@@ -21,11 +21,7 @@ public class BirthdayMessages {
 	}
 
 	public void sendErrorMessage(TextChannel channel, CommandEvent event, String command, String args) {
-		SelfUser bot = event.getJDA().getSelfUser();
-		String botIcon = bot.getAvatarUrl();
-		Guild g = event.getGuild();
 		EmbedBuilder builder = new EmbedBuilder();
-
 		builder.setColor(Color.decode("#EA2027"))
 				.setDescription("You forgot some parameters, try using this format:" +
 						"\nFormat: `bday " + command + " " + args + "`"
@@ -33,11 +29,7 @@ public class BirthdayMessages {
 		channel.sendMessage(builder.build()).queue();
 	}
 	public void invalidFormat(TextChannel channel, CommandEvent event, String command, String args) {
-		SelfUser bot = event.getJDA().getSelfUser();
-		String botIcon = bot.getAvatarUrl();
-		Guild g = event.getGuild();
 		EmbedBuilder builder = new EmbedBuilder();
-
 		builder.setColor(Color.decode("#EA2027"))
 				.setDescription("Your date format was invalid, try using this format:" +
 						"\nFormat: `bday " + command + " " + args + "`"
@@ -75,6 +67,12 @@ public class BirthdayMessages {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription("Successfully set your birthday to **" + date + "**!");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void userBirthday(TextChannel channel, String date,  Member member, int age) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription(member.getUser().getName() + "'s birthday is on **" + date + "**.\nThey are **" + age + "** years old." );
 		channel.sendMessage(builder.build()).queue();
 	}
 }

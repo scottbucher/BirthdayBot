@@ -8,6 +8,7 @@ import me.stqlth.birthdaybot.commands.userCommands.Help;
 import me.stqlth.birthdaybot.commands.userCommands.SetBDay;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.events.GuildJoinLeave;
+import me.stqlth.birthdaybot.events.GuildMessageRecieved;
 import me.stqlth.birthdaybot.events.UserJoinLeave;
 import me.stqlth.birthdaybot.main.GuildSettings.SettingsManager;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
@@ -84,7 +85,8 @@ public class BirthdayBot {
         EventListener[] listeners = new EventListener[]{
                 waiter,
                 new GuildJoinLeave(birthdayBotConfig, debugMessages),
-                new UserJoinLeave(birthdayBotConfig, debugMessages)
+                new UserJoinLeave(birthdayBotConfig, debugMessages),
+                new GuildMessageRecieved(birthdayBotConfig, debugMessages, birthdayMessages)
         };
 
         // Start the shard manager
@@ -98,7 +100,7 @@ public class BirthdayBot {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            SetupGuilds(birthdayBotConfig, instance.getGuilds(), debugMessages);
+            SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
         } catch (LoginException ex) {
             Logger.Error("Error encountered while logging in. The bot token may be incorrect.", ex);
         }
@@ -136,10 +138,16 @@ public class BirthdayBot {
                 .build();
     }
 
-    private static void SetupGuilds(BirthdayBotConfig birthdayBotConfig, List<Guild> guildList, DebugMessages debugMessages) {
+    private static void SetupDatabase(BirthdayBotConfig birthdayBotConfig, List<Guild> guildList, DebugMessages debugMessages) {
         for (Guild check : guildList) {
             if (!guildExists(birthdayBotConfig, debugMessages, check))
                 AddGuildToDatabase(birthdayBotConfig, check, debugMessages);
+            else {
+                for (Member mCheck : check.getMembers()) {
+                    if (!userExists(birthdayBotConfig, debugMessages, mCheck))
+                        addUser(birthdayBotConfig, mCheck, debugMessages);
+                }
+            }
         }
     }
 
@@ -159,6 +167,21 @@ public class BirthdayBot {
         return false;
     }
 
+    private static boolean userExists(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Member m) {
+        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+             Statement statement = conn.createStatement()) {
+
+            ResultSet check = statement.executeQuery("CALL DoesUserAlreadyExist(" + m.getId() + ")");
+            check.next();
+            boolean alreadyExists = check.getBoolean("AlreadyExists");
+
+            if (alreadyExists) return true;
+
+        } catch (SQLException ex) {
+            debugMessages.sqlDebug(ex);
+        }
+        return false;
+    }
     private static void AddGuildToDatabase(BirthdayBotConfig birthdayBotConfig, Guild g, DebugMessages debugMessages) {
 
         try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
