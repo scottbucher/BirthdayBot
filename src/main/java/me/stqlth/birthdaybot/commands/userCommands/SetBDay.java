@@ -96,31 +96,23 @@ public class SetBDay extends Command {
 
         String sBday = args[4] + "-" + args[3] + "-" + args[2];
 
-        Date bday;
-        try {
-            bday = new SimpleDateFormat("dd-MM-yyyy").parse(sBday);
+        int age = -1;
+        try { //try catch to check for invalid dates such as February 30th
+            LocalDate birthDate = LocalDate.of(year, month, day);
+            age = calculateAge(birthDate, LocalDate.now());
         } catch (Exception e) {
-            birthdayMessages.sendErrorMessage(channel, event, getName(), getArguments());
+            birthdayMessages.dateNotFound(channel);
             return;
         }
-
-        LocalDate birthDate = LocalDate.of(year, month, day);
-        int age = calculateAge(birthDate, LocalDate.now());
 
         if (age < 13) {
             birthdayMessages.tooYoung(channel);
             return;
         }
 
-        try {
-            updateBirthday(event, sBday);
-            updateOffset(event, offset);
-        } catch (SQLException e) {
-            birthdayMessages.invalidFormat(channel, event, getName(), getArguments());
-            return;
-        }
-        updateChangesLeft(event, changesLeft);
+        String date = getMonth(month) + " " + day + ", " + year + " GMT" + offset;
 
+        sendConfirmation(event, channel, date, sBday, offset, changesLeft);
     }
 
     private void updateBirthday (CommandEvent event, String bday) throws SQLException {
@@ -180,8 +172,7 @@ public class SetBDay extends Command {
         }
     }
 
-    public void sendConfirmation(CommandEvent event, TextChannel channel, String date) {
-        SelfUser bot = event.getJDA().getSelfUser();
+    public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, int offset, int changesLeft) {
         EmbedBuilder builder = new EmbedBuilder();
 
         builder.setColor(Color.decode("#1CFE86"))
@@ -189,16 +180,27 @@ public class SetBDay extends Command {
         channel.sendMessage(builder.build()).queue(result -> {
             result.addReaction("\u2705").queue();
             result.addReaction("\u274C").queue();
-            waitForConfirmation(event, result);
+            waitForConfirmation(event, channel, result, sBday, offset, changesLeft, date);
         });
     }
-    private void waitForConfirmation(CommandEvent event, Message msg) {
+    private void waitForConfirmation(CommandEvent event, TextChannel channel, Message msg, String sBday, int offset, int changesLeft, String date) {
 
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 e -> e.getChannel().equals(event.getChannel()) && !e.getUser().isBot() &&
                         (e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C")),
                 e -> {
                     if (e.getReactionEmote().getName().equals("\u2705")) {
+                        msg.delete().queue();
+
+                        try {
+                            updateBirthday(event, sBday);
+                            updateOffset(event, offset);
+                            birthdayMessages.success(channel, date);
+                        } catch (SQLException ex) {
+                            birthdayMessages.invalidFormat(channel, event, getName(), getArguments());
+                            return;
+                        }
+                        updateChangesLeft(event, changesLeft);
 
                     } else if (e.getReactionEmote().getName().equals("\u274C")) {
                         msg.delete().queue();
@@ -213,4 +215,22 @@ public class SetBDay extends Command {
             return 0;
         }
     }
+    private static String getMonth(int month) {
+        switch (month) {
+            case 1:  return "January";
+            case 2:  return "February";
+            case 3:  return "March";
+            case 4:  return "April";
+            case 5:  return "May";
+            case 6:  return "June";
+            case 7:  return "July";
+            case 8:  return "August";
+            case 9:  return "September";
+            case 10: return "October";
+            case 11: return "November";
+            case 12: return "December";
+            default: return "Invalid month";
+        }
+    }
+
 }

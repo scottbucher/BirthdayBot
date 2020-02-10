@@ -56,6 +56,12 @@ public class BirthdayMessages {
 				.setDescription("You must be at least be 13 years old to use Discord. Review the Discord TOS [here](https://discordapp.com/terms).");
 		channel.sendMessage(builder.build()).queue();
 	}
+	public void dateNotFound(TextChannel channel) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("That date doesn't exist. Review a calendar [here](https://www.timeanddate.com/calendar/).");
+		channel.sendMessage(builder.build()).queue();
+	}
 	public void invalidOffset(TextChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#EA2027"))
@@ -63,6 +69,12 @@ public class BirthdayMessages {
 						"If you don't know what a GMT offset is, click [here](https://www.timeanddate.com/time/map/) and hover over your location on the map. " +
 						"Your GMT offset is the value at the bottom that is highlighted " +
 						"(if the highlighted value at the bottom simply says `UTC`, then your GMT offset is 0.).");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void success(TextChannel channel, String date) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription("Successfully set your birthday to **" + date + "**!");
 		channel.sendMessage(builder.build()).queue();
 	}
 }

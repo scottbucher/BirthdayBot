@@ -119,8 +119,8 @@ public class BirthdayBot {
                 .useDefaultGame()
                 .useHelpBuilder(false)
                 .setOwnerId(birthdayBotConfig.getOwnerId())
-                .setActivity(Activity.watching("you"))
-                .setStatus(OnlineStatus.DO_NOT_DISTURB)
+                .setActivity(Activity.listening("Happy Birthday"))
+                .setStatus(OnlineStatus.ONLINE)
                 .setPrefix(birthdayBotConfig.getPrefix())
                 .setEmojis(SUCCESS_EMOJI, WARNING_EMOJI, ERROR_EMOJI)
                 .addCommands(commands);
