@@ -34,7 +34,10 @@ public class Help extends Command {
 						"If you don't know what a GMT offset is, click [here](https://www.timeanddate.com/time/map/) and hover over your location on the map. " +
 						"Your GMT offset is the value at the bottom that is highlighted " +
 						"(if the highlighted value at the bottom simply says `UTC`, then your GMT offset is 0.).\n\n" +
-						"Example usage: `bday set 28, 8, 2001, -5`", false);
+						"Example usage: `bday set 28, 8, 2001, -5`\n ", false)
+				.addField("bday role set <@role/rolename>", "Sets a role to be used as the birthday role", false)
+				.addField("bday role create", "Creates the default birthday role and stores it", false)
+				.addField("bday invite", "Invites the bot to your server", false);
 		channel.sendMessage(builder.build()).queue();
 	}
 }

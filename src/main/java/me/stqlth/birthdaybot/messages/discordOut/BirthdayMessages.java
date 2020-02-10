@@ -1,15 +1,12 @@
 package me.stqlth.birthdaybot.messages.discordOut;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 import java.awt.*;
-import java.util.concurrent.TimeUnit;
 
 public class BirthdayMessages {
 	private BirthdayBotConfig birthdayBotConfig;
@@ -54,6 +51,12 @@ public class BirthdayMessages {
 				.setDescription("That date doesn't exist. Review a calendar [here](https://www.timeanddate.com/calendar/).");
 		channel.sendMessage(builder.build()).queue();
 	}
+	public void noBirthdays(TextChannel channel, Guild guild) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("There are no upcoming birthdays in **" + guild.getName() + "**!\nSet your birthday with `bday set`!");
+		channel.sendMessage(builder.build()).queue();
+	}
 	public void invalidOffset(TextChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#EA2027"))
@@ -73,6 +76,12 @@ public class BirthdayMessages {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription(member.getUser().getName() + "'s birthday is on **" + date + "**.\nThey are **" + age + "** years old." );
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void nextBirthday(TextChannel channel, String date, Member member) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription("**" + member.getUser().getName() + "'s** birthday is next on **" + date + "**!");
 		channel.sendMessage(builder.build()).queue();
 	}
 }
