@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.stqlth.birthdaybot.commands.userCommands.Help;
+import me.stqlth.birthdaybot.commands.userCommands.Next;
 import me.stqlth.birthdaybot.commands.userCommands.SetBDay;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.events.GuildJoinLeave;
@@ -14,6 +15,7 @@ import me.stqlth.birthdaybot.main.GuildSettings.SettingsManager;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
+import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -66,6 +68,7 @@ public class BirthdayBot {
 
         SettingsManager settingsManager = new SettingsManager(birthdayBotConfig, debugMessages);
         BirthdayMessages birthdayMessages = new BirthdayMessages(birthdayBotConfig, getMessageInfo);
+        DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
 
         Command[] commands = new Command[]{
                 //HIDDEN
@@ -76,7 +79,8 @@ public class BirthdayBot {
 
 
                 //UTILITIES
-                new SetBDay(birthdayBotConfig, debugMessages, birthdayMessages, waiter)
+                new SetBDay(birthdayMessages, waiter, databaseMethods),
+                new Next(databaseMethods, birthdayMessages)
         };
 
         // Create the client
@@ -86,7 +90,7 @@ public class BirthdayBot {
                 waiter,
                 new GuildJoinLeave(birthdayBotConfig, debugMessages),
                 new UserJoinLeave(birthdayBotConfig, debugMessages),
-                new GuildMessageRecieved(birthdayBotConfig, debugMessages, birthdayMessages)
+                new GuildMessageRecieved(databaseMethods, birthdayMessages)
         };
 
         // Start the shard manager

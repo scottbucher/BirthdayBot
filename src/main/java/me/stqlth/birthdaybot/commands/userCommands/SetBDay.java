@@ -3,50 +3,43 @@ package me.stqlth.birthdaybot.commands.userCommands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import me.stqlth.birthdaybot.config.BirthdayBotConfig;
-import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
+import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 import java.awt.*;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class SetBDay extends Command {
-
-    private BirthdayBotConfig birthdayBotConfig;
-    private DebugMessages debugMessages;
     private BirthdayMessages birthdayMessages;
     private EventWaiter waiter;
+    private DatabaseMethods db;
 
-    public SetBDay(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, BirthdayMessages birthdayMessages, EventWaiter waiter) {
+    public SetBDay(BirthdayMessages birthdayMessages, EventWaiter waiter, DatabaseMethods databaseMethods) {
         this.name = "set";
-        this.aliases = new String[]{" add"};
+        this.aliases = new String[]{"add"};
         this.guildOnly = false;
         this.help = "Sets a user's global birthday.";
         this.arguments = "<day>, <month>, <year>, <gmt offset>";
         this.category = new Category("Utilities");
 
-        this.birthdayBotConfig = birthdayBotConfig;
-        this.debugMessages = debugMessages;
         this.birthdayMessages = birthdayMessages;
         this.waiter = waiter;
+        this.db = databaseMethods;
     }
 
     @Override
     protected void execute(CommandEvent event) {
         TextChannel channel = event.getTextChannel();
 
-        int changesLeft = getChangesLeft(event);
+        int changesLeft = db.getChangesLeft(event);
         if (changesLeft  <= 0) {
             birthdayMessages.outOfChanges(event, channel);
             return;
@@ -74,6 +67,11 @@ public class SetBDay extends Command {
             birthdayMessages.invalidOffset(channel);
             return;
         }
+
+        String offsetS = String.valueOf(offset);
+        if (offsetS.equals("0")) {
+            offsetS = "UTC";
+        } else offsetS = "GMT" + offsetS;
 
 
         args[2] = args[2].replace(",", "");
@@ -110,66 +108,9 @@ public class SetBDay extends Command {
             return;
         }
 
-        String date = getMonth(month) + " " + day + ", " + year + " GMT" + offset;
+        String date = getMonth(month) + " " + day + ", " + year + " " + offsetS;
 
         sendConfirmation(event, channel, date, sBday, offset, changesLeft);
-    }
-
-    private void updateBirthday (CommandEvent event, String bday) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-             Statement statement = conn.createStatement()) {
-            int userId = -1;
-
-            ResultSet rs = statement.executeQuery("CALL GetUserId(" + event.getMember().getUser().getId() + ")");
-            rs.next();
-            userId = rs.getInt("UserId");
-
-            statement.execute("CALL UpdateBirthday(" + userId + ", '" + bday + "')");
-        }
-    }
-    private void updateOffset (CommandEvent event, int offset) throws SQLException  {
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-             Statement statement = conn.createStatement()) {
-            int userId = -1;
-
-            ResultSet rs = statement.executeQuery("CALL GetUserId(" + event.getMember().getUser().getId() + ")");
-            rs.next();
-            userId = rs.getInt("UserId");
-
-            statement.execute("CALL UpdateOffset(" + userId + ", " + offset + ")");
-        }
-    }
-    private int getChangesLeft (CommandEvent event) {
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-             Statement statement = conn.createStatement()) {
-            int userId = -1;
-
-            ResultSet rs = statement.executeQuery("CALL GetUserId(" + event.getMember().getUser().getId() + ")");
-            rs.next();
-            userId = rs.getInt("UserId");
-
-            ResultSet rs2 = statement.executeQuery("CALL GetChangesLeft(" + userId + ")");
-            rs2.next();
-            return rs2.getInt("ChangesLeft");
-
-        } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
-        }
-        return -1;
-    }
-    private void updateChangesLeft (CommandEvent event, int left) {
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-             Statement statement = conn.createStatement()) {
-            int userId = -1;
-
-            ResultSet rs = statement.executeQuery("CALL GetUserId(" + event.getMember().getUser().getId() + ")");
-            rs.next();
-            userId = rs.getInt("UserId");
-
-            statement.execute("CALL UpdateChangesLeft(" + userId + ", " + left + ")");
-        } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
-        }
     }
 
     public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, int offset, int changesLeft) {
@@ -193,14 +134,14 @@ public class SetBDay extends Command {
                         msg.delete().queue();
 
                         try {
-                            updateBirthday(event, sBday);
-                            updateOffset(event, offset);
+                            db.updateBirthday(event, sBday);
+                            db.updateOffset(event, offset);
                             birthdayMessages.success(channel, date);
                         } catch (SQLException ex) {
                             birthdayMessages.invalidFormat(channel, event, getName(), getArguments());
                             return;
                         }
-                        updateChangesLeft(event, changesLeft);
+                        db.updateChangesLeft(event, changesLeft);
 
                     } else if (e.getReactionEmote().getName().equals("\u274C")) {
                         msg.delete().queue();

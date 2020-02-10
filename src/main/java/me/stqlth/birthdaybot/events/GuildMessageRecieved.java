@@ -4,6 +4,7 @@ import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
+import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -15,13 +16,11 @@ import java.time.Period;
 
 public class GuildMessageRecieved extends ListenerAdapter {
 
-	private BirthdayBotConfig birthdayBotConfig;
-	private DebugMessages debugMessages;
+	private DatabaseMethods db;
 	private BirthdayMessages birthdayMessages;
 
-	public GuildMessageRecieved(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, BirthdayMessages birthdayMessages) {
-		this.birthdayBotConfig = birthdayBotConfig;
-		this.debugMessages = debugMessages;
+	public GuildMessageRecieved(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages) {
+		this.db = databaseMethods;
 		this.birthdayMessages = birthdayMessages;
 	}
 
@@ -36,57 +35,22 @@ public class GuildMessageRecieved extends ListenerAdapter {
 
 		Member member = event.getMessage().getMentionedMembers().get(0);
 
-		String birthday = getUserBirthday(member);
+		String birthday = db.getUserBirthday(member);
 		String[] values = birthday.split("-");
-		int offset = getUserOffset(member);
+		String offset = String.valueOf(db.getUserOffset(member));
+		if (offset.equals("0")) {
+			offset = "UTC";
+		} else offset = "GMT" + offset;
 		int day = Integer.parseInt(values[2]);
 		int month = Integer.parseInt(values[1]);
 		int year = Integer.parseInt(values[0]);
 
-		String date = getMonth(month) + " " + day + ", " + year + " GMT" + offset;
+		String date = getMonth(month) + " " + day + ", " + year + " " + offset;
 
 		LocalDate birthDate = LocalDate.of(year, month, day);
 		int age = calculateAge(birthDate, LocalDate.now());
 
 		birthdayMessages.userBirthday(event.getChannel(), date, member, age);
-	}
-
-
-	private String getUserBirthday(Member member) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-			int userId = -1;
-
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + member.getId() + ")");
-			rs.next();
-			userId = rs.getInt("UserId");
-
-			ResultSet rs2 = statement.executeQuery("CALL GetUserBirthday(" + userId + ")");
-			rs2.next();
-			return rs2.getString("Birthday");
-
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-		return "-1";
-	}
-	private int getUserOffset(Member member) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-			int userId = -1;
-
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + member.getId() + ")");
-			rs.next();
-			userId = rs.getInt("UserId");
-
-			ResultSet rs2 = statement.executeQuery("CALL GetUserOffset(" + userId + ")");
-			rs2.next();
-			return rs2.getInt("TimeOffset");
-
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-		return 0;
 	}
 	private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {
 		if ((birthDate != null) && (currentDate != null)) {
