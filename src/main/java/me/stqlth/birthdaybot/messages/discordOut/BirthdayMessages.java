@@ -57,12 +57,6 @@ public class BirthdayMessages {
 				.setDescription("There are no upcoming birthdays in **" + guild.getName() + "**!\nSet your birthday with `bday set`!");
 		channel.sendMessage(builder.build()).queue();
 	}
-	public void noBirthday(TextChannel channel, Member member) {
-		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Color.decode("#EA2027"))
-				.setDescription("**" + member.getUser().getName() + "** does not have a birthday set! :(");
-		channel.sendMessage(builder.build()).queue();
-	}
 	public void invalidOffset(TextChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#EA2027"))
@@ -88,18 +82,6 @@ public class BirthdayMessages {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription("**" + member.getUser().getName() + "'s** birthday is next on **" + date + "**!");
-		channel.sendMessage(builder.build()).queue();
-	}
-	public void inviteBot(TextChannel channel) {
-		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Color.decode("#1CFE86"))
-				.setDescription("Invite BirthdayBot to your server [here](https://discordapp.com/oauth2/authorize?client_id=656621136808902656&permissions=8&scope=bot)!");
-		channel.sendMessage(builder.build()).queue();
-	}
-	public void joinSupportServer(TextChannel channel) {
-		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Color.decode("#1CFE86"))
-				.setDescription("For support join our discord server [here](https://discord.gg/CJnWuWn)!");
 		channel.sendMessage(builder.build()).queue();
 	}
 }
