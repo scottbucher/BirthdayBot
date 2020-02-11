@@ -4,9 +4,8 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import me.stqlth.birthdaybot.commands.userCommands.Help;
-import me.stqlth.birthdaybot.commands.userCommands.Next;
-import me.stqlth.birthdaybot.commands.userCommands.SetBDay;
+import me.stqlth.birthdaybot.commands.staffCommands.*;
+import me.stqlth.birthdaybot.commands.userCommands.*;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.events.GuildJoinLeave;
 import me.stqlth.birthdaybot.events.GuildMessageRecieved;
@@ -14,6 +13,7 @@ import me.stqlth.birthdaybot.events.UserJoinLeave;
 import me.stqlth.birthdaybot.main.GuildSettings.SettingsManager;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
+import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Logger;
@@ -69,18 +69,32 @@ public class BirthdayBot {
         SettingsManager settingsManager = new SettingsManager(birthdayBotConfig, debugMessages);
         BirthdayMessages birthdayMessages = new BirthdayMessages(birthdayBotConfig, getMessageInfo);
         DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
+        StaffMessages staffMessages = new StaffMessages(birthdayBotConfig, getMessageInfo);
 
         Command[] commands = new Command[]{
-                //HIDDEN
+                //CONFIG
+                new Config(databaseMethods, staffMessages),
+                new SetChannel(databaseMethods, staffMessages),
+                new ClearChannel(databaseMethods, staffMessages),
+                new CreateChannel(databaseMethods, staffMessages),
+                new SetBirthdayRole(databaseMethods, staffMessages),
+                new ClearBirthdayRole(databaseMethods, staffMessages),
+                new CreateBirthdayRole(databaseMethods, staffMessages),
+                new SetTrustedRole(databaseMethods, staffMessages),
+                new ClearTrustedRole(databaseMethods, staffMessages),
+                new CreateTrustedRole(databaseMethods, staffMessages),
 
 
                 //INFO
-                new Help(),
+                new Help(waiter),
+                new About(),
 
 
                 //UTILITIES
                 new SetBDay(birthdayMessages, waiter, databaseMethods),
-                new Next(databaseMethods, birthdayMessages)
+                new Next(databaseMethods, birthdayMessages),
+                new Support(birthdayMessages),
+                new Invite(birthdayMessages)
         };
 
         // Create the client
