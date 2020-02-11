@@ -9,14 +9,14 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class SetRole extends Command {
+public class SetBirthdayRole extends Command {
 
 	private DatabaseMethods db;
 	private StaffMessages staffMessages;
 
-	public SetRole(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
-		this.name = "setrole";
-		this.help = "Set the birthday message channel";
+	public SetBirthdayRole(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+		this.name = "setbirthdayrole";
+		this.help = "Set the birthday role";
 		this.arguments = "<@role/role name>";
 		this.guildOnly = true;
 		this.hidden = true;
@@ -39,14 +39,17 @@ public class SetRole extends Command {
 
 		String[] args = event.getMessage().getContentRaw().split(" ");
 
-		if (args.length > 3) return;
+		if (args.length != 3) {
+			staffMessages.sendErrorMessage(channel, event, getName(), arguments);
+			return;
+		}
 
 		Role bdayRole;
 
 		try {
 			bdayRole = event.getMessage().getMentionedRoles().get(0);
 		} catch (IndexOutOfBoundsException e) {
-			bdayRole = event.getGuild().getRoles().stream().filter(role -> role.getName().toLowerCase().contains(args[2])).findFirst().orElse(null);
+			bdayRole = event.getGuild().getRoles().stream().filter(role -> role.getName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
 		}
 
 		if (bdayRole == null) {
@@ -56,6 +59,5 @@ public class SetRole extends Command {
 
 		db.updateBirthdayRole(event, bdayRole);
 		staffMessages.successBdayRole(channel, bdayRole);
-
 	}
 }
