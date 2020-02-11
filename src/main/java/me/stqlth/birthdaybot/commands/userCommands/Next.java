@@ -110,7 +110,7 @@ public class Next extends Command {
 				bdays.append(birthdays.get(i).getUser().getName()).append(", ");
 			}
 
-			bdays.append(birthdays.get(size-2).getUser().getName()).append(" and ").append(birthdays.get(size-1).getUser().getName()).append("'s birthday on ");
+			bdays.append(birthdays.get(size-2).getUser().getName()).append(", and ").append(birthdays.get(size-1).getUser().getName()).append("'s birthday on ");
 			String date = "**" + getMonth(month) + " " + day + ", " + currentYear + "**";
 
 			String message = bdays + date;
