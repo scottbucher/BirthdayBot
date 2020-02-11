@@ -1,16 +1,13 @@
 package me.stqlth.birthdaybot.events;
 
-import me.stqlth.birthdaybot.config.BirthdayBotConfig;
-import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
-import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -26,6 +23,7 @@ public class GuildMessageRecieved extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+		TextChannel channel = event.getChannel();
 
 		String[] args = event.getMessage().getContentRaw().split(" ");
 
@@ -36,6 +34,10 @@ public class GuildMessageRecieved extends ListenerAdapter {
 		Member member = event.getMessage().getMentionedMembers().get(0);
 
 		String birthday = db.getUserBirthday(member);
+		if (birthday == null) {
+			birthdayMessages.noBirthday(channel, member);
+			return;
+		}
 		String[] values = birthday.split("-");
 		String offset = String.valueOf(db.getUserOffset(member));
 		if (offset.equals("0")) {
@@ -50,7 +52,7 @@ public class GuildMessageRecieved extends ListenerAdapter {
 		LocalDate birthDate = LocalDate.of(year, month, day);
 		int age = calculateAge(birthDate, LocalDate.now());
 
-		birthdayMessages.userBirthday(event.getChannel(), date, member, age);
+		birthdayMessages.userBirthday(channel, date, member, age);
 	}
 	private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {
 		if ((birthDate != null) && (currentDate != null)) {
