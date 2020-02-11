@@ -1,15 +1,10 @@
 package me.stqlth.birthdaybot.utils;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.nio.channels.Channel;
 import java.sql.*;
 
 public class DatabaseMethods {
@@ -113,107 +108,6 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 		return 0;
-	}
-	public int getGuildSettingsId(Guild guild) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			ResultSet rs = statement.executeQuery("CALL GetGuildSettingsId(" + guild.getId() + ")");
-			rs.next();
-			return rs.getInt("GuildSettingsId");
-
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-		return 0;
-	}
-	public void updateBirthdayChannel (CommandEvent event, TextChannel bdayChannel) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
-
-			statement.execute("CALL UpdateBirthdayChannel(" + bdayChannel.getId() + ", " + guildSettingsId + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-	public void clearBirthdayChannel (CommandEvent event) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
-
-			statement.execute("CALL UpdateBirthdayChannel(" + 0 + ", " + guildSettingsId + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-	public void updateBirthdayRole (CommandEvent event, Role bdayRole) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
-
-			statement.execute("CALL UpdateBirthdayRole(" + bdayRole.getId() + ", " + guildSettingsId + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-	public void clearBirthdayRole (CommandEvent event) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
-
-			statement.execute("CALL UpdateBirthdayRole(" + 0 + ", " + guildSettingsId + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-	public void updateTrustedRole (CommandEvent event, Role bdayRole) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
-
-			statement.execute("CALL UpdateTrustedRole(" + bdayRole.getId() + ", " + guildSettingsId + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-	public void clearTrustedRole (CommandEvent event) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
-
-			statement.execute("CALL UpdateTrustedRole(" + 0 + ", " + guildSettingsId + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-	public void updatePreventRole (CommandEvent event, int bool) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
-
-			statement.execute("CALL UpdatePreventRole(" + guildSettingsId + ", " + bool + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-	public void updatePreventMessage (CommandEvent event, int bool) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
-
-			statement.execute("CALL UpdatePreventMessage(" + guildSettingsId + ", " + bool + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
 	}
 
 }
