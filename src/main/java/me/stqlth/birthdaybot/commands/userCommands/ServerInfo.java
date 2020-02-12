@@ -1,10 +1,9 @@
-package me.stqlth.krypto.commands.user;
+package me.stqlth.birthdaybot.commands.userCommands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.mashape.unirest.http.Unirest;
-import me.stqlth.krypto.messages.getMethods.GetMessageInfo;
-import me.stqlth.krypto.music.FormatTime;
+import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
+import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Guild;
@@ -12,23 +11,17 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class ServerInfo extends Command {
 
-    private GetMessageInfo getMessageInfo;
-    public ServerInfo(GetMessageInfo getMessageInfo) {
+    public ServerInfo() {
         this.name = "serverinfo";
         this.help = "View information about your server.";
         this.guildOnly = true;
         this.category = new Category("Info");
-
-        this.getMessageInfo = getMessageInfo;
     }
 
     @Override
@@ -38,7 +31,6 @@ public class ServerInfo extends Command {
 
         EmbedBuilder builder = new EmbedBuilder();
         Guild guild = event.getGuild();
-        FormatTime ft = new FormatTime();
 
         int currentShard = event.getJDA().getShardInfo().getShardId() + 1;
         int totalShards = event.getJDA().getShardInfo().getShardTotal();
@@ -70,12 +62,11 @@ public class ServerInfo extends Command {
         String uMonth = month.substring(0, 1).toUpperCase() + month.substring(1);
 
         builder.setAuthor(guild.getName(), null, guild.getIconUrl())
-                .setColor(getAverageColor(event.getMember().getUser().getAvatarUrl()))
+                .setColor(Utilities.getAverageColor(event.getMember().getUser().getAvatarUrl()))
                 .addField("Member Count", "" + totalRealMembers.size() + " (" + onlineMembers.size() + " currently online)", true)
                 .addField("Bot Count", "" + totalBots.size(), true)
                 .addField("Channel Count", guild.getTextChannels().size() + " text channels\n"
                         + guild.getVoiceChannels().size() + " voice channels", true)
-                .addField("Guild Specific Prefix", "`" + getMessageInfo.getPrefix(guild) + "`", true)
                 .addField("Server Founder", Objects.requireNonNull(guild.getOwner()).getUser().getAsTag(), true)
                 .addField("Created On", uMonth + " " + guild.getTimeCreated().getDayOfMonth()
                         + getDayEnding(guild) + " " + guild.getTimeCreated().getYear(), true)
@@ -107,36 +98,6 @@ public class ServerInfo extends Command {
             return "rd";
         else return "th";
     }
-
-    public static Color getAverageColor(String url) {
-        if (url == null) {
-            return new Color(27, 137, 255);
-        }
-        try {
-            BufferedImage img = ImageIO.read(Unirest.get(url).asBinary().getRawBody());
-            int x0 = 0;
-            int y0 = 0;
-            int x1 = x0 + img.getWidth();
-            int y1 = y0 + img.getHeight();
-            long sumr = 0, sumg = 0, sumb = 0;
-            for (int x = x0; x < x1; x++) {
-                for (int y = y0; y < y1; y++) {
-                    Color pixel = new Color(img.getRGB(x, y));
-                    sumr += pixel.getRed();
-                    sumg += pixel.getGreen();
-                    sumb += pixel.getBlue();
-                }
-            }
-            int num = img.getWidth() * img.getHeight();
-            return new Color((int) sumr / num, (int) sumg / num, (int) sumb / num);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new Color(27, 137, 255);
-    }
-
-
-
 }
 
 
