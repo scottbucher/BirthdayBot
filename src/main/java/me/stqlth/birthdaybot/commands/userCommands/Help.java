@@ -5,23 +5,17 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 import java.awt.*;
-import java.util.concurrent.TimeUnit;
 
 public class Help extends Command {
 
-	private EventWaiter waiter;
-
-	public Help(EventWaiter waiter) {
+	public Help() {
 		this.name = "help";
 		this.aliases = new String[]{"h", "?"};
 		this.guildOnly = true;
 		this.help = "Displays the help menu";
 		this.category = new Category("Info");
-
-		this.waiter = waiter;
 	}
 
 	@Override
