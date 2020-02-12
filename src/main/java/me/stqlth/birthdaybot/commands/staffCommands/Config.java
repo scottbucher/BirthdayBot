@@ -84,6 +84,12 @@ public class Config extends Command {
 						staffMessages.roleNotFound(channel);
 						return;
 					}
+					if (!mentionedRole.isMentionable()) {
+						staffMessages.roleNotMentionable(channel);
+						return;
+					}
+
+
 					db.updateMentionedSetting(event, mentionedRole.getId());
 					staffMessages.successRoleMentionSetting(channel, mentionedRole);
 					break;
