@@ -1,8 +1,13 @@
 package me.stqlth.birthdaybot.utils;
 
+import com.mashape.unirest.http.Unirest;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.TimeUnit;
 
-public class FormatTime {
+public class Utilities {
 
     public String formatTime(long timeInMillis) {
         final long hours = timeInMillis / TimeUnit.HOURS.toMillis(1);
@@ -10,5 +15,32 @@ public class FormatTime {
         final long seconds = timeInMillis % TimeUnit.MINUTES.toMillis(1) / TimeUnit.SECONDS.toMillis(1);
 
         return String.format("%01d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    public static Color getAverageColor(String url) {
+        if (url == null) {
+            return new Color(27, 137, 255);
+        }
+        try {
+            BufferedImage img = ImageIO.read(Unirest.get(url).asBinary().getRawBody());
+            int x0 = 0;
+            int y0 = 0;
+            int x1 = x0 + img.getWidth();
+            int y1 = y0 + img.getHeight();
+            long sumr = 0, sumg = 0, sumb = 0;
+            for (int x = x0; x < x1; x++) {
+                for (int y = y0; y < y1; y++) {
+                    Color pixel = new Color(img.getRGB(x, y));
+                    sumr += pixel.getRed();
+                    sumg += pixel.getGreen();
+                    sumb += pixel.getBlue();
+                }
+            }
+            int num = img.getWidth() * img.getHeight();
+            return new Color((int) sumr / num, (int) sumg / num, (int) sumb / num);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Color(27, 137, 255);
     }
 }
