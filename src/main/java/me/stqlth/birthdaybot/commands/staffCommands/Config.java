@@ -4,9 +4,13 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.Utilities;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
+
+import java.awt.*;
+import java.util.Objects;
 
 public class Config extends Command {
 
@@ -55,8 +59,36 @@ public class Config extends Command {
 					staffMessages.setPreventMessage(channel, false);
 				}
 			}
+		} else if (args[2].equalsIgnoreCase("mentionSetting")) {
+			switch (args[3].toLowerCase()) {
+				case "everyone":
+					db.updateMentionedSetting(event, "everyone");
+					staffMessages.successMentionSetting(channel, "everyone");
+					break;
+				case "here":
+					db.updateMentionedSetting(event, "here");
+					staffMessages.successMentionSetting(channel, "here");
+					break;
+				case "disable":
+					db.updateMentionedSetting(event, "0");
+					staffMessages.disableMentionSetting(channel);
+					break;
+				default:
+					Role mentionedRole;
+					try {
+						mentionedRole = event.getMessage().getMentionedRoles().get(0);
+					} catch (IndexOutOfBoundsException e) {
+						mentionedRole = event.getGuild().getRoles().stream().filter(role -> role.getName().toLowerCase().contains(args[3].toLowerCase())).findFirst().orElse(null);
+					}
+					if (mentionedRole == null) {
+						staffMessages.roleNotFound(channel);
+						return;
+					}
+					db.updateMentionedSetting(event, mentionedRole.getId());
+					staffMessages.successRoleMentionSetting(channel, mentionedRole);
+					break;
+			}
 		}
-
-
 	}
+
 }
