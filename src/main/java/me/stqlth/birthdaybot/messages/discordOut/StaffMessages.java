@@ -50,6 +50,12 @@ public class StaffMessages {
                 .setDescription("The specified role cannot be found.");
         channel.sendMessage(builder.build()).queue();
     }
+    public void roleNotMentionable(TextChannel channel) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#EA2027"))
+                .setDescription("The specified role is not mentionable. Please change this in your role settings.");
+        channel.sendMessage(builder.build()).queue();
+    }
     public void messageTooLarge(TextChannel channel) {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.decode("#EA2027"))

@@ -2,7 +2,6 @@ package me.stqlth.birthdaybot.commands.userCommands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -66,7 +65,14 @@ public class Help extends Command {
 				.addField("Trusted Config", "These commands allow server owners to define what the trusted role prevents/allows. " +
 						"For these settings to work, a trusted role must be set, to set this up, use `bday help setup`.\n\n**NOTE:** All settings have a default value of **true**!" +
 						"\n\n`bday config trusted preventMessage <true/false>`\n - When **true** users without the trusted role will not receive a birthday message." +
-						"\n\n`bday config trusted preventRole <true/false>`\n - When **true** users without the trusted role will not receive a birthday role.", false);
+						"\n\n`bday config trusted preventRole <true/false>`\n - When **true** users without the trusted role will not receive a birthday role.", false)
+				.addField("Mention Setting", "These commands allow server owners to define what role/group BirthdayBot should mention when a birthday happens. " +
+						"For these settings to work, a birthday channel must be set, to set this up, use `bday help setup`.\n\n**NOTE:** By default all servers have mentions **disabled**!" +
+						"\n\n`bday config mentionSetting <everyone/here/@role/rolename/disable>`" +
+						"\n - When set to **everyone** the bot @everyone when a birthday message is sent." +
+						"\n - When set to **here** the bot will @here when a birthday message is sent." +
+						"\n - When set to a **role** the bot will mention that role when a birthday message is sent." +
+						"\n - When set to **disabled** the bot will not send a mention with birthday messages.", false);
 		channel.sendMessage(builder.build()).queue();
 	}
 	public void sendSetupHelpMessage(CommandEvent event, TextChannel channel) {
