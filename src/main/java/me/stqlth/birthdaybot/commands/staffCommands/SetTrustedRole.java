@@ -40,7 +40,7 @@ public class SetTrustedRole extends Command {
 		String[] args = event.getMessage().getContentRaw().split(" ");
 
 		if (args.length != 3) {
-			staffMessages.sendErrorMessage(channel, event, getName(), arguments);
+			staffMessages.sendErrorMessage(channel, getName(), arguments);
 			return;
 		}
 

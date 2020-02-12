@@ -6,24 +6,24 @@ import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class SetBirthdayRole extends Command {
+public class SetMessage extends Command {
 
 	private DatabaseMethods db;
 	private StaffMessages staffMessages;
 
-	public SetBirthdayRole(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
-		this.name = "setbirthdayrole";
-		this.help = "Set the birthday role";
-		this.arguments = "<@role/role name>";
+	public SetMessage(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+		this.name = "setmessage";
+		this.help = "Set a custom birthday message";
+		this.arguments = "<message>";
 		this.guildOnly = true;
 		this.hidden = true;
 
 		this.db = databaseMethods;
 		this.staffMessages = staffMessages;
 	}
+
 
 	@Override
 	protected void execute(CommandEvent event) {
@@ -39,25 +39,22 @@ public class SetBirthdayRole extends Command {
 
 		String[] args = event.getMessage().getContentRaw().split(" ");
 
-		if (args.length != 3) {
-			staffMessages.sendErrorMessage(channel, getName(), arguments);
+		if (args.length < 3) {
+			staffMessages.sendMessageError(channel, getName(), getArguments());
 			return;
 		}
 
-		Role bdayRole;
+		StringBuilder message = new StringBuilder(args[2]);
 
-		try {
-			bdayRole = event.getMessage().getMentionedRoles().get(0);
-		} catch (IndexOutOfBoundsException e) {
-			bdayRole = event.getGuild().getRoles().stream().filter(role -> role.getName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
-		}
+		for (int i = 3; i < args.length; i++)
+			message.append(" ").append(args[i]);
 
-		if (bdayRole == null) {
-			staffMessages.roleNotFound(channel);
+		if (message.length() > 2000) {
+			staffMessages.messageTooLarge(channel);
 			return;
 		}
 
-		db.updateBirthdayRole(event, bdayRole);
-		staffMessages.successBdayRole(channel, bdayRole);
+		db.updateMessage(event, message.toString());
+		staffMessages.successMessage(channel, message.toString());
 	}
 }

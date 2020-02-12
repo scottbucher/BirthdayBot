@@ -83,11 +83,14 @@ public class BirthdayBot {
                 new SetTrustedRole(databaseMethods, staffMessages),
                 new ClearTrustedRole(databaseMethods, staffMessages),
                 new CreateTrustedRole(databaseMethods, staffMessages),
+//                new SetMessage(databaseMethods, staffMessages),
 
 
                 //INFO
-                new Help(waiter),
+                new Help(),
                 new About(),
+                new Settings(databaseMethods),
+                new ServerInfo(),
 
 
                 //UTILITIES
@@ -108,7 +111,7 @@ public class BirthdayBot {
         };
 
         // Start the shard manager
-        ShardManager instance = null;
+        ShardManager instance;
 
         Logger.Info("Starting shard manager...");
         try {

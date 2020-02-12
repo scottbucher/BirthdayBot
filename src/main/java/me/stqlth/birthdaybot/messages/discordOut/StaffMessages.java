@@ -21,12 +21,20 @@ public class StaffMessages {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Punishment Command Messages
 
-    public void sendErrorMessage(TextChannel channel, CommandEvent event, String command, String args) {
+    public void sendErrorMessage(TextChannel channel, String command, String args) {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.decode("#EA2027"))
                 .setDescription("You forgot some parameters, try using this format:" +
                         "\nFormat: `bday " + command + " " + args + "`"
                         + "\nExample usage: `bday setrole @Birthdays`");
+        channel.sendMessage(builder.build()).queue();
+    }
+    public void sendMessageError(TextChannel channel, String command, String args) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#EA2027"))
+                .setDescription("You forgot some parameters, try using this format:" +
+                        "\nFormat: `bday " + command + " " + args + "`"
+                        + "\nExample usage: `bday setmessage Happy Birthday!`");
         channel.sendMessage(builder.build()).queue();
     }
     public void onlyAdmins(TextChannel channel) {
@@ -40,6 +48,36 @@ public class StaffMessages {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.decode("#EA2027"))
                 .setDescription("The specified role cannot be found.");
+        channel.sendMessage(builder.build()).queue();
+    }
+    public void messageTooLarge(TextChannel channel) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#EA2027"))
+                .setDescription("That birthday message is too large.");
+        channel.sendMessage(builder.build()).queue();
+    }
+    public void successMessage(TextChannel channel, String message) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#1CFE86"))
+                .setDescription("Successfully set the birthday message to \"" + message + "\"");
+        channel.sendMessage(builder.build()).queue();
+    }
+    public void successMentionSetting(TextChannel channel, String setting) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#1CFE86"))
+                .setDescription("The birthday message will now mention @" + setting + "!");
+        channel.sendMessage(builder.build()).queue();
+    }
+    public void successRoleMentionSetting(TextChannel channel, Role setting) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#1CFE86"))
+                .setDescription("The birthday message will now mention " + setting.getAsMention() + "!");
+        channel.sendMessage(builder.build()).queue();
+    }
+    public void disableMentionSetting(TextChannel channel) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#1CFE86"))
+                .setDescription("The birthday message will no longer mention anyone!");
         channel.sendMessage(builder.build()).queue();
     }
     public void successChannel(TextChannel channel, TextChannel bdayChanbel) {

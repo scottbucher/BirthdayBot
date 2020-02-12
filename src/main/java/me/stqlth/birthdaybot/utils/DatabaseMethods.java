@@ -127,6 +127,102 @@ public class DatabaseMethods {
 		}
 		return 0;
 	}
+	public long getBirthdayChannel(CommandEvent event) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+
+			ResultSet rs = statement.executeQuery("CALL GetBirthdayChannel(" + guildSettingsId + ")");
+			rs.next();
+			return rs.getLong("BirthdayChannel");
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return 0;
+	}
+	public long getBirthdayRole(CommandEvent event) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+
+			ResultSet rs = statement.executeQuery("CALL GetBirthdayRole(" + guildSettingsId + ")");
+			rs.next();
+			return rs.getLong("BirthdayRole");
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return 0;
+	}
+	public long getTrustedRole(CommandEvent event) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+
+			ResultSet rs = statement.executeQuery("CALL GetTrustedRole(" + guildSettingsId + ")");
+			rs.next();
+			return rs.getLong("TrustedRole");
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return 0;
+	}
+	public String getMentionSetting(CommandEvent event) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+
+			ResultSet rs = statement.executeQuery("CALL GetMentionSetting(" + guildSettingsId + ")");
+			rs.next();
+			return rs.getString("MentionSetting");
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return "0";
+	}
+	public boolean getTrustedPreventMessage(CommandEvent event) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+
+			ResultSet rs = statement.executeQuery("CALL GetTrustedPreventsMessage(" + guildSettingsId + ")");
+			rs.next();
+			return rs.getBoolean("TrustedPreventsMessage");
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return true;
+	}
+	public boolean getTrustedPreventRole(CommandEvent event) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+
+			ResultSet rs = statement.executeQuery("CALL GetTrustedPreventsRole(" + guildSettingsId + ")");
+			rs.next();
+			return rs.getBoolean("TrustedPreventsRole");
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return true;
+	}
 	public void updateBirthdayChannel (CommandEvent event, TextChannel bdayChannel) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -211,6 +307,28 @@ public class DatabaseMethods {
 			int guildSettingsId = getGuildSettingsId(event.getGuild());
 
 			statement.execute("CALL UpdatePreventMessage(" + guildSettingsId + ", " + bool + ")");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+	}
+	public void updateMessage (CommandEvent event, String message) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+			statement.execute("CALL UpdateMessage(" + guildSettingsId + ", '" + message + "')");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+	}
+	public void updateMentionedSetting (CommandEvent event, String setting) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+			statement.execute("CALL UpdateMentionSetting(" + guildSettingsId + ", '" + setting + "')");
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
 		}
