@@ -26,5 +26,7 @@ public class BirthdayBotConfig {
     public String getOwnerId() { return _configJson.getString("ownerId"); }
 
     public String getPrefix() { return  _configJson.getString("prefix"); }
+
+    public String getBotOffset() { return  _configJson.getString("botGMTOffset"); }
 }
 

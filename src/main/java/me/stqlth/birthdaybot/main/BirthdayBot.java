@@ -71,7 +71,7 @@ public class BirthdayBot {
         DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
         StaffMessages staffMessages = new StaffMessages(birthdayBotConfig, getMessageInfo);
 
-        BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages);
+        BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages, birthdayBotConfig);
 
         Command[] commands = new Command[]{
                 //CONFIG
