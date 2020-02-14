@@ -37,8 +37,8 @@ public class Settings extends Command {
 		SelfUser bot = event.getJDA().getSelfUser();
 		Guild guild = event.getGuild();
 
-		long bdayChannel = db.getBirthdayChannel(event);
-		long bdayRole = db.getBirthdayRole(event);
+		long bdayChannel = db.getBirthdayChannel(event.getGuild());
+		long bdayRole = db.getBirthdayRole(event.getGuild());
 		long trustedRole = db.getTrustedRole(event);
 		String mentionSetting = db.getMentionSetting(event);
 		String bChannel = "Not Set";

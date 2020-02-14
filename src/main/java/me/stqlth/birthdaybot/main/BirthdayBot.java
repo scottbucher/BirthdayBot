@@ -71,6 +71,8 @@ public class BirthdayBot {
         DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
         StaffMessages staffMessages = new StaffMessages(birthdayBotConfig, getMessageInfo);
 
+        BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages);
+
         Command[] commands = new Command[]{
                 //CONFIG
                 new Config(databaseMethods, staffMessages),
@@ -117,12 +119,13 @@ public class BirthdayBot {
         try {
             instance = startShardManager(birthdayBotConfig, client, listeners);
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            birthdayTracker.startTracker(instance);
             SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
-        } catch (LoginException ex) {
+        } catch (Exception ex) {
             Logger.Error("Error encountered while logging in. The bot token may be incorrect.", ex);
         }
 

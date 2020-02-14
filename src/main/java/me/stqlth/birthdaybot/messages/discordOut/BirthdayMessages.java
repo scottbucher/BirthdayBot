@@ -102,4 +102,10 @@ public class BirthdayMessages {
 				.setDescription("For support join our discord server [here](https://discord.gg/CJnWuWn)!");
 		channel.sendMessage(builder.build()).queue();
 	}
+	public void happyBirthday(TextChannel channel, Member member) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription("Happy Birthday " + member.getAsMention() + "!");
+		channel.sendMessage(builder.build()).queue();
+	}
 }
