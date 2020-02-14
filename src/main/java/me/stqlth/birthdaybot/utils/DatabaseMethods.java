@@ -127,11 +127,11 @@ public class DatabaseMethods {
 		}
 		return 0;
 	}
-	public long getBirthdayChannel(CommandEvent event) {
+	public long getBirthdayChannel(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
+			int guildSettingsId = getGuildSettingsId(guild);
 
 
 			ResultSet rs = statement.executeQuery("CALL GetBirthdayChannel(" + guildSettingsId + ")");
@@ -143,11 +143,11 @@ public class DatabaseMethods {
 		}
 		return 0;
 	}
-	public long getBirthdayRole(CommandEvent event) {
+	public long getBirthdayRole(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
+			int guildSettingsId = getGuildSettingsId(guild);
 
 
 			ResultSet rs = statement.executeQuery("CALL GetBirthdayRole(" + guildSettingsId + ")");
