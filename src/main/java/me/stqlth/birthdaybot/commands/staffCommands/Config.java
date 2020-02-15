@@ -41,7 +41,7 @@ public class Config extends Command {
 
 		String[] args = event.getMessage().getContentRaw().split(" ");
 
-		if (args[2].equalsIgnoreCase("trusted")) {
+		if (args[2].equalsIgnoreCase("trusted") && args.length == 5) {
 			if (args[3].equalsIgnoreCase("preventRole")) {
 				if (args[4].equalsIgnoreCase("t") || args[4].equalsIgnoreCase("true") || args[4].equals("1")) {
 					db.updatePreventRole(event, 1);
@@ -59,7 +59,7 @@ public class Config extends Command {
 					staffMessages.setPreventMessage(channel, false);
 				}
 			}
-		} else if (args[2].equalsIgnoreCase("mentionSetting")) {
+		} else if (args[2].equalsIgnoreCase("mentionSetting") && args.length == 4) {
 			switch (args[3].toLowerCase()) {
 				case "everyone":
 					db.updateMentionedSetting(event, "everyone");
@@ -94,6 +94,38 @@ public class Config extends Command {
 					staffMessages.successRoleMentionSetting(channel, mentionedRole);
 					break;
 			}
+		} else if (args[2].equalsIgnoreCase("messageTime") && args.length == 4) {
+			int messageTime = 0;
+			try {
+				messageTime = Integer.parseInt(args[3]);
+			} catch (NumberFormatException e) {
+				staffMessages.invalidTime(channel, "config messageTime", "<0-23>");
+				 return;
+			}
+
+			if (messageTime < 0 || messageTime > 23) {
+				staffMessages.invalidTime(channel, "config messageTime", "<0-23>");
+				return;
+			}
+			db.updateGuildMessageTime(event.getGuild(), messageTime);
+			staffMessages.successMessageTime(channel, messageTime);
+		} else if (args[2].equalsIgnoreCase("setMessage") && args.length >= 4) {
+			StringBuilder message = new StringBuilder(args[3]);
+
+			for (int i = 4; i < args.length; i++)
+				message.append(" ").append(args[i]);
+
+			if (message.length() > 2000) {
+				staffMessages.messageTooLarge(channel);
+				return;
+			}
+
+			db.updateMessage(event, message.toString());
+			staffMessages.successMessage(channel, message.toString());
+		} else if (args[2].equalsIgnoreCase("resetMessage") && args.length == 3) {
+
+			db.updateMessage(event, "0");
+			staffMessages.resetMessage(channel);
 		}
 	}
 
