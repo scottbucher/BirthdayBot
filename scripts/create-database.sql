@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Feb 14, 2020 at 12:27 AM
--- Server version: 10.3.22-MariaDB-0+deb10u1
--- PHP Version: 7.3.11-1~deb10u1
+-- Host: localhost:3307
+-- Generation Time: Feb 15, 2020 at 11:52 PM
+-- Server version: 5.7.24-log
+-- PHP Version: 7.2.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `birthday-bot`
+-- Database: `birthdaydev`
 --
 
 DELIMITER $$
@@ -66,6 +66,14 @@ WHERE `UserId` = IN_UserId;
 
 END$$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetGuildBirthdayMessage` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+
+SELECT Custommessage
+FROM guildsettings
+WHERE `GuildSettingsId` = IN_GuildSettingsId;
+
+END$$
+
 CREATE DEFINER=`admin`@`%` PROCEDURE `GetGuildId` (IN `IN_DiscordId` VARCHAR(18))  BEGIN
 
 SELECT GuildId
@@ -85,6 +93,14 @@ END$$
 CREATE DEFINER=`admin`@`%` PROCEDURE `GetMentionSetting` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT MentionSetting
+FROM guildsettings
+WHERE `GuildSettingsId` = IN_GuildSettingsId;
+
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetMessageTime` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+
+SELECT MessageTime
 FROM guildsettings
 WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
@@ -229,6 +245,14 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateMessageTime` (IN `IN_GuildSettingsId` INT(11), IN `IN_Time` TINYINT(1))  BEGIN
+
+UPDATE guildsettings
+SET `MessageTime` = IN_Time
+WHERE `GuildSettingsId` = IN_GuildSettingsID;
+
+END$$
+
 CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateOffset` (IN `IN_UserId` INT(11), IN `IN_Offset` DECIMAL)  BEGIN
 
 UPDATE users
@@ -281,7 +305,7 @@ CREATE TABLE `guild` (
   `GuildId` int(11) NOT NULL,
   `DiscordId` varchar(18) NOT NULL,
   `GuildSettingsId` int(11) DEFAULT NULL,
-  `Active` tinyint(1) DEFAULT 1
+  `Active` tinyint(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -297,8 +321,9 @@ CREATE TABLE `guildsettings` (
   `TrustedRole` varchar(18) DEFAULT '0',
   `BirthdayChannel` varchar(18) DEFAULT '0',
   `MentionSetting` varchar(18) DEFAULT '0',
-  `TrustedPreventsRole` tinyint(1) DEFAULT 1,
-  `TrustedPreventsMessage` tinyint(1) DEFAULT 1,
+  `MessageTime` tinyint(1) DEFAULT '0',
+  `TrustedPreventsRole` tinyint(1) DEFAULT '1',
+  `TrustedPreventsMessage` tinyint(1) DEFAULT '1',
   `CustomMessage` varchar(2000) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -312,8 +337,8 @@ CREATE TABLE `users` (
   `UserId` int(11) NOT NULL,
   `UserDiscordId` varchar(18) NOT NULL,
   `Birthday` date DEFAULT NULL,
-  `TimeOffset` decimal(10,0) DEFAULT 0,
-  `ChangesLeft` tinyint(4) DEFAULT 3
+  `TimeOffset` decimal(10,0) DEFAULT '0',
+  `ChangesLeft` tinyint(4) DEFAULT '3'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
