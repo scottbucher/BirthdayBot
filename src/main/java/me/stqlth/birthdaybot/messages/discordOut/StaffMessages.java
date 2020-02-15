@@ -37,6 +37,14 @@ public class StaffMessages {
                         + "\nExample usage: `bday setmessage Happy Birthday!`");
         channel.sendMessage(builder.build()).queue();
     }
+    public void invalidTime(TextChannel channel, String command, String args) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#EA2027"))
+                .setDescription("Invalid input, try using this format:" +
+                        "\nFormat: `bday " + command + " " + args + "`"
+                        + "\nExample usage: `bday config messageTime 15`");
+        channel.sendMessage(builder.build()).queue();
+    }
     public void onlyAdmins(TextChannel channel) {
         EmbedBuilder builder = new EmbedBuilder();
 
@@ -65,7 +73,13 @@ public class StaffMessages {
     public void successMessage(TextChannel channel, String message) {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.decode("#1CFE86"))
-                .setDescription("Successfully set the birthday message to \"" + message + "\"");
+                .setDescription("Successfully set the birthday message to **" + message + "**");
+        channel.sendMessage(builder.build()).queue();
+    }
+    public void resetMessage(TextChannel channel) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#1CFE86"))
+                .setDescription("Successfully reset the birthday message to it's default value!");
         channel.sendMessage(builder.build()).queue();
     }
     public void successMentionSetting(TextChannel channel, String setting) {
@@ -78,6 +92,12 @@ public class StaffMessages {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.decode("#1CFE86"))
                 .setDescription("The birthday message will now mention " + setting.getAsMention() + "!");
+        channel.sendMessage(builder.build()).queue();
+    }
+    public void successMessageTime(TextChannel channel, int time) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#1CFE86"))
+                .setDescription("temp success message, time: " + time);
         channel.sendMessage(builder.build()).queue();
     }
     public void disableMentionSetting(TextChannel channel) {
