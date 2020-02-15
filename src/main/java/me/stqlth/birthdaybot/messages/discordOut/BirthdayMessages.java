@@ -3,18 +3,19 @@ package me.stqlth.birthdaybot.messages.discordOut;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
+import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
+import java.util.List;
 
 public class BirthdayMessages {
-	private BirthdayBotConfig birthdayBotConfig;
-	private GetMessageInfo getMessageInfo;
 
-	public BirthdayMessages(BirthdayBotConfig birthdayBotConfig, GetMessageInfo getMessageInfo) {
-		this.birthdayBotConfig = birthdayBotConfig;
-		this.getMessageInfo = getMessageInfo;
+	private DatabaseMethods db;
+
+	public BirthdayMessages(DatabaseMethods databaseMethods) {
+		this.db = databaseMethods;
 	}
 
 	public void sendErrorMessage(TextChannel channel, CommandEvent event, String command, String args) {
@@ -107,5 +108,37 @@ public class BirthdayMessages {
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription("Happy Birthday " + member.getAsMention() + "!");
 		channel.sendMessage(builder.build()).queue();
+	}
+	public void happyBirthdays(TextChannel channel, List<Member> birthdays) {
+		EmbedBuilder builder = new EmbedBuilder();
+
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription("Happy Birthday to " + getBirthdays(birthdays) + "!");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void customBirthdayMessage(TextChannel channel, List<Member> birthdays, String message) {
+		EmbedBuilder builder = new EmbedBuilder();
+
+		String bdays = getBirthdays(birthdays).toString();
+		message = message.replaceAll("@Users", bdays);
+
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription(message);
+		channel.sendMessage(builder.build()).queue();
+	}
+
+	public StringBuilder getBirthdays(List<Member> birthdays) {
+		int size = birthdays.size();
+		StringBuilder bdays = new StringBuilder();
+
+		if (size > 2) {
+			for (int i = 0; i < size-1; i++)
+				bdays.append(birthdays.get(i).getAsMention()).append(", ");
+
+			bdays.append("and ").append(birthdays.get(size-1).getUser().getAsMention());
+		} else {
+			bdays.append(birthdays.get(0).getAsMention()).append(" and ").append(birthdays.get(1).getAsMention());
+		}
+		return bdays;
 	}
 }

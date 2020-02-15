@@ -67,8 +67,8 @@ public class BirthdayBot {
         GetMessageInfo getMessageInfo = new GetMessageInfo(birthdayBotConfig, debugMessages);
 
         SettingsManager settingsManager = new SettingsManager(birthdayBotConfig, debugMessages);
-        BirthdayMessages birthdayMessages = new BirthdayMessages(birthdayBotConfig, getMessageInfo);
         DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
+        BirthdayMessages birthdayMessages = new BirthdayMessages(databaseMethods);
         StaffMessages staffMessages = new StaffMessages(birthdayBotConfig, getMessageInfo);
 
         BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages, birthdayBotConfig);
