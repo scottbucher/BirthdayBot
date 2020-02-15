@@ -72,7 +72,16 @@ public class Help extends Command {
 						"\n - When set to **everyone** the bot @everyone when a birthday message is sent." +
 						"\n - When set to **here** the bot will @here when a birthday message is sent." +
 						"\n - When set to a **role** the bot will mention that role when a birthday message is sent." +
-						"\n - When set to **disabled** the bot will not send a mention with birthday messages.", false);
+						"\n - When set to **disabled** the bot will not send a mention with birthday messages.", false)
+				.addField("Message Setting", "These commands allow server owners to change settings for the birthday message " +
+				"For these settings to work, a birthday channel must be set, to set this up, use `bday help setup`." +
+				"\n\n`bday config messageTime <0-23>`" +
+				"\n - The 0-23 represents hours in military time. EX: 0 = 12am (The start of the day) while 23 = 11pm" +
+				"\n\n`bday config setMessage <Message>`" +
+				"\nUse `@Users` in your message if you want the message to include the user(s) who's birthday it is." +
+				" `@Users` auto formats the names as such: `Stqlth, User2, and User 3` if there were 3 birthdays that day" +
+						"\n\n`bday config resetMessage`\n" +
+						" - Sets the birthday message to its default value.", false);
 		channel.sendMessage(builder.build()).queue();
 	}
 	public void sendSetupHelpMessage(CommandEvent event, TextChannel channel) {

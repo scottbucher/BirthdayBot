@@ -106,11 +106,16 @@ public class Next extends Command {
 			int size = birthdays.size();
 			StringBuilder bdays = new StringBuilder();
 
-			for (int i = 0; i < size-2; i++)
-				bdays.append(birthdays.get(i).getUser().getName()).append(", ");
+			if (size > 2) {
+				for (int i = 0; i < size-1; i++)
+					bdays.append(birthdays.get(i).getUser().getName()).append(", ");
+				bdays.append("and ").append(birthdays.get(size-1).getUser().getName());
+			} else {
+				bdays.append(birthdays.get(0).getUser().getName()).append(" and ").append(birthdays.get(1).getUser().getName());
+			}
 
 
-			bdays.append(birthdays.get(size-2).getUser().getName()).append(", and ").append(birthdays.get(size-1).getUser().getName()).append("'s birthday on ");
+			bdays.append("'s birthdays are on ");
 			String date = "**" + getMonth(month) + " " + day + ", " + currentYear + "**";
 
 			String message = bdays + date;
