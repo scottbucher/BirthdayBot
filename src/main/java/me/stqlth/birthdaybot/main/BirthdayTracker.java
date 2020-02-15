@@ -54,23 +54,6 @@ public class BirthdayTracker {
 				everyHour,
 				// The unit of time for the above parameters
 				TimeUnit.MILLISECONDS);
-
-
-//		Calendar calendar = Calendar.getInstance();
-//		int nextHour = calendar.get(Calendar.HOUR_OF_DAY) + 1; //12:00am is 0 - 23 which is 11pm
-//		System.out.println(nextHour);
-//
-//		boolean s = true;
-//
-//		while (s) {
-//			LocalTime cTime = LocalTime.now();
-//			if (cTime.getHour() == nextHour) {
-////				trackBirthdays(client, nextHour);
-//				s = false;
-//			}
-//			Thread.sleep(1000);
-////			System.out.println("Running the while loop");
-//		}
 	}
 
 	public void trackBirthdays(ShardManager client) {
