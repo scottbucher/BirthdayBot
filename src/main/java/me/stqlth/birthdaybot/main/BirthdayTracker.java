@@ -97,6 +97,7 @@ public class BirthdayTracker {
 			boolean preventChannel = db.getTrustedPreventMessage(guild);
 
 			for (Member member : members) {
+
 				if (member.getUser().isBot()) continue;
 
 				if (preventChannel && preventRole && tRole != null)

@@ -15,6 +15,7 @@ import java.awt.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class SetBDay extends Command {
@@ -127,8 +128,8 @@ public class SetBDay extends Command {
     private void waitForConfirmation(CommandEvent event, TextChannel channel, Message msg, String sBday, int offset, int changesLeft, String date) {
 
         waiter.waitForEvent(MessageReactionAddEvent.class,
-                e -> e.getChannel().equals(event.getChannel()) && !e.getUser().isBot() &&
-                        (e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C")),
+                e -> e.getChannel().equals(event.getChannel()) && !Objects.requireNonNull(e.getUser()).isBot() &&
+                        ((e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C")) && Objects.equals(e.getMember(), event.getMember())),
                 e -> {
                     if (e.getReactionEmote().getName().equals("\u2705")) {
                         msg.delete().queue();

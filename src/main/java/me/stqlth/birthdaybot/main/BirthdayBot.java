@@ -52,7 +52,7 @@ public class BirthdayBot {
         }
     }
 
-    private static void startBot() throws IOException, LoginException {
+    private static void startBot() throws IOException {
         Logger.Info("Application started.");
 
         // Load config
@@ -84,7 +84,6 @@ public class BirthdayBot {
                 new SetTrustedRole(databaseMethods, staffMessages),
                 new ClearTrustedRole(databaseMethods, staffMessages),
                 new CreateTrustedRole(databaseMethods, staffMessages),
-//                new SetMessage(databaseMethods, staffMessages),
 
 
                 //INFO
