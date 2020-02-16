@@ -40,6 +40,7 @@ public class Config extends Command {
 		}
 
 		String[] args = event.getMessage().getContentRaw().split(" ");
+		if (args.length <= 2) return;
 
 		if (args[2].equalsIgnoreCase("trusted") && args.length == 5) {
 			if (args[3].equalsIgnoreCase("preventRole")) {
