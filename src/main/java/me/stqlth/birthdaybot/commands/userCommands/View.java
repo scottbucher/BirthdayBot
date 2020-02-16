@@ -19,7 +19,8 @@ public class View extends Command {
 		this.name = "view";
 		this.aliases = new String[]{"show"};
 		this.help = "View another user's birthday";
-		this.category = new Category("Tools");
+		this.arguments = "<name>";
+		this.category = new Category("Utilities");
 
 		this.db = databaseMethods;
 		this.birthdayMessages = birthdayMessages;
