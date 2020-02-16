@@ -91,6 +91,7 @@ public class BirthdayBot {
                 new About(),
                 new Settings(databaseMethods),
                 new ServerInfo(),
+                new Shard(),
 
 
                 //UTILITIES
