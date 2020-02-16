@@ -1,41 +1,41 @@
-package me.stqlth.birthdaybot.events;
+package me.stqlth.birthdaybot.commands.userCommands;
 
+import com.jagrosh.jdautilities.command.Command;
+import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
-import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.time.Period;
 
-public class GuildMessageRecieved extends ListenerAdapter {
+public class View extends Command {
 
 	private DatabaseMethods db;
 	private BirthdayMessages birthdayMessages;
 
-	public GuildMessageRecieved(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages) {
+	public View(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages) {
+		this.name = "view";
+		this.aliases = new String[]{"show"};
+		this.help = "View another user's birthday";
+		this.category = new Category("Tools");
+
 		this.db = databaseMethods;
 		this.birthdayMessages = birthdayMessages;
 	}
 
 	@Override
-	public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-		TextChannel channel = event.getChannel();
+	protected void execute(CommandEvent event) {
+		TextChannel channel = event.getTextChannel();
 
 		String[] args = event.getMessage().getContentRaw().split(" ");
-
-		if (args.length != 2) return;
-
-		if (!args[0].equals("bday")) return;
+		if (args.length != 3) return;
 
 		Member target;
 
-		target = event.getGuild().getMembers().stream().filter(member -> member.getEffectiveName().toLowerCase().contains(args[1].toLowerCase())).findFirst().orElse(null);
-		if (target == null)target = event.getGuild().getMembers().stream().filter(member -> member.getUser().getName().toLowerCase().contains(args[1].toLowerCase())).findFirst().orElse(null);
+		target = event.getGuild().getMembers().stream().filter(member -> member.getEffectiveName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
+		if (target == null)target = event.getGuild().getMembers().stream().filter(member -> member.getUser().getName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
 
 		if (target == null) {
 			birthdayMessages.noUser(channel);
