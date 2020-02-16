@@ -114,7 +114,6 @@ public class Next extends Command {
 				bdays.append(birthdays.get(0).getUser().getName()).append(" and ").append(birthdays.get(1).getUser().getName());
 			}
 
-
 			bdays.append("'s birthdays are on ");
 			String date = "**" + getMonth(month) + " " + day + ", " + currentYear + "**";
 

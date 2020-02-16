@@ -96,7 +96,7 @@ public class Help extends Command {
 						"\n\n`bday SetBirthdayRole <@role/rolename>`\n`bday CreateBirthdayRole` - Creates the default birthday role\n`bday ClearBirthdayRole` - Clears the birthday role\n\n", false)
 				.addField("Birthday Channel", "The birthday channel is the channel birthday messages are sent in. " +
 						"When a birthday channel is not set birthday messages are not set, regardless of other settings." +
-						"\n\n`bday SetChannel <@role/rolename>`\n`bday CreateChannel` - Creates the default birthday channel\n`bday ClearChannel` - Clears the birthday channel", false)
+						"\n\n`bday SetChannel [#channel]`\n`bday CreateChannel` - Creates the default birthday channel\n`bday ClearChannel` - Clears the birthday channel", false)
 				.addField("Trusted Role", "The trusted role is the role which allows users to receive the birthday role and/or birthday message. " +
 						"When a trusted role is not set, all users receive a birthday role and/or message assuming the birthday role and/or channel are set." +
 						"\n\n`bday SetTrustedRole <@role/rolename>`\n`bday CreateTrustedRole` - Creates the default trusted role\n`bday ClearTrustedRole` - Clears the trusted role", false);
