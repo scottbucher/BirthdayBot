@@ -34,6 +34,12 @@ public class BirthdayMessages {
 						+ "\nExample usage: `bday set 28, 8, 2001, -5`");
 		channel.sendMessage(builder.build()).queue();
 	}
+	public void noUser(TextChannel channel) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("I can't find that user!");
+		channel.sendMessage(builder.build()).queue();
+	}
 	public void outOfChanges(CommandEvent event, TextChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#EA2027"))

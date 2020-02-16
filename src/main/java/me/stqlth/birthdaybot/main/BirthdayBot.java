@@ -119,7 +119,7 @@ public class BirthdayBot {
         try {
             instance = startShardManager(birthdayBotConfig, client, listeners);
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000 * 30);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
