@@ -95,9 +95,14 @@ public class StaffMessages {
         channel.sendMessage(builder.build()).queue();
     }
     public void successMessageTime(TextChannel channel, int time) {
+        String timeMessage;
+        if (time == 0) timeMessage = "12:00 AM";
+        else if (time > 0 && time < 12) timeMessage = time + ":00 AM";
+        else timeMessage = (time-12) + ":00 PM";
+
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.decode("#1CFE86"))
-                .setDescription("temp success message, time: " + time);
+                .setDescription("Successfully set the Birthday Messages to send at " + timeMessage);
         channel.sendMessage(builder.build()).queue();
     }
     public void disableMentionSetting(TextChannel channel) {

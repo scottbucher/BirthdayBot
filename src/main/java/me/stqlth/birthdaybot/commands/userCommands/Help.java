@@ -47,7 +47,7 @@ public class Help extends Command {
 						"Your GMT offset is the value at the bottom that is highlighted " +
 						"(if the highlighted value at the bottom simply says `UTC`, then your GMT offset is 0.).\n\n" +
 						"Example usage: `bday set 28, 8, 2001, -5`\n ", false)
-				.addField("bday <@user>", "View a player's birthday", false)
+				.addField("bday <name>", "View a player's birthday", false)
 				.addField("bday next", "View the next birthday in your guild", false)
 				.addField("bday invite", "Invites the bot to your server", false)
 				.addField("bday support", "Join the BirthdayBot support discord", false)

@@ -1,6 +1,7 @@
 package me.stqlth.birthdaybot.events;
 
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
+import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -29,17 +30,25 @@ public class GuildMessageRecieved extends ListenerAdapter {
 
 		if (args.length != 2) return;
 
-		if (!args[0].equals("bday") || event.getMessage().getMentionedMembers().isEmpty()) return;
+		if (!args[0].equals("bday")) return;
 
-		Member member = event.getMessage().getMentionedMembers().get(0);
+		Member target;
 
-		String birthday = db.getUserBirthday(member);
+		target = event.getGuild().getMembers().stream().filter(member -> member.getEffectiveName().toLowerCase().contains(args[1].toLowerCase())).findFirst().orElse(null);
+		if (target == null)target = event.getGuild().getMembers().stream().filter(member -> member.getUser().getName().toLowerCase().contains(args[1].toLowerCase())).findFirst().orElse(null);
+
+		if (target == null) {
+			birthdayMessages.noUser(channel);
+			return;
+		}
+
+		String birthday = db.getUserBirthday(target);
 		if (birthday == null) {
-			birthdayMessages.noBirthday(channel, member);
+			birthdayMessages.noBirthday(channel, target);
 			return;
 		}
 		String[] values = birthday.split("-");
-		String offset = String.valueOf(db.getUserOffset(member));
+		String offset = String.valueOf(db.getUserOffset(target));
 		if (offset.equals("0")) {
 			offset = "UTC";
 		} else offset = "GMT" + offset;
@@ -52,7 +61,7 @@ public class GuildMessageRecieved extends ListenerAdapter {
 		LocalDate birthDate = LocalDate.of(year, month, day);
 		int age = calculateAge(birthDate, LocalDate.now());
 
-		birthdayMessages.userBirthday(channel, date, member, age);
+		birthdayMessages.userBirthday(channel, date, target, age);
 	}
 	private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {
 		if ((birthDate != null) && (currentDate != null)) {
