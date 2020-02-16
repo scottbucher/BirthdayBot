@@ -8,7 +8,6 @@ import me.stqlth.birthdaybot.commands.staffCommands.*;
 import me.stqlth.birthdaybot.commands.userCommands.*;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.events.GuildJoinLeave;
-import me.stqlth.birthdaybot.events.GuildMessageRecieved;
 import me.stqlth.birthdaybot.events.UserJoinLeave;
 import me.stqlth.birthdaybot.main.GuildSettings.SettingsManager;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
@@ -99,7 +98,8 @@ public class BirthdayBot {
                 new SetBDay(birthdayMessages, waiter, databaseMethods),
                 new Next(databaseMethods, birthdayMessages),
                 new Support(birthdayMessages),
-                new Invite(birthdayMessages)
+                new Invite(birthdayMessages),
+                new View(databaseMethods, birthdayMessages)
         };
 
         // Create the client
@@ -108,8 +108,7 @@ public class BirthdayBot {
         EventListener[] listeners = new EventListener[]{
                 waiter,
                 new GuildJoinLeave(birthdayBotConfig, debugMessages),
-                new UserJoinLeave(birthdayBotConfig, debugMessages),
-                new GuildMessageRecieved(databaseMethods, birthdayMessages)
+                new UserJoinLeave(birthdayBotConfig, debugMessages)
         };
 
         // Start the shard manager
