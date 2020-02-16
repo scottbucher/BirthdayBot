@@ -19,8 +19,7 @@ public class Config extends Command {
 
 	public Config(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
 		this.name = "config";
-		this.help = "Set the birthday message channel";
-		this.arguments = "[#channel]";
+		this.help = "Configures server settings";
 		this.guildOnly = true;
 		this.hidden = true;
 
