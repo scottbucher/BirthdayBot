@@ -115,16 +115,19 @@ public class BirthdayTracker {
 				LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 				now = now.minusHours(offsetDifference);
 
+				if (doesBirthdayEqualTodayAndNotTime(bday, now, guildMessageTime)) {
+					if (bChannel != null && now.getHour() == guildMessageTime && (!preventChannel || hasTRole || tRole == null))
+						birthdays.add(member);
+				}
 
 				if (doesBirthdayEqualTodayAndTime(bday, now)) {
+					Logger.Info("It is " + member.getEffectiveName() + "'s birthday");
 					//check if its member's birthday
 
 
 					if (bRole != null && (!preventRole || hasTRole || tRole == null)) {
 						guild.addRoleToMember(member, bRole).queue();
 					}
-					if (bChannel != null && now.getHour() == guildMessageTime && (!preventChannel || hasTRole || tRole == null))
-						birthdays.add(member);
 				} else if (doesBirthdayEqualYesterdayAndTime(bday, now) && bRole != null) {
 					guild.removeRoleFromMember(member, bRole).queue();
 				}
@@ -168,6 +171,15 @@ public class BirthdayTracker {
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
 		LocalDateTime birthDay = LocalDateTime.of(currentYear, month, day, 0, now.getMinute());
+		return now.equals(birthDay);
+	}
+	private static boolean doesBirthdayEqualTodayAndNotTime(String bday, LocalDateTime now, int hour) {
+		String[] values = bday.split("-");
+		int day = Integer.parseInt(values[2]);
+		int month = Integer.parseInt(values[1]);
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+		LocalDateTime birthDay = LocalDateTime.of(currentYear, month, day, hour, 0);
 		return now.equals(birthDay);
 	}
 
