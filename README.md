@@ -1,6 +1,6 @@
 # Birthday Bot
 
-A highly customisable birthday Discord Bot.
+A highly customizable free birthday Discord Bot.
 
 [Click here to add BirthdayBot to your Discord server!](https://discordapp.com/oauth2/authorize?client_id=656621136808902656&permissions=8&scope=bot)
 
