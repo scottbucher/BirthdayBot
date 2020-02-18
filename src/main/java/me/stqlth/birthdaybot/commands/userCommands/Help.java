@@ -30,6 +30,8 @@ public class Help extends Command {
 			sendSetupHelpMessage(event, channel);
 		} else if (args[2].equalsIgnoreCase("config")) {
 			sendConfigHelpMessage(event, channel);
+		} else if (args[2].equalsIgnoreCase("security")) {
+			sendSecurityHelpMessage(event, channel);
 		}
 
 	}
@@ -52,7 +54,8 @@ public class Help extends Command {
 				.addField("bday invite", "Invites the bot to your server", false)
 				.addField("bday support", "Join the BirthdayBot support discord", false)
 				.addField("More Help Options", "Use `bday help setup` for help with the bot setup!\n" +
-						"Use `bday help config` for help with bot configuration!", false);
+						"Use `bday help config` for help with bot configuration!\n" +
+						"User `bday help security` for security options for server owners", false);
 		channel.sendMessage(builder.build()).queue();
 	}
 	public void sendConfigHelpMessage(CommandEvent event, TextChannel channel) {
@@ -82,6 +85,17 @@ public class Help extends Command {
 				" `@Users` auto formats the names as such: `Stqlth, User2, and User 3` if there were 3 birthdays that day" +
 						"\n\n`bday config resetMessage`\n" +
 						" - Sets the birthday message to its default value.", false);
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void sendSecurityHelpMessage(CommandEvent event, TextChannel channel) {
+		SelfUser bot = event.getJDA().getSelfUser();
+		String botIcon = bot.getAvatarUrl();
+		EmbedBuilder builder = new EmbedBuilder();
+
+		builder.setColor(Color.decode("#1CFE86"))
+				.setAuthor("BirthdayBot Security Help", null, botIcon)
+				.addField("User's Age", "These commands allow server owners to control the publicity and accessibility of their member's ages" +
+						"\n\n`bday config security preventAge <true/false>`\n - When **true** user's ages will not be show in the `bday view` command", false);
 		channel.sendMessage(builder.build()).queue();
 	}
 	public void sendSetupHelpMessage(CommandEvent event, TextChannel channel) {
