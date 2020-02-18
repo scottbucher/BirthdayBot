@@ -62,7 +62,12 @@ public class View extends Command {
 		LocalDate birthDate = LocalDate.of(year, month, day);
 		int age = calculateAge(birthDate, LocalDate.now());
 
-		birthdayMessages.userBirthday(channel, date, target, age);
+		if (db.getPreventAge(event.getGuild())) {
+			birthdayMessages.userBirthdayNoAge(channel, date, target, age);
+			return;
+		}
+
+		birthdayMessages.userBirthdayWithAge(channel, date, target, age);
 	}
 	private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {
 		if ((birthDate != null) && (currentDate != null)) {

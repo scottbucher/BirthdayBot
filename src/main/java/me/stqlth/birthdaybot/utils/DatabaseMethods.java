@@ -231,6 +231,33 @@ public class DatabaseMethods {
 		}
 		return "0";
 	}
+	public boolean getPreventAge(Guild guild) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(guild);
+
+
+			ResultSet rs = statement.executeQuery("CALL GetPreventAge(" + guildSettingsId + ")");
+			rs.next();
+			return rs.getBoolean("PreventAge");
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return true;
+	}
+	public void updatePreventAge (CommandEvent event, int bool) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+			statement.execute("CALL UpdatePreventAge(" + guildSettingsId + ", " + bool + ")");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+	}
 	public boolean getTrustedPreventMessage(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {

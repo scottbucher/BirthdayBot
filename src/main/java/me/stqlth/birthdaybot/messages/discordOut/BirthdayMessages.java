@@ -86,10 +86,16 @@ public class BirthdayMessages {
 				.setDescription("Successfully set your birthday to **" + date + "**!");
 		channel.sendMessage(builder.build()).queue();
 	}
-	public void userBirthday(TextChannel channel, String date,  Member member, int age) {
+	public void userBirthdayWithAge(TextChannel channel, String date,  Member member, int age) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription(member.getUser().getName() + "'s birthday is on **" + date + "**.\nThey are **" + age + "** years old." );
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void userBirthdayNoAge(TextChannel channel, String date,  Member member, int age) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription(member.getUser().getName() + "'s birthday is on **" + date + "**." );
 		channel.sendMessage(builder.build()).queue();
 	}
 	public void nextBirthday(TextChannel channel, String date, Member member) {

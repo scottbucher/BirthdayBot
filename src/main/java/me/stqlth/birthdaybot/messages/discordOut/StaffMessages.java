@@ -179,6 +179,13 @@ public class StaffMessages {
         else builder.setDescription("**BirthdayBot** will send birthday messages to all users regardless of if the user has the trusted role!");
         channel.sendMessage(builder.build()).queue();
     }
+    public void setPreventAge(TextChannel channel, boolean setting) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#1CFE86"));
+        if (setting) builder.setDescription("**BirthdayBot** will no longer display a user's age!");
+        else builder.setDescription("**BirthdayBot** will now show a user's age, use with caution.");
+        channel.sendMessage(builder.build()).queue();
+    }
 
 
 
