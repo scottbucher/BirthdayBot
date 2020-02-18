@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Feb 18, 2020 at 05:09 AM
--- Server version: 10.3.18-MariaDB-0+deb10u1
--- PHP Version: 7.3.11-1~deb10u1
+-- Host: localhost:3307
+-- Generation Time: Feb 18, 2020 at 11:50 PM
+-- Server version: 5.7.24-log
+-- PHP Version: 7.2.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `birthdaybot`
+-- Database: `birthdaydev`
 --
 
 DELIMITER $$
@@ -87,6 +87,14 @@ CREATE DEFINER=`admin`@`%` PROCEDURE `GetGuildSettingsId` (IN `IN_DiscordId` VAR
 SELECT GuildSettingsId
 FROM guild
 WHERE `DiscordId` = IN_DiscordId;
+
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetHideAge` (IN `IN_UserId` INT(11))  BEGIN
+
+SELECT HideAge
+FROM users
+WHERE `UserId` = IN_UserId;
 
 END$$
 
@@ -237,6 +245,14 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateHideAge` (IN `IN_UserId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
+
+UPDATE users
+SET `HideAge` = IN_Setting
+WHERE `UserId` = IN_UserId;
+
+END$$
+
 CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateMentionSetting` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` VARCHAR(18))  BEGIN
 
 UPDATE guildsettings
@@ -321,7 +337,7 @@ CREATE TABLE `guild` (
   `GuildId` int(11) NOT NULL,
   `DiscordId` varchar(18) NOT NULL,
   `GuildSettingsId` int(11) DEFAULT NULL,
-  `Active` tinyint(1) DEFAULT 1
+  `Active` tinyint(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -337,11 +353,11 @@ CREATE TABLE `guildsettings` (
   `TrustedRole` varchar(18) DEFAULT '0',
   `BirthdayChannel` varchar(18) DEFAULT '0',
   `MentionSetting` varchar(18) DEFAULT '0',
-  `MessageTime` tinyint(1) DEFAULT 0,
-  `TrustedPreventsRole` tinyint(1) DEFAULT 1,
-  `TrustedPreventsMessage` tinyint(1) DEFAULT 1,
+  `MessageTime` tinyint(1) DEFAULT '0',
+  `TrustedPreventsRole` tinyint(1) DEFAULT '1',
+  `TrustedPreventsMessage` tinyint(1) DEFAULT '1',
   `CustomMessage` varchar(2000) DEFAULT '0',
-  `PreventAge` tinyint(1) DEFAULT 1
+  `PreventAge` tinyint(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -354,8 +370,9 @@ CREATE TABLE `users` (
   `UserId` int(11) NOT NULL,
   `UserDiscordId` varchar(18) NOT NULL,
   `Birthday` date DEFAULT NULL,
-  `TimeOffset` decimal(10,0) DEFAULT 0,
-  `ChangesLeft` tinyint(4) DEFAULT 3
+  `TimeOffset` decimal(10,0) DEFAULT '0',
+  `ChangesLeft` tinyint(4) DEFAULT '3',
+  `HideAge` tinyint(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

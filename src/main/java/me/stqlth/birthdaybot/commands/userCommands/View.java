@@ -43,13 +43,13 @@ public class View extends Command {
 			return;
 		}
 
-		String birthday = db.getUserBirthday(target);
+		String birthday = db.getUserBirthday(target.getUser());
 		if (birthday == null) {
 			birthdayMessages.noBirthday(channel, target);
 			return;
 		}
 		String[] values = birthday.split("-");
-		String offset = String.valueOf(db.getUserOffset(target));
+		String offset = String.valueOf(db.getUserOffset(target.getUser()));
 		if (offset.equals("0")) {
 			offset = "UTC";
 		} else offset = "GMT" + offset;
@@ -57,16 +57,17 @@ public class View extends Command {
 		int month = Integer.parseInt(values[1]);
 		int year = Integer.parseInt(values[0]);
 
-		String date = getMonth(month) + " " + day + ", " + year + " " + offset;
-
 		LocalDate birthDate = LocalDate.of(year, month, day);
 		int age = calculateAge(birthDate, LocalDate.now());
 
-		if (db.getPreventAge(event.getGuild())) {
+		if (db.getPreventAge(event.getGuild()) || db.getHideAge(event.getMember().getUser())) {
+
+			String date = getMonth(month) + " " + day + ", " + offset;
 			birthdayMessages.userBirthdayNoAge(channel, date, target, age);
 			return;
 		}
 
+		String date = getMonth(month) + " " + day + ", " + year + " " + offset;
 		birthdayMessages.userBirthdayWithAge(channel, date, target, age);
 	}
 	private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {

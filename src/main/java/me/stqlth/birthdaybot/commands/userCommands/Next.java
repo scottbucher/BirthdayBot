@@ -44,7 +44,7 @@ public class Next extends Command {
 		LocalDate closest = now.plusYears(10);
 
 		for (Member check : members) { //find the nearest birthday in the guild
-			String checkDate = db.getUserBirthday(check);
+			String checkDate = db.getUserBirthday(check.getUser());
 			if (checkDate == null) continue;
 			String[] values = checkDate.split("-");
 
@@ -66,7 +66,7 @@ public class Next extends Command {
 		List<Member> birthdays = new ArrayList<>();
 
 		for (Member check : members) { //Now with the nearest birthday, find which users have this birthday
-			String checkDate = db.getUserBirthday(check);
+			String checkDate = db.getUserBirthday(check.getUser());
 			if (checkDate == null) continue;
 			String[] values = checkDate.split("-");
 
@@ -91,7 +91,7 @@ public class Next extends Command {
 		}
 
 		if (birthdays.size() > 1) {
-			String birthday = db.getUserBirthday(birthdays.get(0));
+			String birthday = db.getUserBirthday(birthdays.get(0).getUser());
 			String[] values = birthday.split("-");
 			int day = Integer.parseInt(values[2]);
 			int month = Integer.parseInt(values[1]);
@@ -126,7 +126,7 @@ public class Next extends Command {
 
 			return;
 		} else {
-			String birthday = db.getUserBirthday(birthdays.get(0));
+			String birthday = db.getUserBirthday(birthdays.get(0).getUser());
 			String[] values = birthday.split("-");
 
 			int day = Integer.parseInt(values[2]);

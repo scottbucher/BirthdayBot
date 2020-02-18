@@ -12,38 +12,52 @@ public class Help extends Command {
 	public Help() {
 		this.name = "help";
 		this.aliases = new String[]{"h", "?"};
-		this.guildOnly = true;
+		this.guildOnly = false;
 		this.help = "Displays the help menu";
 		this.category = new Category("Info");
 	}
 
 	@Override
 	protected void execute(CommandEvent event) {
-		TextChannel channel = event.getTextChannel();
+		TextChannel channel = null;
+		PrivateChannel privateChannel = null;
+
+		try {
+			channel = event.getTextChannel();
+		} catch (IllegalStateException ignored) {
+			privateChannel = event.getPrivateChannel();
+		}
+		boolean normal = true;
+
+		if (privateChannel != null) normal = false;
+
+
 		String[] args = event.getMessage().getContentRaw().split(" ");
 
 		if (args.length == 2) {
-			sendHelpMessage(event, channel);
+			sendHelpMessage(event, normal);
 			return;
 		}
 		if (args[2].equalsIgnoreCase("setup")) {
-			sendSetupHelpMessage(event, channel);
+			sendSetupHelpMessage(event, normal);
 		} else if (args[2].equalsIgnoreCase("config")) {
-			sendConfigHelpMessage(event, channel);
+			sendConfigHelpMessage(event, normal);
 		} else if (args[2].equalsIgnoreCase("security")) {
-			sendSecurityHelpMessage(event, channel);
+			sendSecurityHelpMessage(event, normal);
 		}
 
 	}
 
-	public void sendHelpMessage(CommandEvent event, TextChannel channel) {
+	public void sendHelpMessage(CommandEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
 		String botIcon = bot.getAvatarUrl();
 		EmbedBuilder builder = new EmbedBuilder();
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor("BirthdayBot General Help", null, botIcon)
-				.addField("bday set <day>, <month>, <year>, <gmt offset>", "This command enters your birthday into our system. " +
+				.addField("bday set <day>, <month>, <year>, <gmt offset>", "__**NOTE**__: We recommend this command is used in a PM with Birthday Bot" +
+						" to hide your age and exact date of birth." +
+						"\n\nThis command enters your birthday into our system. " +
 						"Each User may use this command up to __**3**__ times. This is to prevent abuse.\n\n" +
 						"If you don't know what a GMT offset is, click [here](https://www.timeanddate.com/time/map/) and hover over your location on the map. " +
 						"Your GMT offset is the value at the bottom that is highlighted " +
@@ -56,9 +70,9 @@ public class Help extends Command {
 				.addField("More Help Options", "Use `bday help setup` for help with the bot setup!\n" +
 						"Use `bday help config` for help with bot configuration!\n" +
 						"User `bday help security` for security options for server owners", false);
-		channel.sendMessage(builder.build()).queue();
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();
 	}
-	public void sendConfigHelpMessage(CommandEvent event, TextChannel channel) {
+	public void sendConfigHelpMessage(CommandEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
 		String botIcon = bot.getAvatarUrl();
 		EmbedBuilder builder = new EmbedBuilder();
@@ -85,20 +99,21 @@ public class Help extends Command {
 				" `@Users` auto formats the names as such: `Stqlth, User2, and User 3` if there were 3 birthdays that day" +
 						"\n\n`bday config resetMessage`\n" +
 						" - Sets the birthday message to its default value.", false);
-		channel.sendMessage(builder.build()).queue();
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();
 	}
-	public void sendSecurityHelpMessage(CommandEvent event, TextChannel channel) {
+	public void sendSecurityHelpMessage(CommandEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
 		String botIcon = bot.getAvatarUrl();
 		EmbedBuilder builder = new EmbedBuilder();
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor("BirthdayBot Security Help", null, botIcon)
-				.addField("User's Age", "These commands allow server owners to control the publicity and accessibility of their member's ages" +
-						"\n\n`bday config security preventAge <true/false>`\n - When **true** user's ages will not be show in the `bday view` command", false);
-		channel.sendMessage(builder.build()).queue();
+				.addField("Age Protection", "These commands allow server owners & users to control the publicity and accessibility of their/members' age(s)" +
+						"\n\n`bday config security preventAge <true/false>`\n - When **true** user's ages will not be show in the `bday view` command" +
+						"\n\n`bday hideAge <true/false>`\n - When **true** your age will not be show in the `bday view` command", false);
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();
 	}
-	public void sendSetupHelpMessage(CommandEvent event, TextChannel channel) {
+	public void sendSetupHelpMessage(CommandEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
 		String botIcon = bot.getAvatarUrl();
 		EmbedBuilder builder = new EmbedBuilder();
@@ -114,6 +129,6 @@ public class Help extends Command {
 				.addField("Trusted Role", "The trusted role is the role which allows users to receive the birthday role and/or birthday message. " +
 						"When a trusted role is not set, all users receive a birthday role and/or message assuming the birthday role and/or channel are set." +
 						"\n\n`bday SetTrustedRole <@role/rolename>`\n`bday CreateTrustedRole` - Creates the default trusted role\n`bday ClearTrustedRole` - Clears the trusted role", false);
-		channel.sendMessage(builder.build()).queue();
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();
 	}
 }

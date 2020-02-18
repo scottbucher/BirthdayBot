@@ -108,10 +108,10 @@ public class BirthdayTracker {
 
 				boolean hasTRole = member.getRoles().contains(tRole);
 
-				String bday = db.getUserBirthday(member);
+				String bday = db.getUserBirthday(member.getUser());
 				if (bday == null) continue; //if the member doesn't have a birthday ignore them
 				int botOffset = Integer.parseInt(bConfig.getBotOffset());
-				int memberOffset = db.getUserOffset(member);
+				int memberOffset = db.getUserOffset(member.getUser());
 				int offsetDifference = botOffset - memberOffset;
 				LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 				now = now.minusHours(offsetDifference);

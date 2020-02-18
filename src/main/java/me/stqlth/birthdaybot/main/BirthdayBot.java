@@ -99,7 +99,8 @@ public class BirthdayBot {
                 new Next(databaseMethods, birthdayMessages),
                 new Support(birthdayMessages),
                 new Invite(birthdayMessages),
-                new View(databaseMethods, birthdayMessages)
+                new View(databaseMethods, birthdayMessages),
+                new HideAge(databaseMethods, birthdayMessages)
         };
 
         // Create the client
@@ -118,7 +119,7 @@ public class BirthdayBot {
         try {
             instance = startShardManager(birthdayBotConfig, client, listeners);
             try {
-                Thread.sleep(1000 * 60);
+                Thread.sleep(1000 * 1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
