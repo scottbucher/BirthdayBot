@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -142,8 +143,10 @@ public class BirthdayMessages {
 				bdays.append(birthdays.get(i).getAsMention()).append(", ");
 
 			bdays.append("and ").append(birthdays.get(size-1).getUser().getAsMention());
-		} else {
+		} else if (size == 2){
 			bdays.append(birthdays.get(0).getAsMention()).append(" and ").append(birthdays.get(1).getAsMention());
+		} else {
+			bdays.append(birthdays.get(0).getAsMention());
 		}
 		return bdays;
 	}
