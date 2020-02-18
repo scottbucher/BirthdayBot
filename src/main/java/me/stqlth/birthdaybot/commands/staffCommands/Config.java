@@ -126,6 +126,14 @@ public class Config extends Command {
 
 			db.updateMessage(event, "0");
 			staffMessages.resetMessage(channel);
+		} else if (args[2].equalsIgnoreCase("PreventAge") && args.length == 4) {
+			if (args[3].equalsIgnoreCase("t") || args[3].equalsIgnoreCase("true") || args[3].equals("1")) {
+				db.updatePreventAge(event, 1);
+				staffMessages.setPreventAge(channel, true);
+			} else if (args[3].equalsIgnoreCase("f") || args[3].equalsIgnoreCase("false") || args[3].equals("0")) {
+				db.updatePreventAge(event, 0);
+				staffMessages.setPreventAge(channel, false);
+			}
 		}
 	}
 

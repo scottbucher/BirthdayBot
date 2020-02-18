@@ -39,6 +39,7 @@ public class SetBDay extends Command {
     @Override
     protected void execute(CommandEvent event) {
         TextChannel channel = event.getTextChannel();
+        event.getMessage().delete().queue();
 
         int changesLeft = db.getChangesLeft(event);
         if (changesLeft  <= 0) {
