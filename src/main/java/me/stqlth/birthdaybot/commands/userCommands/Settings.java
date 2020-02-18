@@ -78,6 +78,7 @@ public class Settings extends Command {
 
 		boolean preventMessages = db.getTrustedPreventMessage(guild);
 		boolean preventRole = db.getTrustedPreventRole(guild);
+		boolean preventAge = db.getPreventAge(guild);
 
 		builder.setAuthor(guild.getName() + "'s Settings", null, guild.getIconUrl())
 				.setColor(Utilities.getAverageColor(event.getMember().getUser().getAvatarUrl()))
@@ -89,6 +90,7 @@ public class Settings extends Command {
 				.addField("Trusted Prevents Message", "" + preventMessages, true)
 				.addField("Message Time", "" + mTime, true)
 				.addField("Custom Message", "" + customMessage, true)
+				.addField("Show Members' Ages", "" + preventAge, true)
 //				.setThumbnail(bot.getAvatarUrl())
 				.setFooter(bot.getName(), bot.getAvatarUrl());
 

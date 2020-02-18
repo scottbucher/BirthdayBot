@@ -1,10 +1,7 @@
 package me.stqlth.birthdaybot.messages.discordOut;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.config.BirthdayBotConfig;
-import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
-import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -19,20 +16,45 @@ public class BirthdayMessages {
 		this.db = databaseMethods;
 	}
 
-	public void sendErrorMessage(TextChannel channel, CommandEvent event, String command, String args) {
+	public void sendErrorMessage(TextChannel channel, String command, String args) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#EA2027"))
-				.setDescription("You forgot some parameters, try using this format:" +
+				.setDescription("We recommend using this command in BirthdayBot's PM's for privacy." +
+						"\n\nYou forgot some parameters, try using this format:" +
 						"\nFormat: `bday " + command + " " + args + "`"
 				+ "\nExample usage: `bday set 28, 8, 2001, -5`");
 		channel.sendMessage(builder.build()).queue();
 	}
-	public void invalidFormat(TextChannel channel, CommandEvent event, String command, String args) {
+	public void sendErrorMessage(PrivateChannel channel, String command, String args) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("You forgot some parameters, try using this format:" +
+						"\nFormat: `bday " + command + " " + args + "`"
+						+ "\nExample usage: `bday set 28, 8, 2001, -5`");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void invalidFormat(TextChannel channel, String command, String args) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#EA2027"))
 				.setDescription("Your date format was invalid, try using this format:" +
 						"\nFormat: `bday " + command + " " + args + "`"
 						+ "\nExample usage: `bday set 28, 8, 2001, -5`");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void invalidFormat(PrivateChannel channel, String command, String args) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("Your date format was invalid, try using this format:" +
+						"\nFormat: `bday " + command + " " + args + "`"
+						+ "\nExample usage: `bday set 28, 8, 2001, -5`");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void invalidSetFormat(TextChannel channel, String command, String args) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("Invalid Format!" +
+						"\nFormat: `bday " + command + " " + args + "`"
+						+ "\nExample usage: `bday HideAge true`");
 		channel.sendMessage(builder.build()).queue();
 	}
 	public void noUser(TextChannel channel) {
@@ -41,7 +63,13 @@ public class BirthdayMessages {
 				.setDescription("I can't find that user!");
 		channel.sendMessage(builder.build()).queue();
 	}
-	public void outOfChanges(CommandEvent event, TextChannel channel) {
+	public void outOfChanges(TextChannel channel) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("You have used already changed your birthday 3 times.");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void outOfChanges(PrivateChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#EA2027"))
 				.setDescription("You have used already changed your birthday 3 times.");
@@ -53,7 +81,19 @@ public class BirthdayMessages {
 				.setDescription("You must be at least be 13 years old to use Discord. Review the Discord TOS [here](https://discordapp.com/terms).");
 		channel.sendMessage(builder.build()).queue();
 	}
+	public void tooYoung(PrivateChannel channel) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("You must be at least be 13 years old to use Discord. Review the Discord TOS [here](https://discordapp.com/terms).");
+		channel.sendMessage(builder.build()).queue();
+	}
 	public void dateNotFound(TextChannel channel) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("That date doesn't exist. Review a calendar [here](https://www.timeanddate.com/calendar/).");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void dateNotFound(PrivateChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#EA2027"))
 				.setDescription("That date doesn't exist. Review a calendar [here](https://www.timeanddate.com/calendar/).");
@@ -80,7 +120,22 @@ public class BirthdayMessages {
 						"(if the highlighted value at the bottom simply says `UTC`, then your GMT offset is 0.).");
 		channel.sendMessage(builder.build()).queue();
 	}
+	public void invalidOffset(PrivateChannel channel) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("Your GMT offset is invalid.\n\n" +
+						"If you don't know what a GMT offset is, click [here](https://www.timeanddate.com/time/map/) and hover over your location on the map. " +
+						"Your GMT offset is the value at the bottom that is highlighted " +
+						"(if the highlighted value at the bottom simply says `UTC`, then your GMT offset is 0.).");
+		channel.sendMessage(builder.build()).queue();
+	}
 	public void success(TextChannel channel, String date) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription("Successfully set your birthday to **" + date + "**!");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void success(PrivateChannel channel, String date) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription("Successfully set your birthday to **" + date + "**!");
@@ -137,6 +192,13 @@ public class BirthdayMessages {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription(message);
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void setHideAge(TextChannel channel, boolean setting) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"));
+		if (setting) builder.setDescription("**BirthdayBot** will no longer display your age in __any__ discord!");
+		else builder.setDescription("**BirthdayBot** will now display your age. Use with caution.");
 		channel.sendMessage(builder.build()).queue();
 	}
 

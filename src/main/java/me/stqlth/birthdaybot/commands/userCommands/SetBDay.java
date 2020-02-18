@@ -6,8 +6,8 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
@@ -38,21 +38,32 @@ public class SetBDay extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        TextChannel channel = event.getTextChannel();
-        event.getMessage().delete().queue();
+        TextChannel textChannel = null;
+        PrivateChannel privateChannel = null;
 
-        int changesLeft = db.getChangesLeft(event);
+        try {
+            textChannel = event.getTextChannel();
+        } catch (IllegalStateException ignored) {
+            privateChannel = event.getPrivateChannel();
+        }
+        boolean normal = true;
+
+        if (privateChannel != null) normal = false;
+
+        if (normal) event.getMessage().delete().queue();
+
+        int changesLeft = db.getChangesLeft(event.getAuthor());
         if (changesLeft  <= 0) {
-            birthdayMessages.outOfChanges(event, channel);
+            if (normal) birthdayMessages.outOfChanges(Objects.requireNonNull(textChannel)); else birthdayMessages.outOfChanges(privateChannel);
             return;
         } else changesLeft--;
 
 
         String[] args = event.getMessage().getContentRaw().split(" ");
-        Guild g = event.getGuild();
 
         if (args.length != 6) {
-            birthdayMessages.sendErrorMessage(channel, event, getName(), getArguments());
+            if (normal) birthdayMessages.sendErrorMessage(Objects.requireNonNull(textChannel), getName(), getArguments());
+            else birthdayMessages.sendErrorMessage(privateChannel, getName(), getArguments());
             return;
         }
 
@@ -61,12 +72,12 @@ public class SetBDay extends Command {
         try {
             offset = Integer.parseInt(args[5]);
         } catch (NumberFormatException e) {
-            birthdayMessages.invalidOffset(channel);
+            if (normal) birthdayMessages.invalidOffset(Objects.requireNonNull(textChannel)); else birthdayMessages.invalidOffset(privateChannel);
             return;
         }
 
         if (offset > 14 || offset < -11) {
-            birthdayMessages.invalidOffset(channel);
+            if (normal) birthdayMessages.invalidOffset(Objects.requireNonNull(textChannel)); else birthdayMessages.invalidOffset(privateChannel);
             return;
         }
 
@@ -90,7 +101,7 @@ public class SetBDay extends Command {
             month = Integer.parseInt(args[3]);
             year = Integer.parseInt(args[4]);
         } catch (NumberFormatException e) {
-            birthdayMessages.invalidFormat(channel, event, getName(), getArguments());
+            if (normal) birthdayMessages.invalidFormat(Objects.requireNonNull(textChannel), getName(), getArguments()); else birthdayMessages.invalidFormat(privateChannel, getName(), getArguments());
             return;
         }
 
@@ -101,18 +112,18 @@ public class SetBDay extends Command {
             LocalDate birthDate = LocalDate.of(year, month, day);
             age = calculateAge(birthDate, LocalDate.now());
         } catch (Exception e) {
-            birthdayMessages.dateNotFound(channel);
+            if (normal) birthdayMessages.dateNotFound(Objects.requireNonNull(textChannel)); else birthdayMessages.dateNotFound(privateChannel);
             return;
         }
 
         if (age < 13) {
-            birthdayMessages.tooYoung(channel);
+            if (normal) birthdayMessages.tooYoung(Objects.requireNonNull(textChannel)); else birthdayMessages.tooYoung(privateChannel);
             return;
         }
 
-        String date = getMonth(month) + " " + day + ", " + year + " " + offsetS;
+        String date = (normal ? getMonth(month) + " " + day + ", " + offsetS : getMonth(month) + " " + day + ", " + year+ " " + offsetS);
 
-        sendConfirmation(event, channel, date, sBday, offset, changesLeft);
+       if (normal) sendConfirmation(event, Objects.requireNonNull(textChannel), date, sBday, offset, changesLeft); else  sendConfirmation(event, privateChannel, date, sBday, offset, changesLeft);
     }
 
     public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, int offset, int changesLeft) {
@@ -136,11 +147,47 @@ public class SetBDay extends Command {
                         msg.delete().queue();
 
                         try {
-                            db.updateBirthday(event, sBday);
+                            db.updateBirthday(event.getMember().getUser(), sBday);
                             db.updateOffset(event, offset);
                             birthdayMessages.success(channel, date);
                         } catch (SQLException ex) {
-                            birthdayMessages.invalidFormat(channel, event, getName(), getArguments());
+                            birthdayMessages.invalidFormat(channel, getName(), getArguments());
+                            return;
+                        }
+                        db.updateChangesLeft(event, changesLeft);
+
+                    } else if (e.getReactionEmote().getName().equals("\u274C")) {
+                        msg.delete().queue();
+                    }
+                }, 30, TimeUnit.SECONDS, () -> msg.delete().queue());
+    }
+
+    public void sendConfirmation(CommandEvent event, PrivateChannel channel, String date, String sBday, int offset, int changesLeft) {
+        EmbedBuilder builder = new EmbedBuilder();
+
+        builder.setColor(Color.decode("#1CFE86"))
+                .setDescription("Please confirm that this is the correct date: **" + date + "**");
+        channel.sendMessage(builder.build()).queue(result -> {
+            result.addReaction("\u2705").queue();
+            result.addReaction("\u274C").queue();
+            waitForConfirmation(event, channel, result, sBday, offset, changesLeft, date);
+        });
+    }
+    private void waitForConfirmation(CommandEvent event, PrivateChannel channel, Message msg, String sBday, int offset, int changesLeft, String date) {
+
+        waiter.waitForEvent(MessageReactionAddEvent.class,
+                e -> e.getChannel().equals(event.getChannel()) && !Objects.requireNonNull(e.getUser()).isBot() &&
+                        ((e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C")) && Objects.equals(e.getMember(), event.getMember())),
+                e -> {
+                    if (e.getReactionEmote().getName().equals("\u2705")) {
+                        msg.delete().queue();
+
+                        try {
+                            db.updateBirthday(event.getAuthor(), sBday);
+                            db.updateOffset(event, offset);
+                            birthdayMessages.success(channel, date);
+                        } catch (SQLException ex) {
+                            birthdayMessages.invalidFormat(channel, getName(), getArguments());
                             return;
                         }
                         db.updateChangesLeft(event, changesLeft);

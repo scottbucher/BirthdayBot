@@ -3,10 +3,7 @@ package me.stqlth.birthdaybot.utils;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 
 import java.sql.*;
 
@@ -19,39 +16,45 @@ public class DatabaseMethods {
 		this.birthdayBotConfig = birthdayBotConfig;
 		this.debugMessages = debugMessages;
 	}
-
-	public void updateBirthday (CommandEvent event, String bday) throws SQLException {
+	public void updateBirthday (User user, String bday) throws SQLException {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + event.getMember().getUser().getId() + ")");
+			ResultSet rs = statement.executeQuery("CALL GetUserId(" + user.getId() + ")");
 			rs.next();
 			userId = rs.getInt("UserId");
 
 			statement.execute("CALL UpdateBirthday(" + userId + ", '" + bday + "')");
 		}
 	}
+	public int getUserId(User user) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+			ResultSet rs = statement.executeQuery("CALL GetUserId(" + user.getId() + ")");
+			rs.next();
+			return rs.getInt("UserId");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return -1;
+	}
 	public void updateOffset (CommandEvent event, int offset) throws SQLException {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + event.getMember().getUser().getId() + ")");
-			rs.next();
-			userId = rs.getInt("UserId");
+			userId = getUserId(event.getAuthor());
 
 			statement.execute("CALL UpdateOffset(" + userId + ", " + offset + ")");
 		}
 	}
-	public int getChangesLeft(CommandEvent event) {
+	public int getChangesLeft(User user) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + event.getMember().getUser().getId() + ")");
-			rs.next();
-			userId = rs.getInt("UserId");
+			userId = getUserId(user);
 
 			ResultSet rs2 = statement.executeQuery("CALL GetChangesLeft(" + userId + ")");
 			rs2.next();
@@ -67,23 +70,19 @@ public class DatabaseMethods {
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + event.getMember().getUser().getId() + ")");
-			rs.next();
-			userId = rs.getInt("UserId");
+			userId = getUserId(event.getAuthor());
 
 			statement.execute("CALL UpdateChangesLeft(" + userId + ", " + left + ")");
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public String getUserBirthday(Member member) {
+	public String getUserBirthday(User user) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + member.getId() + ")");
-			rs.next();
-			userId = rs.getInt("UserId");
+			userId = getUserId(user);
 
 			ResultSet rs2 = statement.executeQuery("CALL GetUserBirthday(" + userId + ")");
 			rs2.next();
@@ -94,14 +93,12 @@ public class DatabaseMethods {
 		}
 		return "-1";
 	}
-	public int getUserOffset(Member member) {
+	public int getUserOffset(User user) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + member.getId() + ")");
-			rs.next();
-			userId = rs.getInt("UserId");
+			userId = getUserId(user);
 
 			ResultSet rs2 = statement.executeQuery("CALL GetUserOffset(" + userId + ")");
 			rs2.next();
@@ -254,6 +251,34 @@ public class DatabaseMethods {
 			int guildSettingsId = getGuildSettingsId(event.getGuild());
 
 			statement.execute("CALL UpdatePreventAge(" + guildSettingsId + ", " + bool + ")");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+	}
+	public boolean getHideAge(User user) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int UserId = getUserId(user);
+
+
+			ResultSet rs = statement.executeQuery("CALL GetHideAge(" + UserId + ")");
+			rs.next();
+			return rs.getBoolean("HideAge");
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+			Logger.Info("GetHideAge");
+		}
+		return true;
+	}
+	public void updateHideAge(User user, int bool) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int UserId = getUserId(user);
+
+			statement.execute("CALL UpdateHideAge(" + UserId + ", " + bool + ")");
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
 		}
