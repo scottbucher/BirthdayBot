@@ -4,6 +4,8 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 
+import static me.stqlth.birthdaybot.utils.Utilities.isPrivate;
+
 public class Invite extends Command {
 
 	private BirthdayMessages birthdayMessages;
@@ -24,6 +26,6 @@ public class Invite extends Command {
 
 		if (args.length != 2) return;
 
-		birthdayMessages.inviteBot(event.getTextChannel());
+		if (!isPrivate(event)) birthdayMessages.inviteBot(event.getTextChannel()); else birthdayMessages.inviteBot(event.getPrivateChannel());
 	}
 }

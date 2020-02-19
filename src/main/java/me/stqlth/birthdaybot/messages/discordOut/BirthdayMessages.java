@@ -57,6 +57,14 @@ public class BirthdayMessages {
 						+ "\nExample usage: `bday HideAge true`");
 		channel.sendMessage(builder.build()).queue();
 	}
+	public void invalidSetFormat(PrivateChannel channel, String command, String args) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#EA2027"))
+				.setDescription("Invalid Format!" +
+						"\nFormat: `bday " + command + " " + args + "`"
+						+ "\nExample usage: `bday HideAge true`");
+		channel.sendMessage(builder.build()).queue();
+	}
 	public void noUser(TextChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#EA2027"))
@@ -165,7 +173,19 @@ public class BirthdayMessages {
 				.setDescription("Invite BirthdayBot to your server [here](https://discordapp.com/oauth2/authorize?client_id=656621136808902656&permissions=8&scope=bot)!");
 		channel.sendMessage(builder.build()).queue();
 	}
+	public void inviteBot(PrivateChannel channel) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription("Invite BirthdayBot to your server [here](https://discordapp.com/oauth2/authorize?client_id=656621136808902656&permissions=8&scope=bot)!");
+		channel.sendMessage(builder.build()).queue();
+	}
 	public void joinSupportServer(TextChannel channel) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"))
+				.setDescription("For support join our discord server [here](https://discord.gg/CJnWuWn)!");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void joinSupportServer(PrivateChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription("For support join our discord server [here](https://discord.gg/CJnWuWn)!");
@@ -195,6 +215,13 @@ public class BirthdayMessages {
 		channel.sendMessage(builder.build()).queue();
 	}
 	public void setHideAge(TextChannel channel, boolean setting) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Color.decode("#1CFE86"));
+		if (setting) builder.setDescription("**BirthdayBot** will no longer display your age in __any__ discord!");
+		else builder.setDescription("**BirthdayBot** will now display your age. Use with caution.");
+		channel.sendMessage(builder.build()).queue();
+	}
+	public void setHideAge(PrivateChannel channel, boolean setting) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#1CFE86"));
 		if (setting) builder.setDescription("**BirthdayBot** will no longer display your age in __any__ discord!");

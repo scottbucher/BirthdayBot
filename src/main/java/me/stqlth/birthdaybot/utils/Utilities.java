@@ -1,6 +1,9 @@
 package me.stqlth.birthdaybot.utils;
 
+import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.Unirest;
+import net.dv8tion.jda.api.entities.PrivateChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -42,5 +45,17 @@ public class Utilities {
             e.printStackTrace();
         }
         return new Color(27, 137, 255);
+    }
+    public static boolean isPrivate(CommandEvent event) {
+        TextChannel textChannel = null;
+        PrivateChannel privateChannel = null;
+        try {
+            textChannel = event.getTextChannel();
+        } catch (IllegalStateException ignored) {
+            privateChannel = event.getPrivateChannel();
+        }
+        boolean normal = true;
+
+        return  (privateChannel != null);
     }
 }
