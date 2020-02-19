@@ -34,10 +34,15 @@ public class View extends Command {
 		String[] args = event.getMessage().getContentRaw().split(" ");
 		if (args.length != 3) return;
 
-		Member target;
+		Member target = null;
 
-		target = event.getGuild().getMembers().stream().filter(member -> member.getEffectiveName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
-		if (target == null)target = event.getGuild().getMembers().stream().filter(member -> member.getUser().getName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
+		try {
+			target = event.getMessage().getMentionedMembers().get(0);
+		} catch (Exception ignored) {
+			target = event.getGuild().getMembers().stream().filter(member -> member.getEffectiveName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
+			if (target == null)
+				target = event.getGuild().getMembers().stream().filter(member -> member.getUser().getName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
+		}
 
 		if (target == null) {
 			birthdayMessages.noUser(channel);
