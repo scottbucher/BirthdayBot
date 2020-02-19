@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 
+import static me.stqlth.birthdaybot.utils.Utilities.isPrivate;
+
 
 public class About extends Command {
 
@@ -15,6 +17,7 @@ public class About extends Command {
     {
         this.name = "about";
         this.aliases = new String[]{"botabout","hi"};
+        this.guildOnly = false;
         this.help = "View information about BirthdayBot.";
         this.category = new Category("Info");
     }
@@ -22,7 +25,6 @@ public class About extends Command {
     @Override
     protected void execute(CommandEvent event) {
         EmbedBuilder builder = new EmbedBuilder();
-        TextChannel channel = event.getTextChannel();
 
         builder.setDescription("Hello! I am <@656621136808902656>, a bot built by <@478288246858711040>!"+
                 "\n"+
@@ -34,8 +36,7 @@ public class About extends Command {
                 "\n"+
                 "\nFor additional help, contact <@478288246858711040> or join our discord server [here](https://discord.gg/CJnWuWn)")
                 .setColor(Color.decode("#00e1ff"));
-        channel.sendMessage(builder.build()).queue();
-
+        if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();;
     }
 
 }
