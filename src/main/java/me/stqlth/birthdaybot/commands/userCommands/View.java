@@ -61,8 +61,7 @@ public class View extends Command {
 		LocalDate birthDate = LocalDate.of(year, month, day);
 		int age = calculateAge(birthDate, LocalDate.now());
 
-		if (db.getPreventAge(event.getGuild()) || db.getHideAge(event.getMember().getUser())) {
-
+		if (db.getPreventAge(event.getGuild()) || db.getHideAge(target.getUser())) {
 			String date = getMonth(month) + " " + day + ", " + offset;
 			birthdayMessages.userBirthdayNoAge(channel, date, target, age);
 			return;
