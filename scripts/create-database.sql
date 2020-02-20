@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3307
--- Generation Time: Feb 18, 2020 at 11:50 PM
+-- Generation Time: Feb 20, 2020 at 05:47 AM
 -- Server version: 5.7.24-log
 -- PHP Version: 7.2.10
 
@@ -39,6 +39,14 @@ CREATE DEFINER=`admin`@`%` PROCEDURE `DoesUserAlreadyExist` (IN `IN_UserDiscordI
 SELECT COUNT(*) > 0 AS AlreadyExists
 FROM users
 WHERE `UserDiscordId` = IN_UserDiscordId;
+
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `DoesUserAlreadyExistInGuildUser` (IN `IN_UserId` INT(11), IN `IN_GuildId` INT(11))  BEGIN
+
+SELECT COUNT(*) > 0 AS AlreadyExists
+FROM guilduser
+WHERE `UserId` = IN_UserId AND `GuildId` = IN_GuildId;
 
 END$$
 
@@ -90,11 +98,21 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetGuildUsers` (IN `IN_GuildId` INT(11))  BEGIN
+
+SELECT UserDiscordId
+FROM users
+JOIN guilduser
+ON users.UserId=guilduser.UserId
+WHERE guilduser.GuildId = IN_GuildId AND guilduser.Active=1 AND users.Birthday IS NOT NULL;
+
+END$$
+
 CREATE DEFINER=`admin`@`%` PROCEDURE `GetHideAge` (IN `IN_UserId` INT(11))  BEGIN
 
 SELECT HideAge
 FROM users
-WHERE `UserId` = IN_UserId;
+WHERE `UserId` = In_UserId;
 
 END$$
 
@@ -192,10 +210,25 @@ SET `Prefix` = IN_Prefix;
 
 END$$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `InsertGuildUser` (IN `IN_UserId` INT(11), IN `IN_GuildId` INT(11))  BEGIN
+
+INSERT INTO guilduser(UserId, GuildId)
+VALUES(IN_UserId, IN_GuildId);
+
+END$$
+
 CREATE DEFINER=`admin`@`%` PROCEDURE `InsertUser` (IN `IN_UserDiscordId` VARCHAR(18))  BEGIN
 
 INSERT INTO users(UserDiscordId)
 VALUES(IN_UserDiscordId);
+
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `IsGuildActive` (IN `IN_DiscordId` VARCHAR(18))  BEGIN
+
+SELECT Active
+FROM guild
+WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
@@ -242,6 +275,14 @@ CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateGuildActive` (IN `IN_DiscordId` VARC
 UPDATE guild
 SET `Active` = IN_Active
 WHERE `DiscordId` = IN_DiscordId;
+
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateGuildUserActive` (IN `IN_UserId` INT(11), IN `IN_GuildId` INT(11), IN `IN_Active` TINYINT(1))  BEGIN
+
+UPDATE guilduser
+SET `Active` = IN_Active
+WHERE `UserId` = IN_UserId;
 
 END$$
 
@@ -363,6 +404,19 @@ CREATE TABLE `guildsettings` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `guilduser`
+--
+
+CREATE TABLE `guilduser` (
+  `GuildUserId` int(11) NOT NULL,
+  `UserId` int(11) NOT NULL,
+  `GuildId` int(11) NOT NULL,
+  `Active` tinyint(1) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -393,6 +447,14 @@ ALTER TABLE `guildsettings`
   ADD PRIMARY KEY (`GuildSettingsId`);
 
 --
+-- Indexes for table `guilduser`
+--
+ALTER TABLE `guilduser`
+  ADD PRIMARY KEY (`GuildUserId`),
+  ADD KEY `GuildId` (`GuildId`),
+  ADD KEY `UserId` (`UserId`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -415,6 +477,12 @@ ALTER TABLE `guildsettings`
   MODIFY `GuildSettingsId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `guilduser`
+--
+ALTER TABLE `guilduser`
+  MODIFY `GuildUserId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -429,6 +497,13 @@ ALTER TABLE `users`
 --
 ALTER TABLE `guild`
   ADD CONSTRAINT `guild_ibfk_1` FOREIGN KEY (`GuildSettingsId`) REFERENCES `guildsettings` (`GuildSettingsId`);
+
+--
+-- Constraints for table `guilduser`
+--
+ALTER TABLE `guilduser`
+  ADD CONSTRAINT `guilduser_ibfk_1` FOREIGN KEY (`GuildId`) REFERENCES `guild` (`GuildId`),
+  ADD CONSTRAINT `guilduser_ibfk_2` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

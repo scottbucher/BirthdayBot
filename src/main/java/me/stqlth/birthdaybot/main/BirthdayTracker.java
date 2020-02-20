@@ -64,6 +64,8 @@ public class BirthdayTracker {
 
 		for (Guild guild : guilds) {
 
+			if (!db.guildActive(guild)) return;
+
 			long bdayRole = db.getBirthdayRole(guild);
 			long trustedRole = db.getTrustedRole(guild);
 			long bdayChannel = db.getBirthdayChannel(guild);
@@ -90,7 +92,7 @@ public class BirthdayTracker {
 			if (bChannel == null && bRole == null)
 				continue; //if both return null the bot can't do anything for this guild on birthdays
 
-			List<Member> members = guild.getMembers();
+			List<Member> members = db.getGuildUsers(guild);
 
 			int guildMessageTime = db.getGuildMessageTime(guild);
 			List<Member> birthdays = new ArrayList<>();
@@ -126,10 +128,14 @@ public class BirthdayTracker {
 					//check if its member's birthday
 
 					if (bRole != null && (!preventRole || hasTRole || tRole == null)) {
-						guild.addRoleToMember(member, bRole).queue();
+						try {
+							guild.addRoleToMember(member, bRole).queue();
+						} catch (Exception ignored) {}
 					}
 				} else if (doesBirthdayEqualYesterdayAndTime(bday, now) && bRole != null) {
-					guild.removeRoleFromMember(member, bRole).queue();
+					try {
+						guild.removeRoleFromMember(member, bRole).queue();
+					} catch (Exception ignored) {}
 				}
 
 			}
@@ -200,7 +206,7 @@ public class BirthdayTracker {
 		// Calculates the exact time of the next whole second
 		LocalDateTime nextHour = LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.HOURS);
 		// Calculates the number of milliseconds until the next second
-		return LocalDateTime.now().until(nextHour, ChronoUnit.MILLIS);
+		return LocalDateTime.now().until(nextHour, ChronoUnit.MILLIS) + 500;
 	}
 
 	private static long getMsToNextMinute() {
