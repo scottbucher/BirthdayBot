@@ -1,11 +1,12 @@
 package me.stqlth.birthdaybot.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
 public class Logger {
-    private static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+    private static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss.SSS");
 
     private static final String INFO_PREFIX = "[Info]";
     private static final String WARN_PREFIX = "[Warn]";
@@ -27,7 +28,7 @@ public class Logger {
     }
 
     public static void Error(String message, Exception ex) {
-        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + ex.getStackTrace();
+        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace());
         Output(log);
     }
 

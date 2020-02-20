@@ -19,14 +19,11 @@ public class Help extends Command {
 
 	@Override
 	protected void execute(CommandEvent event) {
-		TextChannel channel = null;
 		PrivateChannel privateChannel = null;
 
 		try {
-			channel = event.getTextChannel();
-		} catch (IllegalStateException ignored) {
 			privateChannel = event.getPrivateChannel();
-		}
+		} catch (IllegalStateException ignored) { }
 		boolean normal = true;
 
 		if (privateChannel != null) normal = false;
@@ -69,7 +66,7 @@ public class Help extends Command {
 				.addField("bday support", "Join the BirthdayBot support discord", false)
 				.addField("More Help Options", "Use `bday help setup` for help with the bot setup!\n" +
 						"Use `bday help config` for help with bot configuration!\n" +
-						"User `bday help security` for security options for server owners", false);
+						"Use `bday help security` for security options for server owners", false);
 		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();
 	}
 	public void sendConfigHelpMessage(CommandEvent event, boolean normal) {

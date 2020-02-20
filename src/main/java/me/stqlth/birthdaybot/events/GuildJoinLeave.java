@@ -5,8 +5,11 @@ import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.sql.*;
@@ -48,6 +51,7 @@ public class GuildJoinLeave extends ListenerAdapter {
 
         for (Member mem : event.getGuild().getMembers()) {
             addUser(mem);
+            addGuildUser(mem, guild);
         }
 
     }
@@ -62,6 +66,11 @@ public class GuildJoinLeave extends ListenerAdapter {
         } catch (SQLException ex) {
             debugMessages.sqlDebug(ex);
         }
+
+        for (Member mem : event.getGuild().getMembers()) {
+            deactivateGuildUser(mem, g);
+        }
+
     }
 
     private void addUser(Member member) {
@@ -79,5 +88,67 @@ public class GuildJoinLeave extends ListenerAdapter {
         } catch (SQLException ex) {
             debugMessages.sqlDebug(ex);
         }
+    }
+    private void addGuildUser(Member member, Guild guild) {
+
+        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+             Statement statement = conn.createStatement()) {
+
+            int userId = -1;
+            userId = getUserId(member.getUser());
+            int guildId = -1;
+            guildId = getGuildId(guild);
+
+            ResultSet check = statement.executeQuery("CALL DoesUserAlreadyExistInGuildUser(" + userId + ", " + guildId + ")");
+            check.next();
+            boolean UserAlreadyExists = check.getBoolean("AlreadyExists");
+
+            if (!UserAlreadyExists) {
+                statement.execute("CALL InsertGuildUser(" + userId + ", " + guildId + ")");
+            } else {
+                statement.execute("CALL UpdateGuildUserActive(" + userId + ", " + guildId + ", " + 1 + ")");
+            }
+        } catch (SQLException ex) {
+            debugMessages.sqlDebug(ex);
+        }
+    }
+
+    private void deactivateGuildUser(Member member, Guild guild) {
+
+        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+             Statement statement = conn.createStatement()) {
+
+            int userId = -1;
+            userId = getUserId(member.getUser());
+            int guildId = -1;
+            guildId = getGuildId(guild);
+
+            statement.execute("CALL UpdateGuildUserActive(" + userId + ", " + guildId + ", " + 0 + ")");
+
+        } catch (SQLException ex) {
+            debugMessages.sqlDebug(ex);
+        }
+    }
+    public int getUserId(User user) {
+        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery("CALL GetUserId(" + user.getId() + ")");
+            rs.next();
+            return rs.getInt("UserId");
+        } catch (SQLException ex) {
+            debugMessages.sqlDebug(ex);
+        }
+        return -1;
+    }
+    public int getGuildId(Guild guild) {
+        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+             Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery("CALL GetGuildId(" + guild.getId() + ")");
+            rs.next();
+            return rs.getInt("GuildId");
+        } catch (SQLException ex) {
+            debugMessages.sqlDebug(ex);
+        }
+        return -1;
     }
 }

@@ -6,6 +6,8 @@ import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import net.dv8tion.jda.api.entities.*;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseMethods {
 
@@ -21,9 +23,7 @@ public class DatabaseMethods {
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + user.getId() + ")");
-			rs.next();
-			userId = rs.getInt("UserId");
+			userId = getUserId(user);
 
 			statement.execute("CALL UpdateBirthday(" + userId + ", '" + bday + "')");
 		}
@@ -425,5 +425,56 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
+	public boolean guildActive(Guild g) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
 
+			ResultSet check = statement.executeQuery("CALL IsGuildActive(" + g.getId() + ")");
+			check.next();
+			boolean alreadyExists = check.getBoolean("Active");
+
+			if (alreadyExists) return true;
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return false;
+	}
+	public int getGuildId(Guild guild) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+			ResultSet rs = statement.executeQuery("CALL GetGuildId(" + guild.getId() + ")");
+			rs.next();
+			return rs.getInt("GuildId");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+			Logger.Info("getGuildId");
+		}
+		return -1;
+	}
+	public List<Member> getGuildUsers(Guild guild) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			List<Member> members = new ArrayList<>();
+
+			int guildId = -1;
+			guildId = getGuildId(guild);
+
+			ResultSet rs = statement.executeQuery("CALL GetGuildUsers(" + guildId + ")");
+
+			while (rs.next()) {
+				Logger.Info("There is rs.next");
+				try {
+					members.add(guild.getMemberById(rs.getString("UserDiscordId")));
+				} catch (Exception ignored) {}
+			}
+
+			return members;
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+			Logger.Info("getGuildId");
+		}
+		return null;
+	}
 }

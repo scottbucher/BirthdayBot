@@ -20,6 +20,9 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -36,212 +39,286 @@ import java.util.List;
 public class BirthdayBot {
 
 
-    private static final String CONFIG_FILE = "botconfig.json";
-    private static final String SUCCESS_EMOJI = "\uD83D\uDE03";
-    private static final String WARNING_EMOJI = "\uD83D\uDE2E";
-    private static final String ERROR_EMOJI = "\uD83D\uDE26";
+	private static final String CONFIG_FILE = "botconfig.json";
+	private static final String SUCCESS_EMOJI = "\uD83D\uDE03";
+	private static final String WARNING_EMOJI = "\uD83D\uDE2E";
+	private static final String ERROR_EMOJI = "\uD83D\uDE26";
 
-    public static void main(String[] args) {
-        try {
-            startBot();
-        } catch (IllegalArgumentException e) {
-            Logger.Warn("No login details provided! Please provide a botToken in the config file.");
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public static void main(String[] args) {
+		try {
+			startBot();
+		} catch (IllegalArgumentException e) {
+			Logger.Warn("No login details provided! Please provide a botToken in the config file.");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    private static void startBot() throws IOException {
-        Logger.Info("Application started.");
+	private static void startBot() throws IOException {
+		Logger.Info("Application started.");
 
-        // Load config
-        Logger.Info("Loading config...");
-        BirthdayBotConfig birthdayBotConfig = loadConfig();
+		// Load config
+		Logger.Info("Loading config...");
+		BirthdayBotConfig birthdayBotConfig = loadConfig();
 
-        // Construct dependencies
-        EventWaiter waiter = new EventWaiter();
+		// Construct dependencies
+		EventWaiter waiter = new EventWaiter();
 
-        DebugMessages debugMessages = new DebugMessages();
-        GetMessageInfo getMessageInfo = new GetMessageInfo(birthdayBotConfig, debugMessages);
+		DebugMessages debugMessages = new DebugMessages();
+		GetMessageInfo getMessageInfo = new GetMessageInfo(birthdayBotConfig, debugMessages);
 
-        SettingsManager settingsManager = new SettingsManager(birthdayBotConfig, debugMessages);
-        DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
-        BirthdayMessages birthdayMessages = new BirthdayMessages(databaseMethods);
-        StaffMessages staffMessages = new StaffMessages(birthdayBotConfig, getMessageInfo);
+		SettingsManager settingsManager = new SettingsManager(birthdayBotConfig, debugMessages);
+		DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
+		BirthdayMessages birthdayMessages = new BirthdayMessages(databaseMethods);
+		StaffMessages staffMessages = new StaffMessages(birthdayBotConfig, getMessageInfo);
 
-        BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages, birthdayBotConfig);
+		BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages, birthdayBotConfig);
 
-        Command[] commands = new Command[]{
-                //CONFIG
-                new Config(databaseMethods, staffMessages),
-                new SetChannel(databaseMethods, staffMessages),
-                new ClearChannel(databaseMethods, staffMessages),
-                new CreateChannel(databaseMethods, staffMessages),
-                new SetBirthdayRole(databaseMethods, staffMessages),
-                new ClearBirthdayRole(databaseMethods, staffMessages),
-                new CreateBirthdayRole(databaseMethods, staffMessages),
-                new SetTrustedRole(databaseMethods, staffMessages),
-                new ClearTrustedRole(databaseMethods, staffMessages),
-                new CreateTrustedRole(databaseMethods, staffMessages),
-
-
-                //INFO
-                new Help(),
-                new About(),
-                new Settings(databaseMethods),
-                new ServerInfo(),
-                new Shard(),
+		Command[] commands = new Command[]{
+				//CONFIG
+				new Config(databaseMethods, staffMessages),
+				new SetChannel(databaseMethods, staffMessages),
+				new ClearChannel(databaseMethods, staffMessages),
+				new CreateChannel(databaseMethods, staffMessages),
+				new SetBirthdayRole(databaseMethods, staffMessages),
+				new ClearBirthdayRole(databaseMethods, staffMessages),
+				new CreateBirthdayRole(databaseMethods, staffMessages),
+				new SetTrustedRole(databaseMethods, staffMessages),
+				new ClearTrustedRole(databaseMethods, staffMessages),
+				new CreateTrustedRole(databaseMethods, staffMessages),
 
 
-                //UTILITIES
-                new SetBDay(birthdayMessages, waiter, databaseMethods),
-                new Next(databaseMethods, birthdayMessages),
-                new Support(birthdayMessages),
-                new Invite(birthdayMessages),
-                new View(databaseMethods, birthdayMessages),
-                new HideAge(databaseMethods, birthdayMessages)
-        };
-
-        // Create the client
-        CommandClient client = createClient(birthdayBotConfig, settingsManager, commands);
-
-        EventListener[] listeners = new EventListener[]{
-                waiter,
-                new GuildJoinLeave(birthdayBotConfig, debugMessages),
-                new UserJoinLeave(birthdayBotConfig, debugMessages)
-        };
-
-        // Start the shard manager
-        ShardManager instance;
-
-        Logger.Info("Starting shard manager...");
-        try {
-            instance = startShardManager(birthdayBotConfig, client, listeners);
-            try {
-                Thread.sleep(1000 * 30);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            birthdayTracker.startTracker(instance);
-            SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
-        } catch (Exception ex) {
-            Logger.Error("Error encountered while logging in. The bot token may be incorrect.", ex);
-        }
+				//INFO
+				new Help(),
+				new About(),
+				new Settings(databaseMethods),
+				new ServerInfo(),
+				new Shard(),
 
 
-    }
+				//UTILITIES
+				new SetBDay(birthdayMessages, waiter, databaseMethods),
+				new Next(databaseMethods, birthdayMessages),
+				new Support(birthdayMessages),
+				new Invite(birthdayMessages),
+				new View(databaseMethods, birthdayMessages),
+				new HideAge(databaseMethods, birthdayMessages)
+		};
 
-    private static BirthdayBotConfig loadConfig() throws IOException {
-        Path configFilePath = new File(CONFIG_FILE).toPath();
-        String configData = new String(Files.readAllBytes(configFilePath));
-        JSONObject configJson = new JSONObject(configData);
-        return new BirthdayBotConfig(configJson);
-    }
+		// Create the client
+		CommandClient client = createClient(birthdayBotConfig, settingsManager, commands);
 
-    private static CommandClient createClient(BirthdayBotConfig birthdayBotConfig, SettingsManager settingsManager, Command[] commands) {
-        CommandClientBuilder clientBuilder = new CommandClientBuilder();
-        clientBuilder.setGuildSettingsManager(settingsManager)
-                .useDefaultGame()
-                .useHelpBuilder(false)
-                .setOwnerId(birthdayBotConfig.getOwnerId())
-                .setActivity(Activity.listening("Happy Birthday"))
-                .setStatus(OnlineStatus.ONLINE)
-                .setPrefix(birthdayBotConfig.getPrefix())
-                .setEmojis(SUCCESS_EMOJI, WARNING_EMOJI, ERROR_EMOJI)
-                .addCommands(commands);
-        return clientBuilder.build();
-    }
+		EventListener[] listeners = new EventListener[]{
+				waiter,
+				new GuildJoinLeave(birthdayBotConfig, debugMessages),
+				new UserJoinLeave(birthdayBotConfig, debugMessages)
+		};
 
-    private static ShardManager startShardManager(BirthdayBotConfig birthdayBotConfig, CommandClient client, EventListener[] listeners) throws LoginException {
-        DefaultShardManagerBuilder shardManager = new DefaultShardManagerBuilder();
+		// Start the shard manager
+		ShardManager instance;
 
-        return shardManager.setToken(birthdayBotConfig.getToken())
-                .addEventListeners((Object[]) listeners)
-                .addEventListeners(client)
-                .build();
-    }
+		Logger.Info("Starting shard manager...");
+		try {
+			instance = startShardManager(birthdayBotConfig, client, listeners);
+			try {
+				Thread.sleep(1000 * 5);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
+			try {
+				Thread.sleep(1000 * 30);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			birthdayTracker.startTracker(instance);
+		} catch (Exception ex) {
+			Logger.Error("Error encountered while logging in. The bot token may be incorrect.", ex);
+		}
 
-    private static void SetupDatabase(BirthdayBotConfig birthdayBotConfig, List<Guild> guildList, DebugMessages debugMessages) {
-        for (Guild check : guildList) {
-            if (!guildExists(birthdayBotConfig, debugMessages, check))
-                AddGuildToDatabase(birthdayBotConfig, check, debugMessages);
-            else {
-                for (Member mCheck : check.getMembers()) {
-                    if (!userExists(birthdayBotConfig, debugMessages, mCheck))
-                        addUser(birthdayBotConfig, mCheck, debugMessages);
-                }
-            }
-        }
-    }
 
-    private static boolean guildExists(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Guild g) {
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-             Statement statement = conn.createStatement()) {
+	}
 
-            ResultSet check = statement.executeQuery("CALL DoesGuildAlreadyExist(" + g.getId() + ")");
-            check.next();
-            boolean alreadyExists = check.getBoolean("AlreadyExists");
+	private static BirthdayBotConfig loadConfig() throws IOException {
+		Path configFilePath = new File(CONFIG_FILE).toPath();
+		String configData = new String(Files.readAllBytes(configFilePath));
+		JSONObject configJson = new JSONObject(configData);
+		return new BirthdayBotConfig(configJson);
+	}
 
-            if (alreadyExists) return true;
+	private static CommandClient createClient(BirthdayBotConfig birthdayBotConfig, SettingsManager settingsManager, Command[] commands) {
+		CommandClientBuilder clientBuilder = new CommandClientBuilder();
+		clientBuilder.setGuildSettingsManager(settingsManager)
+				.useDefaultGame()
+				.useHelpBuilder(false)
+				.setOwnerId(birthdayBotConfig.getOwnerId())
+				.setActivity(Activity.listening("Happy Birthday"))
+				.setStatus(OnlineStatus.ONLINE)
+				.setPrefix(birthdayBotConfig.getPrefix())
+				.setEmojis(SUCCESS_EMOJI, WARNING_EMOJI, ERROR_EMOJI)
+				.addCommands(commands);
+		return clientBuilder.build();
+	}
 
-        } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
-        }
-        return false;
-    }
+	private static ShardManager startShardManager(BirthdayBotConfig birthdayBotConfig, CommandClient client, EventListener[] listeners) throws LoginException {
+		DefaultShardManagerBuilder shardManager = new DefaultShardManagerBuilder();
 
-    private static boolean userExists(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Member m) {
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-             Statement statement = conn.createStatement()) {
+		return shardManager.setToken(birthdayBotConfig.getToken())
+				.addEventListeners((Object[]) listeners)
+				.addEventListeners(client)
+				.build();
+	}
 
-            ResultSet check = statement.executeQuery("CALL DoesUserAlreadyExist(" + m.getId() + ")");
-            check.next();
-            boolean alreadyExists = check.getBoolean("AlreadyExists");
+	private static void SetupDatabase(BirthdayBotConfig birthdayBotConfig, List<Guild> guildList, DebugMessages debugMessages) {
+		for (Guild check : guildList) {
+			if (!guildExists(birthdayBotConfig, debugMessages, check))
+				AddGuildToDatabase(birthdayBotConfig, check, debugMessages);
+			else if (guildActive(birthdayBotConfig, debugMessages, check)) {
+				for (Member mCheck : check.getMembers()) {
+					addUser(birthdayBotConfig, mCheck, debugMessages);
+					addGuildUser(birthdayBotConfig, debugMessages, mCheck, check);
+				}
+			}
+		}
+	}
 
-            if (alreadyExists) return true;
+	private static boolean guildExists(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Guild g) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
 
-        } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
-        }
-        return false;
-    }
-    private static void AddGuildToDatabase(BirthdayBotConfig birthdayBotConfig, Guild g, DebugMessages debugMessages) {
+			ResultSet check = statement.executeQuery("CALL DoesGuildAlreadyExist(" + g.getId() + ")");
+			check.next();
+			boolean alreadyExists = check.getBoolean("AlreadyExists");
 
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-             Statement statement = conn.createStatement()) {
+			if (alreadyExists) return true;
 
-            statement.execute("CALL InsertGuildSettings('bday ')");
-            ResultSet rs = statement.executeQuery("CALL SelectLastInsertID()");
-            rs.next();
-            int lastId = rs.getInt("LAST_INSERT_ID()");
-            statement.execute("CALL InsertGuild(" + g.getId() + ", " + lastId + ", 1)");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return false;
+	}
 
-        } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
-        }
+	private static boolean guildActive(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Guild g) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
 
-        for (Member mem : g.getMembers()) {
-            addUser(birthdayBotConfig, mem, debugMessages);
-        }
+			ResultSet check = statement.executeQuery("CALL IsGuildActive(" + g.getId() + ")");
+			check.next();
+			boolean alreadyExists = check.getBoolean("Active");
 
-    }
+			if (alreadyExists) return true;
 
-    public static void addUser(BirthdayBotConfig birthdayBotConfig, Member member, DebugMessages debugMessages) {
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return false;
+	}
 
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-             Statement statement = conn.createStatement()) {
+	private static void AddGuildToDatabase(BirthdayBotConfig birthdayBotConfig, Guild g, DebugMessages debugMessages) {
 
-            ResultSet check = statement.executeQuery("CALL DoesUserAlreadyExist(" + member.getId() + ")");
-            check.next();
-            boolean UserAlreadyExists = check.getBoolean("AlreadyExists");
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
 
-            if (!UserAlreadyExists) {
-                statement.execute("CALL InsertUser(" + member.getId() + ")");
-            }
-        } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
-        }
-    }
+			statement.execute("CALL InsertGuildSettings('bday ')");
+			ResultSet rs = statement.executeQuery("CALL SelectLastInsertID()");
+			rs.next();
+			int lastId = rs.getInt("LAST_INSERT_ID()");
+			statement.execute("CALL InsertGuild(" + g.getId() + ", " + lastId + ", 1)");
 
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+
+		for (Member mem : g.getMembers()) {
+			addUser(birthdayBotConfig, mem, debugMessages);
+			addGuildUser(birthdayBotConfig, debugMessages, mem, g);
+		}
+
+	}
+
+	private static void addUser(BirthdayBotConfig birthdayBotConfig, Member member, DebugMessages debugMessages) {
+
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			ResultSet check = statement.executeQuery("CALL DoesUserAlreadyExist(" + member.getId() + ")");
+			check.next();
+			boolean UserAlreadyExists = check.getBoolean("AlreadyExists");
+
+			if (!UserAlreadyExists) {
+				statement.execute("CALL InsertUser(" + member.getId() + ")");
+			}
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+	}
+
+	private static void addGuildUser(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Member member, Guild guild) {
+
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int userId = -1;
+			userId = getUserId(birthdayBotConfig, debugMessages, member.getUser());
+			int guildId = -1;
+			guildId = getGuildId(birthdayBotConfig, debugMessages, guild);
+
+			ResultSet check = statement.executeQuery("CALL DoesUserAlreadyExistInGuildUser(" + userId + ", " + guildId + ")");
+			check.next();
+			boolean UserAlreadyExists = check.getBoolean("AlreadyExists");
+
+			if (!UserAlreadyExists) {
+				statement.execute("CALL InsertGuildUser(" + userId + ", " + guildId + ")");
+			} else {
+				statement.execute("CALL UpdateGuildUserActive(" + userId + ", " + guildId + ", " + 1 + ")");
+			}
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+			Logger.Info("addGuildUser");
+		}
+	}
+
+	private static void deactivateGuildUser(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Member member, Guild guild) {
+
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			int userId = -1;
+			userId = getUserId(birthdayBotConfig, debugMessages, member.getUser());
+			int guildId = -1;
+			guildId = getGuildId(birthdayBotConfig, debugMessages, guild);
+
+			statement.execute("CALL UpdateGuildUserActive(" + userId + ", " + guildId + ", " + 0 + ")");
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+	}
+
+	private static int getUserId(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, User user) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+			ResultSet rs = statement.executeQuery("CALL GetUserId(" + user.getId() + ")");
+			rs.next();
+			return rs.getInt("UserId");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+			Logger.Info("getUserId");
+		}
+		return -1;
+	}
+
+	private static int getGuildId(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Guild guild) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+			ResultSet rs = statement.executeQuery("CALL GetGuildId(" + guild.getId() + ")");
+			rs.next();
+			return rs.getInt("GuildId");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+			Logger.Info("getGuildId");
+		}
+		return -1;
+	}
 }
