@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3307
--- Generation Time: Feb 20, 2020 at 05:47 AM
+-- Generation Time: Mar 13, 2020 at 01:29 AM
 -- Server version: 5.7.24-log
 -- PHP Version: 7.2.10
 
@@ -42,14 +42,6 @@ WHERE `UserDiscordId` = IN_UserDiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `DoesUserAlreadyExistInGuildUser` (IN `IN_UserId` INT(11), IN `IN_GuildId` INT(11))  BEGIN
-
-SELECT COUNT(*) > 0 AS AlreadyExists
-FROM guilduser
-WHERE `UserId` = IN_UserId AND `GuildId` = IN_GuildId;
-
-END$$
-
 CREATE DEFINER=`admin`@`%` PROCEDURE `GetBirthdayChannel` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT BirthdayChannel
@@ -63,6 +55,14 @@ CREATE DEFINER=`admin`@`%` PROCEDURE `GetBirthdayRole` (IN `IN_GuildSettingsId` 
 SELECT BirthdayRole
 FROM guildsettings
 WHERE `GuildSettingsId` = IN_GuildSettingsId;
+
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetBirthdays` (IN `IN_Birthday` VARCHAR(10))  BEGIN
+
+SELECT UserDiscordId
+FROM users
+WHERE DATE_FORMAT(users.Birthday, '%m-%d') = IN_Birthday;
 
 END$$
 
@@ -98,16 +98,6 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetGuildUsers` (IN `IN_GuildId` INT(11))  BEGIN
-
-SELECT UserDiscordId
-FROM users
-JOIN guilduser
-ON users.UserId=guilduser.UserId
-WHERE guilduser.GuildId = IN_GuildId AND guilduser.Active=1 AND users.Birthday IS NOT NULL;
-
-END$$
-
 CREATE DEFINER=`admin`@`%` PROCEDURE `GetHideAge` (IN `IN_UserId` INT(11))  BEGIN
 
 SELECT HideAge
@@ -129,6 +119,12 @@ CREATE DEFINER=`admin`@`%` PROCEDURE `GetMessageTime` (IN `IN_GuildSettingsId` I
 SELECT MessageTime
 FROM guildsettings
 WHERE `GuildSettingsId` = IN_GuildSettingsId;
+
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetNextBirthday` (IN `IN_GuildId` INT(11))  BEGIN
+
+
 
 END$$
 
@@ -188,9 +184,9 @@ WHERE `UserDiscordId` = IN_UserDiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserOffset` (IN `IN_UserId` INT(11))  BEGIN
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserUTCTime` (IN `IN_UserId` INT(11))  BEGIN
 
-SELECT TimeOffset
+SELECT UTCTime
 FROM users
 WHERE `UserId` = IN_UserId;
 
@@ -210,16 +206,9 @@ SET `Prefix` = IN_Prefix;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `InsertGuildUser` (IN `IN_UserId` INT(11), IN `IN_GuildId` INT(11))  BEGIN
-
-INSERT INTO guilduser(UserId, GuildId)
-VALUES(IN_UserId, IN_GuildId);
-
-END$$
-
 CREATE DEFINER=`admin`@`%` PROCEDURE `InsertUser` (IN `IN_UserDiscordId` VARCHAR(18))  BEGIN
 
-INSERT INTO users(UserDiscordId)
+INSERT IGNORE INTO users(UserDiscordId)
 VALUES(IN_UserDiscordId);
 
 END$$
@@ -278,14 +267,6 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateGuildUserActive` (IN `IN_UserId` INT(11), IN `IN_GuildId` INT(11), IN `IN_Active` TINYINT(1))  BEGIN
-
-UPDATE guilduser
-SET `Active` = IN_Active
-WHERE `UserId` = IN_UserId;
-
-END$$
-
 CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateHideAge` (IN `IN_UserId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
 
 UPDATE users
@@ -315,14 +296,6 @@ CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateMessageTime` (IN `IN_GuildSettingsId
 UPDATE guildsettings
 SET `MessageTime` = IN_Time
 WHERE `GuildSettingsId` = IN_GuildSettingsID;
-
-END$$
-
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateOffset` (IN `IN_UserId` INT(11), IN `IN_Offset` DECIMAL)  BEGIN
-
-UPDATE users
-SET `TimeOffset` = IN_Offset
-WHERE `UserId` = IN_UserId;
 
 END$$
 
@@ -366,6 +339,28 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateUTCTime` (IN `IN_UserId` INT(11), IN `IN_UTCTime` DECIMAL)  BEGIN
+
+UPDATE users
+SET `UTCTime` = IN_UTCTime
+WHERE `UserId` = IN_UserId;
+
+END$$
+
+--
+-- Functions
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `SPLIT_STRING` (`str` VARCHAR(255), `delim` MEDIUMTEXT, `pos` INT(11)) RETURNS INT(11) RETURN REPLACE(
+	SUBSTRING(
+		SUBSTRING_INDEX(str , delim , pos) ,
+		CHAR_LENGTH(
+			SUBSTRING_INDEX(str , delim , pos - 1)
+		) + 1
+	) ,
+	delim ,
+	''
+)$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -404,19 +399,6 @@ CREATE TABLE `guildsettings` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `guilduser`
---
-
-CREATE TABLE `guilduser` (
-  `GuildUserId` int(11) NOT NULL,
-  `UserId` int(11) NOT NULL,
-  `GuildId` int(11) NOT NULL,
-  `Active` tinyint(1) DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -424,7 +406,7 @@ CREATE TABLE `users` (
   `UserId` int(11) NOT NULL,
   `UserDiscordId` varchar(18) NOT NULL,
   `Birthday` date DEFAULT NULL,
-  `TimeOffset` decimal(10,0) DEFAULT '0',
+  `UTCTime` tinyint(1) DEFAULT '0',
   `ChangesLeft` tinyint(4) DEFAULT '3',
   `HideAge` tinyint(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -445,14 +427,6 @@ ALTER TABLE `guild`
 --
 ALTER TABLE `guildsettings`
   ADD PRIMARY KEY (`GuildSettingsId`);
-
---
--- Indexes for table `guilduser`
---
-ALTER TABLE `guilduser`
-  ADD PRIMARY KEY (`GuildUserId`),
-  ADD KEY `GuildId` (`GuildId`),
-  ADD KEY `UserId` (`UserId`);
 
 --
 -- Indexes for table `users`
@@ -477,12 +451,6 @@ ALTER TABLE `guildsettings`
   MODIFY `GuildSettingsId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `guilduser`
---
-ALTER TABLE `guilduser`
-  MODIFY `GuildUserId` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -497,13 +465,6 @@ ALTER TABLE `users`
 --
 ALTER TABLE `guild`
   ADD CONSTRAINT `guild_ibfk_1` FOREIGN KEY (`GuildSettingsId`) REFERENCES `guildsettings` (`GuildSettingsId`);
-
---
--- Constraints for table `guilduser`
---
-ALTER TABLE `guilduser`
-  ADD CONSTRAINT `guilduser_ibfk_1` FOREIGN KEY (`GuildId`) REFERENCES `guild` (`GuildId`),
-  ADD CONSTRAINT `guilduser_ibfk_2` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
