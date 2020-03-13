@@ -513,7 +513,6 @@ public class DatabaseMethods {
 	}
 
 	public List<String> getBirthdays(String date) {
-		Logger.Info("Date: " + date);
 
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
