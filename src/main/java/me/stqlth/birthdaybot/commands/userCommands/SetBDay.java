@@ -6,10 +6,9 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.PrivateChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.awt.*;
 import java.sql.*;
@@ -50,14 +49,11 @@ public class SetBDay extends Command {
 
         if (privateChannel != null) normal = false;
 
-        if (normal) event.getMessage().delete().queue();
+        try {
+            if (normal) event.getMessage().delete().queue();
+        } catch (InsufficientPermissionException ignored) {}
 
-        int changesLeft = db.getChangesLeft(event.getAuthor());
-        if (changesLeft  <= 0) {
-            if (normal) birthdayMessages.outOfChanges(Objects.requireNonNull(textChannel)); else birthdayMessages.outOfChanges(privateChannel);
-            return;
-        } else changesLeft--;
-
+        User author = event.getAuthor();
 
         String[] args = event.getMessage().getContentRaw().split(" ");
 
@@ -76,16 +72,32 @@ public class SetBDay extends Command {
             return;
         }
 
+        int utcTime = 0;
+
         if (offset > 14 || offset < -11) {
             if (normal) birthdayMessages.invalidOffset(Objects.requireNonNull(textChannel)); else birthdayMessages.invalidOffset(privateChannel);
             return;
-        }
+        } else if (offset > 0) { //offset changes into the UTC time which is midnight for the user
+            utcTime = 24 - offset;
+        } else utcTime = Math.abs(offset);
 
         String offsetS = String.valueOf(offset);
         if (offsetS.equals("0")) {
             offsetS = "UTC";
         } else offsetS = "GMT" + offsetS;
 
+        /*
+        * Notes:
+        * Now that I store user's birthday with their midnight in terms of UTC time
+        * All I have to do is make a procedure which finds birthdays that are today //UNSURE
+        * AND
+        * Which have the current hour //UNSURE
+        * EXAMPLES
+        * Scenario 1: If user's birthday is January 1st with timezone -5
+        * It is January 1st 5am - Birthday event triggered!
+        * Scenario 2: If user's birthday is January 1st with timezone 7
+        * It is December 31st 5pm - Birthday event triggered!
+        */
 
         args[2] = args[2].replace(",", "");
         args[3] = args[3].replace(",", "");
@@ -105,8 +117,6 @@ public class SetBDay extends Command {
             return;
         }
 
-        String sBday = args[4] + "-" + args[3] + "-" + args[2];
-
         int age = -1;
         try { //try catch to check for invalid dates such as February 30th
             LocalDate birthDate = LocalDate.of(year, month, day);
@@ -123,10 +133,37 @@ public class SetBDay extends Command {
 
         String date = (normal ? getMonth(month) + " " + day + ", " + offsetS : getMonth(month) + " " + day + ", " + year+ " " + offsetS);
 
-       if (normal) sendConfirmation(event, Objects.requireNonNull(textChannel), date, sBday, offset, changesLeft); else  sendConfirmation(event, privateChannel, date, sBday, offset, changesLeft);
+        if (offset == 13) offset = -11; //Easier conversion for storage
+        if (offset == 14) offset = -10;
+
+        if (offset > 0) { //Storing this birthday as a UTC time/date
+            try {
+                LocalDate birthDate = LocalDate.of(year, month, day);
+                birthDate = birthDate.minusDays(1);
+                year = birthDate.getYear();
+                month = birthDate.getMonthValue();
+                day = birthDate.getDayOfMonth();
+            } catch (Exception e) {
+                if (normal) birthdayMessages.dateNotFound(Objects.requireNonNull(textChannel)); else birthdayMessages.dateNotFound(privateChannel);
+                return;
+            }
+        }
+
+        String sBday = year + "-" + month + "-" + day;
+
+        if (!db.doesUserExist(event.getAuthor())) {
+            db.addUser(event.getAuthor());
+        }
+        int changesLeft = db.getChangesLeft(author);
+        if (changesLeft  <= 0){
+            if (normal) birthdayMessages.outOfChanges(Objects.requireNonNull(textChannel)); else birthdayMessages.outOfChanges(privateChannel);
+            return;
+        } else changesLeft--;
+
+       if (normal) sendConfirmation(event, Objects.requireNonNull(textChannel), date, sBday, utcTime, changesLeft); else  sendConfirmation(event, privateChannel, date, sBday, utcTime, changesLeft);
     }
 
-    public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, int offset, int changesLeft) {
+    public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, int utcTime, int changesLeft) {
         EmbedBuilder builder = new EmbedBuilder();
 
         builder.setColor(Color.decode("#1CFE86"))
@@ -134,10 +171,10 @@ public class SetBDay extends Command {
         channel.sendMessage(builder.build()).queue(result -> {
             result.addReaction("\u2705").queue();
             result.addReaction("\u274C").queue();
-            waitForConfirmation(event, channel, result, sBday, offset, changesLeft, date);
+            waitForConfirmation(event, channel, result, sBday, utcTime, changesLeft, date);
         });
     }
-    private void waitForConfirmation(CommandEvent event, TextChannel channel, Message msg, String sBday, int offset, int changesLeft, String date) {
+    private void waitForConfirmation(CommandEvent event, TextChannel channel, Message msg, String sBday, int utcTime, int changesLeft, String date) {
 
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 e -> e.getChannel().equals(event.getChannel()) && !Objects.requireNonNull(e.getUser()).isBot() &&
@@ -148,7 +185,7 @@ public class SetBDay extends Command {
 
                         try {
                             db.updateBirthday(event.getMember().getUser(), sBday);
-                            db.updateOffset(event, offset);
+                            db.updateUTCTime(event, utcTime);
                             birthdayMessages.success(channel, date);
                         } catch (SQLException ex) {
                             birthdayMessages.invalidFormat(channel, getName(), getArguments());
@@ -162,7 +199,7 @@ public class SetBDay extends Command {
                 }, 30, TimeUnit.SECONDS, () -> msg.delete().queue());
     }
 
-    public void sendConfirmation(CommandEvent event, PrivateChannel channel, String date, String sBday, int offset, int changesLeft) {
+    public void sendConfirmation(CommandEvent event, PrivateChannel channel, String date, String sBday, int utcTime, int changesLeft) {
         EmbedBuilder builder = new EmbedBuilder();
 
         builder.setColor(Color.decode("#1CFE86"))
@@ -170,10 +207,10 @@ public class SetBDay extends Command {
         channel.sendMessage(builder.build()).queue(result -> {
             result.addReaction("\u2705").queue();
             result.addReaction("\u274C").queue();
-            waitForConfirmation(event, channel, result, sBday, offset, changesLeft, date);
+            waitForConfirmation(event, channel, result, sBday, utcTime, changesLeft, date);
         });
     }
-    private void waitForConfirmation(CommandEvent event, PrivateChannel channel, Message msg, String sBday, int offset, int changesLeft, String date) {
+    private void waitForConfirmation(CommandEvent event, PrivateChannel channel, Message msg, String sBday, int utcTime, int changesLeft, String date) {
 
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 e -> e.getChannel().equals(event.getChannel()) && !Objects.requireNonNull(e.getUser()).isBot() &&
@@ -184,7 +221,7 @@ public class SetBDay extends Command {
 
                         try {
                             db.updateBirthday(event.getAuthor(), sBday);
-                            db.updateOffset(event, offset);
+                            db.updateUTCTime(event, utcTime);
                             birthdayMessages.success(channel, date);
                         } catch (SQLException ex) {
                             birthdayMessages.invalidFormat(channel, getName(), getArguments());

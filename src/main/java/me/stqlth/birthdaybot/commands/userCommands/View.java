@@ -34,7 +34,7 @@ public class View extends Command {
 		String[] args = event.getMessage().getContentRaw().split(" ");
 		if (args.length != 3) return;
 
-		Member target = null;
+		Member target;
 
 		try {
 			target = event.getMessage().getMentionedMembers().get(0);
@@ -49,30 +49,36 @@ public class View extends Command {
 			return;
 		}
 
-		String birthday = db.getUserBirthday(target.getUser());
-		if (birthday == null) {
+		if (!db.doesUserExist(target.getUser()) || db.getUserBirthday(target.getUser()) == null) {
 			birthdayMessages.noBirthday(channel, target);
 			return;
 		}
+
+		String birthday = db.getUserBirthday(target.getUser()); //we set birthday here so we don't try to get a user's birthday who isn't in the database in the block above
 		String[] values = birthday.split("-");
-		String offset = String.valueOf(db.getUserOffset(target.getUser()));
-		if (offset.equals("0")) {
-			offset = "UTC";
-		} else offset = "GMT" + offset;
+		String utcTime = String.valueOf(db.getUserUTCTime(target.getUser()));
+
 		int day = Integer.parseInt(values[2]);
 		int month = Integer.parseInt(values[1]);
 		int year = Integer.parseInt(values[0]);
+
+		if (utcTime.equals("0")) {
+			utcTime = "UTC";
+		} else if (12 <= Integer.parseInt(utcTime) && Integer.parseInt(utcTime) <= 23){
+			day++;
+			utcTime = "GMT" + (24-Integer.parseInt(utcTime));
+		} else utcTime = "GMT-" + utcTime;
 
 		LocalDate birthDate = LocalDate.of(year, month, day);
 		int age = calculateAge(birthDate, LocalDate.now());
 
 		if (db.getPreventAge(event.getGuild()) || db.getHideAge(target.getUser())) {
-			String date = getMonth(month) + " " + day + ", " + offset;
+			String date = getMonth(month) + " " + day + ", " + utcTime;
 			birthdayMessages.userBirthdayNoAge(channel, date, target, age);
 			return;
 		}
 
-		String date = getMonth(month) + " " + day + ", " + year + " " + offset;
+		String date = getMonth(month) + " " + day + ", " + year + " " + utcTime;
 		birthdayMessages.userBirthdayWithAge(channel, date, target, age);
 	}
 	private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {

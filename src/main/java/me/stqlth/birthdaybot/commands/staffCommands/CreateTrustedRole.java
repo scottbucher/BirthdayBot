@@ -7,6 +7,7 @@ import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public class CreateTrustedRole extends Command {
 
@@ -27,11 +28,19 @@ public class CreateTrustedRole extends Command {
 		TextChannel channel = event.getTextChannel();
 
 		Member sender = event.getMember();
+
 		Permission req = Permission.ADMINISTRATOR;
+		Permission botReq = Permission.MANAGE_ROLES;
 
 		if (!sender.hasPermission(req)) {
 			staffMessages.onlyAdmins(channel); //Only admins may use this command
 			return;
+		}
+
+		if (!event.getSelfMember().hasPermission(botReq)) {
+			try {
+				staffMessages.botNoPerms(channel);
+			} catch (InsufficientPermissionException ignored) {}
 		}
 
 		event.getGuild().createRole()

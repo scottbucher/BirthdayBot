@@ -4,6 +4,10 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +22,8 @@ public class DatabaseMethods {
 		this.birthdayBotConfig = birthdayBotConfig;
 		this.debugMessages = debugMessages;
 	}
-	public void updateBirthday (User user, String bday) throws SQLException {
+
+	public void updateBirthday(User user, String bday) throws SQLException {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
@@ -28,6 +33,7 @@ public class DatabaseMethods {
 			statement.execute("CALL UpdateBirthday(" + userId + ", '" + bday + "')");
 		}
 	}
+
 	public int getUserId(User user) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -39,16 +45,18 @@ public class DatabaseMethods {
 		}
 		return -1;
 	}
-	public void updateOffset (CommandEvent event, int offset) throws SQLException {
+
+	public void updateUTCTime(CommandEvent event, int offset) throws SQLException {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
 			userId = getUserId(event.getAuthor());
 
-			statement.execute("CALL UpdateOffset(" + userId + ", " + offset + ")");
+			statement.execute("CALL UpdateUTCTime(" + userId + ", " + offset + ")");
 		}
 	}
+
 	public int getChangesLeft(User user) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -65,7 +73,8 @@ public class DatabaseMethods {
 		}
 		return -1;
 	}
-	public void updateChangesLeft (CommandEvent event, int left) {
+
+	public void updateChangesLeft(CommandEvent event, int left) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
@@ -77,6 +86,7 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
+
 	public String getUserBirthday(User user) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -93,22 +103,24 @@ public class DatabaseMethods {
 		}
 		return "-1";
 	}
-	public int getUserOffset(User user) {
+
+	public int getUserUTCTime(User user) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
 			userId = getUserId(user);
 
-			ResultSet rs2 = statement.executeQuery("CALL GetUserOffset(" + userId + ")");
+			ResultSet rs2 = statement.executeQuery("CALL GetUserUTCTime(" + userId + ")");
 			rs2.next();
-			return rs2.getInt("TimeOffset");
+			return rs2.getInt("UTCTime");
 
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
 		}
 		return 0;
 	}
+
 	public String getGuildBirthdayMessage(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -124,17 +136,19 @@ public class DatabaseMethods {
 		}
 		return "0";
 	}
+
 	public void updateGuildMessageTime(Guild guild, int time) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
 			int guildSettingsId = getGuildSettingsId(guild);
-			statement.execute("CALL UpdateMessageTime(" + guildSettingsId +", " + time + ")");
+			statement.execute("CALL UpdateMessageTime(" + guildSettingsId + ", " + time + ")");
 
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
 		}
 	}
+
 	public int getGuildMessageTime(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -151,6 +165,7 @@ public class DatabaseMethods {
 		}
 		return 0;
 	}
+
 	public int getGuildSettingsId(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -164,6 +179,7 @@ public class DatabaseMethods {
 		}
 		return 0;
 	}
+
 	public long getBirthdayChannel(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -180,6 +196,7 @@ public class DatabaseMethods {
 		}
 		return 0;
 	}
+
 	public long getBirthdayRole(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -196,6 +213,7 @@ public class DatabaseMethods {
 		}
 		return 0;
 	}
+
 	public long getTrustedRole(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -212,6 +230,7 @@ public class DatabaseMethods {
 		}
 		return 0;
 	}
+
 	public String getMentionSetting(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -228,6 +247,7 @@ public class DatabaseMethods {
 		}
 		return "0";
 	}
+
 	public boolean getPreventAge(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -244,7 +264,8 @@ public class DatabaseMethods {
 		}
 		return true;
 	}
-	public void updatePreventAge (CommandEvent event, int bool) {
+
+	public void updatePreventAge(CommandEvent event, int bool) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -255,6 +276,7 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
+
 	public boolean getHideAge(User user) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -268,10 +290,10 @@ public class DatabaseMethods {
 
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
-			Logger.Info("GetHideAge");
 		}
 		return true;
 	}
+
 	public void updateHideAge(User user, int bool) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -283,6 +305,7 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
+
 	public boolean getTrustedPreventMessage(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -299,6 +322,7 @@ public class DatabaseMethods {
 		}
 		return true;
 	}
+
 	public boolean getTrustedPreventRole(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -315,7 +339,8 @@ public class DatabaseMethods {
 		}
 		return true;
 	}
-	public void updateBirthdayChannel (CommandEvent event, TextChannel bdayChannel) {
+
+	public void updateBirthdayChannel(CommandEvent event, TextChannel bdayChannel) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -326,7 +351,8 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public void clearBirthdayChannel (CommandEvent event) {
+
+	public void clearBirthdayChannel(CommandEvent event) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -337,7 +363,8 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public void updateBirthdayRole (CommandEvent event, Role bdayRole) {
+
+	public void updateBirthdayRole(CommandEvent event, Role bdayRole) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -348,7 +375,8 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public void clearBirthdayRole (CommandEvent event) {
+
+	public void clearBirthdayRole(CommandEvent event) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -359,7 +387,8 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public void updateTrustedRole (CommandEvent event, Role bdayRole) {
+
+	public void updateTrustedRole(CommandEvent event, Role bdayRole) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -370,7 +399,8 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public void clearTrustedRole (CommandEvent event) {
+
+	public void clearTrustedRole(CommandEvent event) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -381,7 +411,8 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public void updatePreventRole (CommandEvent event, int bool) {
+
+	public void updatePreventRole(CommandEvent event, int bool) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -392,7 +423,8 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public void updatePreventMessage (CommandEvent event, int bool) {
+
+	public void updatePreventMessage(CommandEvent event, int bool) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -403,7 +435,8 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public void updateMessage (CommandEvent event, String message) {
+
+	public void updateMessage(CommandEvent event, String message) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -414,7 +447,8 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
-	public void updateMentionedSetting (CommandEvent event, String setting) {
+
+	public void updateMentionedSetting(CommandEvent event, String setting) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
@@ -425,6 +459,7 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 	}
+
 	public boolean guildActive(Guild g) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -440,6 +475,7 @@ public class DatabaseMethods {
 		}
 		return false;
 	}
+
 	public int getGuildId(Guild guild) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
@@ -448,33 +484,53 @@ public class DatabaseMethods {
 			return rs.getInt("GuildId");
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
-			Logger.Info("getGuildId");
 		}
 		return -1;
 	}
-	public List<Member> getGuildUsers(Guild guild) {
+
+	public boolean doesUserExist(User user) {
+
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
-			List<Member> members = new ArrayList<>();
+			ResultSet check = statement.executeQuery("CALL DoesUserAlreadyExist(" + user.getId() + ")");
+			check.next();
+			return check.getBoolean("AlreadyExists");
 
-			int guildId = -1;
-			guildId = getGuildId(guild);
-
-			ResultSet rs = statement.executeQuery("CALL GetGuildUsers(" + guildId + ")");
-
-			while (rs.next()) {
-				Logger.Info("There is rs.next");
-				try {
-					members.add(guild.getMemberById(rs.getString("UserDiscordId")));
-				} catch (Exception ignored) {}
-			}
-
-			return members;
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
-			Logger.Info("getGuildId");
 		}
+		return false;
+	}
+
+	public void addUser(User user) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+			statement.execute("CALL InsertUser(" + user.getId() + ")");
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+	}
+
+	public List<String> getBirthdays(String date) {
+		Logger.Info("Date: " + date);
+
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			List<String> birthdays = new ArrayList<>();
+			ResultSet rs = statement.executeQuery("CALL GetBirthdays('" + date + "')");
+
+			while (rs.next()) {
+				birthdays.add(rs.getString("UserDiscordId"));
+				rs.next();
+			}
+			return birthdays;
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+
 		return null;
 	}
+
 }

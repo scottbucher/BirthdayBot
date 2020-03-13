@@ -64,27 +64,4 @@ public class GetMessageInfo {
 
         return channels.getFirst().toString();
     }
-    public String getLevelingChannelId(Guild guild){
-
-        LinkedList<Object> channels = new LinkedList<>();
-
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-             Statement statement = conn.createStatement()) {
-            int gSettingsId=0;
-
-            ResultSet id = statement.executeQuery("CALL GetGuildSettingsId(" + guild.getId() + ")");
-            if (id.next()) gSettingsId = id.getInt("GuildSettingsId");
-
-            ResultSet rs = statement.executeQuery("CALL GetBirthdayChannel(" + gSettingsId + ")");
-
-            if (rs.next()) {
-                channels.add(rs.getString("BirthdayChannel"));
-            }
-
-        } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
-        }
-
-        return channels.getFirst().toString();
-    }
 }

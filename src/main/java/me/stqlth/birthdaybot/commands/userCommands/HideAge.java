@@ -4,8 +4,10 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.Objects;
 
@@ -30,8 +32,12 @@ public class HideAge extends Command {
 		TextChannel textChannel = null;
 		PrivateChannel privateChannel = null;
 
+		User author = event.getAuthor();
+		Guild guild = null;
+
 		try {
 			textChannel = event.getTextChannel();
+			guild = event.getGuild();
 		} catch (IllegalStateException ignored) {
 			privateChannel = event.getPrivateChannel();
 		}
@@ -42,6 +48,10 @@ public class HideAge extends Command {
 		if (args.length < 3) {
 			if (normal) birthdayMessages.invalidSetFormat(Objects.requireNonNull(textChannel), getName(), getArguments()); else birthdayMessages.invalidSetFormat(privateChannel, getName(), getArguments());
 			return;
+		}
+
+		if (!db.doesUserExist(event.getAuthor())) {
+			db.addUser(event.getAuthor());
 		}
 
 		if (args[2].equalsIgnoreCase("t") || args[2].equalsIgnoreCase("true") || args[2].equals("1")) {

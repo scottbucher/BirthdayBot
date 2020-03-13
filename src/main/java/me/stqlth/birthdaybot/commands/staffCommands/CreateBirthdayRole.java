@@ -6,11 +6,10 @@ import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.awt.*;
-import java.util.EnumSet;
 
 public class CreateBirthdayRole extends Command {
 
@@ -33,20 +32,27 @@ public class CreateBirthdayRole extends Command {
 
 		Member sender = event.getMember();
 		Permission req = Permission.ADMINISTRATOR;
+		Permission botReq = Permission.MANAGE_ROLES;
 
 		if (!sender.hasPermission(req)) {
 			staffMessages.onlyAdmins(channel); //Only admins may use this command
 			return;
 		}
 
-		event.getGuild().createRole()
-				.setName("\uD83C\uDF82")
-				.setColor(Color.decode("#AC1CFE"))
-				.setHoisted(true)
-				.queue(result -> {
-					staffMessages.successBdayRoleCreate(channel, result);
-					db.updateBirthdayRole(event, result);
-				});
+		if (!event.getSelfMember().hasPermission(botReq)) {
+			try {
+				staffMessages.botNoPerms(channel);
+			} catch (InsufficientPermissionException ignored) {}
+		}
+
+			event.getGuild().createRole()
+					.setName("\uD83C\uDF82")
+					.setColor(Color.decode("#AC1CFE"))
+					.setHoisted(true)
+					.queue(result -> {
+						staffMessages.successBdayRoleCreate(channel, result);
+						db.updateBirthdayRole(event, result);
+					});
 
 	}
 }

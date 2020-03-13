@@ -2,7 +2,6 @@ package me.stqlth.birthdaybot.commands.staffCommands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.Permission;

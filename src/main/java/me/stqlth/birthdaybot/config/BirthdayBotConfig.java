@@ -27,6 +27,5 @@ public class BirthdayBotConfig {
 
     public String getPrefix() { return  _configJson.getString("prefix"); }
 
-    public String getBotOffset() { return  _configJson.getString("botGMTOffset"); }
 }
 

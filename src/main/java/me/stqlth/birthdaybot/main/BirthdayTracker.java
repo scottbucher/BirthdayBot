@@ -1,22 +1,17 @@
 package me.stqlth.birthdaybot.main;
 
-import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Logger;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import org.apache.commons.collections4.ListUtils;
 
-import javax.management.relation.RoleNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,12 +21,10 @@ public class BirthdayTracker {
 
 	private DatabaseMethods db;
 	private BirthdayMessages birthdayMessages;
-	private BirthdayBotConfig bConfig;
 
-	public BirthdayTracker(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages, BirthdayBotConfig birthdayBotConfig) {
+	public BirthdayTracker(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages) {
 		this.db = databaseMethods;
 		this.birthdayMessages = birthdayMessages;
-		this.bConfig = birthdayBotConfig;
 	}
 
 	public void startTracker(ShardManager client) {
@@ -45,36 +38,69 @@ public class BirthdayTracker {
 		scheduler.scheduleAtFixedRate(
 				// Method to call on a schedule
 				() -> {
-					trackBirthdays(client);
+					trackBirthdays(client, birthdayMessages);
 				},
 				// How long to wait before starting, in ms
 				// Calculates the time to the next exact Hour:
-				getMsToNextHour(),
+				getMsToNextMinute(),
 				// Once started, how often to repeat, in ms
-				everyHour,
+				everyMinute,
 				// The unit of time for the above parameters
 				TimeUnit.MILLISECONDS);
 	}
 
-	public void trackBirthdays(ShardManager client) {
+	public void trackBirthdays(ShardManager client, BirthdayMessages birthdayMessages) {
 		Logger.Info("Tracking Birthdays...");
 
-		List<Guild> guilds = client.getGuilds();
-		if (guilds.isEmpty()) return;
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime previous = LocalDateTime.now().minusDays(1);
+
+		int tempMonth = now.getMonthValue();
+		String date;
+		if (tempMonth < 10) date = "0" + now.getMonthValue() + "-" + now.getDayOfMonth();
+		else date = now.getMonthValue() + "-" + now.getDayOfMonth();
+
+		int tempPrevMonth = previous.getMonthValue();
+		String prevDate;
+		if (tempPrevMonth < 10) prevDate = "0" + previous.getMonthValue() + "-" + previous.getDayOfMonth();
+		else prevDate = previous.getMonthValue() + "-" + previous.getDayOfMonth();
+
+		List<String> birthdaysString = db.getBirthdays(date);
+		List<String> finishedBirthdaysString = db.getBirthdays(prevDate);
+
+		roleHandler(db, client, birthdaysString, finishedBirthdaysString, now);
+		messageHandler(db, birthdayMessages, client, birthdaysString, finishedBirthdaysString, now);
+	}
+
+	private static void roleHandler(DatabaseMethods db, ShardManager client, List<String> birthdaysString, List<String> finishedBirthdaysString, LocalDateTime now) {
+		if (birthdaysString.isEmpty() && finishedBirthdaysString.isEmpty()) {
+			Logger.Info("No Birthdays!");
+			return;
+		}
+
+		List<User> birthdayUsers = new ArrayList<>();
+		for (String check : birthdaysString) {
+			Logger.Info("Birthday for: " + check);
+			birthdayUsers.add(client.getUserById(check));
+		}
+
+		List<User> finishedBirthdayUsers = new ArrayList<>();
+		for (String check : finishedBirthdaysString) {
+			Logger.Info("Birthday expired for: " + check);
+			finishedBirthdayUsers.add(client.getUserById(check));
+		}
+
+		List<Guild> guilds = client.getMutualGuilds(birthdayUsers);
 
 		for (Guild guild : guilds) {
 
-			if (!db.guildActive(guild)) return;
-
 			long bdayRole = db.getBirthdayRole(guild);
 			long trustedRole = db.getTrustedRole(guild);
-			long bdayChannel = db.getBirthdayChannel(guild);
-			if (bdayChannel == 0 && bdayRole == 0)
+			if (bdayRole == 0)
 				continue; //if they are both not set, the birthday bot has nothing to do for this guild
 
 			Role bRole = null;
 			Role tRole = null;
-			TextChannel bChannel = null; //initialize the Role and TextChannel since at-least one exists
 
 			try {
 				bRole = guild.getRoleById(bdayRole);
@@ -84,64 +110,181 @@ public class BirthdayTracker {
 				tRole = guild.getRoleById(trustedRole);
 			} catch (Exception ignored) {
 			}
+
+			if (bRole == null)
+				continue; //if both return null the bot can't do anything for this guild on birthdays
+
+			List<Member> birthdaysExactInGuild = new ArrayList<>();
+			List<Member> birthdaysExpiredExactInGuild = new ArrayList<>();
+			boolean preventRole = db.getTrustedPreventRole(guild);
+
+			for (Member check : guild.getMembers()) {
+				if (birthdayUsers.contains(check.getUser()) && db.getUserUTCTime(check.getUser()) == now.getHour())
+					birthdaysExactInGuild.add(check);
+				else if (finishedBirthdayUsers.contains(check.getUser())) {
+					birthdaysExpiredExactInGuild.add(check);
+				}
+
+				for (Member birthday : birthdaysExactInGuild) { //ADD ROLE AND ADD USER TO THE LIST OF PEOPLE TO SAY HAPPY BIRTHDAY TO
+
+					if (birthday.getUser().isBot()) continue;
+
+					if (preventRole && tRole != null)
+						if (!birthday.getRoles().contains(tRole)) {
+							continue;
+						}
+
+					boolean hasTRole = birthday.getRoles().contains(tRole);
+
+					if (!preventRole || hasTRole || tRole == null) {
+						try {
+							guild.addRoleToMember(birthday, bRole).queue();
+						} catch (Exception ignored) {
+						}
+					}
+
+				}
+
+				for (Member birthday : birthdaysExpiredExactInGuild) { //REMOVE THE ROLE IF THEIR BIRTHDAY HAS ENDED
+
+					if (birthday.getUser().isBot()) continue;
+
+					if (preventRole && tRole != null)
+						if (!birthday.getRoles().contains(tRole)) {
+							continue;
+						}
+
+					boolean hasTRole = birthday.getRoles().contains(tRole);
+
+					if (!preventRole || hasTRole || tRole == null) {
+						try {
+							guild.removeRoleFromMember(birthday, bRole).queue();
+						} catch (Exception ignored) {
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+	private static void messageHandler(DatabaseMethods db, BirthdayMessages birthdayMessages, ShardManager client, List<String> birthdaysString, List<String> pBirthdaysString, LocalDateTime now) {
+		Logger.Info("messageHandler Triggered");
+		if (birthdaysString.isEmpty() && pBirthdaysString.isEmpty()) {
+			Logger.Info("No Messages!");
+			return;
+		}
+
+		List<User> birthdayUsers = new ArrayList<>();
+		for (String check : birthdaysString) {
+			Logger.Info("Birthday for: " + check);
+			birthdayUsers.add(client.getUserById(check));
+		}
+
+		List<User> pBirthdayUsers = new ArrayList<>();
+		for (String check : pBirthdaysString) {
+			Logger.Info("Birthday previous for: " + check);
+			pBirthdayUsers.add(client.getUserById(check));
+		}
+
+		List<User> allBirthdayUsers = ListUtils.union(birthdayUsers, pBirthdayUsers);
+
+		List<Guild> guilds = client.getMutualGuilds(allBirthdayUsers);
+
+		for (Guild guild : guilds) {
+			Logger.Info("Checking Guild: " + guild.getName());
+
+			long trustedRole = db.getTrustedRole(guild);
+			long bdayChannel = db.getBirthdayChannel(guild);
+			if (bdayChannel == 0) {
+				Logger.Info("bdayChannel == 0");
+				continue;
+			}
+
+			Role tRole = null;
+			TextChannel bChannel = null; //initialize the Role and TextChannel since at-least one exists
+
+
+			try {
+				tRole = guild.getRoleById(trustedRole);
+			} catch (Exception ignored) {
+			}
 			try {
 				bChannel = guild.getTextChannelById(bdayChannel);
 			} catch (Exception ignored) {
 			} //try to get said role/channel
 
-			if (bChannel == null && bRole == null)
+			if (bChannel == null) {
+				Logger.Info("bChannel == null");
 				continue; //if both return null the bot can't do anything for this guild on birthdays
 
-			List<Member> members = db.getGuildUsers(guild);
+			}
 
-			int guildMessageTime = db.getGuildMessageTime(guild);
-			List<Member> birthdays = new ArrayList<>();
-			boolean preventRole = db.getTrustedPreventRole(guild);
+			List<Member> membersInGuild = new ArrayList<>();
+			List<Member> messageMembers = new ArrayList<>();
+
+			for (Member check : guild.getMembers())
+				if (birthdayUsers.contains(check.getUser()))
+					membersInGuild.add(check);
+
+			if (membersInGuild.isEmpty()) {
+				Logger.Info("membersInGuild.isEmpty()");
+				continue;
+			}
+
+			int messageTime = db.getGuildMessageTime(guild);
 			boolean preventChannel = db.getTrustedPreventMessage(guild);
 
-			for (Member member : members) {
-
-				if (member.getUser().isBot()) continue;
-
-				if (preventChannel && preventRole && tRole != null)
-					if (!member.getRoles().contains(tRole)) {
-						continue;
-					}
-
-				boolean hasTRole = member.getRoles().contains(tRole);
-
-				String bday = db.getUserBirthday(member.getUser());
-				if (bday == null) continue; //if the member doesn't have a birthday ignore them
-				int botOffset = Integer.parseInt(bConfig.getBotOffset());
-				int memberOffset = db.getUserOffset(member.getUser());
-				int offsetDifference = botOffset - memberOffset;
-				LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-				now = now.minusHours(offsetDifference);
-
-				if (doesBirthdayEqualTodayAndNotTime(bday, now, guildMessageTime)) {
-					if (bChannel != null && now.getHour() == guildMessageTime && (!preventChannel || hasTRole || tRole == null)) {
-						birthdays.add(member);
-					}
+			for (Member member : membersInGuild) {
+				if (tRole != null && !member.getRoles().contains(tRole) && preventChannel) {
+					Logger.Info("tRole != null && !member.getRoles().contains(tRole) && preventChannel");
+					continue;
 				}
 
-				if (doesBirthdayEqualTodayAndTime(bday, now)) {
-					//check if its member's birthday
+				String birthday = db.getUserBirthday(member.getUser());
+				String[] values = birthday.split("-");
+				String utcTime = String.valueOf(db.getUserUTCTime(member.getUser()));
+				int utc = Integer.parseInt(utcTime);
 
-					if (bRole != null && (!preventRole || hasTRole || tRole == null)) {
-						try {
-							guild.addRoleToMember(member, bRole).queue();
-						} catch (Exception ignored) {}
-					}
-				} else if (doesBirthdayEqualYesterdayAndTime(bday, now) && bRole != null) {
-					try {
-						guild.removeRoleFromMember(member, bRole).queue();
-					} catch (Exception ignored) {}
+				int day = Integer.parseInt(values[2]);
+				int month = Integer.parseInt(values[1]);
+				int year = Integer.parseInt(values[0]);
+
+				LocalDate messageDate = LocalDate.of(year, month, day);
+
+				utc += messageTime;
+				if (utc > 23) {
+					Logger.Info("utc > 23");
+					messageDate = messageDate.plusDays(1); //we increase this because this should now be the day of the message
+					utc -= 24;
 				}
 
+				int nowHour = now.getHour();
+				int nowDay = now.getDayOfMonth();
+				int nowMonth = now.getMonthValue();
+				int mHour = utc;
+				int mDay = messageDate.getDayOfMonth();
+				int mMonth = messageDate.getMonthValue();
+
+				LocalDate nowDate = LocalDate.of(now.getYear(), nowMonth, nowDay);
+				LocalDate mDate = LocalDate.of(now.getYear(), mMonth, mDay);
+
+
+				Logger.Info("mHour = " + mHour);
+				Logger.Info("nowHour = " + nowHour);
+				Logger.Info("nowDate = " + nowDate.toString());
+				Logger.Info("mDate = " + mDate.toString());
+
+				if (mHour == nowHour && nowDate.equals(mDate)) {
+					messageMembers.add(member);
+					continue;
+				}
+				Logger.Info("Did not add to messageMembers");
 			}
-			if (bChannel == null) {
-				continue;
-			} else if (birthdays.isEmpty()) {
+
+
+
+			if (messageMembers.isEmpty()) {
 				continue;
 			}
 
@@ -159,47 +302,17 @@ public class BirthdayTracker {
 
 			String customMessage = db.getGuildBirthdayMessage(guild);
 			if (customMessage.equalsIgnoreCase("0")) {
-				if (birthdays.size() == 1) {
-					birthdayMessages.happyBirthday(bChannel, birthdays.get(0));
+				if (messageMembers.size() == 1) {
+					birthdayMessages.happyBirthday(bChannel, messageMembers.get(0));
 					continue;
 				}
-				birthdayMessages.happyBirthdays(bChannel, birthdays);
+				birthdayMessages.happyBirthdays(bChannel, messageMembers);
 				continue;
 			}
-			birthdayMessages.customBirthdayMessage(bChannel, birthdays, customMessage);
+			birthdayMessages.customBirthdayMessage(bChannel, messageMembers, customMessage);
+
 		}
 
-	}
-
-	private static boolean doesBirthdayEqualTodayAndTime(String bday, LocalDateTime now) {
-		String[] values = bday.split("-");
-		int day = Integer.parseInt(values[2]);
-		int month = Integer.parseInt(values[1]);
-		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-
-		LocalDateTime birthDay = LocalDateTime.of(currentYear, month, day, 0, now.getMinute());
-		return now.equals(birthDay);
-	}
-
-	private static boolean doesBirthdayEqualTodayAndNotTime(String bday, LocalDateTime now, int hour) {
-		String[] values = bday.split("-");
-		int day = Integer.parseInt(values[2]);
-		int month = Integer.parseInt(values[1]);
-		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-
-		LocalDateTime birthDay = LocalDateTime.of(currentYear, month, day, hour, now.getMinute());
-		return now.equals(birthDay);
-	}
-
-	private static boolean doesBirthdayEqualYesterdayAndTime(String bday, LocalDateTime now) {
-		now = now.minusDays(1);
-		String[] values = bday.split("-");
-		int day = Integer.parseInt(values[2]);
-		int month = Integer.parseInt(values[1]);
-		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-
-		LocalDateTime birthDay = LocalDateTime.of(currentYear, month, day, 0, now.getMinute());
-		return now.equals(birthDay);
 	}
 
 	private static long getMsToNextHour() {
