@@ -181,7 +181,10 @@ public class SetBDay extends Command {
                         ((e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C")) && Objects.equals(e.getMember(), event.getMember())),
                 e -> {
                     if (e.getReactionEmote().getName().equals("\u2705")) {
-                        msg.delete().queue();
+
+                        try {
+                            msg.delete().queue();
+                        } catch (InsufficientPermissionException ignored) {}
 
                         try {
                             db.updateBirthday(event.getMember().getUser(), sBday);
@@ -194,9 +197,16 @@ public class SetBDay extends Command {
                         db.updateChangesLeft(event, changesLeft);
 
                     } else if (e.getReactionEmote().getName().equals("\u274C")) {
-                        msg.delete().queue();
+                        try {
+                            msg.delete().queue();
+                        } catch (InsufficientPermissionException ignored) {
+                        }
                     }
-                }, 30, TimeUnit.SECONDS, () -> msg.delete().queue());
+                }, 30, TimeUnit.SECONDS, () -> {
+                    try {
+                        msg.delete().queue();
+                    } catch (InsufficientPermissionException ignored) {}
+                });
     }
 
     public void sendConfirmation(CommandEvent event, PrivateChannel channel, String date, String sBday, int utcTime, int changesLeft) {
@@ -207,18 +217,16 @@ public class SetBDay extends Command {
         channel.sendMessage(builder.build()).queue(result -> {
             result.addReaction("\u2705").queue();
             result.addReaction("\u274C").queue();
-            waitForConfirmation(event, channel, result, sBday, utcTime, changesLeft, date);
+            waitForConfirmation(event, channel, sBday, utcTime, changesLeft, date);
         });
     }
-    private void waitForConfirmation(CommandEvent event, PrivateChannel channel, Message msg, String sBday, int utcTime, int changesLeft, String date) {
+    private void waitForConfirmation(CommandEvent event, PrivateChannel channel, String sBday, int utcTime, int changesLeft, String date) {
 
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 e -> e.getChannel().equals(event.getChannel()) && !Objects.requireNonNull(e.getUser()).isBot() &&
                         ((e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C")) && Objects.equals(e.getMember(), event.getMember())),
                 e -> {
                     if (e.getReactionEmote().getName().equals("\u2705")) {
-                        msg.delete().queue();
-
                         try {
                             db.updateBirthday(event.getAuthor(), sBday);
                             db.updateUTCTime(event, utcTime);
@@ -228,11 +236,8 @@ public class SetBDay extends Command {
                             return;
                         }
                         db.updateChangesLeft(event, changesLeft);
-
-                    } else if (e.getReactionEmote().getName().equals("\u274C")) {
-                        msg.delete().queue();
                     }
-                }, 30, TimeUnit.SECONDS, () -> msg.delete().queue());
+                });
     }
 
     private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {
