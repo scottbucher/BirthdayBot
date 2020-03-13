@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.EnumSet;
 
@@ -31,11 +32,19 @@ public class CreateChannel extends Command {
 		TextChannel channel = event.getTextChannel();
 
 		Member sender = event.getMember();
+
 		Permission req = Permission.ADMINISTRATOR;
+		Permission botReq = Permission.MANAGE_CHANNEL;
 
 		if (!sender.hasPermission(req)) {
 			staffMessages.onlyAdmins(channel); //Only admins may use this command
 			return;
+		}
+
+		if (!event.getSelfMember().hasPermission(botReq)) {
+			try {
+				staffMessages.botNoPerms(channel);
+			} catch (InsufficientPermissionException ignored) {}
 		}
 
 		EnumSet<Permission> grantPublic = EnumSet.of(Permission.VIEW_CHANNEL), //Application Permissions

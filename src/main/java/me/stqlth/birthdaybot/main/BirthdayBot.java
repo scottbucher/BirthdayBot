@@ -21,8 +21,6 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -70,10 +68,10 @@ public class BirthdayBot {
 
 		SettingsManager settingsManager = new SettingsManager(birthdayBotConfig, debugMessages);
 		DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
-		BirthdayMessages birthdayMessages = new BirthdayMessages(databaseMethods);
-		StaffMessages staffMessages = new StaffMessages(birthdayBotConfig, getMessageInfo);
+		BirthdayMessages birthdayMessages = new BirthdayMessages();
+		StaffMessages staffMessages = new StaffMessages(getMessageInfo);
 
-		BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages, birthdayBotConfig);
+		BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages);
 
 		Command[] commands = new Command[]{
 				//CONFIG
@@ -111,8 +109,8 @@ public class BirthdayBot {
 
 		EventListener[] listeners = new EventListener[]{
 				waiter,
-				new GuildJoinLeave(birthdayBotConfig, debugMessages),
-				new UserJoinLeave(birthdayBotConfig, debugMessages)
+				new GuildJoinLeave(birthdayBotConfig, debugMessages, databaseMethods),
+				new UserJoinLeave(databaseMethods)
 		};
 
 		// Start the shard manager
@@ -122,13 +120,13 @@ public class BirthdayBot {
 		try {
 			instance = startShardManager(birthdayBotConfig, client, listeners);
 			try {
-				Thread.sleep(1000 * 5);
+				Thread.sleep(1000 * 1 * 1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
 			try {
-				Thread.sleep(1000 * 30);
+				Thread.sleep(1000 * 1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -172,13 +170,8 @@ public class BirthdayBot {
 
 	private static void SetupDatabase(BirthdayBotConfig birthdayBotConfig, List<Guild> guildList, DebugMessages debugMessages) {
 		for (Guild check : guildList) {
-			if (!guildExists(birthdayBotConfig, debugMessages, check))
+			if (!guildExists(birthdayBotConfig, debugMessages, check)) {
 				AddGuildToDatabase(birthdayBotConfig, check, debugMessages);
-			else if (guildActive(birthdayBotConfig, debugMessages, check)) {
-				for (Member mCheck : check.getMembers()) {
-					addUser(birthdayBotConfig, mCheck, debugMessages);
-					addGuildUser(birthdayBotConfig, debugMessages, mCheck, check);
-				}
 			}
 		}
 	}
@@ -198,23 +191,6 @@ public class BirthdayBot {
 		}
 		return false;
 	}
-
-	private static boolean guildActive(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Guild g) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			ResultSet check = statement.executeQuery("CALL IsGuildActive(" + g.getId() + ")");
-			check.next();
-			boolean alreadyExists = check.getBoolean("Active");
-
-			if (alreadyExists) return true;
-
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-		return false;
-	}
-
 	private static void AddGuildToDatabase(BirthdayBotConfig birthdayBotConfig, Guild g, DebugMessages debugMessages) {
 
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
@@ -229,96 +205,5 @@ public class BirthdayBot {
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
 		}
-
-		for (Member mem : g.getMembers()) {
-			addUser(birthdayBotConfig, mem, debugMessages);
-			addGuildUser(birthdayBotConfig, debugMessages, mem, g);
-		}
-
-	}
-
-	private static void addUser(BirthdayBotConfig birthdayBotConfig, Member member, DebugMessages debugMessages) {
-
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			ResultSet check = statement.executeQuery("CALL DoesUserAlreadyExist(" + member.getId() + ")");
-			check.next();
-			boolean UserAlreadyExists = check.getBoolean("AlreadyExists");
-
-			if (!UserAlreadyExists) {
-				statement.execute("CALL InsertUser(" + member.getId() + ")");
-			}
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-
-	private static void addGuildUser(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Member member, Guild guild) {
-
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int userId = -1;
-			userId = getUserId(birthdayBotConfig, debugMessages, member.getUser());
-			int guildId = -1;
-			guildId = getGuildId(birthdayBotConfig, debugMessages, guild);
-
-			ResultSet check = statement.executeQuery("CALL DoesUserAlreadyExistInGuildUser(" + userId + ", " + guildId + ")");
-			check.next();
-			boolean UserAlreadyExists = check.getBoolean("AlreadyExists");
-
-			if (!UserAlreadyExists) {
-				statement.execute("CALL InsertGuildUser(" + userId + ", " + guildId + ")");
-			} else {
-				statement.execute("CALL UpdateGuildUserActive(" + userId + ", " + guildId + ", " + 1 + ")");
-			}
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-			Logger.Info("addGuildUser");
-		}
-	}
-
-	private static void deactivateGuildUser(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Member member, Guild guild) {
-
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int userId = -1;
-			userId = getUserId(birthdayBotConfig, debugMessages, member.getUser());
-			int guildId = -1;
-			guildId = getGuildId(birthdayBotConfig, debugMessages, guild);
-
-			statement.execute("CALL UpdateGuildUserActive(" + userId + ", " + guildId + ", " + 0 + ")");
-
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-
-	private static int getUserId(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, User user) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-			ResultSet rs = statement.executeQuery("CALL GetUserId(" + user.getId() + ")");
-			rs.next();
-			return rs.getInt("UserId");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-			Logger.Info("getUserId");
-		}
-		return -1;
-	}
-
-	private static int getGuildId(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Guild guild) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-			ResultSet rs = statement.executeQuery("CALL GetGuildId(" + guild.getId() + ")");
-			rs.next();
-			return rs.getInt("GuildId");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-			Logger.Info("getGuildId");
-		}
-		return -1;
 	}
 }
