@@ -207,7 +207,7 @@ public class BirthdayMessages {
 	public void inviteBot(TextChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#1CFE86"))
-				.setDescription("Invite BirthdayBot to your server [here](https://discordapp.com/oauth2/authorize?client_id=656621136808902656&permissions=8&scope=bot)!");
+				.setDescription("Invite BirthdayBot to your server [here](https://discordapp.com/api/oauth2/authorize?client_id=656621136808902656&permissions=269053008&scope=bot)!");
 		try {
 			channel.sendMessage(builder.build()).queue();
 		} catch (InsufficientPermissionException ignored) {}
@@ -215,7 +215,7 @@ public class BirthdayMessages {
 	public void inviteBot(PrivateChannel channel) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Color.decode("#1CFE86"))
-				.setDescription("Invite BirthdayBot to your server [here](https://discordapp.com/oauth2/authorize?client_id=656621136808902656&permissions=8&scope=bot)!");
+				.setDescription("Invite BirthdayBot to your server [here](https://discordapp.com/api/oauth2/authorize?client_id=656621136808902656&permissions=269053008&scope=bot)!");
 		try {
 			channel.sendMessage(builder.build()).queue();
 		} catch (InsufficientPermissionException ignored) {}
