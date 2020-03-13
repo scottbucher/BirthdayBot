@@ -42,9 +42,9 @@ public class BirthdayTracker {
 				},
 				// How long to wait before starting, in ms
 				// Calculates the time to the next exact Hour:
-				getMsToNextMinute(),
+				getMsToNextHour(),
 				// Once started, how often to repeat, in ms
-				everyMinute,
+				everyHour,
 				// The unit of time for the above parameters
 				TimeUnit.MILLISECONDS);
 	}

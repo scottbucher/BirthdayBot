@@ -120,13 +120,13 @@ public class BirthdayBot {
 		try {
 			instance = startShardManager(birthdayBotConfig, client, listeners);
 			try {
-				Thread.sleep(1000 * 1 * 1);
+				Thread.sleep(1000 * 60);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
 			try {
-				Thread.sleep(1000 * 1);
+				Thread.sleep(1000 * 30);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
