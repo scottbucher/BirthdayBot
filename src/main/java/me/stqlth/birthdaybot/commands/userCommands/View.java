@@ -74,7 +74,7 @@ public class View extends Command {
 
 		if (db.getPreventAge(event.getGuild()) || db.getHideAge(target.getUser())) {
 			String date = getMonth(month) + " " + day + ", " + utcTime;
-			birthdayMessages.userBirthdayNoAge(channel, date, target, age);
+			birthdayMessages.userBirthdayNoAge(channel, date, target);
 			return;
 		}
 
