@@ -73,22 +73,15 @@ public class BirthdayTracker {
 	}
 
 	private static void roleHandler(DatabaseMethods db, ShardManager client, List<String> birthdaysString, List<String> finishedBirthdaysString, LocalDateTime now) {
-		if (birthdaysString.isEmpty() && finishedBirthdaysString.isEmpty()) {
-			Logger.Info("No Birthdays!");
-			return;
-		}
+		if (birthdaysString.isEmpty() && finishedBirthdaysString.isEmpty()) return;
 
 		List<User> birthdayUsers = new ArrayList<>();
-		for (String check : birthdaysString) {
-			Logger.Info("Birthday for: " + check);
+		for (String check : birthdaysString)
 			birthdayUsers.add(client.getUserById(check));
-		}
 
 		List<User> finishedBirthdayUsers = new ArrayList<>();
-		for (String check : finishedBirthdaysString) {
-			Logger.Info("Birthday expired for: " + check);
+		for (String check : finishedBirthdaysString)
 			finishedBirthdayUsers.add(client.getUserById(check));
-		}
 
 		List<Guild> guilds = client.getMutualGuilds(birthdayUsers);
 
@@ -169,37 +162,28 @@ public class BirthdayTracker {
 	}
 
 	private static void messageHandler(DatabaseMethods db, BirthdayMessages birthdayMessages, ShardManager client, List<String> birthdaysString, List<String> pBirthdaysString, LocalDateTime now) {
-		Logger.Info("messageHandler Triggered");
-		if (birthdaysString.isEmpty() && pBirthdaysString.isEmpty()) {
-			Logger.Info("No Messages!");
-			return;
-		}
+		if (birthdaysString.isEmpty() && pBirthdaysString.isEmpty()) return;
 
 		List<User> birthdayUsers = new ArrayList<>();
-		for (String check : birthdaysString) {
-			Logger.Info("Birthday for: " + check);
+		for (String check : birthdaysString)
 			birthdayUsers.add(client.getUserById(check));
-		}
+
 
 		List<User> pBirthdayUsers = new ArrayList<>();
-		for (String check : pBirthdaysString) {
-			Logger.Info("Birthday previous for: " + check);
+		for (String check : pBirthdaysString)
 			pBirthdayUsers.add(client.getUserById(check));
-		}
+
 
 		List<User> allBirthdayUsers = ListUtils.union(birthdayUsers, pBirthdayUsers);
 
 		List<Guild> guilds = client.getMutualGuilds(allBirthdayUsers);
 
 		for (Guild guild : guilds) {
-			Logger.Info("Checking Guild: " + guild.getName());
 
 			long trustedRole = db.getTrustedRole(guild);
 			long bdayChannel = db.getBirthdayChannel(guild);
-			if (bdayChannel == 0) {
-				Logger.Info("bdayChannel == 0");
-				continue;
-			}
+			if (bdayChannel == 0) continue;
+
 
 			Role tRole = null;
 			TextChannel bChannel = null; //initialize the Role and TextChannel since at-least one exists
@@ -214,11 +198,7 @@ public class BirthdayTracker {
 			} catch (Exception ignored) {
 			} //try to get said role/channel
 
-			if (bChannel == null) {
-				Logger.Info("bChannel == null");
-				continue; //if both return null the bot can't do anything for this guild on birthdays
-
-			}
+			if (bChannel == null) continue; //if both return null the bot can't do anything for this guild on birthdays
 
 			List<Member> membersInGuild = new ArrayList<>();
 			List<Member> messageMembers = new ArrayList<>();
@@ -227,17 +207,14 @@ public class BirthdayTracker {
 				if (birthdayUsers.contains(check.getUser()))
 					membersInGuild.add(check);
 
-			if (membersInGuild.isEmpty()) {
-				Logger.Info("membersInGuild.isEmpty()");
-				continue;
-			}
+			if (membersInGuild.isEmpty()) continue;
+
 
 			int messageTime = db.getGuildMessageTime(guild);
 			boolean preventChannel = db.getTrustedPreventMessage(guild);
 
 			for (Member member : membersInGuild) {
 				if (tRole != null && !member.getRoles().contains(tRole) && preventChannel) {
-					Logger.Info("tRole != null && !member.getRoles().contains(tRole) && preventChannel");
 					continue;
 				}
 
@@ -254,7 +231,6 @@ public class BirthdayTracker {
 
 				utc += messageTime;
 				if (utc > 23) {
-					Logger.Info("utc > 23");
 					messageDate = messageDate.plusDays(1); //we increase this because this should now be the day of the message
 					utc -= 24;
 				}
@@ -269,17 +245,10 @@ public class BirthdayTracker {
 				LocalDate nowDate = LocalDate.of(now.getYear(), nowMonth, nowDay);
 				LocalDate mDate = LocalDate.of(now.getYear(), mMonth, mDay);
 
-
-				Logger.Info("mHour = " + mHour);
-				Logger.Info("nowHour = " + nowHour);
-				Logger.Info("nowDate = " + nowDate.toString());
-				Logger.Info("mDate = " + mDate.toString());
-
 				if (mHour == nowHour && nowDate.equals(mDate)) {
 					messageMembers.add(member);
 					continue;
 				}
-				Logger.Info("Did not add to messageMembers");
 			}
 
 
