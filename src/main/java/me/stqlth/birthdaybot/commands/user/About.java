@@ -4,7 +4,6 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 
@@ -34,7 +33,7 @@ public class About extends Command {
                 "\nType `bday help` and I'll display you a list of commands you can use!"+
 //                "\nSee some of my other stats with `" + getMessageInfo.getPrefix(g) + "stats`"+
                 "\n"+
-                "\nFor additional help, contact <@478288246858711040> or join our discord server [here](https://discord.gg/CJnWuWn)")
+                "\nFor additional help, contact <@478288246858711040> or join our discord server [here](https://discord.gg/24xS3N5)")
                 .setColor(Color.decode("#00e1ff"));
         if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();;
     }

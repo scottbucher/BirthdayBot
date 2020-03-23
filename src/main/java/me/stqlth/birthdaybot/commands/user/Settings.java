@@ -90,7 +90,7 @@ public class Settings extends Command {
 				.addField("Trusted Prevents Message", "" + preventMessages, true)
 				.addField("Message Time", "" + mTime, true)
 				.addField("Custom Message", "" + customMessage, true)
-				.addField("Show Members' Ages", "" + preventAge, true)
+				.addField("Show Members' Ages", "" + !preventAge, true)
 //				.setThumbnail(bot.getAvatarUrl())
 				.setFooter(bot.getName(), bot.getAvatarUrl());
 

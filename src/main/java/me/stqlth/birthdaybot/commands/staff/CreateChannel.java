@@ -5,10 +5,9 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.requests.RestAction;
 
 import java.util.EnumSet;
 
@@ -58,6 +57,5 @@ public class CreateChannel extends Command {
 					staffMessages.successChannelCreate(channel, result);
 					db.updateBirthdayChannel(event, result);
 		});
-
 	}
 }
