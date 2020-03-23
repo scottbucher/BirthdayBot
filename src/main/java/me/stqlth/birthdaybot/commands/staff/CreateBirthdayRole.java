@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.staffCommands;
+package me.stqlth.birthdaybot.commands.staff;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -7,15 +7,18 @@ import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
-public class ClearTrustedRole extends Command {
+import java.awt.*;
+
+public class CreateBirthdayRole extends Command {
 
 	private DatabaseMethods db;
 	private StaffMessages staffMessages;
 
-	public ClearTrustedRole(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
-		this.name = "cleartrustedrole";
-		this.help = "Clears the birthday role";
+	public CreateBirthdayRole(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+		this.name = "createbirthdayrole";
+		this.help = "Creates a birthday role";
 		this.guildOnly = true;
 		this.hidden = true;
 
@@ -29,13 +32,27 @@ public class ClearTrustedRole extends Command {
 
 		Member sender = event.getMember();
 		Permission req = Permission.ADMINISTRATOR;
+		Permission botReq = Permission.MANAGE_ROLES;
 
 		if (!sender.hasPermission(req)) {
 			staffMessages.onlyAdmins(channel); //Only admins may use this command
 			return;
 		}
 
-		db.clearTrustedRole(event);
-		staffMessages.trustedRoleClear(channel);
+		if (!event.getSelfMember().hasPermission(botReq)) {
+			try {
+				staffMessages.botNoPerms(channel);
+			} catch (InsufficientPermissionException ignored) {}
+		}
+
+			event.getGuild().createRole()
+					.setName("\uD83C\uDF82")
+					.setColor(Color.decode("#AC1CFE"))
+					.setHoisted(true)
+					.queue(result -> {
+						staffMessages.successBdayRoleCreate(channel, result);
+						db.updateBirthdayRole(event, result);
+					});
+
 	}
 }

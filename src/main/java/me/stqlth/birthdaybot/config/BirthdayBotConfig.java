@@ -1,6 +1,9 @@
 package me.stqlth.birthdaybot.config;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class BirthdayBotConfig {
     private JSONObject _configJson;
@@ -27,5 +30,6 @@ public class BirthdayBotConfig {
 
     public String getPrefix() { return  _configJson.getString("prefix"); }
 
+    public JSONArray getRegions() { return _configJson.getJSONArray("regions"); }
 }
 

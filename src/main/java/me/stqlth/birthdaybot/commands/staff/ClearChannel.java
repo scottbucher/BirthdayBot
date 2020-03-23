@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.staffCommands;
+package me.stqlth.birthdaybot.commands.staff;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -8,14 +8,14 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class ClearBirthdayRole extends Command {
+public class ClearChannel extends Command {
 
 	private DatabaseMethods db;
 	private StaffMessages staffMessages;
 
-	public ClearBirthdayRole(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
-		this.name = "clearbirthdayrole";
-		this.help = "Clears the birthday role";
+	public ClearChannel(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+		this.name = "clearchannel";
+		this.help = "Clears the birthday channel";
 		this.guildOnly = true;
 		this.hidden = true;
 
@@ -35,7 +35,7 @@ public class ClearBirthdayRole extends Command {
 			return;
 		}
 
-		db.clearBirthdayRole(event);
-		staffMessages.bdayRoleClear(channel);
+		db.clearBirthdayChannel(event);
+		staffMessages.channelClear(channel);
 	}
 }

@@ -4,14 +4,16 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import me.stqlth.birthdaybot.commands.staffCommands.*;
-import me.stqlth.birthdaybot.commands.userCommands.*;
+import me.stqlth.birthdaybot.commands.developement.Broadcast;
+import me.stqlth.birthdaybot.commands.staff.*;
+import me.stqlth.birthdaybot.commands.user.*;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.events.GuildJoinLeave;
 import me.stqlth.birthdaybot.events.UserJoinLeave;
 import me.stqlth.birthdaybot.main.GuildSettings.SettingsManager;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
+import me.stqlth.birthdaybot.messages.discordOut.DevelopmentMessages;
 import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
@@ -19,8 +21,7 @@ import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -33,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class BirthdayBot {
 
@@ -70,6 +72,7 @@ public class BirthdayBot {
 		DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
 		BirthdayMessages birthdayMessages = new BirthdayMessages();
 		StaffMessages staffMessages = new StaffMessages(getMessageInfo);
+		DevelopmentMessages developementMessages = new DevelopmentMessages();
 
 		BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages);
 
@@ -96,12 +99,15 @@ public class BirthdayBot {
 
 
 				//UTILITIES
-				new SetBDay(birthdayMessages, waiter, databaseMethods),
+				new SetBDay(birthdayMessages, waiter, databaseMethods, birthdayBotConfig),
 				new Next(databaseMethods, birthdayMessages),
 				new Support(birthdayMessages),
 				new Invite(birthdayMessages),
 				new View(databaseMethods, birthdayMessages),
-				new HideAge(databaseMethods, birthdayMessages)
+				new HideAge(databaseMethods, birthdayMessages),
+
+				//Owner
+				new Broadcast(databaseMethods, developementMessages)
 		};
 
 		// Create the client
@@ -109,7 +115,7 @@ public class BirthdayBot {
 
 		EventListener[] listeners = new EventListener[]{
 				waiter,
-				new GuildJoinLeave(birthdayBotConfig, debugMessages, databaseMethods),
+				new GuildJoinLeave(birthdayBotConfig, debugMessages),
 				new UserJoinLeave(databaseMethods)
 		};
 
@@ -119,18 +125,21 @@ public class BirthdayBot {
 		Logger.Info("Starting shard manager...");
 		try {
 			instance = startShardManager(birthdayBotConfig, client, listeners);
-			try {
-				Thread.sleep(1000 * 60);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
-			try {
-				Thread.sleep(1000 * 30);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			birthdayTracker.startTracker(instance);
+			waiter.waitForEvent(ReadyEvent.class,
+					e -> e.getGuildAvailableCount() == e.getGuildTotalCount(),
+					e -> {
+						Logger.Info("Bot Ready!");
+
+						SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
+						Logger.Info("Database Ready!");
+						try {
+							Thread.sleep(1000 * 1);
+						} catch (InterruptedException ex) {
+							ex.printStackTrace();
+						}
+						birthdayTracker.startTracker(instance);
+					},
+					5, TimeUnit.MINUTES, client::shutdown);
 		} catch (Exception ex) {
 			Logger.Error("Error encountered while logging in. The bot token may be incorrect.", ex);
 		}
@@ -191,6 +200,7 @@ public class BirthdayBot {
 		}
 		return false;
 	}
+
 	private static void AddGuildToDatabase(BirthdayBotConfig birthdayBotConfig, Guild g, DebugMessages debugMessages) {
 
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());

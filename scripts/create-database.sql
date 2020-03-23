@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3307
--- Generation Time: Mar 13, 2020 at 01:29 AM
+-- Generation Time: Mar 23, 2020 at 06:09 AM
 -- Server version: 5.7.24-log
 -- PHP Version: 7.2.10
 
@@ -122,9 +122,34 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetNextBirthday` (IN `IN_GuildId` INT(11))  BEGIN
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetNextBirthday1` (IN `IN_DiscordIds` MEDIUMTEXT)  BEGIN
 
+SELECT *
+FROM users
+WHERE FIND_IN_SET(`UserDiscordId`, IN_DiscordIds) IS NOT NULL
+AND FIND_IN_SET(`UserDiscordId`, IN_DiscordIds) > 0
+AND DATE_ADD(Birthday, INTERVAL YEAR(CURDATE())-YEAR(Birthday) YEAR) > CURRENT_DATE
+ORDER BY Birthday DESC;
 
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetNextBirthday2` (IN `IN_DiscordIds` MEDIUMTEXT)  BEGIN
+
+SELECT *
+FROM users
+WHERE FIND_IN_SET(`UserDiscordId`, IN_DiscordIds) IS NOT NULL
+AND FIND_IN_SET(`UserDiscordId`, IN_DiscordIds) > 0
+AND DATE_ADD(Birthday, INTERVAL YEAR(CURDATE())-YEAR(Birthday) YEAR) < CURRENT_DATE
+ORDER BY Birthday ASC;
+
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetNextBirthdays` (IN `IN_Birthday` DATE)  NO SQL
+BEGIN
+
+SELECT *
+FROM users
+WHERE `Birthday` = IN_Birthday;
 
 END$$
 
@@ -176,6 +201,16 @@ WHERE `UserId` = IN_UserId;
 
 END$$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserBirthdayFromDiscordId` (IN `IN_DiscordId` VARCHAR(18))  NO SQL
+BEGIN
+
+SELECT *
+FROM users
+WHERE `UserDiscordId` = IN_DiscordId
+LIMIT 1;
+
+END$$
+
 CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserId` (IN `IN_UserDiscordId` VARCHAR(18))  BEGIN
 
 SELECT UserId
@@ -184,9 +219,9 @@ WHERE `UserDiscordId` = IN_UserDiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserUTCTime` (IN `IN_UserId` INT(11))  BEGIN
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserZoneId` (IN `IN_UserId` INT(11))  BEGIN
 
-SELECT UTCTime
+SELECT ZoneId
 FROM users
 WHERE `UserId` = IN_UserId;
 
@@ -339,10 +374,10 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateUTCTime` (IN `IN_UserId` INT(11), IN `IN_UTCTime` DECIMAL)  BEGIN
+CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateZoneId` (IN `IN_UserId` INT(11), IN `IN_ZoneId` TINYTEXT)  BEGIN
 
 UPDATE users
-SET `UTCTime` = IN_UTCTime
+SET `ZoneId` = IN_ZoneId
 WHERE `UserId` = IN_UserId;
 
 END$$
@@ -406,7 +441,7 @@ CREATE TABLE `users` (
   `UserId` int(11) NOT NULL,
   `UserDiscordId` varchar(18) NOT NULL,
   `Birthday` date DEFAULT NULL,
-  `UTCTime` tinyint(1) DEFAULT '0',
+  `ZoneId` tinytext,
   `ChangesLeft` tinyint(4) DEFAULT '3',
   `HideAge` tinyint(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

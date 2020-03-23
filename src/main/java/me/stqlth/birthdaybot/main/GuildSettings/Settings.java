@@ -1,7 +1,6 @@
 package me.stqlth.birthdaybot.main.GuildSettings;
 
 import com.jagrosh.jdautilities.command.GuildSettingsProvider;
-import me.stqlth.birthdaybot.commands.userCommands.Help;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import net.dv8tion.jda.api.entities.Guild;

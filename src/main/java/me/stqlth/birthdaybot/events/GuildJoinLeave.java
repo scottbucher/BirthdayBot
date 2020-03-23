@@ -2,28 +2,22 @@ package me.stqlth.birthdaybot.events;
 
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
-import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.EmoteManager;
 
 import java.sql.*;
-import java.util.List;
 
 
 public class GuildJoinLeave extends ListenerAdapter {
     private BirthdayBotConfig birthdayBotConfig;
     private DebugMessages debugMessages;
-    private DatabaseMethods db;
 
-    public GuildJoinLeave(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, DatabaseMethods databaseMethods) {
+    public GuildJoinLeave(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages) {
         this.birthdayBotConfig = birthdayBotConfig;
         this.debugMessages = debugMessages;
-        this.db = databaseMethods;
     }
 
     public void onGuildJoin(GuildJoinEvent event) {

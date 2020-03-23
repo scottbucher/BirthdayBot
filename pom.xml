@@ -30,7 +30,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.1.1_108</version>
+            <version>4.1.1_116</version>
         </dependency>
         <dependency>
             <groupId>com.jagrosh</groupId>

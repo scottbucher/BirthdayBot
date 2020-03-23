@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.userCommands;
+package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 
 public class View extends Command {
 
@@ -56,29 +57,22 @@ public class View extends Command {
 
 		String birthday = db.getUserBirthday(target.getUser()); //we set birthday here so we don't try to get a user's birthday who isn't in the database in the block above
 		String[] values = birthday.split("-");
-		String utcTime = String.valueOf(db.getUserUTCTime(target.getUser()));
+		ZoneId zoneId = db.getUserZoneId(target.getUser());
 
 		int day = Integer.parseInt(values[2]);
 		int month = Integer.parseInt(values[1]);
 		int year = Integer.parseInt(values[0]);
 
-		if (utcTime.equals("0")) {
-			utcTime = "UTC";
-		} else if (12 <= Integer.parseInt(utcTime) && Integer.parseInt(utcTime) <= 23){
-			day++;
-			utcTime = "GMT" + (24-Integer.parseInt(utcTime));
-		} else utcTime = "GMT-" + utcTime;
-
 		LocalDate birthDate = LocalDate.of(year, month, day);
 		int age = calculateAge(birthDate, LocalDate.now());
 
 		if (db.getPreventAge(event.getGuild()) || db.getHideAge(target.getUser())) {
-			String date = getMonth(month) + " " + day + ", " + utcTime;
+			String date = getMonth(month) + " " + day + ", " + zoneId.getId();
 			birthdayMessages.userBirthdayNoAge(channel, date, target);
 			return;
 		}
 
-		String date = getMonth(month) + " " + day + ", " + year + " " + utcTime;
+		String date = getMonth(month) + " " + day + ", " + year + " " + zoneId.getId();
 		birthdayMessages.userBirthdayWithAge(channel, date, target, age);
 	}
 	private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {

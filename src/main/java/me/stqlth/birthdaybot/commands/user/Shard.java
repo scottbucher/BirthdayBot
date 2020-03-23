@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.userCommands;
+package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -31,6 +31,6 @@ public class Shard extends Command {
 
         builder.setColor(Color.decode("#2aff16"))
                 .setDescription("You are currently on shard `" + currentShard + "` out of `" + totalShards + "` total shards!");
-        channel.sendMessage(builder.build()).queue();
+        channel.sendMessage(builder.build()).queue(null, (error) -> {});
     }
 }

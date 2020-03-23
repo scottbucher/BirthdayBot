@@ -42,7 +42,7 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 
 ### Utilities
 
-* `setbday <day>, <month>, <year>, <gmt offset>` - Set your birthday.
+* `setbday <day>, <month>, <year>, <timezone>` - Set your birthday.
 * `next` - View the next birthday in your current guild.
 * `view <name>` - View a user's birthday.
 * `invite` - Invite Birthday Bot to your discord.
@@ -54,4 +54,4 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 
 ## Help
 
-For additional help contact **Stqlth#0001** or join the support server [here](https://discord.gg/CJnWuWn).
+For additional help contact **Stqlth#0001** or join the support server [here](https://discord.gg/24xS3N5).

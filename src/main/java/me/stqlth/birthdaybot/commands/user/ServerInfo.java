@@ -1,8 +1,7 @@
-package me.stqlth.birthdaybot.commands.userCommands;
+package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
 import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -75,7 +74,7 @@ public class ServerInfo extends Command {
                 .setThumbnail(bot.getAvatarUrl())
                 .setFooter(bot.getName(), bot.getAvatarUrl());
 
-        channel.sendMessage(builder.build()).queue();
+        channel.sendMessage(builder.build()).queue(null, (error) -> {});
 
 
     }

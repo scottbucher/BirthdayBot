@@ -3,13 +3,12 @@ package me.stqlth.birthdaybot.utils;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,14 +45,14 @@ public class DatabaseMethods {
 		return -1;
 	}
 
-	public void updateUTCTime(CommandEvent event, int offset) throws SQLException {
+	public void updateZoneId(CommandEvent event, String zoneId) throws SQLException {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
 			userId = getUserId(event.getAuthor());
 
-			statement.execute("CALL UpdateUTCTime(" + userId + ", " + offset + ")");
+			statement.execute("CALL UpdateZoneId(" + userId + ", '" + zoneId + "')");
 		}
 	}
 
@@ -104,21 +103,38 @@ public class DatabaseMethods {
 		return "-1";
 	}
 
-	public int getUserUTCTime(User user) {
+	public String getUserBirthday(long userid) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			ResultSet rs2 = statement.executeQuery("CALL GetUserBirthdayFromDiscordId('" + userid + "')");
+			rs2.next();
+
+			String[] values = rs2.getString("Birthday").split("-");
+
+			return values[1] + "-" + values[2];
+
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return "-1";
+	}
+
+	public ZoneId getUserZoneId(User user) {
 		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 			int userId = -1;
 
 			userId = getUserId(user);
 
-			ResultSet rs2 = statement.executeQuery("CALL GetUserUTCTime(" + userId + ")");
+			ResultSet rs2 = statement.executeQuery("CALL GetUserZoneId(" + userId + ")");
 			rs2.next();
-			return rs2.getInt("UTCTime");
+			return ZoneId.of(rs2.getString("ZoneId"));
 
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
 		}
-		return 0;
+		return null;
 	}
 
 	public String getGuildBirthdayMessage(Guild guild) {
@@ -212,6 +228,58 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 		return 0;
+	}
+
+	public List<User> getNextBirthdays(CommandEvent event, String userDiscordIds) {
+		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+
+			List<User> birthdays = new ArrayList<>();
+			String firstDate;
+			ResultSet rs = statement.executeQuery("CALL GetNextBirthday1('" + userDiscordIds + "')");
+
+			if (!rs.next()) {
+				ResultSet rs2 = statement.executeQuery("CALL GetNextBirthday2('" + userDiscordIds + "')");
+				if (!rs2.next()) return null;
+				long temp2 = rs2.getLong("UserDiscordId");
+				Logger.Info(temp2+"");
+				firstDate = getUserBirthday(temp2);
+				rs2.beforeFirst();
+
+
+				while (rs2.next()) {
+					long temp = rs2.getLong("UserDiscordId");
+					if (getUserBirthday(temp).equals(firstDate)) {
+						birthdays.add(event.getJDA().getUserById(temp));
+					} else if(!Utilities.isLeap(LocalDateTime.now().getYear()) && firstDate.equalsIgnoreCase("02-28") && getUserBirthday(temp).equals("02-29")) {
+						birthdays.add(event.getJDA().getUserById(temp));
+					} else {
+						break;
+					}
+				}
+
+			} else {
+				Logger.Info("SECOND");
+				firstDate = getUserBirthday(rs.getLong("UserDiscordId"));
+				rs.beforeFirst();
+
+				while (rs.next()) {
+					long temp = rs.getLong("UserDiscordId");
+					if (getUserBirthday(temp).equals(firstDate)) {
+						birthdays.add(event.getJDA().getUserById(temp));
+					} else if(!Utilities.isLeap(LocalDateTime.now().getYear()) && firstDate.equalsIgnoreCase("02-28") && getUserBirthday(temp).equals("02-29")) {
+						birthdays.add(event.getJDA().getUserById(temp));
+					} else {
+						break;
+					}
+				}
+			}
+
+			return birthdays;
+		} catch (SQLException ex) {
+			debugMessages.sqlDebug(ex);
+		}
+		return null;
 	}
 
 	public long getTrustedRole(Guild guild) {

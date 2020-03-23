@@ -1,19 +1,26 @@
-package me.stqlth.birthdaybot.commands.userCommands;
+package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.json.JSONArray;
 
 import java.awt.*;
-import java.sql.*;
+import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -21,20 +28,21 @@ public class SetBDay extends Command {
     private BirthdayMessages birthdayMessages;
     private EventWaiter waiter;
     private DatabaseMethods db;
+    private JSONArray regions;
 
-    public SetBDay(BirthdayMessages birthdayMessages, EventWaiter waiter, DatabaseMethods databaseMethods) {
+    public SetBDay(BirthdayMessages birthdayMessages, EventWaiter waiter, DatabaseMethods databaseMethods, BirthdayBotConfig birthdayBotConfig) {
         this.name = "set";
         this.aliases = new String[]{"add"};
         this.guildOnly = false;
         this.help = "Sets a user's global birthday.";
-        this.arguments = "<day>, <month>, <year>, <gmt offset>";
+        this.arguments = "<day>, <month>, <year>, <timezone>";
         this.category = new Category("Utilities");
 
         this.birthdayMessages = birthdayMessages;
         this.waiter = waiter;
         this.db = databaseMethods;
+        this.regions = birthdayBotConfig.getRegions();
     }
-
     @Override
     protected void execute(CommandEvent event) {
         TextChannel textChannel = null;
@@ -42,16 +50,13 @@ public class SetBDay extends Command {
 
         try {
             textChannel = event.getTextChannel();
-        } catch (IllegalStateException ignored) {
+        } catch (IllegalStateException ex) {
             privateChannel = event.getPrivateChannel();
         }
-        boolean normal = true;
+        boolean normal = privateChannel == null;
 
-        if (privateChannel != null) normal = false;
+            if (normal) event.getMessage().delete().queue(null, (error) -> {});
 
-        try {
-            if (normal) event.getMessage().delete().queue();
-        } catch (InsufficientPermissionException ignored) {}
 
         User author = event.getAuthor();
 
@@ -63,46 +68,38 @@ public class SetBDay extends Command {
             return;
         }
 
-        int offset = -1;
+        List<String> acceptedZones = new ArrayList<>();
+        for (String check : ZoneId.getAvailableZoneIds()) {
+            for (Object region : regions) {
+                if (check.startsWith(region.toString())) {
+                    acceptedZones.add(check);
+                    break;
+                }
+            }
+        }
 
-        try {
-            offset = Integer.parseInt(args[5]);
-        } catch (NumberFormatException e) {
-            if (normal) birthdayMessages.invalidOffset(Objects.requireNonNull(textChannel)); else birthdayMessages.invalidOffset(privateChannel);
+        boolean check = false;
+        for (String acceptedZone : acceptedZones)
+            if (args[5].equalsIgnoreCase(acceptedZone)) {
+                check = true;
+                break;
+            }
+        if (!check) {
+            if (normal) birthdayMessages.invalidZone(Objects.requireNonNull(textChannel)); else birthdayMessages.invalidZone(privateChannel);
             return;
         }
 
-        int utcTime = 0;
-
-        if (offset > 14 || offset < -11) {
-            if (normal) birthdayMessages.invalidOffset(Objects.requireNonNull(textChannel)); else birthdayMessages.invalidOffset(privateChannel);
+        ZoneId zoneId;
+        try {
+            zoneId = ZoneId.of(args[5]);
+        } catch (DateTimeException e) {
+            if (normal) birthdayMessages.invalidZone(Objects.requireNonNull(textChannel)); else birthdayMessages.invalidZone(privateChannel);
             return;
-        } else if (offset > 0) { //offset changes into the UTC time which is midnight for the user
-            utcTime = 24 - offset;
-        } else utcTime = Math.abs(offset);
-
-        String offsetS = String.valueOf(offset);
-        if (offsetS.equals("0")) {
-            offsetS = "UTC";
-        } else offsetS = "GMT" + offsetS;
-
-        /*
-        * Notes:
-        * Now that I store user's birthday with their midnight in terms of UTC time
-        * All I have to do is make a procedure which finds birthdays that are today //UNSURE
-        * AND
-        * Which have the current hour //UNSURE
-        * EXAMPLES
-        * Scenario 1: If user's birthday is January 1st with timezone -5
-        * It is January 1st 5am - Birthday event triggered!
-        * Scenario 2: If user's birthday is January 1st with timezone 7
-        * It is December 31st 5pm - Birthday event triggered!
-        */
+        }
 
         args[2] = args[2].replace(",", "");
         args[3] = args[3].replace(",", "");
         args[4] = args[4].replace(",", "");
-
 
         int day = -1;
         int month = -1;
@@ -116,6 +113,11 @@ public class SetBDay extends Command {
             if (normal) birthdayMessages.invalidFormat(Objects.requireNonNull(textChannel), getName(), getArguments()); else birthdayMessages.invalidFormat(privateChannel, getName(), getArguments());
             return;
         }
+
+//        if (day == 29 && month == 2) {
+//            if (normal) chooseLeapDate(Objects.requireNonNull(textChannel)); else chooseLeapDate(privateChannel);
+//            return;
+//        }
 
         int age = -1;
         try { //try catch to check for invalid dates such as February 30th
@@ -131,23 +133,7 @@ public class SetBDay extends Command {
             return;
         }
 
-        String date = (normal ? getMonth(month) + " " + day + ", " + offsetS : getMonth(month) + " " + day + ", " + year+ " " + offsetS);
-
-        if (offset == 13) offset = -11; //Easier conversion for storage
-        if (offset == 14) offset = -10;
-
-        if (offset > 0) { //Storing this birthday as a UTC time/date
-            try {
-                LocalDate birthDate = LocalDate.of(year, month, day);
-                birthDate = birthDate.minusDays(1);
-                year = birthDate.getYear();
-                month = birthDate.getMonthValue();
-                day = birthDate.getDayOfMonth();
-            } catch (Exception e) {
-                if (normal) birthdayMessages.dateNotFound(Objects.requireNonNull(textChannel)); else birthdayMessages.dateNotFound(privateChannel);
-                return;
-            }
-        }
+        String date = (normal ? getMonth(month) + " " + day + ", " + zoneId.toString() : getMonth(month) + " " + day + ", " + year + ", " + zoneId.toString());
 
         String sBday = year + "-" + month + "-" + day;
 
@@ -160,67 +146,81 @@ public class SetBDay extends Command {
             return;
         } else changesLeft--;
 
-       if (normal) sendConfirmation(event, Objects.requireNonNull(textChannel), date, sBday, utcTime, changesLeft); else  sendConfirmation(event, privateChannel, date, sBday, utcTime, changesLeft);
+        if (normal) sendConfirmation(event, Objects.requireNonNull(textChannel), date, sBday, zoneId.toString(), changesLeft); else  sendConfirmation(event, privateChannel, date, sBday, zoneId.toString(), changesLeft);
+
     }
 
-    public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, int utcTime, int changesLeft) {
+    public void leapDate(TextChannel channel) {
+        EmbedBuilder builder = new EmbedBuilder();
+
+        builder.setColor(Color.decode("#1CFE86"))
+                .setTitle("**A Leap Day?!?!**")
+        .setDescription("Wow! A birthday on a leap day? Only 1 in 1461 people are born on a leap day!" +
+                "\n\nPlease note that on years that are __not__ a leap year, your birthday will be celebrated on February 28th.");
+        channel.sendMessage(builder.build()).queue(null, error ->{});
+    }
+    public void leapDate(PrivateChannel channel) {
+        EmbedBuilder builder = new EmbedBuilder();
+
+        builder.setColor(Color.decode("#1CFE86"))
+                .setTitle("**A Leap Day?!?!**")
+                .setDescription("Wow! A birthday on a leap day? Only 1 in 1461 people are born on a leap day!" +
+                        "\n\nPlease note that on years that are __not__ a leap year, your birthday will be celebrated on February 28th.");
+        channel.sendMessage(builder.build()).queue(null, error ->{});
+    }
+
+
+
+    public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, String zoneId, int changesLeft) {
         EmbedBuilder builder = new EmbedBuilder();
 
         builder.setColor(Color.decode("#1CFE86"))
                 .setDescription("Please confirm that this is the correct date: **" + date + "**");
         channel.sendMessage(builder.build()).queue(result -> {
-            result.addReaction("\u2705").queue();
-            result.addReaction("\u274C").queue();
-            waitForConfirmation(event, channel, result, sBday, utcTime, changesLeft, date);
-        });
+            result.addReaction("\u2705").queue(null, (error) -> {});
+            result.addReaction("\u274C").queue(null, (error) -> {});
+            waitForConfirmation(event, channel, result, sBday, zoneId, changesLeft, date);
+        }, (error) -> {});
     }
-    private void waitForConfirmation(CommandEvent event, TextChannel channel, Message msg, String sBday, int utcTime, int changesLeft, String date) {
+    private void waitForConfirmation(CommandEvent event, TextChannel channel, Message msg, String sBday, String zoneId, int changesLeft, String date) {
 
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 e -> e.getChannel().equals(event.getChannel()) && !Objects.requireNonNull(e.getUser()).isBot() &&
                         ((e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C")) && Objects.equals(e.getMember(), event.getMember())),
                 e -> {
                     if (e.getReactionEmote().getName().equals("\u2705")) {
-
-                        try {
-                            msg.delete().queue();
-                        } catch (InsufficientPermissionException ignored) {}
-
+                            msg.delete().queue(null, (error) -> {});
                         try {
                             db.updateBirthday(event.getMember().getUser(), sBday);
-                            db.updateUTCTime(event, utcTime);
+                            db.updateZoneId(event, zoneId);
                             birthdayMessages.success(channel, date);
                         } catch (SQLException ex) {
+                            Logger.Info("Here");
                             birthdayMessages.invalidFormat(channel, getName(), getArguments());
                             return;
                         }
                         db.updateChangesLeft(event, changesLeft);
-
+                        leapDate(channel);
                     } else if (e.getReactionEmote().getName().equals("\u274C")) {
-                        try {
-                            msg.delete().queue();
-                        } catch (InsufficientPermissionException ignored) {
-                        }
+                            msg.delete().queue(null, (error) -> {});
                     }
                 }, 30, TimeUnit.SECONDS, () -> {
-                    try {
-                        msg.delete().queue();
-                    } catch (InsufficientPermissionException ignored) {}
+                        msg.delete().queue(null, (error) -> {});
                 });
     }
 
-    public void sendConfirmation(CommandEvent event, PrivateChannel channel, String date, String sBday, int utcTime, int changesLeft) {
+    public void sendConfirmation(CommandEvent event, PrivateChannel channel, String date, String sBday, String zoneId, int changesLeft) {
         EmbedBuilder builder = new EmbedBuilder();
 
         builder.setColor(Color.decode("#1CFE86"))
                 .setDescription("Please confirm that this is the correct date: **" + date + "**");
         channel.sendMessage(builder.build()).queue(result -> {
-            result.addReaction("\u2705").queue();
-            result.addReaction("\u274C").queue();
-            waitForConfirmation(event, channel, sBday, utcTime, changesLeft, date);
-        });
+            result.addReaction("\u2705").queue(null, error ->{});
+            result.addReaction("\u274C").queue(null, error ->{});
+            waitForConfirmation(event, channel, result, sBday, zoneId, changesLeft, date);
+        }, (error) -> {});
     }
-    private void waitForConfirmation(CommandEvent event, PrivateChannel channel, String sBday, int utcTime, int changesLeft, String date) {
+    private void waitForConfirmation(CommandEvent event, PrivateChannel channel, Message msg, String sBday, String zoneId, int changesLeft, String date) {
 
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 e -> e.getChannel().equals(event.getChannel()) && !Objects.requireNonNull(e.getUser()).isBot() &&
@@ -229,14 +229,16 @@ public class SetBDay extends Command {
                     if (e.getReactionEmote().getName().equals("\u2705")) {
                         try {
                             db.updateBirthday(event.getAuthor(), sBday);
-                            db.updateUTCTime(event, utcTime);
+                            db.updateZoneId(event, zoneId);
+                            msg.delete().queue(null, (error) -> {});
                             birthdayMessages.success(channel, date);
                         } catch (SQLException ex) {
                             birthdayMessages.invalidFormat(channel, getName(), getArguments());
                             return;
                         }
                         db.updateChangesLeft(event, changesLeft);
-                    }
+                        leapDate(channel);
+                    } else if (e.getReactionEmote().getName().equals("\u274C")) msg.delete().queue(null, (error) -> {});
                 });
     }
 
