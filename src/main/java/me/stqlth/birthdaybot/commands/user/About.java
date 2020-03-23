@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.userCommands;
+package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -35,7 +35,8 @@ public class About extends Command {
                 "\n"+
                 "\nFor additional help, contact <@478288246858711040> or join our discord server [here](https://discord.gg/24xS3N5)")
                 .setColor(Color.decode("#00e1ff"));
-        if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();;
+        if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(null, (error) -> {});
+        else event.getPrivateChannel().sendMessage(builder.build()).queue(null, (error) -> {});
     }
 
 }

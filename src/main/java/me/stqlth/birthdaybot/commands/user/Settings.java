@@ -1,8 +1,7 @@
-package me.stqlth.birthdaybot.commands.userCommands;
+package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -94,6 +93,6 @@ public class Settings extends Command {
 //				.setThumbnail(bot.getAvatarUrl())
 				.setFooter(bot.getName(), bot.getAvatarUrl());
 
-		channel.sendMessage(builder.build()).queue();
+		channel.sendMessage(builder.build()).queue(null, (error) -> {});
 	}
 }

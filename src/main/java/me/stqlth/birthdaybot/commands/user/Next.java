@@ -5,25 +5,28 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Logger;
+import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
+import javax.rmi.CORBA.Util;
 import java.awt.*;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class NewNext extends Command {
+public class Next extends Command {
 	private BirthdayMessages birthdayMessages;
 	private DatabaseMethods db;
 
-	public NewNext(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages) {
+	public Next(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages) {
 		this.name = "next";
 		this.aliases = new String[]{"upcoming"};
 		this.guildOnly = true;
@@ -65,12 +68,12 @@ public class NewNext extends Command {
 			String[] values = birthday.split("-");
 			int day = Integer.parseInt(values[2]);
 			int month = Integer.parseInt(values[1]);
-
 			int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-			LocalDate birthDay = LocalDate.of(currentYear, month, day);
 
-			if (now.isAfter(birthDay)) {
-				currentYear++;
+			if (now.isAfter(LocalDate.of(currentYear, month, day))) currentYear++;
+			if (day == 29 && month == 2 && !Utilities.isLeap(currentYear)) {
+				Logger.Info("CHECK1");
+				day--;
 			}
 
 			int size = bdays.size();
@@ -92,19 +95,19 @@ public class NewNext extends Command {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setColor(Color.decode("#1CFE86"))
 					.setDescription("The next birthdays are " + message);
-			channel.sendMessage(builder.build()).queue();
+			channel.sendMessage(builder.build()).queue(null, (error) -> {});
 		} else {
 			String birthday = db.getUserBirthday(bdays.get(0));
 			String[] values = birthday.split("-");
 
 			int day = Integer.parseInt(values[2]);
 			int month = Integer.parseInt(values[1]);
-
 			int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-			LocalDate birthDay = LocalDate.of(currentYear, month, day);
 
-			if (now.isAfter(birthDay)) {
-				currentYear++;
+			if (now.isAfter(LocalDate.of(currentYear, month, day))) currentYear++;
+			if (day == 29 && month == 2 && !Utilities.isLeap(currentYear)) {
+				Logger.Info("CHECK2");
+				day--;
 			}
 
 			String date = getMonth(month) + " " + day + ", " + currentYear;

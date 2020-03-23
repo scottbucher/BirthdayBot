@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import javax.annotation.Nullable;
 import java.awt.*;
 
-public class DevelopementMessages {
+public class DevelopmentMessages {
 
 	public void broadcastUpdate(CommandEvent event, @Nullable TextChannel channel, @Nullable PrivateChannel privateChannel) {
 		EmbedBuilder builder = new EmbedBuilder();

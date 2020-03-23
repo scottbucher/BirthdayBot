@@ -1,17 +1,12 @@
-package me.stqlth.birthdaybot.commands.staffCommands;
+package me.stqlth.birthdaybot.commands.staff;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
-import me.stqlth.birthdaybot.utils.Utilities;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-
-import java.awt.*;
-import java.util.Objects;
 
 public class Config extends Command {
 

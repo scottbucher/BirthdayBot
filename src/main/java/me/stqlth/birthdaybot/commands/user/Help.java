@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.userCommands;
+package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -53,13 +53,13 @@ public class Help extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor("BirthdayBot General Help", null, botIcon)
-				.addField("bday set <day>, <month>, <year>, <gmt offset>", "__**NOTE**__: We recommend this command is used in a PM with Birthday Bot" +
+				.addField("bday set <day>, <month>, <year>, <timezone>", "__**NOTE**__: We recommend this command is used in a PM with Birthday Bot" +
 						" to hide your age and exact date of birth." +
 						"\n\nThis command enters your birthday into our system. " +
 						"Each User may use this command up to __**3**__ times. This is to prevent abuse.\n\n" +
-						"If you don't know what a GMT offset is, click [here](https://www.timeanddate.com/time/map/) and hover over your location on the map. " +
-						"Your GMT offset is the value at the bottom that is highlighted " +
-						"(if the highlighted value at the bottom simply says `UTC`, then your GMT offset is 0.).\n\n" +
+						"If you don't know what a ZoneId is, click [here](http://kevalbhatt.github.io/timezone-picker/) and hover over your location on the map. " +
+						"Your ZoneId is the Location that appears at the bottom of the map. " +
+						"\n(Do __**not**__ use the shortened values of the Zones. Example: `EST`).\n\n" +
 						"Example usage: `bday set 28, 8, 2001, -5`\n ", false)
 				.addField("bday view <name>", "View a player's birthday", false)
 				.addField("bday next", "View the next birthday in your guild", false)
@@ -68,9 +68,8 @@ public class Help extends Command {
 				.addField("More Help Options", "Use `bday help setup` for help with the bot setup!\n" +
 						"Use `bday help config` for help with bot configuration!\n" +
 						"Use `bday help security` for security options for server owners", false);
-		try {
-			if (normal) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();
-		} catch (InsufficientPermissionException ignored) {}
+			if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, (error) -> {});
+			else event.getPrivateChannel().sendMessage(builder.build()).queue(null, (error) -> {});
 	}
 	public void sendConfigHelpMessage(CommandEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
@@ -99,9 +98,8 @@ public class Help extends Command {
 				" `@Users` auto formats the names as such: `Stqlth, User2, and User 3` if there were 3 birthdays that day" +
 						"\n\n`bday config resetMessage`\n" +
 						" - Sets the birthday message to its default value.", false);
-		try {
-			if (normal) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();
-		} catch (InsufficientPermissionException ignored) {}
+			if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, (error) -> {});
+			else event.getPrivateChannel().sendMessage(builder.build()).queue(null, (error) -> {});
 	}
 	public void sendSecurityHelpMessage(CommandEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
@@ -113,9 +111,8 @@ public class Help extends Command {
 				.addField("Age Protection", "These commands allow server owners & users to control the publicity and accessibility of their/members' age(s)" +
 						"\n\n`bday config security preventAge <true/false>`\n - When **true** user's ages will not be show in the `bday view` command" +
 						"\n\n`bday hideAge <true/false>`\n - When **true** your age will not be show in the `bday view` command", false);
-		try {
-			if (normal) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();
-		} catch (InsufficientPermissionException ignored) {}
+			if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, (error) -> {});
+			else event.getPrivateChannel().sendMessage(builder.build()).queue(null, (error) -> {});
 	}
 	public void sendSetupHelpMessage(CommandEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
@@ -133,8 +130,7 @@ public class Help extends Command {
 				.addField("Trusted Role", "The trusted role is the role which allows users to receive the birthday role and/or birthday message. " +
 						"When a trusted role is not set, all users receive a birthday role and/or message assuming the birthday role and/or channel are set." +
 						"\n\n`bday SetTrustedRole <@role/rolename>`\n`bday CreateTrustedRole` - Creates the default trusted role\n`bday ClearTrustedRole` - Clears the trusted role", false);
-		try {
-			if (normal) event.getTextChannel().sendMessage(builder.build()).queue(); else event.getPrivateChannel().sendMessage(builder.build()).queue();
-		} catch (InsufficientPermissionException ignored) {}
+			if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, (error) -> {});
+			else event.getPrivateChannel().sendMessage(builder.build()).queue(null, (error) -> {});
 	}
 }

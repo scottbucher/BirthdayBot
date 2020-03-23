@@ -20,6 +20,21 @@ public class Utilities {
         return String.format("%01d:%02d:%02d", hours, minutes, seconds);
     }
 
+    public static boolean isLeap(int year) {
+        if(year % 4 == 0)
+        {
+            if( year % 100 == 0)
+            {
+                return year % 400 == 0;
+            }
+            else
+                return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public static Color getAverageColor(String url) {
         if (url == null) {
             return new Color(27, 137, 255);

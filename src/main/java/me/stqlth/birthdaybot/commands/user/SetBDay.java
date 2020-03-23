@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.userCommands;
+package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -15,7 +15,6 @@ import org.json.JSONArray;
 
 import java.awt.*;
 import java.sql.SQLException;
-import java.text.BreakIterator;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.Period;
@@ -36,7 +35,7 @@ public class SetBDay extends Command {
         this.aliases = new String[]{"add"};
         this.guildOnly = false;
         this.help = "Sets a user's global birthday.";
-        this.arguments = "<day>, <month>, <year>, <gmt offset>";
+        this.arguments = "<day>, <month>, <year>, <timezone>";
         this.category = new Category("Utilities");
 
         this.birthdayMessages = birthdayMessages;
@@ -56,9 +55,8 @@ public class SetBDay extends Command {
         }
         boolean normal = privateChannel == null;
 
-        try {
-            if (normal) event.getMessage().delete().queue();
-        } catch (InsufficientPermissionException ignored) {}
+            if (normal) event.getMessage().delete().queue(null, (error) -> {});
+
 
         User author = event.getAuthor();
 
@@ -116,6 +114,11 @@ public class SetBDay extends Command {
             return;
         }
 
+//        if (day == 29 && month == 2) {
+//            if (normal) chooseLeapDate(Objects.requireNonNull(textChannel)); else chooseLeapDate(privateChannel);
+//            return;
+//        }
+
         int age = -1;
         try { //try catch to check for invalid dates such as February 30th
             LocalDate birthDate = LocalDate.of(year, month, day);
@@ -147,16 +150,37 @@ public class SetBDay extends Command {
 
     }
 
+    public void leapDate(TextChannel channel) {
+        EmbedBuilder builder = new EmbedBuilder();
+
+        builder.setColor(Color.decode("#1CFE86"))
+                .setTitle("**A Leap Day?!?!**")
+        .setDescription("Wow! A birthday on a leap day? Only 1 in 1461 people are born on a leap day!" +
+                "\n\nPlease note that on years that are __not__ a leap year, your birthday will be celebrated on February 28th.");
+        channel.sendMessage(builder.build()).queue(null, error ->{});
+    }
+    public void leapDate(PrivateChannel channel) {
+        EmbedBuilder builder = new EmbedBuilder();
+
+        builder.setColor(Color.decode("#1CFE86"))
+                .setTitle("**A Leap Day?!?!**")
+                .setDescription("Wow! A birthday on a leap day? Only 1 in 1461 people are born on a leap day!" +
+                        "\n\nPlease note that on years that are __not__ a leap year, your birthday will be celebrated on February 28th.");
+        channel.sendMessage(builder.build()).queue(null, error ->{});
+    }
+
+
+
     public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, String zoneId, int changesLeft) {
         EmbedBuilder builder = new EmbedBuilder();
 
         builder.setColor(Color.decode("#1CFE86"))
                 .setDescription("Please confirm that this is the correct date: **" + date + "**");
         channel.sendMessage(builder.build()).queue(result -> {
-            result.addReaction("\u2705").queue();
-            result.addReaction("\u274C").queue();
+            result.addReaction("\u2705").queue(null, (error) -> {});
+            result.addReaction("\u274C").queue(null, (error) -> {});
             waitForConfirmation(event, channel, result, sBday, zoneId, changesLeft, date);
-        });
+        }, (error) -> {});
     }
     private void waitForConfirmation(CommandEvent event, TextChannel channel, Message msg, String sBday, String zoneId, int changesLeft, String date) {
 
@@ -165,11 +189,7 @@ public class SetBDay extends Command {
                         ((e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C")) && Objects.equals(e.getMember(), event.getMember())),
                 e -> {
                     if (e.getReactionEmote().getName().equals("\u2705")) {
-
-                        try {
-                            msg.delete().queue();
-                        } catch (InsufficientPermissionException ignored) {}
-
+                            msg.delete().queue(null, (error) -> {});
                         try {
                             db.updateBirthday(event.getMember().getUser(), sBday);
                             db.updateZoneId(event, zoneId);
@@ -180,17 +200,12 @@ public class SetBDay extends Command {
                             return;
                         }
                         db.updateChangesLeft(event, changesLeft);
-
+                        leapDate(channel);
                     } else if (e.getReactionEmote().getName().equals("\u274C")) {
-                        try {
-                            msg.delete().queue();
-                        } catch (InsufficientPermissionException ignored) {
-                        }
+                            msg.delete().queue(null, (error) -> {});
                     }
                 }, 30, TimeUnit.SECONDS, () -> {
-                    try {
-                        msg.delete().queue();
-                    } catch (InsufficientPermissionException ignored) {}
+                        msg.delete().queue(null, (error) -> {});
                 });
     }
 
@@ -200,10 +215,10 @@ public class SetBDay extends Command {
         builder.setColor(Color.decode("#1CFE86"))
                 .setDescription("Please confirm that this is the correct date: **" + date + "**");
         channel.sendMessage(builder.build()).queue(result -> {
-            result.addReaction("\u2705").queue();
-            result.addReaction("\u274C").queue();
+            result.addReaction("\u2705").queue(null, error ->{});
+            result.addReaction("\u274C").queue(null, error ->{});
             waitForConfirmation(event, channel, result, sBday, zoneId, changesLeft, date);
-        });
+        }, (error) -> {});
     }
     private void waitForConfirmation(CommandEvent event, PrivateChannel channel, Message msg, String sBday, String zoneId, int changesLeft, String date) {
 
@@ -215,14 +230,15 @@ public class SetBDay extends Command {
                         try {
                             db.updateBirthday(event.getAuthor(), sBday);
                             db.updateZoneId(event, zoneId);
-                            msg.delete().queue();
+                            msg.delete().queue(null, (error) -> {});
                             birthdayMessages.success(channel, date);
                         } catch (SQLException ex) {
                             birthdayMessages.invalidFormat(channel, getName(), getArguments());
                             return;
                         }
                         db.updateChangesLeft(event, changesLeft);
-                    } else if (e.getReactionEmote().getName().equals("\u274C")) msg.delete().queue();
+                        leapDate(channel);
+                    } else if (e.getReactionEmote().getName().equals("\u274C")) msg.delete().queue(null, (error) -> {});
                 });
     }
 

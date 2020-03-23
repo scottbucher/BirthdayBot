@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.userCommands;
+package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
