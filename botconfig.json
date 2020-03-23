@@ -5,5 +5,16 @@
   "dbUrl": "jdbc:mysql://localhost:3306/<DATABASE_NAME>?useSSL=false",
   "dbUser": "<DATABASE_USER>",
   "dbPassword": "<DATABASE_PASSWORD>",
-  "botGMTOffset": "-5"
+  "regions": [
+    "Africa",
+    "America",
+    "Antarctica",
+    "Arctic",
+    "Asia",
+    "Atlantic",
+    "Australia",
+    "Europe",
+    "Indian",
+    "Pacific"
+  ]
 }
