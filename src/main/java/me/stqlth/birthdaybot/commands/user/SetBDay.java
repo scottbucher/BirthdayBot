@@ -146,7 +146,8 @@ public class SetBDay extends Command {
             return;
         } else changesLeft--;
 
-        if (normal) sendConfirmation(event, Objects.requireNonNull(textChannel), date, sBday, zoneId.toString(), changesLeft); else  sendConfirmation(event, privateChannel, date, sBday, zoneId.toString(), changesLeft);
+        if (normal) sendConfirmation(event, Objects.requireNonNull(textChannel), date, sBday, zoneId.toString(), changesLeft, month, day);
+        else  sendConfirmation(event, privateChannel, date, sBday, zoneId.toString(), changesLeft, month, day);
 
     }
 
@@ -171,7 +172,7 @@ public class SetBDay extends Command {
 
 
 
-    public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, String zoneId, int changesLeft) {
+    public void sendConfirmation(CommandEvent event, TextChannel channel, String date, String sBday, String zoneId, int changesLeft, int month, int day) {
         EmbedBuilder builder = new EmbedBuilder();
 
         builder.setColor(Color.decode("#1CFE86"))
@@ -179,10 +180,10 @@ public class SetBDay extends Command {
         channel.sendMessage(builder.build()).queue(result -> {
             result.addReaction("\u2705").queue(null, (error) -> {});
             result.addReaction("\u274C").queue(null, (error) -> {});
-            waitForConfirmation(event, channel, result, sBday, zoneId, changesLeft, date);
+            waitForConfirmation(event, channel, result, sBday, zoneId, changesLeft, date, month, day);
         }, (error) -> {});
     }
-    private void waitForConfirmation(CommandEvent event, TextChannel channel, Message msg, String sBday, String zoneId, int changesLeft, String date) {
+    private void waitForConfirmation(CommandEvent event, TextChannel channel, Message msg, String sBday, String zoneId, int changesLeft, String date, int month, int day) {
 
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 e -> e.getChannel().equals(event.getChannel()) && !Objects.requireNonNull(e.getUser()).isBot() &&
@@ -200,7 +201,7 @@ public class SetBDay extends Command {
                             return;
                         }
                         db.updateChangesLeft(event, changesLeft);
-                        leapDate(channel);
+                        if (month == 2 && day == 29) leapDate(channel);
                     } else if (e.getReactionEmote().getName().equals("\u274C")) {
                             msg.delete().queue(null, (error) -> {});
                     }
@@ -209,7 +210,7 @@ public class SetBDay extends Command {
                 });
     }
 
-    public void sendConfirmation(CommandEvent event, PrivateChannel channel, String date, String sBday, String zoneId, int changesLeft) {
+    public void sendConfirmation(CommandEvent event, PrivateChannel channel, String date, String sBday, String zoneId, int changesLeft, int month, int day) {
         EmbedBuilder builder = new EmbedBuilder();
 
         builder.setColor(Color.decode("#1CFE86"))
@@ -217,10 +218,10 @@ public class SetBDay extends Command {
         channel.sendMessage(builder.build()).queue(result -> {
             result.addReaction("\u2705").queue(null, error ->{});
             result.addReaction("\u274C").queue(null, error ->{});
-            waitForConfirmation(event, channel, result, sBday, zoneId, changesLeft, date);
+            waitForConfirmation(event, channel, result, sBday, zoneId, changesLeft, date, month, day);
         }, (error) -> {});
     }
-    private void waitForConfirmation(CommandEvent event, PrivateChannel channel, Message msg, String sBday, String zoneId, int changesLeft, String date) {
+    private void waitForConfirmation(CommandEvent event, PrivateChannel channel, Message msg, String sBday, String zoneId, int changesLeft, String date, int month, int day) {
 
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 e -> e.getChannel().equals(event.getChannel()) && !Objects.requireNonNull(e.getUser()).isBot() &&
@@ -237,7 +238,7 @@ public class SetBDay extends Command {
                             return;
                         }
                         db.updateChangesLeft(event, changesLeft);
-                        leapDate(channel);
+                        if (month == 2 && day == 29) leapDate(channel);
                     } else if (e.getReactionEmote().getName().equals("\u274C")) msg.delete().queue(null, (error) -> {});
                 });
     }

@@ -133,7 +133,7 @@ public class BirthdayBot {
 						SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
 						Logger.Info("Database Ready!");
 						try {
-							Thread.sleep(1000 * 1);
+							Thread.sleep(1000 * 30);
 						} catch (InterruptedException ex) {
 							ex.printStackTrace();
 						}
