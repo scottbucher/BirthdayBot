@@ -92,7 +92,7 @@ public class BirthdayBot {
 
 				//INFO
 				new Help(),
-				new About(),
+				new About(birthdayBotConfig),
 				new Settings(databaseMethods),
 				new ServerInfo(),
 				new Shard(),
@@ -133,7 +133,7 @@ public class BirthdayBot {
 						SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
 						Logger.Info("Database Ready!");
 						try {
-							Thread.sleep(1000 * 30);
+							Thread.sleep(1000 * 1);
 						} catch (InterruptedException ex) {
 							ex.printStackTrace();
 						}

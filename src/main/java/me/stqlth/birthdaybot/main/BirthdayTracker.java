@@ -153,7 +153,6 @@ public class BirthdayTracker {
 			if (membersInGuild.isEmpty()) continue;
 
 			for (Member check : membersInGuild) { //GET EVERYONE WE WANT FOR EITHER THE ROLE ADD/REMOVE OR MESSAGE
-				Logger.Info("Member: " + check.getUser().getName());
 				ZoneId zoneId = db.getUserZoneId(check.getUser());
 				if (zoneId == null) continue;
 
@@ -165,13 +164,9 @@ public class BirthdayTracker {
 				int yearOffset = LocalDate.now().getYear() - year;
 
 				LocalDateTime bday = LocalDateTime.of(year, month, day, 0, 0).truncatedTo(ChronoUnit.HOURS);
-				Logger.Info("bday: " + bday.toString());
 				LocalDateTime current = LocalDateTime.now(zoneId).minusYears(yearOffset).truncatedTo(ChronoUnit.HOURS);
-				Logger.Info("current: " + current.toString());
 				LocalDateTime message = current.plusHours(messageTime).truncatedTo(ChronoUnit.HOURS);
-				Logger.Info("message: " + message.toString());
 				LocalDateTime previous = LocalDateTime.now(zoneId).minusYears(yearOffset).minusDays(1).truncatedTo(ChronoUnit.HOURS);
-				Logger.Info("previous: " + previous.toString());
 
 				if (bday.isEqual(current)) birthdaysExactInGuild.add(check);
 				else if (bday.isEqual(previous)) birthdaysExpiredExactInGuild.add(check);
