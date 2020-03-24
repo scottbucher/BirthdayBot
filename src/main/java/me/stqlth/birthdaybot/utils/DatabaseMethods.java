@@ -242,7 +242,6 @@ public class DatabaseMethods {
 				ResultSet rs2 = statement.executeQuery("CALL GetNextBirthday2('" + userDiscordIds + "')");
 				if (!rs2.next()) return null;
 				long temp2 = rs2.getLong("UserDiscordId");
-				Logger.Info(temp2+"");
 				firstDate = getUserBirthday(temp2);
 				rs2.beforeFirst();
 
@@ -259,8 +258,8 @@ public class DatabaseMethods {
 				}
 
 			} else {
-				Logger.Info("SECOND");
-				firstDate = getUserBirthday(rs.getLong("UserDiscordId"));
+				long temp2 = rs.getLong("UserDiscordId");
+				firstDate = getUserBirthday(temp2);
 				rs.beforeFirst();
 
 				while (rs.next()) {

@@ -53,7 +53,7 @@ public class Next extends Command {
 
 		List<User> bdays = db.getNextBirthdays(event, members.toString());
 
-		if (bdays == null) {
+		if (bdays == null || bdays.isEmpty()) {
 			birthdayMessages.noBirthdays(channel, event.getGuild());
 			return;
 		}
