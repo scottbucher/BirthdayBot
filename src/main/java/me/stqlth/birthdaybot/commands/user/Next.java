@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.ErrorManager;
 import me.stqlth.birthdaybot.utils.Logger;
 import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -23,10 +24,9 @@ import java.util.Calendar;
 import java.util.List;
 
 public class Next extends Command {
-	private BirthdayMessages birthdayMessages;
 	private DatabaseMethods db;
 
-	public Next(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages) {
+	public Next(DatabaseMethods databaseMethods) {
 		this.name = "next";
 		this.aliases = new String[]{"upcoming"};
 		this.guildOnly = true;
@@ -35,7 +35,6 @@ public class Next extends Command {
 		this.category = new Category("Utilities");
 
 		this.db = databaseMethods;
-		this.birthdayMessages = birthdayMessages;
 	}
 
 	@Override
@@ -54,7 +53,7 @@ public class Next extends Command {
 		List<User> bdays = db.getNextBirthdays(event, members.toString());
 
 		if (bdays == null || bdays.isEmpty()) {
-			birthdayMessages.noBirthdays(channel, event.getGuild());
+			BirthdayMessages.noBirthdays(channel, event.getGuild());
 			return;
 		}
 
@@ -72,7 +71,6 @@ public class Next extends Command {
 
 			if (now.isAfter(LocalDate.of(currentYear, month, day))) currentYear++;
 			if (day == 29 && month == 2 && !Utilities.isLeap(currentYear)) {
-				Logger.Info("CHECK1");
 				day--;
 			}
 
@@ -95,7 +93,7 @@ public class Next extends Command {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setColor(Color.decode("#1CFE86"))
 					.setDescription("The next birthdays are " + message);
-			channel.sendMessage(builder.build()).queue(null, (error) -> {});
+			channel.sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
 		} else {
 			String birthday = db.getUserBirthday(bdays.get(0));
 			String[] values = birthday.split("-");
@@ -106,22 +104,13 @@ public class Next extends Command {
 
 			if (now.isAfter(LocalDate.of(currentYear, month, day))) currentYear++;
 			if (day == 29 && month == 2 && !Utilities.isLeap(currentYear)) {
-				Logger.Info("CHECK2");
 				day--;
 			}
 
 			String date = getMonth(month) + " " + day + ", " + currentYear;
-			birthdayMessages.nextBirthday(channel, date, bdays.get(0));
+			BirthdayMessages.nextBirthday(channel, date, bdays.get(0));
 		}
 
-	}
-
-	private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {
-		if ((birthDate != null) && (currentDate != null)) {
-			return Period.between(birthDate, currentDate).getYears();
-		} else {
-			return 0;
-		}
 	}
 	private static String getMonth(int month) {
 		switch (month) {

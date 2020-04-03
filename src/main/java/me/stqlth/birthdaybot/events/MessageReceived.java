@@ -1,42 +1,27 @@
-package me.stqlth.birthdaybot.commands.user;
+package me.stqlth.birthdaybot.events;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.utils.ErrorManager;
-import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.SelfUser;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-public class Help extends Command {
+public class MessageReceived extends ListenerAdapter {
 
-	public Help() {
-		this.name = "help";
-		this.aliases = new String[]{"h", "?"};
-		this.guildOnly = false;
-		this.help = "Displays the help menu";
-		this.category = new Category("Info");
+	public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+		boolean normal = event.isFromGuild();
+
+		if (event.getMessage().getContentRaw().equalsIgnoreCase("bday")) {
+			if (event.isFromGuild()) sendHelpMessage(event, normal);
+			else sendHelpMessage(event, false);
+		}
+
 	}
 
-	@Override
-	protected void execute(CommandEvent event) {
-		boolean normal = !Utilities.isPrivate(event);
-
-		String[] args = event.getMessage().getContentRaw().split(" ");
-
-		if (args.length == 2) {
-			sendHelpMessage(event, normal);
-			return;
-		}
-		if (args[2].equalsIgnoreCase("setup")) {
-			if (args.length == 4) {
-				if (args[3].equalsIgnoreCase("optional")) sendOptionalSetupHelpMessage(event, normal);
-			} else sendSetupHelpMessage(event, normal);
-		}
-	}
-
-	public void sendHelpMessage(CommandEvent event, boolean normal) {
+	public static void sendHelpMessage(MessageReceivedEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
 		String botIcon = bot.getAvatarUrl();
 		EmbedBuilder builder = new EmbedBuilder();
@@ -57,7 +42,7 @@ public class Help extends Command {
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
 	}
 
-	public void sendSetupHelpMessage(CommandEvent event, boolean normal) {
+	public static void sendSetupHelpMessage(MessageReceivedEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
 		String botIcon = bot.getAvatarUrl();
 		EmbedBuilder builder = new EmbedBuilder();
@@ -77,7 +62,7 @@ public class Help extends Command {
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
 	}
 
-	public  void sendOptionalSetupHelpMessage(CommandEvent event, boolean normal) {
+	public static void sendOptionalSetupHelpMessage(MessageReceivedEvent event, boolean normal) {
 		SelfUser bot = event.getJDA().getSelfUser();
 		String botIcon = bot.getAvatarUrl();
 		EmbedBuilder builder = new EmbedBuilder();
@@ -96,4 +81,5 @@ public class Help extends Command {
 		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
 	}
+
 }

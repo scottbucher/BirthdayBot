@@ -8,16 +8,12 @@ import static me.stqlth.birthdaybot.utils.Utilities.isPrivate;
 
 public class Invite extends Command {
 
-	private BirthdayMessages birthdayMessages;
-
-	public Invite(BirthdayMessages birthdayMessages) {
+	public Invite() {
 		this.name = "invite";
 		this.aliases = new String[]{"inv"};
 		this.guildOnly = false;
 		this.help = "Invite Birthday bot to your server";
 		this.category = new Category("Utilities");
-
-		this.birthdayMessages = birthdayMessages;
 	}
 
 	@Override
@@ -26,6 +22,6 @@ public class Invite extends Command {
 
 		if (args.length != 2) return;
 
-		if (!isPrivate(event)) birthdayMessages.inviteBot(event.getTextChannel()); else birthdayMessages.inviteBot(event.getPrivateChannel());
+		if (!isPrivate(event)) BirthdayMessages.inviteBot(event.getTextChannel()); else BirthdayMessages.inviteBot(event.getPrivateChannel());
 	}
 }

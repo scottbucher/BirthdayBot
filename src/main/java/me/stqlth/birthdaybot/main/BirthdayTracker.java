@@ -20,11 +20,9 @@ import java.util.concurrent.TimeUnit;
 public class BirthdayTracker {
 
 	private DatabaseMethods db;
-	private BirthdayMessages birthdayMessages;
 
-	public BirthdayTracker(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages) {
+	public BirthdayTracker(DatabaseMethods databaseMethods) {
 		this.db = databaseMethods;
-		this.birthdayMessages = birthdayMessages;
 	}
 
 	public void startTracker(ShardManager client) {
@@ -38,7 +36,7 @@ public class BirthdayTracker {
 		scheduler.scheduleAtFixedRate(
 				// Method to call on a schedule
 				() -> {
-					trackBirthdays(client, birthdayMessages);
+					trackBirthdays(client);
 				},
 				// How long to wait before starting, in ms
 				// Calculates the time to the next exact Hour:
@@ -49,7 +47,7 @@ public class BirthdayTracker {
 				TimeUnit.MILLISECONDS);
 	}
 
-	public void trackBirthdays(ShardManager client, BirthdayMessages birthdayMessages) {
+	public void trackBirthdays(ShardManager client) {
 //		Logger.Info("Tracking Birthdays...");
 
 		LocalDateTime now = LocalDateTime.now();
@@ -93,10 +91,10 @@ public class BirthdayTracker {
 		}
 
 		if (birthdaysString.isEmpty() && prevBirthdaysString.isEmpty() && nextBirthdaysString.isEmpty()) return;
-		eventHandler(db, client, birthdayMessages, birthdaysString, prevBirthdaysString, nextBirthdaysString);
+		eventHandler(db, client, birthdaysString, prevBirthdaysString, nextBirthdaysString);
 	}
 
-	public static void eventHandler(DatabaseMethods db, ShardManager client, BirthdayMessages bMessages, List<String> bString, List<String> prevBString, List<String> nextBString) {
+	public static void eventHandler(DatabaseMethods db, ShardManager client, List<String> bString, List<String> prevBString, List<String> nextBString) {
 		List<User> birthdayUsers = new ArrayList<>();
 		for (String check : bString)
 			birthdayUsers.add(client.getUserById(check));
@@ -141,7 +139,7 @@ public class BirthdayTracker {
 			List<Member> birthdaysExactInGuild = new ArrayList<>();
 			List<Member> birthdaysExpiredExactInGuild = new ArrayList<>();
 			List<Member> membersInGuild = new ArrayList<>();
-			List<Member> birthdayMessagesInGuild = new ArrayList<>();
+			List<Member> BirthdayMessagesInGuild = new ArrayList<>();
 			boolean preventRole = db.getTrustedPreventRole(guild);
 			boolean preventChannel = db.getTrustedPreventMessage(guild);
 			int messageTime = db.getGuildMessageTime(guild);
@@ -170,7 +168,7 @@ public class BirthdayTracker {
 
 				if (bday.isEqual(current)) birthdaysExactInGuild.add(check);
 				else if (bday.isEqual(previous)) birthdaysExpiredExactInGuild.add(check);
-				if (bday.isEqual(message)) birthdayMessagesInGuild.add(check);
+				if (bday.isEqual(message)) BirthdayMessagesInGuild.add(check);
 			}
 
 			if (bRole != null) {
@@ -203,7 +201,7 @@ public class BirthdayTracker {
 			}
 
 			if (bChannel != null) {
-				for (Member birthday : birthdayMessagesInGuild) { //REMOVE THE ROLE IF THEIR BIRTHDAY HAS ENDED
+				for (Member birthday : BirthdayMessagesInGuild) { //REMOVE THE ROLE IF THEIR BIRTHDAY HAS ENDED
 
 					if (preventChannel && tRole != null)
 						if (!birthday.getRoles().contains(tRole)) {
@@ -213,11 +211,11 @@ public class BirthdayTracker {
 					boolean hasTRole = birthday.getRoles().contains(tRole);
 
 					if (preventChannel && !hasTRole && tRole != null) {
-						birthdayMessagesInGuild.remove(birthday);
+						BirthdayMessagesInGuild.remove(birthday);
 					}
 				}
 
-				if (birthdayMessagesInGuild.isEmpty()) continue;
+				if (BirthdayMessagesInGuild.isEmpty()) continue;
 
 				String roleMention = db.getMentionSetting(guild);
 				Role mRole = null;
@@ -233,15 +231,14 @@ public class BirthdayTracker {
 
 				String customMessage = db.getGuildBirthdayMessage(guild);
 				if (customMessage.equalsIgnoreCase("0")) {
-					if (birthdayMessagesInGuild.size() == 1) {
-						bMessages.happyBirthday(bChannel, birthdayMessagesInGuild.get(0));
+					if (BirthdayMessagesInGuild.size() == 1) {
+						BirthdayMessages.happyBirthday(bChannel, BirthdayMessagesInGuild.get(0));
 						continue;
 					}
-					bMessages.happyBirthdays(bChannel, birthdayMessagesInGuild);
+					BirthdayMessages.happyBirthdays(bChannel, BirthdayMessagesInGuild);
 					continue;
 				}
-				bMessages.customBirthdayMessage(bChannel, birthdayMessagesInGuild, customMessage);
-
+				BirthdayMessages.customBirthdayMessage(bChannel, BirthdayMessagesInGuild, customMessage);
 			}
 
 		}

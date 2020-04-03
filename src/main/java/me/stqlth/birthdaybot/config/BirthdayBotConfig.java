@@ -3,8 +3,6 @@ package me.stqlth.birthdaybot.config;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.List;
-
 public class BirthdayBotConfig {
     private JSONObject _configJson;
 

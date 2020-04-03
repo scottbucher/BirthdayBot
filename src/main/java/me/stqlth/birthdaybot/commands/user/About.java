@@ -3,6 +3,7 @@ package me.stqlth.birthdaybot.commands.user;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
+import me.stqlth.birthdaybot.utils.ErrorManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
 
@@ -50,8 +51,8 @@ public class About extends Command {
                 .setThumbnail(botIcon)
                 .setAuthor("BirthdayBot", null, botIcon)
                 .setFooter("© 2020 Stqlth", ownerIcon);
-        if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(null, (error) -> {});
-        else event.getPrivateChannel().sendMessage(builder.build()).queue(null, (error) -> {});
+        if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+        else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
     }
 
 }
