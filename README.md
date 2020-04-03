@@ -15,7 +15,6 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 * `help` - View useful information about BirthdayBot.
 * `help setup` - View useful information on how to setup Birthday Bot.
 * `help config` - View useful information on how to configure Birthday Bot.
-* `help security` - View useful information on how to change how Birthday Bot handles your personal information.
 * `about` - View information about BirthdayBot.
 * `serverinfo` - View information about your server.
 * `settings` - View your server's current configuration settings.
@@ -38,19 +37,14 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 * `config messageTime <0-23>` - What time should the birthday message be sent at.
 * `config setMessage` - Set the a custom birthday message for your server. Use "@Users" in the message to be replaced with the user's who's birthday it is.
 * `config resetMessage` - Set the birthday message to it's default value.
-* `config security preventAge <true/false>` - Server Owners decide if age/birth years should be shown in their discord.
 
 ### Utilities
 
-* `setbday <day>, <month>, <year>, <timezone>` - Set your birthday.
+* `set` - Set your birthday.
 * `next` - View the next birthday in your current guild.
 * `view <name>` - View a user's birthday.
 * `invite` - Invite Birthday Bot to your discord.
 * `support` - Join the Birthday Bot support server.
-
-### Security
-
-* `hideAge <true/false>` - User can set whether to show their age/birth year or not.
 
 ## Help
 
