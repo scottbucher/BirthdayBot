@@ -14,13 +14,16 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 
 * `help` - View useful information about BirthdayBot.
 * `help setup` - View useful information on how to setup Birthday Bot.
-* `help config` - View useful information on how to configure Birthday Bot.
+* `help setup option` - View useful information on how to setup the optional Birthday Bot settings.
 * `about` - View information about BirthdayBot.
 * `serverinfo` - View information about your server.
 * `settings` - View your server's current configuration settings.
 * `shard` - View information about your current shard.
 
 ### Server Configuration (Admins only)
+
+* `bday setup` - Interactive guide for server setup.
+* `bday setup optional` - Interactive guide for optional server setup settings.
 
 * `SetBirthdayRole <@role/rolename>` - Set a role to be the designated Birthday role.
 * `SetChannel [#channel]` - Set a channel to be the designated Birthday Channel.
