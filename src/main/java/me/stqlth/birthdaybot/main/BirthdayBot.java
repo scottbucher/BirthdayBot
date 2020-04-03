@@ -9,11 +9,10 @@ import me.stqlth.birthdaybot.commands.staff.*;
 import me.stqlth.birthdaybot.commands.user.*;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.events.GuildJoinLeave;
+import me.stqlth.birthdaybot.events.MessageReceived;
 import me.stqlth.birthdaybot.events.UserJoinLeave;
 import me.stqlth.birthdaybot.main.GuildSettings.SettingsManager;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
-import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
-import me.stqlth.birthdaybot.messages.discordOut.DevelopmentMessages;
 import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
@@ -70,14 +69,13 @@ public class BirthdayBot {
 
 		SettingsManager settingsManager = new SettingsManager(birthdayBotConfig, debugMessages);
 		DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
-		BirthdayMessages birthdayMessages = new BirthdayMessages();
 		StaffMessages staffMessages = new StaffMessages(getMessageInfo);
-		DevelopmentMessages developementMessages = new DevelopmentMessages();
 
-		BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods, birthdayMessages);
+		BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods);
 
 		Command[] commands = new Command[]{
 				//CONFIG
+				new Setup(databaseMethods, staffMessages, waiter),
 				new Config(databaseMethods, staffMessages),
 				new SetChannel(databaseMethods, staffMessages),
 				new ClearChannel(databaseMethods, staffMessages),
@@ -99,15 +97,14 @@ public class BirthdayBot {
 
 
 				//UTILITIES
-				new SetBDay(birthdayMessages, waiter, databaseMethods, birthdayBotConfig),
-				new Next(databaseMethods, birthdayMessages),
-				new Support(birthdayMessages),
-				new Invite(birthdayMessages),
-				new View(databaseMethods, birthdayMessages),
-				new HideAge(databaseMethods, birthdayMessages),
+				new SetBday(waiter, databaseMethods, birthdayBotConfig),
+				new Next(databaseMethods),
+				new Support(),
+				new Invite(),
+				new View(databaseMethods),
 
 				//Owner
-				new Broadcast(databaseMethods, developementMessages)
+				new Broadcast(databaseMethods)
 		};
 
 		// Create the client
@@ -116,7 +113,8 @@ public class BirthdayBot {
 		EventListener[] listeners = new EventListener[]{
 				waiter,
 				new GuildJoinLeave(birthdayBotConfig, debugMessages),
-				new UserJoinLeave(databaseMethods)
+				new UserJoinLeave(databaseMethods),
+				new MessageReceived()
 		};
 
 		// Start the shard manager
@@ -133,7 +131,7 @@ public class BirthdayBot {
 						SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
 						Logger.Info("Database Ready!");
 						try {
-							Thread.sleep(1000 * 1);
+							Thread.sleep(1000 * 30);
 						} catch (InterruptedException ex) {
 							ex.printStackTrace();
 						}

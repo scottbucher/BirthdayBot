@@ -9,22 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-public class MessageRecieved extends ListenerAdapter {
+public class MessageReceived extends ListenerAdapter {
 
 	public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 		boolean normal = event.isFromGuild();
 
-		String[] args = event.getMessage().getContentRaw().split(" ");
+		if (event.getMessage().getContentRaw().equalsIgnoreCase("bday")) {
+			if (event.isFromGuild()) sendHelpMessage(event, normal);
+			else sendHelpMessage(event, false);
+		}
 
-		if (args.length == 2) {
-			sendHelpMessage(event, normal);
-			return;
-		}
-		if (args[2].equalsIgnoreCase("setup")) {
-			if (args.length == 4) {
-				if (args[3].equalsIgnoreCase("optional")) sendOptionalSetupHelpMessage(event, normal);
-			} else sendSetupHelpMessage(event, normal);
-		}
 	}
 
 	public static void sendHelpMessage(MessageReceivedEvent event, boolean normal) {

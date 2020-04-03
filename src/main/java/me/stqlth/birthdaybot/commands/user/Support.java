@@ -8,15 +8,11 @@ import static me.stqlth.birthdaybot.utils.Utilities.isPrivate;
 
 public class Support extends Command {
 
-	private BirthdayMessages birthdayMessages;
-
-	public Support(BirthdayMessages birthdayMessages) {
+	public Support() {
 		this.name = "support";
 		this.guildOnly = false;
 		this.help = "Join the BirthdayBot support server";
 		this.category = new Category("Utilities");
-
-		this.birthdayMessages = birthdayMessages;
 	}
 
 	@Override
@@ -25,6 +21,6 @@ public class Support extends Command {
 
 		if (args.length != 2) return;
 
-		if (!isPrivate(event)) birthdayMessages.joinSupportServer(event.getTextChannel()); else birthdayMessages.joinSupportServer(event.getPrivateChannel());
+		if (!isPrivate(event)) BirthdayMessages.joinSupportServer(event.getTextChannel()); else BirthdayMessages.joinSupportServer(event.getPrivateChannel());
 	}
 }

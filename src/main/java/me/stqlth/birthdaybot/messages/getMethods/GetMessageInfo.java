@@ -1,6 +1,5 @@
 package me.stqlth.birthdaybot.messages.getMethods;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import net.dv8tion.jda.api.entities.Guild;

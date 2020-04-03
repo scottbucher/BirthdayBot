@@ -57,16 +57,6 @@ public class Config extends Command {
 						staffMessages.setPreventMessage(channel, false);
 					}
 				}
-			} else if (args[2].equalsIgnoreCase("security") && args.length >= 5) {
-				if (args[3].equalsIgnoreCase("PreventAge")) {
-					if (args[4].equalsIgnoreCase("t") || args[4].equalsIgnoreCase("true") || args[4].equals("1")) {
-						db.updatePreventAge(event, 1);
-						staffMessages.setPreventAge(channel, true);
-					} else if (args[4].equalsIgnoreCase("f") || args[4].equalsIgnoreCase("false") || args[4].equals("0")) {
-						db.updatePreventAge(event, 0);
-						staffMessages.setPreventAge(channel, false);
-					}
-				}
 			} else if (args[2].equalsIgnoreCase("mentionSetting") && args.length == 4) {
 				switch (args[3].toLowerCase()) {
 					case "everyone":

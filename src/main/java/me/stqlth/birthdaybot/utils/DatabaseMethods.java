@@ -3,7 +3,6 @@ package me.stqlth.birthdaybot.utils;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.debug.DebugMessages;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 
 import java.sql.*;
@@ -313,64 +312,6 @@ public class DatabaseMethods {
 			debugMessages.sqlDebug(ex);
 		}
 		return "0";
-	}
-
-	public boolean getPreventAge(Guild guild) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(guild);
-
-
-			ResultSet rs = statement.executeQuery("CALL GetPreventAge(" + guildSettingsId + ")");
-			rs.next();
-			return rs.getBoolean("PreventAge");
-
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-		return true;
-	}
-
-	public void updatePreventAge(CommandEvent event, int bool) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int guildSettingsId = getGuildSettingsId(event.getGuild());
-
-			statement.execute("CALL UpdatePreventAge(" + guildSettingsId + ", " + bool + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-	}
-
-	public boolean getHideAge(User user) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int UserId = getUserId(user);
-
-
-			ResultSet rs = statement.executeQuery("CALL GetHideAge(" + UserId + ")");
-			rs.next();
-			return rs.getBoolean("HideAge");
-
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
-		return true;
-	}
-
-	public void updateHideAge(User user, int bool) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			int UserId = getUserId(user);
-
-			statement.execute("CALL UpdateHideAge(" + UserId + ", " + bool + ")");
-		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
-		}
 	}
 
 	public boolean getTrustedPreventMessage(Guild guild) {

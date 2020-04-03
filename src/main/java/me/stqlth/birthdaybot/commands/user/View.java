@@ -14,9 +14,8 @@ import java.time.ZoneId;
 public class View extends Command {
 
 	private DatabaseMethods db;
-	private BirthdayMessages birthdayMessages;
 
-	public View(DatabaseMethods databaseMethods, BirthdayMessages birthdayMessages) {
+	public View(DatabaseMethods databaseMethods) {
 		this.name = "view";
 		this.aliases = new String[]{"show"};
 		this.help = "View another user's birthday";
@@ -25,7 +24,6 @@ public class View extends Command {
 		this.category = new Category("Utilities");
 
 		this.db = databaseMethods;
-		this.birthdayMessages = birthdayMessages;
 	}
 
 	@Override
@@ -46,12 +44,12 @@ public class View extends Command {
 		}
 
 		if (target == null) {
-			birthdayMessages.noUser(channel);
+			BirthdayMessages.noUser(channel);
 			return;
 		}
 
 		if (!db.doesUserExist(target.getUser()) || db.getUserBirthday(target.getUser()) == null) {
-			birthdayMessages.noBirthday(channel, target);
+			BirthdayMessages.noBirthday(channel, target);
 			return;
 		}
 
@@ -61,27 +59,11 @@ public class View extends Command {
 
 		int day = Integer.parseInt(values[2]);
 		int month = Integer.parseInt(values[1]);
-		int year = Integer.parseInt(values[0]);
 
-		LocalDate birthDate = LocalDate.of(year, month, day);
-		int age = calculateAge(birthDate, LocalDate.now());
-
-		if (db.getPreventAge(event.getGuild()) || db.getHideAge(target.getUser())) {
-			String date = getMonth(month) + " " + day + ", " + zoneId.getId();
-			birthdayMessages.userBirthdayNoAge(channel, date, target);
-			return;
-		}
-
-		String date = getMonth(month) + " " + day + ", " + year + " " + zoneId.getId();
-		birthdayMessages.userBirthdayWithAge(channel, date, target, age);
+		String date = getMonth(month) + " " + day + " " + zoneId.getId();
+		BirthdayMessages.userBirthday(channel, date, target);
 	}
-	private static int calculateAge(LocalDate birthDate, LocalDate currentDate) {
-		if ((birthDate != null) && (currentDate != null)) {
-			return Period.between(birthDate, currentDate).getYears();
-		} else {
-			return 0;
-		}
-	}
+
 	private static String getMonth(int month) {
 		switch (month) {
 			case 1:  return "January";

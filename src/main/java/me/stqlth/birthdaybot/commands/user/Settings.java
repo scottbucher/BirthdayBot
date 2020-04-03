@@ -68,6 +68,7 @@ public class Settings extends Command {
 		} catch (Exception ex) {
 			tRole = "Not Set";
 		}
+
 		try {
 			if (!mentionSetting.equals("0") && !mentionSetting.equalsIgnoreCase("everyone") && !mentionSetting.equalsIgnoreCase("here"))
 				mSetting = Objects.requireNonNull(event.getGuild().getRoleById(mentionSetting)).getAsMention();
@@ -75,21 +76,22 @@ public class Settings extends Command {
 			mSetting = "Disabled";
 		}
 
+		if (mentionSetting.equals("everyone")) mSetting = "@everyone";
+		else if (mentionSetting.equals("here")) mSetting = "@here";
+
 		boolean preventMessages = db.getTrustedPreventMessage(guild);
 		boolean preventRole = db.getTrustedPreventRole(guild);
-		boolean preventAge = db.getPreventAge(guild);
 
 		builder.setAuthor(guild.getName() + "'s Settings", null, guild.getIconUrl())
 				.setColor(Utilities.getAverageColor(event.getMember().getUser().getAvatarUrl()))
 				.addField("Birthday Channel", bChannel, true)
 				.addField("Birthday Role", bRole, true)
-				.addField("Trusted Role", tRole, true)
 				.addField("Mention Setting", mSetting, true)
-				.addField("Trusted Prevents Role", "" + preventRole, true)
-				.addField("Trusted Prevents Message", "" + preventMessages, true)
 				.addField("Message Time", "" + mTime, true)
 				.addField("Custom Message", "" + customMessage, true)
-				.addField("Show Members' Ages", "" + !preventAge, true)
+				.addField("Trusted Role", tRole, true)
+				.addField("Trusted Prevents Role", "" + preventRole, true)
+				.addField("Trusted Prevents Message", "" + preventMessages, true)
 //				.setThumbnail(bot.getAvatarUrl())
 				.setFooter(bot.getName(), bot.getAvatarUrl());
 

@@ -8,19 +8,12 @@ import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Logger;
 import me.stqlth.birthdaybot.utils.Utilities;
-import me.stqlth.birthdaybot.utils.eHandler;
+import me.stqlth.birthdaybot.utils.ErrorManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.PrivateChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.api.exceptions.ErrorHandler;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.api.requests.ErrorResponse;
-import org.apache.http.auth.AUTH;
 import org.json.JSONArray;
 
 import java.awt.*;
@@ -33,20 +26,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class NextSetBday extends Command {
-	private BirthdayMessages birthdayMessages;
+public class SetBday extends Command {
 	private EventWaiter waiter;
 	private DatabaseMethods db;
 	private JSONArray regions;
 
-	public NextSetBday(BirthdayMessages birthdayMessages, EventWaiter waiter, DatabaseMethods databaseMethods, BirthdayBotConfig birthdayBotConfig) {
-		this.name = "newset";
-		this.aliases = new String[]{"newadd"};
+	public SetBday(EventWaiter waiter, DatabaseMethods databaseMethods, BirthdayBotConfig birthdayBotConfig) {
+		this.name = "set";
+		this.aliases = new String[]{"add"};
 		this.guildOnly = false;
 		this.help = "Sets a user's global birthday.";
 		this.category = new Category("Utilities");
 
-		this.birthdayMessages = birthdayMessages;
 		this.waiter = waiter;
 		this.db = databaseMethods;
 		this.regions = birthdayBotConfig.getRegions();
@@ -80,11 +71,11 @@ public class NextSetBday extends Command {
 		if (normal)
 			event.getTextChannel().sendMessage(builder.build()).queue(result -> {
 				waitForTimezone(event, result, author, true);
-			}, eHandler.PERMISSION);
+			}, ErrorManager.PERMISSION);
 		else
 			event.getPrivateChannel().sendMessage(builder.build()).queue(result -> {
 				waitForTimezone(event, result, author, false);
-			}, eHandler.PERMISSION);
+			}, ErrorManager.PERMISSION);
 
 	}
 	private void waitForTimezone(CommandEvent event, Message result, User author, boolean normal) {
@@ -110,8 +101,7 @@ public class NextSetBday extends Command {
 						}
 						}
 					if (!check) {
-						Logger.Info("FIRST");
-						if (normal) birthdayMessages.invalidZone(event.getTextChannel()); else birthdayMessages.invalidZone(event.getPrivateChannel());
+						if (normal) BirthdayMessages.invalidZone(event.getTextChannel()); else BirthdayMessages.invalidZone(event.getPrivateChannel());
 						return;
 					}
 
@@ -119,13 +109,12 @@ public class NextSetBday extends Command {
 					try {
 						zoneId = ZoneId.of(e.getMessage().getContentRaw());
 					} catch (DateTimeException ex) {
-						Logger.Info("SECOND");
-						if (normal) birthdayMessages.invalidZone(event.getTextChannel()); else birthdayMessages.invalidZone(event.getPrivateChannel());
+						if (normal) BirthdayMessages.invalidZone(event.getTextChannel()); else BirthdayMessages.invalidZone(event.getPrivateChannel());
 						return;
 					}
 					getBirthDate(event, author, zoneId, normal);
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, eHandler.PERMISSION);
+					result.delete().queue(null, ErrorManager.PERMISSION);
 				});
 	}
 	public void getBirthDate(CommandEvent event, User author, ZoneId zoneid, boolean normal) {
@@ -143,11 +132,11 @@ public class NextSetBday extends Command {
 		if (normal)
 			event.getTextChannel().sendMessage(builder.build()).queue(result -> {
 				waitForBirthDate(event, result, zoneid, true);
-			}, eHandler.PERMISSION);
+			}, ErrorManager.PERMISSION);
 		else
 			event.getPrivateChannel().sendMessage(builder.build()).queue(result -> {
 				waitForBirthDate(event, result, zoneid, false);
-			}, eHandler.PERMISSION);
+			}, ErrorManager.PERMISSION);
 
 	}
 	private void waitForBirthDate(CommandEvent event, Message result, ZoneId zoneId, boolean normal) {
@@ -166,7 +155,7 @@ public class NextSetBday extends Command {
 						month = Integer.parseInt(args[0]);
 						LocalDate birthDate = LocalDate.of(year, month, day);
 					} catch (Exception ex) {
-						if (normal) birthdayMessages.dateNotFound(event.getTextChannel()); else birthdayMessages.dateNotFound(event.getPrivateChannel());
+						if (normal) BirthdayMessages.dateNotFound(event.getTextChannel()); else BirthdayMessages.dateNotFound(event.getPrivateChannel());
 						return;
 					}
 
@@ -179,7 +168,7 @@ public class NextSetBday extends Command {
 					}
 					int changesLeft = db.getChangesLeft(event.getAuthor());
 					if (changesLeft  <= 0){
-						if (normal) birthdayMessages.outOfChanges(event.getTextChannel()); else birthdayMessages.outOfChanges(event.getPrivateChannel());
+						if (normal) BirthdayMessages.outOfChanges(event.getTextChannel()); else BirthdayMessages.outOfChanges(event.getPrivateChannel());
 						return;
 					} else changesLeft--;
 
@@ -187,7 +176,7 @@ public class NextSetBday extends Command {
 					else  sendConfirmation(event, date, sBday, zoneId.toString(), changesLeft, month, day, false);
 
 				}, 30, TimeUnit.SECONDS, () -> {
-					result.delete().queue(null, eHandler.PERMISSION);
+					result.delete().queue(null, ErrorManager.PERMISSION);
 				});
 	}
 
@@ -197,15 +186,15 @@ public class NextSetBday extends Command {
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription("Please confirm that this is the correct date: **" + date + "**");
 		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\u2705").queue(null, eHandler.PERMISSION);
-			result.addReaction("\u274C").queue(null, eHandler.PERMISSION);
+			result.addReaction("\u2705").queue(null, ErrorManager.PERMISSION);
+			result.addReaction("\u274C").queue(null, ErrorManager.PERMISSION);
 			waitForConfirmation(event, result, sBday, zoneId, changesLeft, date, month, day, normal);
-		}, eHandler.PERMISSION);
+		}, ErrorManager.PERMISSION);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\u2705").queue(null, eHandler.PERMISSION);
-			result.addReaction("\u274C").queue(null, eHandler.PERMISSION);
+			result.addReaction("\u2705").queue(null, ErrorManager.PERMISSION);
+			result.addReaction("\u274C").queue(null, ErrorManager.PERMISSION);
 			waitForConfirmation(event, result, sBday, zoneId, changesLeft, date, month, day, normal);
-		}, eHandler.PERMISSION);
+		}, ErrorManager.PERMISSION);
 	}
 	private void waitForConfirmation(CommandEvent event, Message msg, String sBday, String zoneId, int changesLeft, String date, int month, int day, boolean normal) {
 
@@ -217,17 +206,17 @@ public class NextSetBday extends Command {
 						try {
 							db.updateBirthday(event.getAuthor(), sBday);
 							db.updateZoneId(event, zoneId);
-							msg.delete().queue(null, eHandler.PERMISSION);
-							if (normal) birthdayMessages.success(event.getTextChannel(), date);
-							else birthdayMessages.success(event.getPrivateChannel(), date);
+							msg.delete().queue(null, ErrorManager.PERMISSION);
+							if (normal) BirthdayMessages.success(event.getTextChannel(), date);
+							else BirthdayMessages.success(event.getPrivateChannel(), date);
 						} catch (SQLException ex) {
-							if (normal) birthdayMessages.invalidFormat(event.getTextChannel(), getName(), getArguments());
-							else birthdayMessages.invalidFormat(event.getPrivateChannel(), getName(), getArguments());
+							if (normal) BirthdayMessages.invalidFormat(event.getTextChannel(), getName(), getArguments());
+							else BirthdayMessages.invalidFormat(event.getPrivateChannel(), getName(), getArguments());
 							return;
 						}
 						db.updateChangesLeft(event, changesLeft);
 						if (month == 2 && day == 29) leapDate(event, normal);
-					} else if (e.getReactionEmote().getName().equals("\u274C")) msg.delete().queue(null, eHandler.PERMISSION);
+					} else if (e.getReactionEmote().getName().equals("\u274C")) msg.delete().queue(null, ErrorManager.PERMISSION);
 				});
 	}
 
@@ -238,8 +227,8 @@ public class NextSetBday extends Command {
 				.setTitle("**A Leap Day?!?!**")
 				.setDescription("Wow! A birthday on a leap day? Only 1 in 1461 people are born on a leap day!" +
 						"\n\nPlease note that on years that are __not__ a leap year, your birthday will be celebrated on February 28th.");
-		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, eHandler.PERMISSION);
-		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, eHandler.PERMISSION);
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
 	}
 	private static String getMonth(int month) {
 		switch (month) {
