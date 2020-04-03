@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3307
--- Generation Time: Mar 23, 2020 at 06:09 AM
+-- Generation Time: Apr 03, 2020 at 04:23 AM
 -- Server version: 5.7.24-log
 -- PHP Version: 7.2.10
 
@@ -98,14 +98,6 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetHideAge` (IN `IN_UserId` INT(11))  BEGIN
-
-SELECT HideAge
-FROM users
-WHERE `UserId` = In_UserId;
-
-END$$
-
 CREATE DEFINER=`admin`@`%` PROCEDURE `GetMentionSetting` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT MentionSetting
@@ -129,7 +121,7 @@ FROM users
 WHERE FIND_IN_SET(`UserDiscordId`, IN_DiscordIds) IS NOT NULL
 AND FIND_IN_SET(`UserDiscordId`, IN_DiscordIds) > 0
 AND DATE_ADD(Birthday, INTERVAL YEAR(CURDATE())-YEAR(Birthday) YEAR) > CURRENT_DATE
-ORDER BY Birthday DESC;
+ORDER BY DATE_FORMAT(Birthday, '%m-%d') ASC;
 
 END$$
 
@@ -140,7 +132,7 @@ FROM users
 WHERE FIND_IN_SET(`UserDiscordId`, IN_DiscordIds) IS NOT NULL
 AND FIND_IN_SET(`UserDiscordId`, IN_DiscordIds) > 0
 AND DATE_ADD(Birthday, INTERVAL YEAR(CURDATE())-YEAR(Birthday) YEAR) < CURRENT_DATE
-ORDER BY Birthday ASC;
+ORDER BY DATE_FORMAT(Birthday, '%m-%d') DESC;
 
 END$$
 
@@ -156,14 +148,6 @@ END$$
 CREATE DEFINER=`admin`@`%` PROCEDURE `GetPrefix` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT Prefix
-FROM guildsettings
-WHERE `GuildSettingsId` = IN_GuildSettingsId;
-
-END$$
-
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetPreventAge` (IN `IN_GuildSettingsId` INT(11))  BEGIN
-
-SELECT PreventAge
 FROM guildsettings
 WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
@@ -302,14 +286,6 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateHideAge` (IN `IN_UserId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
-
-UPDATE users
-SET `HideAge` = IN_Setting
-WHERE `UserId` = IN_UserId;
-
-END$$
-
 CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateMentionSetting` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` VARCHAR(18))  BEGIN
 
 UPDATE guildsettings
@@ -338,14 +314,6 @@ CREATE DEFINER=`admin`@`%` PROCEDURE `UpdatePrefix` (IN `IN_Prefix` VARCHAR(100)
 
 UPDATE guildsettings
 SET `Prefix` = IN_Prefix
-WHERE `GuildSettingsId` = IN_GuildSettingsId;
-
-END$$
-
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdatePreventAge` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
-
-UPDATE guildsettings
-SET `PreventAge` = IN_Setting
 WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
@@ -381,20 +349,6 @@ SET `ZoneId` = IN_ZoneId
 WHERE `UserId` = IN_UserId;
 
 END$$
-
---
--- Functions
---
-CREATE DEFINER=`root`@`localhost` FUNCTION `SPLIT_STRING` (`str` VARCHAR(255), `delim` MEDIUMTEXT, `pos` INT(11)) RETURNS INT(11) RETURN REPLACE(
-	SUBSTRING(
-		SUBSTRING_INDEX(str , delim , pos) ,
-		CHAR_LENGTH(
-			SUBSTRING_INDEX(str , delim , pos - 1)
-		) + 1
-	) ,
-	delim ,
-	''
-)$$
 
 DELIMITER ;
 
