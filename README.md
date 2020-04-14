@@ -26,13 +26,13 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 * `bday setup optional` - Interactive guide for optional server setup settings.
 
 * `SetBirthdayRole <@role/rolename>` - Set a role to be the designated Birthday role.
-* `SetChannel [#channel]` - Set a channel to be the designated Birthday Channel.
+* `SetBirthdayChannel [#channel]` - Set a channel to be the designated Birthday Channel.
 * `SetTrustedRole <@role/rolename>` - Set a role to be the designated Trusted role.
 * `CreateBirthdayRole` - Create the default Birthday Role.
-* `CreateChannel` - Create the default Birthday Channel.
+* `CreateBirthdayChannel` - Create the default Birthday Channel.
 * `CreateTrustedRole` - Create the default Trusted Role.
 * `ClearBirthdayRole` - Clears the Birthday Role (Effectively Disabling this feature).
-* `ClearChannel` - Clears the Birthday Channel (Effectively Disabling this feature).
+* `ClearBirthdayChannel` - Clears the Birthday Channel (Effectively Disabling this feature).
 * `ClearTrustedRole` - Clears the Trusted Role (Effectively Disabling this feature).
 * `config trusted preventMessage <true/false>` - Should the bot only send birthday messages for people with the trusted role.
 * `config trusted preventRole <true/false>` - Should the bot only give the birthday role for people with the trusted role.

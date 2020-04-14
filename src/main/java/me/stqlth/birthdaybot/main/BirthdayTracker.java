@@ -2,6 +2,7 @@ package me.stqlth.birthdaybot.main;
 
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.ErrorManager;
 import me.stqlth.birthdaybot.utils.Logger;
 import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.entities.*;
@@ -40,7 +41,7 @@ public class BirthdayTracker {
 				},
 				// How long to wait before starting, in ms
 				// Calculates the time to the next exact Hour:
-				getMsToNextHour(),
+				Utilities.getMsToNextHour(),
 				// Once started, how often to repeat, in ms
 				everyHour,
 				// The unit of time for the above parameters
@@ -48,8 +49,6 @@ public class BirthdayTracker {
 	}
 
 	public void trackBirthdays(ShardManager client) {
-//		Logger.Info("Tracking Birthdays...");
-
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime previous = now.minusDays(1);
 		LocalDateTime next = now.plusDays(1);
@@ -69,44 +68,53 @@ public class BirthdayTracker {
 		if (tempNextMonth < 10) nextDate = "0" + next.getMonthValue() + "-" + next.getDayOfMonth();
 		else nextDate = next.getMonthValue() + "-" + next.getDayOfMonth();
 
-//		Logger.Info("Date: " + date);
-//		Logger.Info("PrevDate: " + prevDate);
-//		Logger.Info("NextDate: " + nextDate);
-
 		List<String> birthdaysString = db.getBirthdays(date);
 		List<String> prevBirthdaysString = db.getBirthdays(prevDate);
 		List<String> nextBirthdaysString = db.getBirthdays(nextDate);
 
+		String leap = "02-29";
 		if (!Utilities.isLeap(now.getYear())) { //Support for Leap day birthdays on non leap years
 			if (now.getMonthValue() == 2 && now.getDayOfMonth() == 28) {
-				String leap = "02-29";
 				birthdaysString.addAll(db.getBirthdays(leap));
 			} else if (now.getMonthValue() == 3 && now.getDayOfMonth() == 1) {
-				String leap = "02-29";
 				prevBirthdaysString.addAll(db.getBirthdays(leap));
 			} else if (now.getMonthValue() == 2 && now.getDayOfMonth() == 27) {
-				String leap = "02-29";
 				nextBirthdaysString.addAll(db.getBirthdays(leap));
 			}
 		}
 
 		if (birthdaysString.isEmpty() && prevBirthdaysString.isEmpty() && nextBirthdaysString.isEmpty()) return;
-		eventHandler(db, client, birthdaysString, prevBirthdaysString, nextBirthdaysString);
+		eventHandler(client, birthdaysString, prevBirthdaysString, nextBirthdaysString);
 	}
 
-	public static void eventHandler(DatabaseMethods db, ShardManager client, List<String> bString, List<String> prevBString, List<String> nextBString) {
+	public void eventHandler(ShardManager client, List<String> bString, List<String> prevBString, List<String> nextBString) {
+		Logger.Info("Birthday Event Triggered!");
 		List<User> birthdayUsers = new ArrayList<>();
-		for (String check : bString)
-			birthdayUsers.add(client.getUserById(check));
 
-		for (String check : prevBString)
-			birthdayUsers.add(client.getUserById(check));
+		for (String check : bString) {
+			User user = client.getUserById(check);
+			if (user == null) continue;
 
-		for (String check : nextBString)
-			birthdayUsers.add(client.getUserById(check));
+			birthdayUsers.add(user);
+		}
+		for (String check : prevBString) {
+			User user = client.getUserById(check);
+			if (user == null) continue;
+
+			birthdayUsers.add(user);
+		}
+		for (String check : nextBString) {
+			User user = client.getUserById(check);
+			if (user == null) continue;
+
+			birthdayUsers.add(user);
+		}
+		List<Guild> guilds = new ArrayList<>();
+
+		for (User check : birthdayUsers)
+			guilds.addAll(client.getMutualGuilds(check));
 
 
-		List<Guild> guilds = client.getMutualGuilds(birthdayUsers);
 
 		for (Guild guild : guilds) {
 
@@ -161,14 +169,29 @@ public class BirthdayTracker {
 				int year = Integer.parseInt(values[0]);
 				int yearOffset = LocalDate.now().getYear() - year;
 
-				LocalDateTime bday = LocalDateTime.of(year, month, day, 0, 0).truncatedTo(ChronoUnit.HOURS);
-				LocalDateTime current = LocalDateTime.now(zoneId).minusYears(yearOffset).truncatedTo(ChronoUnit.HOURS);
-				LocalDateTime message = current.plusHours(messageTime).truncatedTo(ChronoUnit.HOURS);
-				LocalDateTime previous = LocalDateTime.now(zoneId).minusYears(yearOffset).minusDays(1).truncatedTo(ChronoUnit.HOURS);
+				Logger.Debug("Checking user: " + check.getUser().getName());
 
-				if (bday.isEqual(current)) birthdaysExactInGuild.add(check);
-				else if (bday.isEqual(previous)) birthdaysExpiredExactInGuild.add(check);
-				if (bday.isEqual(message)) BirthdayMessagesInGuild.add(check);
+				LocalDateTime userBday = LocalDateTime.of(year, month, day, 0, 0).truncatedTo(ChronoUnit.HOURS);
+				Logger.Debug("userBday: " + userBday.toString());
+				LocalDateTime message = userBday.plusHours(messageTime).truncatedTo(ChronoUnit.HOURS);
+				Logger.Debug("message: " + message.toString());
+				LocalDateTime currentForUser = LocalDateTime.now(zoneId).minusYears(yearOffset).truncatedTo(ChronoUnit.HOURS);
+				Logger.Debug("currentForUser: " + currentForUser.toString());
+				LocalDateTime yesterdayForUser = currentForUser.minusDays(1).truncatedTo(ChronoUnit.HOURS);
+				Logger.Debug("yesterdayForUser: " + yesterdayForUser.toString());
+
+				if (userBday.isEqual(currentForUser)){
+					Logger.Debug("Give BirthdayRole to: " + check.getUser().getName());
+					birthdaysExactInGuild.add(check);
+				}
+				else if (userBday.isEqual(yesterdayForUser)) {
+					Logger.Debug("Take BirthdayRole from: " + check.getUser().getName());
+					birthdaysExpiredExactInGuild.add(check);
+				}
+				if (message.isEqual(currentForUser)) {
+					Logger.Debug("Send BirthdayMessage for: " + check.getUser().getName());
+					BirthdayMessagesInGuild.add(check);
+				}
 			}
 
 			if (bRole != null) {
@@ -180,7 +203,7 @@ public class BirthdayTracker {
 					boolean hasTRole = birthday.getRoles().contains(tRole);
 
 					if (!preventRole || hasTRole || tRole == null) {
-							guild.addRoleToMember(birthday, bRole).queue(null, (error) -> {});
+							guild.addRoleToMember(birthday, bRole).queue(null, ErrorManager.PERMISSION);
 					}
 				}
 
@@ -194,7 +217,7 @@ public class BirthdayTracker {
 					boolean hasTRole = birthday.getRoles().contains(tRole);
 
 					if (!preventRole || hasTRole || tRole == null) {
-							guild.removeRoleFromMember(birthday, bRole).queue(null, (error) -> {});
+							guild.removeRoleFromMember(birthday, bRole).queue(null, ErrorManager.PERMISSION);
 					}
 				}
 
@@ -225,8 +248,8 @@ public class BirthdayTracker {
 				}
 
 				if (!roleMention.equalsIgnoreCase("0")) {
-					if (mRole != null) bChannel.sendMessage(mRole.getAsMention()).queue(null, (error) -> {});
-					else bChannel.sendMessage("@" + roleMention).queue(null, (error) -> {});
+					if (mRole != null) bChannel.sendMessage(mRole.getAsMention()).queue(null, ErrorManager.PERMISSION);
+					else bChannel.sendMessage("@" + roleMention).queue(null, ErrorManager.PERMISSION);
 				}
 
 				String customMessage = db.getGuildBirthdayMessage(guild);
@@ -245,18 +268,5 @@ public class BirthdayTracker {
 
 	}
 
-	private static long getMsToNextHour() {
-		// Calculates the exact time of the next whole second
-		LocalDateTime nextHour = LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.HOURS);
-		// Calculates the number of milliseconds until the next second
-		return LocalDateTime.now().until(nextHour, ChronoUnit.MILLIS) + 500;
-	}
-
-	private static long getMsToNextMinute() {
-		// Calculates the exact time of the next whole second
-		LocalDateTime nextMinute = LocalDateTime.now().plusMinutes(1).truncatedTo(ChronoUnit.MINUTES);
-		// Calculates the number of milliseconds until the next second
-		return LocalDateTime.now().until(nextMinute, ChronoUnit.MILLIS);
-	}
 }
 

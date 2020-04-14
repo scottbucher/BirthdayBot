@@ -15,24 +15,20 @@ import static me.stqlth.birthdaybot.utils.Utilities.isPrivate;
 
 public class About extends Command {
 
-    private BirthdayBotConfig birthdayBotConfig;
-
-    public About(BirthdayBotConfig birthdayBotConfig)
+    public About()
     {
         this.name = "about";
         this.aliases = new String[]{"botabout","hi"};
         this.guildOnly = false;
         this.help = "View information about BirthdayBot.";
         this.category = new Category("Info");
-
-        this.birthdayBotConfig = birthdayBotConfig;
     }
 
     @Override
     protected void execute(CommandEvent event) {
         EmbedBuilder builder = new EmbedBuilder();
         String botIcon = event.getSelfUser().getAvatarUrl();
-        String ownerIcon = Objects.requireNonNull(event.getJDA().getUserById(birthdayBotConfig.getOwnerId())).getAvatarUrl();
+        String ownerIcon = Objects.requireNonNull(event.getJDA().getUserById(BirthdayBotConfig.getOwnerId())).getAvatarUrl();
 
         builder.setDescription("Hello! I am <@656621136808902656>, a bot built by <@478288246858711040>!"+
                 "\n"+

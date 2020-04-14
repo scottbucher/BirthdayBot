@@ -3,6 +3,7 @@ package me.stqlth.birthdaybot.commands.user;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
@@ -31,7 +32,7 @@ public class SetBday extends Command {
 	private DatabaseMethods db;
 	private JSONArray regions;
 
-	public SetBday(EventWaiter waiter, DatabaseMethods databaseMethods, BirthdayBotConfig birthdayBotConfig) {
+	public SetBday(EventWaiter waiter, DatabaseMethods databaseMethods) {
 		this.name = "set";
 		this.aliases = new String[]{"add"};
 		this.guildOnly = false;
@@ -40,7 +41,7 @@ public class SetBday extends Command {
 
 		this.waiter = waiter;
 		this.db = databaseMethods;
-		this.regions = birthdayBotConfig.getRegions();
+		this.regions = BirthdayBotConfig.getRegions();
 	}
 
 	@Override

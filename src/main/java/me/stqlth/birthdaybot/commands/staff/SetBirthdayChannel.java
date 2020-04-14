@@ -8,13 +8,13 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class SetChannel extends Command {
+public class SetBirthdayChannel extends Command {
 
 	private DatabaseMethods db;
 	private StaffMessages staffMessages;
 
-	public SetChannel(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
-        this.name = "setchannel";
+	public SetBirthdayChannel(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+        this.name = "setbirthdaychannel";
         this.help = "Set the birthday message channel";
 		this.arguments = "[#channel]";
         this.guildOnly = true;
