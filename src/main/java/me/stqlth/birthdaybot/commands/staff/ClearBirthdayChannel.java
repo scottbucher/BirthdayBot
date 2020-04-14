@@ -8,13 +8,13 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class ClearChannel extends Command {
+public class ClearBirthdayChannel extends Command {
 
 	private DatabaseMethods db;
 	private StaffMessages staffMessages;
 
-	public ClearChannel(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
-		this.name = "clearchannel";
+	public ClearBirthdayChannel(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+		this.name = "clearbirthdaychannel";
 		this.help = "Clears the birthday channel";
 		this.guildOnly = true;
 		this.hidden = true;

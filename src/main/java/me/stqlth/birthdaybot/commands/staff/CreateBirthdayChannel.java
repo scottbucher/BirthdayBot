@@ -10,13 +10,13 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.EnumSet;
 
-public class CreateChannel extends Command {
+public class CreateBirthdayChannel extends Command {
 
 	private DatabaseMethods db;
 	private StaffMessages staffMessages;
 
-	public CreateChannel(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
-		this.name = "createchannel";
+	public CreateBirthdayChannel(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+		this.name = "createbirthdaychannel";
 		this.help = "Creates a birthday channel";
 		this.guildOnly = true;
 		this.hidden = true;
