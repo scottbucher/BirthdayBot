@@ -11,7 +11,7 @@ In your discord server Birthday Bot will track your users' birthdays and using t
 
 Start by using `bday set`
 
-![Example Start](https://imgur.com/a/eB4vhWh)
+![Example Start](https://i.imgur.com/lEt7I0J.png)
 
 ### Finding Your Time Zone
 
@@ -23,13 +23,13 @@ Simply click your location on the map, and use the name displayed in the dropdow
 
 You can then take your time zone name and use it in the `bday set` command
 
-![Setting your time zone](https://imgur.com/a/VZTZof4)
+![Setting your time zone](https://i.imgur.com/Mtpx86n.png)
 
 Birthday Bot will then know your timezone and will use this to know when to celebrate your birthday.
 
 Full Example usage of `bday set`
 
-![Example usage](https://imgur.com/a/nu4gGf8)
+![Example usage](https://i.imgur.com/rJXpDss.png)
 
 For users that's it! Server owners will have to do a bit more but Birthday Bot makes it easy with an interactive setup commands `bday setup` and `bday setup optional`!
 
