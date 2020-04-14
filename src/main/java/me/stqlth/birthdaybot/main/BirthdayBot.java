@@ -24,6 +24,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import org.discordbots.api.client.DiscordBotListAPI;
 import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
@@ -59,27 +60,27 @@ public class BirthdayBot {
 
 		// Load config
 		Logger.Info("Loading config...");
-		BirthdayBotConfig birthdayBotConfig = loadConfig();
+		loadConfig();
 
 		// Construct dependencies
 		EventWaiter waiter = new EventWaiter();
 
-		DebugMessages debugMessages = new DebugMessages();
-		GetMessageInfo getMessageInfo = new GetMessageInfo(birthdayBotConfig, debugMessages);
+		GetMessageInfo getMessageInfo = new GetMessageInfo();
 
-		SettingsManager settingsManager = new SettingsManager(birthdayBotConfig, debugMessages);
-		DatabaseMethods databaseMethods = new DatabaseMethods(birthdayBotConfig, debugMessages);
+		SettingsManager settingsManager = new SettingsManager();
+		DatabaseMethods databaseMethods = new DatabaseMethods();
 		StaffMessages staffMessages = new StaffMessages(getMessageInfo);
 
 		BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods);
+		Manager manager = new Manager();
 
 		Command[] commands = new Command[]{
 				//CONFIG
 				new Setup(databaseMethods, staffMessages, waiter),
 				new Config(databaseMethods, staffMessages),
-				new SetChannel(databaseMethods, staffMessages),
-				new ClearChannel(databaseMethods, staffMessages),
-				new CreateChannel(databaseMethods, staffMessages),
+				new SetBirthdayChannel(databaseMethods, staffMessages),
+				new ClearBirthdayChannel(databaseMethods, staffMessages),
+				new CreateBirthdayChannel(databaseMethods, staffMessages),
 				new SetBirthdayRole(databaseMethods, staffMessages),
 				new ClearBirthdayRole(databaseMethods, staffMessages),
 				new CreateBirthdayRole(databaseMethods, staffMessages),
@@ -90,14 +91,14 @@ public class BirthdayBot {
 
 				//INFO
 				new Help(),
-				new About(birthdayBotConfig),
+				new About(),
 				new Settings(databaseMethods),
 				new ServerInfo(),
 				new Shard(),
 
 
 				//UTILITIES
-				new SetBday(waiter, databaseMethods, birthdayBotConfig),
+				new SetBday(waiter, databaseMethods),
 				new Next(databaseMethods),
 				new Support(),
 				new Invite(),
@@ -108,83 +109,87 @@ public class BirthdayBot {
 		};
 
 		// Create the client
-		CommandClient client = createClient(birthdayBotConfig, settingsManager, commands);
+		CommandClient client = createClient(settingsManager, commands);
 
 		EventListener[] listeners = new EventListener[]{
 				waiter,
-				new GuildJoinLeave(birthdayBotConfig, debugMessages),
+				new GuildJoinLeave(),
 				new UserJoinLeave(databaseMethods),
 				new MessageReceived()
 		};
 
+		DiscordBotListAPI api = new DiscordBotListAPI.Builder()
+				.token(BirthdayBotConfig.getBotListToken())
+				.botId(BirthdayBotConfig.getBotId())
+				.build();
+
 		// Start the shard manager
-		ShardManager instance;
 
 		Logger.Info("Starting shard manager...");
 		try {
-			instance = startShardManager(birthdayBotConfig, client, listeners);
+			startShardManager(client, listeners);
 			waiter.waitForEvent(ReadyEvent.class,
 					e -> e.getGuildAvailableCount() == e.getGuildTotalCount(),
 					e -> {
+						ShardManager shardManager = e.getJDA().getShardManager();
 						Logger.Info("Bot Ready!");
 
-						SetupDatabase(birthdayBotConfig, instance.getGuilds(), debugMessages);
+						SetupDatabase(e.getJDA().getGuilds());
 						Logger.Info("Database Ready!");
-						try {
-							Thread.sleep(1000 * 30);
-						} catch (InterruptedException ex) {
-							ex.printStackTrace();
-						}
-						birthdayTracker.startTracker(instance);
+
+						manager.startScheduler(shardManager, api);
+						birthdayTracker.startTracker(shardManager);
 					},
 					5, TimeUnit.MINUTES, client::shutdown);
 		} catch (Exception ex) {
 			Logger.Error("Error encountered while logging in. The bot token may be incorrect.", ex);
+			ex.printStackTrace();
 		}
 
 
+
 	}
 
-	private static BirthdayBotConfig loadConfig() throws IOException {
+	private static void loadConfig() throws IOException {
 		Path configFilePath = new File(CONFIG_FILE).toPath();
 		String configData = new String(Files.readAllBytes(configFilePath));
 		JSONObject configJson = new JSONObject(configData);
-		return new BirthdayBotConfig(configJson);
+		new BirthdayBotConfig(configJson);
 	}
 
-	private static CommandClient createClient(BirthdayBotConfig birthdayBotConfig, SettingsManager settingsManager, Command[] commands) {
+	private static CommandClient createClient(SettingsManager settingsManager, Command[] commands) {
 		CommandClientBuilder clientBuilder = new CommandClientBuilder();
 		clientBuilder.setGuildSettingsManager(settingsManager)
 				.useDefaultGame()
 				.useHelpBuilder(false)
-				.setOwnerId(birthdayBotConfig.getOwnerId())
+				.setOwnerId(BirthdayBotConfig.getOwnerId())
 				.setActivity(Activity.listening("Happy Birthday"))
 				.setStatus(OnlineStatus.ONLINE)
-				.setPrefix(birthdayBotConfig.getPrefix())
+				.setPrefix(BirthdayBotConfig.getPrefix())
 				.setEmojis(SUCCESS_EMOJI, WARNING_EMOJI, ERROR_EMOJI)
 				.addCommands(commands);
 		return clientBuilder.build();
 	}
 
-	private static ShardManager startShardManager(BirthdayBotConfig birthdayBotConfig, CommandClient client, EventListener[] listeners) throws LoginException {
+	private static void startShardManager(CommandClient client, EventListener[] listeners) throws LoginException {
 		DefaultShardManagerBuilder shardManager = new DefaultShardManagerBuilder();
 
-		return shardManager.setToken(birthdayBotConfig.getToken())
+		shardManager.setToken(BirthdayBotConfig.getToken())
 				.addEventListeners((Object[]) listeners)
 				.addEventListeners(client)
 				.build();
 	}
 
-	private static void SetupDatabase(BirthdayBotConfig birthdayBotConfig, List<Guild> guildList, DebugMessages debugMessages) {
+	private static void SetupDatabase(List<Guild> guildList) {
 		for (Guild check : guildList) {
-			if (!guildExists(birthdayBotConfig, debugMessages, check)) {
-				AddGuildToDatabase(birthdayBotConfig, check, debugMessages);
+			if (!guildExists(check)) {
+				AddGuildToDatabase(check);
 			}
 		}
 	}
 
-	private static boolean guildExists(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages, Guild g) {
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+	private static boolean guildExists(Guild g) {
+		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
 			ResultSet check = statement.executeQuery("CALL DoesGuildAlreadyExist(" + g.getId() + ")");
@@ -194,14 +199,14 @@ public class BirthdayBot {
 			if (alreadyExists) return true;
 
 		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
+			DebugMessages.sqlDebug(ex);
 		}
 		return false;
 	}
 
-	private static void AddGuildToDatabase(BirthdayBotConfig birthdayBotConfig, Guild g, DebugMessages debugMessages) {
+	private static void AddGuildToDatabase(Guild g) {
 
-		try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
 
 			statement.execute("CALL InsertGuildSettings('bday ')");
@@ -211,7 +216,7 @@ public class BirthdayBot {
 			statement.execute("CALL InsertGuild(" + g.getId() + ", " + lastId + ", 1)");
 
 		} catch (SQLException ex) {
-			debugMessages.sqlDebug(ex);
+			DebugMessages.sqlDebug(ex);
 		}
 	}
 }

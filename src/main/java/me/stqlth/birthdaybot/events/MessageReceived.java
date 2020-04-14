@@ -1,6 +1,7 @@
 package me.stqlth.birthdaybot.events;
 
 import me.stqlth.birthdaybot.utils.ErrorManager;
+import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -8,17 +9,59 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MessageReceived extends ListenerAdapter {
 
 	public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 		boolean normal = event.isFromGuild();
 
-		if (event.getMessage().getContentRaw().equalsIgnoreCase("bday")) {
-			if (event.isFromGuild()) sendHelpMessage(event, normal);
-			else sendHelpMessage(event, false);
+		String[] args = event.getMessage().getContentRaw().split(" ");
+
+		String prefix = args[0].toLowerCase();
+		if (!prefix.equals("bday")) {
+			return;
 		}
 
+		if (args.length < 2) {
+			sendHelpMessage(event, normal);
+			return;
+		}
+
+		String cmd = args[1].toLowerCase();
+
+		List<String> validCmds = Arrays.asList(
+				"help",
+				"about",
+				"serverinfo",
+				"settings",
+				"shard",
+				"setup",
+				"set",
+				"clear",
+				"config",
+				"setbirthdaychannel",
+				"setbirthdayrole",
+				"settrustedrole",
+				"createbirthdaychannel",
+				"createbirthdayrole",
+				"createtrustedrole",
+				"clearbirthdaychannel",
+				"clearbirthdayrole",
+				"cleartrustedrole",
+				"next",
+				"view",
+				"invite",
+				"support"
+		);
+
+		if(validCmds.contains(cmd)) {
+			return;
+		}
+
+		sendHelpMessage(event, normal);
 	}
 
 	public static void sendHelpMessage(MessageReceivedEvent event, boolean normal) {
@@ -41,45 +84,4 @@ public class MessageReceived extends ListenerAdapter {
 		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
 	}
-
-	public static void sendSetupHelpMessage(MessageReceivedEvent event, boolean normal) {
-		SelfUser bot = event.getJDA().getSelfUser();
-		String botIcon = bot.getAvatarUrl();
-		EmbedBuilder builder = new EmbedBuilder();
-
-		builder.setColor(Color.decode("#1CFE86"))
-				.setAuthor("BirthdayBot Setup Help", null, botIcon)
-				.setDescription("" +
-						"\n**bday setup** - Interactive guide for server setup." +
-						"\n" +
-						"\n**bday createBirthdayRole** - Create the default birthday role." +
-						"\n**bday createBirthdayChannel** - Create the default birthday channel." +
-						"\n**bday setBirthdayRole** - Set custom birthday role." +
-						"\n**bday setBirthdayChannel** - Set custom birthday channel." +
-						"\n**bday clearBirthdayRole** - Clear the birthday role from the database." +
-						"\n**bday clearBirthdayChannel** - Clear the birthday channel from the database.");
-		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
-		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
-	}
-
-	public static void sendOptionalSetupHelpMessage(MessageReceivedEvent event, boolean normal) {
-		SelfUser bot = event.getJDA().getSelfUser();
-		String botIcon = bot.getAvatarUrl();
-		EmbedBuilder builder = new EmbedBuilder();
-
-		builder.setColor(Color.decode("#1CFE86"))
-				.setAuthor("BirthdayBot Optional Setup Help", null, botIcon)
-				.setDescription("" +
-						"\n**bday setup optional** - Interactive guide for optional server setup settings." +
-						"\n" +
-						"\n\n**bday config mentionSetting <everyone/here/@role/rolename/disable>** - What group should the bot @ in the birthday message." +
-						"\n\n**bday config messageTime <0-23>** - What time should the bot send the birthday message." +
-						"\n\n**bday config setMessage <Message>** - Set custom birthday message." +
-						"\n\n**bday config resetMessage** - Reset the birthday message." +
-						"\n\n**bday config trusted preventRole <true/false>** - Set if you need the trusted role to get the Birthday Role." +
-						"\n\n**bday config trusted preventMessage <true/false>** - Set if you need the trusted role to get the Birthday Message.");
-		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
-		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
-	}
-
 }

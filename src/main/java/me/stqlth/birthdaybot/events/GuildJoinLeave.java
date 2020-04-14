@@ -17,19 +17,12 @@ import java.util.Objects;
 
 
 public class GuildJoinLeave extends ListenerAdapter {
-    private BirthdayBotConfig birthdayBotConfig;
-    private DebugMessages debugMessages;
-
-    public GuildJoinLeave(BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages) {
-        this.birthdayBotConfig = birthdayBotConfig;
-        this.debugMessages = debugMessages;
-    }
 
     public void onGuildJoin(GuildJoinEvent event) {
         Guild g = event.getGuild();
         Logger.Info("Registering Guild: \"" + g.getName() + "\" (" + g.getId() + ")!");
 
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+        try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
              Statement statement = conn.createStatement()) {
 
             ResultSet check = statement.executeQuery("CALL DoesGuildAlreadyExist(" + g.getId() + ")");
@@ -46,7 +39,7 @@ public class GuildJoinLeave extends ListenerAdapter {
                 statement.execute("CALL UpdateGuildActive(" + g.getId() + ", 1)");
             }
         } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
+            DebugMessages.sqlDebug(ex);
             return;
         }
 
@@ -58,12 +51,12 @@ public class GuildJoinLeave extends ListenerAdapter {
         Guild g = event.getGuild();
         Logger.Info("UnRegistering Guild \"" + g.getName() + "\" (" + g.getId() + ")!");
 
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+        try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
              Statement statement = conn.createStatement()) {
             statement.execute("CALL UpdateGuildActive(" + g.getId() + ", 0)");
 
         } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
+            DebugMessages.sqlDebug(ex);
         }
         Logger.Info("UnRegistered Guild \"" + g.getName() + "\" (" + g.getId() + ")!");
     }
