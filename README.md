@@ -23,7 +23,7 @@ Simply click your location on the map, and use the name displayed in the dropdow
 
 You can then take your time zone name and use it in the `bday set` command
 
-![Setting your time zone](https://imgur.com/gallery/VZTZof4)
+![Setting your time zone](https://imgur.com/a/VZTZof4)
 
 Birthday Bot will then know your timezone and will use this to know when to celebrate your birthday.
 
