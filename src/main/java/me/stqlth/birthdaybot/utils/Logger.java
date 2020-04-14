@@ -1,5 +1,7 @@
 package me.stqlth.birthdaybot.utils;
 
+import me.stqlth.birthdaybot.config.BirthdayBotConfig;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -11,6 +13,7 @@ public class Logger {
     private static final String INFO_PREFIX = "[Info]";
     private static final String WARN_PREFIX = "[Warn]";
     private static final String ERROR_PREFIX = "[Error]";
+    private static final String DEBUG_PREFIX = "[Debug]";
 
     public static void Info(String message) {
         String log = GetCurrentTimestamp() + " " + INFO_PREFIX + " " + message;
@@ -19,6 +22,12 @@ public class Logger {
 
     public static void Warn(String message) {
         String log = GetCurrentTimestamp() + " " + WARN_PREFIX + " " + message;
+        Output(log);
+    }
+
+    public static void Debug(String message) {
+        if (!BirthdayBotConfig.isDebug()) return;
+        String log = GetCurrentTimestamp() + " " + DEBUG_PREFIX + " " + message;
         Output(log);
     }
 

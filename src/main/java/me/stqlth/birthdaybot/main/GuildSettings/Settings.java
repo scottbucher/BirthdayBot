@@ -13,21 +13,17 @@ public class Settings implements GuildSettingsProvider {
 
     private final Guild guild;
     private Collection<String> prefixes;
-    private BirthdayBotConfig birthdayBotConfig;
-    private DebugMessages debugMessages;
 
-    public Settings(Guild guild, BirthdayBotConfig birthdayBotConfig, DebugMessages debugMessages) {
+    public Settings(Guild guild) {
         this.guild = guild;
         this.prefixes = new LinkedList<>();
-        this.birthdayBotConfig = birthdayBotConfig;
-        this.debugMessages = debugMessages;
     }
 
     @Override
     public Collection<String> getPrefixes() {
 
 
-        try (Connection conn = DriverManager.getConnection(birthdayBotConfig.getDbUrl(), birthdayBotConfig.getDbUser(), birthdayBotConfig.getDbPassword());
+        try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
              Statement statement = conn.createStatement()) {
             int gSettingsId=0;
 
@@ -42,7 +38,7 @@ public class Settings implements GuildSettingsProvider {
 
 
         } catch (SQLException ex) {
-            debugMessages.sqlDebug(ex);
+            DebugMessages.sqlDebug(ex);
         }
         return prefixes;
     }

@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 public class Utilities {
@@ -75,5 +77,19 @@ public class Utilities {
 		}
 
 		return (privateChannel != null);
+	}
+
+	public static long getMsToNextHour() {
+		// Calculates the exact time of the next whole second
+		LocalDateTime nextHour = LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.HOURS);
+		// Calculates the number of milliseconds until the next second
+		return LocalDateTime.now().until(nextHour, ChronoUnit.MILLIS) + 500;
+	}
+
+	public static long getMsToNextMinute() {
+		// Calculates the exact time of the next whole second
+		LocalDateTime nextMinute = LocalDateTime.now().plusMinutes(1).truncatedTo(ChronoUnit.MINUTES);
+		// Calculates the number of milliseconds until the next second
+		return LocalDateTime.now().until(nextMinute, ChronoUnit.MILLIS);
 	}
 }
