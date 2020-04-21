@@ -2,25 +2,25 @@ package me.stqlth.birthdaybot.commands.staff;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.awt.*;
+
 public class ClearBirthdayChannel extends Command {
 
 	private DatabaseMethods db;
-	private StaffMessages staffMessages;
 
-	public ClearBirthdayChannel(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+	public ClearBirthdayChannel(DatabaseMethods databaseMethods) {
 		this.name = "clearbirthdaychannel";
 		this.help = "Clears the birthday channel";
 		this.guildOnly = true;
 		this.hidden = true;
 
 		this.db = databaseMethods;
-		this.staffMessages = staffMessages;
 	}
 
 	@Override
@@ -31,11 +31,11 @@ public class ClearBirthdayChannel extends Command {
 		Permission req = Permission.ADMINISTRATOR;
 
 		if (!sender.hasPermission(req)) {
-			staffMessages.onlyAdmins(channel); //Only admins may use this command
+			EmbedSender.sendEmbed(channel, null, "Only Admins may use this command!", Color.RED);
 			return;
 		}
 
 		db.clearBirthdayChannel(event);
-		staffMessages.channelClear(channel);
+		EmbedSender.sendEmbed(channel, null, "**BirthdayBot** will no longer send birthday messages! :(", Color.decode("#1CFE86"));
 	}
 }

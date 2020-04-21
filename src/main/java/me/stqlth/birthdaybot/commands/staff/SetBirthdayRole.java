@@ -2,19 +2,20 @@ package me.stqlth.birthdaybot.commands.staff;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.awt.*;
+
 public class SetBirthdayRole extends Command {
 
 	private DatabaseMethods db;
-	private StaffMessages staffMessages;
 
-	public SetBirthdayRole(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+	public SetBirthdayRole(DatabaseMethods databaseMethods) {
 		this.name = "setbirthdayrole";
 		this.help = "Set the birthday role";
 		this.arguments = "<@role/role name>";
@@ -22,7 +23,6 @@ public class SetBirthdayRole extends Command {
 		this.hidden = true;
 
 		this.db = databaseMethods;
-		this.staffMessages = staffMessages;
 	}
 
 	@Override
@@ -33,14 +33,14 @@ public class SetBirthdayRole extends Command {
 		Permission req = Permission.ADMINISTRATOR;
 
 		if (!sender.hasPermission(req)) {
-			staffMessages.onlyAdmins(channel); //Only admins may use this command
+			EmbedSender.sendEmbed(channel, null, "Only Admins may use this command!", Color.RED);
 			return;
 		}
 
 		String[] args = event.getMessage().getContentRaw().split(" ");
 
 		if (args.length != 3) {
-			staffMessages.sendErrorMessage(channel, getName(), arguments);
+			EmbedSender.sendEmbed(channel, null, "Incorrect Usage. \nExample Usage: `bday " + this.name + " " + this.arguments +"`", Color.RED);
 			return;
 		}
 
@@ -53,11 +53,11 @@ public class SetBirthdayRole extends Command {
 		}
 
 		if (bdayRole == null) {
-			staffMessages.roleNotFound(channel);
+			EmbedSender.sendEmbed(channel, null, "The specified role cannot be found.", Color.RED);
 			return;
 		}
 
 		db.updateBirthdayRole(event, bdayRole);
-		staffMessages.successBdayRole(channel, bdayRole);
+		EmbedSender.sendEmbed(channel, null, "Successfully set the birthday role to " + bdayRole.getAsMention() + "**!", Color.decode("#1CFE86"));
 	}
 }

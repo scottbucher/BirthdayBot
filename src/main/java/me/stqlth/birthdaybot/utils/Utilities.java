@@ -2,14 +2,20 @@ package me.stqlth.birthdaybot.utils;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.Unirest;
+import me.stqlth.birthdaybot.config.BirthdayBotConfig;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Utilities {
@@ -91,5 +97,52 @@ public class Utilities {
 		LocalDateTime nextMinute = LocalDateTime.now().plusMinutes(1).truncatedTo(ChronoUnit.MINUTES);
 		// Calculates the number of milliseconds until the next second
 		return LocalDateTime.now().until(nextMinute, ChronoUnit.MILLIS);
+	}
+
+	public static StringBuilder getBirthdays(List<Member> birthdays) {
+		int size = birthdays.size();
+		StringBuilder bdays = new StringBuilder();
+
+		if (size > 2) {
+			for (int i = 0; i < size - 1; i++)
+				bdays.append(birthdays.get(i).getAsMention()).append(", ");
+
+			bdays.append("and ").append(birthdays.get(size - 1).getUser().getAsMention());
+		} else if (size == 2) {
+			bdays.append(birthdays.get(0).getAsMention()).append(" and ").append(birthdays.get(1).getAsMention());
+		} else {
+			bdays.append(birthdays.get(0).getAsMention());
+		}
+		return bdays;
+	}
+
+	public String getPrefix(Guild guild) {
+
+		LinkedList<Object> prefixes = new LinkedList<>();
+
+		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
+			 Statement statement = conn.createStatement()) {
+			int gSettingsId=0;
+
+			ResultSet id = statement.executeQuery("CALL GetGuildSettingsId(" + guild.getId() + ")");
+			if (id.next()) gSettingsId = id.getInt("GuildSettingsId");
+
+			ResultSet rs = statement.executeQuery("CALL GetPrefix(" + gSettingsId + ")");
+
+			if (rs.next()) {
+				prefixes.add(rs.getString("Prefix"));
+			}
+
+		} catch (SQLException ex) {
+			Utilities.sqlDebug(ex);
+		}
+
+		return prefixes.getFirst().toString();
+	}
+
+	public static void sqlDebug(SQLException ex) {
+		System.out.println("SQLExpection: " + ex.getMessage());
+		System.out.println("SQLState: " + ex.getSQLState());
+		System.out.println("VendorError: " + ex.getErrorCode());
 	}
 }

@@ -3,11 +3,9 @@ package me.stqlth.birthdaybot.commands.user;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
-import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
-import me.stqlth.birthdaybot.utils.Logger;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import me.stqlth.birthdaybot.utils.Utilities;
 import me.stqlth.birthdaybot.utils.ErrorManager;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -72,11 +70,11 @@ public class SetBday extends Command {
 		if (normal)
 			event.getTextChannel().sendMessage(builder.build()).queue(result -> {
 				waitForTimezone(event, result, author, true);
-			}, ErrorManager.PERMISSION);
+			}, ErrorManager.GENERAL);
 		else
 			event.getPrivateChannel().sendMessage(builder.build()).queue(result -> {
 				waitForTimezone(event, result, author, false);
-			}, ErrorManager.PERMISSION);
+			}, ErrorManager.GENERAL);
 
 	}
 	private void waitForTimezone(CommandEvent event, Message result, User author, boolean normal) {
@@ -101,8 +99,16 @@ public class SetBday extends Command {
 							break;
 						}
 						}
+
+					final String message = "Your ZoneId is invalid.\n\n" +
+							"If you don't know what a ZoneId is, click [here](http://kevalbhatt.github.io/timezone-picker/) and hover over your location on the map. " +
+							"Your ZoneId is the Location that appears at the bottom of the map. " +
+							"\n(Do __**not**__ use the shortened values of the Zones. Example: `EST`).";
+
 					if (!check) {
-						if (normal) BirthdayMessages.invalidZone(event.getTextChannel()); else BirthdayMessages.invalidZone(event.getPrivateChannel());
+
+						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
+						else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
 						return;
 					}
 
@@ -110,12 +116,13 @@ public class SetBday extends Command {
 					try {
 						zoneId = ZoneId.of(e.getMessage().getContentRaw());
 					} catch (DateTimeException ex) {
-						if (normal) BirthdayMessages.invalidZone(event.getTextChannel()); else BirthdayMessages.invalidZone(event.getPrivateChannel());
+						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
+						else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
 						return;
 					}
 					getBirthDate(event, author, zoneId, normal);
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 	public void getBirthDate(CommandEvent event, User author, ZoneId zoneid, boolean normal) {
@@ -133,11 +140,11 @@ public class SetBday extends Command {
 		if (normal)
 			event.getTextChannel().sendMessage(builder.build()).queue(result -> {
 				waitForBirthDate(event, result, zoneid, true);
-			}, ErrorManager.PERMISSION);
+			}, ErrorManager.GENERAL);
 		else
 			event.getPrivateChannel().sendMessage(builder.build()).queue(result -> {
 				waitForBirthDate(event, result, zoneid, false);
-			}, ErrorManager.PERMISSION);
+			}, ErrorManager.GENERAL);
 
 	}
 	private void waitForBirthDate(CommandEvent event, Message result, ZoneId zoneId, boolean normal) {
@@ -156,7 +163,8 @@ public class SetBday extends Command {
 						month = Integer.parseInt(args[0]);
 						LocalDate birthDate = LocalDate.of(year, month, day);
 					} catch (Exception ex) {
-						if (normal) BirthdayMessages.dateNotFound(event.getTextChannel()); else BirthdayMessages.dateNotFound(event.getPrivateChannel());
+						String message = "That date doesn't exist. Review a calendar [here](https://www.timeanddate.com/calendar/).";
+						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED); else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
 						return;
 					}
 
@@ -169,7 +177,8 @@ public class SetBday extends Command {
 					}
 					int changesLeft = db.getChangesLeft(event.getAuthor());
 					if (changesLeft  <= 0){
-						if (normal) BirthdayMessages.outOfChanges(event.getTextChannel()); else BirthdayMessages.outOfChanges(event.getPrivateChannel());
+						String message = "You have used already changed your birthday 3 times.";
+						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED); else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
 						return;
 					} else changesLeft--;
 
@@ -177,7 +186,7 @@ public class SetBday extends Command {
 					else  sendConfirmation(event, date, sBday, zoneId.toString(), changesLeft, month, day, false);
 
 				}, 30, TimeUnit.SECONDS, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -187,15 +196,15 @@ public class SetBday extends Command {
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription("Please confirm that this is the correct date: **" + date + "**");
 		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\u2705").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\u274C").queue(null, ErrorManager.PERMISSION);
+			result.addReaction("\u2705").queue(null, ErrorManager.GENERAL);
+			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
 			waitForConfirmation(event, result, sBday, zoneId, changesLeft, date, month, day, normal);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\u2705").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\u274C").queue(null, ErrorManager.PERMISSION);
+			result.addReaction("\u2705").queue(null, ErrorManager.GENERAL);
+			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
 			waitForConfirmation(event, result, sBday, zoneId, changesLeft, date, month, day, normal);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 	}
 	private void waitForConfirmation(CommandEvent event, Message msg, String sBday, String zoneId, int changesLeft, String date, int month, int day, boolean normal) {
 
@@ -207,17 +216,17 @@ public class SetBday extends Command {
 						try {
 							db.updateBirthday(event.getAuthor(), sBday);
 							db.updateZoneId(event, zoneId);
-							msg.delete().queue(null, ErrorManager.PERMISSION);
-							if (normal) BirthdayMessages.success(event.getTextChannel(), date);
-							else BirthdayMessages.success(event.getPrivateChannel(), date);
+							msg.delete().queue(null, ErrorManager.GENERAL);
+							if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set your birthday to **" + date + "**!", Color.decode("#1CFE86"));
+							else EmbedSender.sendEmbed(event.getPrivateChannel(), null, "Successfully set your birthday to **" + date + "**!", Color.decode("#1CFE86"));
 						} catch (SQLException ex) {
-							if (normal) BirthdayMessages.invalidFormat(event.getTextChannel(), getName(), getArguments());
-							else BirthdayMessages.invalidFormat(event.getPrivateChannel(), getName(), getArguments());
+							if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, "Invalid Format.\nExample Date: `08/28`", Color.RED);
+							else EmbedSender.sendEmbed(event.getPrivateChannel(), null, "Invalid Format.\nExample Date: `08/28`", Color.RED);
 							return;
 						}
 						db.updateChangesLeft(event, changesLeft);
 						if (month == 2 && day == 29) leapDate(event, normal);
-					} else if (e.getReactionEmote().getName().equals("\u274C")) msg.delete().queue(null, ErrorManager.PERMISSION);
+					} else if (e.getReactionEmote().getName().equals("\u274C")) msg.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -228,8 +237,8 @@ public class SetBday extends Command {
 				.setTitle("**A Leap Day?!?!**")
 				.setDescription("Wow! A birthday on a leap day? Only 1 in 1461 people are born on a leap day!" +
 						"\n\nPlease note that on years that are __not__ a leap year, your birthday will be celebrated on February 28th.");
-		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
-		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
+		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
 	}
 	private static String getMonth(int month) {
 		switch (month) {

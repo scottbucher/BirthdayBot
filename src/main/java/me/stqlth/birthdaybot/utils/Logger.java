@@ -36,11 +36,15 @@ public class Logger {
         Output(log);
     }
 
-    public static void Error(String message, Exception ex) {
+    public static void Error(String message, Throwable ex) {
         String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace());
         Output(log);
     }
 
+    public static void Error(String message, Exception ex) {
+        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace());
+        Output(log);
+    }
     private static void Output(String log) {
         System.out.println(log);
     }

@@ -1,9 +1,9 @@
 package me.stqlth.birthdaybot.events;
 
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
-import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import me.stqlth.birthdaybot.utils.ErrorManager;
 import me.stqlth.birthdaybot.utils.Logger;
+import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -39,7 +39,7 @@ public class GuildJoinLeave extends ListenerAdapter {
                 statement.execute("CALL UpdateGuildActive(" + g.getId() + ", 1)");
             }
         } catch (SQLException ex) {
-            DebugMessages.sqlDebug(ex);
+            Utilities.sqlDebug(ex);
             return;
         }
 
@@ -56,7 +56,7 @@ public class GuildJoinLeave extends ListenerAdapter {
             statement.execute("CALL UpdateGuildActive(" + g.getId() + ", 0)");
 
         } catch (SQLException ex) {
-            DebugMessages.sqlDebug(ex);
+            Utilities.sqlDebug(ex);
         }
         Logger.Info("UnRegistered Guild \"" + g.getName() + "\" (" + g.getId() + ")!");
     }

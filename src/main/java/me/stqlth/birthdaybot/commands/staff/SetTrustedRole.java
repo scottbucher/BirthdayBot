@@ -2,19 +2,20 @@ package me.stqlth.birthdaybot.commands.staff;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.awt.*;
+
 public class SetTrustedRole extends Command {
 
 	private DatabaseMethods db;
-	private StaffMessages staffMessages;
 
-	public SetTrustedRole(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+	public SetTrustedRole(DatabaseMethods databaseMethods) {
 		this.name = "settrustedrole";
 		this.help = "Set the trusted role";
 		this.arguments = "<@role/role name>";
@@ -22,7 +23,6 @@ public class SetTrustedRole extends Command {
 		this.hidden = true;
 
 		this.db = databaseMethods;
-		this.staffMessages = staffMessages;
 	}
 
 	@Override
@@ -33,14 +33,14 @@ public class SetTrustedRole extends Command {
 		Permission req = Permission.ADMINISTRATOR;
 
 		if (!sender.hasPermission(req)) {
-			staffMessages.onlyAdmins(channel); //Only admins may use this command
+			EmbedSender.sendEmbed(channel, null, "Only Admins may use this command!", Color.RED);
 			return;
 		}
 
 		String[] args = event.getMessage().getContentRaw().split(" ");
 
 		if (args.length != 3) {
-			staffMessages.sendErrorMessage(channel, getName(), arguments);
+			EmbedSender.sendEmbed(channel, null, "Incorrect Usage. \nExample Usage: `bday " + this.name + " " + this.arguments +"`", Color.RED);
 			return;
 		}
 
@@ -53,11 +53,11 @@ public class SetTrustedRole extends Command {
 		}
 
 		if (trustedRole == null) {
-			staffMessages.roleNotFound(channel);
+			EmbedSender.sendEmbed(channel, null, "The specified role cannot be found.", Color.RED);
 			return;
 		}
 
 		db.updateTrustedRole(event, trustedRole);
-		staffMessages.successTrustedRole(channel, trustedRole);
+		EmbedSender.sendEmbed(channel, null, "Successfully set the trusted role to " + trustedRole.getAsMention() + "**!", Color.decode("#1CFE86"));
 	}
 }

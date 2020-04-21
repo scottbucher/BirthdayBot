@@ -2,7 +2,7 @@ package me.stqlth.birthdaybot.main.GuildSettings;
 
 import com.jagrosh.jdautilities.command.GuildSettingsProvider;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
-import me.stqlth.birthdaybot.messages.debug.DebugMessages;
+import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 
 import java.sql.*;
@@ -38,7 +38,7 @@ public class Settings implements GuildSettingsProvider {
 
 
         } catch (SQLException ex) {
-            DebugMessages.sqlDebug(ex);
+            Utilities.sqlDebug(ex);
         }
         return prefixes;
     }

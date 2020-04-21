@@ -2,7 +2,6 @@ package me.stqlth.birthdaybot.utils;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
-import me.stqlth.birthdaybot.messages.debug.DebugMessages;
 import net.dv8tion.jda.api.entities.*;
 
 import java.sql.*;
@@ -31,7 +30,7 @@ public class DatabaseMethods {
 			rs.next();
 			return rs.getInt("UserId");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return -1;
 	}
@@ -59,7 +58,7 @@ public class DatabaseMethods {
 			return rs2.getInt("ChangesLeft");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return -1;
 	}
@@ -73,7 +72,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdateChangesLeft(" + userId + ", " + left + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -89,7 +88,7 @@ public class DatabaseMethods {
 			return rs2.getString("Birthday");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return "-1";
 	}
@@ -106,7 +105,7 @@ public class DatabaseMethods {
 			return values[1] + "-" + values[2];
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return "-1";
 	}
@@ -123,7 +122,7 @@ public class DatabaseMethods {
 			return ZoneId.of(rs2.getString("ZoneId"));
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return null;
 	}
@@ -139,7 +138,7 @@ public class DatabaseMethods {
 			return rs.getString("CustomMessage");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return "0";
 	}
@@ -152,7 +151,7 @@ public class DatabaseMethods {
 			statement.execute("CALL UpdateMessageTime(" + guildSettingsId + ", " + time + ")");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -168,7 +167,7 @@ public class DatabaseMethods {
 			return rs.getInt("MessageTime");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return 0;
 	}
@@ -182,7 +181,7 @@ public class DatabaseMethods {
 			return rs.getInt("GuildSettingsId");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return 0;
 	}
@@ -199,7 +198,7 @@ public class DatabaseMethods {
 			return rs.getLong("BirthdayChannel");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return 0;
 	}
@@ -216,7 +215,7 @@ public class DatabaseMethods {
 			return rs.getLong("BirthdayRole");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return 0;
 	}
@@ -267,7 +266,7 @@ public class DatabaseMethods {
 
 			return birthdays;
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return null;
 	}
@@ -284,7 +283,7 @@ public class DatabaseMethods {
 			return rs.getLong("TrustedRole");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return 0;
 	}
@@ -301,7 +300,7 @@ public class DatabaseMethods {
 			return rs.getString("MentionSetting");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return "0";
 	}
@@ -318,7 +317,7 @@ public class DatabaseMethods {
 			return rs.getBoolean("TrustedPreventsMessage");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return true;
 	}
@@ -335,7 +334,7 @@ public class DatabaseMethods {
 			return rs.getBoolean("TrustedPreventsRole");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return true;
 	}
@@ -348,7 +347,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdateBirthdayChannel(" + bdayChannel.getId() + ", " + guildSettingsId + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -360,7 +359,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdateBirthdayChannel(" + 0 + ", " + guildSettingsId + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -372,7 +371,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdateBirthdayRole(" + bdayRole.getId() + ", " + guildSettingsId + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -384,7 +383,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdateBirthdayRole(" + 0 + ", " + guildSettingsId + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -396,7 +395,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdateTrustedRole(" + bdayRole.getId() + ", " + guildSettingsId + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -408,7 +407,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdateTrustedRole(" + 0 + ", " + guildSettingsId + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -420,7 +419,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdatePreventRole(" + guildSettingsId + ", " + bool + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -432,7 +431,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdatePreventMessage(" + guildSettingsId + ", " + bool + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -444,7 +443,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdateMessage(" + guildSettingsId + ", '" + message + "')");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -456,7 +455,7 @@ public class DatabaseMethods {
 
 			statement.execute("CALL UpdateMentionSetting(" + guildSettingsId + ", '" + setting + "')");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -471,7 +470,7 @@ public class DatabaseMethods {
 			if (alreadyExists) return true;
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return false;
 	}
@@ -483,7 +482,7 @@ public class DatabaseMethods {
 			rs.next();
 			return rs.getInt("GuildId");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return -1;
 	}
@@ -498,7 +497,7 @@ public class DatabaseMethods {
 			return check.getBoolean("AlreadyExists");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return false;
 	}
@@ -508,7 +507,7 @@ public class DatabaseMethods {
 			 Statement statement = conn.createStatement()) {
 			statement.execute("CALL InsertUser(" + user.getId() + ")");
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 
@@ -526,7 +525,7 @@ public class DatabaseMethods {
 			}
 			return birthdays;
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 
 		return null;

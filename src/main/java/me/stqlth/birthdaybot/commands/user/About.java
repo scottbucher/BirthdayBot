@@ -33,9 +33,9 @@ public class About extends Command {
         builder.setDescription("Hello! I am <@656621136808902656>, a bot built by <@478288246858711040>!"+
                 "\n"+
                 "\nI was written for Discord in Java, using the JDA library ("+ JDAInfo.VERSION+")"+
-                "\nI'm currently in Version 1.0.0. " +
+                "\nI'm currently in Version 1.1.0. " +
                 "\n" +
-                "\nSpecial Thanks to <@212772875793334272> for helping me with this bot! Checkout his bot " +
+                "\nSpecial thanks to <@212772875793334272> for helping me with this bot! Checkout his bot " +
                 "[FriendTime](https://github.com/KevinNovak/Friend-Time), and add it to your discord [here]" +
                 "(https://discordapp.com/oauth2/authorize?client_id=471091072546766849&scope=bot&permissions=522304)!" +
                 "\n"+
@@ -47,7 +47,7 @@ public class About extends Command {
                 .setThumbnail(botIcon)
                 .setAuthor("BirthdayBot", null, botIcon)
                 .setFooter("© 2020 Stqlth", ownerIcon);
-        if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+        if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
         else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
     }
 

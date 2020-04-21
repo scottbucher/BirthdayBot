@@ -2,13 +2,12 @@ package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.time.LocalDate;
-import java.time.Period;
+import java.awt.*;
 import java.time.ZoneId;
 
 public class View extends Command {
@@ -44,12 +43,12 @@ public class View extends Command {
 		}
 
 		if (target == null) {
-			BirthdayMessages.noUser(channel);
+			EmbedSender.sendEmbed(event.getTextChannel(), null, "I can't find that user!", Color.RED);
 			return;
 		}
 
 		if (!db.doesUserExist(target.getUser()) || db.getUserBirthday(target.getUser()) == null) {
-			BirthdayMessages.noBirthday(channel, target);
+			EmbedSender.sendEmbed(event.getTextChannel(), null, "**" + target.getUser().getName() + "** does not have a birthday set! :(", Color.RED);
 			return;
 		}
 
@@ -61,7 +60,7 @@ public class View extends Command {
 		int month = Integer.parseInt(values[1]);
 
 		String date = getMonth(month) + " " + day + " " + zoneId.getId();
-		BirthdayMessages.userBirthday(channel, date, target);
+		EmbedSender.sendEmbed(event.getTextChannel(), null, target.getUser().getName() + "'s birthday is on **" + date + "**.", Color.decode("#1CFE86"));
 	}
 
 	private static String getMonth(int month) {

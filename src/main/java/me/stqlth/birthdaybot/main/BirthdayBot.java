@@ -12,11 +12,9 @@ import me.stqlth.birthdaybot.events.GuildJoinLeave;
 import me.stqlth.birthdaybot.events.MessageReceived;
 import me.stqlth.birthdaybot.events.UserJoinLeave;
 import me.stqlth.birthdaybot.main.GuildSettings.SettingsManager;
-import me.stqlth.birthdaybot.messages.debug.DebugMessages;
-import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
-import me.stqlth.birthdaybot.messages.getMethods.GetMessageInfo;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Logger;
+import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
@@ -65,28 +63,25 @@ public class BirthdayBot {
 		// Construct dependencies
 		EventWaiter waiter = new EventWaiter();
 
-		GetMessageInfo getMessageInfo = new GetMessageInfo();
-
 		SettingsManager settingsManager = new SettingsManager();
 		DatabaseMethods databaseMethods = new DatabaseMethods();
-		StaffMessages staffMessages = new StaffMessages(getMessageInfo);
 
 		BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods);
 		Manager manager = new Manager();
 
 		Command[] commands = new Command[]{
 				//CONFIG
-				new Setup(databaseMethods, staffMessages, waiter),
-				new Config(databaseMethods, staffMessages),
-				new SetBirthdayChannel(databaseMethods, staffMessages),
-				new ClearBirthdayChannel(databaseMethods, staffMessages),
-				new CreateBirthdayChannel(databaseMethods, staffMessages),
-				new SetBirthdayRole(databaseMethods, staffMessages),
-				new ClearBirthdayRole(databaseMethods, staffMessages),
-				new CreateBirthdayRole(databaseMethods, staffMessages),
-				new SetTrustedRole(databaseMethods, staffMessages),
-				new ClearTrustedRole(databaseMethods, staffMessages),
-				new CreateTrustedRole(databaseMethods, staffMessages),
+				new Setup(databaseMethods, waiter),
+				new Config(databaseMethods),
+				new SetBirthdayChannel(databaseMethods),
+				new ClearBirthdayChannel(databaseMethods),
+				new CreateBirthdayChannel(databaseMethods),
+				new SetBirthdayRole(databaseMethods),
+				new ClearBirthdayRole(databaseMethods),
+				new CreateBirthdayRole(databaseMethods),
+				new SetTrustedRole(databaseMethods),
+				new ClearTrustedRole(databaseMethods),
+				new CreateTrustedRole(databaseMethods),
 
 
 				//INFO
@@ -126,6 +121,7 @@ public class BirthdayBot {
 		// Start the shard manager
 
 		Logger.Info("Starting shard manager...");
+		Logger.Info("Debug Mode: " + BirthdayBotConfig.isDebug());
 		try {
 			startShardManager(client, listeners);
 			waiter.waitForEvent(ReadyEvent.class,
@@ -138,6 +134,7 @@ public class BirthdayBot {
 						Logger.Info("Database Ready!");
 
 						manager.startScheduler(shardManager, api);
+						Logger.Info("Api Manager Ready!");
 						birthdayTracker.startTracker(shardManager);
 					},
 					5, TimeUnit.MINUTES, client::shutdown);
@@ -199,7 +196,7 @@ public class BirthdayBot {
 			if (alreadyExists) return true;
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 		return false;
 	}
@@ -216,7 +213,7 @@ public class BirthdayBot {
 			statement.execute("CALL InsertGuild(" + g.getId() + ", " + lastId + ", 1)");
 
 		} catch (SQLException ex) {
-			DebugMessages.sqlDebug(ex);
+			Utilities.sqlDebug(ex);
 		}
 	}
 }

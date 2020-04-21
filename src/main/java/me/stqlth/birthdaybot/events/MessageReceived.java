@@ -1,7 +1,6 @@
 package me.stqlth.birthdaybot.events;
 
 import me.stqlth.birthdaybot.utils.ErrorManager;
-import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -9,7 +8,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -81,7 +79,7 @@ public class MessageReceived extends ListenerAdapter {
 						"\n**bday support** - Join the BirthdayBot support server" +
 						"\n**bday help setup** - View more help regarding server setup." +
 						"\n**bday help setup optional** - View help on optional server settings.");
-		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
 	}
 }

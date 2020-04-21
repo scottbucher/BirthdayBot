@@ -2,18 +2,19 @@ package me.stqlth.birthdaybot.commands.staff;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.awt.*;
+
 public class SetBirthdayChannel extends Command {
 
 	private DatabaseMethods db;
-	private StaffMessages staffMessages;
 
-	public SetBirthdayChannel(DatabaseMethods databaseMethods, StaffMessages staffMessages) {
+	public SetBirthdayChannel(DatabaseMethods databaseMethods) {
         this.name = "setbirthdaychannel";
         this.help = "Set the birthday message channel";
 		this.arguments = "[#channel]";
@@ -21,7 +22,6 @@ public class SetBirthdayChannel extends Command {
         this.hidden = true;
 
 		this.db = databaseMethods;
-		this.staffMessages = staffMessages;
 	}
 
 
@@ -33,7 +33,7 @@ public class SetBirthdayChannel extends Command {
 		Permission req = Permission.ADMINISTRATOR;
 
 		if (!sender.hasPermission(req)) {
-			staffMessages.onlyAdmins(channel); //Only admins may use this command
+			EmbedSender.sendEmbed(channel, null, "Only Admins may use this command!", Color.RED);
 			return;
 		}
 
@@ -51,6 +51,6 @@ public class SetBirthdayChannel extends Command {
 
 		db.updateBirthdayChannel(event, bdayChannel);
 
-		staffMessages.successChannel(channel, bdayChannel);
+		EmbedSender.sendEmbed(channel, null, "Successfully set the birthday channel to " + bdayChannel.getAsMention() + "**!", Color.decode("#1CFE86"));
 	}
 }

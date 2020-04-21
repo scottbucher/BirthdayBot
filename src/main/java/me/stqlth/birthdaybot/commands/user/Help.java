@@ -53,7 +53,7 @@ public class Help extends Command {
 						"\n**bday support** - Join the BirthdayBot support server" +
 						"\n**bday help setup** - View more help regarding server setup." +
 						"\n**bday help setup optional** - View help on optional server settings.");
-		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
 	}
 
@@ -73,7 +73,7 @@ public class Help extends Command {
 						"\n**bday setBirthdayChannel** - Set custom birthday channel." +
 						"\n**bday clearBirthdayRole** - Clear the birthday role from the database." +
 						"\n**bday clearBirthdayChannel** - Clear the birthday channel from the database.");
-		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
 	}
 
@@ -93,7 +93,7 @@ public class Help extends Command {
 						"\n\n**bday config resetMessage** - Reset the birthday message." +
 						"\n\n**bday config trusted preventRole <true/false>** - Set if you need the trusted role to get the Birthday Role." +
 						"\n\n**bday config trusted preventMessage <true/false>** - Set if you need the trusted role to get the Birthday Message.");
-		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
 	}
 }

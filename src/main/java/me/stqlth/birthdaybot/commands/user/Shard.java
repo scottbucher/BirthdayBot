@@ -2,6 +2,7 @@ package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import me.stqlth.birthdaybot.utils.ErrorManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -23,15 +24,7 @@ public class Shard extends Command {
         int currentShard = event.getJDA().getShardInfo().getShardId() + 1;
         int totalShards = event.getJDA().getShardInfo().getShardTotal();
 
-        currentShard(event.getTextChannel(), currentShard, totalShards);
-    }
-
-
-    public void currentShard(TextChannel channel, int currentShard, int totalShards) {
-        EmbedBuilder builder = new EmbedBuilder();
-
-        builder.setColor(Color.decode("#2aff16"))
-                .setDescription("You are currently on shard `" + currentShard + "` out of `" + totalShards + "` total shards!");
-        channel.sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+        String message = "You are currently on shard `" + currentShard + "` out of `" + totalShards + "` total shards!";
+        EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.decode("#1CFE86"));
     }
 }

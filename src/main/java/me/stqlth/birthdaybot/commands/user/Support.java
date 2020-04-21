@@ -2,7 +2,9 @@ package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
+import me.stqlth.birthdaybot.utils.EmbedSender;
+
+import java.awt.*;
 
 import static me.stqlth.birthdaybot.utils.Utilities.isPrivate;
 
@@ -21,6 +23,8 @@ public class Support extends Command {
 
 		if (args.length != 2) return;
 
-		if (!isPrivate(event)) BirthdayMessages.joinSupportServer(event.getTextChannel()); else BirthdayMessages.joinSupportServer(event.getPrivateChannel());
+		String message = "For support join our discord server [here](https://discord.gg/24xS3N5)!";
+		if (!isPrivate(event)) EmbedSender.sendEmbed(event.getTextChannel(), null, message, null);
+		else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, null);
 	}
 }

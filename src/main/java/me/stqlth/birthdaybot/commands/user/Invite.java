@@ -2,7 +2,7 @@ package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 
 import static me.stqlth.birthdaybot.utils.Utilities.isPrivate;
 
@@ -22,6 +22,9 @@ public class Invite extends Command {
 
 		if (args.length != 2) return;
 
-		if (!isPrivate(event)) BirthdayMessages.inviteBot(event.getTextChannel()); else BirthdayMessages.inviteBot(event.getPrivateChannel());
+		String message = "Invite BirthdayBot to your server [here](https://discordapp.com/api/oauth2/authorize?client_id=656621136808902656&permissions=269053008&scope=bot)!";
+
+		if (!isPrivate(event)) EmbedSender.sendEmbed(event.getTextChannel(), null, message, null);
+		else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, null);
 	}
 }

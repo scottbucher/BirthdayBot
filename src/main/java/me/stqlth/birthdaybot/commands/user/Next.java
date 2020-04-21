@@ -2,24 +2,16 @@ package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.stqlth.birthdaybot.messages.discordOut.BirthdayMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
-import me.stqlth.birthdaybot.utils.ErrorManager;
-import me.stqlth.birthdaybot.utils.Logger;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import me.stqlth.birthdaybot.utils.Utilities;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
-import javax.rmi.CORBA.Util;
 import java.awt.*;
-import java.sql.ResultSet;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -53,7 +45,7 @@ public class Next extends Command {
 		List<User> bdays = db.getNextBirthdays(event, members.toString());
 
 		if (bdays == null || bdays.isEmpty()) {
-			BirthdayMessages.noBirthdays(channel, event.getGuild());
+			EmbedSender.sendEmbed(event.getTextChannel(), null, "There are no upcoming birthdays in **" + guild.getName() + "**!\nSet your birthday with `bday set`!", Color.RED);
 			return;
 		}
 
@@ -90,10 +82,7 @@ public class Next extends Command {
 
 			String message = bString + date;
 
-			EmbedBuilder builder = new EmbedBuilder();
-			builder.setColor(Color.decode("#1CFE86"))
-					.setDescription("The next birthdays are " + message);
-			channel.sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+			EmbedSender.sendEmbed(event.getTextChannel(), null, "The next birthdays are " + message, Color.decode("#1CFE86"));
 		} else {
 			String birthday = db.getUserBirthday(bdays.get(0));
 			String[] values = birthday.split("-");
@@ -108,7 +97,7 @@ public class Next extends Command {
 			}
 
 			String date = getMonth(month) + " " + day + ", " + currentYear;
-			BirthdayMessages.nextBirthday(channel, date, bdays.get(0));
+			EmbedSender.sendEmbed(event.getTextChannel(), null, "**" + bdays.get(0).getName() + "'s** birthday is next on **" + date + "**!", Color.decode("#1CFE86"));
 		}
 
 	}

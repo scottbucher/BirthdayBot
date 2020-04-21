@@ -3,14 +3,16 @@ package me.stqlth.birthdaybot.commands.staff;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import me.stqlth.birthdaybot.messages.discordOut.StaffMessages;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.ErrorManager;
+import me.stqlth.birthdaybot.utils.EmbedSender;
+import me.stqlth.birthdaybot.utils.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.awt.*;
 import java.util.EnumSet;
@@ -21,25 +23,25 @@ import java.util.concurrent.TimeUnit;
 public class Setup extends Command {
 
 	private EventWaiter waiter;
-	private StaffMessages staffMessages;
 	private DatabaseMethods db;
 
-	public Setup(DatabaseMethods databaseMethods, StaffMessages staffMessages, EventWaiter waiter) {
+	public Setup(DatabaseMethods databaseMethods, EventWaiter waiter) {
 		this.name = "setup";
 		this.guildOnly = true;
 		this.help = "Setup a Guild's server settings";
 
 		this.db = databaseMethods;
-		this.staffMessages = staffMessages;
 		this.waiter = waiter;
 	}
 
 	@Override
 	protected void execute(CommandEvent event) {
 		Permission req = Permission.ADMINISTRATOR;
+		TextChannel channel = event.getTextChannel();
 		Member member = event.getMember();
 		if (!member.hasPermission(req)) {
-			staffMessages.onlyAdmins(event.getTextChannel());
+			String message = "Only Admins may use this command!";
+			EmbedSender.sendEmbed(channel, null, message, Color.RED);
 			return;
 		}
 
@@ -69,11 +71,23 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\uD83D\uDD28").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\uD83D\uDDB1").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\u274C").queue(null, ErrorManager.PERMISSION);
+			result.addReaction("\uD83D\uDD28").queue(null, error -> {
+				if (!(error instanceof PermissionException)) {
+					Logger.Error("Failed to add reaction in a TextChannel with ID: " + result.getId(), error);
+				}
+			});
+			result.addReaction("\uD83D\uDDB1").queue(null, error -> {
+				if (!(error instanceof PermissionException)) {
+					Logger.Error("Failed to add reaction in a TextChannel with ID: " + result.getId(), error);
+				}
+			});
+			result.addReaction("\u274C").queue(null, error -> {
+				if (!(error instanceof PermissionException)) {
+					Logger.Error("Failed to add reaction in a TextChannel with ID: " + result.getId(), error);
+				}
+			});
 			waitForChannel(event, result, author);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 
 
 	}
@@ -96,30 +110,33 @@ public class Setup extends Command {
 									.setTopic("Birthday Announcements!")
 									.addPermissionOverride(publicRole, grantPublic, denyPublic)
 									.queue(r -> {
-										staffMessages.successChannelCreate(event.getTextChannel(), r);
+										EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully created the birthday channel **" + r.getAsMention() + "**!", Color.decode("#1CFE86"));
 										db.updateBirthdayChannel(event, r);
-										result.delete().queue(null, ErrorManager.PERMISSION);
+										result.delete().queue(null, ErrorManager.GENERAL);
 										getBirthdayRole(event, member);
-									}, ErrorManager.PERMISSION);
+									}, error -> {
+										if (error instanceof PermissionException) {
+											EmbedSender.sendEmbed(event.getTextChannel(), null, "**BirthdayBot** does not have permission to create a channel!", Color.RED);
+										} else {
+											Logger.Error("Could not create a birthday channel for " + event.getGuild().getName() + "(" + event.getGuild().getId() + ")", error);
+										}
+									});
 							break;
 						case "\uD83D\uDDB1": //Select Pre-Existing
-							EmbedBuilder builder = new EmbedBuilder();
-							builder.setColor(Color.decode("#1CFE86"))
-									.setDescription("Please mention a channel or input a channel's name.");
-							event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "Please mention a channel or input a channel's name.", Color.RED);
 
 							waitForBirthdayChannelSelection(event, result);
 							break;
 						default: //None
-							staffMessages.choseNoChannel(event.getTextChannel());
-							result.delete().queue(null, ErrorManager.PERMISSION);
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "A Birthday Channel will not be set.", Color.RED);
+							result.delete().queue(null, ErrorManager.GENERAL);
 							getBirthdayRole(event, member);
 							break;
 					}
 
 
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -140,18 +157,18 @@ public class Setup extends Command {
 						bdayChannel = event.getGuild().getTextChannels().stream().filter(channel -> channel.getName().equalsIgnoreCase(args[0])).findFirst().orElse(null);
 					}
 					if (bdayChannel == null) {
-						staffMessages.channelNotFound(event.getTextChannel());
-						result.delete().queue(null, ErrorManager.PERMISSION);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "The specified channel cannot be found.", Color.RED);
+						result.delete().queue(null, ErrorManager.GENERAL);
 						return;
 					}
 
 					db.updateBirthdayChannel(event, bdayChannel);
-					staffMessages.successChannel(event.getTextChannel(), bdayChannel);
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set the birthday channel to " + bdayChannel.getAsMention() + "**!", Color.decode("#1CFE86"));
+					result.delete().queue(null, ErrorManager.GENERAL);
 					getBirthdayRole(event, event.getMember());
 
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -172,11 +189,11 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\uD83D\uDD28").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\uD83D\uDDB1").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\u274C").queue(null, ErrorManager.PERMISSION);
+			result.addReaction("\uD83D\uDD28").queue(null, ErrorManager.GENERAL);
+			result.addReaction("\uD83D\uDDB1").queue(null, ErrorManager.GENERAL);
+			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
 			waitForBirthdayRole(event, result);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 	}
 
 
@@ -193,26 +210,36 @@ public class Setup extends Command {
 									.setColor(Color.decode("#AC1CFE"))
 									.setHoisted(true)
 									.queue(r -> {
-										staffMessages.successBdayRoleCreate(event.getTextChannel(), r);
+										String message = "Successfully created the birthday role **" + r.getAsMention() + "**!" +
+												"\n" +
+												"\nNote: Please move <@656621136808902656>'s Role to the top of the role list and move the new Birthday Role to directly under" +
+												"<@656621136808902656>'s Role.";
+										EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.decode("#1CFE86"));
 										db.updateBirthdayRole(event, r);
-										result.delete().queue(null, ErrorManager.PERMISSION);
-									}, ErrorManager.PERMISSION);
+										result.delete().queue(null, ErrorManager.GENERAL);
+									}, error -> {
+										if (error instanceof PermissionException) {
+											EmbedSender.sendEmbed(event.getTextChannel(), null, "**BirthdayBot** does not have permission to create a role!", Color.RED);
+										} else {
+											Logger.Error("Could not create a birthday role for " + event.getGuild().getName() + "(" + event.getGuild().getId() + ")", error);
+										}
+									});
 							break;
 						case "\uD83D\uDDB1": //Select Pre-Existing
 							EmbedBuilder builder = new EmbedBuilder();
 							builder.setColor(Color.decode("#1CFE86"))
 									.setDescription("Please mention a Role or input a Role's name.");
-							event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+							event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
 
 							waitForBirthdayRoleSelection(event, result);
 							break;
 						default: //None
-							staffMessages.choseNoBirthdayRole(event.getTextChannel());
-							result.delete().queue(null, ErrorManager.PERMISSION);
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "A Birthday Role will not be set.", Color.RED);
+							result.delete().queue(null, ErrorManager.GENERAL);
 							break;
 					}
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -232,17 +259,21 @@ public class Setup extends Command {
 						bdayRole = event.getGuild().getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(args[0])).findFirst().orElse(null);
 					}
 					if (bdayRole == null) {
-						staffMessages.channelNotFound(event.getTextChannel());
-						result.delete().queue(null, ErrorManager.PERMISSION);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "The specified role cannot be found.", Color.RED);
+						result.delete().queue(null, ErrorManager.GENERAL);
 						return;
 					}
 
 					db.updateBirthdayRole(event, bdayRole);
-					staffMessages.successBdayRole(event.getTextChannel(), bdayRole);
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					String message = "Successfully set the birthday role to **" + bdayRole.getAsMention() + "**!" +
+							"\n" +
+							"\nNote: Please move <@656621136808902656>'s Role to the top of the role list and move the new Birthday Role to directly under" +
+							"<@656621136808902656>'s Role.";
+					EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.decode("#1CFE86"));
+					result.delete().queue(null, ErrorManager.GENERAL);
 
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -264,7 +295,7 @@ public class Setup extends Command {
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
 			waitForBirthdayTime(event, result);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 	}
 
 	private void waitForBirthdayTime(CommandEvent event, Message result) {
@@ -280,23 +311,27 @@ public class Setup extends Command {
 					try {
 						time = Integer.parseInt(args[0]);
 					} catch (NumberFormatException ex) {
-						staffMessages.invalidBirthdayTime(event.getTextChannel());
-						result.delete().queue(null, ErrorManager.PERMISSION);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "Your time was invalid. \nAcceptable Time Range: `<0-23>`", Color.RED);
+						result.delete().queue(null, ErrorManager.GENERAL);
 						return;
 					}
 					if (time < 0 || time > 23) {
-						staffMessages.invalidBirthdayTime(event.getTextChannel());
-						result.delete().queue(null, ErrorManager.PERMISSION);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "Your time was invalid. \nAcceptable Time Range: `<0-23>`", Color.RED);
+						result.delete().queue(null, ErrorManager.GENERAL);
 						return;
 					}
 
 					db.updateGuildMessageTime(event.getGuild(), time);
-					staffMessages.successMessageTime(event.getTextChannel(), time);
-					result.delete().queue(null, ErrorManager.PERMISSION);
-					getCustomBirthdayMessage(event, event.getMember());
+					String timeMessage;
+					if (time == 0) timeMessage = "12:00 AM";
+					else if (time < 12) timeMessage = time + ":00 AM";
+					else timeMessage = (time - 12) + ":00 PM";
+					EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set the Birthday Messages to send at " + timeMessage, Color.decode("#1CFE86"));
 
+					result.delete().queue(null, ErrorManager.GENERAL);
+					getCustomBirthdayMessage(event, event.getMember());
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -313,13 +348,14 @@ public class Setup extends Command {
 						"\nUse the `@Users` placeholder in your Custom Birthday Message and the bot will replace it with the username of the member(s) who birthday it is!" +
 						"\n" +
 						"\nDefault Value: `Happy Birthday @Users!`" +
+						"\nTo use the default Message use: `default`" +
 						"\n**Example Usage**: `Everyone, wish @Users a happy Birthday!`" +
 						"\n**Result**: Everyone, wish <@478288246858711040> a happy Birthday!")
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
 			waitForCustomBirthdayMessage(event, result);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 	}
 
 	private void waitForCustomBirthdayMessage(CommandEvent event, Message result) {
@@ -335,18 +371,24 @@ public class Setup extends Command {
 						message.append(" ").append(args[i]);
 
 					if (message.length() > 2000) {
-						staffMessages.messageTooLarge(event.getTextChannel());
-						result.delete().queue(null, ErrorManager.PERMISSION);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "The birthday message is too large.", Color.RED);
+						result.delete().queue(null, ErrorManager.GENERAL);
 						return;
 					}
 
-					db.updateMessage(event, message.toString());
-					result.delete().queue(null, ErrorManager.PERMISSION);
-					staffMessages.successMessage(event.getTextChannel(), message.toString());
+
+					result.delete().queue(null, ErrorManager.GENERAL);
+					if (message.toString().equalsIgnoreCase("default")) {
+						db.updateMessage(event, "0");
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "Birthday Bot will use the default Birthday Message", Color.decode("#1CFE86"));
+					} else {
+						db.updateMessage(event, message.toString());
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set the birthday message to **" + message.toString() + "**", Color.decode("#1CFE86"));
+					}
 					getMentionSetting(event, event.getMember());
 
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -367,7 +409,7 @@ public class Setup extends Command {
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
 			waitForMentionSetting(event, result);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 	}
 
 	private void waitForMentionSetting(CommandEvent event, Message result) {
@@ -379,15 +421,15 @@ public class Setup extends Command {
 					switch (args[0].toLowerCase()) {
 						case "everyone":
 							db.updateMentionedSetting(event, "everyone");
-							staffMessages.successMentionSetting(event.getTextChannel(), "everyone");
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "The birthday message will now mention @everyone!", Color.decode("#1CFE86"));
 							break;
 						case "here":
 							db.updateMentionedSetting(event, "here");
-							staffMessages.successMentionSetting(event.getTextChannel(), "here");
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "The birthday message will now mention @here!", Color.decode("#1CFE86"));
 							break;
-						case "disable":
+						case "disabled":
 							db.updateMentionedSetting(event, "0");
-							staffMessages.disableMentionSetting(event.getTextChannel());
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "The birthday message will not mention anyone.", Color.decode("#1CFE86"));
 							break;
 						default:
 							Role mentionedRole;
@@ -397,25 +439,25 @@ public class Setup extends Command {
 								mentionedRole = event.getGuild().getRoles().stream().filter(role -> role.getName().toLowerCase().contains(args[0].toLowerCase())).findFirst().orElse(null);
 							}
 							if (mentionedRole == null) {
-								staffMessages.roleNotFound(event.getTextChannel());
-								result.delete().queue(null, ErrorManager.PERMISSION);
+								EmbedSender.sendEmbed(event.getTextChannel(), null, "The specified role cannot be found.", Color.RED);
+								result.delete().queue(null, ErrorManager.GENERAL);
 								return;
 							}
 							if (!mentionedRole.isMentionable()) {
-								staffMessages.roleNotMentionable(event.getTextChannel());
-								result.delete().queue(null, ErrorManager.PERMISSION);
+								EmbedSender.sendEmbed(event.getTextChannel(), null, "The specified role is not mentionable. Please change this in your role settings.", Color.RED);
+								result.delete().queue(null, ErrorManager.GENERAL);
 								return;
 							}
 
 							db.updateMentionedSetting(event, mentionedRole.getId());
-							staffMessages.successRoleMentionSetting(event.getTextChannel(), mentionedRole);
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "The birthday message will now mention " + mentionedRole.getAsMention() + "!", Color.decode("#1CFE86"));
 							break;
 					}
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 					getTrustedRole(event, event.getMember());
 
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -438,11 +480,11 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\uD83D\uDD28").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\uD83D\uDDB1").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\u274C").queue(null, ErrorManager.PERMISSION);
+			result.addReaction("\uD83D\uDD28").queue(null, ErrorManager.GENERAL);
+			result.addReaction("\uD83D\uDDB1").queue(null, ErrorManager.GENERAL);
+			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
 			waitForTrustedRole(event, result);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 	}
 
 	private void waitForTrustedRole(CommandEvent event, Message result) {
@@ -456,28 +498,34 @@ public class Setup extends Command {
 							event.getGuild().createRole()
 									.setName("BirthdayTrusted")
 									.queue(r -> {
-										staffMessages.successTrustedRoleCreate(event.getTextChannel(), r);
-										result.delete().queue(null, ErrorManager.PERMISSION);
+										EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully created the trusted role **" + r.getAsMention() + "**!", Color.decode("#1CFE86"));
+										result.delete().queue(null, ErrorManager.GENERAL);
 										db.updateTrustedRole(event, r);
 										getTrustedPreventsRole(event, event.getMember());
+									}, error -> {
+										if (error instanceof PermissionException) {
+											EmbedSender.sendEmbed(event.getTextChannel(), null, "**BirthdayBot** does not have permission to create a Role!", Color.RED);
+										} else {
+											Logger.Error("Could not create a trusted role for " + event.getGuild().getName() + "(" + event.getGuild().getId() + ")", error);
+										}
 									});
 							break;
 						case "\uD83D\uDDB1": //Select Pre-Existing
 							EmbedBuilder builder = new EmbedBuilder();
 							builder.setColor(Color.decode("#1CFE86"))
 									.setDescription("Please mention a Role or input a Role's name.");
-							event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.PERMISSION);
+							event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
 
 							waitForTrustedRoleSelection(event, result);
 							break;
 						default: //None
-							staffMessages.choseNoTrustedRole(event.getTextChannel());
-							result.delete().queue(null, ErrorManager.PERMISSION);
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "A Trusted Role will not be set.", Color.RED);
+							result.delete().queue(null, ErrorManager.GENERAL);
 							getTrustedPreventsRole(event, event.getMember());
 							break;
 					}
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -497,17 +545,17 @@ public class Setup extends Command {
 						trustedRole = event.getGuild().getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(args[0])).findFirst().orElse(null);
 					}
 					if (trustedRole == null) {
-						staffMessages.channelNotFound(event.getTextChannel());
-						result.delete().queue(null, ErrorManager.PERMISSION);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "The specified role cannot be found.", Color.RED);
+						result.delete().queue(null, ErrorManager.GENERAL);
 						return;
 					}
 
 					db.updateTrustedRole(event, trustedRole);
-					staffMessages.successTrustedRole(event.getTextChannel(), trustedRole);
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set the trusted role to " + trustedRole.getAsMention() + "!", Color.decode("#1CFE86"));
+					result.delete().queue(null, ErrorManager.GENERAL);
 					getTrustedPreventsRole(event, event.getMember());
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -527,13 +575,14 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\u2705").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\u274C").queue(null, ErrorManager.PERMISSION);
+			result.addReaction("\u2705").queue(null, ErrorManager.GENERAL);
+			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
 			waitForTrustedPreventsRole(event, result);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 	}
 
 	private void waitForTrustedPreventsRole(CommandEvent event, Message result) {
+		TextChannel channel = event.getTextChannel();
 
 		waiter.waitForEvent(MessageReactionAddEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember()) &&
@@ -542,19 +591,25 @@ public class Setup extends Command {
 					switch (e.getReactionEmote().getName()) {
 						case "\u2705": //Yes
 							db.updatePreventRole(event, 1);
-							staffMessages.setPreventRole(event.getTextChannel(), true);
-							result.delete().queue(null, ErrorManager.PERMISSION);
+
+							String message = "**BirthdayBot** will only grant the birthday role with users with the trusted role now!";
+							EmbedSender.sendEmbed(channel, null, message, Color.decode("#1CFE86"));
+
+							result.delete().queue(null, ErrorManager.GENERAL);
 							getTrustedPreventsMessage(event, event.getMember());
 							break;
 						case "\u274C": //No
 							db.updatePreventRole(event, 0);
-							staffMessages.setPreventRole(event.getTextChannel(), false);
-							result.delete().queue(null, ErrorManager.PERMISSION);
+
+							String message2 = "**BirthdayBot** will grant the birthday role to all users regardless of if the user has the trusted role!";
+							EmbedSender.sendEmbed(channel, null, message2, Color.decode("#1CFE86"));
+
+							result.delete().queue(null, ErrorManager.GENERAL);
 							getTrustedPreventsMessage(event, event.getMember());
 							break;
 					}
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 
@@ -573,13 +628,14 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\u2705").queue(null, ErrorManager.PERMISSION);
-			result.addReaction("\u274C").queue(null, ErrorManager.PERMISSION);
+			result.addReaction("\u2705").queue(null, ErrorManager.GENERAL);
+			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
 			waitForTrustedPreventsMessage(event, result);
-		}, ErrorManager.PERMISSION);
+		}, ErrorManager.GENERAL);
 	}
 
 	private void waitForTrustedPreventsMessage(CommandEvent event, Message result) {
+		TextChannel channel = event.getTextChannel();
 
 		waiter.waitForEvent(MessageReactionAddEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember()) &&
@@ -588,17 +644,23 @@ public class Setup extends Command {
 					switch (e.getReactionEmote().getName()) {
 						case "\u2705": //Yes
 							db.updatePreventMessage(event, 1);
-							staffMessages.setPreventMessage(event.getTextChannel(), true);
-							result.delete().queue(null, ErrorManager.PERMISSION);
+
+							String message = "**BirthdayBot** will only send messages for users with the trusted role now!";
+							EmbedSender.sendEmbed(channel, null, message, Color.decode("#1CFE86"));
+
+							result.delete().queue(null, ErrorManager.GENERAL);
 							break;
 						case "\u274C": //No
 							db.updatePreventMessage(event, 0);
-							staffMessages.setPreventMessage(event.getTextChannel(), false);
-							result.delete().queue(null, ErrorManager.PERMISSION);
+
+							String message2 = "**BirthdayBot** will send birthday messages to all users regardless of if the user has the trusted role!";
+							EmbedSender.sendEmbed(channel, null, message2, Color.decode("#1CFE86"));
+
+							result.delete().queue(null, ErrorManager.GENERAL);
 							break;
 					}
 				}, 1, TimeUnit.MINUTES, () -> {
-					result.delete().queue(null, ErrorManager.PERMISSION);
+					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
 

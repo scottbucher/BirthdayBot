@@ -70,7 +70,7 @@ public class ServerInfo extends Command {
                 .addField("Created On", uMonth + " " + guild.getTimeCreated().getDayOfMonth()
                         + getDayEnding(guild) + " " + guild.getTimeCreated().getYear(), true)
                 .addField("Discord Id", guild.getId(), true)
-                .addField("Current Shard", "shard " + currentShard + "/" + totalShards + " total shards", true)
+                .addField("Current Shard", "Shard " + currentShard + "/" + totalShards + " total Shards", true)
                 .setThumbnail(bot.getAvatarUrl())
                 .setFooter(bot.getName(), bot.getAvatarUrl());
 
