@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.EmbedSender;
+import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -19,6 +20,7 @@ public class Config extends Command {
 		this.help = "Configures server settings";
 		this.guildOnly = true;
 		this.hidden = true;
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE};
 
 		this.db = databaseMethods;
 	}
@@ -140,9 +142,9 @@ public class Config extends Command {
 					EmbedSender.sendEmbed(channel, null, "The birthday message is too large.", Color.RED);
 					return;
 				}
-
-				db.updateMessage(event, message.toString());
-				EmbedSender.sendEmbed(channel, null, "Successfully set the birthday message to **" + message + "**", Color.decode("#1CFE86"));
+				String bMessage = message.toString().replaceAll("@users", "@Users");
+				db.updateMessage(event, bMessage);
+				EmbedSender.sendEmbed(channel, null, "Successfully set the birthday message to **" + bMessage + "**", Color.decode("#1CFE86"));
 			} else if (args[2].equalsIgnoreCase("resetMessage") && args.length == 3) {
 
 				db.updateMessage(event, "0");

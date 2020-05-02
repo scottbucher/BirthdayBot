@@ -3,6 +3,7 @@ package me.stqlth.birthdaybot.commands.user;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.utils.EmbedSender;
+import net.dv8tion.jda.api.Permission;
 
 import static me.stqlth.birthdaybot.utils.Utilities.isPrivate;
 
@@ -14,6 +15,7 @@ public class Invite extends Command {
 		this.guildOnly = false;
 		this.help = "Invite Birthday bot to your server";
 		this.category = new Category("Utilities");
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS};
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.utils.EmbedSender;
 import me.stqlth.birthdaybot.utils.ErrorManager;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
@@ -16,6 +17,7 @@ public class Shard extends Command {
         this.help = "View information about your shard.";
         this.guildOnly = true;
         this.category = new Category("Info");
+        this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE};
     }
 
     @Override

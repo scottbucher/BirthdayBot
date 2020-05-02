@@ -2,9 +2,11 @@ package me.stqlth.birthdaybot.commands.user;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import me.stqlth.birthdaybot.utils.ErrorManager;
 import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
@@ -17,6 +19,7 @@ public class Help extends Command {
 		this.guildOnly = false;
 		this.help = "Displays the help menu";
 		this.category = new Category("Info");
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS};
 	}
 
 	@Override
@@ -87,9 +90,10 @@ public class Help extends Command {
 				.setDescription("" +
 						"\n**bday setup optional** - Interactive guide for optional server setup settings." +
 						"\n" +
-						"\n\n**bday config mentionSetting <everyone/here/@role/rolename/disable>** - What group should the bot @ in the birthday message." +
+						"\n**bday config mentionSetting <everyone/here/@role/rolename/disable>** - What group should the bot @ in the birthday message." +
 						"\n\n**bday config messageTime <0-23>** - What time should the bot send the birthday message." +
-						"\n\n**bday config setMessage <Message>** - Set custom birthday message." +
+						"\n\n**bday config setMessage <Message>** - Set custom birthday message. Use @Users in your message, it will be replaced with the birthdays." +
+						"\n**Example Usage**: `bday config setMessage Happy Birthday @Users!`" +
 						"\n\n**bday config resetMessage** - Reset the birthday message." +
 						"\n\n**bday config trusted preventRole <true/false>** - Set if you need the trusted role to get the Birthday Role." +
 						"\n\n**bday config trusted preventMessage <true/false>** - Set if you need the trusted role to get the Birthday Message.");

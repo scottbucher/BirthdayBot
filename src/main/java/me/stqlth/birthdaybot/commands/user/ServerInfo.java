@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.SelfUser;
@@ -21,6 +22,7 @@ public class ServerInfo extends Command {
         this.help = "View information about your server.";
         this.guildOnly = true;
         this.category = new Category("Info");
+        this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE};
     }
 
     @Override

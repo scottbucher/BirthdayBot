@@ -2,6 +2,7 @@ package me.stqlth.birthdaybot.main;
 
 import me.stqlth.birthdaybot.utils.Logger;
 import me.stqlth.birthdaybot.utils.Utilities;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.discordbots.api.client.DiscordBotListAPI;
 
@@ -34,8 +35,14 @@ public class Manager {
 	}
 
 	private void startManager(ShardManager client, DiscordBotListAPI api) {
-		int serverCount = client.getGuilds().size();
-		api.setStats(serverCount);
+		try {
+			int serverCount = client.getGuilds().size();
+			Logger.Debug("Updating Manager with ServerCount: " + serverCount);
+			api.setStats(serverCount);
+			client.setActivity(Activity.streaming("bdays to " + serverCount + " servers", "https://www.twitch.tv/stqlth"));
+		} catch (Exception ex) {
+			Logger.Error("The Manager Caught an Exception.", ex);
+		}
 	}
 
 }

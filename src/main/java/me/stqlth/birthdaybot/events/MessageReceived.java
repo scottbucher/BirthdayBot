@@ -52,7 +52,8 @@ public class MessageReceived extends ListenerAdapter {
 				"next",
 				"view",
 				"invite",
-				"support"
+				"support",
+				"testmessage"
 		);
 
 		if(validCmds.contains(cmd)) {

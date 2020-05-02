@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.staff;
+package me.stqlth.birthdaybot.commands.staff.set;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -11,16 +11,17 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 
-public class SetTrustedRole extends Command {
+public class SetBirthdayRole extends Command {
 
 	private DatabaseMethods db;
 
-	public SetTrustedRole(DatabaseMethods databaseMethods) {
-		this.name = "settrustedrole";
-		this.help = "Set the trusted role";
+	public SetBirthdayRole(DatabaseMethods databaseMethods) {
+		this.name = "setbirthdayrole";
+		this.help = "Set the birthday role";
 		this.arguments = "<@role/role name>";
 		this.guildOnly = true;
 		this.hidden = true;
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE};
 
 		this.db = databaseMethods;
 	}
@@ -44,20 +45,20 @@ public class SetTrustedRole extends Command {
 			return;
 		}
 
-		Role trustedRole;
+		Role bdayRole;
 
 		try {
-			trustedRole = event.getMessage().getMentionedRoles().get(0);
+			bdayRole = event.getMessage().getMentionedRoles().get(0);
 		} catch (IndexOutOfBoundsException e) {
-			trustedRole = event.getGuild().getRoles().stream().filter(role -> role.getName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
+			bdayRole = event.getGuild().getRoles().stream().filter(role -> role.getName().toLowerCase().contains(args[2].toLowerCase())).findFirst().orElse(null);
 		}
 
-		if (trustedRole == null) {
+		if (bdayRole == null) {
 			EmbedSender.sendEmbed(channel, null, "The specified role cannot be found.", Color.RED);
 			return;
 		}
 
-		db.updateTrustedRole(event, trustedRole);
-		EmbedSender.sendEmbed(channel, null, "Successfully set the trusted role to " + trustedRole.getAsMention() + "**!", Color.decode("#1CFE86"));
+		db.updateBirthdayRole(event, bdayRole);
+		EmbedSender.sendEmbed(channel, null, "Successfully set the birthday role to " + bdayRole.getAsMention() + "!", Color.decode("#1CFE86"));
 	}
 }

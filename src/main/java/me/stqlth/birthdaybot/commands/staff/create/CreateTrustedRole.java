@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.staff;
+package me.stqlth.birthdaybot.commands.staff.create;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -22,6 +22,7 @@ public class CreateTrustedRole extends Command {
 		this.help = "Creates a trusted role";
 		this.guildOnly = true;
 		this.hidden = true;
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE, Permission.MANAGE_ROLES};
 
 		this.db = databaseMethods;
 	}

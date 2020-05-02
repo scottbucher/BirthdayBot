@@ -14,12 +14,15 @@ public class DatabaseMethods {
 
 	public void updateBirthday(User user, String bday) throws SQLException {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-			int userId = -1;
+			 CallableStatement statement = conn.prepareCall("CALL UpdateBirthday(?, ?)")) {
+			int userId;
 
 			userId = getUserId(user);
 
-			statement.execute("CALL UpdateBirthday(" + userId + ", '" + bday + "')");
+			statement.setInt(1, userId);
+			statement.setString(2, bday);
+
+			statement.execute();
 		}
 	}
 
@@ -37,12 +40,15 @@ public class DatabaseMethods {
 
 	public void updateZoneId(CommandEvent event, String zoneId) throws SQLException {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-			int userId = -1;
+			 CallableStatement statement = conn.prepareCall("CALL UpdateZoneId(?, ?)")) {
+			int userId;
 
 			userId = getUserId(event.getAuthor());
 
-			statement.execute("CALL UpdateZoneId(" + userId + ", '" + zoneId + "')");
+			statement.setInt(1, userId);
+			statement.setString(2, zoneId);
+
+			statement.execute();
 		}
 	}
 
@@ -65,12 +71,15 @@ public class DatabaseMethods {
 
 	public void updateChangesLeft(CommandEvent event, int left) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-			int userId = -1;
+			 CallableStatement statement = conn.prepareCall("CALL UpdateChangesLeft(?, ?)")) {
+			int userId;
 
 			userId = getUserId(event.getAuthor());
 
-			statement.execute("CALL UpdateChangesLeft(" + userId + ", " + left + ")");
+			statement.setInt(1, userId);
+			statement.setInt(2, left);
+
+			statement.execute();
 		} catch (SQLException ex) {
 			Utilities.sqlDebug(ex);
 		}
@@ -145,11 +154,14 @@ public class DatabaseMethods {
 
 	public void updateGuildMessageTime(Guild guild, int time) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
+			 CallableStatement statement = conn.prepareCall("CALL UpdateMessageTime(?, ?)")) {
 
 			int guildSettingsId = getGuildSettingsId(guild);
-			statement.execute("CALL UpdateMessageTime(" + guildSettingsId + ", " + time + ")");
 
+			statement.setInt(1, guildSettingsId);
+			statement.setInt(2, time);
+
+			statement.execute();
 		} catch (SQLException ex) {
 			Utilities.sqlDebug(ex);
 		}
@@ -240,7 +252,7 @@ public class DatabaseMethods {
 					long temp = rs2.getLong("UserDiscordId");
 					if (getUserBirthday(temp).equals(firstDate)) {
 						birthdays.add(event.getJDA().getUserById(temp));
-					} else if(!Utilities.isLeap(LocalDateTime.now().getYear()) && firstDate.equalsIgnoreCase("02-28") && getUserBirthday(temp).equals("02-29")) {
+					} else if (!Utilities.isLeap(LocalDateTime.now().getYear()) && firstDate.equalsIgnoreCase("02-28") && getUserBirthday(temp).equals("02-29")) {
 						birthdays.add(event.getJDA().getUserById(temp));
 					} else {
 						break;
@@ -256,7 +268,7 @@ public class DatabaseMethods {
 					long temp = rs.getLong("UserDiscordId");
 					if (getUserBirthday(temp).equals(firstDate)) {
 						birthdays.add(event.getJDA().getUserById(temp));
-					} else if(!Utilities.isLeap(LocalDateTime.now().getYear()) && firstDate.equalsIgnoreCase("02-28") && getUserBirthday(temp).equals("02-29")) {
+					} else if (!Utilities.isLeap(LocalDateTime.now().getYear()) && firstDate.equalsIgnoreCase("02-28") && getUserBirthday(temp).equals("02-29")) {
 						birthdays.add(event.getJDA().getUserById(temp));
 					} else {
 						break;
@@ -339,13 +351,17 @@ public class DatabaseMethods {
 		return true;
 	}
 
+
 	public void updateBirthdayChannel(CommandEvent event, TextChannel bdayChannel) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
+			 CallableStatement statement = conn.prepareCall("CALL UpdateBirthdayChannel(?, ?)")) {
 
 			int guildSettingsId = getGuildSettingsId(event.getGuild());
 
-			statement.execute("CALL UpdateBirthdayChannel(" + bdayChannel.getId() + ", " + guildSettingsId + ")");
+			statement.setString(1, bdayChannel.getId());
+			statement.setInt(2, guildSettingsId);
+
+			statement.execute();
 		} catch (SQLException ex) {
 			Utilities.sqlDebug(ex);
 		}
@@ -365,11 +381,14 @@ public class DatabaseMethods {
 
 	public void updateBirthdayRole(CommandEvent event, Role bdayRole) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
+			 CallableStatement statement = conn.prepareCall("CALL UpdateBirthdayRole(?, ?)")) {
 
 			int guildSettingsId = getGuildSettingsId(event.getGuild());
 
-			statement.execute("CALL UpdateBirthdayRole(" + bdayRole.getId() + ", " + guildSettingsId + ")");
+			statement.setString(1, bdayRole.getId());
+			statement.setInt(2, guildSettingsId);
+
+			statement.execute();
 		} catch (SQLException ex) {
 			Utilities.sqlDebug(ex);
 		}
@@ -387,13 +406,16 @@ public class DatabaseMethods {
 		}
 	}
 
-	public void updateTrustedRole(CommandEvent event, Role bdayRole) {
+	public void updateTrustedRole(CommandEvent event, Role tRole) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
+			 CallableStatement statement = conn.prepareCall("CALL UpdateTrustedRole(?, ?)")) {
 
 			int guildSettingsId = getGuildSettingsId(event.getGuild());
 
-			statement.execute("CALL UpdateTrustedRole(" + bdayRole.getId() + ", " + guildSettingsId + ")");
+			statement.setString(1, tRole.getId());
+			statement.setInt(2, guildSettingsId);
+
+			statement.execute();
 		} catch (SQLException ex) {
 			Utilities.sqlDebug(ex);
 		}
@@ -413,11 +435,15 @@ public class DatabaseMethods {
 
 	public void updatePreventRole(CommandEvent event, int bool) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
+			 CallableStatement statement = conn.prepareCall("CALL UpdatePreventRole(?, ?)")) {
 
 			int guildSettingsId = getGuildSettingsId(event.getGuild());
 
-			statement.execute("CALL UpdatePreventRole(" + guildSettingsId + ", " + bool + ")");
+
+			statement.setInt(1, guildSettingsId);
+			statement.setInt(2, bool);
+
+			statement.execute();
 		} catch (SQLException ex) {
 			Utilities.sqlDebug(ex);
 		}
@@ -425,11 +451,15 @@ public class DatabaseMethods {
 
 	public void updatePreventMessage(CommandEvent event, int bool) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
+			 CallableStatement statement = conn.prepareCall("CALL UpdatePreventMessage(?, ?)")) {
 
 			int guildSettingsId = getGuildSettingsId(event.getGuild());
 
-			statement.execute("CALL UpdatePreventMessage(" + guildSettingsId + ", " + bool + ")");
+
+			statement.setInt(1, guildSettingsId);
+			statement.setInt(2, bool);
+
+			statement.execute();
 		} catch (SQLException ex) {
 			Utilities.sqlDebug(ex);
 		}
@@ -437,11 +467,15 @@ public class DatabaseMethods {
 
 	public void updateMessage(CommandEvent event, String message) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
+			 CallableStatement statement = conn.prepareCall("CALL UpdateMessage(?, ?)")) {
 
 			int guildSettingsId = getGuildSettingsId(event.getGuild());
 
-			statement.execute("CALL UpdateMessage(" + guildSettingsId + ", '" + message + "')");
+
+			statement.setInt(1, guildSettingsId);
+			statement.setString(2, message);
+
+			statement.execute();
 		} catch (SQLException ex) {
 			Utilities.sqlDebug(ex);
 		}
@@ -449,43 +483,20 @@ public class DatabaseMethods {
 
 	public void updateMentionedSetting(CommandEvent event, String setting) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
+			 CallableStatement statement = conn.prepareCall("CALL UpdateMentionSetting(?, ?)")) {
 
 			int guildSettingsId = getGuildSettingsId(event.getGuild());
 
-			statement.execute("CALL UpdateMentionSetting(" + guildSettingsId + ", '" + setting + "')");
+
+			statement.setInt(1, guildSettingsId);
+			statement.setString(2, setting);
+
+			statement.execute();
 		} catch (SQLException ex) {
 			Utilities.sqlDebug(ex);
 		}
 	}
 
-	public boolean guildActive(Guild g) {
-		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-
-			ResultSet check = statement.executeQuery("CALL IsGuildActive(" + g.getId() + ")");
-			check.next();
-			boolean alreadyExists = check.getBoolean("Active");
-
-			if (alreadyExists) return true;
-
-		} catch (SQLException ex) {
-			Utilities.sqlDebug(ex);
-		}
-		return false;
-	}
-
-	public int getGuildId(Guild guild) {
-		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
-			 Statement statement = conn.createStatement()) {
-			ResultSet rs = statement.executeQuery("CALL GetGuildId(" + guild.getId() + ")");
-			rs.next();
-			return rs.getInt("GuildId");
-		} catch (SQLException ex) {
-			Utilities.sqlDebug(ex);
-		}
-		return -1;
-	}
 
 	public boolean doesUserExist(User user) {
 

@@ -3,9 +3,11 @@ package me.stqlth.birthdaybot.commands.user;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
+import me.stqlth.birthdaybot.utils.EmbedSender;
 import me.stqlth.birthdaybot.utils.ErrorManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
+import net.dv8tion.jda.api.Permission;
 
 import java.awt.*;
 import java.util.Objects;
@@ -22,6 +24,7 @@ public class About extends Command {
         this.guildOnly = false;
         this.help = "View information about BirthdayBot.";
         this.category = new Category("Info");
+        this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS};
     }
 
     @Override
@@ -47,8 +50,10 @@ public class About extends Command {
                 .setThumbnail(botIcon)
                 .setAuthor("BirthdayBot", null, botIcon)
                 .setFooter("© 2020 Stqlth", ownerIcon);
-        if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
-        else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
+        try {
+            if (!isPrivate(event)) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
+            else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.PRIVATE);
+        } catch (Exception ignored) {}
     }
 
 }
