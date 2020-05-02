@@ -6,6 +6,15 @@ import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.stqlth.birthdaybot.commands.developement.Broadcast;
 import me.stqlth.birthdaybot.commands.staff.*;
+import me.stqlth.birthdaybot.commands.staff.clear.ClearBirthdayChannel;
+import me.stqlth.birthdaybot.commands.staff.clear.ClearBirthdayRole;
+import me.stqlth.birthdaybot.commands.staff.clear.ClearTrustedRole;
+import me.stqlth.birthdaybot.commands.staff.create.CreateBirthdayChannel;
+import me.stqlth.birthdaybot.commands.staff.create.CreateBirthdayRole;
+import me.stqlth.birthdaybot.commands.staff.create.CreateTrustedRole;
+import me.stqlth.birthdaybot.commands.staff.set.SetBirthdayChannel;
+import me.stqlth.birthdaybot.commands.staff.set.SetBirthdayRole;
+import me.stqlth.birthdaybot.commands.staff.set.SetTrustedRole;
 import me.stqlth.birthdaybot.commands.user.*;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.events.GuildJoinLeave;
@@ -98,6 +107,7 @@ public class BirthdayBot {
 				new Support(),
 				new Invite(),
 				new View(databaseMethods),
+				new TestMessage(databaseMethods),
 
 				//Owner
 				new Broadcast(databaseMethods)
@@ -136,13 +146,12 @@ public class BirthdayBot {
 						manager.startScheduler(shardManager, api);
 						Logger.Info("Api Manager Ready!");
 						birthdayTracker.startTracker(shardManager);
-					},
+		},
 					5, TimeUnit.MINUTES, client::shutdown);
 		} catch (Exception ex) {
 			Logger.Error("Error encountered while logging in. The bot token may be incorrect.", ex);
 			ex.printStackTrace();
 		}
-
 
 
 	}
@@ -157,11 +166,9 @@ public class BirthdayBot {
 	private static CommandClient createClient(SettingsManager settingsManager, Command[] commands) {
 		CommandClientBuilder clientBuilder = new CommandClientBuilder();
 		clientBuilder.setGuildSettingsManager(settingsManager)
-				.useDefaultGame()
 				.useHelpBuilder(false)
 				.setOwnerId(BirthdayBotConfig.getOwnerId())
-				.setActivity(Activity.listening("Happy Birthday"))
-				.setStatus(OnlineStatus.ONLINE)
+				.setActivity(Activity.streaming("Happy Birthday", "https://www.twitch.tv/stqlth"))
 				.setPrefix(BirthdayBotConfig.getPrefix())
 				.setEmojis(SUCCESS_EMOJI, WARNING_EMOJI, ERROR_EMOJI)
 				.addCommands(commands);
