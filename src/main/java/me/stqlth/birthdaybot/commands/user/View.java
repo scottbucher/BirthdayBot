@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.EmbedSender;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -21,6 +22,7 @@ public class View extends Command {
 		this.guildOnly = true;
 		this.arguments = "<name>";
 		this.category = new Category("Utilities");
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE};
 
 		this.db = databaseMethods;
 	}
@@ -43,12 +45,12 @@ public class View extends Command {
 		}
 
 		if (target == null) {
-			EmbedSender.sendEmbed(event.getTextChannel(), null, "I can't find that user!", Color.RED);
+			EmbedSender.sendEmbed(channel, null, "I can't find that user!", Color.RED);
 			return;
 		}
 
 		if (!db.doesUserExist(target.getUser()) || db.getUserBirthday(target.getUser()) == null) {
-			EmbedSender.sendEmbed(event.getTextChannel(), null, "**" + target.getUser().getName() + "** does not have a birthday set! :(", Color.RED);
+			EmbedSender.sendEmbed(channel, null, "**" + target.getUser().getName() + "** does not have a birthday set! :(", Color.RED);
 			return;
 		}
 
@@ -60,7 +62,7 @@ public class View extends Command {
 		int month = Integer.parseInt(values[1]);
 
 		String date = getMonth(month) + " " + day + " " + zoneId.getId();
-		EmbedSender.sendEmbed(event.getTextChannel(), null, target.getUser().getName() + "'s birthday is on **" + date + "**.", Color.decode("#1CFE86"));
+		EmbedSender.sendEmbed(channel, null, target.getUser().getName() + "'s birthday is on **" + date + "**.", Color.decode("#1CFE86"));
 	}
 
 	private static String getMonth(int month) {

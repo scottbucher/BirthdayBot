@@ -24,11 +24,16 @@ public class Setup extends Command {
 
 	private EventWaiter waiter;
 	private DatabaseMethods db;
+	private static final String CREATE_EMOJI = "\uD83D\uDD28";
+	private static final String SELECT_EMOJI = "\uD83D\uDDB1";
+	private static final String NO_EMOJI = "\u274C";
+	private static final String YES_EMOJI = "\u2705";
 
 	public Setup(DatabaseMethods databaseMethods, EventWaiter waiter) {
 		this.name = "setup";
 		this.guildOnly = true;
 		this.help = "Setup a Guild's server settings";
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS, Permission.MANAGE_CHANNEL, Permission.MANAGE_ROLES, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_MANAGE};
 
 		this.db = databaseMethods;
 		this.waiter = waiter;
@@ -71,21 +76,9 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\uD83D\uDD28").queue(null, error -> {
-				if (!(error instanceof PermissionException)) {
-					Logger.Error("Failed to add reaction in a TextChannel with ID: " + result.getId(), error);
-				}
-			});
-			result.addReaction("\uD83D\uDDB1").queue(null, error -> {
-				if (!(error instanceof PermissionException)) {
-					Logger.Error("Failed to add reaction in a TextChannel with ID: " + result.getId(), error);
-				}
-			});
-			result.addReaction("\u274C").queue(null, error -> {
-				if (!(error instanceof PermissionException)) {
-					Logger.Error("Failed to add reaction in a TextChannel with ID: " + result.getId(), error);
-				}
-			});
+			result.addReaction(CREATE_EMOJI).queue(null, ErrorManager.GENERAL);
+			result.addReaction(SELECT_EMOJI).queue(null, ErrorManager.GENERAL);
+			result.addReaction(NO_EMOJI).queue(null, ErrorManager.GENERAL);
 			waitForChannel(event, result, author);
 		}, ErrorManager.GENERAL);
 
@@ -99,6 +92,12 @@ public class Setup extends Command {
 						(e.getReactionEmote().getName().equals("\uD83D\uDD28") || e.getReactionEmote().getName().equals("\uD83D\uDDB1") || e.getReactionEmote().getName().equals("\u274C"))),
 				e -> {
 
+					if (!event.getSelfMember().hasPermission(Permission.MANAGE_CHANNEL)) {
+						result.delete().queue(null, ErrorManager.GENERAL);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "**BirthdayBot** does not have permission to create a channel!", Color.RED);
+						getBirthdayRole(event, member);
+						return;
+					}
 
 					switch (e.getReactionEmote().getName()) {
 						case "\uD83D\uDD28": //Create New
@@ -123,7 +122,7 @@ public class Setup extends Command {
 									});
 							break;
 						case "\uD83D\uDDB1": //Select Pre-Existing
-							EmbedSender.sendEmbed(event.getTextChannel(), null, "Please mention a channel or input a channel's name.", Color.RED);
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "Please mention a channel or input a channel's name.", Color.GREEN);
 
 							waitForBirthdayChannelSelection(event, result);
 							break;
@@ -163,7 +162,7 @@ public class Setup extends Command {
 					}
 
 					db.updateBirthdayChannel(event, bdayChannel);
-					EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set the birthday channel to " + bdayChannel.getAsMention() + "**!", Color.decode("#1CFE86"));
+					EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set the birthday channel to " + bdayChannel.getAsMention() + "!", Color.decode("#1CFE86"));
 					result.delete().queue(null, ErrorManager.GENERAL);
 					getBirthdayRole(event, event.getMember());
 
@@ -189,9 +188,9 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\uD83D\uDD28").queue(null, ErrorManager.GENERAL);
-			result.addReaction("\uD83D\uDDB1").queue(null, ErrorManager.GENERAL);
-			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
+			result.addReaction(CREATE_EMOJI).queue(null, ErrorManager.GENERAL);
+			result.addReaction(SELECT_EMOJI).queue(null, ErrorManager.GENERAL);
+			result.addReaction(NO_EMOJI).queue(null, ErrorManager.GENERAL);
 			waitForBirthdayRole(event, result);
 		}, ErrorManager.GENERAL);
 	}
@@ -203,6 +202,13 @@ public class Setup extends Command {
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember()) &&
 						(e.getReactionEmote().getName().equals("\uD83D\uDD28") || e.getReactionEmote().getName().equals("\uD83D\uDDB1") || e.getReactionEmote().getName().equals("\u274C"))),
 				e -> {
+
+					if (!event.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
+						result.delete().queue(null, ErrorManager.GENERAL);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "**BirthdayBot** does not have permission to create a role!", Color.RED);
+						return;
+					}
+
 					switch (e.getReactionEmote().getName()) {
 						case "\uD83D\uDD28": //Create New
 							event.getGuild().createRole()
@@ -265,7 +271,7 @@ public class Setup extends Command {
 					}
 
 					db.updateBirthdayRole(event, bdayRole);
-					String message = "Successfully set the birthday role to **" + bdayRole.getAsMention() + "**!" +
+					String message = "Successfully set the birthday role to " + bdayRole.getAsMention() + "!" +
 							"\n" +
 							"\nNote: Please move <@656621136808902656>'s Role to the top of the role list and move the new Birthday Role to directly under" +
 							"<@656621136808902656>'s Role.";
@@ -376,13 +382,13 @@ public class Setup extends Command {
 						return;
 					}
 
-
 					result.delete().queue(null, ErrorManager.GENERAL);
 					if (message.toString().equalsIgnoreCase("default")) {
 						db.updateMessage(event, "0");
 						EmbedSender.sendEmbed(event.getTextChannel(), null, "Birthday Bot will use the default Birthday Message", Color.decode("#1CFE86"));
 					} else {
-						db.updateMessage(event, message.toString());
+						String bMessage = message.toString().replaceAll("@users", "@Users");
+						db.updateMessage(event, bMessage);
 						EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set the birthday message to **" + message.toString() + "**", Color.decode("#1CFE86"));
 					}
 					getMentionSetting(event, event.getMember());
@@ -480,9 +486,9 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\uD83D\uDD28").queue(null, ErrorManager.GENERAL);
-			result.addReaction("\uD83D\uDDB1").queue(null, ErrorManager.GENERAL);
-			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
+			result.addReaction(CREATE_EMOJI).queue(null, ErrorManager.GENERAL);
+			result.addReaction(SELECT_EMOJI).queue(null, ErrorManager.GENERAL);
+			result.addReaction(NO_EMOJI).queue(null, ErrorManager.GENERAL);
 			waitForTrustedRole(event, result);
 		}, ErrorManager.GENERAL);
 	}
@@ -493,6 +499,14 @@ public class Setup extends Command {
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember()) &&
 						(e.getReactionEmote().getName().equals("\uD83D\uDD28") || e.getReactionEmote().getName().equals("\uD83D\uDDB1") || e.getReactionEmote().getName().equals("\u274C"))),
 				e -> {
+
+					if (!event.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
+						result.delete().queue(null, ErrorManager.GENERAL);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "**BirthdayBot** does not have permission to create a role!", Color.RED);
+						getTrustedPreventsRole(event, event.getMember());
+						return;
+					}
+
 					switch (e.getReactionEmote().getName()) {
 						case "\uD83D\uDD28": //Create New
 							event.getGuild().createRole()
@@ -575,8 +589,8 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\u2705").queue(null, ErrorManager.GENERAL);
-			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
+			result.addReaction(YES_EMOJI).queue(null, ErrorManager.GENERAL);
+			result.addReaction(NO_EMOJI).queue(null, ErrorManager.GENERAL);
 			waitForTrustedPreventsRole(event, result);
 		}, ErrorManager.GENERAL);
 	}
@@ -628,8 +642,8 @@ public class Setup extends Command {
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		event.getTextChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\u2705").queue(null, ErrorManager.GENERAL);
-			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
+			result.addReaction(YES_EMOJI).queue(null, ErrorManager.GENERAL);
+			result.addReaction(NO_EMOJI).queue(null, ErrorManager.GENERAL);
 			waitForTrustedPreventsMessage(event, result);
 		}, ErrorManager.GENERAL);
 	}

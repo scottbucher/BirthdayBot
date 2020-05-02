@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.staff;
+package me.stqlth.birthdaybot.commands.staff.set;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -21,6 +21,7 @@ public class SetBirthdayRole extends Command {
 		this.arguments = "<@role/role name>";
 		this.guildOnly = true;
 		this.hidden = true;
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE};
 
 		this.db = databaseMethods;
 	}
@@ -58,6 +59,6 @@ public class SetBirthdayRole extends Command {
 		}
 
 		db.updateBirthdayRole(event, bdayRole);
-		EmbedSender.sendEmbed(channel, null, "Successfully set the birthday role to " + bdayRole.getAsMention() + "**!", Color.decode("#1CFE86"));
+		EmbedSender.sendEmbed(channel, null, "Successfully set the birthday role to " + bdayRole.getAsMention() + "!", Color.decode("#1CFE86"));
 	}
 }

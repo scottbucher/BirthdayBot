@@ -4,17 +4,18 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
-import me.stqlth.birthdaybot.utils.DatabaseMethods;
-import me.stqlth.birthdaybot.utils.EmbedSender;
-import me.stqlth.birthdaybot.utils.Utilities;
-import me.stqlth.birthdaybot.utils.ErrorManager;
+import me.stqlth.birthdaybot.utils.*;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.exceptions.PermissionException;
+import org.jetbrains.annotations.Nls;
 import org.json.JSONArray;
 
+import javax.security.auth.Subject;
 import java.awt.*;
 import java.sql.SQLException;
 import java.time.DateTimeException;
@@ -36,6 +37,7 @@ public class SetBday extends Command {
 		this.guildOnly = false;
 		this.help = "Sets a user's global birthday.";
 		this.category = new Category("Utilities");
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_MANAGE};
 
 		this.waiter = waiter;
 		this.db = databaseMethods;
@@ -82,6 +84,7 @@ public class SetBday extends Command {
 		waiter.waitForEvent(MessageReceivedEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember())),
 				e -> {
+					String input = e.getMessage().getContentRaw();
 					List<String> acceptedZones = new ArrayList<>();
 					for (String check : ZoneId.getAvailableZoneIds()) {
 						for (Object region : regions) {
@@ -92,34 +95,32 @@ public class SetBday extends Command {
 						}
 					}
 
-					boolean check = false;
-					for (String acceptedZone : acceptedZones) {
-						if (e.getMessage().getContentRaw().equalsIgnoreCase(acceptedZone)) {
-							check = true;
-							break;
-						}
-						}
-
+					ZoneId zoneId = null;
 					final String message = "Your ZoneId is invalid.\n\n" +
 							"If you don't know what a ZoneId is, click [here](http://kevalbhatt.github.io/timezone-picker/) and hover over your location on the map. " +
 							"Your ZoneId is the Location that appears at the bottom of the map. " +
 							"\n(Do __**not**__ use the shortened values of the Zones. Example: `EST`).";
 
-					if (!check) {
+					for (String acceptedZone : acceptedZones) {
+						if (input.equalsIgnoreCase(acceptedZone)) {
+							try {
+								zoneId = ZoneId.of(input);
+							} catch (DateTimeException ex) {
+								if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
+								else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
+								return;
+							}
+						}
+						}
 
+					if (zoneId == null) {
 						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
 						else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
 						return;
 					}
 
-					ZoneId zoneId;
-					try {
-						zoneId = ZoneId.of(e.getMessage().getContentRaw());
-					} catch (DateTimeException ex) {
-						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
-						else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
-						return;
-					}
+
+
 					getBirthDate(event, author, zoneId, normal);
 				}, 1, TimeUnit.MINUTES, () -> {
 					result.delete().queue(null, ErrorManager.GENERAL);
@@ -177,7 +178,7 @@ public class SetBday extends Command {
 					}
 					int changesLeft = db.getChangesLeft(event.getAuthor());
 					if (changesLeft  <= 0){
-						String message = "You have used already changed your birthday 3 times.";
+						String message = "You have already set your birthday 3 times.";
 						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED); else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
 						return;
 					} else changesLeft--;

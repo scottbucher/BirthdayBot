@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -20,6 +21,7 @@ public class Settings extends Command {
 		this.help = "View your server's current settings";
 		this.guildOnly = true;
 		this.hidden = true;
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE};
 
 		this.db = databaseMethods;
 	}

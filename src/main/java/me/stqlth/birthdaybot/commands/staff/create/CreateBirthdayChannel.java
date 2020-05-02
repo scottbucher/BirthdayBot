@@ -1,4 +1,4 @@
-package me.stqlth.birthdaybot.commands.staff;
+package me.stqlth.birthdaybot.commands.staff.create;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -21,6 +21,7 @@ public class CreateBirthdayChannel extends Command {
 		this.help = "Creates a birthday channel";
 		this.guildOnly = true;
 		this.hidden = true;
+		this.botPermissions = new Permission[]{Permission.MESSAGE_WRITE, Permission.MANAGE_CHANNEL};
 
 		this.db = databaseMethods;
 	}
@@ -33,7 +34,6 @@ public class CreateBirthdayChannel extends Command {
 		Member sender = event.getMember();
 
 		Permission req = Permission.ADMINISTRATOR;
-		Permission botReq = Permission.MANAGE_CHANNEL;
 
 		if (!sender.hasPermission(req)) {
 			EmbedSender.sendEmbed(channel, null, "Only Admins may use this command!", Color.RED);
