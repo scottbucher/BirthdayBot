@@ -8,6 +8,7 @@
   "dbPassword": "<DATABASE_PASSWORD>",
   "botListToken": "<BOT-LIST_API_TOKEN>",
   "debug": "false",
+  "api": "false",
   "regions": [
     "Africa",
     "America",
