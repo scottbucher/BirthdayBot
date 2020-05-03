@@ -1,5 +1,6 @@
 package me.stqlth.birthdaybot.main;
 
+import me.stqlth.birthdaybot.config.BirthdayBotConfig;
 import me.stqlth.birthdaybot.utils.Logger;
 import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.entities.Activity;
@@ -38,7 +39,7 @@ public class Manager {
 		try {
 			int serverCount = client.getGuilds().size();
 			Logger.Debug("Updating Manager with ServerCount: " + serverCount);
-			api.setStats(serverCount);
+			if (BirthdayBotConfig.updateApi()) api.setStats(serverCount);
 			client.setActivity(Activity.streaming("bdays to " + serverCount + " servers", "https://www.twitch.tv/stqlth"));
 		} catch (Exception ex) {
 			Logger.Error("The Manager Caught an Exception.", ex);

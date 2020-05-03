@@ -131,7 +131,7 @@ public class BirthdayBot {
 		// Start the shard manager
 
 		Logger.Info("Starting shard manager...");
-		Logger.Info("Debug Mode: " + BirthdayBotConfig.isDebug());
+		Logger.Info("Debug Mode: " + Utilities.capitalize(String.valueOf(BirthdayBotConfig.isDebug())));
 		try {
 			startShardManager(client, listeners);
 			waiter.waitForEvent(ReadyEvent.class,
@@ -147,7 +147,7 @@ public class BirthdayBot {
 						Logger.Info("Api Manager Ready!");
 						birthdayTracker.startTracker(shardManager);
 		},
-					5, TimeUnit.MINUTES, client::shutdown);
+					15, TimeUnit.MINUTES, client::shutdown);
 		} catch (Exception ex) {
 			Logger.Error("Error encountered while logging in. The bot token may be incorrect.", ex);
 			ex.printStackTrace();

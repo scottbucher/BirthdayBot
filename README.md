@@ -61,12 +61,13 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 * `ClearBirthdayRole` - Clears the Birthday Role (Effectively Disabling this feature).
 * `ClearBirthdayChannel` - Clears the Birthday Channel (Effectively Disabling this feature).
 * `ClearTrustedRole` - Clears the Trusted Role (Effectively Disabling this feature).
+* `config message setMention <everyone/here/@role/rolename/disable>` - Who/What role should the bot mention when the birthday message is sent.
+* `config message setTime <0-23>` - What time should the birthday message be sent at.
+* `config message set <message>` - Set the a custom birthday message for your server. Use "@Users" in the message to be replaced with the user's who's birthday it is.
+* `config message reset` - Set the birthday message to it's default value.
+* `config message useEmbed <true/false>` - Set if the Birthday Message will be embedded. (Set false for links/images to work properly)
 * `config trusted preventMessage <true/false>` - Should the bot only send birthday messages for people with the trusted role.
 * `config trusted preventRole <true/false>` - Should the bot only give the birthday role for people with the trusted role.
-* `config mentionSetting <everyone/here/@role/rolename/disable>` - Who/What role should the bot mention when the birthday message is sent.
-* `config messageTime <0-23>` - What time should the birthday message be sent at.
-* `config setMessage` - Set the a custom birthday message for your server. Use "@Users" in the message to be replaced with the user's who's birthday it is.
-* `config resetMessage` - Set the birthday message to it's default value.
 
 ### Utilities
 

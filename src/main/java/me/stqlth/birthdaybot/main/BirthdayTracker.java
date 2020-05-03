@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class BirthdayTracker {
 
@@ -48,14 +49,11 @@ public class BirthdayTracker {
 
 	public void trackBirthdays(ShardManager client) {
 		Logger.Debug("Tracking Birthdays...");
-
 		try {
 
 			LocalDateTime now = LocalDateTime.now();
 			LocalDateTime previous = now.minusDays(1);
 			LocalDateTime next = now.plusDays(1);
-
-
 
 			String month = (now.getMonthValue() < 10) ? "0" + now.getMonthValue() : String.valueOf(now.getMonthValue());
 			String day = (now.getDayOfMonth() < 10) ? "0" + now.getDayOfMonth() : String.valueOf(now.getDayOfMonth());
@@ -132,8 +130,12 @@ public class BirthdayTracker {
 					birthdayUsers.add(user);
 				}
 
-				for (User check : birthdayUsers)
+				for (User check : birthdayUsers) { //creates possible duplicate guilds in this list
 					guilds.addAll(client.getMutualGuilds(check));
+				}
+
+				guilds = guilds.stream().distinct().collect(Collectors.toList());
+
 
 			} catch (Exception ex) {
 				Logger.Error("The Birthday Tracker Setup Caught an Exception", ex);
@@ -147,6 +149,7 @@ public class BirthdayTracker {
 					long bdayRole = db.getBirthdayRole(guild);
 					long bdayChannel = db.getBirthdayChannel(guild);
 					long trustedRole = db.getTrustedRole(guild);
+					boolean useEmbed = db.getUseEmbed(guild);
 					if (bdayRole == 0 && bdayChannel == 0) {
 						Logger.Debug("Both bdayRole and channel are 0 in the database");
 						continue; //if they are both not set, the birthday bot has nothing to do for this guild
@@ -340,21 +343,62 @@ public class BirthdayTracker {
 
 							String customMessage = db.getGuildBirthdayMessage(guild);
 							if (customMessage.equalsIgnoreCase("0")) {
-								if (BirthdayMessagesInGuild.size() == 1) {
+								if (BirthdayMessagesInGuild.size() == 1) { //ONLY ONE PERSON IN BIRTHDAY MESSAGE
 									Logger.Debug("Sent Birthday Message with size 1 to Guild: " + guild.getName());
-									EmbedSender.sendEmbed(bChannel, null, "Happy Birthday to " + BirthdayMessagesInGuild.get(0).getAsMention() + "!", Color.decode("#1CFE86"));
-									continue;
+
+									/////////////////Send birthday message with single birthday
+									if (useEmbed) { //CHECK IF THE GUILD WANTS AN EMBED
+										EmbedSender.sendEmbed(bChannel, null, "Happy Birthday to " + BirthdayMessagesInGuild.get(0).getAsMention() + "!", Color.decode("#1CFE86"));
+									} else {
+										try { //catch any unforeseen errors
+											TextChannel finalBChannel = bChannel;
+											bChannel.sendMessage("Happy Birthday to " + BirthdayMessagesInGuild.get(0).getAsMention() + "!").queue(null, error -> {
+												if (!(error instanceof PermissionException)) {
+													Logger.Error("Failed to send message to a TextChannel with ID: " + finalBChannel.getId(), error);
+												}
+											});
+										} catch (Exception ignored) {}
+									}
+									/////////////////
+
+
+										continue;
 								}
 								Logger.Debug("Sent Birthday Message with size " + BirthdayMessagesInGuild.size() + " to Guild: " + guild.getName());
-
-								EmbedSender.sendEmbed(bChannel, null, "Happy Birthday to " + Utilities.getBirthdays(BirthdayMessagesInGuild) + "!", Color.decode("#1CFE86"));
+								/////////////////Send birthday message to multiple people
+								if (useEmbed) {
+									EmbedSender.sendEmbed(bChannel, null, "Happy Birthday to " + Utilities.getBirthdays(BirthdayMessagesInGuild) + "!", Color.decode("#1CFE86"));
+								} else {
+									try { //catch any unforeseen errors
+										TextChannel finalBChannel = bChannel;
+										bChannel.sendMessage("Happy Birthday to " + Utilities.getBirthdays(BirthdayMessagesInGuild) + "!").queue(null, error -> {
+											if (!(error instanceof PermissionException)) {
+												Logger.Error("Failed to send message to a TextChannel with ID: " + finalBChannel.getId(), error);
+											}
+										});
+									} catch (Exception ignored) {}
+								}
+								/////////////////
 								continue;
 							}
 							Logger.Debug("Sent Custom Birthday Message with size " + BirthdayMessagesInGuild.size() + " to Guild: " + guild.getName());
 
 							customMessage = customMessage.replaceAll("@Users", Utilities.getBirthdays(BirthdayMessagesInGuild).toString());
 							customMessage = customMessage.replaceAll("@users", Utilities.getBirthdays(BirthdayMessagesInGuild).toString());
-							EmbedSender.sendEmbed(bChannel, null, customMessage, Color.decode("#1CFE86"));
+							/////////////////Set custom birthday message
+							if (useEmbed) {
+								EmbedSender.sendEmbed(bChannel, null, customMessage, Color.decode("#1CFE86"));
+							} else {
+								try { //catch any unforeseen errors
+									TextChannel finalBChannel = bChannel;
+									bChannel.sendMessage(customMessage).queue(null, error -> {
+										if (!(error instanceof PermissionException)) {
+											Logger.Error("Failed to send message to a TextChannel with ID: " + finalBChannel.getId(), error);
+										}
+									});
+								} catch (Exception ignored) {}
+							}
+							/////////////////
 						}
 
 					} catch (Exception ex) {

@@ -34,6 +34,8 @@ public class BirthdayBotConfig {
 
     public static boolean isDebug() { return  _configJson.getBoolean("debug"); }
 
+    public static boolean updateApi() { return  _configJson.getBoolean("debug"); }
+
     public static JSONArray getRegions() { return _configJson.getJSONArray("regions"); }
 }
 

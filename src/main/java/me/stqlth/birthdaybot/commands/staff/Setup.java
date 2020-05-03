@@ -385,11 +385,11 @@ public class Setup extends Command {
 					result.delete().queue(null, ErrorManager.GENERAL);
 					if (message.toString().equalsIgnoreCase("default")) {
 						db.updateMessage(event, "0");
-						EmbedSender.sendEmbed(event.getTextChannel(), null, "Birthday Bot will use the default Birthday Message", Color.decode("#1CFE86"));
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "Birthday Bot will use the default Birthday Message!\nTest this with `bday testMessage`!", Color.decode("#1CFE86"));
 					} else {
 						String bMessage = message.toString().replaceAll("@users", "@Users");
 						db.updateMessage(event, bMessage);
-						EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set the birthday message to **" + message.toString() + "**", Color.decode("#1CFE86"));
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set the birthday message to **" + message.toString() + "**\nTest this with `bday testMessage`!", Color.decode("#1CFE86"));
 					}
 					getMentionSetting(event, event.getMember());
 
