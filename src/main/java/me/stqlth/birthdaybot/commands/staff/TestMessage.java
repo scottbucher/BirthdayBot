@@ -4,10 +4,13 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.EmbedSender;
+import me.stqlth.birthdaybot.utils.Logger;
 import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,8 +36,11 @@ public class TestMessage extends Command {
 	protected void execute(CommandEvent event) {
 		TextChannel channel = event.getTextChannel();
 		String[] args = event.getMessage().getContentRaw().split(" ");
+		Guild guild = event.getGuild();
 
-		String guildMessage = db.getGuildBirthdayMessage(event.getGuild());
+		String guildMessage = db.getGuildBirthdayMessage(guild);
+
+		boolean useEmbed = db.getUseEmbed(guild);
 
 		if (guildMessage.equals("0"))
 			guildMessage = "Happy Birthday @Users!";
@@ -47,13 +53,23 @@ public class TestMessage extends Command {
 		if (args.length == 3) {
 			try {
 				testAmount = Integer.parseInt(args[2]);
-			} catch (NumberFormatException ignored) {}
+			} catch (NumberFormatException ignored) {
+			}
 			testAmount = Math.min(testAmount, 5);
 			for (int i = 1; i < testAmount; i++)
 				testList.add(event.getMember());
 		}
 
 		guildMessage = guildMessage.replaceAll("@Users", Utilities.getBirthdays(testList).toString());
-		EmbedSender.sendEmbed(channel, null, guildMessage, Color.decode("#1CFE86"));
+		try {
+			if (useEmbed) EmbedSender.sendEmbed(channel, null, guildMessage, Color.decode("#1CFE86"));
+			else {
+				channel.sendMessage(guildMessage).queue(null, error -> {
+					if (!(error instanceof PermissionException)) {
+						Logger.Error("Failed to send message to a TextChannel with ID: " + channel.getId(), error);
+					}
+				});
+			}
+		} catch (Exception ignored) {}
 	}
 }
