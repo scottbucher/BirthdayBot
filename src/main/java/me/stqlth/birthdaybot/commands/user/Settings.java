@@ -81,8 +81,10 @@ public class Settings extends Command {
 		if (mentionSetting.equals("everyone")) mSetting = "@everyone";
 		else if (mentionSetting.equals("here")) mSetting = "@here";
 
-		boolean preventMessages = db.getTrustedPreventMessage(guild);
-		boolean preventRole = db.getTrustedPreventRole(guild);
+		String preventMessages = Utilities.capitalize(String.valueOf(db.getTrustedPreventMessage(guild)));
+		String preventRole = Utilities.capitalize(String.valueOf(db.getTrustedPreventRole(guild)));
+		String useEmbed = Utilities.capitalize(String.valueOf(db.getUseEmbed(guild)));
+
 
 		builder.setAuthor(guild.getName() + "'s Settings", null, guild.getIconUrl())
 				.setColor(Utilities.getAverageColor(event.getMember().getUser().getAvatarUrl()))
@@ -94,6 +96,7 @@ public class Settings extends Command {
 				.addField("Trusted Role", tRole, true)
 				.addField("Trusted Prevents Role", "" + preventRole, true)
 				.addField("Trusted Prevents Message", "" + preventMessages, true)
+				.addField("Use Embed", "" + useEmbed, true)
 //				.setThumbnail(bot.getAvatarUrl())
 				.setFooter(bot.getName(), bot.getAvatarUrl());
 

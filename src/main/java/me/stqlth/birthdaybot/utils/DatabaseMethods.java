@@ -465,6 +465,41 @@ public class DatabaseMethods {
 		}
 	}
 
+	public void updateUseEmbed(CommandEvent event, int bool) {
+		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
+			 CallableStatement statement = conn.prepareCall("CALL UpdateUseEmbed(?, ?)")) {
+
+			int guildSettingsId = getGuildSettingsId(event.getGuild());
+
+
+			statement.setInt(1, guildSettingsId);
+			statement.setInt(2, bool);
+
+			statement.execute();
+		} catch (SQLException ex) {
+			Utilities.sqlDebug(ex);
+		}
+	}
+
+	public boolean getUseEmbed(Guild guild) {
+		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
+			 CallableStatement statement = conn.prepareCall("CALL GetUseEmbed(?)")) {
+
+			int guildSettingsId = getGuildSettingsId(guild);
+
+
+			statement.setInt(1, guildSettingsId);
+
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			return rs.getBoolean("UseEmbed");
+
+		} catch (SQLException ex) {
+			Utilities.sqlDebug(ex);
+		}
+		return true;
+	}
+
 	public void updateMessage(CommandEvent event, String message) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
 			 CallableStatement statement = conn.prepareCall("CALL UpdateMessage(?, ?)")) {
