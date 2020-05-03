@@ -90,11 +90,12 @@ public class Help extends Command {
 				.setDescription("" +
 						"\n**bday setup optional** - Interactive guide for optional server setup settings." +
 						"\n" +
-						"\n**bday config mentionSetting <everyone/here/@role/rolename/disable>** - What group should the bot @ in the birthday message." +
-						"\n\n**bday config messageTime <0-23>** - What time should the bot send the birthday message." +
-						"\n\n**bday config setMessage <Message>** - Set custom birthday message. Use @Users in your message, it will be replaced with the birthdays." +
-						"\n**Example Usage**: `bday config setMessage Happy Birthday @Users!`" +
-						"\n\n**bday config resetMessage** - Reset the birthday message." +
+						"\n**bday config message setMention <everyone/here/@role/rolename/disable>** - What group should the bot @ in the birthday message." +
+						"\n\n**bday config message setTime <0-23>** - What time should the bot send the birthday message." +
+						"\n\n**bday config message set <Message>** - Set custom birthday message. Use @Users in your message, it will be replaced with the birthdays." +
+						"\n**Example Usage**: `bday config message set Happy Birthday @Users!`" +
+						"\n\n**bday config message reset** - Reset the birthday message." +
+						"\n\n**bday config message useEmbed <true/false>** - Should the Birthday Message be embedded? (Set false for links/images to work properly)" +
 						"\n\n**bday config trusted preventRole <true/false>** - Set if you need the trusted role to get the Birthday Role." +
 						"\n\n**bday config trusted preventMessage <true/false>** - Set if you need the trusted role to get the Birthday Message.");
 		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
