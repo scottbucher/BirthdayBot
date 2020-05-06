@@ -24,7 +24,6 @@ import me.stqlth.birthdaybot.main.GuildSettings.SettingsManager;
 import me.stqlth.birthdaybot.utils.DatabaseMethods;
 import me.stqlth.birthdaybot.utils.Logger;
 import me.stqlth.birthdaybot.utils.Utilities;
-import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;

@@ -65,7 +65,7 @@ public class Setup extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor(author.getEffectiveName() + "#" + author.getUser().getDiscriminator(), null, author.getUser().getAvatarUrl())
-				.setTitle("**Server Setup [BETA] - Birthday Channel Selection**")
+				.setTitle("**Server Setup - Birthday Channel Selection**")
 				.setDescription("" +
 						"\n » To begin your setup you must set your birthday channel. This allows the bot to know where to send birthday messages!" +
 						"\n" +
@@ -177,7 +177,7 @@ public class Setup extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor(author.getEffectiveName() + "#" + author.getUser().getDiscriminator(), null, author.getUser().getAvatarUrl())
-				.setTitle("**Server Setup [BETA] - Birthday Role Selection**")
+				.setTitle("**Server Setup - Birthday Role Selection**")
 				.setDescription("" +
 						"\n » Now you must choose a Birthday Role. This allows the bot to know what role to give for user's birthdays!" +
 						"\n" +
@@ -218,7 +218,7 @@ public class Setup extends Command {
 									.queue(r -> {
 										String message = "Successfully created the birthday role **" + r.getAsMention() + "**!" +
 												"\n" +
-												"\nNote: Please move <@656621136808902656>'s Role to the top of the role list and move the new Birthday Role to directly under" +
+												"\nNote: Please move <@656621136808902656>'s Role to the top of the role list and move the new Birthday Role under" +
 												"<@656621136808902656>'s Role.";
 										EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.decode("#1CFE86"));
 										db.updateBirthdayRole(event, r);
@@ -273,7 +273,7 @@ public class Setup extends Command {
 					db.updateBirthdayRole(event, bdayRole);
 					String message = "Successfully set the birthday role to " + bdayRole.getAsMention() + "!" +
 							"\n" +
-							"\nNote: Please move <@656621136808902656>'s Role to the top of the role list and move the new Birthday Role to directly under" +
+							"\nNote: Please move <@656621136808902656>'s Role to the top of the role list and move the new Birthday Role under" +
 							"<@656621136808902656>'s Role.";
 					EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.decode("#1CFE86"));
 					result.delete().queue(null, ErrorManager.GENERAL);
@@ -289,7 +289,7 @@ public class Setup extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor(author.getEffectiveName() + "#" + author.getUser().getDiscriminator(), null, author.getUser().getAvatarUrl())
-				.setTitle("**Server Setup [BETA] - Birthday Message Time**")
+				.setTitle("**Server Setup - Birthday Message Time**")
 				.setDescription("" +
 						"\n » Now you must give an __hour__ for your Birthday Messages. This will tell bot what hour to send the Birthday Messages!" +
 						"\n" +
@@ -347,7 +347,7 @@ public class Setup extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor(author.getEffectiveName() + "#" + author.getUser().getDiscriminator(), null, author.getUser().getAvatarUrl())
-				.setTitle("**Server Setup [BETA] - Custom Birthday Message**")
+				.setTitle("**Server Setup - Custom Birthday Message**")
 				.setDescription("" +
 						"\n » Now you can create a custom Birthday Message. This will tell bot what message to send as the Birthday Messages!" +
 						"\n" +
@@ -404,7 +404,7 @@ public class Setup extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor(author.getEffectiveName() + "#" + author.getUser().getDiscriminator(), null, author.getUser().getAvatarUrl())
-				.setTitle("**Server Setup [BETA] - Custom Birthday Message**")
+				.setTitle("**Server Setup - Custom Birthday Message**")
 				.setDescription("" +
 						"\n » Now you can set your birthday mention setting. This is the group the bot will @ when it sends a birthday message." +
 						"\n" +
@@ -472,7 +472,7 @@ public class Setup extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor(author.getEffectiveName() + "#" + author.getUser().getDiscriminator(), null, author.getUser().getAvatarUrl())
-				.setTitle("**Server Setup [BETA] - Trusted Role Selection**")
+				.setTitle("**Server Setup - Trusted Role Selection**")
 				.setDescription("" +
 						"\n » You may now choose your Trusted Role! " +
 						"\n\nThe idea behind a Trusted Role is that users without this role will not have their birthdays " +
@@ -579,7 +579,7 @@ public class Setup extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor(author.getEffectiveName() + "#" + author.getUser().getDiscriminator(), null, author.getUser().getAvatarUrl())
-				.setTitle("**Server Setup [BETA] - Trusted Role Options**")
+				.setTitle("**Server Setup - Trusted Role Options**")
 				.setDescription("" +
 						"\n » You may now choose settings for the Trusted Role. Should the bot only give the Birthday Role for users with the Trusted Role?" +
 						"\n" +
@@ -632,7 +632,7 @@ public class Setup extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor(author.getEffectiveName() + "#" + author.getUser().getDiscriminator(), null, author.getUser().getAvatarUrl())
-				.setTitle("**Server Setup [BETA] - Trusted Role Options**")
+				.setTitle("**Server Setup - Trusted Role Options**")
 				.setDescription("" +
 						"\n » You may now choose settings for the Trusted Role. Should the bot only send Birthday Messages for users with the Trusted Role?" +
 						"\n" +
