@@ -90,7 +90,10 @@ public class Help extends Command {
 				.setDescription("" +
 						"\n**bday setup optional** - Interactive guide for optional server setup settings." +
 						"\n" +
-						"\n**bday config message setMention <everyone/here/@role/rolename/disable>** - What group should the bot @ in the birthday message." +
+						"\n**bday createTrustedRole** - Create the default trusted role." +
+						"\n**bday setTrustedRole** - Set custom trusted role." +
+						"\n**bday clearTrustedRole** - Clear the trusted role from the database." +
+						"\n\n**bday config message setMention <everyone/here/@role/rolename/disable>** - What group should the bot @ in the birthday message." +
 						"\n\n**bday config message setTime <0-23>** - What time should the bot send the birthday message." +
 						"\n\n**bday config message set <Message>** - Set custom birthday message. Use @Users in your message, it will be replaced with the birthdays." +
 						"\n**Example Usage**: `bday config message set Happy Birthday @Users!`" +
