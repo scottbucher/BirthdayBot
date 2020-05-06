@@ -46,7 +46,11 @@ public class CreateBirthdayRole extends Command {
 					.setHoisted(true)
 					.queue(result -> {
 						db.updateBirthdayRole(event, result);
-						EmbedSender.sendEmbed(channel, null, "Successfully created the birthday role **" + result.getAsMention() + "**!", Color.decode("#1CFE86"));
+						String message = "Successfully created the birthday role **" + result.getAsMention() + "**!" +
+								"\n" +
+								"\nNote: Please move <@656621136808902656>'s Role to the top of the role list and move the new Birthday Role under" +
+								"<@656621136808902656>'s Role.";
+						EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.decode("#1CFE86"));
 					}, error -> {
 						if (error instanceof PermissionException) {
 							EmbedSender.sendEmbed(channel, null, "**BirthdayBot** does not have permission to create a role!", Color.RED);

@@ -59,6 +59,10 @@ public class SetBirthdayRole extends Command {
 		}
 
 		db.updateBirthdayRole(event, bdayRole);
-		EmbedSender.sendEmbed(channel, null, "Successfully set the birthday role to " + bdayRole.getAsMention() + "!", Color.decode("#1CFE86"));
+		String message = "Successfully set the birthday role **" + bdayRole.getAsMention() + "**!" +
+				"\n" +
+				"\nNote: Please move <@656621136808902656>'s Role to the top of the role list and move the new Birthday Role under" +
+				"<@656621136808902656>'s Role.";
+		EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.decode("#1CFE86"));
 	}
 }
