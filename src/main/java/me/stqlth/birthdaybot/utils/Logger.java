@@ -27,6 +27,7 @@ public class Logger {
 
     public static void Debug(String message) {
         if (!BirthdayBotConfig.isDebug()) return;
+
         String log = GetCurrentTimestamp() + " " + DEBUG_PREFIX + " " + message;
         Output(log);
     }
