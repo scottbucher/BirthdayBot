@@ -566,8 +566,8 @@ public class DatabaseMethods {
 			ResultSet rs = statement.executeQuery("CALL GetBirthdays('" + date + "')");
 
 			while (rs.next()) {
+//				Logger.Debug("Retrieved user Birthday from database with ID: " + rs.getString("UserDiscordId"));
 				birthdays.add(rs.getString("UserDiscordId"));
-				rs.next();
 			}
 			return birthdays;
 		} catch (SQLException ex) {

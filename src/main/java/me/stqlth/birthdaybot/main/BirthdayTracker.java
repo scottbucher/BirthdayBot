@@ -103,30 +103,36 @@ public class BirthdayTracker {
 			try {
 
 				for (String check : bString) {
+//					Logger.Debug("Trying to locate user with ID: " + check);
 					User user = client.getUserById(check);
 					if (user == null) {
 						Logger.Debug("User is null (ID: " + check + ")");
 						continue;
 					}
 
+//					Logger.Debug("Adding User: " + user.getName() + " (ID: " + user.getId() + ") from nextBString)");
 					birthdayUsers.add(user);
 				}
 				for (String check : prevBString) {
+//					Logger.Debug("Trying to locate user with ID: " + check);
 					User user = client.getUserById(check);
 					if (user == null) {
 						Logger.Debug("User is null (ID: " + check + ")");
 						continue;
 					}
 
+//					Logger.Debug("Adding User: " + user.getName() + " (ID: " + user.getId() + ") from nextBString)");
 					birthdayUsers.add(user);
 				}
 				for (String check : nextBString) {
+//					Logger.Debug("Trying to locate user with ID: " + check);
 					User user = client.getUserById(check);
 					if (user == null) {
 						Logger.Debug("User is null (ID: " + check + ")");
 						continue;
 					}
 
+//					Logger.Debug("Adding User: " + user.getName() + " (ID: " + user.getId() + ") from nextBString)");
 					birthdayUsers.add(user);
 				}
 
@@ -145,13 +151,14 @@ public class BirthdayTracker {
 			try { //try catch for Guild Loop
 
 				for (Guild guild : guilds) {
+					Logger.Debug("Checking guild: " + guild.getName() + "ID(" + guild.getId() + ")");
 
 					long bdayRole = db.getBirthdayRole(guild);
 					long bdayChannel = db.getBirthdayChannel(guild);
 					long trustedRole = db.getTrustedRole(guild);
 					boolean useEmbed = db.getUseEmbed(guild);
 					if (bdayRole == 0 && bdayChannel == 0) {
-						Logger.Debug("Both bdayRole and channel are 0 in the database");
+						Logger.Debug("Both bdayRole and channel are 0 in the database for guild: " + guild.getName() + " (ID: " + guild.getId() + ")");
 						continue; //if they are both not set, the birthday bot has nothing to do for this guild
 					}
 
@@ -173,7 +180,7 @@ public class BirthdayTracker {
 					}
 
 					if (bRole == null && bChannel == null) {
-						Logger.Debug("Both birthday role and channel are null");
+						Logger.Debug("Both birthday role and channel are null for guild: " + guild.getName() + " (ID: " + guild.getId() + ")");
 						continue; //if both return null the bot can't do anything for this guild on birthdays
 					}
 
