@@ -79,6 +79,7 @@ public class SetBday extends Command {
 			}, ErrorManager.GENERAL);
 
 	}
+
 	private void waitForTimezone(CommandEvent event, Message result, User author, boolean normal) {
 
 		waiter.waitForEvent(MessageReceivedEvent.class,
@@ -101,17 +102,10 @@ public class SetBday extends Command {
 							"Your ZoneId is the Location that appears at the bottom of the map. " +
 							"\n(Do __**not**__ use the shortened values of the Zones. Example: `EST`).";
 
-					for (String acceptedZone : acceptedZones) {
-						if (input.equalsIgnoreCase(acceptedZone)) {
-							try {
-								zoneId = ZoneId.of(input);
-							} catch (DateTimeException ex) {
-								if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
-								else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
-								return;
-							}
-						}
-						}
+					for (String acceptedZone : acceptedZones)
+						if (input.equalsIgnoreCase(acceptedZone))
+							zoneId = ZoneId.of(acceptedZone);
+
 
 					if (zoneId == null) {
 						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
@@ -120,12 +114,12 @@ public class SetBday extends Command {
 					}
 
 
-
 					getBirthDate(event, author, zoneId, normal);
 				}, 1, TimeUnit.MINUTES, () -> {
 					result.delete().queue(null, ErrorManager.GENERAL);
 				});
 	}
+
 	public void getBirthDate(CommandEvent event, User author, ZoneId zoneid, boolean normal) {
 		EmbedBuilder builder = new EmbedBuilder();
 
@@ -134,8 +128,8 @@ public class SetBday extends Command {
 				.setTitle("**User Setup - Birth Date**")
 				.setDescription(
 						"\n » Now you will have to provide <@656621136808902656> with your birth month and day." +
-						"\n" +
-						"\n**Example Usage**: `08/28` (MM/DD)")
+								"\n" +
+								"\n**Example Usage**: `08/28` (MM/DD)")
 				.setFooter("This message will timeout in 30 seconds!", event.getJDA().getSelfUser().getAvatarUrl());
 
 		if (normal)
@@ -148,6 +142,7 @@ public class SetBday extends Command {
 			}, ErrorManager.GENERAL);
 
 	}
+
 	private void waitForBirthDate(CommandEvent event, Message result, ZoneId zoneId, boolean normal) {
 
 		waiter.waitForEvent(MessageReceivedEvent.class,
@@ -165,11 +160,12 @@ public class SetBday extends Command {
 						LocalDate birthDate = LocalDate.of(year, month, day);
 					} catch (Exception ex) {
 						String message = "That date doesn't exist. Review a calendar [here](https://www.timeanddate.com/calendar/).";
-						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED); else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
+						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
+						else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
 						return;
 					}
 
-					String date =  getMonth(month) + " " + day + ", " + zoneId.toString();
+					String date = getMonth(month) + " " + day + ", " + zoneId.toString();
 
 					String sBday = year + "-" + month + "-" + day;
 
@@ -177,14 +173,15 @@ public class SetBday extends Command {
 						db.addUser(event.getAuthor());
 					}
 					int changesLeft = db.getChangesLeft(event.getAuthor());
-					if (changesLeft  <= 0){
+					if (changesLeft <= 0) {
 						String message = "You have already set your birthday 3 times.";
-						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED); else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
+						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
+						else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
 						return;
 					} else changesLeft--;
 
 					if (normal) sendConfirmation(event, date, sBday, zoneId.toString(), changesLeft, month, day, true);
-					else  sendConfirmation(event, date, sBday, zoneId.toString(), changesLeft, month, day, false);
+					else sendConfirmation(event, date, sBday, zoneId.toString(), changesLeft, month, day, false);
 
 				}, 30, TimeUnit.SECONDS, () -> {
 					result.delete().queue(null, ErrorManager.GENERAL);
@@ -207,6 +204,7 @@ public class SetBday extends Command {
 			waitForConfirmation(event, result, sBday, zoneId, changesLeft, date, month, day, normal);
 		}, ErrorManager.GENERAL);
 	}
+
 	private void waitForConfirmation(CommandEvent event, Message msg, String sBday, String zoneId, int changesLeft, String date, int month, int day, boolean normal) {
 
 		waiter.waitForEvent(MessageReactionAddEvent.class,
@@ -218,16 +216,23 @@ public class SetBday extends Command {
 							db.updateBirthday(event.getAuthor(), sBday);
 							db.updateZoneId(event, zoneId);
 							msg.delete().queue(null, ErrorManager.GENERAL);
-							if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set your birthday to **" + date + "**!", Color.decode("#1CFE86"));
-							else EmbedSender.sendEmbed(event.getPrivateChannel(), null, "Successfully set your birthday to **" + date + "**!", Color.decode("#1CFE86"));
+							if (normal)
+								EmbedSender.sendEmbed(event.getTextChannel(), null, "Successfully set your birthday to **" + date + "**!", Color.decode("#1CFE86"));
+							else
+								EmbedSender.sendEmbed(event.getPrivateChannel(), null, "Successfully set your birthday to **" + date + "**!", Color.decode("#1CFE86"));
 						} catch (SQLException ex) {
-							if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, "Invalid Format.\nExample Date: `08/28`", Color.RED);
-							else EmbedSender.sendEmbed(event.getPrivateChannel(), null, "Invalid Format.\nExample Date: `08/28`", Color.RED);
+							if (normal)
+								EmbedSender.sendEmbed(event.getTextChannel(), null, "Invalid Format.\nExample Date: `08/28`", Color.RED);
+							else
+								EmbedSender.sendEmbed(event.getPrivateChannel(), null, "Invalid Format.\nExample Date: `08/28`", Color.RED);
 							return;
 						}
 						db.updateChangesLeft(event, changesLeft);
 						if (month == 2 && day == 29) leapDate(event, normal);
-					} else if (e.getReactionEmote().getName().equals("\u274C")) msg.delete().queue(null, ErrorManager.GENERAL);
+					} else if (e.getReactionEmote().getName().equals("\u274C")) {
+						msg.delete().queue(null, ErrorManager.GENERAL);
+						EmbedSender.sendEmbed(event.getTextChannel(), null, "Your birthday has not been set.", Color.RED);
+					}
 				});
 	}
 
@@ -241,21 +246,35 @@ public class SetBday extends Command {
 		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(null, ErrorManager.GENERAL);
 	}
+
 	private static String getMonth(int month) {
 		switch (month) {
-			case 1:  return "January";
-			case 2:  return "February";
-			case 3:  return "March";
-			case 4:  return "April";
-			case 5:  return "May";
-			case 6:  return "June";
-			case 7:  return "July";
-			case 8:  return "August";
-			case 9:  return "September";
-			case 10: return "October";
-			case 11: return "November";
-			case 12: return "December";
-			default: return "Invalid month";
+			case 1:
+				return "January";
+			case 2:
+				return "February";
+			case 3:
+				return "March";
+			case 4:
+				return "April";
+			case 5:
+				return "May";
+			case 6:
+				return "June";
+			case 7:
+				return "July";
+			case 8:
+				return "August";
+			case 9:
+				return "September";
+			case 10:
+				return "October";
+			case 11:
+				return "November";
+			case 12:
+				return "December";
+			default:
+				return "Invalid month";
 		}
 	}
 }
