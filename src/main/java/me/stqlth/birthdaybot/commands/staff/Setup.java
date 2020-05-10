@@ -89,7 +89,7 @@ public class Setup extends Command {
 
 		waiter.waitForEvent(MessageReactionAddEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember()) &&
-						(e.getReactionEmote().getName().equals("\uD83D\uDD28") || e.getReactionEmote().getName().equals("\uD83D\uDDB1") || e.getReactionEmote().getName().equals("\u274C"))),
+						(e.getReactionEmote().getName().equals(CREATE_EMOJI) || e.getReactionEmote().getName().equals(SELECT_EMOJI) || e.getReactionEmote().getName().equals(NO_EMOJI))),
 				e -> {
 
 					if (!event.getSelfMember().hasPermission(Permission.MANAGE_CHANNEL)) {
@@ -100,7 +100,7 @@ public class Setup extends Command {
 					}
 
 					switch (e.getReactionEmote().getName()) {
-						case "\uD83D\uDD28": //Create New
+						case CREATE_EMOJI: //Create New
 							EnumSet<Permission> grantPublic = EnumSet.of(Permission.VIEW_CHANNEL), //Application Permissions
 									denyPublic = EnumSet.of(Permission.MESSAGE_WRITE);
 							Role publicRole = event.getGuild().getPublicRole();
@@ -121,7 +121,7 @@ public class Setup extends Command {
 										}
 									});
 							break;
-						case "\uD83D\uDDB1": //Select Pre-Existing
+						case SELECT_EMOJI: //Select Pre-Existing
 							EmbedSender.sendEmbed(event.getTextChannel(), null, "Please mention a channel or input a channel's name.", Color.GREEN);
 
 							waitForBirthdayChannelSelection(event, result);
@@ -200,7 +200,7 @@ public class Setup extends Command {
 
 		waiter.waitForEvent(MessageReactionAddEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember()) &&
-						(e.getReactionEmote().getName().equals("\uD83D\uDD28") || e.getReactionEmote().getName().equals("\uD83D\uDDB1") || e.getReactionEmote().getName().equals("\u274C"))),
+						(e.getReactionEmote().getName().equals(CREATE_EMOJI) || e.getReactionEmote().getName().equals(SELECT_EMOJI) || e.getReactionEmote().getName().equals(NO_EMOJI))),
 				e -> {
 
 					if (!event.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
@@ -210,7 +210,7 @@ public class Setup extends Command {
 					}
 
 					switch (e.getReactionEmote().getName()) {
-						case "\uD83D\uDD28": //Create New
+						case CREATE_EMOJI: //Create New
 							event.getGuild().createRole()
 									.setName("\uD83C\uDF82")
 									.setColor(Color.decode("#AC1CFE"))
@@ -231,7 +231,7 @@ public class Setup extends Command {
 										}
 									});
 							break;
-						case "\uD83D\uDDB1": //Select Pre-Existing
+						case SELECT_EMOJI: //Select Pre-Existing
 							EmbedBuilder builder = new EmbedBuilder();
 							builder.setColor(Color.decode("#1CFE86"))
 									.setDescription("Please mention a Role or input a Role's name.");
@@ -497,7 +497,7 @@ public class Setup extends Command {
 
 		waiter.waitForEvent(MessageReactionAddEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember()) &&
-						(e.getReactionEmote().getName().equals("\uD83D\uDD28") || e.getReactionEmote().getName().equals("\uD83D\uDDB1") || e.getReactionEmote().getName().equals("\u274C"))),
+						(e.getReactionEmote().getName().equals(CREATE_EMOJI) || e.getReactionEmote().getName().equals(SELECT_EMOJI) || e.getReactionEmote().getName().equals(NO_EMOJI))),
 				e -> {
 
 					if (!event.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
@@ -508,7 +508,7 @@ public class Setup extends Command {
 					}
 
 					switch (e.getReactionEmote().getName()) {
-						case "\uD83D\uDD28": //Create New
+						case CREATE_EMOJI: //Create New
 							event.getGuild().createRole()
 									.setName("BirthdayTrusted")
 									.queue(r -> {
@@ -524,7 +524,7 @@ public class Setup extends Command {
 										}
 									});
 							break;
-						case "\uD83D\uDDB1": //Select Pre-Existing
+						case SELECT_EMOJI: //Select Pre-Existing
 							EmbedBuilder builder = new EmbedBuilder();
 							builder.setColor(Color.decode("#1CFE86"))
 									.setDescription("Please mention a Role or input a Role's name.");
@@ -600,10 +600,10 @@ public class Setup extends Command {
 
 		waiter.waitForEvent(MessageReactionAddEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember()) &&
-						(e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C"))),
+						(e.getReactionEmote().getName().equals(YES_EMOJI) || e.getReactionEmote().getName().equals(NO_EMOJI))),
 				e -> {
 					switch (e.getReactionEmote().getName()) {
-						case "\u2705": //Yes
+						case YES_EMOJI: //Yes
 							db.updatePreventRole(event, 1);
 
 							String message = "**BirthdayBot** will only grant the birthday role with users with the trusted role now!";
@@ -612,7 +612,7 @@ public class Setup extends Command {
 							result.delete().queue(null, ErrorManager.GENERAL);
 							getTrustedPreventsMessage(event, event.getMember());
 							break;
-						case "\u274C": //No
+						case NO_EMOJI: //No
 							db.updatePreventRole(event, 0);
 
 							String message2 = "**BirthdayBot** will grant the birthday role to all users regardless of if the user has the trusted role!";
@@ -653,10 +653,10 @@ public class Setup extends Command {
 
 		waiter.waitForEvent(MessageReactionAddEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember()) &&
-						(e.getReactionEmote().getName().equals("\u2705") || e.getReactionEmote().getName().equals("\u274C"))),
+						(e.getReactionEmote().getName().equals(YES_EMOJI) || e.getReactionEmote().getName().equals(NO_EMOJI))),
 				e -> {
 					switch (e.getReactionEmote().getName()) {
-						case "\u2705": //Yes
+						case YES_EMOJI: //Yes
 							db.updatePreventMessage(event, 1);
 
 							String message = "**BirthdayBot** will only send messages for users with the trusted role now!";
@@ -664,7 +664,7 @@ public class Setup extends Command {
 
 							result.delete().queue(null, ErrorManager.GENERAL);
 							break;
-						case "\u274C": //No
+						case NO_EMOJI: //No
 							db.updatePreventMessage(event, 0);
 
 							String message2 = "**BirthdayBot** will send birthday messages to all users regardless of if the user has the trusted role!";

@@ -74,10 +74,10 @@ public class Config extends Command {
 					}
 				}
 			}
-			if (args[2].equalsIgnoreCase("message")) {
+			if (args[2].equalsIgnoreCase("message") && args.length >= 4) {
 
 
-				if (args[3].equalsIgnoreCase("setMention")) {
+				if (args[3].equalsIgnoreCase("setMention") && args.length == 5) {
 					switch (args[4].toLowerCase()) {
 						case "everyone":
 							db.updateMentionedSetting(event, "everyone");
@@ -115,7 +115,7 @@ public class Config extends Command {
 							EmbedSender.sendEmbed(channel, null, "The birthday message will now mention " + mentionedRole.getAsMention() + "!", Color.decode("#1CFE86"));
 							break;
 					}
-				} else if (args[3].equalsIgnoreCase("setTime") && args.length >= 5) {
+				} else if (args[3].equalsIgnoreCase("setTime") && args.length == 5) {
 					int messageTime = 0;
 					try {
 						messageTime = Integer.parseInt(args[4]);
@@ -136,7 +136,7 @@ public class Config extends Command {
 					else timeMessage = (messageTime - 12) + ":00 PM";
 					EmbedSender.sendEmbed(channel, null, "Successfully set the Birthday Messages to send at " + timeMessage, Color.decode("#1CFE86"));
 
-				} else if (args[3].equalsIgnoreCase("set") && args.length >= 5) {
+				} else if (args[3].equalsIgnoreCase("set") && args.length == 5) {
 					StringBuilder message = new StringBuilder(args[4]);
 
 					for (int i = 5; i < args.length; i++)
@@ -153,7 +153,7 @@ public class Config extends Command {
 
 					db.updateMessage(event, "0");
 					EmbedSender.sendEmbed(channel, null, "Successfully reset the birthday message to it's default value!\nTest this with `bday testMessage`!", Color.decode("#1CFE86"));
-				} else if (args[3].equalsIgnoreCase("useEmbed") && args.length >= 5) {
+				} else if (args[3].equalsIgnoreCase("useEmbed") && args.length == 5) {
 					if (args[4].equalsIgnoreCase("t") || args[4].equalsIgnoreCase("true") || args[4].equals("1")) {
 						db.updateUseEmbed(event, 1);
 
