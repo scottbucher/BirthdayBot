@@ -38,7 +38,7 @@ public class Logger {
     }
 
     public static void Error(String message, Throwable ex) {
-        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace());
+        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace()) + "\nCaused by: " + ex.getCause();
         Output(log);
     }
 

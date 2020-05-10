@@ -3,6 +3,7 @@ package me.stqlth.birthdaybot.main;
 import me.stqlth.birthdaybot.utils.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
@@ -260,7 +261,7 @@ public class BirthdayTracker {
 								if (!preventRole || hasTRole || tRole == null) {
 									TextChannel temp = bChannel == null ? guild.getDefaultChannel() : bChannel;
 									guild.addRoleToMember(birthday, bRole).queue(null, error -> {
-										if (error instanceof PermissionException) {
+										if (error instanceof PermissionException || error instanceof HierarchyException) {
 											if (temp != null) {
 												String message = "**BirthdayBot** can't give  " + birthday.getAsMention() + " the birthday role due to a lack of permissions!";
 												EmbedSender.sendEmbed(temp, null, message, Color.RED);

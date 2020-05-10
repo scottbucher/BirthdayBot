@@ -40,6 +40,11 @@ public class CreateBirthdayChannel extends Command {
 			return;
 		}
 
+		if (event.getSelfMember().hasPermission(Permission.MANAGE_CHANNEL)) {
+			EmbedSender.sendEmbed(event.getTextChannel(), null, "Birthday Bot does not have the Manage Channels permission!", Color.RED);
+			return;
+		}
+
 		EnumSet<Permission> grantPublic = EnumSet.of(Permission.VIEW_CHANNEL), //Application Permissions
 				denyPublic = EnumSet.of(Permission.MESSAGE_WRITE);
 		Role publicRole = event.getGuild().getPublicRole();
