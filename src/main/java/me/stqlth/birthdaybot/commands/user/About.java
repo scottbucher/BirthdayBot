@@ -36,7 +36,7 @@ public class About extends Command {
         builder.setDescription("Hello! I am <@656621136808902656>, a bot built by <@478288246858711040>!"+
                 "\n"+
                 "\nI was written for Discord in Java, using the JDA library ("+ JDAInfo.VERSION+")"+
-                "\nI'm currently in Version 1.2.1. " +
+                "\nI'm currently in Version 1.2.2. " +
                 "\n" +
                 "\nSpecial thanks to <@212772875793334272> for helping me with this bot! Checkout his bot " +
                 "[FriendTime](https://github.com/KevinNovak/Friend-Time), and add it to your discord [here]" +
