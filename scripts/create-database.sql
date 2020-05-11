@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3307
--- Generation Time: Apr 03, 2020 at 04:23 AM
--- Server version: 5.7.24-log
--- PHP Version: 7.2.10
+-- Host: localhost
+-- Generation Time: May 10, 2020 at 03:46 AM
+-- Server version: 10.3.18-MariaDB-0+deb10u1
+-- PHP Version: 7.3.11-1~deb10u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `birthdaydev`
+-- Database: `birthdaybot`
 --
 
 DELIMITER $$
@@ -172,6 +172,14 @@ END$$
 CREATE DEFINER=`admin`@`%` PROCEDURE `GetTrustedRole` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT TrustedRole
+FROM guildsettings
+WHERE `GuildSettingsId` = IN_GuildSettingsId;
+
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `GetUseEmbed` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+
+SELECT UseEmbed
 FROM guildsettings
 WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
@@ -342,6 +350,14 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateUseEmbed` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
+
+UPDATE guildsettings
+SET `UseEmbed` = IN_Setting
+WHERE `GuildSettingsId` = IN_GuildSettingsId;
+
+END$$
+
 CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateZoneId` (IN `IN_UserId` INT(11), IN `IN_ZoneId` TINYTEXT)  BEGIN
 
 UPDATE users
@@ -362,7 +378,7 @@ CREATE TABLE `guild` (
   `GuildId` int(11) NOT NULL,
   `DiscordId` varchar(18) NOT NULL,
   `GuildSettingsId` int(11) DEFAULT NULL,
-  `Active` tinyint(1) DEFAULT '1'
+  `Active` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -378,11 +394,11 @@ CREATE TABLE `guildsettings` (
   `TrustedRole` varchar(18) DEFAULT '0',
   `BirthdayChannel` varchar(18) DEFAULT '0',
   `MentionSetting` varchar(18) DEFAULT '0',
-  `MessageTime` tinyint(1) DEFAULT '0',
-  `TrustedPreventsRole` tinyint(1) DEFAULT '1',
-  `TrustedPreventsMessage` tinyint(1) DEFAULT '1',
-  `CustomMessage` varchar(2000) DEFAULT '0',
-  `PreventAge` tinyint(1) DEFAULT '1'
+  `MessageTime` tinyint(1) DEFAULT 0,
+  `TrustedPreventsRole` tinyint(1) DEFAULT 1,
+  `TrustedPreventsMessage` tinyint(1) DEFAULT 1,
+  `CustomMessage` varchar(2000) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0',
+  `UseEmbed` tinyint(4) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -395,9 +411,8 @@ CREATE TABLE `users` (
   `UserId` int(11) NOT NULL,
   `UserDiscordId` varchar(18) NOT NULL,
   `Birthday` date DEFAULT NULL,
-  `ZoneId` tinytext,
-  `ChangesLeft` tinyint(4) DEFAULT '3',
-  `HideAge` tinyint(1) DEFAULT '1'
+  `ZoneId` tinytext CHARACTER SET utf32 DEFAULT NULL,
+  `ChangesLeft` tinyint(4) DEFAULT 3
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

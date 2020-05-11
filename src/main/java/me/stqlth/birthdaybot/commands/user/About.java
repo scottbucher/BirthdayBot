@@ -36,7 +36,7 @@ public class About extends Command {
         builder.setDescription("Hello! I am <@656621136808902656>, a bot built by <@478288246858711040>!"+
                 "\n"+
                 "\nI was written for Discord in Java, using the JDA library ("+ JDAInfo.VERSION+")"+
-                "\nI'm currently in Version 1.2.2. " +
+                "\nI'm currently in Version 1.2.3. " +
                 "\n" +
                 "\nSpecial thanks to <@212772875793334272> for helping me with this bot! Checkout his bot " +
                 "[FriendTime](https://github.com/KevinNovak/Friend-Time), and add it to your discord [here]" +
@@ -45,7 +45,7 @@ public class About extends Command {
                 "\nType `bday help` and I'll display you a list of commands you can use!"+
 //                "\nSee some of my other stats with `" + getMessageInfo.getPrefix(g) + "stats`"+
                 "\n"+
-                "\nFor additional help, contact <@478288246858711040> or join our discord server [here](https://discord.gg/24xS3N5).")
+                "\nFor additional help, contact <@478288246858711040> or join our discord server [here](https://discord.gg/9gUQFtz).")
                 .setColor(Color.decode("#00e1ff"))
                 .setThumbnail(botIcon)
                 .setAuthor("BirthdayBot", null, botIcon)

@@ -32,7 +32,7 @@ public class Support extends Command {
 			return;
 		}
 
-		String message = "For support join our discord server [here](https://discord.gg/24xS3N5)!";
+		String message = "For support join our discord server [here](https://discord.gg/9gUQFtz)!";
 		if (!isPrivate(event)) EmbedSender.sendEmbed(event.getTextChannel(), null, message, null);
 		else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, null);
 	}

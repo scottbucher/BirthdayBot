@@ -5,7 +5,7 @@
 
 ## [Click here to add Birthday Bot to your Discord server!](https://discordapp.com/api/oauth2/authorize?client_id=656621136808902656&permissions=269053008&scope=bot)
 
-[Join The Support Server](https://discord.gg/24xS3N5) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
+[Join The Support Server](https://discord.gg/9gUQFtz) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
 
 In your discord server Birthday Bot will track your users' birthdays and using their timezone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord use Birthday Bot's trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone.
 
@@ -79,4 +79,4 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 
 ## Help
 
-For additional help contact **Stqlth#0001** or join the support server [here](https://discord.gg/24xS3N5).
+For additional help contact **Stqlth#0001** or join the support server [here](https://discord.gg/9gUQFtz).
