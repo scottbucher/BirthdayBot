@@ -136,7 +136,7 @@ public class Config extends Command {
 					else timeMessage = (messageTime - 12) + ":00 PM";
 					EmbedSender.sendEmbed(channel, null, "Successfully set the Birthday Messages to send at " + timeMessage, Color.decode("#1CFE86"));
 
-				} else if (args[3].equalsIgnoreCase("set") && args.length == 5) {
+				} else if (args[3].equalsIgnoreCase("set") && args.length >= 5) {
 					StringBuilder message = new StringBuilder(args[4]);
 
 					for (int i = 5; i < args.length; i++)
