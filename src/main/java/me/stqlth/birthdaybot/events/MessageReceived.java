@@ -71,7 +71,7 @@ public class MessageReceived extends ListenerAdapter {
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor("BirthdayBot General Help", null, botIcon)
 				.setDescription("Birthday Bot handles user's birthdays and allows for a wide variety of settings and customizability for server owners. " +
-						"If you have any questions or run into any problems please join our support server [here](https://discord.gg/24xS3N5)" +
+						"If you have any questions or run into any problems please join our support server [here](https://discord.gg/9gUQFtz)" +
 						"\n" +
 						"\n**bday set** - Set your birthday information." +
 						"\n**bday view <user>** - View another person's birthday." +

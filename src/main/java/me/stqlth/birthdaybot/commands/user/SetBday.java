@@ -102,8 +102,9 @@ public class SetBday extends Command {
 							"Your ZoneId is the Location that appears at the bottom of the map. " +
 							"\n(Do __**not**__ use the shortened values of the Zones. Example: `EST`).";
 
+					input = input.replace(' ', '_').toLowerCase();
 					for (String acceptedZone : acceptedZones)
-						if (input.equalsIgnoreCase(acceptedZone))
+						if (acceptedZone.toLowerCase().contains(input))
 							zoneId = ZoneId.of(acceptedZone);
 
 
