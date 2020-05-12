@@ -107,6 +107,7 @@ public class BirthdayBot {
 				new Invite(),
 				new View(databaseMethods),
 				new TestMessage(databaseMethods),
+				new Clear(waiter, databaseMethods),
 
 				//Owner
 				new Broadcast(databaseMethods)
