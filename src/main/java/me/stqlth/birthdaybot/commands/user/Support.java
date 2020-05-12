@@ -3,6 +3,7 @@ package me.stqlth.birthdaybot.commands.user;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.stqlth.birthdaybot.utils.EmbedSender;
+import me.stqlth.birthdaybot.utils.Utilities;
 import net.dv8tion.jda.api.Permission;
 
 import java.awt.*;
@@ -25,11 +26,13 @@ public class Support extends Command {
 
 		if (args.length != 2) return;
 
-		if (!event.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) return;
+		if (!Utilities.isPrivate(event)) {
+			if (!event.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) return;
 
-		if (!event.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS)) {
-			EmbedSender.sendEmbed(event.getTextChannel(), null, "**BirthdayBot** does not have permission to embed links!", Color.RED);
-			return;
+			if (!event.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS)) {
+				EmbedSender.sendEmbed(event.getTextChannel(), null, "**BirthdayBot** does not have permission to embed links!", Color.RED);
+				return;
+			}
 		}
 
 		String message = "For support join our discord server [here](https://discord.gg/9gUQFtz)!";

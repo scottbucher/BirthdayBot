@@ -200,8 +200,8 @@ public class SetBday extends Command {
 			waitForConfirmation(event, result, sBday, zoneId, changesLeft, date, month, day, normal);
 		}, ErrorManager.GENERAL);
 		else event.getPrivateChannel().sendMessage(builder.build()).queue(result -> {
-			result.addReaction("\u2705").queue(null, ErrorManager.GENERAL);
-			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
+			result.addReaction("\u2705").queue(null, ErrorManager.PRIVATE);
+			result.addReaction("\u274C").queue(null, ErrorManager.PRIVATE);
 			waitForConfirmation(event, result, sBday, zoneId, changesLeft, date, month, day, normal);
 		}, ErrorManager.GENERAL);
 	}
@@ -232,7 +232,9 @@ public class SetBday extends Command {
 						if (month == 2 && day == 29) leapDate(event, normal);
 					} else if (e.getReactionEmote().getName().equals("\u274C")) {
 						msg.delete().queue(null, ErrorManager.GENERAL);
-						EmbedSender.sendEmbed(event.getTextChannel(), null, "Your birthday has not been set.", Color.RED);
+						if (normal) {
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "Your birthday has not been set.", Color.RED);
+						} else EmbedSender.sendEmbed(event.getPrivateChannel(), null, "Your birthday has not been set.", Color.RED);
 					}
 				});
 	}
