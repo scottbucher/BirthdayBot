@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 10, 2020 at 03:46 AM
--- Server version: 10.3.18-MariaDB-0+deb10u1
--- PHP Version: 7.3.11-1~deb10u1
+-- Generation Time: May 12, 2020 at 11:08 AM
+-- Server version: 10.3.22-MariaDB-0+deb10u1
+-- PHP Version: 7.3.14-1~deb10u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -26,7 +26,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`admin`@`%` PROCEDURE `DoesGuildAlreadyExist` (IN `IN_DiscordID` VARCHAR(18))  BEGIN
+CREATE PROCEDURE `DoesGuildAlreadyExist` (IN `IN_DiscordID` VARCHAR(18))  BEGIN
 
 SELECT COUNT(*) > 0 AS AlreadyExists
 FROM guild
@@ -34,7 +34,7 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `DoesUserAlreadyExist` (IN `IN_UserDiscordId` VARCHAR(18))  BEGIN
+CREATE PROCEDURE `DoesUserAlreadyExist` (IN `IN_UserDiscordId` VARCHAR(18))  BEGIN
 
 SELECT COUNT(*) > 0 AS AlreadyExists
 FROM users
@@ -42,7 +42,7 @@ WHERE `UserDiscordId` = IN_UserDiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetBirthdayChannel` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetBirthdayChannel` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT BirthdayChannel
 FROM guildsettings
@@ -50,7 +50,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetBirthdayRole` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetBirthdayRole` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT BirthdayRole
 FROM guildsettings
@@ -58,7 +58,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetBirthdays` (IN `IN_Birthday` VARCHAR(10))  BEGIN
+CREATE PROCEDURE `GetBirthdays` (IN `IN_Birthday` VARCHAR(10))  BEGIN
 
 SELECT UserDiscordId
 FROM users
@@ -66,7 +66,7 @@ WHERE DATE_FORMAT(users.Birthday, '%m-%d') = IN_Birthday;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetChangesLeft` (IN `IN_UserId` INT(11))  BEGIN
+CREATE PROCEDURE `GetChangesLeft` (IN `IN_UserId` INT(11))  BEGIN
 
 SELECT ChangesLeft
 FROM users
@@ -74,7 +74,7 @@ WHERE `UserId` = IN_UserId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetGuildBirthdayMessage` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetGuildBirthdayMessage` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT Custommessage
 FROM guildsettings
@@ -82,7 +82,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetGuildId` (IN `IN_DiscordId` VARCHAR(18))  BEGIN
+CREATE PROCEDURE `GetGuildId` (IN `IN_DiscordId` VARCHAR(18))  BEGIN
 
 SELECT GuildId
 FROM guild
@@ -90,7 +90,7 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetGuildSettingsId` (IN `IN_DiscordId` VARCHAR(18))  BEGIN
+CREATE PROCEDURE `GetGuildSettingsId` (IN `IN_DiscordId` VARCHAR(18))  BEGIN
 
 SELECT GuildSettingsId
 FROM guild
@@ -98,7 +98,7 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetMentionSetting` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetMentionSetting` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT MentionSetting
 FROM guildsettings
@@ -106,7 +106,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetMessageTime` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetMessageTime` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT MessageTime
 FROM guildsettings
@@ -114,7 +114,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetNextBirthday1` (IN `IN_DiscordIds` MEDIUMTEXT)  BEGIN
+CREATE PROCEDURE `GetNextBirthday1` (IN `IN_DiscordIds` MEDIUMTEXT)  BEGIN
 
 SELECT *
 FROM users
@@ -125,7 +125,7 @@ ORDER BY DATE_FORMAT(Birthday, '%m-%d') ASC;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetNextBirthday2` (IN `IN_DiscordIds` MEDIUMTEXT)  BEGIN
+CREATE PROCEDURE `GetNextBirthday2` (IN `IN_DiscordIds` MEDIUMTEXT)  BEGIN
 
 SELECT *
 FROM users
@@ -136,7 +136,7 @@ ORDER BY DATE_FORMAT(Birthday, '%m-%d') DESC;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetNextBirthdays` (IN `IN_Birthday` DATE)  NO SQL
+CREATE PROCEDURE `GetNextBirthdays` (IN `IN_Birthday` DATE)
 BEGIN
 
 SELECT *
@@ -145,7 +145,7 @@ WHERE `Birthday` = IN_Birthday;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetPrefix` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetPrefix` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT Prefix
 FROM guildsettings
@@ -153,7 +153,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetTrustedPreventsMessage` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetTrustedPreventsMessage` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT TrustedPreventsMessage
 FROM guildsettings
@@ -161,7 +161,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetTrustedPreventsRole` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetTrustedPreventsRole` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT TrustedPreventsRole
 FROM guildsettings
@@ -169,7 +169,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetTrustedRole` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetTrustedRole` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT TrustedRole
 FROM guildsettings
@@ -177,7 +177,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetUseEmbed` (IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `GetUseEmbed` (IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 SELECT UseEmbed
 FROM guildsettings
@@ -185,7 +185,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserBirthday` (IN `IN_UserId` INT(11))  BEGIN
+CREATE PROCEDURE `GetUserBirthday` (IN `IN_UserId` INT(11))  BEGIN
 
 SELECT Birthday
 FROM users
@@ -193,7 +193,7 @@ WHERE `UserId` = IN_UserId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserBirthdayFromDiscordId` (IN `IN_DiscordId` VARCHAR(18))  NO SQL
+CREATE PROCEDURE `GetUserBirthdayFromDiscordId` (IN `IN_DiscordId` VARCHAR(18))
 BEGIN
 
 SELECT *
@@ -203,7 +203,7 @@ LIMIT 1;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserId` (IN `IN_UserDiscordId` VARCHAR(18))  BEGIN
+CREATE PROCEDURE `GetUserId` (IN `IN_UserDiscordId` VARCHAR(18))  BEGIN
 
 SELECT UserId
 FROM users
@@ -211,7 +211,7 @@ WHERE `UserDiscordId` = IN_UserDiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `GetUserZoneId` (IN `IN_UserId` INT(11))  BEGIN
+CREATE PROCEDURE `GetUserZoneId` (IN `IN_UserId` INT(11))  BEGIN
 
 SELECT ZoneId
 FROM users
@@ -219,28 +219,28 @@ WHERE `UserId` = IN_UserId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `InsertGuild` (IN `IN_DiscordId` VARCHAR(18), IN `IN_GuildSettingsId` INT(11), IN `IN_Active` TINYINT(1))  BEGIN
+CREATE PROCEDURE `InsertGuild` (IN `IN_DiscordId` VARCHAR(18), IN `IN_GuildSettingsId` INT(11), IN `IN_Active` TINYINT(1))  BEGIN
 
 INSERT INTO guild(DiscordId, GuildSettingsId, Active)
 VALUES(IN_DiscordId, IN_GuildSettingsId, IN_Active);
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `InsertGuildSettings` (IN `IN_Prefix` VARCHAR(100))  BEGIN
+CREATE PROCEDURE `InsertGuildSettings` (IN `IN_Prefix` VARCHAR(100))  BEGIN
 
 INSERT guildsettings
 SET `Prefix` = IN_Prefix;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `InsertUser` (IN `IN_UserDiscordId` VARCHAR(18))  BEGIN
+CREATE PROCEDURE `InsertUser` (IN `IN_UserDiscordId` VARCHAR(18))  BEGIN
 
 INSERT IGNORE INTO users(UserDiscordId)
 VALUES(IN_UserDiscordId);
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `IsGuildActive` (IN `IN_DiscordId` VARCHAR(18))  BEGIN
+CREATE PROCEDURE `IsGuildActive` (IN `IN_DiscordId` VARCHAR(18))  BEGIN
 
 SELECT Active
 FROM guild
@@ -248,13 +248,13 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `SelectLastInsertID` ()  BEGIN
+CREATE PROCEDURE `SelectLastInsertID` ()  BEGIN
 
 SELECT LAST_INSERT_ID();
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateBirthday` (IN `IN_UserId` INT(11), IN `IN_Birthday` DATE)  BEGIN
+CREATE PROCEDURE `UpdateBirthday` (IN `IN_UserId` INT(11), IN `IN_Birthday` DATE)  BEGIN
 
 UPDATE users
 SET `Birthday` = IN_Birthday
@@ -262,7 +262,7 @@ WHERE `UserId` = IN_UserId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateBirthdayChannel` (IN `IN_ChannelId` VARCHAR(18), IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `UpdateBirthdayChannel` (IN `IN_ChannelId` VARCHAR(18), IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 UPDATE guildsettings
 SET `BirthdayChannel` = IN_ChannelId
@@ -270,7 +270,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateBirthdayRole` (IN `IN_RoleId` VARCHAR(18), IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `UpdateBirthdayRole` (IN `IN_RoleId` VARCHAR(18), IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 UPDATE guildsettings
 SET `BirthdayRole` = IN_RoleId
@@ -278,7 +278,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateChangesLeft` (IN `IN_UserId` INT(11), IN `IN_Left` TINYINT)  BEGIN
+CREATE PROCEDURE `UpdateChangesLeft` (IN `IN_UserId` INT(11), IN `IN_Left` TINYINT)  BEGIN
 
 UPDATE users
 SET `ChangesLeft` = IN_Left
@@ -286,7 +286,7 @@ WHERE `UserId` = IN_UserId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateGuildActive` (IN `IN_DiscordId` VARCHAR(18), IN `IN_Active` TINYINT(1))  BEGIN
+CREATE PROCEDURE `UpdateGuildActive` (IN `IN_DiscordId` VARCHAR(18), IN `IN_Active` TINYINT(1))  BEGIN
 
 UPDATE guild
 SET `Active` = IN_Active
@@ -294,7 +294,7 @@ WHERE `DiscordId` = IN_DiscordId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateMentionSetting` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` VARCHAR(18))  BEGIN
+CREATE PROCEDURE `UpdateMentionSetting` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` VARCHAR(18))  BEGIN
 
 UPDATE guildsettings
 SET `MentionSetting` = IN_Setting
@@ -302,7 +302,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateMessage` (IN `IN_GuildSettingsId` INT(11), IN `IN_Message` VARCHAR(2000))  BEGIN
+CREATE PROCEDURE `UpdateMessage` (IN `IN_GuildSettingsId` INT(11), IN `IN_Message` VARCHAR(2000))  BEGIN
 
 UPDATE guildsettings
 SET `CustomMessage` = IN_Message
@@ -310,7 +310,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateMessageTime` (IN `IN_GuildSettingsId` INT(11), IN `IN_Time` TINYINT(1))  BEGIN
+CREATE PROCEDURE `UpdateMessageTime` (IN `IN_GuildSettingsId` INT(11), IN `IN_Time` TINYINT(1))  BEGIN
 
 UPDATE guildsettings
 SET `MessageTime` = IN_Time
@@ -318,7 +318,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsID;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdatePrefix` (IN `IN_Prefix` VARCHAR(100), IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `UpdatePrefix` (IN `IN_Prefix` VARCHAR(100), IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 UPDATE guildsettings
 SET `Prefix` = IN_Prefix
@@ -326,7 +326,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdatePreventMessage` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
+CREATE PROCEDURE `UpdatePreventMessage` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
 
 UPDATE guildsettings
 SET `TrustedPreventsMessage` = IN_Setting
@@ -334,7 +334,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdatePreventRole` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
+CREATE PROCEDURE `UpdatePreventRole` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
 
 UPDATE guildsettings
 SET `TrustedPreventsRole` = IN_Setting
@@ -342,7 +342,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateTrustedRole` (IN `IN_RoleId` VARCHAR(18), IN `IN_GuildSettingsId` INT(11))  BEGIN
+CREATE PROCEDURE `UpdateTrustedRole` (IN `IN_RoleId` VARCHAR(18), IN `IN_GuildSettingsId` INT(11))  BEGIN
 
 UPDATE guildsettings
 SET `TrustedRole` = IN_RoleId
@@ -350,7 +350,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateUseEmbed` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
+CREATE PROCEDURE `UpdateUseEmbed` (IN `IN_GuildSettingsId` INT(11), IN `IN_Setting` TINYINT(1))  BEGIN
 
 UPDATE guildsettings
 SET `UseEmbed` = IN_Setting
@@ -358,7 +358,7 @@ WHERE `GuildSettingsId` = IN_GuildSettingsId;
 
 END$$
 
-CREATE DEFINER=`admin`@`%` PROCEDURE `UpdateZoneId` (IN `IN_UserId` INT(11), IN `IN_ZoneId` TINYTEXT)  BEGIN
+CREATE PROCEDURE `UpdateZoneId` (IN `IN_UserId` INT(11), IN `IN_ZoneId` TINYTEXT)  BEGIN
 
 UPDATE users
 SET `ZoneId` = IN_ZoneId
