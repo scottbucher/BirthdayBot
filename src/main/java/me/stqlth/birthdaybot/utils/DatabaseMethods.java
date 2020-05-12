@@ -26,6 +26,38 @@ public class DatabaseMethods {
 		}
 	}
 
+	public void clearBirthday(User user) {
+		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
+			 CallableStatement statement = conn.prepareCall("CALL UpdateBirthday(?, ?)")) {
+			int userId;
+
+			userId = getUserId(user);
+
+			statement.setInt(1, userId);
+			statement.setString(2, null);
+
+			statement.execute();
+		} catch (SQLException ex) {
+			Utilities.sqlDebug(ex);
+		}
+	}
+
+	public void clearZoneId(CommandEvent event) {
+		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
+			 CallableStatement statement = conn.prepareCall("CALL UpdateZoneId(?, ?)")) {
+			int userId;
+
+			userId = getUserId(event.getAuthor());
+
+			statement.setInt(1, userId);
+			statement.setString(2, null);
+
+			statement.execute();
+		} catch (SQLException ex) {
+			Utilities.sqlDebug(ex);
+		}
+	}
+
 	public int getUserId(User user) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
 			 Statement statement = conn.createStatement()) {
