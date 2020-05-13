@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -74,6 +75,18 @@ public class Utilities {
 	}
 
 	public static boolean isPrivate(CommandEvent event) {
+		TextChannel textChannel = null;
+		PrivateChannel privateChannel = null;
+		try {
+			textChannel = event.getTextChannel();
+		} catch (IllegalStateException ignored) {
+			privateChannel = event.getPrivateChannel();
+		}
+
+		return (privateChannel != null);
+	}
+
+	public static boolean isPrivate(MessageReceivedEvent event) {
 		TextChannel textChannel = null;
 		PrivateChannel privateChannel = null;
 		try {
