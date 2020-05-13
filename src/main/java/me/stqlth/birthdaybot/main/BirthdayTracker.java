@@ -3,7 +3,6 @@ package me.stqlth.birthdaybot.main;
 import me.stqlth.birthdaybot.utils.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
@@ -152,6 +151,7 @@ public class BirthdayTracker {
 			try { //try catch for Guild Loop
 
 				for (Guild guild : guilds) {
+
 					Logger.Debug("Checking guild: " + guild.getName() + "ID(" + guild.getId() + ")");
 
 					long bdayRole = db.getBirthdayRole(guild);
@@ -184,6 +184,11 @@ public class BirthdayTracker {
 						Logger.Debug("Both birthday role and channel are null for guild: " + guild.getName() + " (ID: " + guild.getId() + ")");
 						continue; //if both return null the bot can't do anything for this guild on birthdays
 					}
+
+
+					if (bChannel != null)
+						if (!(guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES) && guild.getSelfMember().hasPermission(bChannel, Permission.MESSAGE_WRITE))) continue;
+
 
 					List<Member> birthdaysExactInGuild = new ArrayList<>();
 					List<Member> birthdaysExpiredExactInGuild = new ArrayList<>();
@@ -246,62 +251,64 @@ public class BirthdayTracker {
 
 					try {
 
-						EnumSet<Permission> reqRole = EnumSet.of(Permission.MANAGE_ROLES);
-						if (bRole != null && guild.getSelfMember().hasPermission(reqRole)) {
-							for (Member birthday : birthdaysExactInGuild) { //ADD ROLE AND ADD USER TO THE LIST OF PEOPLE TO SAY HAPPY BIRTHDAY TO
+						if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
+							EnumSet<Permission> reqRole = EnumSet.of(Permission.MANAGE_ROLES);
+							if (bRole != null && guild.getSelfMember().hasPermission(reqRole)) {
+								for (Member birthday : birthdaysExactInGuild) { //ADD ROLE AND ADD USER TO THE LIST OF PEOPLE TO SAY HAPPY BIRTHDAY TO
 
-								if (preventRole && tRole != null) {
-									if (!birthday.getRoles().contains(tRole)) {
-										Logger.Debug("Bday Role: Trusted role is present and they do not have the role");
-										continue;
+									if (preventRole && tRole != null) {
+										if (!birthday.getRoles().contains(tRole)) {
+											Logger.Debug("Bday Role: Trusted role is present and they do not have the role");
+											continue;
+										}
+									}
+
+									boolean hasTRole = birthday.getRoles().contains(tRole);
+									if (!preventRole || hasTRole || tRole == null) {
+										TextChannel temp = bChannel == null ? guild.getDefaultChannel() : bChannel;
+										guild.addRoleToMember(birthday, bRole).queue(null, error -> {
+											if (error instanceof PermissionException) {
+												if (temp != null) {
+													String message = "**BirthdayBot** can't give  " + birthday.getAsMention() + " the birthday role due to a lack of permissions!";
+													EmbedSender.sendEmbed(temp, null, message, Color.RED);
+												}
+											} else {
+												Logger.Error("Could not give the birthday role to " + birthday.getUser().getName() +
+														"(" + birthday.getId() + ") in " + guild.getName() + "!", error);
+											}
+										});
 									}
 								}
 
-								boolean hasTRole = birthday.getRoles().contains(tRole);
-								if (!preventRole || hasTRole || tRole == null) {
-									TextChannel temp = bChannel == null ? guild.getDefaultChannel() : bChannel;
-									guild.addRoleToMember(birthday, bRole).queue(null, error -> {
-										if (error instanceof PermissionException || error instanceof HierarchyException) {
-											if (temp != null) {
-												String message = "**BirthdayBot** can't give  " + birthday.getAsMention() + " the birthday role due to a lack of permissions!";
-												EmbedSender.sendEmbed(temp, null, message, Color.RED);
-											}
-										} else {
-											Logger.Error("Could not give the birthday role to " + birthday.getUser().getName() +
-													"(" + birthday.getId() + ") in " + guild.getName() + "!", error);
+								for (Member birthday : birthdaysExpiredExactInGuild) { //REMOVE THE ROLE IF THEIR BIRTHDAY HAS ENDED
+
+									if (preventRole && tRole != null) {
+										if (!birthday.getRoles().contains(tRole)) {
+											Logger.Debug("Bday Remove Role: Trusted role is present and they do not have the role");
+											continue;
 										}
-									});
-								}
-							}
+									}
 
-							for (Member birthday : birthdaysExpiredExactInGuild) { //REMOVE THE ROLE IF THEIR BIRTHDAY HAS ENDED
+									boolean hasTRole = birthday.getRoles().contains(tRole);
 
-								if (preventRole && tRole != null) {
-									if (!birthday.getRoles().contains(tRole)) {
-										Logger.Debug("Bday Remove Role: Trusted role is present and they do not have the role");
-										continue;
+									if (!preventRole || hasTRole || tRole == null) {
+
+										TextChannel temp = bChannel == null ? guild.getDefaultChannel() : bChannel;
+										guild.removeRoleFromMember(birthday, bRole).queue(null, error -> {
+											if (error instanceof PermissionException) {
+												if (temp != null) {
+													String message = "**BirthdayBot** can't take the birthday role from " + birthday.getAsMention() + " due to a lack of permissions!";
+													EmbedSender.sendEmbed(temp, null, message, Color.RED);
+												}
+											} else {
+												Logger.Error("Could not take the birthday role from " + birthday.getUser().getName() +
+														"(" + birthday.getId() + ") in " + guild.getName() + "!", error);
+											}
+										});
 									}
 								}
 
-								boolean hasTRole = birthday.getRoles().contains(tRole);
-
-								if (!preventRole || hasTRole || tRole == null) {
-
-									TextChannel temp = bChannel == null ? guild.getDefaultChannel() : bChannel;
-									guild.removeRoleFromMember(birthday, bRole).queue(null, error -> {
-										if (error instanceof PermissionException) {
-											if (temp != null) {
-												String message = "**BirthdayBot** can't take the birthday role from " + birthday.getAsMention() + " due to a lack of permissions!";
-												EmbedSender.sendEmbed(temp, null, message, Color.RED);
-											}
-										} else {
-											Logger.Error("Could not take the birthday role from " + birthday.getUser().getName() +
-													"(" + birthday.getId() + ") in " + guild.getName() + "!", error);
-										}
-									});
-								}
 							}
-
 						}
 
 					} catch (Exception ex) {
@@ -309,9 +316,8 @@ public class BirthdayTracker {
 					}
 
 					try {
-						EnumSet<Permission> req = EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_READ);
 
-						if (bChannel != null && guild.getSelfMember().hasPermission(req)) {
+						if (bChannel != null && guild.getSelfMember().hasPermission(bChannel, Permission.MESSAGE_WRITE)) {
 							for (Member birthday : BirthdayMessagesInGuild) {
 
 								boolean hasTRole = birthday.getRoles().contains(tRole);
