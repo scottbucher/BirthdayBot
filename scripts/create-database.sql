@@ -412,7 +412,7 @@ CREATE TABLE `users` (
   `UserDiscordId` varchar(18) NOT NULL,
   `Birthday` date DEFAULT NULL,
   `ZoneId` tinytext CHARACTER SET utf32 DEFAULT NULL,
-  `ChangesLeft` tinyint(4) DEFAULT 3
+  `ChangesLeft` tinyint(4) DEFAULT 5
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
