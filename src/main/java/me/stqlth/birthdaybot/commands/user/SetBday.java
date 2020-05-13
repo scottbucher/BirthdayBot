@@ -50,7 +50,19 @@ public class SetBday extends Command {
 
 		User author = event.getAuthor();
 
+		if (db.doesUserExist(author)) {
+			if (db.getChangesLeft(author)<= 0) {
+				String message = "You have already set your birthday 5 times.";
+				if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
+				else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
+				return;
+			}
+		}
+
+
 		getTimezone(event, author, normal);
+
+
 	}
 
 	public void getTimezone(CommandEvent event, User author, boolean normal) {
@@ -174,12 +186,7 @@ public class SetBday extends Command {
 						db.addUser(event.getAuthor());
 					}
 					int changesLeft = db.getChangesLeft(event.getAuthor());
-					if (changesLeft <= 0) {
-						String message = "You have already set your birthday 3 times.";
-						if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, message, Color.RED);
-						else EmbedSender.sendEmbed(event.getPrivateChannel(), null, message, Color.RED);
-						return;
-					} else changesLeft--;
+					changesLeft--;
 
 					if (normal) sendConfirmation(event, date, sBday, zoneId.toString(), changesLeft, month, day, true);
 					else sendConfirmation(event, date, sBday, zoneId.toString(), changesLeft, month, day, false);
@@ -193,7 +200,8 @@ public class SetBday extends Command {
 		EmbedBuilder builder = new EmbedBuilder();
 
 		builder.setColor(Color.decode("#1CFE86"))
-				.setDescription("Please confirm that this is the correct date: **" + date + "**");
+				.setDescription("Please confirm this information is correct: **" + date + "**")
+				.setFooter("You have " + db.getChangesLeft(event.getAuthor()) + " birthday set(s) left. By clicking confirm you will use one of them.", event.getSelfUser().getAvatarUrl());
 		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(result -> {
 			result.addReaction("\u2705").queue(null, ErrorManager.GENERAL);
 			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
@@ -228,7 +236,7 @@ public class SetBday extends Command {
 								EmbedSender.sendEmbed(event.getPrivateChannel(), null, "Invalid Format.\nExample Date: `08/28`", Color.RED);
 							return;
 						}
-						db.updateChangesLeft(event, changesLeft);
+						db.updateChangesLeft(event.getAuthor(), changesLeft);
 						if (month == 2 && day == 29) leapDate(event, normal);
 					} else if (e.getReactionEmote().getName().equals("\u274C")) {
 						msg.delete().queue(null, ErrorManager.GENERAL);
