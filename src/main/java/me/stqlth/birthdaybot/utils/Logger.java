@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Logger {
-    private static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss.SSS");
+    private static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     private static final String INFO_PREFIX = "[Info]";
     private static final String WARN_PREFIX = "[Warn]";
@@ -43,7 +43,7 @@ public class Logger {
     }
 
     public static void Error(String message, Exception ex) {
-        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace());
+        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace()) + "\nCaused by: " + ex.getCause();
         Output(log);
     }
     private static void Output(String log) {
