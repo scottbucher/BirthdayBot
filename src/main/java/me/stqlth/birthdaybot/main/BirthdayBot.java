@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.stqlth.birthdaybot.commands.developement.Broadcast;
+import me.stqlth.birthdaybot.commands.developement.SetAttempts;
 import me.stqlth.birthdaybot.commands.staff.*;
 import me.stqlth.birthdaybot.commands.staff.clear.ClearBirthdayChannel;
 import me.stqlth.birthdaybot.commands.staff.clear.ClearBirthdayRole;
@@ -77,7 +78,7 @@ public class BirthdayBot {
 		BirthdayTracker birthdayTracker = new BirthdayTracker(databaseMethods);
 		Manager manager = new Manager();
 
-		Command[] commands = new Command[]{
+		Command[] commands = new Command[] {
 				//CONFIG
 				new Setup(databaseMethods, waiter),
 				new Config(databaseMethods),
@@ -108,9 +109,11 @@ public class BirthdayBot {
 				new View(databaseMethods),
 				new TestMessage(databaseMethods),
 				new Clear(waiter, databaseMethods),
+				new ViewSets(databaseMethods),
 
-				//Owner
-				new Broadcast(databaseMethods)
+				//Development
+				new Broadcast(databaseMethods),
+				new SetAttempts(databaseMethods)
 		};
 
 		// Create the client

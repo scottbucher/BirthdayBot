@@ -50,6 +50,8 @@ public class Help extends Command {
 						"If you have any questions or run into any problems please join our support server [here](https://discord.gg/9gUQFtz)" +
 						"\n" +
 						"\n**bday set** - Set your birthday information." +
+						"\n**bday clear** - Clear your data from the Birthday Bot database." +
+						"\n**bday viewSets** - View how many birthday sets you have left." +
 						"\n**bday view <user>** - View another person's birthday." +
 						"\n**bday next** - View the next birthday in a server." +
 						"\n**bday invite** -  Get the BirthdayBot invite link." +

@@ -101,12 +101,12 @@ public class DatabaseMethods {
 		return -1;
 	}
 
-	public void updateChangesLeft(CommandEvent event, int left) {
+	public void updateChangesLeft(User user, int left) {
 		try (Connection conn = DriverManager.getConnection(BirthdayBotConfig.getDbUrl(), BirthdayBotConfig.getDbUser(), BirthdayBotConfig.getDbPassword());
 			 CallableStatement statement = conn.prepareCall("CALL UpdateChangesLeft(?, ?)")) {
 			int userId;
 
-			userId = getUserId(event.getAuthor());
+			userId = getUserId(user);
 
 			statement.setInt(1, userId);
 			statement.setInt(2, left);
