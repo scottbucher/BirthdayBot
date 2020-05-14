@@ -2,6 +2,9 @@
 # Custom
 # =====================================================
 botconfig.*.json
+.settings
+.classpath
+.project
 
 # Created by https://www.gitignore.io/api/java,maven,intellij
 # Edit at https://www.gitignore.io/?templates=java,maven,intellij
