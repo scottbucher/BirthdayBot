@@ -38,12 +38,12 @@ public class Logger {
     }
 
     public static void Error(String message, Throwable ex) {
-        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace()) + "\nCaused by: " + ex.getCause();
+        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace());
         Output(log);
     }
 
     public static void Error(String message, Exception ex) {
-        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace()) + "\nCaused by: " + ex.getCause();
+        String log = GetCurrentTimestamp() + " " + ERROR_PREFIX + " " + message + " Exception: " + Arrays.toString(ex.getStackTrace());
         Output(log);
     }
     private static void Output(String log) {
