@@ -29,7 +29,7 @@ public class ViewSets extends Command
 
 		int setsLeft = db.getChangesLeft(event.getAuthor());
 
-		if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, "You have " + setsLeft + " birthday set(s) left.", Color.decode("#1CFE86"));
-		else EmbedSender.sendEmbed(event.getPrivateChannel(), null, "You have " + setsLeft + " birthday set(s) left.", Color.decode("#1CFE86"));
+		if (normal) EmbedSender.sendEmbed(event.getTextChannel(), null, "You may set your birthday " + setsLeft + " more time(s).", Color.decode("#1CFE86"));
+		else EmbedSender.sendEmbed(event.getPrivateChannel(), null, "You may set your birthday " + setsLeft + " more time(s).", Color.decode("#1CFE86"));
 	}
 }

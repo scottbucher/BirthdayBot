@@ -201,7 +201,7 @@ public class SetBday extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setDescription("Please confirm this information is correct: **" + date + "**")
-				.setFooter("You have " + db.getChangesLeft(event.getAuthor()) + " birthday set(s) left. By clicking confirm you will use one of them.", event.getSelfUser().getAvatarUrl());
+				.setFooter("You have " + db.getChangesLeft(event.getAuthor()) + " birthday change(s) left. By clicking confirm you will use one of them.", event.getSelfUser().getAvatarUrl());
 		if (normal) event.getTextChannel().sendMessage(builder.build()).queue(result -> {
 			result.addReaction("\u2705").queue(null, ErrorManager.GENERAL);
 			result.addReaction("\u274C").queue(null, ErrorManager.GENERAL);
