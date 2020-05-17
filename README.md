@@ -37,7 +37,9 @@ For users that's it! Server owners will have to do a bit more but Birthday Bot m
 
 ## Commands
 
-The following are commands for BirthdayBot. To run a command, prefix the command with `bday`, for example, `bday help`.
+The following are commands for BirthdayBot.
+
+**NOTE**: To run a command, prefix the command with `bday`, for example: `bday help`.
 
 ### Setup (Admins only)
 
