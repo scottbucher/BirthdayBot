@@ -7,9 +7,11 @@
 
 [Join The Support Server](https://discord.gg/9gUQFtz) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
 
-In your discord server Birthday Bot will track your users' birthdays and using their timezone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord use Birthday Bot's trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone.
+In your Discord server Birthday Bot will track your users' birthdays and using their time zone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord, use Birthday Bots trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone.
 
-Start by using `bday set`
+## Quick Start Guide
+
+Start by typing `bday set`.
 
 ![Example Start](https://i.imgur.com/lEt7I0J.png)
 
@@ -21,36 +23,38 @@ Start by using `bday set`
 
 Simply click your location on the map, and use the name displayed in the dropdown box as your time zone.
 
-You can then take your time zone name and use it in the `bday set` command
+You can then take your time zone name and use it in the `bday set` command.
 
 ![Setting your time zone](https://i.imgur.com/Mtpx86n.png)
 
-Birthday Bot will then know your timezone and will use this to know when to celebrate your birthday.
+Birthday Bot will then know your time zone and will use this to know when to celebrate your birthday.
 
-Full Example usage of `bday set`
+Full example usage of `bday set`:
 
 ![Example usage](https://i.imgur.com/rJXpDss.png)
 
-For users that's it! Server owners will have to do a bit more but Birthday Bot makes it easy with an interactive setup commands `bday setup` and `bday setup optional`!
+For users that's it! Server owners will have to do a bit more but Birthday Bot makes it easy with the interactive setup commands `bday setup` and `bday setup optional`!
 
 ## Commands
 
-The following are commands for BirthdayBot. To run a command, prefix the command with `bday `, for example, `bday help` or `@BirthdayBot help`.
+The following are commands for BirthdayBot. To run a command, prefix the command with `bday`, for example, `bday help`.
+
+### Setup (Admins only)
+
+* `setup` - Interactive guide for server setup.
+* `setup optional` - Interactive guide for optional server setup settings.
 
 ### Info
 
 * `help` - View useful information about BirthdayBot.
 * `help setup` - View useful information on how to setup Birthday Bot.
-* `help setup option` - View useful information on how to setup the optional Birthday Bot settings.
+* `help setup optional` - View useful information on how to setup the optional Birthday Bot settings.
 * `about` - View information about BirthdayBot.
 * `serverinfo` - View information about your server.
-* `settings` - View your server's current configuration settings.
+* `settings` - View your server's current server settings.
 * `shard` - View information about your current shard.
 
-### Server Configuration (Admins only)
-
-* `bday setup` - Interactive guide for server setup.
-* `bday setup optional` - Interactive guide for optional server setup settings.
+### Server Settings (Admins only)
 
 * `SetBirthdayRole <@role/rolename>` - Set a role to be the designated Birthday role.
 * `SetBirthdayChannel [#channel]` - Set a channel to be the designated Birthday Channel.
@@ -79,4 +83,4 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 
 ## Help
 
-For additional help contact **Stqlth#0001** or join the support server [here](https://discord.gg/9gUQFtz).
+For additional help join the support server [here](https://discord.gg/9gUQFtz).
