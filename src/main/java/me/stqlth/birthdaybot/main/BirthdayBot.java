@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 import org.discordbots.api.client.DiscordBotListAPI;
 import org.json.JSONObject;
 
@@ -41,6 +42,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -172,7 +174,7 @@ public class BirthdayBot {
 		clientBuilder.setGuildSettingsManager(settingsManager)
 				.useHelpBuilder(false)
 				.setOwnerId(BirthdayBotConfig.getOwnerId())
-				.setActivity(Activity.streaming("Happy Birthday", "https://www.twitch.tv/stqlth"))
+				.setActivity(Activity.streaming("Happy Birthdays", "https://www.twitch.tv/stqlth"))
 				.setPrefix(BirthdayBotConfig.getPrefix())
 				.setEmojis(SUCCESS_EMOJI, WARNING_EMOJI, ERROR_EMOJI)
 				.addCommands(commands);
@@ -183,6 +185,7 @@ public class BirthdayBot {
 		DefaultShardManagerBuilder shardManager = new DefaultShardManagerBuilder();
 
 		shardManager.setToken(BirthdayBotConfig.getToken())
+				.setChunkingFilter(ChunkingFilter.NONE)
 				.addEventListeners((Object[]) listeners)
 				.addEventListeners(client)
 				.build();

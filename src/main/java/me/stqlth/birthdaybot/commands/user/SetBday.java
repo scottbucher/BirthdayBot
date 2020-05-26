@@ -97,6 +97,8 @@ public class SetBday extends Command {
 		waiter.waitForEvent(MessageReceivedEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember())),
 				e -> {
+					if (Utilities.cancelWaiter(e.getMessage())) return;
+
 					String input = e.getMessage().getContentRaw();
 					List<String> acceptedZones = new ArrayList<>();
 					for (String check : ZoneId.getAvailableZoneIds()) {
@@ -161,6 +163,8 @@ public class SetBday extends Command {
 		waiter.waitForEvent(MessageReceivedEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember())),
 				e -> {
+					if (Utilities.cancelWaiter(e.getMessage())) return;
+
 					String[] args = e.getMessage().getContentRaw().split("/");
 
 					int day;
