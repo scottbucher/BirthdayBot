@@ -3,10 +3,7 @@ package me.stqlth.birthdaybot.utils;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.Unirest;
 import me.stqlth.birthdaybot.config.BirthdayBotConfig;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.PrivateChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.imageio.ImageIO;
@@ -84,6 +81,16 @@ public class Utilities {
 		}
 
 		return (privateChannel != null);
+	}
+
+	public static boolean cancelWaiter(Message message) {
+		String[] args = getArgs(message);
+
+		return args[0].equalsIgnoreCase("bday");
+	}
+
+	public static String[] getArgs(Message message) {
+			return message.getContentRaw().split(" ");
 	}
 
 	public static boolean isPrivate(MessageReceivedEvent event) {

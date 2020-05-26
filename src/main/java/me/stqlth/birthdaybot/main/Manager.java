@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.discordbots.api.client.DiscordBotListAPI;
 
+import java.text.DecimalFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -38,9 +39,11 @@ public class Manager {
 	private void startManager(ShardManager client, DiscordBotListAPI api) {
 		try {
 			int serverCount = client.getGuilds().size();
-			Logger.Debug("Updating Manager with ServerCount: " + serverCount);
+			DecimalFormat formatter = new DecimalFormat("#,###");
+
+			Logger.Debug("Updating Manager with ServerCount: " + formatter.format(serverCount));
 			if (BirthdayBotConfig.updateApi()) api.setStats(serverCount);
-			client.setActivity(Activity.streaming("bdays to " + serverCount + " servers", "https://www.twitch.tv/stqlth"));
+			client.setActivity(Activity.streaming("bdays to " + formatter.format(serverCount) + " servers", "https://www.twitch.tv/stqlth"));
 		} catch (Exception ex) {
 			Logger.Error("The Manager Caught an Exception.", ex);
 		}

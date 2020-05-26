@@ -3,10 +3,7 @@ package me.stqlth.birthdaybot.commands.staff;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import me.stqlth.birthdaybot.utils.DatabaseMethods;
-import me.stqlth.birthdaybot.utils.ErrorManager;
-import me.stqlth.birthdaybot.utils.EmbedSender;
-import me.stqlth.birthdaybot.utils.Logger;
+import me.stqlth.birthdaybot.utils.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -14,6 +11,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
+import javax.rmi.CORBA.Util;
 import java.awt.*;
 import java.util.EnumSet;
 import java.util.Objects;
@@ -122,7 +120,7 @@ public class Setup extends Command {
 									});
 							break;
 						case SELECT_EMOJI: //Select Pre-Existing
-							EmbedSender.sendEmbed(event.getTextChannel(), null, "Please mention a channel or input a channel's name.", Color.GREEN);
+							EmbedSender.sendEmbed(event.getTextChannel(), null, "Please mention a channel or input a channel's name.", Color.decode("#1CFE86"));
 
 							waitForBirthdayChannelSelection(event, result);
 							break;
@@ -153,7 +151,7 @@ public class Setup extends Command {
 					try {
 						bdayChannel = e.getMessage().getMentionedChannels().get(0);
 					} catch (IndexOutOfBoundsException ex) {
-						bdayChannel = event.getGuild().getTextChannels().stream().filter(channel -> channel.getName().equalsIgnoreCase(args[0])).findFirst().orElse(null);
+						bdayChannel = event.getGuild().getTextChannels().stream().filter(channel -> channel.getName().toLowerCase().contains(args[0].toLowerCase())).findFirst().orElse(null);
 					}
 					if (bdayChannel == null) {
 						EmbedSender.sendEmbed(event.getTextChannel(), null, "The specified channel cannot be found.", Color.RED);
@@ -254,15 +252,16 @@ public class Setup extends Command {
 		waiter.waitForEvent(MessageReceivedEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember())),
 				e -> {
+					if (Utilities.cancelWaiter(e.getMessage())) return;
 
-					String[] args = e.getMessage().getContentRaw().split(" ");
+					String[] args = Utilities.getArgs(e.getMessage());
 
 					Role bdayRole;
 
 					try {
 						bdayRole = e.getMessage().getMentionedRoles().get(0);
 					} catch (IndexOutOfBoundsException ex) {
-						bdayRole = event.getGuild().getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(args[0])).findFirst().orElse(null);
+						bdayRole = event.getGuild().getRoles().stream().filter(role -> role.getName().toLowerCase().contains(args[0].toLowerCase())).findFirst().orElse(null);
 					}
 					if (bdayRole == null) {
 						EmbedSender.sendEmbed(event.getTextChannel(), null, "The specified role cannot be found.", Color.RED);
@@ -309,8 +308,9 @@ public class Setup extends Command {
 		waiter.waitForEvent(MessageReceivedEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember())),
 				e -> {
+					if (Utilities.cancelWaiter(e.getMessage())) return;
 
-					String[] args = e.getMessage().getContentRaw().split(" ");
+					String[] args = Utilities.getArgs(e.getMessage());
 
 					int time;
 
@@ -369,7 +369,9 @@ public class Setup extends Command {
 		waiter.waitForEvent(MessageReceivedEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember())),
 				e -> {
-					String[] args = e.getMessage().getContentRaw().split(" ");
+					if (Utilities.cancelWaiter(e.getMessage())) return;
+
+					String[] args = Utilities.getArgs(e.getMessage());
 
 					StringBuilder message = new StringBuilder(args[0]);
 
@@ -404,7 +406,7 @@ public class Setup extends Command {
 
 		builder.setColor(Color.decode("#1CFE86"))
 				.setAuthor(author.getEffectiveName() + "#" + author.getUser().getDiscriminator(), null, author.getUser().getAvatarUrl())
-				.setTitle("**Server Setup - Custom Birthday Message**")
+				.setTitle("**Server Setup - Birthday Message Options**")
 				.setDescription("" +
 						"\n » Now you can set your birthday mention setting. This is the group the bot will @ when it sends a birthday message." +
 						"\n" +
@@ -423,7 +425,9 @@ public class Setup extends Command {
 		waiter.waitForEvent(MessageReceivedEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember())),
 				e -> {
-					String[] args = e.getMessage().getContentRaw().split(" ");
+					if (Utilities.cancelWaiter(e.getMessage())) return;
+
+					String[] args = Utilities.getArgs(e.getMessage());
 					switch (args[0].toLowerCase()) {
 						case "everyone":
 							db.updateMentionedSetting(event, "everyone");
@@ -548,10 +552,11 @@ public class Setup extends Command {
 		waiter.waitForEvent(MessageReceivedEvent.class,
 				e -> (e.getChannel().equals(event.getChannel()) && Objects.equals(e.getMember(), event.getMember())),
 				e -> {
+					if (Utilities.cancelWaiter(e.getMessage())) return;
 
-					String[] args = e.getMessage().getContentRaw().split(" ");
+					String[] args = Utilities.getArgs(e.getMessage());
 
-					Role trustedRole = null;
+					Role trustedRole;
 
 					try {
 						trustedRole = e.getMessage().getMentionedRoles().get(0);
