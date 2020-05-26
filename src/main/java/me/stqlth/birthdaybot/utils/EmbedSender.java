@@ -25,7 +25,9 @@ public class EmbedSender {
 					Logger.Error("Failed to send message to a TextChannel with ID: " + channel.getId(), error);
 				}
 			});
-		} catch (Exception ignored) {}
+		} catch (Exception ex) {
+			Logger.Error("Could not send an embed to the Guild: " + channel.getGuild().getName() + " (ID:" + channel.getGuild().getId() + ") in the TextChannel: " + channel.getName() + " (ID: " + channel.getId() + " )", ex);
+		}
 
 	}
 	public static void sendEmbed(@Nonnull PrivateChannel channel, @Nullable String title, @Nonnull String description, @Nullable Color color) {
