@@ -1,7 +1,3 @@
----
-description: Welcome to the official Birthday Bot Documentation!
----
-
 # Overview
 
 **If you haven't already, invite Birthday Bot to your discord** [**here**](https://discordapp.com/api/oauth2/authorize?client_id=656621136808902656&permissions=269053008&scope=bot)**.**
@@ -24,8 +20,3 @@ In your Discord server Birthday Bot will track your users' birthdays and using t
 #### Support & Troubleshooting
 
 Birthday Bot is a part of the Arilyn Bot family and any support, questions or feedback are welcome in our support [Discord](https://discord.com/invite/9gUQFtz). Please visit our [FAQ](faq.md) and setup guide, as well as previous user questions before contacting staff, thanks!
-
-
-
-\*\*\*\*
-
