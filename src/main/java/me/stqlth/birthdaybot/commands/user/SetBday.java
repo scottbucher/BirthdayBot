@@ -112,7 +112,7 @@ public class SetBday extends Command {
 
 					ZoneId zoneId = null;
 					final String message = "Your ZoneId is invalid.\n\n" +
-							"If you don't know what a ZoneId is, click [here](http://kevalbhatt.github.io/timezone-picker/) and hover over your location on the map. " +
+							"If you don't know what a ZoneId is, click [here](https://kevinnovak.github.io/Time-Zone-Picker/) and hover over your location on the map. " +
 							"Your ZoneId is the Location that appears at the bottom of the map. " +
 							"\n(Do __**not**__ use the shortened values of the Zones. Example: `EST`).";
 
