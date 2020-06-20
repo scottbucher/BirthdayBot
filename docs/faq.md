@@ -30,7 +30,7 @@ However, the trusted role system is a feature if servers need to limit which use
 
 ## I can't find my time zone?
 
-[Keval Bhatt](https://github.com/kevalbhatt) has created a handy [map time zone picker](http://kevalbhatt.github.io/timezone-picker/)!
+[KevinNovak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker//)!
 
 Simply click your location on the map, and use the name displayed in the drop-down box as your time zone.
 

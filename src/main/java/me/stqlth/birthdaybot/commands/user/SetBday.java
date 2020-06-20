@@ -76,7 +76,7 @@ public class SetBday extends Command {
 						"\n" +
 						"\n » To begin your setup you must select your timezone. This allows the bot to know what time to trigger your birthday!" +
 						"\n" +
-						"\nTo find your timezone please use the map [here](http://kevalbhatt.github.io/timezone-picker/)." +
+						"\nTo find your timezone please use the map [here](https://kevinnovak.github.io/Time-Zone-Picker/)." +
 						"\n" +
 						"\n**Example Usage**: `America/New_York`")
 				.setFooter("This message will timeout in 1 minute!", event.getJDA().getSelfUser().getAvatarUrl());

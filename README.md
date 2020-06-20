@@ -19,7 +19,7 @@ Start by typing `bday set`.
 
 [Keval Bhatt](https://github.com/kevalbhatt) has created a handy map time zone picker:
 
-<http://kevalbhatt.github.io/timezone-picker/>
+<https://kevinnovak.github.io/Time-Zone-Picker/>
 
 Simply click your location on the map, and use the name displayed in the dropdown box as your time zone.
 
