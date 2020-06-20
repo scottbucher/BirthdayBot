@@ -9,8 +9,7 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import java.awt.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -140,19 +139,20 @@ public class BirthdayTracker {
 					guilds.addAll(client.getMutualGuilds(check));
 				}
 
-				guilds = guilds.stream().distinct().collect(Collectors.toList());
+				Set<Guild> set = new HashSet<>(guilds);
+				guilds.clear();
+				guilds.addAll(set);
 
 
 			} catch (Exception ex) {
 				Logger.Error("The Birthday Tracker Setup Caught an Exception", ex);
 			}
 
-
 			try { //try catch for Guild Loop
 
 				for (Guild guild : guilds) {
 
-					Logger.Debug("Checking guild: " + guild.getName() + "ID(" + guild.getId() + ")");
+					Logger.Debug("Checking guild: " + guild.getName() + " ID(" + guild.getId() + ")");
 
 					long bdayRole = db.getBirthdayRole(guild);
 					long bdayChannel = db.getBirthdayChannel(guild);

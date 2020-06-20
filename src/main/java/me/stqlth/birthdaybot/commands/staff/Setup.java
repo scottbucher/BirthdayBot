@@ -374,7 +374,6 @@ public class Setup extends Command {
 					String[] args = Utilities.getArgs(e.getMessage());
 
 					StringBuilder message = new StringBuilder(args[0]);
-
 					for (int i = 1; i < args.length; i++)
 						message.append(" ").append(args[i]);
 
