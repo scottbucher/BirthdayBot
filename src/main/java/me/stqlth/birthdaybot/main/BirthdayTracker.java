@@ -39,9 +39,9 @@ public class BirthdayTracker {
 				},
 				// How long to wait before starting, in ms
 				// Calculates the time to the next exact Hour:
-				Utilities.getMsToNextHour(),
+				Utilities.getMsToNextMinute(),
 				// Once started, how often to repeat, in ms
-				everyHour,
+				everyMinute,
 				// The unit of time for the above parameters
 				TimeUnit.MILLISECONDS);
 	}
@@ -138,11 +138,9 @@ public class BirthdayTracker {
 				for (User check : birthdayUsers) { //creates possible duplicate guilds in this list
 					guilds.addAll(client.getMutualGuilds(check));
 				}
-
-				Set<Guild> set = new HashSet<>(guilds);
+				HashSet<Guild> set = new HashSet<>(guilds);
 				guilds.clear();
 				guilds.addAll(set);
-
 
 			} catch (Exception ex) {
 				Logger.Error("The Birthday Tracker Setup Caught an Exception", ex);
