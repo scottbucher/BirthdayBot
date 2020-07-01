@@ -1,10 +1,10 @@
 import { Collection, DMChannel, Message, MessageReaction, User } from 'discord.js';
 
+import { CustomMessageRepo } from '../services/database/repos/custom-message-repo';
 import { EventHandler } from '.';
+import { FormatUtils } from '../utils';
 import { Logger } from '../services';
 import { UserRepo } from '../services/database/repos';
-import { CustomMessageRepo } from '../services/database/repos/custom-message-repo';
-import { FormatUtils } from '../utils';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -43,7 +43,9 @@ export class ReactionAddHandler implements EventHandler {
             users.find(user => user.id === msg.client.user.id) !== null;
 
         if (checkNextPage || checkPreviousPage) {
-            let titleArgs = msg.embeds[0]?.title.split(' ');
+            let titleArgs = msg.embeds[0]?.title?.split(' ');
+
+            if (!titleArgs) return;
 
             if (titleArgs[1] === 'Messages') {
                 let page = 1;
@@ -87,7 +89,9 @@ export class ReactionAddHandler implements EventHandler {
                 if (customMessageResults.stats.TotalPages > page)
                     await message.react(Config.emotes.nextPage);
             } else if (titleArgs[1] === 'List') {
-                let titleArgs = msg.embeds[0]?.title.split(' ');
+                let titleArgs = msg.embeds[0]?.title?.split(' ');
+
+                if (!titleArgs) return;
                 let page = 1;
 
                 if (titleArgs[4]) {
