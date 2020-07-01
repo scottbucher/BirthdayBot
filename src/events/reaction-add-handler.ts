@@ -21,7 +21,7 @@ export class ReactionAddHandler implements EventHandler {
             try {
                 msg = await messageReaction.message.fetch();
             } catch (error) {
-                Logger.error(Logs.error.MessagePartial, error);
+                Logger.error(Logs.error.messagePartial, error);
                 return;
             }
         } else {
