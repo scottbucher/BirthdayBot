@@ -1,4 +1,4 @@
-INSERT INTO birthdaybotdev.user (
+INSERT INTO birthdaybot.user (
     UserId,
     UserDiscordId,
     Birthday,
@@ -13,8 +13,8 @@ SELECT
     ChangesLeft
 FROM oldbirthdaybot.users;
 
-DROP TEMPORARY TABLE IF EXISTS birthdaybotdev.GuildData;
-CREATE TEMPORARY TABLE IF NOT EXISTS birthdaybotdev.GuildData AS
+DROP TEMPORARY TABLE IF EXISTS birthdaybot.GuildData;
+CREATE TEMPORARY TABLE IF NOT EXISTS birthdaybot.GuildData AS
     SELECT
         G.DiscordId,
         GS.*
@@ -22,7 +22,7 @@ CREATE TEMPORARY TABLE IF NOT EXISTS birthdaybotdev.GuildData AS
 	JOIN oldbirthdaybot.`guild` AS G
     	ON GS.GuildSettingsId = G.GuildSettingsId;
 
-INSERT INTO birthdaybotdev.guild (
+INSERT INTO birthdaybot.guild (
     GuildDiscordId,
     BirthdayChannelDiscordId,
     BirthdayRoleDiscordId,
@@ -42,9 +42,9 @@ INSERT INTO birthdaybotdev.guild (
     TrustedPreventsRole,
     TrustedPreventsMessage,
     UseEmbed
-FROM birthdaybotdev.GuildData;
+FROM birthdaybot.GuildData;
 
-INSERT INTO birthdaybotdev.messages (
+INSERT INTO birthdaybot.messages (
 	GuildId,
 	Message
 ) SELECT
@@ -54,10 +54,10 @@ FROM (
 	SELECT
         G.GuildId,
         LEFT(GD.CustomMessage, 300) AS CustomMessage
-	FROM birthdaybotdev.GuildData AS GD
-	JOIN birthdaybotdev.guild AS G
+	FROM birthdaybot.GuildData AS GD
+	JOIN birthdaybot.guild AS G
 		ON GD.DiscordId = G.GuildDiscordId
 	WHERE GD.CustomMessage <> '0'
 ) AS NewData;
 
-DROP TEMPORARY TABLE IF EXISTS birthdaybotdev.GuildData;
+DROP TEMPORARY TABLE IF EXISTS birthdaybot.GuildData;
