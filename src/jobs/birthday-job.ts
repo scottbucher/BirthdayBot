@@ -1,6 +1,6 @@
+import { BirthdayService, Logger } from '../services';
 import { Client, Guild } from 'discord.js';
 
-import { BirthdayService, Logger } from '../services';
 import { GuildRepo } from '../services/database/repos';
 import { Job } from './job';
 
@@ -53,10 +53,10 @@ export class BirthdayJob implements Job {
                     );
                 })
             );
-
-            // Wait for all birthday celebrations to finish
-            await Promise.allSettled(promises);
-            Logger.info(Logs.info.completedBirthdayJob);
         }
+
+        // Wait for all birthday celebrations to finish
+        await Promise.allSettled(promises);
+        Logger.info(Logs.info.completedBirthdayJob);
     }
 }
