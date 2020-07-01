@@ -1,8 +1,8 @@
-import { Collection, DMChannel, Message, MessageReaction, User } from 'discord.js';
+import { Collection, DMChannel, Message, MessageReaction, TextChannel, User } from 'discord.js';
+import { FormatUtils, PermissionUtils } from '../utils';
 
 import { CustomMessageRepo } from '../services/database/repos/custom-message-repo';
 import { EventHandler } from '.';
-import { FormatUtils } from '../utils';
 import { Logger } from '../services';
 import { UserRepo } from '../services/database/repos';
 
@@ -13,7 +13,11 @@ export class ReactionAddHandler implements EventHandler {
     constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
 
     public async process(messageReaction: MessageReaction, author: User): Promise<void> {
-        if (author.bot || messageReaction.message.channel instanceof DMChannel) return;
+        if (author.bot || !(messageReaction.message.channel instanceof TextChannel)) return;
+
+        let channel = messageReaction.message.channel as TextChannel;
+
+        if (!PermissionUtils.canSend(channel) || !PermissionUtils.canHandleReaction(channel) || !PermissionUtils.canReact(channel)) return;
 
         let msg: Message;
 
@@ -28,9 +32,17 @@ export class ReactionAddHandler implements EventHandler {
             msg = messageReaction.message;
         }
 
+
         let reactor = msg.guild.members.resolve(author);
 
-        let users: Collection<string, User> = await messageReaction.users.fetch();
+        let users: Collection<string, User>;
+
+        try {
+            users = await messageReaction.users.fetch();
+        } catch (error) {
+            Logger.error(Logs.error.userFetch, error);
+            return;
+        }
 
         let checkNextPage: boolean =
             messageReaction.emoji.name === Config.emotes.nextPage &&

@@ -6,11 +6,11 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
-import { Logger } from '../services';
 import { GuildRepo } from '../services/database/repos';
-import { MessageUtils } from '../utils';
+import { Logger } from '../services';
 
 let Config = require('../../config/config.json');
 
@@ -32,8 +32,15 @@ export class MessageHandler {
         if (!(channel instanceof TextChannel || channel instanceof DMChannel)) return;
 
         if (channel instanceof TextChannel) {
-            if (!channel.permissionsFor(msg.guild.me).has(Permissions.FLAGS.SEND_MESSAGES)) {
+            if (!PermissionUtils.canSend(channel)) {
                 // We can't even send a message to this guild
+                return;
+            }
+            if (!PermissionUtils.canReact(channel)) {
+                let embed = new MessageEmbed()
+                    .setDescription('I need permission to **Add Reactions** & **Read Message History**!')
+                    .setColor(Config.colors.error);
+                await channel.send(embed);
                 return;
             }
         }
