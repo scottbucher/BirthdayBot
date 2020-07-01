@@ -37,6 +37,10 @@ export class ReactionAddHandler implements EventHandler {
 
         let users: Collection<string, User>;
 
+        if (messageReaction.emoji.name !== Config.emotes.nextPage && messageReaction.emoji.name !== Config.emotes.previousPage) {
+            return;
+        }
+
         try {
             users = await messageReaction.users.fetch();
         } catch (error) {
