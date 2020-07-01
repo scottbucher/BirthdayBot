@@ -879,6 +879,7 @@ export abstract class SetupUtils {
                                                     .setDescription(`Invalid Role!`)
                                                     .setColor(Config.colors.error);
                                                 await channel.send(embed);
+                                                trustedRole = '0';
                                                 return;
                                             }
 
