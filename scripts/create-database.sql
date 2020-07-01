@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.5
+-- version 4.6.6deb4
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 01, 2020 at 04:03 PM
--- Server version: 5.7.24
--- PHP Version: 7.4.1
+-- Generation Time: Jul 01, 2020 at 11:07 PM
+-- Server version: 10.1.41-MariaDB-0+deb9u1
+-- PHP Version: 7.0.33-0+deb9u6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -19,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `birthdaybotdev`
+-- Database: `birthdaybot`
 --
 
 DELIMITER $$
@@ -66,7 +64,7 @@ SET @GuildId = NULL;
 
 SELECT GuildId
 INTO @GuildId
-FROM Guild
+FROM `guild`
 WHERE GuildDiscordId = IN_GuildDiscordId;
 
 SET @Row_Number = 0;
@@ -567,21 +565,17 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `guild`
 --
 ALTER TABLE `guild`
-  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT;
-
+  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16384;
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT;
-
+  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1024;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27261;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
