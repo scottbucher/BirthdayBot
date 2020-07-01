@@ -1,0 +1,32 @@
+{
+    "info": {
+        "started": "Application started.",
+        "launchedShard": "Launched Shard {SHARD_ID}.",
+        "startedJobs": "Started job schedules.",
+        "login": "Logged in as '{USER_TAG}'!",
+        "updatedServerCount": "Updated server count. Connected to {SERVER_COUNT} total servers.",
+        "updateServerCountSite": "Updated server count on '{BOT_SITE}'.",
+        "guildJoined": "Guild '{GUILD_NAME}' ({GUILD_ID}) joined.",
+        "guildLeft": "Guild '{GUILD_NAME}' ({GUILD_ID}) left.",
+        "birthdayJobStarted": "Started birthday job.",
+        "birthdayJobGuildCount": "Celebrating Birthdays for {GUILD_COUNT} guilds...",
+        "completedBirthdayJob": "Completed birthday job."
+    },
+    "warn": {
+        "noShards": "No shards to spawn."
+    },
+    "error": {
+        "retrieveShardCount": "An error occurred while retrieving the recommended shard count.",
+        "spawnShard": "An error occurred while spawning shards.",
+        "updateServerCount": "An error occurred while updating the server count.",
+        "updateServerCountSite": "An error occurred while updating the server count on '{BOT_SITE}'.",
+        "login": "An error occurred while the client attempted to login.",
+        "guildJoin": "An error occurred while processing a guild join.",
+        "guildLeave": "An error occurred while processing a guild leave.",
+        "resolveGuild": "Guild '{GUILD_ID}' could not be resolved even though it is in the cache.",
+        "message": "An error occurred while processing a message.",
+        "birthdayJob": "An error occurred while running the birthday job.",
+        "celebrateBirthday": "An error occurred while trying to celebrate birthdays for guild '{GUILD_NAME}' ({GUILD_ID}).",
+        "messagePartial": "An error occurred while trying to fetch a message partial."
+    }
+}

@@ -1,0 +1,81 @@
+{
+    "prefix": "bday",
+    "token": "<BOT_TOKEN>",
+    "intents": ["GUILDS", "GUILD_MEMBERS", "GUILD_PRESENCES", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
+    "colors": {
+        "default": "0x4eefff",
+        "success": "0x1cfe86",
+        "error": "0xff0000"
+    },
+    "emotes": {
+        "confirm": "✅",
+        "deny": "❌",
+        "nextPage": "➡️",
+        "previousPage": "⬅️",
+        "create": "🔨",
+        "select": "🖱",
+        "birthday": "🎂"
+    },
+    "birthdayListSize": "15",
+    "birthdayMessageListSize": "5",
+    "mysql": {
+        "host": "localhost",
+        "database": "<DATABASE_NAME>",
+        "user": "<DATABASE_USERNAME>",
+        "password": "<DATABASE_PASSWORD>",
+        "charset": "utf8mb4",
+        "connectionLimit": 10
+    },
+    "postSchedule": "0 0 * * * *",
+    "listPageSize": 5,
+    "promptExpireTime": 120,
+    "regions": [
+        "Africa",
+        "America",
+        "Antarctica",
+        "Arctic",
+        "Asia",
+        "Atlantic",
+        "Australia",
+        "Europe",
+        "Indian",
+        "Pacific"
+    ],
+    "sharding": {
+        "machineId": 0,
+        "machineCount": 1,
+        "serversPerShard": 1000,
+        "spawnDelay": 5,
+        "spawnTimeout": 60
+    },
+    "ownerIds": ["478288246858711040", "212772875793334272"],
+    "updateInterval": 300,
+    "botSites": {
+        "topGg": {
+            "enabled": false,
+            "url": "https://top.gg/api/bots/<BOT_ID>/stats",
+            "token": "<TOKEN>"
+        },
+        "botsOnDiscordXyz": {
+            "enabled": false,
+            "url": "https://bots.ondiscord.xyz/bot-api/bots/<BOT_ID>/guilds",
+            "token": "<TOKEN>"
+        },
+        "discordBotsGg": {
+            "enabled": false,
+            "url": "https://discord.bots.gg/api/v1/bots/<BOT_ID>/stats",
+            "token": "<TOKEN>"
+        },
+        "discordBotListCom": {
+            "enabled": false,
+            "url": "https://discordbotlist.com/api/bots/<BOT_ID>/stats",
+            "token": "Bot <TOKEN>"
+        }
+    },
+    "clientOptions": {
+        "messageCacheMaxSize": 20,
+        "messageCacheLifetime": 120,
+        "messageSweepInterval": 60,
+        "partials": ["MESSAGE", "REACTION"]
+    }
+}

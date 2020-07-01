@@ -1,0 +1,11 @@
+{
+    "enabled": false,
+    "overrideShardCount": false,
+    "shardCount": 2,
+    "skipAdminCheck": false,
+    "overridePostScheduleEnabled": true,
+    "overridePostSchedule": "0 * * * * *",
+    "alwaysGiveBirthdayRole": false,
+    "alwaysRemoveBirthdayRole": false,
+    "alwaysSendBirthdayMessage": false
+}
