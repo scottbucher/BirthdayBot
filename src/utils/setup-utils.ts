@@ -8,9 +8,9 @@ import {
     User,
 } from 'discord.js';
 
-import { PermissionUtils } from '.';
-import { GuildRepo } from '../services/database/repos';
 import { ActionUtils } from './action-utils';
+import { GuildRepo } from '../services/database/repos';
+import { PermissionUtils } from '.';
 
 let Config = require('../../config/config.json');
 
@@ -86,7 +86,7 @@ export abstract class SetupUtils {
                     )?.id;
                 } else if (nextReaction.emoji.name === Config.emotes.select) {
                     let embed = new MessageEmbed()
-                        .setDescription('Please mention a channel or input a channel\'s name.')
+                        .setDescription("Please mention a channel or input a channel's name.")
                         .setColor(Config.colors.default);
                     let selectMessage = await channel.send(embed);
 
@@ -107,6 +107,17 @@ export abstract class SetupUtils {
                                         .toLowerCase()
                                         .includes(nextMsg.content.toLowerCase())
                                 );
+                        }
+
+                        // Bot needs to be able to message in the desired channel
+                        if (!PermissionUtils.canSend(channelInput)) {
+                            let embed = new MessageEmbed()
+                                .setDescription(
+                                    `I don't have permission to send messages in ${channelInput.toString()}!`
+                                )
+                                .setColor(Config.colors.error);
+                            channel.send(embed);
+                            return false;
                         }
 
                         if (!channelInput || channelInput.guild.id !== msg.guild.id) {
@@ -153,17 +164,6 @@ export abstract class SetupUtils {
                             if (!channelInput || channelInput.guild.id !== msg.guild.id) {
                                 let embed = new MessageEmbed()
                                     .setDescription('Invalid channel!')
-                                    .setColor(Config.colors.error);
-                                await channel.send(embed);
-                                return;
-                            }
-
-                            // Bot needs to be able to message in the desired channel
-                            if (!PermissionUtils.canSend(channelInput)) {
-                                let embed = new MessageEmbed()
-                                    .setDescription(
-                                        `I don't have permission to send messages in ${channelInput.toString()}!`
-                                    )
                                     .setColor(Config.colors.error);
                                 await channel.send(embed);
                                 return;
@@ -229,7 +229,7 @@ export abstract class SetupUtils {
                             )?.id;
                         } else if (nextReaction.emoji.name === Config.emotes.select) {
                             let embed = new MessageEmbed()
-                                .setDescription('Please mention a role or input a role\'s name.')
+                                .setDescription("Please mention a role or input a role's name.")
                                 .setColor(Config.colors.default);
                             let selectMessage = await channel.send(embed);
 
@@ -806,7 +806,7 @@ export abstract class SetupUtils {
                                 } else if (nextReaction.emoji.name === Config.emotes.select) {
                                     let embed = new MessageEmbed()
                                         .setDescription(
-                                            'Please mention a role or input a role\'s name.'
+                                            "Please mention a role or input a role's name."
                                         )
                                         .setColor(Config.colors.default);
                                     let selectMessage = await channel.send(embed);
