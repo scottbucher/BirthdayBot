@@ -1,8 +1,8 @@
 import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
-
-import { Command } from './command';
-import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
+
+import { UserRepo } from '../services/database/repos';
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 
