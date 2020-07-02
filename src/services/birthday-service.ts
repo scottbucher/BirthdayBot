@@ -10,7 +10,6 @@ export class BirthdayService {
     constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
 
     public async celebrateBirthdays(guild: Guild, guildData: GuildData): Promise<void> {
-        if (!guild) return;
         let birthdayChannel: TextChannel;
         let birthdayRole: Role;
         let trustedRole: Role;

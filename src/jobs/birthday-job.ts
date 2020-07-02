@@ -43,6 +43,8 @@ export class BirthdayJob implements Job {
                 continue;
             }
 
+            if (!guild) continue;
+
             promises.push(
                 this.birthdayService.celebrateBirthdays(guild, guildData).catch(error => {
                     Logger.error(
