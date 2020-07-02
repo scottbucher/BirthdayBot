@@ -1,7 +1,7 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { Command } from './command';
 import { MessageUtils } from '../utils';
+import { Command } from './command';
 
 let Config = require('../../config/config.json'); // Possible support for server specific prefixes?
 
