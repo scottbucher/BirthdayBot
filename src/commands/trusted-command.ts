@@ -1,8 +1,8 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { Command } from './command';
-import { FormatUtils } from '../utils';
 import { GuildRepo } from '../services/database/repos';
+import { FormatUtils } from '../utils';
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 
