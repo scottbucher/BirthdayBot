@@ -32,10 +32,7 @@ export abstract class PermissionUtils {
 
         return channel
             .permissionsFor(channel.client.user)
-            .has([
-                Permissions.FLAGS.ADD_REACTIONS,
-                Permissions.FLAGS.READ_MESSAGE_HISTORY
-            ]);
+            .has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.READ_MESSAGE_HISTORY]);
     }
 
     public static canHandleReaction(channel: TextChannel): boolean {
@@ -47,9 +44,6 @@ export abstract class PermissionUtils {
 
         return channel
             .permissionsFor(channel.client.user)
-            .has([
-                Permissions.FLAGS.VIEW_CHANNEL,
-                Permissions.FLAGS.READ_MESSAGE_HISTORY
-            ]);
+            .has([Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY]);
     }
 }
