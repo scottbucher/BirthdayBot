@@ -109,6 +109,15 @@ export abstract class SetupUtils {
                                 );
                         }
 
+                        if (!channelInput || channelInput.guild.id !== msg.guild.id) {
+                            let embed = new MessageEmbed()
+                                .setDescription('Invalid channel!')
+                                .setColor(Config.colors.error);
+
+                            channel.send(embed);
+                            return false;
+                        }
+
                         // Bot needs to be able to message in the desired channel
                         if (!PermissionUtils.canSend(channelInput)) {
                             let embed = new MessageEmbed()
@@ -120,14 +129,6 @@ export abstract class SetupUtils {
                             return false;
                         }
 
-                        if (!channelInput || channelInput.guild.id !== msg.guild.id) {
-                            let embed = new MessageEmbed()
-                                .setDescription('Invalid channel!')
-                                .setColor(Config.colors.error);
-
-                            channel.send(embed);
-                            return false;
-                        }
                         return true;
                     };
 
