@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 02, 2020 at 01:33 AM
+-- Generation Time: Jul 02, 2020 at 02:12 AM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -431,17 +431,15 @@ DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
 CREATE PROCEDURE `User_GetFullList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
+DROP TEMPORARY TABLE IF EXISTS temp;
 
 SET @TotalPages = NULL;
 SET @TotalItems = NULL;
 SET @StartRow = NULL;
 SET @EndRow = NULL;
-SET @ROW_NUMBER = 0;
 
-DROP TEMPORARY TABLE IF EXISTS temp;
 CREATE TEMPORARY TABLE temp( val VARCHAR(20) );
 SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
-
 PREPARE stmt1 FROM @sql;
 EXECUTE stmt1;
 
@@ -449,9 +447,11 @@ SELECT COUNT(*) INTO @TotalItems
 FROM temp AS T
 JOIN `user`AS U
 	ON U.UserDiscordId = T.val
-WHERE U.Birthday IS NOT NULL AND U.Timezone IS NOT NULL;
+WHERE
+	U.Birthday IS NOT NULL AND
+	U.Timezone IS NOT NULL;
 
-SELECT CEILING(@TotalItems/IN_PageSize) INTO @TotalPages;
+SELECT CEILING(@TotalItems / IN_PageSize) INTO @TotalPages;
 
 IF (IN_Page < 0) THEN 
 	SET IN_Page = 1;
@@ -464,26 +464,26 @@ SET @EndRow = IN_Page * IN_PageSize;
 
 SELECT *
 FROM (
-    SELECT
-        *,
-        @ROW_NUMBER := @ROW_NUMBER + 1 AS 'Position'
-    FROM (
-		SELECT *
-		FROM temp AS T
-		JOIN `user`AS U
-			ON U.UserDiscordId = T.val
-		WHERE U.Birthday IS NOT NULL AND U.Timezone IS NOT NULL
-        ORDER BY U.Birthday
-    ) AS UserData
+	SELECT
+		*,
+		ROW_NUMBER() OVER (
+			ORDER BY U.Birthday
+		) AS 'Position'
+	FROM temp AS T
+	JOIN `user`AS U
+		ON U.UserDiscordId = T.val
+	WHERE
+		U.Birthday IS NOT NULL AND
+		U.Timezone IS NOT NULL
 ) AS UserData
 WHERE
-    UserData.Position >= @StartRow AND
-    UserData.Position <= @EndRow;
+	UserData.Position >= @StartRow AND
+	UserData.Position <= @EndRow;
 
 SELECT
-    @TotalItems AS 'TotalItems',
-    @TotalPages as 'TotalPages';
-    
+	@TotalItems AS 'TotalItems',
+	@TotalPages as 'TotalPages';
+	
 DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
