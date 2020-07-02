@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 4.6.6deb4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jul 02, 2020 at 02:12 AM
--- Server version: 10.3.22-MariaDB-0+deb10u1
--- PHP Version: 7.3.14-1~deb10u1
+-- Host: localhost:3306
+-- Generation Time: Jul 02, 2020 at 06:17 AM
+-- Server version: 10.3.23-MariaDB-1:10.3.23+maria~stretch
+-- PHP Version: 7.0.33-0+deb9u6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -26,7 +24,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE PROCEDURE `CustomMessages_Add` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Message` VARCHAR(2000))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Add` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Message` VARCHAR(2000))  BEGIN
 
 SET @GuildId = NULL;
 SET @MessageId = NULL;
@@ -45,7 +43,7 @@ INSERT INTO `messages` (
 );
 END$$
 
-CREATE PROCEDURE `CustomMessages_Clear` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Clear` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -60,7 +58,7 @@ WHERE
 		GuildId = @GuildId; 
 END$$
 
-CREATE PROCEDURE `CustomMessages_Get` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Get` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -81,7 +79,7 @@ ORDER BY MessageId;
 
 END$$
 
-CREATE PROCEDURE `CustomMessages_GetList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_GetList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
 
 SET @GuildId = NULL;
 SET @TotalPages = NULL;
@@ -132,7 +130,7 @@ SELECT
 DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
-CREATE PROCEDURE `CustomMessages_Remove` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Position` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Remove` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Position` INT)  BEGIN
 
 SET @GuildId = NULL;
 SET @MessageId = NULL;
@@ -162,7 +160,7 @@ WHERE
         AND MessageId = @MessageId;   
 END$$
 
-CREATE PROCEDURE `Guild_AddOrUpdate` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayChannelDiscordId` VARCHAR(20), IN `IN_BirthdayRoleDiscordId` VARCHAR(20))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_AddOrUpdate` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayChannelDiscordId` VARCHAR(20), IN `IN_BirthdayRoleDiscordId` VARCHAR(20))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -192,7 +190,7 @@ END IF;
 
 END$$
 
-CREATE PROCEDURE `Guild_Get` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_Get` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
 
 SELECT *
 FROM `guild`
@@ -200,7 +198,7 @@ WHERE GuildDiscordId = IN_GuildDiscordId;
 
 END$$
 
-CREATE PROCEDURE `Guild_GetAll` (IN `IN_GuildDiscordIds` MEDIUMTEXT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_GetAll` (IN `IN_GuildDiscordIds` MEDIUMTEXT)  BEGIN
 
 SELECT *
 FROM `guild`
@@ -208,7 +206,7 @@ WHERE FIND_IN_SET(GuildDiscordId, IN_GuildDiscordIds) > 0;
 
 END$$
 
-CREATE PROCEDURE `Guild_SetupMessage` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_MessageTime` TINYINT, IN `IN_MentionSetting` VARCHAR(20), IN `IN_UseEmbed` TINYINT(1))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_SetupMessage` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_MessageTime` TINYINT, IN `IN_MentionSetting` VARCHAR(20), IN `IN_UseEmbed` TINYINT(1))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -227,7 +225,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `Guild_SetupTrusted` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_TrustedRoleDiscordId` VARCHAR(20), IN `IN_TrustedPreventsRole` TINYINT(1), IN `IN_TrustedPreventsMessage` TINYINT(1))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_SetupTrusted` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_TrustedRoleDiscordId` VARCHAR(20), IN `IN_TrustedPreventsRole` TINYINT(1), IN `IN_TrustedPreventsMessage` TINYINT(1))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -246,7 +244,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `Guild_UpdateBirthdayChannel` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayChannelDiscordId` VARCHAR(20))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateBirthdayChannel` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayChannelDiscordId` VARCHAR(20))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -261,7 +259,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `Guild_UpdateBirthdayRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayRoleDiscordId` VARCHAR(20))  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateBirthdayRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayRoleDiscordId` VARCHAR(20))  NO SQL
 BEGIN
 
 SET @GuildId = NULL;
@@ -277,7 +275,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `Guild_UpdateMentionSetting` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_MentionSetting` VARCHAR(20))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateMentionSetting` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_MentionSetting` VARCHAR(20))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -292,7 +290,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `Guild_UpdateMessageTime` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Time` TINYINT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateMessageTime` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Time` TINYINT)  BEGIN
 
 SET @GuildId = NULL;
 
@@ -307,7 +305,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `Guild_UpdateTrustedPreventsMessage` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Value` TINYINT(1))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateTrustedPreventsMessage` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Value` TINYINT(1))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -322,7 +320,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `Guild_UpdateTrustedPreventsRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Value` TINYINT(1))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateTrustedPreventsRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Value` TINYINT(1))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -337,7 +335,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `Guild_UpdateTrustedRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_TrustedRoleDiscordId` VARCHAR(20))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateTrustedRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_TrustedRoleDiscordId` VARCHAR(20))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -352,7 +350,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `Guild_UpdateUseEmbed` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Value` TINYINT(1))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateUseEmbed` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Value` TINYINT(1))  BEGIN
 
 SET @GuildId = NULL;
 
@@ -367,7 +365,7 @@ WHERE GuildId = @GuildId;
 
 END$$
 
-CREATE PROCEDURE `User_AddOrUpdate` (IN `IN_UserDiscordId` VARCHAR(20), IN `IN_Birthday` DATE, IN `IN_Timezone` VARCHAR(100), IN `IN_ChangesLeft` TINYINT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_AddOrUpdate` (IN `IN_UserDiscordId` VARCHAR(20), IN `IN_Birthday` DATE, IN `IN_Timezone` VARCHAR(100), IN `IN_ChangesLeft` TINYINT)  BEGIN
 
 SET @UserId = NULL;
 
@@ -400,7 +398,7 @@ END IF;
 
 END$$
 
-CREATE PROCEDURE `User_Get` (IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_Get` (IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
 
 SELECT *
 FROM `user`
@@ -408,7 +406,7 @@ WHERE UserDiscordId = IN_UserDiscordId;
 
 END$$
 
-CREATE PROCEDURE `User_GetAll` (IN `IN_UserDiscordIds` MEDIUMTEXT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetAll` (IN `IN_UserDiscordIds` MEDIUMTEXT)  BEGIN
 
 DROP TEMPORARY TABLE IF EXISTS temp;
 CREATE TEMPORARY TABLE temp( val VARCHAR(20) );
@@ -430,7 +428,7 @@ FROM (
 DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
-CREATE PROCEDURE `User_GetFullList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
 DROP TEMPORARY TABLE IF EXISTS temp;
 
 SET @TotalPages = NULL;
@@ -446,17 +444,17 @@ EXECUTE stmt1;
 SELECT COUNT(*) INTO @TotalItems
 FROM temp AS T
 JOIN `user`AS U
-	ON U.UserDiscordId = T.val
+    ON U.UserDiscordId = T.val
 WHERE
-	U.Birthday IS NOT NULL AND
-	U.Timezone IS NOT NULL;
+    U.Birthday IS NOT NULL AND
+    U.Timezone IS NOT NULL;
 
 SELECT CEILING(@TotalItems / IN_PageSize) INTO @TotalPages;
 
 IF (IN_Page < 0) THEN 
-	SET IN_Page = 1;
+    SET IN_Page = 1;
 ELSEIF (IN_Page > @TotalPages) THEN 
-	SET IN_Page = @TotalPages;
+    SET IN_Page = @TotalPages;
 END IF;
 
 SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
@@ -464,26 +462,26 @@ SET @EndRow = IN_Page * IN_PageSize;
 
 SELECT *
 FROM (
-	SELECT
-		*,
-		ROW_NUMBER() OVER (
-			ORDER BY U.Birthday
-		) AS 'Position'
-	FROM temp AS T
-	JOIN `user`AS U
-		ON U.UserDiscordId = T.val
-	WHERE
-		U.Birthday IS NOT NULL AND
-		U.Timezone IS NOT NULL
+    SELECT
+        *,
+        ROW_NUMBER() OVER (
+            ORDER BY U.Birthday
+        ) AS 'Position'
+    FROM temp AS T
+    JOIN `user`AS U
+        ON U.UserDiscordId = T.val
+    WHERE
+        U.Birthday IS NOT NULL AND
+        U.Timezone IS NOT NULL
 ) AS UserData
 WHERE
-	UserData.Position >= @StartRow AND
-	UserData.Position <= @EndRow;
+    UserData.Position >= @StartRow AND
+    UserData.Position <= @EndRow;
 
 SELECT
-	@TotalItems AS 'TotalItems',
-	@TotalPages as 'TotalPages';
-	
+    @TotalItems AS 'TotalItems',
+    @TotalPages as 'TotalPages';
+    
 DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
@@ -567,21 +565,17 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `guild`
 --
 ALTER TABLE `guild`
-  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT;
-
+  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16394;
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT;
-
+  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1036;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27420;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
