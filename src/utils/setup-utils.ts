@@ -8,9 +8,9 @@ import {
     User,
 } from 'discord.js';
 
-import { ActionUtils } from './action-utils';
-import { GuildRepo } from '../services/database/repos';
 import { PermissionUtils } from '.';
+import { GuildRepo } from '../services/database/repos';
+import { ActionUtils } from './action-utils';
 
 let Config = require('../../config/config.json');
 
@@ -28,7 +28,7 @@ export abstract class SetupUtils {
 
         let channelEmbed = new MessageEmbed()
             .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
-            .setTitle('Server Required Setup - Birthday Channel Selection')
+            .setTitle('Server Setup - Birthday Channel')
             .setDescription(
                 'To begin you must set up the birthday channel [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
                     '\n\nPlease select an option'
@@ -183,7 +183,7 @@ export abstract class SetupUtils {
 
                 let roleEmbed = new MessageEmbed()
                     .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
-                    .setTitle('Server Required Setup - Birthday Role Selection')
+                    .setTitle('Server Setup - Birthday Role')
                     .setDescription(
                         'Now, set up the birthday role [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-role)' +
                             '\n\nPlease select an option'
@@ -351,7 +351,7 @@ export abstract class SetupUtils {
 
                         let embed = new MessageEmbed()
                             .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
-                            .setTitle('Server Required Setup - Completion')
+                            .setTitle('Server Setup - Completed')
                             .setDescription(
                                 'You have successfully completed the required server setup!' +
                                     `\n\n**Birthday Channel**: ${channelOutput}` +
@@ -389,7 +389,7 @@ export abstract class SetupUtils {
 
         let messageTimeEmbed = new MessageEmbed()
             .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
-            .setTitle('Server Message Setup - Birthday Message Time')
+            .setTitle('Message Setup - Birthday Message Time')
             .setDescription(
                 'Please give the hour for your Birthday Messages [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-message-time)' +
                     '\n\nAccepted Values: `0-23`\nDefault Value: `0`' +
@@ -428,7 +428,7 @@ export abstract class SetupUtils {
                     messageTime = parseInt(nextMsgArgs[0]);
                 } catch (error) {
                     let embed = new MessageEmbed()
-                        .setTitle('Server Message Setup - Message Time')
+                        .setTitle('Message Setup - Message Time')
                         .setDescription('Invalid time!')
                         .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
                         .setTimestamp()
@@ -440,7 +440,7 @@ export abstract class SetupUtils {
 
                 if (messageTime !== 0 && (messageTime < 0 || messageTime > 23 || !messageTime)) {
                     let embed = new MessageEmbed()
-                        .setTitle('Server Message Setup - Message Time')
+                        .setTitle('Message Setup - Message Time')
                         .setDescription('Invalid time!')
                         .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
                         .setTimestamp()
@@ -454,7 +454,7 @@ export abstract class SetupUtils {
 
                 let messageMentionEmbed = new MessageEmbed()
                     .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
-                    .setTitle('Server Message Setup - Birthday Message Mention')
+                    .setTitle('Message Setup - Birthday Message Mention')
                     .setDescription(
                         'Now you can set your birthday message mention! [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-message-mention)' +
                             '\n\nAcceptable inputs: `everyone`, `here`, `@role/role-name`, or `none`' +
@@ -487,7 +487,7 @@ export abstract class SetupUtils {
                         nextMsg.content.toLowerCase() !== 'none'
                     ) {
                         let embed = new MessageEmbed()
-                            .setTitle('Server Message Setup - Birthday Message Mention')
+                            .setTitle('Message Setup - Birthday Message Mention')
                             .setDescription('Could not find the group or role!')
                             .setFooter(
                                 `Please check above and try again!`,
@@ -511,7 +511,7 @@ export abstract class SetupUtils {
 
                 let embedMessage = new MessageEmbed()
                     .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
-                    .setTitle('Server Message Setup - Embed Birthday Message')
+                    .setTitle('Message Setup - Embed Birthday Message')
                     .setDescription(
                         'Now you can choose if the Birthday Message should be embedded or not! [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-an-embed)' +
                             '\n\nDisable this if you use a image/gif in your Custom Birthday Message. [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-custom-birthday-message)' +
@@ -586,7 +586,7 @@ export abstract class SetupUtils {
 
                         let embed = new MessageEmbed()
                             .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
-                            .setTitle('Server Message Setup - Completion')
+                            .setTitle('Message Setup - Completed')
                             .setDescription(
                                 'You have successfully completed the server message setup!' +
                                     `\n\n**Birthday Message Time**: \`${timeOutput}\`` +
@@ -619,7 +619,7 @@ export abstract class SetupUtils {
 
                     if (reactionExpired) {
                         let embed = new MessageEmbed()
-                            .setTitle('Server Message Setup Expired')
+                            .setTitle('Message Setup - Expired')
                             .setDescription('Type `bday setup message` to rerun the setup.')
                             .setColor(Config.colors.error);
                         await channel.send(embed);
@@ -638,7 +638,7 @@ export abstract class SetupUtils {
 
             if (expired) {
                 let embed = new MessageEmbed()
-                    .setTitle('Server Message Setup Expired')
+                    .setTitle('Message Setup - Expired')
                     .setDescription('Type `bday setup message` to rerun the setup.')
                     .setColor(Config.colors.error);
                 await channel.send(embed);
@@ -752,7 +752,7 @@ export abstract class SetupUtils {
 
                         let channelEmbed = new MessageEmbed()
                             .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
-                            .setTitle('Server Trusted Setup - Trusted Role Selection')
+                            .setTitle('Trusted Setup - Trusted Role')
                             .setDescription(
                                 'To begin you must select the Trusted Role [(?)](https://birthdaybot.scottbucher.dev/faq#do-i-need-to-set-up-the-trusted-role)' +
                                     '\n\nPlease select an option'
@@ -903,7 +903,7 @@ export abstract class SetupUtils {
 
                                 let embed = new MessageEmbed()
                                     .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
-                                    .setTitle('Server Trusted Setup - Completion')
+                                    .setTitle('Trusted Setup - Completed')
                                     .setDescription(
                                         'You have successfully completed the trusted server setup!' +
                                             `\n\n**Trusted Role**: ${roleOutput}` +

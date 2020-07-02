@@ -106,8 +106,8 @@ export class SetCommand implements Command {
             .setTimestamp()
             .setAuthor(`${target.username}#${target.discriminator}`, target.avatarURL());
 
-        if (suggest) timeZoneEmbed.setTitle('User Setup - Time Zone Selection');
-        else timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone Selection`);
+        if (suggest) timeZoneEmbed.setTitle('User Setup - Time Zone');
+        else timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
 
         await channel.send(timeZoneEmbed);
 
@@ -138,8 +138,8 @@ export class SetCommand implements Command {
                         .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
                         .setTimestamp()
                         .setColor(Config.colors.error);
-                    if (suggest) embed.setTitle('User Setup - Time Zone Selection');
-                    else embed.setTitle(`Setup For ${target.username} - Time Zone Selection`);
+                    if (suggest) embed.setTitle('User Setup - Time Zone');
+                    else embed.setTitle(`Setup For ${target.username} - Time Zone`);
                     await channel.send(embed);
                     return;
                 }
