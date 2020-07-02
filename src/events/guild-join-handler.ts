@@ -1,8 +1,8 @@
 import { Guild, MessageEmbed } from 'discord.js';
 
+import { EventHandler } from './event-handler';
 import { Logger } from '../services';
 import { PermissionUtils } from '../utils';
-import { EventHandler } from './event-handler';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -30,8 +30,8 @@ export class GuildJoinHandler implements EventHandler {
 
         let ownerChannel = await guild.owner.createDM();
 
-        if (PermissionUtils.canSend(ownerChannel)) {
-            await ownerChannel.send(embed);
-        }
+        await ownerChannel.send(embed).catch(() => {
+            // Could not send DM
+        });
     }
 }
