@@ -1,8 +1,8 @@
 import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
-import moment from 'moment';
 
-import { UserRepo } from '../services/database/repos';
 import { Command } from './command';
+import { UserRepo } from '../services/database/repos';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -66,7 +66,7 @@ export class ViewCommand implements Command {
 
         let embed = new MessageEmbed()
             .setDescription(
-                `${target.username}'s birthday is on **${moment(userData.Birthday).format(
+                `${target.toString()}'s birthday is on **${moment(userData.Birthday).format(
                     'MMMM Do'
                 )}, ${userData.TimeZone}**!`
             )
