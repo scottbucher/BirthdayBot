@@ -73,7 +73,7 @@ export class SetCommand implements Command {
         let userData = await this.userRepo.getUser(target.id); // Try and get their data
         let changesLeft = 5; // Default # of changes
         let birthday: string;
-        let timezone: string;
+        let timeZone: string;
 
         if (userData) {
             // Are they in the database?
@@ -92,17 +92,22 @@ export class SetCommand implements Command {
         let timeZoneEmbed = new MessageEmbed()
             .setDescription(
                 '**Please Note**: by submitting this information you agree it can be shown to anyone.' +
-                    '\n\nFirst, please select your time zone. [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
-                    '\n\nTo find your time zone please use the map [here](https://kevinnovak.github.io/Time-Zone-Picker/).' +
-                    '\n\n**Example Usage** `America/New_York`'
+                    '\n' +
+                    '\nFirst, please enter your time zone. [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
+                    '\n' +
+                    '\nTo find your time zone please use the [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!' +
+                    '\n' +
+                    '\nSimply click your location on the map and copy the name of the selected time zone. You can then enter it below.' +
+                    '\n' +
+                    '\n**Example Usage** `America/New_York`'
             )
             .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
             .setColor(Config.colors.default)
             .setTimestamp()
             .setAuthor(`${target.username}#${target.discriminator}`, target.avatarURL());
 
-        if (suggest) timeZoneEmbed.setTitle('User Setup - Time Zone Selection');
-        else timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone Selection`);
+        if (suggest) timeZoneEmbed.setTitle('User Setup - Time Zone');
+        else timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
 
         await channel.send(timeZoneEmbed);
 
@@ -125,21 +130,21 @@ export class SetCommand implements Command {
                 return;
             }
 
-            if (!timezone) {
-                let timeZoneInput = FormatUtils.findZone(nextMsg.content); // Try and get the timezone
+            if (!timeZone) {
+                let timeZoneInput = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
                 if (!timeZoneInput) {
                     let embed = new MessageEmbed()
                         .setDescription('Invalid time zone!')
                         .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
                         .setTimestamp()
                         .setColor(Config.colors.error);
-                    if (suggest) embed.setTitle('User Setup - Time Zone Selection');
-                    else embed.setTitle(`Setup For ${target.username} - Time Zone Selection`);
+                    if (suggest) embed.setTitle('User Setup - Time Zone');
+                    else embed.setTitle(`Setup For ${target.username} - Time Zone`);
                     await channel.send(embed);
                     return;
                 }
 
-                timezone = timeZoneInput;
+                timeZone = timeZoneInput;
 
                 collector.resetTimer(); // Reset timer
 
@@ -187,7 +192,7 @@ export class SetCommand implements Command {
                         .setDescription(
                             `${target.toString()}, please confirm this information is correct: **${FormatUtils.getMonth(
                                 month
-                            )} ${day}, ${timezone}**`
+                            )} ${day}, ${timeZone}**`
                         )
                         .setFooter(
                             `${target.username} has ${changesLeft} attempts left. By clicking confirm they will use one of them.`,
@@ -198,7 +203,7 @@ export class SetCommand implements Command {
                         .setDescription(
                             `Please confirm this information is correct: **${FormatUtils.getMonth(
                                 month
-                            )} ${day}, ${timezone}**`
+                            )} ${day}, ${timeZone}**`
                         )
                         .setFooter(
                             `You have ${changesLeft} attempts left. By clicking confirm you will use one of them.`,
@@ -240,7 +245,7 @@ export class SetCommand implements Command {
                             await this.userRepo.addOrUpdateUser(
                                 target.id,
                                 birthday,
-                                timezone,
+                                timeZone,
                                 changesLeft - 1
                             ); // Add or update user
 
@@ -248,7 +253,7 @@ export class SetCommand implements Command {
                                 .setDescription(
                                     `Successfully set your birthday to **${FormatUtils.getMonth(
                                         month
-                                    )} ${day}, ${timezone}**`
+                                    )} ${day}, ${timeZone}**`
                                 )
                                 .setFooter(
                                     `You now have ${changesLeft - 1} birthday attempts left.`

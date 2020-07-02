@@ -18,7 +18,7 @@ export class GuildJoinHandler implements EventHandler {
         let prefix = Config.prefix;
         let embed = new MessageEmbed()
             .setAuthor(guild.name, guild.iconURL())
-            .setTitle('Thank you for using BirthdayBot!')
+            .setTitle('Thank you for using Birthday Bot!')
             .setDescription(
                 `To view the commands of this bot use \`${prefix} help\`` +
                     `\nTo setup the bot run \`${prefix} setup\`` +

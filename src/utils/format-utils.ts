@@ -160,7 +160,7 @@ export abstract class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*Birthdays are celebrated on the day (and __timezone__) of the birthday user. To set your birthday use \`bday set\`!*\n\n`;
+        let description = `*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use \`bday set\`!*\n\n`;
 
         for (let userData of userDataResults.userData) {
             description += `${

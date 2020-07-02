@@ -24,7 +24,9 @@ export class MapCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let embed = new MessageEmbed()
             .setDescription(
-                `Find your timezone [here](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)!`
+                '[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!' +
+                    '\n' +
+                    '\nSimply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command.'
             )
             .setColor(Config.colors.default);
 

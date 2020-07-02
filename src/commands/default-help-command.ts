@@ -1,7 +1,7 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { Command } from './command';
 import { MessageUtils } from '../utils';
+import { Command } from './command';
 
 let Config = require('../../config/config.json'); // Possible support for server specific prefixes?
 
@@ -24,13 +24,13 @@ export class DefaultHelpCommand implements Command {
                     `Birthday Bot celebrates user's birthdays and allows for a wide variety of settings and customizability for server owners. ` +
                         '\n' +
                         `\n**${prefix} set** - Set your birthday.` +
-                        `\n**${prefix} purge** - Remove your birthday data.` +
-                        `\n**${prefix} map** - View the timezone map.` +
-                        `\n**${prefix} view [user]** - View your or another person's birthday.` +
-                        `\n**${prefix} list [page]** - View the server's birthday list.` +
-                        `\n**${prefix} next** - View the next birthday(s) in a server.` +
-                        `\n**${prefix} invite** - Get the BirthdayBot invite link.` +
+                        `\n**${prefix} view [user]** - View your birthday or a users birthday.` +
+                        `\n**${prefix} next** - View next birthday(s) in the server.` +
+                        `\n**${prefix} list [page]** - View the server birthday list.` +
+                        `\n**${prefix} map** - View the time zone map.` +
+                        `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
+                        `\n**${prefix} purge** - Remove your birthday data.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +
@@ -92,13 +92,13 @@ export class DefaultHelpCommand implements Command {
                     `Birthday Bot celebrates user's birthdays and allows for a wide variety of settings and customizability for server owners. ` +
                         '\n' +
                         `\n**${prefix} set** - Set your birthday.` +
-                        `\n**${prefix} purge** - Remove your birthday data.` +
-                        `\n**${prefix} map** - View the timezone map.` +
-                        `\n**${prefix} view [user]** - View your or another person's birthday.` +
-                        `\n**${prefix} list [page]** - View the server's birthday list.` +
-                        `\n**${prefix} next** - View the next birthday(s) in a server.` +
-                        `\n**${prefix} invite** - Get the BirthdayBot invite link.` +
+                        `\n**${prefix} view [user]** - View your birthday or a users birthday.` +
+                        `\n**${prefix} next** - View next birthday(s) in the server.` +
+                        `\n**${prefix} list [page]** - View the server birthday list.` +
+                        `\n**${prefix} map** - View the time zone map.` +
+                        `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
+                        `\n**${prefix} purge** - Remove your birthday data.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +

@@ -43,7 +43,7 @@ export class PurgeCommand implements Command {
                 .setAuthor(`${target.username}#${target.discriminator}`, target.avatarURL());
 
             let description =
-                'This command will remove both your timezone and your birthday from the database. [(?)]()' +
+                'This command will remove both your time zone and your birthday from the database. [(?)]()' +
                 `\n\nThis will not reset your birthday attempts. (You have ${changesLeft} left) [(?)]()`;
 
             if (changesLeft === 0) {
