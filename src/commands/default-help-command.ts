@@ -24,13 +24,13 @@ export class DefaultHelpCommand implements Command {
                     `Birthday Bot celebrates user's birthdays and allows for a wide variety of settings and customizability for server owners. ` +
                         '\n' +
                         `\n**${prefix} set** - Set your birthday.` +
-                        `\n**${prefix} purge** - Remove your birthday data.` +
-                        `\n**${prefix} map** - View the time zone map.` +
-                        `\n**${prefix} view [user]** - View a birthday.` +
+                        `\n**${prefix} view [user]** - View your birthday or a users birthday.` +
+                        `\n**${prefix} next** - View next birthday(s) in the server.` +
                         `\n**${prefix} list [page]** - View the server birthday list.` +
-                        `\n**${prefix} next** - View next birthday(s).` +
+                        `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
+                        `\n**${prefix} purge** - Remove your birthday data.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +
@@ -92,13 +92,13 @@ export class DefaultHelpCommand implements Command {
                     `Birthday Bot celebrates user's birthdays and allows for a wide variety of settings and customizability for server owners. ` +
                         '\n' +
                         `\n**${prefix} set** - Set your birthday.` +
-                        `\n**${prefix} purge** - Remove your birthday data.` +
-                        `\n**${prefix} map** - View the time zone map.` +
-                        `\n**${prefix} view [user]** - View a birthday.` +
+                        `\n**${prefix} view [user]** - View your birthday or a users birthday.` +
+                        `\n**${prefix} next** - View next birthday(s) in the server.` +
                         `\n**${prefix} list [page]** - View the server birthday list.` +
-                        `\n**${prefix} next** - View next birthday(s).` +
+                        `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
+                        `\n**${prefix} purge** - Remove your birthday data.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +
