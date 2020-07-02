@@ -29,7 +29,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} view [user]** - View your or another person's birthday.` +
                         `\n**${prefix} list [page]** - View the server's birthday list.` +
                         `\n**${prefix} next** - View the next birthday(s) in a server.` +
-                        `\n**${prefix} invite** - Get the BirthdayBot invite link.` +
+                        `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
@@ -97,7 +97,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} view [user]** - View your or another person's birthday.` +
                         `\n**${prefix} list [page]** - View the server's birthday list.` +
                         `\n**${prefix} next** - View the next birthday(s) in a server.` +
-                        `\n**${prefix} invite** - Get the BirthdayBot invite link.` +
+                        `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
