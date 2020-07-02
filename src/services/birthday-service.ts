@@ -10,24 +10,25 @@ export class BirthdayService {
     constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
 
     public async celebrateBirthdays(guild: Guild, guildData: GuildData): Promise<void> {
+        if (!guild) return;
         let birthdayChannel: TextChannel;
         let birthdayRole: Role;
         let trustedRole: Role;
 
         try {
-            birthdayChannel = guild?.channels.resolve(
+            birthdayChannel = guild.channels.resolve(
                 guildData.BirthdayChannelDiscordId
             ) as TextChannel;
         } catch (error) {
             // No Birthday Channel
         }
         try {
-            birthdayRole = guild?.roles.resolve(guildData.BirthdayRoleDiscordId);
+            birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId);
         } catch (error) {
             // No Birthday Channel
         }
         try {
-            trustedRole = guild?.roles.resolve(guildData.TrustedRoleDiscordId);
+            trustedRole = guild.roles.resolve(guildData.TrustedRoleDiscordId);
         } catch (error) {
             // No Birthday Channel
         }
@@ -64,7 +65,7 @@ export class BirthdayService {
                 trustedRole &&
                 preventMessage &&
                 preventRole &&
-                !member?.roles.cache.has(trustedRole.id)
+                !member.roles.cache.has(trustedRole.id)
             ) {
                 continue;
             }
@@ -72,7 +73,7 @@ export class BirthdayService {
             if (
                 birthdayRole &&
                 BdayUtils.isTimeForBirthdayRole(user) &&
-                !(trustedRole && preventRole && !member?.roles.cache.has(trustedRole.id))
+                !(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))
             ) {
                 ActionUtils.giveRole(member, birthdayRole);
             }
@@ -80,14 +81,14 @@ export class BirthdayService {
             if (
                 birthdayChannel &&
                 BdayUtils.isTimeForBirthdayMessage(guildData.MessageTime, user) &&
-                !(trustedRole && preventMessage && !member?.roles.cache.has(trustedRole.id))
+                !(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))
             ) {
                 birthdayUsers.push(member);
             }
 
             if (
                 birthdayRole &&
-                member?.roles.cache.has(birthdayRole.id) &&
+                member.roles.cache.has(birthdayRole.id) &&
                 BdayUtils.isntBirthday(user)
             ) {
                 ActionUtils.removeRole(member, birthdayRole);
@@ -103,7 +104,7 @@ export class BirthdayService {
 
             // Find mentioned role
             let mentionSetting: string;
-            let roleInput: Role = guild?.roles.resolve(guildData.MentionSetting);
+            let roleInput: Role = guild.roles.resolve(guildData.MentionSetting);
 
             if (!roleInput || roleInput.guild.id !== guild.id) {
                 if (
