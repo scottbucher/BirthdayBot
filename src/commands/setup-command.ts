@@ -17,16 +17,6 @@ export class SetupCommand implements Command {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
-        if (!msg.guild.me.hasPermission('ADD_REACTIONS')) {
-            let embed = new MessageEmbed()
-                .setTitle('Not Enough Permissions!')
-                .setDescription('The bot must have permission to add reactions to messages!')
-                .setColor(Config.colors.error);
-
-            await channel.send(embed);
-            return;
-        }
-
         if (args.length === 2) {
             // Required Setup
             if (
