@@ -26,9 +26,9 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} set** - Set your birthday.` +
                         `\n**${prefix} purge** - Remove your birthday data.` +
                         `\n**${prefix} map** - View the time zone map.` +
-                        `\n**${prefix} view [user]** - View your or another person's birthday.` +
-                        `\n**${prefix} list [page]** - View the server's birthday list.` +
-                        `\n**${prefix} next** - View the next birthday(s) in a server.` +
+                        `\n**${prefix} view [user]** - View a birthday.` +
+                        `\n**${prefix} list [page]** - View the server birthday list.` +
+                        `\n**${prefix} next** - View next birthday(s).` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
@@ -94,9 +94,9 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} set** - Set your birthday.` +
                         `\n**${prefix} purge** - Remove your birthday data.` +
                         `\n**${prefix} map** - View the time zone map.` +
-                        `\n**${prefix} view [user]** - View your or another person's birthday.` +
-                        `\n**${prefix} list [page]** - View the server's birthday list.` +
-                        `\n**${prefix} next** - View the next birthday(s) in a server.` +
+                        `\n**${prefix} view [user]** - View a birthday.` +
+                        `\n**${prefix} list [page]** - View the server birthday list.` +
+                        `\n**${prefix} next** - View next birthday(s).` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
