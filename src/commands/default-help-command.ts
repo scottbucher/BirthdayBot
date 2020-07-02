@@ -25,7 +25,7 @@ export class DefaultHelpCommand implements Command {
                         '\n' +
                         `\n**${prefix} set** - Set your birthday.` +
                         `\n**${prefix} purge** - Remove your birthday data.` +
-                        `\n**${prefix} map** - View the timezone map.` +
+                        `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} view [user]** - View your or another person's birthday.` +
                         `\n**${prefix} list [page]** - View the server's birthday list.` +
                         `\n**${prefix} next** - View the next birthday(s) in a server.` +
@@ -93,7 +93,7 @@ export class DefaultHelpCommand implements Command {
                         '\n' +
                         `\n**${prefix} set** - Set your birthday.` +
                         `\n**${prefix} purge** - Remove your birthday data.` +
-                        `\n**${prefix} map** - View the timezone map.` +
+                        `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} view [user]** - View your or another person's birthday.` +
                         `\n**${prefix} list [page]** - View the server's birthday list.` +
                         `\n**${prefix} next** - View the next birthday(s) in a server.` +

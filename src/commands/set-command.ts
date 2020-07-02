@@ -73,7 +73,7 @@ export class SetCommand implements Command {
         let userData = await this.userRepo.getUser(target.id); // Try and get their data
         let changesLeft = 5; // Default # of changes
         let birthday: string;
-        let timezone: string;
+        let timeZone: string;
 
         if (userData) {
             // Are they in the database?
@@ -125,8 +125,8 @@ export class SetCommand implements Command {
                 return;
             }
 
-            if (!timezone) {
-                let timeZoneInput = FormatUtils.findZone(nextMsg.content); // Try and get the timezone
+            if (!timeZone) {
+                let timeZoneInput = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
                 if (!timeZoneInput) {
                     let embed = new MessageEmbed()
                         .setDescription('Invalid time zone!')
@@ -139,7 +139,7 @@ export class SetCommand implements Command {
                     return;
                 }
 
-                timezone = timeZoneInput;
+                timeZone = timeZoneInput;
 
                 collector.resetTimer(); // Reset timer
 
@@ -187,7 +187,7 @@ export class SetCommand implements Command {
                         .setDescription(
                             `${target.toString()}, please confirm this information is correct: **${FormatUtils.getMonth(
                                 month
-                            )} ${day}, ${timezone}**`
+                            )} ${day}, ${timeZone}**`
                         )
                         .setFooter(
                             `${target.username} has ${changesLeft} attempts left. By clicking confirm they will use one of them.`,
@@ -198,7 +198,7 @@ export class SetCommand implements Command {
                         .setDescription(
                             `Please confirm this information is correct: **${FormatUtils.getMonth(
                                 month
-                            )} ${day}, ${timezone}**`
+                            )} ${day}, ${timeZone}**`
                         )
                         .setFooter(
                             `You have ${changesLeft} attempts left. By clicking confirm you will use one of them.`,
@@ -240,7 +240,7 @@ export class SetCommand implements Command {
                             await this.userRepo.addOrUpdateUser(
                                 target.id,
                                 birthday,
-                                timezone,
+                                timeZone,
                                 changesLeft - 1
                             ); // Add or update user
 
@@ -248,7 +248,7 @@ export class SetCommand implements Command {
                                 .setDescription(
                                     `Successfully set your birthday to **${FormatUtils.getMonth(
                                         month
-                                    )} ${day}, ${timezone}**`
+                                    )} ${day}, ${timeZone}**`
                                 )
                                 .setFooter(
                                     `You now have ${changesLeft - 1} birthday attempts left.`

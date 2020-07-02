@@ -22,13 +22,13 @@ export class UserRepo {
     public async addOrUpdateUser(
         discordId: string,
         birthday: string,
-        timezone: string,
+        timeZone: string,
         changesLeft: number
     ): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.User_AddOrUpdate, [
             discordId,
             birthday,
-            timezone,
+            timeZone,
             changesLeft,
         ]);
     }

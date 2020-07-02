@@ -24,7 +24,7 @@ export class MapCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let embed = new MessageEmbed()
             .setDescription(
-                `Find your timezone [here](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)!`
+                `Find your time zone [here](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)!`
             )
             .setColor(Config.colors.default);
 
