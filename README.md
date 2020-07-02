@@ -16,13 +16,9 @@ Start by typing `bday set`.
 
 ### Finding Your Time Zone
 
-[Keval Bhatt](https://github.com/kevalbhatt) has created a handy map time zone picker:
+[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!
 
-<https://kevinnovak.github.io/Time-Zone-Picker/>
-
-Simply click your location on the map, and use the name displayed in the dropdown box as your time zone.
-
-You can then take your time zone name and use it in the `bday set` command.
+Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command.'
 
 ![Setting your time zone](https://i.imgur.com/Mtpx86n.png)
 
