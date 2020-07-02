@@ -20,7 +20,7 @@ Birthday Bot will then know when to celebrate your birthday and make an announce
 
 [Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!
 
-Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command.'
+Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command.
 
 ![Setting your time zone](https://i.imgur.com/ibPmjNs.png)
 
