@@ -30,54 +30,6 @@ Full example usage of `bday set`:
 
 For users that's it! Server owners will have to do a bit more but Birthday Bot makes it easy with the interactive setup commands `bday setup` and `bday setup optional`!
 
-## Commands
-
-The following are commands for BirthdayBot.
-
-**NOTE**: To run a command, prefix the command with `bday`, for example: `bday help`.
-
-### Setup (Admins only)
-
-* `setup` - Interactive guide for server setup.
-* `setup optional` - Interactive guide for optional server setup settings.
-
-### Info
-
-* `help` - View useful information about BirthdayBot.
-* `help setup` - View useful information on how to setup Birthday Bot.
-* `help setup optional` - View useful information on how to setup the optional Birthday Bot settings.
-* `about` - View information about BirthdayBot.
-* `serverinfo` - View information about your server.
-* `settings` - View your server's current server settings.
-* `shard` - View information about your current shard.
-
-### Server Settings (Admins only)
-
-* `SetBirthdayRole <@role/rolename>` - Set a role to be the designated Birthday role.
-* `SetBirthdayChannel [#channel]` - Set a channel to be the designated Birthday Channel.
-* `SetTrustedRole <@role/rolename>` - Set a role to be the designated Trusted role.
-* `CreateBirthdayRole` - Create the default Birthday Role.
-* `CreateBirthdayChannel` - Create the default Birthday Channel.
-* `CreateTrustedRole` - Create the default Trusted Role.
-* `ClearBirthdayRole` - Clears the Birthday Role (Effectively Disabling this feature).
-* `ClearBirthdayChannel` - Clears the Birthday Channel (Effectively Disabling this feature).
-* `ClearTrustedRole` - Clears the Trusted Role (Effectively Disabling this feature).
-* `config message setMention <everyone/here/@role/rolename/disable>` - Who/What role should the bot mention when the birthday message is sent.
-* `config message setTime <0-23>` - What time should the birthday message be sent at.
-* `config message set <message>` - Set the a custom birthday message for your server. Use "@Users" in the message to be replaced with the user's who's birthday it is.
-* `config message reset` - Set the birthday message to it's default value.
-* `config message useEmbed <true/false>` - Set if the Birthday Message will be embedded. (Set false for links/images to work properly)
-* `config trusted preventMessage <true/false>` - Should the bot only send birthday messages for people with the trusted role.
-* `config trusted preventRole <true/false>` - Should the bot only give the birthday role for people with the trusted role.
-
-### Utilities
-
-* `set` - Set your birthday.
-* `next` - View the next birthday in your current guild.
-* `view <name>` - View a user's birthday.
-* `invite` - Invite Birthday Bot to your discord.
-* `support` - Join the Birthday Bot support server.
-
 ## Help
 
 For additional help join the support server [here](https://discord.gg/9gUQFtz).
