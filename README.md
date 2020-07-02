@@ -14,7 +14,7 @@ Enter your birthday by typing `bday set` and following the prompts.
 
 ![Quick Start](https://i.imgur.com/G0MYlA5.png)
 
-Birthday Bot will then know your time zone and will use this to know when to celebrate your birthday.
+Birthday Bot will then know when to celebrate your birthday and make an announcement at the appropriate time.
 
 ## Finding your time zone
 
