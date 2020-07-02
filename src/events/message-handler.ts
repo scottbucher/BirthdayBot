@@ -6,11 +6,11 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
-import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
-import { GuildRepo } from '../services/database/repos';
 import { Logger } from '../services';
+import { GuildRepo } from '../services/database/repos';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -38,7 +38,9 @@ export class MessageHandler {
             }
             if (!PermissionUtils.canReact(channel)) {
                 let embed = new MessageEmbed()
-                    .setDescription('I need permission to **Add Reactions** & **Read Message History**!')
+                    .setDescription(
+                        'I need permission to **Add Reactions** & **Read Message History**!'
+                    )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
