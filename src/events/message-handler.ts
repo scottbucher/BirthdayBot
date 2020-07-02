@@ -38,6 +38,7 @@ export class MessageHandler {
             }
             if (!PermissionUtils.canReact(channel)) {
                 let embed = new MessageEmbed()
+                    .setTitle('Missing Permissions!')
                     .setDescription(
                         'I need permission to **Add Reactions** & **Read Message History**!'
                     )

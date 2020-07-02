@@ -24,8 +24,10 @@ export class SetupCommand implements Command {
                 !msg.guild.me.hasPermission('MANAGE_ROLES')
             ) {
                 let embed = new MessageEmbed()
-                    .setTitle('Not Enough Permissions!')
-                    .setDescription('The bot must have permission to manage channels and roles!')
+                    .setTitle('Missing Permissions!')
+                    .setDescription(
+                        'I need permission to **Manage Channels** and **Manage Roles**!'
+                    )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
