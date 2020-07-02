@@ -8,9 +8,9 @@ import {
     User,
 } from 'discord.js';
 
-import { PermissionUtils } from '.';
-import { GuildRepo } from '../services/database/repos';
 import { ActionUtils } from './action-utils';
+import { GuildRepo } from '../services/database/repos';
+import { PermissionUtils } from '.';
 
 let Config = require('../../config/config.json');
 
@@ -95,6 +95,10 @@ export abstract class SetupUtils {
                             return false;
                         }
 
+                        let nextMsgArgs = nextMsg?.content.split(' ');
+
+                        if (nextMsgArgs[0]?.toLowerCase() === 'bday') return;
+
                         // Find mentioned channel
                         let channelInput: TextChannel = nextMsg.mentions.channels.first();
 
@@ -142,9 +146,6 @@ export abstract class SetupUtils {
                             if (!PermissionUtils.canSend(channel)) return; // Check if another command was ran, if so cancel the current process
 
                             let nextMsg = collected.first();
-                            let nextMsgArgs = nextMsg.content.split(' ');
-
-                            if (nextMsgArgs[0]?.toLowerCase() === 'bday') return;
 
                             // Find mentioned channel
                             let channelInput: TextChannel = msg.mentions.channels.first();
@@ -157,7 +158,7 @@ export abstract class SetupUtils {
                                     .find(channel =>
                                         channel.name
                                             .toLowerCase()
-                                            .includes(nextMsg.content.toLowerCase())
+                                            .includes(nextMsg?.content.toLowerCase())
                                     );
                             }
 
@@ -240,6 +241,10 @@ export abstract class SetupUtils {
                                     return false;
                                 }
 
+                                let nextMsgArgs = nextMsg?.content.split(' ');
+
+                                if (nextMsgArgs[0]?.toLowerCase() === 'bday') return;
+
                                 // Find mentioned role
                                 let roleInput: Role = nextMsg.mentions.roles.first();
 
@@ -247,14 +252,14 @@ export abstract class SetupUtils {
                                     roleInput = msg.guild.roles.cache.find(role =>
                                         role.name
                                             .toLowerCase()
-                                            .includes(nextMsg.content.toLowerCase())
+                                            .includes(nextMsg?.content.toLowerCase())
                                     );
                                 }
 
                                 if (
                                     !roleInput ||
                                     roleInput.guild.id !== msg.guild.id ||
-                                    nextMsg.content.toLowerCase() === 'everyone'
+                                    nextMsg?.content.toLowerCase() === 'everyone'
                                 ) {
                                     let embed = new MessageEmbed()
                                         .setDescription(`Invalid Role!`)
@@ -301,9 +306,6 @@ export abstract class SetupUtils {
 
                                     // Check if another command was ran, if so cancel the current process
                                     let nextMsg = collected.first();
-                                    let nextMsgArgs = nextMsg.content.split(' ');
-
-                                    if (nextMsgArgs[0]?.toLowerCase() === 'bday') return;
 
                                     // Find mentioned role
                                     let roleInput: Role = msg.mentions.roles.first();
@@ -312,14 +314,14 @@ export abstract class SetupUtils {
                                         roleInput = msg.guild.roles.cache.find(role =>
                                             role.name
                                                 .toLowerCase()
-                                                .includes(nextMsg.content.toLowerCase())
+                                                .includes(nextMsg?.content.toLowerCase())
                                         );
                                     }
 
                                     if (
                                         !roleInput ||
                                         roleInput.guild.id !== msg.guild.id ||
-                                        nextMsg.content.toLowerCase() === 'everyone'
+                                        nextMsg?.content.toLowerCase() === 'everyone'
                                     ) {
                                         let embed = new MessageEmbed()
                                             .setDescription(`Invalid Role!`)
@@ -415,7 +417,7 @@ export abstract class SetupUtils {
             }
 
             // Check if another command was ran, if so cancel the current process
-            let nextMsgArgs = nextMsg.content.split(' ');
+            let nextMsgArgs = nextMsg?.content.split(' ');
             if (nextMsgArgs[0]?.toLowerCase() === 'bday') {
                 collector.stop();
                 expired = false;
@@ -474,17 +476,17 @@ export abstract class SetupUtils {
 
                 if (!roleInput) {
                     roleInput = msg.guild.roles.cache.find(role =>
-                        role.name.toLowerCase().includes(nextMsg.content.toLowerCase())
+                        role.name.toLowerCase().includes(nextMsg?.content.toLowerCase())
                     );
                 }
 
                 if (!roleInput || roleInput.guild.id !== msg.guild.id) {
                     // if there is no roles then check for other accepted values
                     if (
-                        nextMsg.content.toLowerCase() !== 'everyone' &&
-                        nextMsg.content.toLowerCase() !== 'here' &&
-                        nextMsg.content.toLowerCase() !== '@here' &&
-                        nextMsg.content.toLowerCase() !== 'none'
+                        nextMsg?.content.toLowerCase() !== 'everyone' &&
+                        nextMsg?.content.toLowerCase() !== 'here' &&
+                        nextMsg?.content.toLowerCase() !== '@here' &&
+                        nextMsg?.content.toLowerCase() !== 'none'
                     ) {
                         let embed = new MessageEmbed()
                             .setTitle('Message Setup - Birthday Message Mention')
@@ -498,11 +500,11 @@ export abstract class SetupUtils {
                         await channel.send(embed);
                         return;
                     } else {
-                        if (nextMsg.content.toLowerCase() === '@here') {
+                        if (nextMsg?.content.toLowerCase() === '@here') {
                             // Support for the @here input
                             mention = `here`;
                         } else {
-                            mention = nextMsg.content.toLowerCase(); // Else it is either here, everyone, or none
+                            mention = nextMsg?.content.toLowerCase(); // Else it is either here, everyone, or none
                         }
                     }
                 } else {
@@ -567,7 +569,7 @@ export abstract class SetupUtils {
 
                         if (!roleInput) {
                             roleInput = msg.guild.roles.cache.find(role =>
-                                role.name.toLowerCase().includes(nextMsg.content.toLowerCase())
+                                role.name.toLowerCase().includes(nextMsg?.content.toLowerCase())
                             );
                         }
 
@@ -826,14 +828,14 @@ export abstract class SetupUtils {
                                             roleInput = msg.guild.roles.cache.find(role =>
                                                 role.name
                                                     .toLowerCase()
-                                                    .includes(nextMsg.content.toLowerCase())
+                                                    .includes(nextMsg?.content.toLowerCase())
                                             );
                                         }
 
                                         if (
                                             !roleInput ||
                                             roleInput.guild.id !== msg.guild.id ||
-                                            nextMsg.content.toLowerCase() === 'everyone'
+                                            nextMsg?.content.toLowerCase() === 'everyone'
                                         ) {
                                             let embed = new MessageEmbed()
                                                 .setDescription(`Invalid Role!`)
@@ -856,7 +858,7 @@ export abstract class SetupUtils {
 
                                             // Check if another command was ran, if so cancel the current process
                                             let nextMsg = collected.first();
-                                            let nextMsgArgs = nextMsg.content.split(' ');
+                                            let nextMsgArgs = nextMsg?.content.split(' ');
 
                                             if (nextMsgArgs[0]?.toLowerCase() === 'bday') return;
 
@@ -867,14 +869,14 @@ export abstract class SetupUtils {
                                                 roleInput = msg.guild.roles.cache.find(role =>
                                                     role.name
                                                         .toLowerCase()
-                                                        .includes(nextMsg.content.toLowerCase())
+                                                        .includes(nextMsg?.content.toLowerCase())
                                                 );
                                             }
 
                                             if (
                                                 !roleInput ||
                                                 roleInput.guild.id !== msg.guild.id ||
-                                                nextMsg.content.toLowerCase() === 'everyone'
+                                                nextMsg?.content.toLowerCase() === 'everyone'
                                             ) {
                                                 let embed = new MessageEmbed()
                                                     .setDescription(`Invalid Role!`)
