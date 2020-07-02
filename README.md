@@ -12,7 +12,7 @@ In your Discord server Birthday Bot will track your users' birthdays and using t
 
 Start by typing `bday set`.
 
-![Example Start](https://i.imgur.com/lEt7I0J.png)
+![Example Start](https://i.imgur.com/N64jxsm.png)
 
 ### Finding Your Time Zone
 
@@ -20,15 +20,15 @@ Start by typing `bday set`.
 
 Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command.'
 
-![Setting your time zone](https://i.imgur.com/Mtpx86n.png)
+![Setting your time zone](https://i.imgur.com/ibPmjNs.png)
 
 Birthday Bot will then know your time zone and will use this to know when to celebrate your birthday.
 
 Full example usage of `bday set`:
 
-![Example usage](https://i.imgur.com/rJXpDss.png)
+![Example usage](https://i.imgur.com/vRUQjRU.png)
 
-For users that's it! Server owners will have to do a bit more but Birthday Bot makes it easy with the interactive setup commands `bday setup` and `bday setup optional`!
+For users that's it! Server owners will have to do a bit more but Birthday Bot makes it easy with the interactive setup commands `bday setup`, `bday setup message`, and `bday setup trusted`!
 
 ## Help
 
