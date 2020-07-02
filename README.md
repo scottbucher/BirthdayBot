@@ -8,13 +8,15 @@
 
 In your Discord server Birthday Bot will track your users' birthdays and using their time zone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord, use Birthday Bots trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone.
 
-## Setting Your Birthday
+## Setting your birthday
 
 Enter your birthday by typing `bday set` and following the prompts.
 
 ![Quick Start](https://i.imgur.com/G0MYlA5.png)
 
-### Finding Your Time Zone
+Birthday Bot will then know your time zone and will use this to know when to celebrate your birthday.
+
+## Finding your time zone
 
 [Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!
 
@@ -22,13 +24,13 @@ Simply click your location on the map and copy the name of the selected time zon
 
 ![Setting your time zone](https://i.imgur.com/ibPmjNs.png)
 
-Birthday Bot will then know your time zone and will use this to know when to celebrate your birthday.
+## Server setup
 
-Full example usage of `bday set`:
+Birthday Bot makes server setup easy with the interactive setup commands:
 
-![Example usage](https://i.imgur.com/vRUQjRU.png)
-
-For most users that's it! Server owners will have to do a bit more but Birthday Bot makes it easy with the interactive setup commands `bday setup`, `bday setup message`, and `bday setup trusted`!
+* `bday setup`
+* `bday setup message`
+* `bday setup trusted`
 
 ## Help
 
