@@ -2,7 +2,7 @@
 
 **Discord Bot** - Track and celebrate birthdays in your discord server! Use `bday help` to get started!
 
-## [Click here to add Birthday Bot to your Discord server!](https://discordapp.com/api/oauth2/authorize?client_id=656621136808902656&permissions=269053008&scope=bot)
+## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot)
 
 [Join The Support Server](https://discord.gg/9gUQFtz) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
 
