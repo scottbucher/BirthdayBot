@@ -1,10 +1,10 @@
-import { Collection, DMChannel, Message, MessageReaction, TextChannel, User } from 'discord.js';
-import { FormatUtils, PermissionUtils } from '../utils';
+import { Collection, Message, MessageReaction, TextChannel, User } from 'discord.js';
 
-import { CustomMessageRepo } from '../services/database/repos/custom-message-repo';
 import { EventHandler } from '.';
 import { Logger } from '../services';
 import { UserRepo } from '../services/database/repos';
+import { CustomMessageRepo } from '../services/database/repos/custom-message-repo';
+import { FormatUtils, PermissionUtils } from '../utils';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -17,7 +17,12 @@ export class ReactionAddHandler implements EventHandler {
 
         let channel = messageReaction.message.channel as TextChannel;
 
-        if (!PermissionUtils.canSend(channel) || !PermissionUtils.canHandleReaction(channel) || !PermissionUtils.canReact(channel)) return;
+        if (
+            !PermissionUtils.canSend(channel) ||
+            !PermissionUtils.canHandleReaction(channel) ||
+            !PermissionUtils.canReact(channel)
+        )
+            return;
 
         let msg: Message;
 
@@ -32,12 +37,14 @@ export class ReactionAddHandler implements EventHandler {
             msg = messageReaction.message;
         }
 
-
         let reactor = msg.guild.members.resolve(author);
 
         let users: Collection<string, User>;
 
-        if (messageReaction.emoji.name !== Config.emotes.nextPage && messageReaction.emoji.name !== Config.emotes.previousPage) {
+        if (
+            messageReaction.emoji.name !== Config.emotes.nextPage &&
+            messageReaction.emoji.name !== Config.emotes.previousPage
+        ) {
             return;
         }
 
