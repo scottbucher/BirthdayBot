@@ -1,6 +1,6 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { CustomMessageRepo } from '../../services/database/repos/custom-message-repo';
+import { CustomMessageRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
 
@@ -34,7 +34,7 @@ export class MessageRemoveSubCommand {
             let embed = new MessageEmbed()
                 .setTitle('Remove Custom Message')
                 .setDescription(
-                    'Message number does not exist!\nView your server\'s custom messages with `bday message list`!'
+                    `Message number does not exist!\nView your server's custom messages with \`bday message list\`!`
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);
@@ -50,7 +50,7 @@ export class MessageRemoveSubCommand {
             let embed = new MessageEmbed()
                 .setTitle('Remove Custom Message')
                 .setDescription(
-                    'Message number does not exist!\nView your server\'s custom messages with `bday message list`!'
+                    `Message number does not exist!\nView your server's custom messages with \`bday message list\`!`
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);

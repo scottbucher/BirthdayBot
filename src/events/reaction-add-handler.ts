@@ -2,8 +2,7 @@ import { Collection, Message, MessageReaction, TextChannel, User } from 'discord
 
 import { EventHandler } from '.';
 import { Logger } from '../services';
-import { UserRepo } from '../services/database/repos';
-import { CustomMessageRepo } from '../services/database/repos/custom-message-repo';
+import { CustomMessageRepo, UserRepo } from '../services/database/repos';
 import { FormatUtils, PermissionUtils } from '../utils';
 
 let Logs = require('../../lang/logs.json');

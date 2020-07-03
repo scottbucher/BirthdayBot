@@ -1,7 +1,6 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { GuildRepo } from '../../services/database/repos';
-import { CustomMessageRepo } from '../../services/database/repos/custom-message-repo';
+import { CustomMessageRepo, GuildRepo } from '../../services/database/repos';
 import { FormatUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
@@ -46,7 +45,7 @@ export class MessageTestSubCommand {
             let embed = new MessageEmbed()
                 .setTitle('Test Custom Message')
                 .setDescription(
-                    'Message number does not exist!\nView your server\'s custom messages with `bday message list`!'
+                    `Message number does not exist!\nView your server's custom messages with \`bday message list\`!`
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);
@@ -90,7 +89,7 @@ export class MessageTestSubCommand {
             let embed = new MessageEmbed()
                 .setTitle('Test Custom Message')
                 .setDescription(
-                    'Message does not exist!\nView your server\'s custom messages with `bday message list`!'
+                    `Message does not exist!\nView your server's custom messages with \`bday message list\`!`
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);

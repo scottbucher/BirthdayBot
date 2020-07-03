@@ -1,6 +1,6 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { CustomMessageRepo } from '../../services/database/repos/custom-message-repo';
+import { CustomMessageRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
 
