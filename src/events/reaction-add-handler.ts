@@ -11,12 +11,12 @@ let Config = require('../../config/config.json');
 export class ReactionAddHandler implements EventHandler {
     constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
 
-    public async process(messageReaction: MessageReaction, author: User): Promise<void> {
+    public async process(msgReaction: MessageReaction, reactor: User): Promise<void> {
         // Don't respond to bots, and only text channels
-        if (author.bot || !(messageReaction.message.channel instanceof TextChannel)) return;
+        if (reactor.bot || !(msgReaction.message.channel instanceof TextChannel)) return;
 
         // Check permissions needed to respond
-        let channel = messageReaction.message.channel as TextChannel;
+        let channel = msgReaction.message.channel as TextChannel;
         if (
             !PermissionUtils.canSend(channel) ||
             !PermissionUtils.canHandleReaction(channel) ||
@@ -27,50 +27,44 @@ export class ReactionAddHandler implements EventHandler {
 
         // Check if the reacted emoji is one we are handling
         if (
-            ![Config.emotes.nextPage, Config.emotes.previousPage].includes(
-                messageReaction.emoji.name
-            )
+            ![Config.emotes.nextPage, Config.emotes.previousPage].includes(msgReaction.emoji.name)
         ) {
             return;
         }
 
         // Check if the reacted message was sent by the bot
-        if (messageReaction.message.author !== messageReaction.message.client.user) {
+        if (msgReaction.message.author !== msgReaction.message.client.user) {
             return;
         }
 
         // Get the reacted message
         let msg: Message;
-        if (messageReaction.message.partial) {
+        if (msgReaction.message.partial) {
             try {
-                msg = await messageReaction.message.fetch();
+                msg = await msgReaction.message.fetch();
             } catch (error) {
                 Logger.error(Logs.error.messagePartial, error);
                 return;
             }
         } else {
-            msg = messageReaction.message;
+            msg = msgReaction.message;
         }
-
-        let reactor = msg.guild.members.resolve(author);
 
         let users: Collection<string, User>;
         try {
-            users = await messageReaction.users.fetch();
+            users = await msgReaction.users.fetch();
         } catch (error) {
             Logger.error(Logs.error.userFetch, error);
             return;
         }
 
         // Check if bot has reacted to the message before
-        let checkNextPage: boolean =
-            messageReaction.emoji.name === Config.emotes.nextPage &&
-            !!users.find(user => user.id === reactor.id) &&
-            !!users.find(user => user.id === msg.client.user.id);
-        let checkPreviousPage: boolean =
-            messageReaction.emoji.name === Config.emotes.previousPage &&
-            !!users.find(user => user.id === reactor.id) &&
-            !!users.find(user => user.id === msg.client.user.id);
+        if (!users.find(user => user === msg.client.user)) {
+            return;
+        }
+
+        let checkNextPage: boolean = msgReaction.emoji.name === Config.emotes.nextPage;
+        let checkPreviousPage: boolean = msgReaction.emoji.name === Config.emotes.previousPage;
 
         if (checkNextPage || checkPreviousPage) {
             let titleArgs = msg.embeds[0]?.title?.split(' ');
