@@ -12,19 +12,30 @@ export class ReactionAddHandler implements EventHandler {
     constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
 
     public async process(messageReaction: MessageReaction, author: User): Promise<void> {
+        // Don't respond to bots, and only text channels
         if (author.bot || !(messageReaction.message.channel instanceof TextChannel)) return;
 
+        // Check permissions needed to respond
         let channel = messageReaction.message.channel as TextChannel;
-
         if (
             !PermissionUtils.canSend(channel) ||
             !PermissionUtils.canHandleReaction(channel) ||
             !PermissionUtils.canReact(channel)
-        )
+        ) {
             return;
+        }
 
+        // Check if the reacted emoji is one we are handling
+        if (
+            ![Config.emotes.nextPage, Config.emotes.previousPage].includes(
+                messageReaction.emoji.name
+            )
+        ) {
+            return;
+        }
+
+        // Get the reacted message
         let msg: Message;
-
         if (messageReaction.message.partial) {
             try {
                 msg = await messageReaction.message.fetch();
@@ -39,14 +50,6 @@ export class ReactionAddHandler implements EventHandler {
         let reactor = msg.guild.members.resolve(author);
 
         let users: Collection<string, User>;
-
-        if (
-            messageReaction.emoji.name !== Config.emotes.nextPage &&
-            messageReaction.emoji.name !== Config.emotes.previousPage
-        ) {
-            return;
-        }
-
         try {
             users = await messageReaction.users.fetch();
         } catch (error) {
