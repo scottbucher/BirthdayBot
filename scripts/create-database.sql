@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 02, 2020 at 06:17 AM
+-- Generation Time: Jul 03, 2020 at 04:53 AM
 -- Server version: 10.3.23-MariaDB-1:10.3.23+maria~stretch
 -- PHP Version: 7.0.33-0+deb9u6
 
@@ -140,24 +140,23 @@ INTO @GuildId
 FROM `guild`
 WHERE GuildDiscordId = IN_GuildDiscordId;
 
-SET @Row_Number = 0;
-
 SELECT M.MessageId
 INTO @MessageId
 FROM (
-    	SELECT
-    			*,
-    			@Row_Number := @Row_Number + 1 AS Position
-    	FROM `messages`
-    	ORDER BY MessageId
+        SELECT
+                *,
+                ROW_NUMBER() OVER (
+       				ORDER BY MessageId 
+                ) AS Position
+    		FROM `messages`
+            WHERE GuildId = @GuildId
 ) AS M
 WHERE M.Position = IN_Position;
 
 DELETE
 FROM `messages`
 WHERE
-		GuildId = @GuildId
-        AND MessageId = @MessageId;   
+        MessageId = @MessageId;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_AddOrUpdate` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayChannelDiscordId` VARCHAR(20), IN `IN_BirthdayRoleDiscordId` VARCHAR(20))  BEGIN
@@ -565,17 +564,17 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `guild`
 --
 ALTER TABLE `guild`
-  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16394;
+  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1036;
+  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27420;
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
