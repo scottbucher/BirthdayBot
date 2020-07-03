@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 03, 2020 at 04:48 AM
+-- Generation Time: Jul 03, 2020 at 04:53 AM
 -- Server version: 10.3.23-MariaDB-1:10.3.23+maria~stretch
 -- PHP Version: 7.0.33-0+deb9u6
 
@@ -19,6 +19,472 @@ SET time_zone = "+00:00";
 --
 -- Database: `birthdaybot`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Add` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Message` VARCHAR(2000))  BEGIN
+
+SET @GuildId = NULL;
+SET @MessageId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+INSERT INTO `messages` (
+	GuildId,
+	Message
+) VALUES (
+	@GuildId,
+	IN_Message
+);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Clear` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+DELETE
+FROM `messages`
+WHERE
+		GuildId = @GuildId; 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Get` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SET @Row_Number = 0;
+
+SELECT
+		*,
+        @Row_Number := @Row_Number + 1 AS Position
+FROM `messages`
+WHERE
+		GuildId = @GuildId
+ORDER BY MessageId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_GetList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
+
+SET @GuildId = NULL;
+SET @TotalPages = NULL;
+SET @TotalItems = NULL;
+SET @StartRow = NULL;
+SET @EndRow = NULL;
+SET @ROW_NUMBER = 0;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SELECT COUNT(*) 
+INTO @TotalItems
+FROM `messages`
+WHERE GuildId = @GuildId;
+
+SELECT CEILING(@TotalItems/IN_PageSize) INTO @TotalPages;
+
+IF (IN_Page < 0) THEN 
+	SET IN_Page = 1;
+ELSEIF (IN_Page > @TotalPages) THEN 
+	SET IN_Page = @TotalPages;
+END IF;
+
+SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
+SET @EndRow = IN_Page * IN_PageSize;
+
+SELECT *
+FROM (
+	SELECT
+			*,
+        	@Row_Number := @Row_Number + 1 AS Position
+	FROM `messages`
+	WHERE
+			GuildId = @GuildId
+	ORDER BY MessageId
+) AS CustomMessage
+WHERE
+    CustomMessage.Position >= @StartRow AND
+    CustomMessage.Position <= @EndRow;
+
+SELECT
+    @TotalItems AS 'TotalItems',
+    @TotalPages as 'TotalPages';
+    
+DROP TEMPORARY TABLE IF EXISTS temp;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Remove` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Position` INT)  BEGIN
+
+SET @GuildId = NULL;
+SET @MessageId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SELECT M.MessageId
+INTO @MessageId
+FROM (
+        SELECT
+                *,
+                ROW_NUMBER() OVER (
+       				ORDER BY MessageId 
+                ) AS Position
+    		FROM `messages`
+            WHERE GuildId = @GuildId
+) AS M
+WHERE M.Position = IN_Position;
+
+DELETE
+FROM `messages`
+WHERE
+        MessageId = @MessageId;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_AddOrUpdate` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayChannelDiscordId` VARCHAR(20), IN `IN_BirthdayRoleDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+IF @GuildId IS NULL THEN
+	INSERT INTO `guild` (
+		GuildDiscordId,
+		BirthdayChannelDiscordId,
+		BirthdayRoleDiscordId
+	) VALUES (
+		IN_GuildDiscordId,
+		IN_BirthdayChannelDiscordId,
+		IN_BirthdayRoleDiscordId
+	);
+ELSE
+	UPDATE `guild`
+	SET
+		GuildDiscordId = IN_GuildDiscordId,
+		BirthdayChannelDiscordId = IN_BirthdayChannelDiscordId,
+		BirthdayRoleDiscordId = IN_BirthdayRoleDiscordId
+	WHERE GuildId = @GuildId;
+END IF;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_Get` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+
+SELECT *
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_GetAll` (IN `IN_GuildDiscordIds` MEDIUMTEXT)  BEGIN
+
+SELECT *
+FROM `guild`
+WHERE FIND_IN_SET(GuildDiscordId, IN_GuildDiscordIds) > 0;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_SetupMessage` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_MessageTime` TINYINT, IN `IN_MentionSetting` VARCHAR(20), IN `IN_UseEmbed` TINYINT(1))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET
+	GuildDiscordId = IN_GuildDiscordId,
+	MessageTime = IN_MessageTime,
+    MentionSetting = IN_MentionSetting,
+    UseEmbed = IN_UseEmbed
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_SetupTrusted` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_TrustedRoleDiscordId` VARCHAR(20), IN `IN_TrustedPreventsRole` TINYINT(1), IN `IN_TrustedPreventsMessage` TINYINT(1))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET
+	GuildDiscordId = IN_GuildDiscordId,
+	TrustedRoleDiscordId = IN_TrustedRoleDiscordId,
+    TrustedPreventsRole = IN_TrustedPreventsRole,
+    TrustedPreventsMessage = IN_TrustedPreventsMessage
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateBirthdayChannel` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayChannelDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET BirthdayChannelDiscordId = IN_BirthdayChannelDiscordId
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateBirthdayRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayRoleDiscordId` VARCHAR(20))  NO SQL
+BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET BirthdayRoleDiscordId = IN_BirthdayRoleDiscordId
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateMentionSetting` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_MentionSetting` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET MentionSetting = IN_MentionSetting
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateMessageTime` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Time` TINYINT)  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET MessageTime = IN_Time
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateTrustedPreventsMessage` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Value` TINYINT(1))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET TrustedPreventsMessage = IN_Value
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateTrustedPreventsRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Value` TINYINT(1))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET TrustedPreventsRole = IN_Value
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateTrustedRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_TrustedRoleDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET TrustedRoleDiscordId = IN_TrustedRoleDiscordId
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateUseEmbed` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Value` TINYINT(1))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET UseEmbed = IN_Value
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_AddOrUpdate` (IN `IN_UserDiscordId` VARCHAR(20), IN `IN_Birthday` DATE, IN `IN_Timezone` VARCHAR(100), IN `IN_ChangesLeft` TINYINT)  BEGIN
+
+SET @UserId = NULL;
+
+SELECT UserId
+INTO @UserId
+FROM `user`
+WHERE UserDiscordId = IN_UserDiscordId;
+
+IF @UserId IS NULL THEN
+	INSERT INTO `user` (
+		UserDiscordId,
+		Birthday,
+		TimeZone,
+        ChangesLeft
+	) VALUES (
+		IN_UserDiscordId,
+		IN_Birthday,
+		IN_Timezone,
+        IN_ChangesLeft
+	);
+ELSE
+	UPDATE `user`
+	SET
+		UserDiscordId = IN_UserDiscordId,
+		Birthday = IN_Birthday,
+		TimeZone = IN_TimeZone,
+        ChangesLeft = IN_ChangesLeft
+	WHERE UserId = @UserId;
+END IF;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_Get` (IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
+
+SELECT *
+FROM `user`
+WHERE UserDiscordId = IN_UserDiscordId;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetAll` (IN `IN_UserDiscordIds` MEDIUMTEXT)  BEGIN
+
+DROP TEMPORARY TABLE IF EXISTS temp;
+CREATE TEMPORARY TABLE temp( val VARCHAR(20) );
+SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
+
+PREPARE stmt1 FROM @sql;
+EXECUTE stmt1;
+
+SELECT *
+FROM (
+	SELECT *
+	FROM temp AS T
+	JOIN `user`AS U
+		ON U.UserDiscordId = T.val
+	WHERE U.Birthday IS NOT NULL AND U.Timezone IS NOT NULL
+       ORDER BY U.Birthday
+) AS UserData;
+
+DROP TEMPORARY TABLE IF EXISTS temp;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
+DROP TEMPORARY TABLE IF EXISTS temp;
+
+SET @TotalPages = NULL;
+SET @TotalItems = NULL;
+SET @StartRow = NULL;
+SET @EndRow = NULL;
+
+CREATE TEMPORARY TABLE temp( val VARCHAR(20) );
+SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
+PREPARE stmt1 FROM @sql;
+EXECUTE stmt1;
+
+SELECT COUNT(*) INTO @TotalItems
+FROM temp AS T
+JOIN `user`AS U
+    ON U.UserDiscordId = T.val
+WHERE
+    U.Birthday IS NOT NULL AND
+    U.Timezone IS NOT NULL;
+
+SELECT CEILING(@TotalItems / IN_PageSize) INTO @TotalPages;
+
+IF (IN_Page < 0) THEN 
+    SET IN_Page = 1;
+ELSEIF (IN_Page > @TotalPages) THEN 
+    SET IN_Page = @TotalPages;
+END IF;
+
+SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
+SET @EndRow = IN_Page * IN_PageSize;
+
+SELECT *
+FROM (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (
+            ORDER BY U.Birthday
+        ) AS 'Position'
+    FROM temp AS T
+    JOIN `user`AS U
+        ON U.UserDiscordId = T.val
+    WHERE
+        U.Birthday IS NOT NULL AND
+        U.Timezone IS NOT NULL
+) AS UserData
+WHERE
+    UserData.Position >= @StartRow AND
+    UserData.Position <= @EndRow;
+
+SELECT
+    @TotalItems AS 'TotalItems',
+    @TotalPages as 'TotalPages';
+    
+DROP TEMPORARY TABLE IF EXISTS temp;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
