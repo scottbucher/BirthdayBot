@@ -33,8 +33,8 @@ export class Bot {
         this.client.on('guildCreate', (guild: Guild) => this.onGuildJoin(guild));
         this.client.on('guildDelete', (guild: Guild) => this.onGuildLeave(guild));
         this.client.on('message', (msg: Message) => this.onMessage(msg));
-        this.client.on('messageReactionAdd', (reaction: MessageReaction, user: User) =>
-            this.onReactionAdd(reaction, user)
+        this.client.on('messageReactionAdd', (msgReaction: MessageReaction, reactor: User) =>
+            this.onReactionAdd(msgReaction, reactor)
         );
     }
 
@@ -100,9 +100,9 @@ export class Bot {
         }
     }
 
-    private onReactionAdd(event: any, user: User) {
+    private onReactionAdd(msgReaction: any, reactor: User) {
         if (!this.ready) return;
-        this.reactionAddHandler.process(event, user);
+        this.reactionAddHandler.process(msgReaction, reactor);
     }
 
     private async onMessage(msg: Message): Promise<void> {

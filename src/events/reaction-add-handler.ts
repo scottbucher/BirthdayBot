@@ -1,10 +1,9 @@
-import { Collection, DMChannel, Message, MessageReaction, TextChannel, User } from 'discord.js';
-import { FormatUtils, PermissionUtils } from '../utils';
+import { Collection, Message, MessageReaction, TextChannel, User } from 'discord.js';
 
-import { CustomMessageRepo } from '../services/database/repos/custom-message-repo';
 import { EventHandler } from '.';
 import { Logger } from '../services';
-import { UserRepo } from '../services/database/repos';
+import { CustomMessageRepo, UserRepo } from '../services/database/repos';
+import { FormatUtils, PermissionUtils } from '../utils';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -12,51 +11,60 @@ let Config = require('../../config/config.json');
 export class ReactionAddHandler implements EventHandler {
     constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
 
-    public async process(messageReaction: MessageReaction, author: User): Promise<void> {
-        if (author.bot || !(messageReaction.message.channel instanceof TextChannel)) return;
+    public async process(msgReaction: MessageReaction, reactor: User): Promise<void> {
+        // Don't respond to bots, and only text channels
+        if (reactor.bot || !(msgReaction.message.channel instanceof TextChannel)) return;
 
-        let channel = messageReaction.message.channel as TextChannel;
+        // Check permissions needed to respond
+        let channel = msgReaction.message.channel as TextChannel;
+        if (
+            !PermissionUtils.canSend(channel) ||
+            !PermissionUtils.canHandleReaction(channel) ||
+            !PermissionUtils.canReact(channel)
+        ) {
+            return;
+        }
 
-        if (!PermissionUtils.canSend(channel) || !PermissionUtils.canHandleReaction(channel) || !PermissionUtils.canReact(channel)) return;
+        // Check if the reacted emoji is one we are handling
+        if (
+            ![Config.emotes.nextPage, Config.emotes.previousPage].includes(msgReaction.emoji.name)
+        ) {
+            return;
+        }
 
+        // Check if the reacted message was sent by the bot
+        if (msgReaction.message.author !== msgReaction.message.client.user) {
+            return;
+        }
+
+        // Get the reacted message
         let msg: Message;
-
-        if (messageReaction.message.partial) {
+        if (msgReaction.message.partial) {
             try {
-                msg = await messageReaction.message.fetch();
+                msg = await msgReaction.message.fetch();
             } catch (error) {
                 Logger.error(Logs.error.messagePartial, error);
                 return;
             }
         } else {
-            msg = messageReaction.message;
+            msg = msgReaction.message;
         }
-
-
-        let reactor = msg.guild.members.resolve(author);
 
         let users: Collection<string, User>;
-
-        if (messageReaction.emoji.name !== Config.emotes.nextPage && messageReaction.emoji.name !== Config.emotes.previousPage) {
-            return;
-        }
-
         try {
-            users = await messageReaction.users.fetch();
+            users = await msgReaction.users.fetch();
         } catch (error) {
             Logger.error(Logs.error.userFetch, error);
             return;
         }
 
-        let checkNextPage: boolean =
-            messageReaction.emoji.name === Config.emotes.nextPage &&
-            users.find(user => user.id === reactor.id) !== null &&
-            users.find(user => user.id === msg.client.user.id) !== null;
+        // Check if bot has reacted to the message before
+        if (!users.find(user => user === msg.client.user)) {
+            return;
+        }
 
-        let checkPreviousPage: boolean =
-            messageReaction.emoji.name === Config.emotes.previousPage &&
-            users.find(user => user.id === reactor.id) !== null &&
-            users.find(user => user.id === msg.client.user.id) !== null;
+        let checkNextPage: boolean = msgReaction.emoji.name === Config.emotes.nextPage;
+        let checkPreviousPage: boolean = msgReaction.emoji.name === Config.emotes.previousPage;
 
         if (checkNextPage || checkPreviousPage) {
             let titleArgs = msg.embeds[0]?.title?.split(' ');

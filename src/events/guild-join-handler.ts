@@ -1,8 +1,8 @@
 import { Guild, MessageEmbed } from 'discord.js';
 
-import { EventHandler } from './event-handler';
 import { Logger } from '../services';
-import { PermissionUtils } from '../utils';
+import { MessageUtils } from '../utils';
+import { EventHandler } from './event-handler';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -28,10 +28,13 @@ export class GuildJoinHandler implements EventHandler {
             .setTimestamp()
             .setColor(Config.colors.default);
 
-        let ownerChannel = await guild.owner.createDM();
+        // Get the guild owner
+        let owner = guild.owner;
+        if (!owner) {
+            return;
+        }
 
-        await ownerChannel.send(embed).catch(() => {
-            // Could not send DM
-        });
+        let ownerChannel = await guild.owner.createDM();
+        await MessageUtils.sendDm(ownerChannel, embed);
     }
 }
