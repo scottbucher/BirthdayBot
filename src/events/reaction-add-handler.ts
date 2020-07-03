@@ -62,15 +62,15 @@ export class ReactionAddHandler implements EventHandler {
             return;
         }
 
+        // Check if bot has reacted to the message before
         let checkNextPage: boolean =
             messageReaction.emoji.name === Config.emotes.nextPage &&
-            users.find(user => user.id === reactor.id) !== null &&
-            users.find(user => user.id === msg.client.user.id) !== null;
-
+            !!users.find(user => user.id === reactor.id) &&
+            !!users.find(user => user.id === msg.client.user.id);
         let checkPreviousPage: boolean =
             messageReaction.emoji.name === Config.emotes.previousPage &&
-            users.find(user => user.id === reactor.id) !== null &&
-            users.find(user => user.id === msg.client.user.id) !== null;
+            !!users.find(user => user.id === reactor.id) &&
+            !!users.find(user => user.id === msg.client.user.id);
 
         if (checkNextPage || checkPreviousPage) {
             let titleArgs = msg.embeds[0]?.title?.split(' ');
