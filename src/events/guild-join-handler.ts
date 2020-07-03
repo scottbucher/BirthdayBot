@@ -28,8 +28,13 @@ export class GuildJoinHandler implements EventHandler {
             .setTimestamp()
             .setColor(Config.colors.default);
 
-        let ownerChannel = await guild.owner.createDM();
+        // Get the guild owner
+        let owner = guild.owner;
+        if (!owner) {
+            return;
+        }
 
+        let ownerChannel = await guild.owner.createDM();
         await ownerChannel.send(embed).catch(() => {
             // Could not send DM
         });
