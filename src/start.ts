@@ -1,6 +1,4 @@
-import { Client, ClientOptions, PartialTypes } from 'discord.js';
-
-import { Bot } from './bot';
+import { BirthdayService, Logger } from './services';
 import {
     ClearCommand,
     CreateCommand,
@@ -20,6 +18,9 @@ import {
     UpdateCommand,
     ViewCommand,
 } from './commands';
+import { Client, ClientOptions, PartialTypes } from 'discord.js';
+import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
+import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -30,11 +31,10 @@ import {
     MessageTestSubCommand,
     MessageTimeSubCommand,
 } from './commands/message';
-import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+
 import { BirthdayJob } from './jobs';
-import { BirthdayService, Logger } from './services';
+import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
-import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
 
@@ -59,7 +59,7 @@ async function start(): Promise<void> {
     let customMessageRepo = new CustomMessageRepo(dataAccess);
 
     // Services
-    let birthdayService = new BirthdayService(userRepo, customMessageRepo);
+    let birthdayService = new BirthdayService(customMessageRepo);
 
     // Commands
     let setCommand = new SetCommand(userRepo);
@@ -129,7 +129,7 @@ async function start(): Promise<void> {
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 
-    let birthdayJob = new BirthdayJob(client, guildRepo, birthdayService);
+    let birthdayJob = new BirthdayJob(client, guildRepo, userRepo, birthdayService);
 
     let bot = new Bot(
         Config.token,

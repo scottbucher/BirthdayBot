@@ -8,7 +8,7 @@ import { UserData } from '../models/database/user-models';
 let Config = require('../../config/config.json');
 
 export class BirthdayService {
-    constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
+    constructor(private customMessageRepo: CustomMessageRepo) {}
 
     public async celebrateBirthdays(
         guild: Guild,

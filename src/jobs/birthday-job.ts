@@ -1,6 +1,6 @@
 import { BdayUtils, MathUtils } from '../utils';
 import { BirthdayService, Logger } from '../services';
-import { Client, Guild, GuildManager, GuildMember, User } from 'discord.js';
+import { Client, Guild } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
 
 import { Job } from './job';
