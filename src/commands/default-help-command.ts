@@ -1,7 +1,7 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { MessageUtils } from '../utils';
 import { Command } from './command';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json'); // Possible support for server specific prefixes?
 
@@ -47,7 +47,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} setup** - Interactive guide for server setup.` +
                         '\n' +
                         `\n**${prefix} create <channel/role>** - Create the default birthday role/channel.` +
-                        `\n**${prefix} update <channel/role>** - Update the birthday role/channel.` +
+                        `\n**${prefix} update <channel/role> <#channel/@role>** - Update the birthday role/channel.` +
                         `\n**${prefix} clear <channel/role>** - Clear the birthday role/channel.` +
                         `\n**${prefix} settings** - View server's settings.`
                 )
@@ -79,8 +79,8 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} setup trusted** - Interactive guide for trusted system settings setup.` +
                         '\n' +
                         `\n**${prefix} create trustedRole** - Create the default trusted role` +
-                        `\n**${prefix} update <channel/role>** - Update the trusted role.` +
-                        `\n**${prefix} clear <channel/role>** - Clear the trusted role.` +
+                        `\n**${prefix} update trustedRole <channel>** - Update the trusted role.` +
+                        `\n**${prefix} clear trustedRole ** - Clear the trusted role.` +
                         `\n**${prefix} trusted preventMsg <T/F>** - If trusted role is required for a birthday message.` +
                         `\n**${prefix} trusted preventRole <T/F>** - If trusted role is required to get the birthday role.`
                 )
