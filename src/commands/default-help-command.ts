@@ -67,7 +67,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} message time <0-23>** - Set the birthday message time.` +
                         `\n**${prefix} message mention <role/group>** - Set the birthday message mention setting.` +
                         `\n**${prefix} message embed <T/F>** - Should the birthday message be embedded.` +
-                        `\n**${prefix} message test <position> [user count]** - Test a birthday message`
+                        `\n**${prefix} message test <position> [user count]** - Test a birthday message.`
                 )
                 .setColor(Config.colors.default);
         } else if (args[2].toLowerCase() === 'trusted') {
@@ -78,7 +78,7 @@ export class DefaultHelpCommand implements Command {
                         '\n' +
                         `\n**${prefix} setup trusted** - Interactive guide for trusted system settings setup.` +
                         '\n' +
-                        `\n**${prefix} create trustedRole** - Create the default trusted role` +
+                        `\n**${prefix} create trustedRole** - Create the default trusted role.` +
                         `\n**${prefix} update trustedRole <channel>** - Update the trusted role.` +
                         `\n**${prefix} clear trustedRole ** - Clear the trusted role.` +
                         `\n**${prefix} trusted preventMsg <T/F>** - If trusted role is required for a birthday message.` +
