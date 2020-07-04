@@ -1,3 +1,4 @@
+import { ArrayUtils } from './array-utils';
 import { CustomMessages } from '../models/database/custom-messages-models';
 import { MathUtils } from './math-utils';
 import { Moment } from 'moment-timezone';
@@ -90,27 +91,9 @@ export class BdayUtils {
         return currentDateFormatted === birthdayFormatted;
     }
 
-    public static isntBirthday(userData: UserData): boolean {
-        if (Debug.enabled && Debug.alwaysRemoveBirthdayRole) {
-            return true;
-        }
-
-        let currentDate = moment().tz(userData.TimeZone);
-        let birthday = moment(userData.Birthday);
-
-        let currentDateFormatted = currentDate.format('MM-DD');
-        let birthdayFormatted = birthday.format('MM-DD');
-
-        if (birthdayFormatted === '02-29' && !MathUtils.isLeap(moment().year())) birthdayFormatted = '02-28';
-
-        return currentDateFormatted !== birthdayFormatted;
-    }
-
     public static randomMessage(messages: CustomMessages): string {
         if (messages.customMessages.length > 0) {
-            return messages.customMessages[
-                Math.round(Math.random() * messages.customMessages.length) - 1
-            ].Message;
+            return ArrayUtils.chooseRandom(messages.customMessages).Message;
         } else return 'Happy Birthday @Users!';
     }
 }
