@@ -68,7 +68,7 @@ export class SetCommand implements Command {
             target = msg.author;
         }
 
-        let suggest = target === msg.author;
+        let suggest = target !== msg.author;
 
         let userData = await this.userRepo.getUser(target.id); // Try and get their data
         let changesLeft = 5; // Default # of changes
@@ -106,8 +106,8 @@ export class SetCommand implements Command {
             .setTimestamp()
             .setAuthor(`${target.username}#${target.discriminator}`, target.avatarURL());
 
-        if (suggest) timeZoneEmbed.setTitle('User Setup - Time Zone');
-        else timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
+        if (suggest) timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
+        else timeZoneEmbed.setTitle('User Setup - Time Zone');
 
         await channel.send(timeZoneEmbed);
 
@@ -138,8 +138,8 @@ export class SetCommand implements Command {
                         .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
                         .setTimestamp()
                         .setColor(Config.colors.error);
-                    if (suggest) embed.setTitle('User Setup - Time Zone');
-                    else embed.setTitle(`Setup For ${target.username} - Time Zone`);
+                    if (suggest) embed.setTitle(`Setup For ${target.username} - Time Zone`);
+                    else embed.setTitle('User Setup - Time Zone');
                     await channel.send(embed);
                     return;
                 }
@@ -158,8 +158,8 @@ export class SetCommand implements Command {
                     .setTimestamp()
                     .setAuthor(`${target.username}#${target.discriminator}`, target.avatarURL());
 
-                if (suggest) birthdayEmbed.setTitle('User Setup - Birthday');
-                else birthdayEmbed.setTitle(`Setup For ${target.username} - Birthday`);
+                if (suggest) birthdayEmbed.setTitle(`Setup For ${target.username} - Birthday`);
+                else birthdayEmbed.setTitle('User Setup - Birthday');
 
                 await channel.send(birthdayEmbed);
                 return;
@@ -174,8 +174,8 @@ export class SetCommand implements Command {
                         .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
                         .setTimestamp()
                         .setColor(Config.colors.error);
-                    if (suggest) embed.setTitle('User Setup - Birthday');
-                    else embed.setTitle(`Setup For ${target.username} - Birthday`);
+                    if (suggest) embed.setTitle(`Setup For ${target.username} - Birthday`);
+                    else embed.setTitle('User Setup - Birthday');
                     await channel.send(embed);
                     return;
                 }
@@ -186,8 +186,7 @@ export class SetCommand implements Command {
 
                 let confirmationEmbed = new MessageEmbed().setColor(Config.colors.default);
 
-                if (!suggest) {
-                    // So suggest is if it is a suggestion setup or not, (THIS IS INVERTED but it works idk why)
+                if (suggest) {
                     confirmationEmbed
                         .setDescription(
                             `${target.toString()}, please confirm this information is correct: **${FormatUtils.getMonth(
