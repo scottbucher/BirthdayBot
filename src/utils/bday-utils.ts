@@ -60,15 +60,22 @@ export class BdayUtils {
         }
 
         let currentDate = moment().tz(userData.TimeZone);
-        let birthday = moment(userData.Birthday);
-
-        let currentDateFormatted = currentDate.format('MM-DD');
-        let birthdayFormatted = birthday.format('MM-DD');
         let currentHour = currentDate.hour();
-        return currentDateFormatted === birthdayFormatted && currentHour === messageHour;
+        return currentHour === messageHour;
     }
 
     public static isTimeForBirthdayRole(userData: UserData): boolean {
+        if (Debug.enabled && Debug.alwaysGiveBirthdayRole) {
+            return true;
+        }
+
+        let currentDate = moment().tz(userData.TimeZone);
+
+        let currentHour = currentDate.hour();
+        return currentHour === 0;
+    }
+
+    public static isBirthday(userData: UserData): boolean {
         if (Debug.enabled && Debug.alwaysGiveBirthdayRole) {
             return true;
         }
@@ -80,9 +87,7 @@ export class BdayUtils {
         let birthdayFormatted = birthday.format('MM-DD');
 
         if (birthdayFormatted === '02-29' && !MathUtils.isLeap(moment().year())) birthdayFormatted = '02-28';
-
-        let currentHour = currentDate.hour();
-        return currentDateFormatted === birthdayFormatted && currentHour === 0;
+        return currentDateFormatted === birthdayFormatted;
     }
 
     public static isntBirthday(userData: UserData): boolean {

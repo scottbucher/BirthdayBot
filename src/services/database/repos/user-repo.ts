@@ -1,8 +1,8 @@
-import { UserDataResults } from '../../../models/database/user-data-results-models';
-import { UserData } from '../../../models/database/user-models';
-import { SQLUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
+import { SQLUtils } from '../../../utils';
+import { UserData } from '../../../models/database/user-models';
+import { UserDataResults } from '../../../models/database/user-data-results-models';
 
 export class UserRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -49,5 +49,12 @@ export class UserRepo {
         let userData = SQLUtils.getFirstResult(results);
         let stats = SQLUtils.getSecondResultFirstRow(results);
         return new UserDataResults(userData, stats);
+    }
+
+    public async getUsersWithBirthday(birthday: string): Promise<UserData[]> {
+        let results = await this.dataAccess.executeProcedure(Procedure.User_GetBirthdays, [
+            birthday
+        ]);
+        return SQLUtils.getFirstResult(results);
     }
 }

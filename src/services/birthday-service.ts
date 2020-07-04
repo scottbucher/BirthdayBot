@@ -1,15 +1,21 @@
 import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
+import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import { CustomMessageRepo, UserRepo } from './database/repos';
-import { Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 
 import { GuildData } from '../models/database/guild-models';
+import { UserData } from '../models/database/user-models';
 
 let Config = require('../../config/config.json');
 
 export class BirthdayService {
     constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
 
-    public async celebrateBirthdays(guild: Guild, guildData: GuildData): Promise<void> {
+    public async celebrateBirthdays(
+        guild: Guild,
+        guildData: GuildData,
+        userDatas: UserData[],
+        members: Collection<string, GuildMember>
+    ): Promise<void> {
         let birthdayChannel: TextChannel;
         let birthdayRole: Role;
         let trustedRole: Role;
@@ -40,16 +46,14 @@ export class BirthdayService {
             return;
         }
 
+        let birthdayUsers: GuildMember[] = [];
+
         let preventMessage = guildData.TrustedPreventsMessage;
         let preventRole = guildData.TrustedPreventsRole;
 
-        let userData = await this.userRepo.getAllUsers(guild.members.cache.keyArray());
+        if (!userDatas) return;
 
-        if (!userData) return;
-
-        let birthdayUsers: GuildMember[] = [];
-
-        for (let user of userData) {
+        for (let user of userDatas) {
             let member: GuildMember;
             try {
                 member = guild.members.resolve(user.UserDiscordId);
@@ -85,13 +89,17 @@ export class BirthdayService {
                 birthdayUsers.push(member);
             }
 
-            if (
-                birthdayRole &&
-                member.roles.cache.has(birthdayRole.id) &&
-                BdayUtils.isntBirthday(user)
-            ) {
-                ActionUtils.removeRole(member, birthdayRole);
+            if (birthdayRole) {
+                members.forEach(member => {
+                    if (member.roles.cache.has(birthdayRole.id))
+                        ActionUtils.removeRole(member, birthdayRole);
+                });
             }
+            // get a string array of the userData keys
+            let userDataKeys = userDatas.map(userData => userData.UserDiscordId);
+
+            // Filter anyone whose birthday it IS from members
+            members.filter(member => userDataKeys.includes(member.id));
         }
 
         // Birthday Message
