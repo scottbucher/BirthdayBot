@@ -5,7 +5,6 @@ import { GuildRepo, UserRepo } from '../services/database/repos';
 
 import { Job } from './job';
 import { UserData } from '../models/database/user-models';
-import { clear } from 'console';
 import moment from 'moment';
 
 let Logs = require('../../lang/logs.json');
@@ -22,22 +21,25 @@ export class BirthdayJob implements Job {
         Logger.info(Logs.info.birthdayJobStarted);
 
         let now = moment();
-        let today = now.format('MM-DD');
-        let tomorrow = now.add(1, 'day').format('MM-DD');
-        let yesterday = now.subtract(1, 'day').format('MM-DD');
-
-        let userDatas: UserData[] = [];
+        let today = moment().format('MM-DD');
+        let tomorrow = moment().add(1, 'day').format('MM-DD');
+        let yesterday = moment().subtract(1, 'day').format('MM-DD');
 
         // Get a user data list of all POSSIBLE birthday events, this includes birthday role, message AND role take.
         // Do to timezones and custom message time this can range by a day, thus we get 3 days worth of birthdays for each check
-        userDatas.concat(await this.userRepo.getUsersWithBirthday(today));
-        userDatas.concat(await this.userRepo.getUsersWithBirthday(tomorrow));
-        userDatas.concat(await this.userRepo.getUsersWithBirthday(yesterday));
+        let userDatas: UserData[] = [
+            ...(await this.userRepo.getUsersWithBirthday(today)),
+            ...(await this.userRepo.getUsersWithBirthday(tomorrow)),
+            ...(await this.userRepo.getUsersWithBirthday(yesterday)),
+        ];
 
         if (!MathUtils.isLeap(now.year()) && today === '02-28') {
             // Add leap year birthdays to list
-            userDatas.concat(await this.userRepo.getUsersWithBirthday('02-29'));
+            userDatas.push(...await this.userRepo.getUsersWithBirthday('02-29'));
         }
+
+        // Remove people whose birthday isn't today (isBirthday() considers timezones)
+        userDatas = userDatas.filter(userData => BdayUtils.isBirthday(userData));
 
         // Get list of guilds the client is connected to
         let discordIds = this.client.guilds.cache.map(guild => guild.id);
@@ -71,12 +73,7 @@ export class BirthdayJob implements Job {
             let members = await guild.members.fetch();
 
             // Remove members who are not apart of this guild
-            for (let member of members.keyArray()) {
-                userDatas.filter(user => user.UserDiscordId !== member);
-            }
-
-            // Remove people whose birthday isn't today (isBirthday() considers timezones)
-            userDatas.filter(userData => !BdayUtils.isBirthday(userData));
+            userDatas = userDatas.filter(userData => members.keyArray().includes(userData.UserDiscordId));
 
             promises.push(
                 this.birthdayService

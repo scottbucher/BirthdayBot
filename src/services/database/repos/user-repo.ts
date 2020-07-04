@@ -55,6 +55,7 @@ export class UserRepo {
         let results = await this.dataAccess.executeProcedure(Procedure.User_GetBirthdays, [
             birthday
         ]);
+
         return SQLUtils.getFirstResult(results);
     }
 }

@@ -51,8 +51,6 @@ export class BirthdayService {
         let preventMessage = guildData.TrustedPreventsMessage;
         let preventRole = guildData.TrustedPreventsRole;
 
-        if (!userDatas) return;
-
         for (let user of userDatas) {
             let member: GuildMember;
             try {
@@ -88,18 +86,19 @@ export class BirthdayService {
             ) {
                 birthdayUsers.push(member);
             }
+        }
 
-            if (birthdayRole) {
-                members.forEach(member => {
-                    if (member.roles.cache.has(birthdayRole.id))
-                        ActionUtils.removeRole(member, birthdayRole);
-                });
-            }
-            // get a string array of the userData keys
-            let userDataKeys = userDatas.map(userData => userData.UserDiscordId);
+        // get a string array of the userData keys
+        let userDataKeys = userDatas.map(userData => userData.UserDiscordId);
 
-            // Filter anyone whose birthday it IS from members
-            members.filter(member => userDataKeys.includes(member.id));
+        // Filter OUT anyone whose in userData (whose birthday is today)
+        members = members.filter(member => !userDataKeys.includes(member.id));
+
+        if (birthdayRole) {
+            members.forEach(member => {
+                if (member.roles.cache.has(birthdayRole.id))
+                    ActionUtils.removeRole(member, birthdayRole);
+            });
         }
 
         // Birthday Message
