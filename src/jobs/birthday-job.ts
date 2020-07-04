@@ -60,6 +60,7 @@ export class BirthdayJob implements Job {
             let guild: Guild;
             try {
                 guild = this.client.guilds.resolve(guildData.GuildDiscordId);
+                if (!guild) continue;
             } catch (error) {
                 Logger.error(
                     Logs.error.resolveGuild
@@ -69,8 +70,6 @@ export class BirthdayJob implements Job {
                 );
                 continue;
             }
-
-            if (!guild) continue;
 
             try {
                 let members: Collection<string, GuildMember>;
