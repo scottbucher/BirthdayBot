@@ -8,9 +8,9 @@ import {
     User,
 } from 'discord.js';
 
-import { ActionUtils } from './action-utils';
-import { GuildRepo } from '../services/database/repos';
 import { PermissionUtils } from '.';
+import { GuildRepo } from '../services/database/repos';
+import { ActionUtils } from './action-utils';
 
 let Config = require('../../config/config.json');
 
@@ -86,7 +86,7 @@ export abstract class SetupUtils {
                     )?.id;
                 } else if (nextReaction.emoji.name === Config.emotes.select) {
                     let embed = new MessageEmbed()
-                        .setDescription('Please mention a channel or input a channel\'s name.')
+                        .setDescription(`Please mention a channel or input a channel's name.`)
                         .setColor(Config.colors.default);
                     let selectMessage = await channel.send(embed);
 
@@ -232,7 +232,7 @@ export abstract class SetupUtils {
                             )?.id;
                         } else if (nextReaction.emoji.name === Config.emotes.select) {
                             let embed = new MessageEmbed()
-                                .setDescription('Please mention a role or input a role\'s name.')
+                                .setDescription(`Please mention a role or input a role's name.`)
                                 .setColor(Config.colors.default);
                             let selectMessage = await channel.send(embed);
 
@@ -592,8 +592,8 @@ export abstract class SetupUtils {
                             .setDescription(
                                 'You have successfully completed the server message setup!' +
                                     `\n\n**Birthday Message Time**: \`${timeOutput}\`` +
-                                    `\n\n**Mention Setting**: ${mentionOutput}` +
-                                    `\n\n**Use Embed**: \`${useEmbed === 1 ? 'True' : 'False'}\``
+                                    `\n**Mention Setting**: ${mentionOutput}` +
+                                    `\n**Use Embed**: \`${useEmbed === 1 ? 'True' : 'False'}\``
                             )
                             .setFooter(`Message Setup Complete!`, msg.client.user.avatarURL())
                             .setColor(Config.colors.default)
@@ -811,7 +811,7 @@ export abstract class SetupUtils {
                                 } else if (nextReaction.emoji.name === Config.emotes.select) {
                                     let embed = new MessageEmbed()
                                         .setDescription(
-                                            'Please mention a role or input a role\'s name.'
+                                            `Please mention a role or input a role's name.`
                                         )
                                         .setColor(Config.colors.default);
                                     let selectMessage = await channel.send(embed);
