@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 03, 2020 at 04:53 AM
+-- Generation Time: Jul 04, 2020 at 08:09 PM
 -- Server version: 10.3.23-MariaDB-1:10.3.23+maria~stretch
 -- PHP Version: 7.0.33-0+deb9u6
 
@@ -425,6 +425,14 @@ FROM (
 ) AS UserData;
 
 DROP TEMPORARY TABLE IF EXISTS temp;
+END$$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `User_GetBirthdays` (IN `IN_Birthday` VARCHAR(10))  BEGIN
+
+SELECT *
+FROM `user`
+WHERE DATE_FORMAT(`user`.Birthday, '%m-%d') = IN_Birthday;
+
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
