@@ -90,14 +90,16 @@ export abstract class SetupUtils {
                         .setColor(Config.colors.default);
                     let selectMessage = await channel.send(embed);
 
-                    const messageFilter: CollectorFilter = (nextMsg: Message) => {
+                    const messageFilter: CollectorFilter = (nextMsg: Message): boolean => {
                         if (nextMsg.author !== msg.author) {
                             return false;
                         }
 
                         let nextMsgArgs = nextMsg?.content.split(' ');
 
-                        if (nextMsgArgs[0]?.toLowerCase() === 'bday') return;
+                        if (nextMsgArgs[0]?.toLowerCase() === 'bday') {
+                            return false;
+                        }
 
                         // Find mentioned channel
                         let channelInput: TextChannel = nextMsg.mentions.channels.first();
@@ -236,14 +238,16 @@ export abstract class SetupUtils {
                                 .setColor(Config.colors.default);
                             let selectMessage = await channel.send(embed);
 
-                            const messageFilter: CollectorFilter = (nextMsg: Message) => {
+                            const messageFilter: CollectorFilter = (nextMsg: Message): boolean => {
                                 if (nextMsg.author !== msg.author) {
                                     return false;
                                 }
 
                                 let nextMsgArgs = nextMsg?.content.split(' ');
 
-                                if (nextMsgArgs[0]?.toLowerCase() === 'bday') return;
+                                if (nextMsgArgs[0]?.toLowerCase() === 'bday') {
+                                    return false;
+                                }
 
                                 // Find mentioned role
                                 let roleInput: Role = nextMsg.mentions.roles.first();
@@ -816,7 +820,9 @@ export abstract class SetupUtils {
                                         .setColor(Config.colors.default);
                                     let selectMessage = await channel.send(embed);
 
-                                    const messageFilter: CollectorFilter = (nextMsg: Message) => {
+                                    const messageFilter: CollectorFilter = (
+                                        nextMsg: Message
+                                    ): boolean => {
                                         if (nextMsg.author !== msg.author) {
                                             return false;
                                         }
