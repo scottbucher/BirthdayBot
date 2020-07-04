@@ -98,7 +98,8 @@ export class BirthdayJob implements Job {
                 Logger.error(
                     Logs.error.birthdayService
                         .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild.name),
+                        .replace('{GUILD_NAME}', guild.name)
+                        .replace('{TOTAL_MEMBERS}', guild.memberCount),
                     error
                 );
                 continue;
