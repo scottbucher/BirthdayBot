@@ -1,6 +1,6 @@
 import { BdayUtils, MathUtils } from '../utils';
 import { BirthdayService, Logger } from '../services';
-import { Client, Guild } from 'discord.js';
+import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
 
 import { Job } from './job';
@@ -35,7 +35,7 @@ export class BirthdayJob implements Job {
 
         if (!MathUtils.isLeap(now.year()) && today === '02-28') {
             // Add leap year birthdays to list
-            userDatas.push(...await this.userRepo.getUsersWithBirthday('02-29'));
+            userDatas.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
         }
 
         // Remove people whose birthday isn't today (isBirthday() considers timezones)
@@ -60,34 +60,49 @@ export class BirthdayJob implements Job {
             let guild: Guild;
             try {
                 guild = this.client.guilds.resolve(guildData.GuildDiscordId);
+                if (!guild) continue;
             } catch (error) {
                 Logger.error(
-                    Logs.error.resolveGuild.replace('{GUILD_ID}', guildData.GuildDiscordId),
+                    Logs.error.resolveGuild
+                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
+                        .replace('{GUILD_NAME}', guild.name),
                     error
                 );
                 continue;
             }
 
-            if (!guild) continue;
+            try {
+                let members: Collection<string, GuildMember>;
 
-            let members = await guild.members.fetch();
+                members = await guild.members.fetch();
 
-            // Remove members who are not apart of this guild
-            userDatas = userDatas.filter(userData => members.keyArray().includes(userData.UserDiscordId));
+                // Remove members who are not apart of this guild
+                userDatas = userDatas.filter(userData =>
+                    members.keyArray().includes(userData.UserDiscordId)
+                );
 
-            promises.push(
-                this.birthdayService
-                    .celebrateBirthdays(guild, guildData, userDatas, members)
-                    .catch(error => {
-                        // send userRoleList and messageList
-                        Logger.error(
-                            Logs.error.celebrateBirthday
-                                .replace('{GUILD_NAME}', guild.name)
-                                .replace('{GUILD_ID}', guild.id),
-                            error
-                        );
-                    })
-            );
+                promises.push(
+                    this.birthdayService
+                        .celebrateBirthdays(guild, guildData, userDatas, members)
+                        .catch(error => {
+                            // send userRoleList and messageList
+                            Logger.error(
+                                Logs.error.celebrateBirthday
+                                    .replace('{GUILD_NAME}', guild.name)
+                                    .replace('{GUILD_ID}', guild.id),
+                                error
+                            );
+                        })
+                );
+            } catch (error) {
+                Logger.error(
+                    Logs.error.birthdayService
+                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
+                        .replace('{GUILD_NAME}', guild.name),
+                    error
+                );
+                continue;
+            }
         }
 
         // Wait for all birthday celebrations to finish

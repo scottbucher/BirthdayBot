@@ -23,11 +23,13 @@
         "login": "An error occurred while the client attempted to login.",
         "guildJoin": "An error occurred while processing a guild join.",
         "guildLeave": "An error occurred while processing a guild leave.",
-        "resolveGuild": "Guild '{GUILD_ID}' could not be resolved even though it is in the cache.",
+        "resolveGuild": "Guild '{GUILD_NAME}' ({GUILD_ID}) could not be resolved even though it is in the cache.",
         "message": "An error occurred while processing a message.",
         "birthdayJob": "An error occurred while running the birthday job.",
         "celebrateBirthday": "An error occurred while trying to celebrate birthdays for guild '{GUILD_NAME}' ({GUILD_ID}).",
         "messagePartial": "An error occurred while trying to fetch a message partial.",
-        "userFetch": "An error occurred while trying to fetch the users of a reaction."
+        "userFetch": "An error occurred while trying to fetch the users of a reaction.",
+        "fetchMembers": "An error occurred while trying to fetch the members for the guild '{GUILD_NAME}' ({GUILD_ID}).",
+        "birthdayService": "An error occurred while trying run the birthday service for '{GUILD_NAME}' ({GUILD_ID})."
     }
 }
