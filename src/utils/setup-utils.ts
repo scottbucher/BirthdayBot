@@ -200,10 +200,12 @@ export abstract class SetupUtils {
                     .setColor(Config.colors.default)
                     .setTimestamp();
 
+                let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
+
                 let roleMessage = await channel.send(roleEmbed);
-                await roleMessage.react(Config.emotes.create);
-                await roleMessage.react(Config.emotes.select);
-                await roleMessage.react(Config.emotes.deny);
+                for (let reactOption of reactOptions) {
+                    await channelMessage.react(reactOption);
+                }
 
                 let reactionCollectorRole = roleMessage.createReactionCollector(filter, {
                     time: Config.promptExpireTime * 1000,
@@ -525,13 +527,15 @@ export abstract class SetupUtils {
                 expired = false;
                 collector.stop();
 
+                let reactOptions = [Config.emotes.confirm, Config.emotes.deny];
+
                 let optionMessage = await channel.send(embedMessage);
-                await optionMessage.react(Config.emotes.confirm);
-                await optionMessage.react(Config.emotes.deny);
+                for (let reactOption of reactOptions) {
+                    await optionMessage.react(reactOption);
+                }
 
                 const filter = (nextReaction: MessageReaction, reactor: User) =>
-                    (nextReaction.emoji.name === Config.emotes.confirm ||
-                        nextReaction.emoji.name === Config.emotes.deny) &&
+                    reactOptions.includes(nextReaction.emoji.name) &&
                     nextReaction.users.resolve(channel.client.user.id) !== null &&
                     reactor === user; // Reaction Collector Filter
 
