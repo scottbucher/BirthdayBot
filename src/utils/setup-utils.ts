@@ -42,15 +42,15 @@ export abstract class SetupUtils {
             .setColor(Config.colors.default)
             .setTimestamp();
 
+        let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
+
         let channelMessage = await channel.send(channelEmbed);
-        await channelMessage.react(Config.emotes.create);
-        await channelMessage.react(Config.emotes.select);
-        await channelMessage.react(Config.emotes.deny);
+        for (let reactOption of reactOptions) {
+            await channelMessage.react(reactOption);
+        }
 
         const filter = (nextReaction: MessageReaction, reactor: User) =>
-            (nextReaction.emoji.name === Config.emotes.create ||
-                nextReaction.emoji.name === Config.emotes.select ||
-                nextReaction.emoji.name === Config.emotes.deny) &&
+            reactOptions.includes(nextReaction.emoji.name) &&
             nextReaction.users.resolve(botUser.id) !== null &&
             reactor === user; // Reaction Collector Filter
 
