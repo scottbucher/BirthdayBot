@@ -1,10 +1,11 @@
-import { ArrayUtils } from './array-utils';
-import { CustomMessages } from '../models/database/custom-messages-models';
-import { MathUtils } from './math-utils';
+import moment from 'moment';
 import { Moment } from 'moment-timezone';
+
+import { CustomMessages } from '../models/database/custom-messages-models';
 import { SplitUsers } from '../models/database/split-users-models';
 import { UserData } from '../models/database/user-models';
-import moment from 'moment';
+import { ArrayUtils } from './array-utils';
+import { MathUtils } from './math-utils';
 
 let Debug = require('../../config/debug.json');
 
@@ -87,7 +88,8 @@ export class BdayUtils {
         let currentDateFormatted = currentDate.format('MM-DD');
         let birthdayFormatted = birthday.format('MM-DD');
 
-        if (birthdayFormatted === '02-29' && !MathUtils.isLeap(moment().year())) birthdayFormatted = '02-28';
+        if (birthdayFormatted === '02-29' && !MathUtils.isLeap(moment().year()))
+            birthdayFormatted = '02-28';
         return currentDateFormatted === birthdayFormatted;
     }
 
