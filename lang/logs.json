@@ -30,6 +30,6 @@
         "messagePartial": "An error occurred while trying to fetch a message partial.",
         "userFetch": "An error occurred while trying to fetch the users of a reaction.",
         "fetchMembers": "An error occurred while trying to fetch the members for the guild '{GUILD_NAME}' ({GUILD_ID}).",
-        "birthdayService": "An error occurred while trying run the birthday service for '{GUILD_NAME}' ({GUILD_ID}) Total Members: {TOTAL_MEMBERS}."
+        "birthdayService": "An error occurred while trying run the birthday service for '{GUILD_NAME}' ({GUILD_ID}) with {MEMBER_COUNT} members and {MEMBER_CACHE_COUNT} in the cache."
     }
 }

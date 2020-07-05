@@ -99,7 +99,8 @@ export class BirthdayJob implements Job {
                     Logs.error.birthdayService
                         .replace('{GUILD_ID}', guildData.GuildDiscordId)
                         .replace('{GUILD_NAME}', guild.name)
-                        .replace('{TOTAL_MEMBERS}', guild.memberCount),
+                        .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                        .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
                     error
                 );
                 continue;
