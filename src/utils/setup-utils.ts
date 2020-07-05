@@ -16,18 +16,19 @@ let Config = require('../../config/config.json');
 
 export abstract class SetupUtils {
     public static async executeRequiredSetup(
-        args: string[],
         msg: Message,
         channel: TextChannel,
         guildRepo: GuildRepo
     ): Promise<void> {
-        // Do stuff
+        let guild = channel.guild;
+        let user = msg.author;
+        let botUser = guild.client.user;
 
         let birthdayChannel: string;
         let birthdayRole: string;
 
         let channelEmbed = new MessageEmbed()
-            .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+            .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Server Setup - Birthday Channel')
             .setDescription(
                 'To begin you must set up the birthday channel [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
@@ -37,21 +38,21 @@ export abstract class SetupUtils {
                 `Create New Channel ${Config.emotes.create}\nSelect Pre-Existing Channel ${Config.emotes.select}\nNo Birthday Channel ${Config.emotes.deny}`,
                 '\u200b'
             )
-            .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+            .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
             .setColor(Config.colors.default)
             .setTimestamp();
 
+        let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
+
         let channelMessage = await channel.send(channelEmbed);
-        await channelMessage.react(Config.emotes.create);
-        await channelMessage.react(Config.emotes.select);
-        await channelMessage.react(Config.emotes.deny);
+        for (let reactOption of reactOptions) {
+            await channelMessage.react(reactOption);
+        }
 
         const filter = (nextReaction: MessageReaction, reactor: User) =>
-            (nextReaction.emoji.name === Config.emotes.create ||
-                nextReaction.emoji.name === Config.emotes.select ||
-                nextReaction.emoji.name === Config.emotes.deny) &&
-            nextReaction.users.resolve(msg.client.user.id) !== null &&
-            reactor === msg.author; // Reaction Collector Filter
+            reactOptions.includes(nextReaction.emoji.name) &&
+            nextReaction.users.resolve(botUser.id) !== null &&
+            reactor === user; // Reaction Collector Filter
 
         let reactionCollectorChannel = channelMessage.createReactionCollector(filter, {
             time: Config.promptExpireTime * 1000,
@@ -72,12 +73,12 @@ export abstract class SetupUtils {
                 if (nextReaction.emoji.name === Config.emotes.create) {
                     // Create channel with desired attributes
                     birthdayChannel = (
-                        await msg.guild.channels.create(`${Config.emotes.birthday} birthdays`, {
+                        await guild.channels.create(`${Config.emotes.birthday} birthdays`, {
                             type: 'text',
                             topic: 'Birthday Announcements!',
                             permissionOverwrites: [
                                 {
-                                    id: msg.guild.id,
+                                    id: guild.id,
                                     deny: ['SEND_MESSAGES'],
                                     allow: ['VIEW_CHANNEL'],
                                 },
@@ -91,7 +92,7 @@ export abstract class SetupUtils {
                     let selectMessage = await channel.send(embed);
 
                     const messageFilter: CollectorFilter = (nextMsg: Message): boolean => {
-                        if (nextMsg.author !== msg.author) {
+                        if (nextMsg.author !== user) {
                             return false;
                         }
 
@@ -105,7 +106,7 @@ export abstract class SetupUtils {
                         let channelInput: TextChannel = nextMsg.mentions.channels.first();
 
                         if (!channelInput) {
-                            channelInput = msg.guild.channels.cache
+                            channelInput = guild.channels.cache
                                 .filter(channel => channel instanceof TextChannel)
                                 .map(channel => channel as TextChannel)
                                 .find(channel =>
@@ -115,7 +116,7 @@ export abstract class SetupUtils {
                                 );
                         }
 
-                        if (!channelInput || channelInput.guild.id !== msg.guild.id) {
+                        if (!channelInput || channelInput.guild.id !== guild.id) {
                             let embed = new MessageEmbed()
                                 .setDescription('Invalid channel!')
                                 .setColor(Config.colors.error);
@@ -154,7 +155,7 @@ export abstract class SetupUtils {
 
                             // If could not find in mention check, try to find by name
                             if (!channelInput) {
-                                channelInput = msg.guild.channels.cache
+                                channelInput = guild.channels.cache
                                     .filter(channel => channel instanceof TextChannel)
                                     .map(channel => channel as TextChannel)
                                     .find(channel =>
@@ -165,7 +166,7 @@ export abstract class SetupUtils {
                             }
 
                             // Could it find the channel in either check?
-                            if (!channelInput || channelInput.guild.id !== msg.guild.id) {
+                            if (!channelInput || channelInput.guild.id !== guild.id) {
                                 let embed = new MessageEmbed()
                                     .setDescription('Invalid channel!')
                                     .setColor(Config.colors.error);
@@ -185,7 +186,7 @@ export abstract class SetupUtils {
                 reactionCollectorChannel.stop();
 
                 let roleEmbed = new MessageEmbed()
-                    .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+                    .setAuthor(`${guild.name}`, guild.iconURL())
                     .setTitle('Server Setup - Birthday Role')
                     .setDescription(
                         'Now, set up the birthday role [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-role)' +
@@ -195,14 +196,16 @@ export abstract class SetupUtils {
                         `Create New Role ${Config.emotes.create}\nSelect Pre-Existing Role ${Config.emotes.select}\nNo Birthday Role ${Config.emotes.deny}`,
                         '\u200b'
                     )
-                    .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+                    .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
                     .setColor(Config.colors.default)
                     .setTimestamp();
 
+                let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
+
                 let roleMessage = await channel.send(roleEmbed);
-                await roleMessage.react(Config.emotes.create);
-                await roleMessage.react(Config.emotes.select);
-                await roleMessage.react(Config.emotes.deny);
+                for (let reactOption of reactOptions) {
+                    await roleMessage.react(reactOption);
+                }
 
                 let reactionCollectorRole = roleMessage.createReactionCollector(filter, {
                     time: Config.promptExpireTime * 1000,
@@ -223,7 +226,7 @@ export abstract class SetupUtils {
                         if (nextReaction.emoji.name === Config.emotes.create) {
                             // Create role with desired attributes
                             birthdayRole = (
-                                await msg.guild.roles.create({
+                                await guild.roles.create({
                                     data: {
                                         name: Config.emotes.birthday,
                                         color: `0xac1cfe`,
@@ -239,7 +242,7 @@ export abstract class SetupUtils {
                             let selectMessage = await channel.send(embed);
 
                             const messageFilter: CollectorFilter = (nextMsg: Message): boolean => {
-                                if (nextMsg.author !== msg.author) {
+                                if (nextMsg.author !== user) {
                                     return false;
                                 }
 
@@ -253,7 +256,7 @@ export abstract class SetupUtils {
                                 let roleInput: Role = nextMsg.mentions.roles.first();
 
                                 if (!roleInput) {
-                                    roleInput = msg.guild.roles.cache.find(role =>
+                                    roleInput = guild.roles.cache.find(role =>
                                         role.name
                                             .toLowerCase()
                                             .includes(nextMsg?.content.toLowerCase())
@@ -262,7 +265,7 @@ export abstract class SetupUtils {
 
                                 if (
                                     !roleInput ||
-                                    roleInput.guild.id !== msg.guild.id ||
+                                    roleInput.guild.id !== guild.id ||
                                     nextMsg?.content.toLowerCase() === 'everyone'
                                 ) {
                                     let embed = new MessageEmbed()
@@ -274,8 +277,7 @@ export abstract class SetupUtils {
 
                                 if (
                                     roleInput.position >
-                                    msg.guild.members.resolve(msg.client.user).roles.highest
-                                        .position
+                                    guild.members.resolve(botUser).roles.highest.position
                                 ) {
                                     let embed = new MessageEmbed()
                                         .setDescription(
@@ -315,7 +317,7 @@ export abstract class SetupUtils {
                                     let roleInput: Role = msg.mentions.roles.first();
 
                                     if (!roleInput) {
-                                        roleInput = msg.guild.roles.cache.find(role =>
+                                        roleInput = guild.roles.cache.find(role =>
                                             role.name
                                                 .toLowerCase()
                                                 .includes(nextMsg?.content.toLowerCase())
@@ -324,7 +326,7 @@ export abstract class SetupUtils {
 
                                     if (
                                         !roleInput ||
-                                        roleInput.guild.id !== msg.guild.id ||
+                                        roleInput.guild.id !== guild.id ||
                                         nextMsg?.content.toLowerCase() === 'everyone'
                                     ) {
                                         let embed = new MessageEmbed()
@@ -347,33 +349,28 @@ export abstract class SetupUtils {
                         let channelOutput =
                             birthdayChannel === '0'
                                 ? 'Not Set'
-                                : msg.guild.channels.resolve(birthdayChannel)?.toString() ||
+                                : guild.channels.resolve(birthdayChannel)?.toString() ||
                                   '**Unknown**';
                         let roleOutput =
                             birthdayRole === '0'
                                 ? 'Not Set'
-                                : msg.guild.roles.resolve(birthdayRole)?.toString() ||
-                                  '**Unknown**';
+                                : guild.roles.resolve(birthdayRole)?.toString() || '**Unknown**';
 
                         let embed = new MessageEmbed()
-                            .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+                            .setAuthor(`${guild.name}`, guild.iconURL())
                             .setTitle('Server Setup - Completed')
                             .setDescription(
                                 'You have successfully completed the required server setup!' +
                                     `\n\n**Birthday Channel**: ${channelOutput}` +
                                     `\n**Birthday Role**: ${roleOutput}`
                             )
-                            .setFooter(`All server commands unlocked!`, msg.client.user.avatarURL())
+                            .setFooter(`All server commands unlocked!`, botUser.avatarURL())
                             .setColor(Config.colors.default)
                             .setTimestamp();
 
                         await channel.send(embed);
 
-                        await guildRepo.addOrUpdateGuild(
-                            msg.guild.id,
-                            birthdayChannel,
-                            birthdayRole
-                        );
+                        await guildRepo.addOrUpdateGuild(guild.id, birthdayChannel, birthdayRole);
                         reactionCollectorRole.stop();
                     }
                 );
@@ -382,33 +379,35 @@ export abstract class SetupUtils {
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static async executeMessageSetup(
-        args: string[],
         msg: Message,
         channel: TextChannel,
         guildRepo: GuildRepo
     ): Promise<void> {
-        // Do stuff
+        let guild = channel.guild;
+        let user = msg.author;
+        let botUser = guild.client.user;
+
         let messageTime: number;
         let mention: string;
         let useEmbed: number;
         let expired = true;
 
         let messageTimeEmbed = new MessageEmbed()
-            .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+            .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Message Setup - Birthday Message Time')
             .setDescription(
                 'Please give the hour for your Birthday Messages [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-message-time)' +
                     '\n\nAccepted Values: `0-23`\nDefault Value: `0`' +
                     '\n\n**Example Usage**: `13` (1PM)'
             )
-            .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+            .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
             .setColor(Config.colors.default)
             .setTimestamp();
 
         await channel.send(messageTimeEmbed);
 
         let collector = channel.createMessageCollector(
-            (nextMsg: Message) => nextMsg.author.id === msg.author.id,
+            (nextMsg: Message) => nextMsg.author.id === user.id,
             { time: Config.promptExpireTime * 1000 }
         );
 
@@ -436,7 +435,7 @@ export abstract class SetupUtils {
                     let embed = new MessageEmbed()
                         .setTitle('Message Setup - Message Time')
                         .setDescription('Invalid time!')
-                        .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
+                        .setFooter(`Please check above and try again!`, botUser.avatarURL())
                         .setTimestamp()
                         .setColor(Config.colors.error);
                     await channel.send(embed);
@@ -448,7 +447,7 @@ export abstract class SetupUtils {
                     let embed = new MessageEmbed()
                         .setTitle('Message Setup - Message Time')
                         .setDescription('Invalid time!')
-                        .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
+                        .setFooter(`Please check above and try again!`, botUser.avatarURL())
                         .setTimestamp()
                         .setColor(Config.colors.error);
                     await channel.send(embed);
@@ -459,14 +458,14 @@ export abstract class SetupUtils {
                 collector.resetTimer(); // Reset timer
 
                 let messageMentionEmbed = new MessageEmbed()
-                    .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+                    .setAuthor(`${guild.name}`, guild.iconURL())
                     .setTitle('Message Setup - Birthday Message Mention')
                     .setDescription(
                         'Now you can set your birthday message mention! [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-message-mention)' +
                             '\n\nAcceptable inputs: `everyone`, `here`, `@role/role-name`, or `none`' +
                             '\n\nDefault Value: `none`'
                     )
-                    .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+                    .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
                     .setColor(Config.colors.default)
                     .setTimestamp();
 
@@ -479,12 +478,12 @@ export abstract class SetupUtils {
                 let roleInput: Role = nextMsg.mentions.roles.first();
 
                 if (!roleInput) {
-                    roleInput = msg.guild.roles.cache.find(role =>
+                    roleInput = guild.roles.cache.find(role =>
                         role.name.toLowerCase().includes(nextMsg?.content.toLowerCase())
                     );
                 }
 
-                if (!roleInput || roleInput.guild.id !== msg.guild.id) {
+                if (!roleInput || roleInput.guild.id !== guild.id) {
                     // if there is no roles then check for other accepted values
                     if (
                         nextMsg?.content.toLowerCase() !== 'everyone' &&
@@ -495,10 +494,7 @@ export abstract class SetupUtils {
                         let embed = new MessageEmbed()
                             .setTitle('Message Setup - Birthday Message Mention')
                             .setDescription('Could not find the group or role!')
-                            .setFooter(
-                                `Please check above and try again!`,
-                                msg.client.user.avatarURL()
-                            )
+                            .setFooter(`Please check above and try again!`, botUser.avatarURL())
                             .setTimestamp()
                             .setColor(Config.colors.error);
                         await channel.send(embed);
@@ -516,7 +512,7 @@ export abstract class SetupUtils {
                 }
 
                 let embedMessage = new MessageEmbed()
-                    .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+                    .setAuthor(`${guild.name}`, guild.iconURL())
                     .setTitle('Message Setup - Embed Birthday Message')
                     .setDescription(
                         'Now you can choose if the Birthday Message should be embedded or not! [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-an-embed)' +
@@ -524,22 +520,24 @@ export abstract class SetupUtils {
                             `\n\nEnabled: ${Config.emotes.confirm}` +
                             `\nDisabled: ${Config.emotes.deny}`
                     )
-                    .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+                    .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
                     .setColor(Config.colors.default)
                     .setTimestamp();
 
                 expired = false;
                 collector.stop();
 
+                let reactOptions = [Config.emotes.confirm, Config.emotes.deny];
+
                 let optionMessage = await channel.send(embedMessage);
-                await optionMessage.react(Config.emotes.confirm);
-                await optionMessage.react(Config.emotes.deny);
+                for (let reactOption of reactOptions) {
+                    await optionMessage.react(reactOption);
+                }
 
                 const filter = (nextReaction: MessageReaction, reactor: User) =>
-                    (nextReaction.emoji.name === Config.emotes.confirm ||
-                        nextReaction.emoji.name === Config.emotes.deny) &&
-                    nextReaction.users.resolve(msg.client.user.id) !== null &&
-                    reactor === msg.member.user; // Reaction Collector Filter
+                    reactOptions.includes(nextReaction.emoji.name) &&
+                    nextReaction.users.resolve(channel.client.user.id) !== null &&
+                    reactor === user; // Reaction Collector Filter
 
                 let reactionCollector = optionMessage.createReactionCollector(filter, {
                     time: Config.promptExpireTime * 1000,
@@ -569,15 +567,15 @@ export abstract class SetupUtils {
                         let mentionOutput: string;
 
                         // Find mentioned role
-                        let roleInput: Role = nextMsg.guild.roles.resolve(mention);
+                        let roleInput: Role = guild.roles.resolve(mention);
 
                         if (!roleInput) {
-                            roleInput = msg.guild.roles.cache.find(role =>
+                            roleInput = guild.roles.cache.find(role =>
                                 role.name.toLowerCase().includes(nextMsg?.content.toLowerCase())
                             );
                         }
 
-                        if (!roleInput || roleInput.guild.id !== msg.guild.id) {
+                        if (!roleInput || roleInput.guild.id !== guild.id) {
                             if (
                                 mention.toLowerCase() === 'everyone' ||
                                 mention.toLowerCase() === 'here'
@@ -591,7 +589,7 @@ export abstract class SetupUtils {
                         }
 
                         let embed = new MessageEmbed()
-                            .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+                            .setAuthor(`${guild.name}`, guild.iconURL())
                             .setTitle('Message Setup - Completed')
                             .setDescription(
                                 'You have successfully completed the server message setup!' +
@@ -599,18 +597,13 @@ export abstract class SetupUtils {
                                     `\n**Mention Setting**: ${mentionOutput}` +
                                     `\n**Use Embed**: \`${useEmbed === 1 ? 'True' : 'False'}\``
                             )
-                            .setFooter(`Message Setup Complete!`, msg.client.user.avatarURL())
+                            .setFooter(`Message Setup Complete!`, botUser.avatarURL())
                             .setColor(Config.colors.default)
                             .setTimestamp();
 
                         if (mention === 'none') mention = '0';
 
-                        await guildRepo.guildSetupMessage(
-                            msg.guild.id,
-                            messageTime,
-                            mention,
-                            useEmbed
-                        );
+                        await guildRepo.guildSetupMessage(guild.id, messageTime, mention, useEmbed);
 
                         await channel.send(embed);
                     }
@@ -653,38 +646,41 @@ export abstract class SetupUtils {
     } // END OF METHOD
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static async executeTrustedSetup(
-        args: string[],
         msg: Message,
         channel: TextChannel,
         guildRepo: GuildRepo
     ): Promise<void> {
-        // Do stuff
+        let guild = channel.guild;
+        let user = msg.author;
+        let botUser = guild.client.user;
 
         let preventMessage: number;
         let preventRole: number;
         let trustedRole;
 
         let preventMessageEmbed = new MessageEmbed()
-            .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+            .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Trusted Setup - Trusted Prevents Message')
             .setDescription(
                 'Should the trusted role prevent the birthday message? [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-trusted-prevents-message-role)' +
                     `\n\nTrue: ${Config.emotes.confirm}` +
                     `\nFalse: ${Config.emotes.deny}`
             )
-            .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+            .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
             .setColor(Config.colors.default)
             .setTimestamp();
 
+        let reactOptions = [Config.emotes.confirm, Config.emotes.deny];
+
         let settingMessage = await channel.send(preventMessageEmbed); // Send confirmation and emotes
-        await settingMessage.react(Config.emotes.confirm);
-        await settingMessage.react(Config.emotes.deny);
+        for (let reactOption of reactOptions) {
+            await settingMessage.react(reactOption);
+        }
 
         const filter = (nextReaction: MessageReaction, reactor: User) =>
-            (nextReaction.emoji.name === Config.emotes.confirm ||
-                nextReaction.emoji.name === Config.emotes.deny) &&
-            nextReaction.users.resolve(msg.client.user.id) !== null &&
-            reactor === msg.author; // Reaction Collector Filter
+            reactOptions.includes(nextReaction.emoji.name) &&
+            nextReaction.users.resolve(botUser.id) !== null &&
+            reactor === user; // Reaction Collector Filter
 
         let reactionCollectorMessage = settingMessage.createReactionCollector(filter, {
             time: Config.promptExpireTime * 1000,
@@ -713,20 +709,23 @@ export abstract class SetupUtils {
                 reactionCollectorMessage.stop();
 
                 let preventRoleEmbed = new MessageEmbed()
-                    .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+                    .setAuthor(`${guild.name}`, guild.iconURL())
                     .setTitle('Trusted Setup - Trusted Prevents Role')
                     .setDescription(
                         'Should the trusted role prevent the birthday role? [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-trusted-prevents-message-role)' +
                             `\n\nTrue: ${Config.emotes.confirm}` +
                             `\nFalse: ${Config.emotes.deny}`
                     )
-                    .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+                    .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
                     .setColor(Config.colors.default)
                     .setTimestamp();
 
+                let reactOptions = [Config.emotes.confirm, Config.emotes.deny];
+
                 let settingRoleMessage = await channel.send(preventRoleEmbed); // Send confirmation and emotes
-                await settingRoleMessage.react(Config.emotes.confirm);
-                await settingRoleMessage.react(Config.emotes.deny);
+                for (let reactOption of reactOptions) {
+                    await settingRoleMessage.react(reactOption);
+                }
 
                 let reactionCollector = settingRoleMessage.createReactionCollector(filter, {
                     time: Config.promptExpireTime * 1000,
@@ -757,7 +756,7 @@ export abstract class SetupUtils {
                         // Create/Select/No Trusted Role
 
                         let channelEmbed = new MessageEmbed()
-                            .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+                            .setAuthor(`${guild.name}`, guild.iconURL())
                             .setTitle('Trusted Setup - Trusted Role')
                             .setDescription(
                                 'To begin you must select the Trusted Role [(?)](https://birthdaybot.scottbucher.dev/faq#do-i-need-to-set-up-the-trusted-role)' +
@@ -767,24 +766,25 @@ export abstract class SetupUtils {
                                 `Create New Role ${Config.emotes.create}\nSelect Pre-Existing Role ${Config.emotes.select}\nNo Trusted Role ${Config.emotes.deny}`,
                                 '\u200b'
                             )
-                            .setFooter(
-                                `This message expires in 2 minutes!`,
-                                msg.client.user.avatarURL()
-                            )
+                            .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
                             .setColor(Config.colors.default)
                             .setTimestamp();
 
+                        let reactOptions = [
+                            Config.emotes.create,
+                            Config.emotes.select,
+                            Config.emotes.deny,
+                        ];
+
                         let trustedMessage = await channel.send(channelEmbed);
-                        await trustedMessage.react(Config.emotes.create);
-                        await trustedMessage.react(Config.emotes.select);
-                        await trustedMessage.react(Config.emotes.deny);
+                        for (let reactOption of reactOptions) {
+                            await trustedMessage.react(reactOption);
+                        }
 
                         const messageFilter = (nextReaction: MessageReaction, reactor: User) =>
-                            (nextReaction.emoji.name === Config.emotes.create ||
-                                nextReaction.emoji.name === Config.emotes.select ||
-                                nextReaction.emoji.name === Config.emotes.deny) &&
-                            nextReaction.users.resolve(msg.client.user.id) !== null &&
-                            reactor === msg.author; // Reaction Collector Filter
+                            reactOptions.includes(nextReaction.emoji.name) &&
+                            nextReaction.users.resolve(botUser.id) !== null &&
+                            reactor === user; // Reaction Collector Filter
 
                         let reactionCollectorRole = trustedMessage.createReactionCollector(
                             messageFilter,
@@ -806,7 +806,7 @@ export abstract class SetupUtils {
                                 if (nextReaction.emoji.name === Config.emotes.create) {
                                     // Create role with desired attributes
                                     trustedRole = (
-                                        await msg.guild.roles.create({
+                                        await guild.roles.create({
                                             data: {
                                                 name: 'BirthdayTrusted',
                                             },
@@ -823,7 +823,7 @@ export abstract class SetupUtils {
                                     const messageFilter: CollectorFilter = (
                                         nextMsg: Message
                                     ): boolean => {
-                                        if (nextMsg.author !== msg.author) {
+                                        if (nextMsg.author !== user) {
                                             return false;
                                         }
 
@@ -831,7 +831,7 @@ export abstract class SetupUtils {
                                         let roleInput: Role = nextMsg.mentions.roles.first();
 
                                         if (!roleInput) {
-                                            roleInput = msg.guild.roles.cache.find(role =>
+                                            roleInput = guild.roles.cache.find(role =>
                                                 role.name
                                                     .toLowerCase()
                                                     .includes(nextMsg?.content.toLowerCase())
@@ -840,7 +840,7 @@ export abstract class SetupUtils {
 
                                         if (
                                             !roleInput ||
-                                            roleInput.guild.id !== msg.guild.id ||
+                                            roleInput.guild.id !== guild.id ||
                                             nextMsg?.content.toLowerCase() === 'everyone'
                                         ) {
                                             let embed = new MessageEmbed()
@@ -872,7 +872,7 @@ export abstract class SetupUtils {
                                             let roleInput: Role = msg.mentions.roles.first();
 
                                             if (!roleInput) {
-                                                roleInput = msg.guild.roles.cache.find(role =>
+                                                roleInput = guild.roles.cache.find(role =>
                                                     role.name
                                                         .toLowerCase()
                                                         .includes(nextMsg?.content.toLowerCase())
@@ -881,7 +881,7 @@ export abstract class SetupUtils {
 
                                             if (
                                                 !roleInput ||
-                                                roleInput.guild.id !== msg.guild.id ||
+                                                roleInput.guild.id !== guild.id ||
                                                 nextMsg?.content.toLowerCase() === 'everyone'
                                             ) {
                                                 let embed = new MessageEmbed()
@@ -906,11 +906,11 @@ export abstract class SetupUtils {
                                 let roleOutput =
                                     trustedRole === '0'
                                         ? 'Not Set'
-                                        : msg.guild.roles.resolve(trustedRole)?.toString() ||
+                                        : guild.roles.resolve(trustedRole)?.toString() ||
                                           '**Unknown**';
 
                                 let embed = new MessageEmbed()
-                                    .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
+                                    .setAuthor(`${guild.name}`, guild.iconURL())
                                     .setTitle('Trusted Setup - Completed')
                                     .setDescription(
                                         'You have successfully completed the trusted server setup!' +
@@ -922,17 +922,14 @@ export abstract class SetupUtils {
                                                 preventMessage === 1 ? 'True' : 'False'
                                             }\``
                                     )
-                                    .setFooter(
-                                        `Trusted Setup Complete!`,
-                                        msg.client.user.avatarURL()
-                                    )
+                                    .setFooter(`Trusted Setup Complete!`, botUser.avatarURL())
                                     .setColor(Config.colors.default)
                                     .setTimestamp();
 
                                 await channel.send(embed);
 
                                 await guildRepo.guildSetupTrusted(
-                                    msg.guild.id,
+                                    guild.id,
                                     trustedRole,
                                     preventMessage,
                                     preventRole

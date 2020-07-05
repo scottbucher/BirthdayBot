@@ -33,7 +33,7 @@ export class SetupCommand implements Command {
                 return;
             }
 
-            await SetupUtils.executeRequiredSetup(args, msg, channel, this.guildRepo);
+            await SetupUtils.executeRequiredSetup(msg, channel, this.guildRepo);
             return;
         }
 
@@ -52,7 +52,7 @@ export class SetupCommand implements Command {
         // Run the appropriate setup
         switch (args[2].toLowerCase()) {
             case 'message':
-                await SetupUtils.executeMessageSetup(args, msg, channel, this.guildRepo);
+                await SetupUtils.executeMessageSetup(msg, channel, this.guildRepo);
                 return;
             case 'trusted':
                 if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
@@ -63,7 +63,7 @@ export class SetupCommand implements Command {
                     await channel.send(embed);
                     return;
                 }
-                await SetupUtils.executeTrustedSetup(args, msg, channel, this.guildRepo);
+                await SetupUtils.executeTrustedSetup(msg, channel, this.guildRepo);
                 return;
             default:
                 let embed = new MessageEmbed()
