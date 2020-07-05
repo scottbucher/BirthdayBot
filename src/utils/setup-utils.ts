@@ -484,13 +484,9 @@ export abstract class SetupUtils {
                 }
 
                 if (!roleInput || roleInput.guild.id !== guild.id) {
-                    // if there is no roles then check for other accepted values
-                    if (
-                        nextMsg?.content.toLowerCase() !== 'everyone' &&
-                        nextMsg?.content.toLowerCase() !== 'here' &&
-                        nextMsg?.content.toLowerCase() !== '@here' &&
-                        nextMsg?.content.toLowerCase() !== 'none'
-                    ) {
+                    // If there is no roles then check for other accepted values
+                    let roleOptions = ['everyone', 'here', '@here', 'none'];
+                    if (!roleOptions.includes(nextMsg?.content.toLowerCase())) {
                         let embed = new MessageEmbed()
                             .setTitle('Message Setup - Birthday Message Mention')
                             .setDescription('Could not find the group or role!')
