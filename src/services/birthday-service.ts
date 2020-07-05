@@ -1,9 +1,9 @@
-import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
 import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
-import { CustomMessageRepo, UserRepo } from './database/repos';
 
 import { GuildData } from '../models/database/guild-models';
 import { UserData } from '../models/database/user-models';
+import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
+import { CustomMessageRepo } from './database/repos';
 
 let Config = require('../../config/config.json');
 
