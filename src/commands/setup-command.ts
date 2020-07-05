@@ -17,8 +17,8 @@ export class SetupCommand implements Command {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
-        if (args.length === 2) {
-            // Required Setup
+        // Run required setup if no arguments
+        if (args.length <= 2) {
             if (
                 !msg.guild.me.hasPermission('MANAGE_CHANNELS') ||
                 !msg.guild.me.hasPermission('MANAGE_ROLES')
@@ -32,24 +32,29 @@ export class SetupCommand implements Command {
                 await channel.send(embed);
                 return;
             }
+
             await SetupUtils.executeRequiredSetup(args, msg, channel, this.guildRepo);
-        } else {
-            let guildData = await this.guildRepo.getGuild(msg.guild.id);
-            if (!guildData) {
-                let embed = new MessageEmbed()
-                    .setTitle('Setup Required!')
-                    .setDescription('You must run `bday setup` before using this command!')
-                    .setColor(Config.colors.error);
+            return;
+        }
 
-                await channel.send(embed);
+        // Required setup is needed to run any specific setup
+        let guildData = await this.guildRepo.getGuild(msg.guild.id);
+        if (!guildData) {
+            let embed = new MessageEmbed()
+                .setTitle('Setup Required!')
+                .setDescription('You must run `bday setup` before using this command!')
+                .setColor(Config.colors.error);
+
+            await channel.send(embed);
+            return;
+        }
+
+        // Run the appropriate setup
+        switch (args[2].toLowerCase()) {
+            case 'message':
+                await SetupUtils.executeMessageSetup(args, msg, channel, this.guildRepo);
                 return;
-            }
-
-            if (args[2].toLowerCase() === 'message') {
-                // Run Message Setup
-                SetupUtils.executeMessageSetup(args, msg, channel, this.guildRepo);
-            } else if (args[2].toLowerCase() === 'trusted') {
-                // Run Trusted Setup
+            case 'trusted':
                 if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
                     let embed = new MessageEmbed()
                         .setTitle('Not Enough Permissions!')
@@ -59,14 +64,16 @@ export class SetupCommand implements Command {
                     return;
                 }
                 await SetupUtils.executeTrustedSetup(args, msg, channel, this.guildRepo);
-            } else {
+                return;
+            default:
                 let embed = new MessageEmbed()
                     .setTitle('Invalid Usage!')
-                    .setDescription('Please specify which setup!\nSetups: `message` or `trusted`')
+                    .setDescription(
+                        `Please specify which setup you'd like to run!\n\nSetup options: \`message\` or \`trusted\``
+                    )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
-            }
         }
     }
 }
