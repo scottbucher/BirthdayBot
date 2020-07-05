@@ -204,7 +204,7 @@ export abstract class SetupUtils {
 
                 let roleMessage = await channel.send(roleEmbed);
                 for (let reactOption of reactOptions) {
-                    await channelMessage.react(reactOption);
+                    await roleMessage.react(reactOption);
                 }
 
                 let reactionCollectorRole = roleMessage.createReactionCollector(filter, {
@@ -670,13 +670,15 @@ export abstract class SetupUtils {
             .setColor(Config.colors.default)
             .setTimestamp();
 
+        let reactOptions = [Config.emotes.confirm, Config.emotes.deny];
+
         let settingMessage = await channel.send(preventMessageEmbed); // Send confirmation and emotes
-        await settingMessage.react(Config.emotes.confirm);
-        await settingMessage.react(Config.emotes.deny);
+        for (let reactOption of reactOptions) {
+            await settingMessage.react(reactOption);
+        }
 
         const filter = (nextReaction: MessageReaction, reactor: User) =>
-            (nextReaction.emoji.name === Config.emotes.confirm ||
-                nextReaction.emoji.name === Config.emotes.deny) &&
+            reactOptions.includes(nextReaction.emoji.name) &&
             nextReaction.users.resolve(botUser.id) !== null &&
             reactor === user; // Reaction Collector Filter
 
@@ -718,9 +720,12 @@ export abstract class SetupUtils {
                     .setColor(Config.colors.default)
                     .setTimestamp();
 
+                let reactOptions = [Config.emotes.confirm, Config.emotes.deny];
+
                 let settingRoleMessage = await channel.send(preventRoleEmbed); // Send confirmation and emotes
-                await settingRoleMessage.react(Config.emotes.confirm);
-                await settingRoleMessage.react(Config.emotes.deny);
+                for (let reactOption of reactOptions) {
+                    await settingRoleMessage.react(reactOption);
+                }
 
                 let reactionCollector = settingRoleMessage.createReactionCollector(filter, {
                     time: Config.promptExpireTime * 1000,
@@ -765,15 +770,19 @@ export abstract class SetupUtils {
                             .setColor(Config.colors.default)
                             .setTimestamp();
 
+                        let reactOptions = [
+                            Config.emotes.create,
+                            Config.emotes.select,
+                            Config.emotes.deny,
+                        ];
+
                         let trustedMessage = await channel.send(channelEmbed);
-                        await trustedMessage.react(Config.emotes.create);
-                        await trustedMessage.react(Config.emotes.select);
-                        await trustedMessage.react(Config.emotes.deny);
+                        for (let reactOption of reactOptions) {
+                            await trustedMessage.react(reactOption);
+                        }
 
                         const messageFilter = (nextReaction: MessageReaction, reactor: User) =>
-                            (nextReaction.emoji.name === Config.emotes.create ||
-                                nextReaction.emoji.name === Config.emotes.select ||
-                                nextReaction.emoji.name === Config.emotes.deny) &&
+                            reactOptions.includes(nextReaction.emoji.name) &&
                             nextReaction.users.resolve(botUser.id) !== null &&
                             reactor === user; // Reaction Collector Filter
 
