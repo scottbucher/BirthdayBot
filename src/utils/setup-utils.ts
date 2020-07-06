@@ -151,7 +151,7 @@ export abstract class SetupUtils {
                             let nextMsg = collected.first();
 
                             // Find mentioned channel
-                            let channelInput: TextChannel = msg.mentions.channels.first();
+                            let channelInput: TextChannel = nextMsg.mentions.channels.first();
 
                             // If could not find in mention check, try to find by name
                             if (!channelInput) {
@@ -314,7 +314,7 @@ export abstract class SetupUtils {
                                     let nextMsg = collected.first();
 
                                     // Find mentioned role
-                                    let roleInput: Role = msg.mentions.roles.first();
+                                    let roleInput: Role = nextMsg.mentions.roles.first();
 
                                     if (!roleInput) {
                                         roleInput = guild.roles.cache.find(role =>
@@ -865,7 +865,7 @@ export abstract class SetupUtils {
                                             if (nextMsgArgs[0]?.toLowerCase() === 'bday') return;
 
                                             // Find mentioned role
-                                            let roleInput: Role = msg.mentions.roles.first();
+                                            let roleInput: Role = nextMsg.mentions.roles.first();
 
                                             if (!roleInput) {
                                                 roleInput = guild.roles.cache.find(role =>
