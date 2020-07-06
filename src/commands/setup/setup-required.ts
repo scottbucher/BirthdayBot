@@ -1,8 +1,8 @@
-import { ActionUtils, PermissionUtils } from '../../utils';
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
-
 import { CollectorUtils } from 'discord.js-collector-utils';
+
 import { GuildRepo } from '../../services/database/repos';
+import { ActionUtils, PermissionUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -79,7 +79,8 @@ export class SetupRequired {
                                 id: guild.id,
                                 deny: ['SEND_MESSAGES'],
                                 allow: ['VIEW_CHANNEL'],
-                            },{
+                            },
+                            {
                                 id: guild.me.roles.cache.filter(role => role.managed).first(),
                                 allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
                             },
@@ -296,34 +297,34 @@ export class SetupRequired {
                 break;
             }
             case Config.emotes.deny: {
-                    birthdayRole = '0';
-                    break;
-                }
+                birthdayRole = '0';
+                break;
             }
+        }
 
-                let channelOutput =
-                    birthdayChannel === '0'
-                        ? 'Not Set'
-                        : guild.channels.resolve(birthdayChannel)?.toString() || '**Unknown**';
-                let roleOutput =
-                    birthdayRole === '0'
-                        ? 'Not Set'
-                        : guild.roles.resolve(birthdayRole)?.toString() || '**Unknown**';
+        let channelOutput =
+            birthdayChannel === '0'
+                ? 'Not Set'
+                : guild.channels.resolve(birthdayChannel)?.toString() || '**Unknown**';
+        let roleOutput =
+            birthdayRole === '0'
+                ? 'Not Set'
+                : guild.roles.resolve(birthdayRole)?.toString() || '**Unknown**';
 
-                let embed = new MessageEmbed()
-                    .setAuthor(`${guild.name}`, guild.iconURL())
-                    .setTitle('Server Setup - Completed')
-                    .setDescription(
-                        'You have successfully completed the required server setup!' +
-                            `\n\n**Birthday Channel**: ${channelOutput}` +
-                            `\n**Birthday Role**: ${roleOutput}`
-                    )
-                    .setFooter(`All server commands unlocked!`, botUser.avatarURL())
-                    .setColor(Config.colors.default)
-                    .setTimestamp();
+        let embed = new MessageEmbed()
+            .setAuthor(`${guild.name}`, guild.iconURL())
+            .setTitle('Server Setup - Completed')
+            .setDescription(
+                'You have successfully completed the required server setup!' +
+                    `\n\n**Birthday Channel**: ${channelOutput}` +
+                    `\n**Birthday Role**: ${roleOutput}`
+            )
+            .setFooter(`All server commands unlocked!`, botUser.avatarURL())
+            .setColor(Config.colors.default)
+            .setTimestamp();
 
-                await channel.send(embed);
+        await channel.send(embed);
 
-                await this.guildRepo.addOrUpdateGuild(guild.id, birthdayChannel, birthdayRole);
+        await this.guildRepo.addOrUpdateGuild(guild.id, birthdayChannel, birthdayRole);
     }
 }
