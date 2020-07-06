@@ -1,8 +1,9 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { GuildRepo } from '../services/database/repos';
-import { SetupUtils } from '../utils';
 import { Command } from './command';
+import { GuildRepo } from '../services/database/repos';
+import { SetupRequired } from './setup/setup-required';
+import { SetupUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -14,7 +15,11 @@ export class SetupCommand implements Command {
     public adminOnly = true;
     public ownerOnly = false;
 
-    constructor(private guildRepo: GuildRepo) {}
+
+    constructor(
+        private guildRepo: GuildRepo,
+        private setupRequired: SetupRequired
+    ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         // Run required setup if no arguments
@@ -33,7 +38,7 @@ export class SetupCommand implements Command {
                 return;
             }
 
-            await SetupUtils.executeRequiredSetup(msg, channel, this.guildRepo);
+            await this.setupRequired.execute(args, msg, channel);
             return;
         }
 
