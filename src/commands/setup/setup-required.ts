@@ -1,22 +1,30 @@
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
-import { CollectorUtils } from 'discord.js-collector-utils';
+import { CollectorUtils, ExpireFunction } from 'discord.js-collector-utils';
 
 import { GuildRepo } from '../../services/database/repos';
 import { ActionUtils, PermissionUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
-const expiredEmbed = new MessageEmbed()
-    .setTitle('Required Setup - Expired')
-    .setDescription('Type `bday setup` to rerun the setup.')
-    .setColor(Config.colors.error);
+const COLLECTOR_OPTIONS = {
+    time: Config.promptExpireTime * 1000,
+    resetInvalid: true,
+};
+
 export class SetupRequired {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let guild = channel.guild;
-        let user = msg.author;
         let botUser = guild.client.user;
+        let expireFunction: ExpireFunction = async () => {
+            await channel.send(
+                new MessageEmbed()
+                    .setTitle('Required Setup - Expired')
+                    .setDescription('Type `bday setup` to rerun the setup.')
+                    .setColor(Config.colors.error)
+            );
+        };
 
         let birthdayChannel: string;
         let birthdayRole: string;
@@ -55,12 +63,8 @@ export class SetupRequired {
             async (msgReaction: MessageReaction, reactor: User) => {
                 return msgReaction.emoji.name;
             },
-            // Expire Function
-            async () => {
-                await channel.send(expiredEmbed);
-            },
-            // Options
-            { time: Config.promptExpireTime * 1000, resetInvalid: true }
+            expireFunction,
+            COLLECTOR_OPTIONS
         );
 
         ActionUtils.deleteMessage(channelMessage);
@@ -121,6 +125,7 @@ export class SetupRequired {
                         if (!channelInput || channelInput.guild.id !== guild.id) {
                             let embed = new MessageEmbed()
                                 .setDescription('Invalid channel!')
+                                .setFooter('Please try again.')
                                 .setColor(Config.colors.error);
 
                             channel.send(embed);
@@ -139,12 +144,8 @@ export class SetupRequired {
                         }
                         return channelInput?.id;
                     },
-                    // Expire Function
-                    async () => {
-                        await channel.send(expiredEmbed);
-                    },
-                    // Options
-                    { time: Config.promptExpireTime * 1000, resetInvalid: true }
+                    expireFunction,
+                    COLLECTOR_OPTIONS
                 );
 
                 ActionUtils.deleteMessage(selectMessage);
@@ -192,12 +193,8 @@ export class SetupRequired {
             async (msgReaction: MessageReaction, reactor: User) => {
                 return msgReaction.emoji.name;
             },
-            // Expire Function
-            async () => {
-                await channel.send(expiredEmbed);
-            },
-            // Options
-            { time: Config.promptExpireTime * 1000, resetInvalid: true }
+            expireFunction,
+            COLLECTOR_OPTIONS
         );
 
         ActionUtils.deleteMessage(roleMessage);
@@ -251,7 +248,8 @@ export class SetupRequired {
                             nextMsg?.content.toLowerCase() === 'everyone'
                         ) {
                             let embed = new MessageEmbed()
-                                .setDescription(`Invalid Role!`)
+                                .setDescription(`Invalid role!`)
+                                .setFooter('Please try again.')
                                 .setColor(Config.colors.error);
                             channel.send(embed);
                             return;
@@ -281,12 +279,8 @@ export class SetupRequired {
                         }
                         return roleInput?.id;
                     },
-                    // Expire Function
-                    async () => {
-                        await channel.send(expiredEmbed);
-                    },
-                    // Options
-                    { time: Config.promptExpireTime * 1000, resetInvalid: true }
+                    expireFunction,
+                    COLLECTOR_OPTIONS
                 );
 
                 ActionUtils.deleteMessage(selectMessage);
