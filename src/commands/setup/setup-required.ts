@@ -1,5 +1,5 @@
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
-import { CollectorUtils, ExpireFunction } from 'discord.js-collector-utils';
+import { CollectorUtils, ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
 
 import { GuildRepo } from '../../services/database/repos';
 import { ActionUtils, PermissionUtils } from '../../utils';
@@ -17,6 +17,8 @@ export class SetupRequired {
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let guild = channel.guild;
         let botUser = guild.client.user;
+        let stopFilter: MessageFilter = (nextMsg: Message) =>
+            nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday ');
         let expireFunction: ExpireFunction = async () => {
             await channel.send(
                 new MessageEmbed()
@@ -56,9 +58,7 @@ export class SetupRequired {
             // Collect Filter
             (msgReaction: MessageReaction, reactor: User) =>
                 reactor.id === msg.author.id && reactOptions.includes(msgReaction.emoji.name),
-            // Stop Filter
-            (nextMsg: Message) =>
-                nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday '),
+            stopFilter,
             // Retrieve Result
             async (msgReaction: MessageReaction, reactor: User) => {
                 return msgReaction.emoji.name;
@@ -103,9 +103,7 @@ export class SetupRequired {
                     msg.channel,
                     // Collect Filter
                     (nextMsg: Message) => nextMsg.author.id === msg.author.id,
-                    // Stop Filter
-                    (nextMsg: Message) =>
-                        nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday '),
+                    stopFilter,
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned channel
@@ -186,9 +184,7 @@ export class SetupRequired {
             // Collect Filter
             (msgReaction: MessageReaction, reactor: User) =>
                 reactor.id === msg.author.id && reactOptions.includes(msgReaction.emoji.name),
-            // Stop Filter
-            (nextMsg: Message) =>
-                nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday '),
+            stopFilter,
             // Retrieve Result
             async (msgReaction: MessageReaction, reactor: User) => {
                 return msgReaction.emoji.name;
@@ -227,8 +223,7 @@ export class SetupRequired {
                     // Collect Filter
                     (nextMsg: Message) => nextMsg.author.id === msg.author.id,
                     // Stop Filter
-                    (nextMsg: Message) =>
-                        nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday '),
+                    stopFilter,
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned role
