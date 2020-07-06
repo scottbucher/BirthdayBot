@@ -35,6 +35,7 @@ import {
 import { BirthdayJob } from './jobs';
 import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
+import { SetupRequired } from './commands/setup';
 
 let Config = require('../config/config.json');
 
@@ -64,7 +65,6 @@ async function start(): Promise<void> {
     // Commands
     let setCommand = new SetCommand(userRepo);
 
-    let setupCommand = new SetupCommand(guildRepo);
     let createCommand = new CreateCommand(guildRepo);
     let updateCommand = new UpdateCommand(guildRepo);
     let clearCommand = new ClearCommand(guildRepo);
@@ -79,6 +79,12 @@ async function start(): Promise<void> {
     let nextCommand = new NextCommand(userRepo);
     let trustedCommand = new TrustedCommand(guildRepo);
     let setAttemptsCommand = new SetAttemptsCommand(userRepo);
+
+    // Setup Sub Commands
+    let setupRequired = new SetupRequired(guildRepo);
+
+    // Setup Command
+    let setupCommand = new SetupCommand(guildRepo, setupRequired);
 
     // Message Sub Commands
     let messageListSubCommand = new MessageListSubCommand(customMessageRepo);

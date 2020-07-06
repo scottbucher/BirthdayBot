@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { GuildRepo } from '../services/database/repos';
 import { Command } from './command';
+import { GuildRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -48,6 +48,9 @@ export class CreateCommand implements Command {
                             id: msg.guild.id,
                             deny: ['SEND_MESSAGES'],
                             allow: ['VIEW_CHANNEL'],
+                        },{
+                            id: msg.guild.me.roles.cache.filter(role => role.managed).first(),
+                            allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
                         },
                     ],
                 }
