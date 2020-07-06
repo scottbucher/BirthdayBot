@@ -1,14 +1,19 @@
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
-import { CollectorUtils, ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
+import {
+    CollectOptions,
+    CollectorUtils,
+    ExpireFunction,
+    MessageFilter,
+} from 'discord.js-collector-utils';
 
 import { GuildRepo } from '../../services/database/repos';
 import { ActionUtils, PermissionUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
-const COLLECTOR_OPTIONS = {
+const COLLECT_OPTIONS: CollectOptions = {
     time: Config.promptExpireTime * 1000,
-    resetInvalid: true,
+    reset: true,
 };
 
 export class SetupRequired {
@@ -64,7 +69,7 @@ export class SetupRequired {
                 return msgReaction.emoji.name;
             },
             expireFunction,
-            COLLECTOR_OPTIONS
+            COLLECT_OPTIONS
         );
 
         ActionUtils.deleteMessage(channelMessage);
@@ -143,7 +148,7 @@ export class SetupRequired {
                         return channelInput?.id;
                     },
                     expireFunction,
-                    COLLECTOR_OPTIONS
+                    COLLECT_OPTIONS
                 );
 
                 ActionUtils.deleteMessage(selectMessage);
@@ -190,7 +195,7 @@ export class SetupRequired {
                 return msgReaction.emoji.name;
             },
             expireFunction,
-            COLLECTOR_OPTIONS
+            COLLECT_OPTIONS
         );
 
         ActionUtils.deleteMessage(roleMessage);
@@ -275,7 +280,7 @@ export class SetupRequired {
                         return roleInput?.id;
                     },
                     expireFunction,
-                    COLLECTOR_OPTIONS
+                    COLLECT_OPTIONS
                 );
 
                 ActionUtils.deleteMessage(selectMessage);
