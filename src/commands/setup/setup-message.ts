@@ -1,13 +1,13 @@
-import { ActionUtils, PermissionUtils } from '../../utils';
+import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
 import {
     CollectOptions,
     CollectorUtils,
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { ActionUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -213,10 +213,7 @@ export class SetupMessage {
         let roleInput: Role = guild.roles.resolve(mention);
 
         if (!roleInput || roleInput.guild.id !== guild.id) {
-            if (
-                mention.toLowerCase() === 'everyone' ||
-                mention.toLowerCase() === 'here'
-            ) {
+            if (mention.toLowerCase() === 'everyone' || mention.toLowerCase() === 'here') {
                 mentionOutput = '@' + mention;
             } else if (mention.toLowerCase() === 'none') {
                 mentionOutput = '`None`';

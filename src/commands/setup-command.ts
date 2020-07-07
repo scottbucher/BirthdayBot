@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { SetupMessage, SetupRequired, SetupTrusted } from './setup';
 
-import { Command } from './command';
+import { Command } from '.';
 import { GuildRepo } from '../services/database/repos';
 import { PermissionUtils } from '../utils';
 
@@ -15,7 +15,12 @@ export class SetupCommand implements Command {
     public adminOnly = true;
     public ownerOnly = false;
 
-    constructor(private guildRepo: GuildRepo, private setupRequired: SetupRequired, private setupMessage: SetupMessage, private setupTrusted: SetupTrusted) {}
+    constructor(
+        private guildRepo: GuildRepo,
+        private setupRequired: SetupRequired,
+        private setupMessage: SetupMessage,
+        private setupTrusted: SetupTrusted
+    ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         // Check for permissions
