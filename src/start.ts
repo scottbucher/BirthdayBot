@@ -31,13 +31,11 @@ import {
     MessageTestSubCommand,
     MessageTimeSubCommand,
 } from './commands/message';
+import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
 
 import { BirthdayJob } from './jobs';
 import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
-import { SetupMessage } from './commands/setup/setup-message';
-import { SetupRequired } from './commands/setup';
-import { SetupTrusted } from './commands/setup/setup-trusted';
 
 let Config = require('../config/config.json');
 
