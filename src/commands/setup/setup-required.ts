@@ -21,10 +21,7 @@ export class SetupRequired {
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let guild = channel.guild;
-
-        let user = msg.author;
         let botUser = guild.client.user;
-
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday ');
         let expireFunction: ExpireFunction = async () => {
