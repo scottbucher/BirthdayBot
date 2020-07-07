@@ -1,4 +1,6 @@
-import { BirthdayService, Logger } from './services';
+import { Client, ClientOptions, PartialTypes } from 'discord.js';
+
+import { Bot } from './bot';
 import {
     ClearCommand,
     CreateCommand,
@@ -18,9 +20,6 @@ import {
     UpdateCommand,
     ViewCommand,
 } from './commands';
-import { Client, ClientOptions, PartialTypes } from 'discord.js';
-import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
-import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -31,13 +30,14 @@ import {
     MessageTestSubCommand,
     MessageTimeSubCommand,
 } from './commands/message';
-
-import { BirthdayJob } from './jobs';
-import { Bot } from './bot';
-import { DataAccess } from './services/database/data-access';
-import { SetupMessage } from './commands/setup/setup-message';
 import { SetupRequired } from './commands/setup';
+import { SetupMessage } from './commands/setup/setup-message';
 import { SetupTrusted } from './commands/setup/setup-trusted';
+import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+import { BirthdayJob } from './jobs';
+import { BirthdayService, Logger } from './services';
+import { DataAccess } from './services/database/data-access';
+import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
 
