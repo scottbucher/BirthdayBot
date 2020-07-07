@@ -1,9 +1,9 @@
 import { Collection, Message, MessageReaction, TextChannel, User } from 'discord.js';
+import { CustomMessageRepo, UserRepo } from '../services/database/repos';
+import { FormatUtils, PermissionUtils } from '../utils';
 
 import { EventHandler } from '.';
 import { Logger } from '../services';
-import { CustomMessageRepo, UserRepo } from '../services/database/repos';
-import { FormatUtils, PermissionUtils } from '../utils';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -67,7 +67,7 @@ export class ReactionAddHandler implements EventHandler {
         let checkPreviousPage: boolean = msgReaction.emoji.name === Config.emotes.previousPage;
 
         if (checkNextPage || checkPreviousPage) {
-            let titleArgs = msg.embeds[0]?.title?.split(' ');
+            let titleArgs = msg.embeds[0]?.title?.split(/\s+/);
 
             if (!titleArgs) return;
 
@@ -113,7 +113,7 @@ export class ReactionAddHandler implements EventHandler {
                 if (customMessageResults.stats.TotalPages > page)
                     await message.react(Config.emotes.nextPage);
             } else if (titleArgs[1] === 'List') {
-                let titleArgs = msg.embeds[0]?.title?.split(' ');
+                let titleArgs = msg.embeds[0]?.title?.split(/\s+/);
 
                 if (!titleArgs) return;
                 let page = 1;

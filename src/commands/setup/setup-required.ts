@@ -1,13 +1,13 @@
-import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import { ActionUtils, PermissionUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
+import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
-import { ActionUtils, PermissionUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -24,7 +24,7 @@ export class SetupRequired {
         let botUser = guild.client.user;
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
-            nextMsg.content.split(' ')[0].toLocaleLowerCase() === 'bday';
+            nextMsg.content.split(/\s+/)[0].toLowerCase() === 'bday';
         let expireFunction: ExpireFunction = async () => {
             await channel.send(
                 new MessageEmbed()

@@ -1,8 +1,8 @@
 import { Guild, MessageEmbed, Util } from 'discord.js';
-import moment from 'moment-timezone';
 
 import { CustomMessages } from '../models/database/custom-messages-models';
 import { UserDataResults } from '../models/database/user-data-results-models';
+import moment from 'moment-timezone';
 
 let Config = require('../../config/config.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;
@@ -41,7 +41,7 @@ export abstract class FormatUtils {
     }
 
     public static findZone(input: string): string {
-        let zoneSearch = input.split(' ').join('_').toLowerCase();
+        let zoneSearch = input.split(/\s+/).join('_').toLowerCase();
         return zoneNames.find(zone => zone.toLowerCase().includes(zoneSearch));
     }
 

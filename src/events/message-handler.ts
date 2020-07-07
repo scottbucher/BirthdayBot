@@ -6,11 +6,11 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
-import { Logger } from '../services';
 import { GuildRepo } from '../services/database/repos';
-import { MessageUtils, PermissionUtils } from '../utils';
+import { Logger } from '../services';
 
 let Config = require('../../config/config.json');
 
@@ -49,7 +49,7 @@ export class MessageHandler {
         }
 
         // Check if first argument is prefix
-        let args = msg.content.split(' ');
+        let args = msg.content.split(/\s+/);
         if (args[0].toLowerCase() !== Config.prefix) {
             return;
         }
