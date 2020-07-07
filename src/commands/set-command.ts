@@ -40,7 +40,7 @@ export class SetCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
-            nextMsg.content.split(/\s+/)[0].toLowerCase() === 'bday';
+            nextMsg.content.split(/\s+/)[0].toLowerCase() === Config.prefix;
         let expireFunction: ExpireFunction = async () => {
             await channel.send(
                 new MessageEmbed()
