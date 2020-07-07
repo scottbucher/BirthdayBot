@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { GuildRepo } from '../services/database/repos';
 import { Command } from './command';
+import { GuildRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -91,6 +91,7 @@ export class CreateCommand implements Command {
                 .setDescription(
                     `Successfully created the birthday role ${birthdayRole.toString()}!`
                 )
+                .setFooter('This role is actively removed from those whose birthday it isn\'t.')
                 .setColor(Config.colors.success);
             await channel.send(embed);
         } else if (args[2].toLowerCase() === 'trustedrole') {
