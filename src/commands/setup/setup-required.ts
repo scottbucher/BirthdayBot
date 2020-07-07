@@ -1,22 +1,40 @@
-import { ActionUtils, PermissionUtils } from '../../utils';
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import {
+    CollectOptions,
+    CollectorUtils,
+    ExpireFunction,
+    MessageFilter,
+} from 'discord.js-collector-utils';
 
-import { CollectorUtils } from 'discord.js-collector-utils';
 import { GuildRepo } from '../../services/database/repos';
+import { ActionUtils, PermissionUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
-const expiredEmbed = new MessageEmbed()
-    .setTitle('Required Setup - Expired')
-    .setDescription('Type `bday setup` to rerun the setup.')
-    .setColor(Config.colors.error);
+const COLLECT_OPTIONS: CollectOptions = {
+    time: Config.promptExpireTime * 1000,
+    reset: true,
+};
+
 export class SetupRequired {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let guild = channel.guild;
+
         let user = msg.author;
         let botUser = guild.client.user;
+
+        let stopFilter: MessageFilter = (nextMsg: Message) =>
+            nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday ');
+        let expireFunction: ExpireFunction = async () => {
+            await channel.send(
+                new MessageEmbed()
+                    .setTitle('Required Setup - Expired')
+                    .setDescription('Type `bday setup` to rerun the setup.')
+                    .setColor(Config.colors.error)
+            );
+        };
 
         let birthdayChannel: string;
         let birthdayRole: string;
@@ -48,19 +66,13 @@ export class SetupRequired {
             // Collect Filter
             (msgReaction: MessageReaction, reactor: User) =>
                 reactor.id === msg.author.id && reactOptions.includes(msgReaction.emoji.name),
-            // Stop Filter
-            (nextMsg: Message) =>
-                nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday '),
+            stopFilter,
             // Retrieve Result
             async (msgReaction: MessageReaction, reactor: User) => {
                 return msgReaction.emoji.name;
             },
-            // Expire Function
-            async () => {
-                await channel.send(expiredEmbed);
-            },
-            // Options
-            { time: Config.promptExpireTime * 1000, resetInvalid: true }
+            expireFunction,
+            COLLECT_OPTIONS
         );
 
         ActionUtils.deleteMessage(channelMessage);
@@ -79,7 +91,8 @@ export class SetupRequired {
                                 id: guild.id,
                                 deny: ['SEND_MESSAGES'],
                                 allow: ['VIEW_CHANNEL'],
-                            },{
+                            },
+                            {
                                 id: guild.me.roles.cache.filter(role => role.managed).first(),
                                 allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
                             },
@@ -98,9 +111,7 @@ export class SetupRequired {
                     msg.channel,
                     // Collect Filter
                     (nextMsg: Message) => nextMsg.author.id === msg.author.id,
-                    // Stop Filter
-                    (nextMsg: Message) =>
-                        nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday '),
+                    stopFilter,
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned channel
@@ -120,6 +131,7 @@ export class SetupRequired {
                         if (!channelInput || channelInput.guild.id !== guild.id) {
                             let embed = new MessageEmbed()
                                 .setDescription('Invalid channel!')
+                                .setFooter('Please try again.')
                                 .setColor(Config.colors.error);
 
                             channel.send(embed);
@@ -138,12 +150,8 @@ export class SetupRequired {
                         }
                         return channelInput?.id;
                     },
-                    // Expire Function
-                    async () => {
-                        await channel.send(expiredEmbed);
-                    },
-                    // Options
-                    { time: Config.promptExpireTime * 1000, resetInvalid: true }
+                    expireFunction,
+                    COLLECT_OPTIONS
                 );
 
                 ActionUtils.deleteMessage(selectMessage);
@@ -184,19 +192,13 @@ export class SetupRequired {
             // Collect Filter
             (msgReaction: MessageReaction, reactor: User) =>
                 reactor.id === msg.author.id && reactOptions.includes(msgReaction.emoji.name),
-            // Stop Filter
-            (nextMsg: Message) =>
-                nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday '),
+            stopFilter,
             // Retrieve Result
             async (msgReaction: MessageReaction, reactor: User) => {
                 return msgReaction.emoji.name;
             },
-            // Expire Function
-            async () => {
-                await channel.send(expiredEmbed);
-            },
-            // Options
-            { time: Config.promptExpireTime * 1000, resetInvalid: true }
+            expireFunction,
+            COLLECT_OPTIONS
         );
 
         ActionUtils.deleteMessage(roleMessage);
@@ -229,8 +231,7 @@ export class SetupRequired {
                     // Collect Filter
                     (nextMsg: Message) => nextMsg.author.id === msg.author.id,
                     // Stop Filter
-                    (nextMsg: Message) =>
-                        nextMsg.author.id === msg.author.id && nextMsg.content.startsWith('bday '),
+                    stopFilter,
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned role
@@ -250,7 +251,8 @@ export class SetupRequired {
                             nextMsg?.content.toLowerCase() === 'everyone'
                         ) {
                             let embed = new MessageEmbed()
-                                .setDescription(`Invalid Role!`)
+                                .setDescription(`Invalid role!`)
+                                .setFooter('Please try again.')
                                 .setColor(Config.colors.error);
                             channel.send(embed);
                             return;
@@ -280,12 +282,8 @@ export class SetupRequired {
                         }
                         return roleInput?.id;
                     },
-                    // Expire Function
-                    async () => {
-                        await channel.send(expiredEmbed);
-                    },
-                    // Options
-                    { time: Config.promptExpireTime * 1000, resetInvalid: true }
+                    expireFunction,
+                    COLLECT_OPTIONS
                 );
 
                 ActionUtils.deleteMessage(selectMessage);
@@ -296,34 +294,34 @@ export class SetupRequired {
                 break;
             }
             case Config.emotes.deny: {
-                    birthdayRole = '0';
-                    break;
-                }
+                birthdayRole = '0';
+                break;
             }
+        }
 
-                let channelOutput =
-                    birthdayChannel === '0'
-                        ? 'Not Set'
-                        : guild.channels.resolve(birthdayChannel)?.toString() || '**Unknown**';
-                let roleOutput =
-                    birthdayRole === '0'
-                        ? 'Not Set'
-                        : guild.roles.resolve(birthdayRole)?.toString() || '**Unknown**';
+        let channelOutput =
+            birthdayChannel === '0'
+                ? 'Not Set'
+                : guild.channels.resolve(birthdayChannel)?.toString() || '**Unknown**';
+        let roleOutput =
+            birthdayRole === '0'
+                ? 'Not Set'
+                : guild.roles.resolve(birthdayRole)?.toString() || '**Unknown**';
 
-                let embed = new MessageEmbed()
-                    .setAuthor(`${guild.name}`, guild.iconURL())
-                    .setTitle('Server Setup - Completed')
-                    .setDescription(
-                        'You have successfully completed the required server setup!' +
-                            `\n\n**Birthday Channel**: ${channelOutput}` +
-                            `\n**Birthday Role**: ${roleOutput}`
-                    )
-                    .setFooter(`All server commands unlocked!`, botUser.avatarURL())
-                    .setColor(Config.colors.default)
-                    .setTimestamp();
+        let embed = new MessageEmbed()
+            .setAuthor(`${guild.name}`, guild.iconURL())
+            .setTitle('Server Setup - Completed')
+            .setDescription(
+                'You have successfully completed the required server setup!' +
+                    `\n\n**Birthday Channel**: ${channelOutput}` +
+                    `\n**Birthday Role**: ${roleOutput}`
+            )
+            .setFooter(`All server commands unlocked!`, botUser.avatarURL())
+            .setColor(Config.colors.default)
+            .setTimestamp();
 
-                await channel.send(embed);
+        await channel.send(embed);
 
-                await this.guildRepo.addOrUpdateGuild(guild.id, birthdayChannel, birthdayRole);
+        await this.guildRepo.addOrUpdateGuild(guild.id, birthdayChannel, birthdayRole);
     }
 }
