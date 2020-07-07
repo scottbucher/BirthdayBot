@@ -91,6 +91,14 @@ export class SetCommand implements Command {
             target = msg.author;
         }
 
+        if (target.bot) {
+            let embed = new MessageEmbed()
+                .setDescription('You can\'t set a birthday for a bot!')
+                .setColor(Config.colors.error);
+            await channel.send(embed);
+            return;
+        }
+
         let suggest = target !== msg.author;
 
         let userData = await this.userRepo.getUser(target.id); // Try and get their data
