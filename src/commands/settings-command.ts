@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
-import { GuildRepo } from '../services/database/repos';
 import { Command } from './command';
+import { GuildRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -78,7 +78,8 @@ export class SettingsCommand implements Command {
             .addField('Trusted Role', trustedRole, true)
             .addField('Trusted Prevents Role', preventsRole, true)
             .addField('Trusted Prevents Message', preventsMessage, true)
-            .addField('Embed Birthday Message', useEmbed, true);
+            .addField('Embed Birthday Message', useEmbed, true)
+            .addField('Guild Id', guild.id, true);
 
         await channel.send(settingsEmbed);
     }

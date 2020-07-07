@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 04, 2020 at 08:09 PM
+-- Generation Time: Jul 07, 2020 at 08:43 PM
 -- Server version: 10.3.23-MariaDB-1:10.3.23+maria~stretch
 -- PHP Version: 7.0.33-0+deb9u6
 
@@ -71,10 +71,11 @@ SET @Row_Number = 0;
 
 SELECT
 		*,
-        @Row_Number := @Row_Number + 1 AS Position
-FROM `messages`
-WHERE
-		GuildId = @GuildId
+        ROW_NUMBER() OVER (
+       		ORDER BY MessageId 
+        ) AS Position
+    FROM `messages`
+    WHERE GuildId = @GuildId
 ORDER BY MessageId;
 
 END$$
@@ -86,7 +87,6 @@ SET @TotalPages = NULL;
 SET @TotalItems = NULL;
 SET @StartRow = NULL;
 SET @EndRow = NULL;
-SET @ROW_NUMBER = 0;
 
 SELECT GuildId
 INTO @GuildId
@@ -113,10 +113,11 @@ SELECT *
 FROM (
 	SELECT
 			*,
-        	@Row_Number := @Row_Number + 1 AS Position
-	FROM `messages`
-	WHERE
-			GuildId = @GuildId
+            ROW_NUMBER() OVER (
+       			ORDER BY MessageId 
+            ) AS Position
+    	FROM `messages`
+        WHERE GuildId = @GuildId
 	ORDER BY MessageId
 ) AS CustomMessage
 WHERE

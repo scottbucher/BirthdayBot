@@ -170,7 +170,8 @@ export class SetupRequired {
             .setTitle('Server Setup - Birthday Role')
             .setDescription(
                 'Now, set up the birthday role [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-role)' +
-                    '\n\nPlease select an option'
+                '\nNote: The Birthday Role is actively removed from those whose birthday it isn\'t. [(?)](https://birthdaybot.scottbucher.dev/faq#what-does-it-mean-by-the-birthday-role-is-actively-removed)' +
+                '\n\nPlease select an option'
             )
             .addField(
                 `Create New Role ${Config.emotes.create}\nSelect Pre-Existing Role ${Config.emotes.select}\nNo Birthday Role ${Config.emotes.deny}`,

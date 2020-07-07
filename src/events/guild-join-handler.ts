@@ -1,8 +1,8 @@
 import { Guild, MessageEmbed } from 'discord.js';
 
+import { EventHandler } from './event-handler';
 import { Logger } from '../services';
 import { MessageUtils } from '../utils';
-import { EventHandler } from './event-handler';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -22,7 +22,8 @@ export class GuildJoinHandler implements EventHandler {
             .setDescription(
                 `To view the commands of this bot use \`${prefix} help\`` +
                     `\nTo setup the bot run \`${prefix} setup\`` +
-                    '\n\nView the [Documentation](https://birthdaybot.scottbucher.dev/) or the [FAQ](https://birthdaybot.scottbucher.dev/faq).'
+                    '\n\nView the [Documentation](https://birthdaybot.scottbucher.dev/) or the [FAQ](https://birthdaybot.scottbucher.dev/faq).' +
+                    `\nFor more support join our discord server [here](https://discord.gg/9gUQFtz)!`
             )
             .setFooter('Join our support server for help!', guild.iconURL())
             .setTimestamp()
