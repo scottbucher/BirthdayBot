@@ -23,7 +23,8 @@ export class SetupRequired {
         let guild = channel.guild;
         let botUser = guild.client.user;
         let stopFilter: MessageFilter = (nextMsg: Message) =>
-            nextMsg.author.id === msg.author.id && nextMsg.content.split(' ')[0].toLocaleLowerCase() === 'bday';
+            nextMsg.author.id === msg.author.id &&
+            nextMsg.content.split(' ')[0].toLocaleLowerCase() === 'bday';
         let expireFunction: ExpireFunction = async () => {
             await channel.send(
                 new MessageEmbed()
