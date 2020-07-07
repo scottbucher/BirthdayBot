@@ -1,9 +1,11 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { PermissionUtils, SetupUtils } from '../utils';
 
 import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
+import { PermissionUtils } from '../utils';
+import { SetupMessage } from './setup/setup-message';
 import { SetupRequired } from './setup/setup-required';
+import { SetupTrusted } from './setup/setup-trusted';
 
 let Config = require('../../config/config.json');
 
@@ -15,7 +17,7 @@ export class SetupCommand implements Command {
     public adminOnly = true;
     public ownerOnly = false;
 
-    constructor(private guildRepo: GuildRepo, private setupRequired: SetupRequired) {}
+    constructor(private guildRepo: GuildRepo, private setupRequired: SetupRequired, private setupMessage: SetupMessage, private setupTrusted: SetupTrusted) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         // Check for permissions
@@ -65,7 +67,7 @@ export class SetupCommand implements Command {
         // Run the appropriate setup
         switch (args[2].toLowerCase()) {
             case 'message':
-                await SetupUtils.executeMessageSetup(msg, channel, this.guildRepo);
+                await this.setupMessage.execute(args, msg, channel);
                 return;
             case 'trusted':
                 if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
@@ -76,7 +78,7 @@ export class SetupCommand implements Command {
                     await channel.send(embed);
                     return;
                 }
-                await SetupUtils.executeTrustedSetup(msg, channel, this.guildRepo);
+                await this.setupTrusted.execute(args, msg, channel);
                 return;
             default:
                 let embed = new MessageEmbed()
