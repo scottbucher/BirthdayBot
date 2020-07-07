@@ -3,9 +3,7 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { GuildRepo } from '../services/database/repos';
 import { PermissionUtils } from '../utils';
 import { Command } from './command';
-import { SetupMessage } from './setup/setup-message';
-import { SetupRequired } from './setup/setup-required';
-import { SetupTrusted } from './setup/setup-trusted';
+import { SetupMessage, SetupRequired, SetupTrusted } from './setup';
 
 let Config = require('../../config/config.json');
 

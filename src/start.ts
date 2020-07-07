@@ -30,9 +30,7 @@ import {
     MessageTestSubCommand,
     MessageTimeSubCommand,
 } from './commands/message';
-import { SetupRequired } from './commands/setup';
-import { SetupMessage } from './commands/setup/setup-message';
-import { SetupTrusted } from './commands/setup/setup-trusted';
+import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import { BirthdayJob } from './jobs';
 import { BirthdayService, Logger } from './services';
