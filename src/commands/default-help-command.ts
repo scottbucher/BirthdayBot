@@ -1,7 +1,7 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { MessageUtils } from '../utils';
 import { Command } from './command';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json'); // Possible support for server specific prefixes?
 
@@ -26,7 +26,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} set** - Set your birthday.` +
                         `\n**${prefix} view [user]** - View your birthday or a users birthday.` +
                         `\n**${prefix} next** - View next birthday(s) in the server.` +
-                        `\n**${prefix} list [page]** - View the server birthday list.` +
+                        `\n**${prefix} list [page]**\*\* - View the server birthday list.` +
                         `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
@@ -34,13 +34,15 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +
+                        `\n**${prefix} settings**\*\* - View server's settings.` +
                         `\n` +
                         '\nIf you have any question/problems please join our support server [here](https://discord.gg/9gUQFtz).'
                 )
+                .addField('Legend', '\*\* = Server Only Command')
                 .setColor(Config.colors.default);
         } else if (args[2].toLowerCase() === 'setup') {
             embed
-                .setAuthor('Birthday Bot Setup Help', msg.client.user.avatarURL())
+                .setAuthor('Birthday Bot Setup Help - Guild Only', msg.client.user.avatarURL())
                 .setDescription(
                     '' +
                         '\n' +
@@ -48,13 +50,12 @@ export class DefaultHelpCommand implements Command {
                         '\n' +
                         `\n**${prefix} create <channel/role>** - Create the default birthday role/channel.` +
                         `\n**${prefix} update <channel/role> <#channel/@role>** - Update the birthday role/channel.` +
-                        `\n**${prefix} clear <channel/role>** - Clear the birthday role/channel.` +
-                        `\n**${prefix} settings** - View server's settings.`
+                        `\n**${prefix} clear <channel/role>** - Clear the birthday role/channel.`
                 )
                 .setColor(Config.colors.default);
         } else if (args[2].toLowerCase() === 'message') {
             embed
-                .setAuthor('Birthday Bot Message Help', msg.client.user.avatarURL())
+                .setAuthor('Birthday Bot Message Help - Guild Only', msg.client.user.avatarURL())
                 .setDescription(
                     '' +
                         '\n' +
@@ -72,7 +73,7 @@ export class DefaultHelpCommand implements Command {
                 .setColor(Config.colors.default);
         } else if (args[2].toLowerCase() === 'trusted') {
             embed
-                .setAuthor('Birthday Bot Trusted System Help', msg.client.user.avatarURL())
+                .setAuthor('Birthday Bot Trusted System Help - Guild Only', msg.client.user.avatarURL())
                 .setDescription(
                     '' +
                         '\n' +
@@ -94,7 +95,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} set** - Set your birthday.` +
                         `\n**${prefix} view [user]** - View your birthday or a users birthday.` +
                         `\n**${prefix} next** - View next birthday(s) in the server.` +
-                        `\n**${prefix} list [page]** - View the server birthday list.` +
+                        `\n***${prefix} list [page]**\*\* - View the server birthday list.` +
                         `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
@@ -102,9 +103,11 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +
+                        `\n**${prefix} settings**\*\* - View server's settings.` +
                         `\n` +
                         '\nIf you have any question/problems please join our support server [here](https://discord.gg/9gUQFtz).'
                 )
+                .addField('Legend', '\*\* = Server Only Command')
                 .setColor(Config.colors.default);
         }
 
