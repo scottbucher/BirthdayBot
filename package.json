@@ -16,7 +16,7 @@
         "build": "tsc"
     },
     "dependencies": {
-        "chrono-node": "1.4.6",
+        "chrono-node": "^1.4.6",
         "discord.js": "12.2.0",
         "discord.js-collector-utils": "1.0.9",
         "moment-timezone": "0.5.31",
