@@ -1,6 +1,4 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-
-import { Command } from './command';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -11,6 +9,8 @@ import {
     MessageTestSubCommand,
     MessageTimeSubCommand,
 } from './message';
+
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 
@@ -38,7 +38,7 @@ export class MessageCommand implements Command {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription(
-                    'Please specify what to create!\nAccepted Values: `list`, `add <Value>`, `remove <#>`, `clear`, `time <0-23>`, `mention <Value>`, `useEmbed <T/F>`,'
+                    'Please specify a sub command for the custom birthday message! [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-a-custom-birthday-message)\nAccepted Values: `list`, `add <Value>`, `remove <#>`, `clear`, `time <0-23>`, `mention <Value>`, `useEmbed <T/F>`,'
                 )
                 .setColor(Config.colors.error);
             await channel.send(embed);

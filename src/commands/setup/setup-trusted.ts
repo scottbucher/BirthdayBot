@@ -44,7 +44,8 @@ export class SetupTrusted {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Trusted Setup - Trusted Role')
             .setDescription(
-                'To begin you must select the Trusted Role [(?)](https://birthdaybot.scottbucher.dev/faq#do-i-need-to-set-up-the-trusted-role)' +
+                'For help, view the trusted setup guide [here](https://birthdaybot.scottbucher.dev/server-setup/trusted-setup)!' +
+                '\n\nTo begin you must select the Trusted Role [(?)](https://birthdaybot.scottbucher.dev/faq#do-i-need-to-set-up-the-trusted-role)' +
                     '\n\nPlease select an option'
             )
             .addField(
