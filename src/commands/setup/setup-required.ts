@@ -41,7 +41,8 @@ export class SetupRequired {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Server Setup - Birthday Channel')
             .setDescription(
-                'To begin you must set up the birthday channel [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
+                'For help, view the required setup guide [here](https://birthdaybot.scottbucher.dev/server-setup/required-setup)!' +
+                '\n\nTo begin you must set up the birthday channel [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
                     '\n\nPlease select an option'
             )
             .addField(
