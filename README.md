@@ -19,7 +19,7 @@ Start by using `bday set`.
 
 ![Start](https://i.imgur.com/Evo2jsp.png)
 
-Birthday Bot uses time zones to detect when to celebrate each user's birthday. If you are unsure of your time zone you can find it [here]().
+Birthday Bot uses time zones to detect when to celebrate each user's birthday. If you are unsure of your time zone you can find it [here](https://github.com/scottbucher/BirthdayBot/blob/master/README.md#finding-your-time-zone).
 
 Now, you can then reply to this message with your desired time zone.
 
