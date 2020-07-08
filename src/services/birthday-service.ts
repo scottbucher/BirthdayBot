@@ -56,6 +56,12 @@ export class BirthdayService {
         let preventMessage = guildData.TrustedPreventsMessage;
         let preventRole = guildData.TrustedPreventsRole;
 
+        if (userDatas.length === 0) {
+            Logger.info(
+                `Guild: ${guild.name} (ID: ${guild.id})'s user data was empty.`
+            );
+        }
+
         for (let user of userDatas) {
             let member: GuildMember;
             try {
