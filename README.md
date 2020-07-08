@@ -42,7 +42,7 @@ Finally, the confirmation menu will appear.
 Ensure this is the correct information, then confirm by clicking the checkmark.
 
 Note: Each user only has a limited amount of Birthday Sets. These multiple sets are made to account for incorrect information input, time zone changes, etc.
-Learn more [here](https://birthdaybot.scottbucher.dev/commands).
+Learn more [here](https://birthdaybot.scottbucher.dev/faq#how-many-times-can-i-set-my-birthday).
 
 ![End](https://i.imgur.com/2F8u3Cw.png)
 
