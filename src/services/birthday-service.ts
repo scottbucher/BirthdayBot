@@ -62,6 +62,8 @@ export class BirthdayService {
                 member = guild.members.resolve(user.UserDiscordId);
             } catch (error) {
                 // Can't find member?
+                Logger.info(
+                    `User with an ID: ${user.UserDiscordId} failed to be resolved in guild: ${guild.name} (ID: ${guild.id})`)
                 continue;
             }
 
