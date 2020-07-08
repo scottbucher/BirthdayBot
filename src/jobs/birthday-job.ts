@@ -38,8 +38,13 @@ export class BirthdayJob implements Job {
             userDatas.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
         }
 
+        Logger.info(`Total possible birthdays: ${userDatas.length}`); // 382
+        Logger.info(`Total possible User birthday IDs Before Filter: ${userDatas.map(userData => userData.UserDiscordId).join(',')}`);
+
         // Remove people whose birthday isn't today (isBirthday() considers timezones)
         userDatas = userDatas.filter(userData => BdayUtils.isBirthday(userData));
+
+        Logger.info(`User datas IDs After Filter: ${userDatas.map(userData => userData.UserDiscordId).join(',')}`);
 
         // Get list of guilds the client is connected to
         let discordIds = this.client.guilds.cache.map(guild => guild.id);
@@ -94,6 +99,8 @@ export class BirthdayJob implements Job {
                 userDatas = userDatas.filter(userData =>
                     members.keyArray().includes(userData.UserDiscordId)
                 );
+
+                Logger.info(`Guild: ${guild.name} (ID: ${guild.id})'s user data IDs: ${userDatas.map(userData => userData.UserDiscordId).join(',')}`);
 
                 promises.push(
                     this.birthdayService
