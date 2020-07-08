@@ -1,11 +1,11 @@
-import { Client, Collection, Guild, GuildMember } from 'discord.js';
-import moment from 'moment';
-
-import { UserData } from '../models/database/user-models';
-import { BirthdayService, Logger } from '../services';
-import { GuildRepo, UserRepo } from '../services/database/repos';
 import { BdayUtils, MathUtils } from '../utils';
+import { BirthdayService, Logger } from '../services';
+import { Client, Collection, Guild, GuildMember } from 'discord.js';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+
 import { Job } from './job';
+import { UserData } from '../models/database/user-models';
+import moment from 'moment';
 
 let Logs = require('../../lang/logs.json');
 
@@ -71,10 +71,24 @@ export class BirthdayJob implements Job {
                 continue;
             }
 
+            Logger.info(`Running the birthday service for guild: ${guild.name} (ID: ${guild.id})`);
+
             try {
                 let members: Collection<string, GuildMember>;
 
-                members = await guild.members.fetch();
+                try {
+                    members = await guild.members.fetch();
+                } catch (error) {
+                    members = guild.members.cache;
+                    Logger.error(
+                        Logs.error.birthdayService
+                            .replace('{GUILD_ID}', guildData.GuildDiscordId)
+                            .replace('{GUILD_NAME}', guild.name)
+                            .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                            .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                        error
+                    );
+                }
 
                 // Remove members who are not apart of this guild
                 userDatas = userDatas.filter(userData =>

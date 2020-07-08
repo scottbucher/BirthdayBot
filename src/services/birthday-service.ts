@@ -1,9 +1,10 @@
+import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
 import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 
-import { GuildData } from '../models/database/guild-models';
-import { UserData } from '../models/database/user-models';
-import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
 import { CustomMessageRepo } from './database/repos';
+import { GuildData } from '../models/database/guild-models';
+import { Logger } from '.';
+import { UserData } from '../models/database/user-models';
 
 let Config = require('../../config/config.json');
 
@@ -46,6 +47,10 @@ export class BirthdayService {
             return;
         }
 
+        Logger.info(
+            `Guild: ${guild.name} (ID: ${guild.id}) passed all settings check for birthday service`
+        );
+
         let birthdayUsers: GuildMember[] = [];
 
         let preventMessage = guildData.TrustedPreventsMessage;
@@ -68,24 +73,41 @@ export class BirthdayService {
                 preventRole &&
                 !member.roles.cache.has(trustedRole.id)
             ) {
+                Logger.info(
+                    `User: ${member.user.username} (ID: ${member.id}) was skipped due to not having the trusted role.`
+                );
                 continue;
             }
 
-            if (
-                birthdayRole &&
-                BdayUtils.isTimeForBirthdayRole(user) &&
-                !(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))
-            ) {
-                ActionUtils.giveRole(member, birthdayRole);
-            }
+            if (BdayUtils.isTimeForBirthdayRole(user)) {
+                if (
+                    birthdayRole &&
+                    !(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))
+                ) {
+                    ActionUtils.giveRole(member, birthdayRole);
+                } else
+                    Logger.info(
+                        `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday role due to the trusted role or birthday role`
+                    );
+            } else
+                Logger.info(
+                    `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday role since it was not their birthday.`
+                );
 
-            if (
-                birthdayChannel &&
-                BdayUtils.isTimeForBirthdayMessage(guildData.MessageTime, user) &&
-                !(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))
-            ) {
-                birthdayUsers.push(member);
-            }
+            if (BdayUtils.isTimeForBirthdayMessage(guildData.MessageTime, user)) {
+                if (
+                    birthdayChannel &&
+                    !(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))
+                ) {
+                    birthdayUsers.push(member);
+                } else
+                Logger.info(
+                    `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday message due to the trusted role or birthday role`
+                );
+            } else
+            Logger.info(
+                `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday message since it was not their birthday.`
+            );
         }
 
         // get a string array of the userData keys
