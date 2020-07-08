@@ -95,6 +95,8 @@ export class BirthdayJob implements Job {
                     );
                 }
 
+                if (guild.id === `660711235766976553`) Logger.info(`Guild: ${guild.name} (ID: ${guild.id})'s member list: ${members.map(member => member.id).join(',')}`);
+
                 // Remove members who are not apart of this guild
                 userDatas = userDatas.filter(userData =>
                     members.keyArray().includes(userData.UserDiscordId)
