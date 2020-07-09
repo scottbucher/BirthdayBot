@@ -29,7 +29,7 @@ export class MessageTimeSubCommand {
             return;
         }
 
-        if (messageTime < 0 || messageTime > 23 || messageTime === undefined) {
+        if (messageTime !== 0 && (messageTime < 0 || messageTime > 23 || !messageTime)) {
             let embed = new MessageEmbed()
                 .setTitle('Invalid time!')
                 .setDescription('Accepted Values: `0-23`')
