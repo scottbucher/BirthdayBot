@@ -106,14 +106,13 @@ export class BirthdayJob implements Job {
                     );
                 }
 
-                // Get a list of userDataIds
-                let userDataIds = userDatas.map(userData => userData.UserDiscordId);
-
                 // Get a list of memberIds
                 let memberIds = members.map(member => member.id.toString());
 
                 // Remove members who are not apart of this guild
-                let filtered = userDataIds.filter(userDataId => memberIds.includes(userDataId));
+                let memberUserDatas = userDatas.filter(userData =>
+                    memberIds.includes(userData.UserDiscordId)
+                );
 
                 if (
                     guild.id === `660711235766976553` ||
@@ -122,22 +121,22 @@ export class BirthdayJob implements Job {
                     guild.id === '468268307573768194'
                 ) {
                     Logger.info(
-                        `Guild: ${guild.name} (ID: ${guild.id})'s userDataIds list: ${userDataIds
-                            .join(',')}`
+                        `Guild: ${guild.name} (ID: ${guild.id})'s memberIds list: ${memberIds.join(
+                            ','
+                        )}`
                     );
                     Logger.info(
-                        `Guild: ${guild.name} (ID: ${guild.id})'s memberIds list: ${memberIds
-                            .join(',')}`
-                    );
-                    Logger.info(
-                        `Guild: ${guild.name} (ID: ${guild.id})'s filtered member list: ${filtered
+                        `Guild: ${guild.name} (ID: ${
+                            guild.id
+                        })'s filtered member list: ${memberUserDatas
+                            .map(memberUserData => memberUserData.UserDiscordId)
                             .join(',')}`
                     );
                 }
 
                 promises.push(
                     this.birthdayService
-                        .celebrateBirthdays(guild, guildData, userDatas, members)
+                        .celebrateBirthdays(guild, guildData, memberUserDatas, members)
                         .catch(error => {
                             // send userRoleList and messageList
                             Logger.error(
