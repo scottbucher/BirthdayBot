@@ -113,8 +113,8 @@ export class BirthdayJob implements Job {
                     guild.id === '468268307573768194'
                 )
                     Logger.info(
-                        `Guild: ${guild.name} (ID: ${guild.id})'s member list: ${members
-                            .map(member => member.id)
+                        `Guild: ${guild.name} (ID: ${guild.id})'s member list (key array): ${members
+                            .keyArray()
                             .join(',')}`
                     );
 
@@ -124,7 +124,7 @@ export class BirthdayJob implements Job {
                 );
 
                 Logger.info(
-                    `Guild: ${guild.name} (ID: ${guild.id})'s user data IDs: ${userDatas
+                    `Guild: ${guild.name} (ID: ${guild.id})'s user data IDs (map): ${userDatas
                         .map(userData => userData.UserDiscordId)
                         .join(',')}`
                 );
