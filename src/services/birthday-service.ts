@@ -47,18 +47,10 @@ export class BirthdayService {
             return;
         }
 
-        Logger.info(
-            `Guild: ${guild.name} (ID: ${guild.id}) passed all settings check for birthday service`
-        );
-
         let birthdayUsers: GuildMember[] = [];
 
         let preventMessage = guildData.TrustedPreventsMessage;
         let preventRole = guildData.TrustedPreventsRole;
-
-        if (userDatas.length === 0) {
-            Logger.info(`Guild: ${guild.name} (ID: ${guild.id})'s user data was empty.`);
-        }
 
         for (let user of userDatas) {
             let member: GuildMember;
@@ -66,9 +58,6 @@ export class BirthdayService {
                 member = guild.members.resolve(user.UserDiscordId);
             } catch (error) {
                 // Can't find member?
-                Logger.info(
-                    `User with an ID: ${user.UserDiscordId} failed to be resolved in guild: ${guild.name} (ID: ${guild.id})`
-                );
                 continue;
             }
 
@@ -80,9 +69,6 @@ export class BirthdayService {
                 preventRole &&
                 !member.roles.cache.has(trustedRole.id)
             ) {
-                Logger.info(
-                    `User: ${member.user.username} (ID: ${member.id}) was skipped due to not having the trusted role.`
-                );
                 continue;
             }
 
@@ -91,25 +77,15 @@ export class BirthdayService {
                 !(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))
             ) {
                 ActionUtils.giveRole(member, birthdayRole);
-            } else
-                Logger.info(
-                    `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday role due to the trusted role or birthday role`
-                );
+            }
 
-            if (BdayUtils.isTimeForBirthdayMessage(guildData.MessageTime, user)) {
-                if (
-                    birthdayChannel &&
-                    !(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))
-                ) {
-                    birthdayUsers.push(member);
-                } else
-                    Logger.info(
-                        `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday message due to the trusted role or birthday role`
-                    );
-            } else
-                Logger.info(
-                    `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday message since it was not their birthday.`
-                );
+            if (
+                BdayUtils.isTimeForBirthdayMessage(guildData.MessageTime, user) &&
+                birthdayChannel &&
+                !(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))
+            ) {
+                birthdayUsers.push(member);
+            }
         }
 
         // get a string array of the userData keys

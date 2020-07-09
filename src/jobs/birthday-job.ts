@@ -38,21 +38,8 @@ export class BirthdayJob implements Job {
             userDatas.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
         }
 
-        Logger.info(`Total possible birthdays: ${userDatas.length}`); // 382
-        Logger.info(
-            `Total possible User birthday IDs Before Filter: ${userDatas
-                .map(userData => userData.UserDiscordId)
-                .join(',')}`
-        );
-
         // Remove people whose birthday isn't today (isBirthday() considers timezones)
         userDatas = userDatas.filter(userData => BdayUtils.isBirthday(userData));
-
-        Logger.info(
-            `User datas IDs After Filter: ${userDatas
-                .map(userData => userData.UserDiscordId)
-                .join(',')}`
-        );
 
         // Get list of guilds the client is connected to
         let discordIds = this.client.guilds.cache.map(guild => guild.id);
@@ -84,8 +71,6 @@ export class BirthdayJob implements Job {
                 continue;
             }
 
-            Logger.info(`Running the birthday service for guild: ${guild.name} (ID: ${guild.id})`);
-
             try {
                 let members: Collection<string, GuildMember>;
 
@@ -113,26 +98,6 @@ export class BirthdayJob implements Job {
                 let memberUserDatas = userDatas.filter(userData =>
                     memberIds.includes(userData.UserDiscordId)
                 );
-
-                if (
-                    guild.id === `660711235766976553` ||
-                    guild.id === '642086985825255424' ||
-                    guild.id === '676120968753578004' ||
-                    guild.id === '468268307573768194'
-                ) {
-                    Logger.info(
-                        `Guild: ${guild.name} (ID: ${guild.id})'s memberIds list: ${memberIds.join(
-                            ','
-                        )}`
-                    );
-                    Logger.info(
-                        `Guild: ${guild.name} (ID: ${
-                            guild.id
-                        })'s filtered member list: ${memberUserDatas
-                            .map(memberUserData => memberUserData.UserDiscordId)
-                            .join(',')}`
-                    );
-                }
 
                 promises.push(
                     this.birthdayService
