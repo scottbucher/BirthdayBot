@@ -57,9 +57,7 @@ export class BirthdayService {
         let preventRole = guildData.TrustedPreventsRole;
 
         if (userDatas.length === 0) {
-            Logger.info(
-                `Guild: ${guild.name} (ID: ${guild.id})'s user data was empty.`
-            );
+            Logger.info(`Guild: ${guild.name} (ID: ${guild.id})'s user data was empty.`);
         }
 
         for (let user of userDatas) {
@@ -69,7 +67,8 @@ export class BirthdayService {
             } catch (error) {
                 // Can't find member?
                 Logger.info(
-                    `User with an ID: ${user.UserDiscordId} failed to be resolved in guild: ${guild.name} (ID: ${guild.id})`)
+                    `User with an ID: ${user.UserDiscordId} failed to be resolved in guild: ${guild.name} (ID: ${guild.id})`
+                );
                 continue;
             }
 
@@ -87,19 +86,14 @@ export class BirthdayService {
                 continue;
             }
 
-            if (BdayUtils.isTimeForBirthdayRole(user)) {
-                if (
-                    birthdayRole &&
-                    !(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))
-                ) {
-                    ActionUtils.giveRole(member, birthdayRole);
-                } else
-                    Logger.info(
-                        `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday role due to the trusted role or birthday role`
-                    );
+            if (
+                birthdayRole &&
+                !(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))
+            ) {
+                ActionUtils.giveRole(member, birthdayRole);
             } else
                 Logger.info(
-                    `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday role since it was not their birthday.`
+                    `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday role due to the trusted role or birthday role`
                 );
 
             if (BdayUtils.isTimeForBirthdayMessage(guildData.MessageTime, user)) {
@@ -109,13 +103,13 @@ export class BirthdayService {
                 ) {
                     birthdayUsers.push(member);
                 } else
-                Logger.info(
-                    `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday message due to the trusted role or birthday role`
-                );
+                    Logger.info(
+                        `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday message due to the trusted role or birthday role`
+                    );
             } else
-            Logger.info(
-                `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday message since it was not their birthday.`
-            );
+                Logger.info(
+                    `User: ${member.user.username} (ID: ${member.id}) did not receive the birthday message since it was not their birthday.`
+                );
         }
 
         // get a string array of the userData keys
