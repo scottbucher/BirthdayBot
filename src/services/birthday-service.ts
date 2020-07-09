@@ -3,7 +3,6 @@ import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 
 
 import { CustomMessageRepo } from './database/repos';
 import { GuildData } from '../models/database/guild-models';
-import { Logger } from '.';
 import { UserData } from '../models/database/user-models';
 
 let Config = require('../../config/config.json');
