@@ -106,28 +106,34 @@ export class BirthdayJob implements Job {
                     );
                 }
 
+                // Get a list of userDataIds
+                let userDataIds = userDatas.map(userData => userData.UserDiscordId);
+
+                // Get a list of memberIds
+                let memberIds = members.map(member => member.id.toString());
+
+                // Remove members who are not apart of this guild
+                let filtered = userDataIds.filter(userDataId => memberIds.includes(userDataId));
+
                 if (
                     guild.id === `660711235766976553` ||
                     guild.id === '642086985825255424' ||
                     guild.id === '676120968753578004' ||
                     guild.id === '468268307573768194'
-                )
+                ) {
                     Logger.info(
-                        `Guild: ${guild.name} (ID: ${guild.id})'s member list (key array): ${members
-                            .keyArray()
+                        `Guild: ${guild.name} (ID: ${guild.id})'s userDataIds list: ${userDataIds
                             .join(',')}`
                     );
-
-                // Remove members who are not apart of this guild
-                userDatas = userDatas.filter(userData =>
-                    members.keyArray().includes(userData.UserDiscordId)
-                );
-
-                Logger.info(
-                    `Guild: ${guild.name} (ID: ${guild.id})'s user data IDs (map): ${userDatas
-                        .map(userData => userData.UserDiscordId)
-                        .join(',')}`
-                );
+                    Logger.info(
+                        `Guild: ${guild.name} (ID: ${guild.id})'s memberIds list: ${memberIds
+                            .join(',')}`
+                    );
+                    Logger.info(
+                        `Guild: ${guild.name} (ID: ${guild.id})'s filtered member list: ${filtered
+                            .join(',')}`
+                    );
+                }
 
                 promises.push(
                     this.birthdayService
