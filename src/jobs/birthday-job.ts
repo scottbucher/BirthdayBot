@@ -73,7 +73,7 @@ export class BirthdayJob implements Job {
 
             try {
                 let members: Collection<string, GuildMember>;
-
+                let beforeCacheSize = guild.members.cache.size;
                 try {
                     members = await guild.members.fetch();
                 } catch (error) {
@@ -84,7 +84,11 @@ export class BirthdayJob implements Job {
                             .replace('{GUILD_NAME}', guild.name)
                             .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
                             .replace(
-                                '{MEMBER_CACHE_COUNT}',
+                                '{MEMBER_CACHE_BEFORE_COUNT}',
+                                beforeCacheSize.toLocaleString()
+                            )
+                            .replace(
+                                '{MEMBER_CACHE_AFTER_COUNT}',
                                 guild.members.cache.size.toLocaleString()
                             ),
                         error
