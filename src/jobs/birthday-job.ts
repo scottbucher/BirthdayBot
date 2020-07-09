@@ -39,12 +39,20 @@ export class BirthdayJob implements Job {
         }
 
         Logger.info(`Total possible birthdays: ${userDatas.length}`); // 382
-        Logger.info(`Total possible User birthday IDs Before Filter: ${userDatas.map(userData => userData.UserDiscordId).join(',')}`);
+        Logger.info(
+            `Total possible User birthday IDs Before Filter: ${userDatas
+                .map(userData => userData.UserDiscordId)
+                .join(',')}`
+        );
 
         // Remove people whose birthday isn't today (isBirthday() considers timezones)
         userDatas = userDatas.filter(userData => BdayUtils.isBirthday(userData));
 
-        Logger.info(`User datas IDs After Filter: ${userDatas.map(userData => userData.UserDiscordId).join(',')}`);
+        Logger.info(
+            `User datas IDs After Filter: ${userDatas
+                .map(userData => userData.UserDiscordId)
+                .join(',')}`
+        );
 
         // Get list of guilds the client is connected to
         let discordIds = this.client.guilds.cache.map(guild => guild.id);
@@ -90,19 +98,36 @@ export class BirthdayJob implements Job {
                             .replace('{GUILD_ID}', guildData.GuildDiscordId)
                             .replace('{GUILD_NAME}', guild.name)
                             .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                            .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                            .replace(
+                                '{MEMBER_CACHE_COUNT}',
+                                guild.members.cache.size.toLocaleString()
+                            ),
                         error
                     );
                 }
 
-                if (guild.id === `660711235766976553`) Logger.info(`Guild: ${guild.name} (ID: ${guild.id})'s member list: ${members.map(member => member.id).join(',')}`);
+                if (
+                    guild.id === `660711235766976553` ||
+                    guild.id === '642086985825255424' ||
+                    guild.id === '676120968753578004' ||
+                    guild.id === '468268307573768194'
+                )
+                    Logger.info(
+                        `Guild: ${guild.name} (ID: ${guild.id})'s member list: ${members
+                            .map(member => member.id)
+                            .join(',')}`
+                    );
 
                 // Remove members who are not apart of this guild
                 userDatas = userDatas.filter(userData =>
                     members.keyArray().includes(userData.UserDiscordId)
                 );
 
-                Logger.info(`Guild: ${guild.name} (ID: ${guild.id})'s user data IDs: ${userDatas.map(userData => userData.UserDiscordId).join(',')}`);
+                Logger.info(
+                    `Guild: ${guild.name} (ID: ${guild.id})'s user data IDs: ${userDatas
+                        .map(userData => userData.UserDiscordId)
+                        .join(',')}`
+                );
 
                 promises.push(
                     this.birthdayService
