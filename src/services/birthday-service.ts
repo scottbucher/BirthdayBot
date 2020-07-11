@@ -1,11 +1,13 @@
-import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
 import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 
-import { CustomMessageRepo } from './database/repos';
+import { Logger } from '.';
 import { GuildData } from '../models/database/guild-models';
 import { UserData } from '../models/database/user-models';
+import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
+import { CustomMessageRepo } from './database/repos';
 
 let Config = require('../../config/config.json');
+let Logs = require('../../lang/logs.json');
 
 export class BirthdayService {
     constructor(private customMessageRepo: CustomMessageRepo) {}
@@ -13,9 +15,35 @@ export class BirthdayService {
     public async celebrateBirthdays(
         guild: Guild,
         guildData: GuildData,
-        userDatas: UserData[],
-        members: Collection<string, GuildMember>
+        userDatas: UserData[]
     ): Promise<void> {
+        let members: Collection<string, GuildMember>;
+        let beforeCacheSize = guild.members.cache.size;
+        try {
+            guild = await guild.fetch();
+            members = await guild.members.fetch();
+        } catch (error) {
+            members = guild.members.cache;
+            Logger.error(
+                Logs.error.birthdayService
+                    .replace('{GUILD_ID}', guildData.GuildDiscordId)
+                    .replace('{GUILD_NAME}', guild.name)
+                    .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                    .replace('{MEMBER_CACHE_BEFORE_COUNT}', beforeCacheSize.toLocaleString())
+                    .replace(
+                        '{MEMBER_CACHE_AFTER_COUNT}',
+                        guild.members.cache.size.toLocaleString()
+                    ),
+                error
+            );
+        }
+
+        // Get a list of memberIds
+        let memberIds = members.map(member => member.id.toString());
+
+        // Remove members who are not apart of this guild
+        userDatas = userDatas.filter(userData => memberIds.includes(userData.UserDiscordId));
+
         let birthdayChannel: TextChannel;
         let birthdayRole: Role;
         let trustedRole: Role;
