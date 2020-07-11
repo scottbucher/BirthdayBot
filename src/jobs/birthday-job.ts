@@ -1,11 +1,11 @@
-import { Client, Guild } from 'discord.js';
-import moment from 'moment';
-
-import { UserData } from '../models/database/user-models';
-import { BirthdayService, Logger } from '../services';
-import { GuildRepo, UserRepo } from '../services/database/repos';
 import { BdayUtils, MathUtils } from '../utils';
+import { BirthdayService, Logger } from '../services';
+import { Client, Collection, Guild, GuildMember } from 'discord.js';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+
 import { Job } from './job';
+import { UserData } from '../models/database/user-models';
+import moment from 'moment';
 
 let Logs = require('../../lang/logs.json');
 
@@ -72,9 +72,40 @@ export class BirthdayJob implements Job {
             }
 
             try {
+                let members: Collection<string, GuildMember>;
+                let beforeCacheSize = guild.members.cache.size;
+                try {
+                    members = await guild.members.fetch();
+                } catch (error) {
+                    members = guild.members.cache;
+                    Logger.error(
+                        Logs.error.birthdayService
+                            .replace('{GUILD_ID}', guildData.GuildDiscordId)
+                            .replace('{GUILD_NAME}', guild.name)
+                            .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                            .replace(
+                                '{MEMBER_CACHE_BEFORE_COUNT}',
+                                beforeCacheSize.toLocaleString()
+                            )
+                            .replace(
+                                '{MEMBER_CACHE_AFTER_COUNT}',
+                                guild.members.cache.size.toLocaleString()
+                            ),
+                        error
+                    );
+                }
+
+                // Get a list of memberIds
+                let memberIds = members.map(member => member.id.toString());
+
+                // Remove members who are not apart of this guild
+                let memberUserDatas = userDatas.filter(userData =>
+                    memberIds.includes(userData.UserDiscordId)
+                );
+
                 promises.push(
                     this.birthdayService
-                        .celebrateBirthdays(guild, guildData, userDatas)
+                        .celebrateBirthdays(guild, guildData, memberUserDatas, members)
                         .catch(error => {
                             // send userRoleList and messageList
                             Logger.error(
