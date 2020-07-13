@@ -1,12 +1,4 @@
 import * as Chrono from 'chrono-node';
-
-import { ActionUtils, FormatUtils, PermissionUtils } from '../utils';
-import {
-    CollectOptions,
-    CollectorUtils,
-    ExpireFunction,
-    MessageFilter,
-} from 'discord.js-collector-utils';
 import {
     DMChannel,
     Message,
@@ -17,8 +9,15 @@ import {
     User,
 } from 'discord.js';
 
-import { Command } from './command';
+import {
+    CollectOptions,
+    CollectorUtils,
+    ExpireFunction,
+    MessageFilter,
+} from 'discord.js-collector-utils';
 import { UserRepo } from '../services/database/repos';
+import { ActionUtils, FormatUtils, GuildUtils } from '../utils';
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 
@@ -72,11 +71,7 @@ export class SetCommand implements Command {
             // Get who they are mentioning
             target =
                 msg.mentions.members.first()?.user ||
-                msg.guild.members.cache.find(
-                    member =>
-                        member.displayName.toLowerCase().includes(args[2].toLowerCase()) ||
-                        member.user.username.toLowerCase().includes(args[2].toLowerCase())
-                )?.user;
+                GuildUtils.findMember(msg.guild, args[2])?.user;
 
             // Did we find a user?
             if (!target) {

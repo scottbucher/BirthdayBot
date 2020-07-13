@@ -2,6 +2,7 @@ import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js'
 import moment from 'moment';
 
 import { UserRepo } from '../services/database/repos';
+import { GuildUtils } from '../utils';
 import { Command } from './command';
 
 let Config = require('../../config/config.json');
@@ -32,11 +33,7 @@ export class ViewCommand implements Command {
             // Get who they are mentioning
             target =
                 msg.mentions.members.first()?.user ||
-                msg.guild.members.cache.find(
-                    member =>
-                        member.displayName.toLowerCase().includes(args[2].toLowerCase()) ||
-                        member.user.username.toLowerCase().includes(args[2].toLowerCase())
-                )?.user;
+                GuildUtils.findMember(msg.guild, args[2])?.user;
 
             // Did we find a user?
             if (!target) {

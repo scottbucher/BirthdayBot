@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 
 import { UserRepo } from '../services/database/repos';
-import { ParseUtils } from '../utils';
+import { GuildUtils, ParseUtils } from '../utils';
 import { Command } from './command';
 
 let Config = require('../../config/config.json');
@@ -28,12 +28,7 @@ export class SetAttemptsCommand implements Command {
         }
         // Get who they are mentioning
         target =
-            msg.mentions.members.first()?.user ||
-            msg.guild.members.cache.find(
-                member =>
-                    member.displayName.toLowerCase().includes(args[2].toLowerCase()) ||
-                    member.user.username.toLowerCase().includes(args[2].toLowerCase())
-            )?.user;
+            msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, args[2])?.user;
 
         // Did we find a user?
         if (!target) {

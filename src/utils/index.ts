@@ -8,3 +8,4 @@ export { PermissionUtils } from './permission-utils';
 export { ActionUtils } from './action-utils';
 export { ArrayUtils } from './array-utils';
 export { BdayUtils } from './bday-utils';
+export { GuildUtils } from './guild-utils';
