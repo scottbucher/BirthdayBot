@@ -280,7 +280,7 @@ export class SetCommand implements Command {
             confirmationMessage,
             // Collect Filter
             (msgReaction: MessageReaction, reactor: User) =>
-                reactor.id === msg.author.id && trueFalseOptions.includes(msgReaction.emoji.name),
+                reactor.id === target.id && trueFalseOptions.includes(msgReaction.emoji.name),
             stopFilter,
             // Retrieve Result
             async (msgReaction: MessageReaction, reactor: User) => {
