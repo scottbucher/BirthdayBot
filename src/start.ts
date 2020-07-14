@@ -53,15 +53,15 @@ async function start(): Promise<void> {
     let client = new Client(clientOptions);
     let dataAccess = new DataAccess(Config.mysql);
 
-    // Voting Api
-    let api = new Api();
-
     let defaultHelpCommand = new DefaultHelpCommand();
 
     // Repos
     let guildRepo = new GuildRepo(dataAccess);
     let userRepo = new UserRepo(dataAccess);
     let customMessageRepo = new CustomMessageRepo(dataAccess);
+
+    // Voting Api
+    let api = new Api(userRepo);
 
     // Services
     let birthdayService = new BirthdayService(customMessageRepo);

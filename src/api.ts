@@ -1,5 +1,6 @@
 import { Logger } from './services';
 import { UserRepo } from './services/database/repos';
+import { VoteData } from './models/database/vote-models';
 import express from 'express';
 
 const app = express();
@@ -15,7 +16,7 @@ export class Api {
         app.use(bodyParser.json());
 
         // Voting Api Ready
-        app.get('/', (req, res) => {
+        app.get('/votes', (req, res) => {
             res.send('Voting Api Ready.');
         });
 
@@ -24,19 +25,11 @@ export class Api {
 
         // Get the votes
         app.post('/votes', async (req, res) => {
-            let botId = req.body.bot;
-            let userId = req.body.user;
-            let type = req.body.type;
-            let isWeekend = req.body.isWeekend;
-            let query = req.body.query;
+            let voteData = new VoteData(req.body);
 
-            Logger.info(`BotId: ${botId}`);
-            Logger.info(`UserId: ${userId}`);
-            Logger.info(`Type: ${type}`);
-            Logger.info(`isWeekend: ${isWeekend}`);
-            Logger.info(`Query: ${query}`);
+            Logger.info(`Vote data: ${voteData}`);
 
-            await this.userRepo.updateUserLastVote(userId);
+            await this.userRepo.addUserVote('top.gg', voteData.UserDiscordId);
         });
     }
 }

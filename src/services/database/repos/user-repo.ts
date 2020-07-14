@@ -59,10 +59,12 @@ export class UserRepo {
         return SQLUtils.getFirstResult(results);
     }
 
-    public async updateUserLastVote(
+    public async addUserVote(
+        botSiteName: string,
         discordId: string
     ): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.User_UpdateLastVote, [
+        await this.dataAccess.executeProcedure(Procedure.User_AddVote, [
+            botSiteName,
             discordId
         ]);
     }

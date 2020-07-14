@@ -70,6 +70,7 @@ export class MessageHandler {
             return;
         }
 
+        // Check if the command is a bot owner only command
         if (command.ownerOnly && !Config.ownerIds.includes(msg.author.id)) {
             let embed = new MessageEmbed()
                 .setDescription('This command can only be used by the bot owner!')
@@ -80,6 +81,7 @@ export class MessageHandler {
             return;
         }
 
+        // Check if the command is a server only command
         if (command.guildOnly && channel instanceof DMChannel) {
             let embed = new MessageEmbed()
                 .setDescription('This command can only be used in a discord server!')
@@ -88,7 +90,21 @@ export class MessageHandler {
             return;
         }
 
-        // channel.startTyping();
+        // Check if the command requires voting
+        if (command.voteOnly) {
+            let embed = new MessageEmbed()
+                .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+                .setThumbnail('https://i.imgur.com/wak8g4V.png')
+                .setTitle('Vote Required!')
+                .setDescription('This command requires you to vote today!')
+                .addField('Last Vote', 'Never', true)
+                .addField('Vote Here', '[Top.gg](https://top.gg/bot/656621136808902656/vote)', true)
+                .setFooter('While Birthday Bot is 100% free, voting helps us grow!', msg.client.user.avatarURL())
+                .setColor(Config.colors.error)
+            await channel.send(embed);
+            return;
+        }
+
         try {
             // Check if command requires guild setup
             if (channel instanceof TextChannel) {
@@ -129,8 +145,6 @@ export class MessageHandler {
             } catch {
                 /*ignore*/
             }
-
-            // channel.stopTyping(true);
 
             return;
         }
