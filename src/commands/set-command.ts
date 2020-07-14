@@ -1,4 +1,12 @@
 import * as Chrono from 'chrono-node';
+
+import { ActionUtils, FormatUtils, GuildUtils } from '../utils';
+import {
+    CollectOptions,
+    CollectorUtils,
+    ExpireFunction,
+    MessageFilter,
+} from 'discord.js-collector-utils';
 import {
     DMChannel,
     Message,
@@ -9,15 +17,8 @@ import {
     User,
 } from 'discord.js';
 
-import {
-    CollectOptions,
-    CollectorUtils,
-    ExpireFunction,
-    MessageFilter,
-} from 'discord.js-collector-utils';
-import { UserRepo } from '../services/database/repos';
-import { ActionUtils, FormatUtils, GuildUtils } from '../utils';
 import { Command } from './command';
+import { UserRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -33,6 +34,7 @@ export class SetCommand implements Command {
     public guildOnly = false;
     public adminOnly = false;
     public ownerOnly = false;
+    public voteOnly = false;
 
     constructor(private userRepo: UserRepo) {}
 

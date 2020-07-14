@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { GuildRepo } from '../services/database/repos';
 import { Command } from './command';
+import { GuildRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -12,6 +12,7 @@ export class ClearCommand implements Command {
     public guildOnly = true;
     public adminOnly = true;
     public ownerOnly = false;
+    public voteOnly = false;
 
     constructor(private guildRepo: GuildRepo) {}
 

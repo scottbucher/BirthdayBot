@@ -7,5 +7,6 @@ export interface Command {
     guildOnly: boolean;
     adminOnly: boolean;
     ownerOnly: boolean;
+    voteOnly: boolean;
     execute(args: string[], msg: Message, channel: TextChannel | DMChannel): Promise<void>;
 }

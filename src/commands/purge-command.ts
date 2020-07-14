@@ -1,8 +1,8 @@
+import { ActionUtils, PermissionUtils } from '../utils';
 import { DMChannel, Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
-import { UserRepo } from '../services/database/repos';
-import { ActionUtils, PermissionUtils } from '../utils';
 import { Command } from './command';
+import { UserRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -13,6 +13,7 @@ export class PurgeCommand implements Command {
     public guildOnly = false;
     public adminOnly = false;
     public ownerOnly = false;
+    public voteOnly = false;
 
     constructor(private userRepo: UserRepo) {}
 
