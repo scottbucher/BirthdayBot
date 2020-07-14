@@ -33,6 +33,7 @@ import {
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
 
+import { Api } from './api';
 import { BirthdayJob } from './jobs';
 import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
@@ -51,6 +52,9 @@ async function start(): Promise<void> {
 
     let client = new Client(clientOptions);
     let dataAccess = new DataAccess(Config.mysql);
+
+    // Voting Api
+    let api = new Api();
 
     let defaultHelpCommand = new DefaultHelpCommand();
 
@@ -150,6 +154,7 @@ async function start(): Promise<void> {
     );
 
     await bot.start();
+    await api.start();
 }
 
 process.on('unhandledRejection', (reason, promise) => {
