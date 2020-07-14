@@ -58,4 +58,12 @@ export class UserRepo {
 
         return SQLUtils.getFirstResult(results);
     }
+
+    public async updateUserLastVote(
+        discordId: string
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.User_UpdateLastVote, [
+            discordId
+        ]);
+    }
 }
