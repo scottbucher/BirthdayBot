@@ -13,7 +13,7 @@ export class ListCommand implements Command {
     public guildOnly = true;
     public adminOnly = false;
     public ownerOnly = false;
-    public voteOnly = false;
+    public voteOnly = true;
 
     constructor(private userRepo: UserRepo) {}
 
