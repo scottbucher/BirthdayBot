@@ -6,11 +6,12 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
+import { GuildRepo, UserRepo } from '../services/database/repos';
 import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
-import { GuildRepo } from '../services/database/repos';
 import { Logger } from '../services';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -18,7 +19,8 @@ export class MessageHandler {
     constructor(
         private defaultHelpCommand: Command,
         private commands: Command[],
-        private guildRepo: GuildRepo
+        private guildRepo: GuildRepo,
+        private userRepo: UserRepo
     ) {}
 
     public async process(msg: Message): Promise<void> {
@@ -90,14 +92,19 @@ export class MessageHandler {
             return;
         }
 
-        // Check if the command requires voting
-        if (command.voteOnly) {
+        // Get the user's last vote and check if the command requires a vote
+        let userVote = await this.userRepo.getUserVote(msg.author.id);
+        let now = moment();
+        let lastVote = moment(userVote.VoteTime);
+        let sinceLastVote: string = `${now.diff(lastVote, 'hours').toString()} hours ago.`;
+        if (!sinceLastVote) sinceLastVote = 'Never.'
+        if (command.voteOnly && (!userVote || lastVote.add(1, 'day') < now)) {
             let embed = new MessageEmbed()
                 .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
                 .setThumbnail('https://i.imgur.com/wak8g4V.png')
                 .setTitle('Vote Required!')
-                .setDescription('This command requires you to vote today!')
-                .addField('Last Vote', 'Never', true)
+                .setDescription('This command requires you to vote every 24 hours!')
+                .addField('Last Vote', `${sinceLastVote} hours ago.`, true)
                 .addField('Vote Here', '[Top.gg](https://top.gg/bot/656621136808902656/vote)', true)
                 .setFooter('While Birthday Bot is 100% free, voting helps us grow!', msg.client.user.avatarURL())
                 .setColor(Config.colors.error)
