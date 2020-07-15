@@ -1,4 +1,4 @@
-import { GuildData } from '../../../models/database/guild-models';
+import { GuildData } from '../../../models/database';
 import { SQLUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';

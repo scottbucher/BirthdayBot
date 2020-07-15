@@ -1,9 +1,7 @@
+import { UserData, UserDataResults, Vote } from '../../../models/database';
+import { SQLUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
-import { SQLUtils } from '../../../utils';
-import { UserData } from '../../../models/database/user-models';
-import { UserDataResults } from '../../../models/database/user-data-results-models';
-import { Vote } from '../../../models/database/vote-models';
 
 export class UserRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -14,7 +12,9 @@ export class UserRepo {
     }
 
     public async getUserVote(discordId: string): Promise<Vote> {
-        let results = await this.dataAccess.executeProcedure(Procedure.	User_GetLastVote, [discordId]);
+        let results = await this.dataAccess.executeProcedure(Procedure.User_GetLastVote, [
+            discordId,
+        ]);
         return SQLUtils.getFirstResultFirstRow(results);
     }
 
@@ -59,19 +59,13 @@ export class UserRepo {
 
     public async getUsersWithBirthday(birthday: string): Promise<UserData[]> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_GetBirthdays, [
-            birthday
+            birthday,
         ]);
 
         return SQLUtils.getFirstResult(results);
     }
 
-    public async addUserVote(
-        botSiteName: string,
-        discordId: string
-    ): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.User_AddVote, [
-            botSiteName,
-            discordId
-        ]);
+    public async addUserVote(botSiteName: string, discordId: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.User_AddVote, [botSiteName, discordId]);
     }
 }
