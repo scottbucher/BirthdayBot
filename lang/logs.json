@@ -21,6 +21,7 @@
         "spawnShard": "An error occurred while spawning shards.",
         "updateServerCount": "An error occurred while updating the server count.",
         "votingApiStart": "An error occurred while starting the voting api.",
+        "registeringVote": "An error occurred while registering a vote for user with ID {USER_ID}.",
         "updateServerCountSite": "An error occurred while updating the server count on '{BOT_SITE}'.",
         "login": "An error occurred while the client attempted to login.",
         "guildJoin": "An error occurred while processing a guild join.",
