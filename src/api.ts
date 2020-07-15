@@ -1,9 +1,11 @@
+import { Logger } from './services';
 import { UserRepo } from './services/database/repos';
 import { VoteData } from './models/database/vote-data-models';
 import bodyParser from 'body-parser';
 import express from 'express';
 
-let Config = require('../config/config.json')
+let Config = require('../config/config.json');
+let Logs = require('../lang/logs.json');
 
 const app = express();
 
@@ -12,6 +14,9 @@ export class Api {
     constructor(private userRepo: UserRepo) {}
 
     public async start(): Promise<void> {
+        // Log that the api is starting
+        Logger.info(Logs.info.startedVotingApi);
+
         // Tell express to use body-parser's JSON parsing
         app.use(bodyParser.json());
 
