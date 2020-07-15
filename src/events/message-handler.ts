@@ -103,7 +103,7 @@ export class MessageHandler {
                 .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
                 .setThumbnail('https://i.imgur.com/wak8g4V.png')
                 .setTitle('Vote Required!')
-                .setDescription('This command requires you to vote every 24 hours!')
+                .setDescription('This command requires you to have voted in the past 24 hours!')
                 .addField('Last Vote', `${sinceLastVote}`, true)
                 .addField('Vote Here', '[Top.gg](https://top.gg/bot/656621136808902656/vote)', true)
                 .setFooter('While Birthday Bot is 100% free, voting helps us grow!', msg.client.user.avatarURL())
