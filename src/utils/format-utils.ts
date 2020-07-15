@@ -1,8 +1,7 @@
 import { Guild, MessageEmbed, Util } from 'discord.js';
-
-import { CustomMessages } from '../models/database/custom-messages-models';
-import { UserDataResults } from '../models/database/user-data-results-models';
 import moment from 'moment-timezone';
+
+import { CustomMessages, UserDataResults } from '../models/database';
 
 let Config = require('../../config/config.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;

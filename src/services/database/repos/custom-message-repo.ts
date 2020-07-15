@@ -1,4 +1,4 @@
-import { CustomMessages } from '../../../models/database/custom-messages-models';
+import { CustomMessages } from '../../../models/database';
 import { SQLUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';

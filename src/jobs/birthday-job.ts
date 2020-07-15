@@ -1,11 +1,11 @@
-import { BdayUtils, MathUtils } from '../utils';
-import { BirthdayService, Logger } from '../services';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-
-import { Job } from './job';
-import { UserData } from '../models/database/user-models';
 import moment from 'moment';
+
+import { UserData } from '../models/database';
+import { BirthdayService, Logger } from '../services';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { BdayUtils, MathUtils } from '../utils';
+import { Job } from './job';
 
 let Logs = require('../../lang/logs.json');
 

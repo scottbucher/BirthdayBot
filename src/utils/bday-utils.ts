@@ -1,9 +1,7 @@
 import moment from 'moment';
 import { Moment } from 'moment-timezone';
 
-import { CustomMessages } from '../models/database/custom-messages-models';
-import { SplitUsers } from '../models/database/split-users-models';
-import { UserData } from '../models/database/user-models';
+import { CustomMessages, SplitUsers, UserData } from '../models/database';
 import { ArrayUtils } from './array-utils';
 import { MathUtils } from './math-utils';
 
