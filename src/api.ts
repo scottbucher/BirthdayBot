@@ -1,11 +1,11 @@
-import { Logger } from './services';
 import { UserRepo } from './services/database/repos';
 import { VoteData } from './models/database/vote-data-models';
+import bodyParser from 'body-parser';
 import express from 'express';
 
+let Config = require('../config/config.json')
+
 const app = express();
-const bodyParser = require('body-parser');
-const PORT = process.env.PORT || 5000;
 
 export class Api {
 
@@ -21,7 +21,7 @@ export class Api {
         });
 
         // Server Running
-        app.listen(PORT, () => console.log('Server Running.'));
+        app.listen(Config.apiPort, () => console.log('Server Running.'));
 
         // Get the votes
         app.post('/votes', async (req, res) => {
