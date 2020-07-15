@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 15, 2020 at 03:44 AM
+-- Generation Time: Jul 15, 2020 at 05:35 AM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -561,8 +561,7 @@ CREATE TABLE `user` (
   `UserDiscordId` varchar(20) NOT NULL,
   `Birthday` date DEFAULT NULL,
   `TimeZone` varchar(100) CHARACTER SET utf32 DEFAULT NULL,
-  `ChangesLeft` tinyint(4) DEFAULT 5,
-  `LastVote` timestamp NOT NULL DEFAULT cast(current_timestamp() - interval 1 day as date)
+  `ChangesLeft` tinyint(4) DEFAULT 5
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
