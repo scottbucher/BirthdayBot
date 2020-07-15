@@ -14,19 +14,16 @@ export class Api {
     constructor(private userRepo: UserRepo) {}
 
     public async start(): Promise<void> {
-        // Log that the api is starting
-        Logger.info(Logs.info.startedVotingApi);
-
         // Tell express to use body-parser's JSON parsing
         app.use(bodyParser.json());
 
         // Voting Api Ready
         app.get('/votes', (req, res) => {
-            res.send('Voting Api Ready.');
+            res.send('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
         });
 
-        // Server Running
-        app.listen(Config.apiPort, () => console.log('Server Running.'));
+        // Voting Api has started
+        app.listen(Config.apiPort, () => Logger.info(Logs.info.startedVotingApi));
 
         // Get the votes
         app.post('/votes', async (req, res) => {
