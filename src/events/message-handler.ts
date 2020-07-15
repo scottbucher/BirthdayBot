@@ -95,16 +95,16 @@ export class MessageHandler {
         // Get the user's last vote and check if the command requires a vote
         let userVote = await this.userRepo.getUserVote(msg.author.id);
         let now = moment();
-        let lastVote = moment(userVote.VoteTime);
-        let sinceLastVote: string = `${now.diff(lastVote, 'hours').toString()} hours ago.`;
-        if (!sinceLastVote) sinceLastVote = 'Never.'
+        let lastVote = moment(userVote?.VoteTime);
+        let sinceLastVote: string = `Never`;
+        if (userVote) sinceLastVote = `${now.diff(lastVote, 'hours').toString()} hours ago.`;
         if (command.voteOnly && (!userVote || lastVote.add(1, 'day') < now)) {
             let embed = new MessageEmbed()
                 .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
                 .setThumbnail('https://i.imgur.com/wak8g4V.png')
                 .setTitle('Vote Required!')
                 .setDescription('This command requires you to vote every 24 hours!')
-                .addField('Last Vote', `${sinceLastVote} hours ago.`, true)
+                .addField('Last Vote', `${sinceLastVote}`, true)
                 .addField('Vote Here', '[Top.gg](https://top.gg/bot/656621136808902656/vote)', true)
                 .setFooter('While Birthday Bot is 100% free, voting helps us grow!', msg.client.user.avatarURL())
                 .setColor(Config.colors.error)
