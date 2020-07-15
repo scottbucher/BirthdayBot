@@ -3,12 +3,18 @@ import { Procedure } from '../procedure';
 import { SQLUtils } from '../../../utils';
 import { UserData } from '../../../models/database/user-models';
 import { UserDataResults } from '../../../models/database/user-data-results-models';
+import { Vote } from '../../../models/database/vote-models';
 
 export class UserRepo {
     constructor(private dataAccess: DataAccess) {}
 
     public async getUser(discordId: string): Promise<UserData> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_Get, [discordId]);
+        return SQLUtils.getFirstResultFirstRow(results);
+    }
+
+    public async getUserVote(discordId: string): Promise<Vote> {
+        let results = await this.dataAccess.executeProcedure(Procedure.	User_GetLastVote, [discordId]);
         return SQLUtils.getFirstResultFirstRow(results);
     }
 
