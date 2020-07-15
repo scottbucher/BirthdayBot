@@ -135,7 +135,8 @@ async function start(): Promise<void> {
             setAttemptsCommand,
             settingsCommand,
         ],
-        guildRepo
+        guildRepo,
+        userRepo
     );
     let reactionAddHandler = new ReactionAddHandler(userRepo, customMessageRepo);
     let guildJoinHandler = new GuildJoinHandler();
