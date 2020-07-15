@@ -1,8 +1,9 @@
-import { Logger } from './services';
-import { UserRepo } from './services/database/repos';
-import { VoteData } from './models/database/vote-data-models';
 import bodyParser from 'body-parser';
 import express from 'express';
+
+import { VoteData } from './models/database/vote-data-models';
+import { Logger } from './services';
+import { UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -13,10 +14,10 @@ export class Api {
     constructor(private userRepo: UserRepo) {}
 
     public async start(): Promise<void> {
-        // Tell express to use body-parser's JSON parsing
+        // Tell express to use body-parsers JSON parsing
         app.use(bodyParser.json());
 
-        // Get the votes
+        // Capture a vote
         app.post('/votes', async (req, res) => {
             if (req.headers?.authorization !== Config.apiAuthentication) {
                 res.sendStatus(401);
@@ -25,13 +26,14 @@ export class Api {
 
             try {
                 let voteData = new VoteData(req.body);
-
                 await this.userRepo.addUserVote('top.gg', voteData.UserDiscordId);
             } catch (error) {
                 Logger.error(
-                    Logs.error.registeringVote.replace('{USER_ID}', req.body.UserDiscordId)
+                    Logs.error.registeringVote.replace('{USER_ID}', req.body.UserDiscordId),
+                    error
                 );
             }
+
             res.sendStatus(201);
         });
 
