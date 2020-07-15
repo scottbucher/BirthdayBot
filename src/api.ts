@@ -18,6 +18,11 @@ export class Api {
 
         // Get the votes
         app.post('/votes', async (req, res) => {
+            if (req.headers?.authorization !== Config.apiAuthentication) {
+                res.sendStatus(401);
+                return;
+            }
+
             try {
                 let voteData = new VoteData(req.body);
 
@@ -27,6 +32,7 @@ export class Api {
                     Logs.error.registeringVote.replace('{USER_ID}', req.body.UserDiscordId)
                 );
             }
+            res.sendStatus(200);
         });
 
         // Voting Api Ready

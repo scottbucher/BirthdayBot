@@ -51,6 +51,7 @@
     "ownerIds": ["478288246858711040", "212772875793334272"],
     "updateInterval": 300,
     "apiPort": 8080,
+    "apiAuthentication": "<AUTHORIZATION_KEY>",
     "botSites": {
         "topGg": {
             "enabled": false,
