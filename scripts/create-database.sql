@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 14, 2020 at 08:24 PM
+-- Generation Time: Jul 15, 2020 at 03:44 AM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -400,6 +400,18 @@ END IF;
 
 END$$
 
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_AddVote` (IN `IN_BotSiteName` VARCHAR(50), IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
+    
+INSERT INTO `vote` (
+	BotSiteName,
+	UserDiscordId
+) VALUES (
+    IN_BotSiteName,
+	IN_UserDiscordId
+);
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `User_Get` (IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
 
 SELECT *
@@ -495,11 +507,13 @@ SELECT
 DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_UpdateLastVote` (IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetLastVote` (IN `IN_UserDiscordId` VARCHAR(20))  READS SQL DATA
+BEGIN
 
-Update `user`
-SET LastVote = CURRENT_TIMESTAMP
-WHERE UserDiscordId = IN_UserDiscordId;
+SELECT *
+FROM `vote`
+WHERE UserDiscordId = IN_UserDiscordId
+ORDER BY VoteId DESC LIMIT 1;
 
 END$$
 
@@ -551,6 +565,19 @@ CREATE TABLE `user` (
   `LastVote` timestamp NOT NULL DEFAULT cast(current_timestamp() - interval 1 day as date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vote`
+--
+
+CREATE TABLE `vote` (
+  `VoteId` int(11) NOT NULL,
+  `BotSiteName` varchar(50) NOT NULL,
+  `UserDiscordId` varchar(20) NOT NULL,
+  `VoteTime` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -577,6 +604,13 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `UserDiscordId` (`UserDiscordId`);
 
 --
+-- Indexes for table `vote`
+--
+ALTER TABLE `vote`
+  ADD PRIMARY KEY (`VoteId`),
+  ADD UNIQUE KEY `UQ_BotSiteName_UserDiscordId_VoteTime` (`BotSiteName`,`UserDiscordId`,`VoteTime`) USING BTREE;
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -597,6 +631,12 @@ ALTER TABLE `messages`
 --
 ALTER TABLE `user`
   MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vote`
+--
+ALTER TABLE `vote`
+  MODIFY `VoteId` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
