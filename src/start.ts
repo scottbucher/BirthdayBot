@@ -60,9 +60,6 @@ async function start(): Promise<void> {
     let userRepo = new UserRepo(dataAccess);
     let customMessageRepo = new CustomMessageRepo(dataAccess);
 
-    // Voting Api
-    let api = new Api(userRepo);
-
     // Services
     let birthdayService = new BirthdayService(customMessageRepo);
 
@@ -155,7 +152,6 @@ async function start(): Promise<void> {
     );
 
     await bot.start();
-    await api.start();
 }
 
 process.on('unhandledRejection', (reason, promise) => {

@@ -1,14 +1,17 @@
-import { ShardingManager } from 'discord.js';
-
-import { Manager } from './manager';
-import { HttpService, Logger } from './services';
 import {
     BotsOnDiscordXyzSite,
     DiscordBotListComSite,
     DiscordBotsGgSite,
     TopGgSite,
 } from './services/sites';
+import { HttpService, Logger } from './services';
+
+import { Api } from './api';
+import { DataAccess } from './services/database/data-access';
+import { Manager } from './manager';
 import { ShardUtils } from './utils';
+import { ShardingManager } from 'discord.js';
+import { UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -64,11 +67,21 @@ async function start(): Promise<void> {
         shardList: myShardIds,
     });
 
+    // Data Access for repos
+    let dataAccess = new DataAccess(Config.mysql);
+
+    // Repos
+    let userRepo = new UserRepo(dataAccess);
+
+    // Voting Api
+    let api = new Api(userRepo);
+
     let manager = new Manager(
         shardManager,
         [topGgSite, botsOnDiscordXyzSite, discordBotsGgSite, discordBotListComSite].filter(
             botSite => botSite.enabled
-        )
+        ),
+        api
     );
 
     // Start
