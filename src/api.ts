@@ -1,6 +1,6 @@
 import { Logger } from './services';
 import { UserRepo } from './services/database/repos';
-import { VoteData } from './models/database/vote-models';
+import { VoteData } from './models/database/vote-data-models';
 import express from 'express';
 
 const app = express();
@@ -26,8 +26,6 @@ export class Api {
         // Get the votes
         app.post('/votes', async (req, res) => {
             let voteData = new VoteData(req.body);
-
-            Logger.info(`Vote data: ${voteData}`);
 
             await this.userRepo.addUserVote('top.gg', voteData.UserDiscordId);
         });
