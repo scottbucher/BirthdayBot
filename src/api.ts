@@ -32,7 +32,7 @@ export class Api {
                     Logs.error.registeringVote.replace('{USER_ID}', req.body.UserDiscordId)
                 );
             }
-            res.sendStatus(200);
+            res.sendStatus(201);
         });
 
         // Voting Api Ready
