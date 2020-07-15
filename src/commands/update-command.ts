@@ -13,6 +13,7 @@ export class UpdateCommand implements Command {
     public guildOnly = true;
     public adminOnly = true;
     public ownerOnly = false;
+    public voteOnly = false;
 
     constructor(private guildRepo: GuildRepo) {}
 

@@ -1,13 +1,15 @@
 import { Shard, ShardingManager } from 'discord.js';
 
-import { Logger } from './services';
+import { Api } from './api';
 import { BotSite } from './services/sites';
+import { Logger } from './services';
+import { UserRepo } from './services/database/repos';
 
 let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');
 
 export class Manager {
-    constructor(private shardManager: ShardingManager, private botSites: BotSite[]) {}
+    constructor(private shardManager: ShardingManager, private botSites: BotSite[], private api: Api) {}
 
     public async start(): Promise<void> {
         this.registerListeners();
@@ -20,6 +22,12 @@ export class Manager {
         } catch (error) {
             Logger.error(Logs.error.spawnShard, error);
             return;
+        }
+
+        try {
+            this.api.start();
+        } catch (error) {
+            Logger.error(Logs.error.votingApiStart, error)
         }
 
         try {

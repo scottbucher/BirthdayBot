@@ -1,9 +1,9 @@
 import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
-import moment from 'moment';
 
-import { UserRepo } from '../services/database/repos';
-import { GuildUtils } from '../utils';
 import { Command } from './command';
+import { GuildUtils } from '../utils';
+import { UserRepo } from '../services/database/repos';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -14,6 +14,7 @@ export class ViewCommand implements Command {
     public guildOnly = false;
     public adminOnly = false;
     public ownerOnly = false;
+    public voteOnly = false;
 
     constructor(private userRepo: UserRepo) {}
 

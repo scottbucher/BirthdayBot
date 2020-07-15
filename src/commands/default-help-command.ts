@@ -12,6 +12,7 @@ export class DefaultHelpCommand implements Command {
     public guildOnly = false;
     public adminOnly = false;
     public ownerOnly = false;
+    public voteOnly = false;
 
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let prefix = Config.prefix;

@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb4
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jul 07, 2020 at 08:43 PM
--- Server version: 10.3.23-MariaDB-1:10.3.23+maria~stretch
--- PHP Version: 7.0.33-0+deb9u6
+-- Host: localhost
+-- Generation Time: Jul 15, 2020 at 03:44 AM
+-- Server version: 10.3.22-MariaDB-0+deb10u1
+-- PHP Version: 7.3.14-1~deb10u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -17,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `birthdaybot`
+-- Database: `birthdaybotdev`
 --
 
 DELIMITER $$
@@ -398,6 +400,18 @@ END IF;
 
 END$$
 
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_AddVote` (IN `IN_BotSiteName` VARCHAR(50), IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
+    
+INSERT INTO `vote` (
+	BotSiteName,
+	UserDiscordId
+) VALUES (
+    IN_BotSiteName,
+	IN_UserDiscordId
+);
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `User_Get` (IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
 
 SELECT *
@@ -493,6 +507,16 @@ SELECT
 DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetLastVote` (IN `IN_UserDiscordId` VARCHAR(20))  READS SQL DATA
+BEGIN
+
+SELECT *
+FROM `vote`
+WHERE UserDiscordId = IN_UserDiscordId
+ORDER BY VoteId DESC LIMIT 1;
+
+END$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -537,8 +561,22 @@ CREATE TABLE `user` (
   `UserDiscordId` varchar(20) NOT NULL,
   `Birthday` date DEFAULT NULL,
   `TimeZone` varchar(100) CHARACTER SET utf32 DEFAULT NULL,
-  `ChangesLeft` tinyint(4) DEFAULT 5
+  `ChangesLeft` tinyint(4) DEFAULT 5,
+  `LastVote` timestamp NOT NULL DEFAULT cast(current_timestamp() - interval 1 day as date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vote`
+--
+
+CREATE TABLE `vote` (
+  `VoteId` int(11) NOT NULL,
+  `BotSiteName` varchar(50) NOT NULL,
+  `UserDiscordId` varchar(20) NOT NULL,
+  `VoteTime` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
@@ -566,6 +604,13 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `UserDiscordId` (`UserDiscordId`);
 
 --
+-- Indexes for table `vote`
+--
+ALTER TABLE `vote`
+  ADD PRIMARY KEY (`VoteId`),
+  ADD UNIQUE KEY `UQ_BotSiteName_UserDiscordId_VoteTime` (`BotSiteName`,`UserDiscordId`,`VoteTime`) USING BTREE;
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -574,16 +619,26 @@ ALTER TABLE `user`
 --
 ALTER TABLE `guild`
   MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
   MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vote`
+--
+ALTER TABLE `vote`
+  MODIFY `VoteId` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

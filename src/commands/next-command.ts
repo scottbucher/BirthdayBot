@@ -1,9 +1,9 @@
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
-import moment from 'moment';
-
-import { UserRepo } from '../services/database/repos';
 import { BdayUtils, FormatUtils } from '../utils';
+import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+
 import { Command } from './command';
+import { UserRepo } from '../services/database/repos';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -14,6 +14,7 @@ export class NextCommand implements Command {
     public guildOnly = true;
     public adminOnly = false;
     public ownerOnly = false;
+    public voteOnly = true;
 
     constructor(private userRepo: UserRepo) {}
 

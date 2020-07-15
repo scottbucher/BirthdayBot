@@ -1,8 +1,8 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { GuildRepo } from '../services/database/repos';
-import { FormatUtils } from '../utils';
 import { Command } from './command';
+import { FormatUtils } from '../utils';
+import { GuildRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -13,6 +13,7 @@ export class TrustedCommand implements Command {
     public guildOnly = true;
     public adminOnly = true;
     public ownerOnly = false;
+    public voteOnly = false;
 
     constructor(private guildRepo: GuildRepo) {}
 

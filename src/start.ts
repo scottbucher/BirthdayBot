@@ -33,6 +33,7 @@ import {
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
 
+import { Api } from './api';
 import { BirthdayJob } from './jobs';
 import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
@@ -131,7 +132,8 @@ async function start(): Promise<void> {
             setAttemptsCommand,
             settingsCommand,
         ],
-        guildRepo
+        guildRepo,
+        userRepo
     );
     let reactionAddHandler = new ReactionAddHandler(userRepo, customMessageRepo);
     let guildJoinHandler = new GuildJoinHandler();

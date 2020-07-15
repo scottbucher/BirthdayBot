@@ -12,6 +12,7 @@ export class SettingsCommand implements Command {
     public guildOnly = true;
     public adminOnly = false;
     public ownerOnly = false;
+    public voteOnly = false;
 
     constructor(private guildRepo: GuildRepo) {}
 

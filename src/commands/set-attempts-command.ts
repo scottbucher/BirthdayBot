@@ -1,8 +1,8 @@
+import { GuildUtils, ParseUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 
-import { UserRepo } from '../services/database/repos';
-import { GuildUtils, ParseUtils } from '../utils';
 import { Command } from './command';
+import { UserRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -13,6 +13,7 @@ export class SetAttemptsCommand implements Command {
     public guildOnly = true;
     public adminOnly = false;
     public ownerOnly = true;
+    public voteOnly = false;
 
     constructor(private userRepo: UserRepo) {}
 
