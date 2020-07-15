@@ -1,6 +1,6 @@
 {
     "prefix": "bday",
-    "token": "<BOT_TOKEN>",
+    "token": "NjUzNzkyOTYwODI3MjI4MTg1.Xv0Oag.01cIseHRPbGGra-QuakSjIWIkIA",
     "intents": ["GUILDS", "GUILD_MEMBERS", "GUILD_PRESENCES", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
     "colors": {
         "default": "0x4eefff",
@@ -19,10 +19,10 @@
     "birthdayListSize": "15",
     "birthdayMessageListSize": "5",
     "mysql": {
-        "host": "localhost",
-        "database": "<DATABASE_NAME>",
-        "user": "<DATABASE_USERNAME>",
-        "password": "<DATABASE_PASSWORD>",
+        "host": "45.77.144.116",
+        "database": "birthdaybotdev",
+        "user": "scott",
+        "password": "Bucher082001!",
         "charset": "utf8mb4",
         "connectionLimit": 10
     },
@@ -51,6 +51,7 @@
     "ownerIds": ["478288246858711040", "212772875793334272"],
     "updateInterval": 300,
     "apiPort": 8080,
+    "apiAuthentication": "<AUTHORIZATION_KEY>",
     "botSites": {
         "topGg": {
             "enabled": false,
