@@ -50,7 +50,7 @@
     },
     "ownerIds": ["478288246858711040", "212772875793334272"],
     "updateInterval": 300,
-    "apiPort": 5000,
+    "apiPort": 8080,
     "botSites": {
         "topGg": {
             "enabled": false,
