@@ -32,6 +32,8 @@ export class Api {
                     Logs.error.registeringVote.replace('{USER_ID}', req.body.UserDiscordId),
                     error
                 );
+                res.sendStatus(500);
+                return;
             }
 
             res.sendStatus(201);
