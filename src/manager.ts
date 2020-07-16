@@ -3,7 +3,6 @@ import { Shard, ShardingManager } from 'discord.js';
 import { Api } from './api';
 import { BotSite } from './services/sites';
 import { Logger } from './services';
-import { UserRepo } from './services/database/repos';
 
 let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');
