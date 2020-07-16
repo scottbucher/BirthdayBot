@@ -25,15 +25,15 @@ export class Manager {
         }
 
         try {
-            this.api.start();
-        } catch (error) {
-            Logger.error(Logs.error.votingApiStart, error)
-        }
-
-        try {
             await this.updateServerCount();
         } catch (error) {
             Logger.error(Logs.error.updateServerCount, error);
+        }
+
+        try {
+            await this.api.start();
+        } catch (error) {
+            Logger.error(Logs.error.votingApiStart, error)
         }
     }
 
