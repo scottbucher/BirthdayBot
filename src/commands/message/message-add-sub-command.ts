@@ -30,6 +30,16 @@ export class MessageAddSubCommand {
             return;
         }
 
+        if (!birthdayMessage.includes('<Users>')) {
+            let embed = new MessageEmbed()
+                .setDescription(
+                    'Please include a `<Users>` placeholder somewhere in the message! This is where birthday names will appear!'
+                )
+                .setColor(Config.colors.error);
+            await channel.send(embed);
+            return;
+        }
+
         let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
 
         if (customMessages && customMessages.customMessages.length > 100) {
