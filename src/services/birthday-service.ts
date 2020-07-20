@@ -1,7 +1,7 @@
-import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
-
-import { GuildData, UserData } from '../models/database';
 import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
+import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { GuildData, UserData } from '../models/database';
+
 import { CustomMessageRepo } from './database/repos';
 
 let Config = require('../../config/config.json');
@@ -104,7 +104,8 @@ export class BirthdayService {
             let userList = FormatUtils.joinWithAnd(birthdayUsers.map(user => user.toString()));
             let message = BdayUtils.randomMessage(
                 await this.customMessageRepo.getCustomMessages(guild.id)
-            ).replace('@Users', userList);
+            ).replace('@Users', userList)
+            .replace('<Users>', userList);
 
             // Find mentioned role
             let mentionSetting: string;

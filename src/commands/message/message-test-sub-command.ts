@@ -1,6 +1,6 @@
+import { CustomMessageRepo, GuildRepo } from '../../services/database/repos';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { CustomMessageRepo, GuildRepo } from '../../services/database/repos';
 import { FormatUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
@@ -68,7 +68,7 @@ export class MessageTestSubCommand {
         let messages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
 
         if (!messages) {
-            let defaultMessage = 'Happy Birthday @Users!'.replace('@Users', userList);
+            let defaultMessage = 'Happy Birthday <Users>!'.replace('<Users>', userList);
             if (guildData.UseEmbed) {
                 let embed = new MessageEmbed()
                     .setDescription(defaultMessage)
@@ -83,7 +83,8 @@ export class MessageTestSubCommand {
 
         let customMessage = messages.customMessages
             .find(question => question.Position === position)
-            ?.Message.replace('@Users', userList);
+            ?.Message.replace('@Users', userList)
+            .replace('<Users>', userList);
 
         if (!customMessage) {
             let embed = new MessageEmbed()
