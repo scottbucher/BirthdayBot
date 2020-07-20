@@ -54,8 +54,13 @@ export class MessageAddSubCommand {
 
         let embed = new MessageEmbed()
             .setDescription(
-                `Successfully added the birthday message \`${birthdayMessage}\`!` +
-                    '\n\nTest this with `bday message test`'
+                `Successfully added the birthday message:\n\n\`${birthdayMessage}\`\n\u200b`
+            )
+            .addField(
+                'Actions',
+                '' +
+                    '`bday message list [page]` - List all custom birthday messages.' +
+                    '\n`bday message test <position> [user count]` - Test a birthday message.'
             )
             .setColor(Config.colors.success);
         await channel.send(embed);
