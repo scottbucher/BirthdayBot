@@ -83,8 +83,8 @@ export class MessageTestSubCommand {
 
         let customMessage = messages.customMessages
             .find(question => question.Position === position)
-            ?.Message.replace('@Users', userList)
-            .replace('<Users>', userList);
+            ?.Message.split('@Users').join(userList)
+            .split('<Users>').join(userList);
 
         if (!customMessage) {
             let embed = new MessageEmbed()

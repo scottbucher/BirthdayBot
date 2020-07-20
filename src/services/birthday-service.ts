@@ -104,8 +104,8 @@ export class BirthdayService {
             let userList = FormatUtils.joinWithAnd(birthdayUsers.map(user => user.toString()));
             let message = BdayUtils.randomMessage(
                 await this.customMessageRepo.getCustomMessages(guild.id)
-            ).replace('@Users', userList)
-            .replace('<Users>', userList);
+            ).split('@Users').join(userList)
+            .split('<Users>').join(userList);;
 
             // Find mentioned role
             let mentionSetting: string;
