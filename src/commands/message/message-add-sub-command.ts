@@ -20,17 +20,21 @@ export class MessageAddSubCommand {
         let birthdayMessage = args
             .slice(3)
             .join(' ')
-            .replace('<users>', '<Users>')
-            .replace('<User>', '<Users>')
-            .replace('<user>', '<Users>')
-            .replace('@User ', '<Users> ')
-            .replace('@user ', '<Users> ')
-            .replace('@user', '<Users>')
-            .replace('@Users', '<Users>');
+            .replace(/@users?|<users?>|{users?}/gi, '<Users>');
 
         if (birthdayMessage.length > 300) {
             let embed = new MessageEmbed()
                 .setDescription('Custom Messages are maxed at 300 characters!')
+                .setColor(Config.colors.error);
+            await channel.send(embed);
+            return;
+        }
+
+        if (!birthdayMessage.includes('<Users>')) {
+            let embed = new MessageEmbed()
+                .setDescription(
+                    'Please include a `<Users>` placeholder somewhere in the message. This indicates where birthday usernames will appear.'
+                )
                 .setColor(Config.colors.error);
             await channel.send(embed);
             return;
@@ -50,8 +54,13 @@ export class MessageAddSubCommand {
 
         let embed = new MessageEmbed()
             .setDescription(
-                `Successfully added the birthday message \`${birthdayMessage}\`!` +
-                    '\n\nTest this with `bday message test`'
+                `Successfully added the birthday message:\n\n\`${birthdayMessage}\`\n\u200b`
+            )
+            .addField(
+                'Actions',
+                '' +
+                    '`bday message list [page]` - List all custom birthday messages.' +
+                    '\n`bday message test <position> [user count]` - Test a birthday message.'
             )
             .setColor(Config.colors.success);
         await channel.send(embed);
