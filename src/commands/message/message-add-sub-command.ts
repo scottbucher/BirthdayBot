@@ -20,13 +20,7 @@ export class MessageAddSubCommand {
         let birthdayMessage = args
             .slice(3)
             .join(' ')
-            .replace('<users>', '<Users>')
-            .replace('<User>', '<Users>')
-            .replace('<user>', '<Users>')
-            .replace('@User ', '<Users> ')
-            .replace('@user ', '<Users> ')
-            .replace('@user', '<Users>')
-            .replace('@Users', '<Users>');
+            .replace(/@users?|<users?>/gi, '<Users>');
 
         if (birthdayMessage.length > 300) {
             let embed = new MessageEmbed()
