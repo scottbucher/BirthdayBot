@@ -33,7 +33,7 @@ export class MessageAddSubCommand {
         if (!birthdayMessage.includes('<Users>')) {
             let embed = new MessageEmbed()
                 .setDescription(
-                    'Please include a `<Users>` placeholder somewhere in the message! This is where birthday names will appear!'
+                    'Please include a `<Users>` placeholder somewhere in the message. This indicates where birthday usernames will appear.'
                 )
                 .setColor(Config.colors.error);
             await channel.send(embed);
