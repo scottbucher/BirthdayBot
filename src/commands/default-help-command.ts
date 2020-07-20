@@ -63,7 +63,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} setup message** - Interactive guide for message settings setup.` +
                         '\n' +
                         `\n**${prefix} message list [page]** - List all custom birthday messages.` +
-                        `\n**${prefix} message add <message>** - Add a custom birthday message.` +
+                        `\n**${prefix} message add <message>** - Add a custom birthday message.\n - Placeholder for users: \`<Users>\`` +
                         `\n**${prefix} message remove <position>** - Remove a certain birthday message.` +
                         `\n**${prefix} message clear** - Clear all custom birthday messages.` +
                         `\n**${prefix} message time <0-23>** - Set the birthday message time.` +
