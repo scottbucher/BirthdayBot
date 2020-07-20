@@ -19,6 +19,7 @@ import {
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
+import { eventNames } from 'process';
 
 let Config = require('../../config/config.json');
 
@@ -71,6 +72,7 @@ export class SetCommand implements Command {
                 return;
             }
             // Get who they are mentioning
+            let member = msg.mentions.members.first() || GuildUtils.findMember(msg.guild, args[2]);
             target =
                 msg.mentions.members.first()?.user ||
                 GuildUtils.findMember(msg.guild, args[2])?.user;
@@ -83,6 +85,17 @@ export class SetCommand implements Command {
                 await channel.send(embed);
                 return;
             }
+
+            if (
+                member &&
+                !channel.permissionsFor(member).has([Permissions.FLAGS.READ_MESSAGE_HISTORY])
+            ) {
+                let embed = new MessageEmbed()
+                    .setDescription('That user needs the `READ_MESSAGE_HISTORY` permission in this channel!')
+                    .setColor(Config.colors.error);
+                await channel.send(embed);
+                return;
+            }
         } else {
             // They didn't mention anyone
             target = msg.author;
@@ -90,7 +103,7 @@ export class SetCommand implements Command {
 
         if (target.bot) {
             let embed = new MessageEmbed()
-                .setDescription('You can\'t set a birthday for a bot!')
+                .setDescription("You can't set a birthday for a bot!")
                 .setColor(Config.colors.error);
             await channel.send(embed);
             return;
