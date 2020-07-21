@@ -16,3 +16,4 @@ export { SetAttemptsCommand } from './set-attempts-command';
 export { SettingsCommand } from './settings-command';
 export { NextCommand } from './next-command';
 export { MapCommand } from './map-command';
+export { TestCommand } from './test-command';
