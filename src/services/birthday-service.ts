@@ -13,11 +13,26 @@ export class BirthdayService {
         guild: Guild,
         guildData: GuildData,
         userDatas: UserData[],
-        members: Collection<string, GuildMember>
+        members: Collection<string, GuildMember>,
+        isTest: boolean = false,
+        testChannel: TextChannel = null
     ): Promise<void> {
         let birthdayChannel: TextChannel;
         let birthdayRole: Role;
         let trustedRole: Role;
+
+        let trustedCheckRole = false;
+        let trustedCheckMessage = false;
+
+        let testingEmbed = new MessageEmbed()
+            .setThumbnail(guild.iconURL())
+            .setTitle('Birthday Event Test - [BETA]')
+            .setFooter(
+                'This is the info from your latest birthday event test.',
+                guild.client.user.avatarURL()
+            )
+            .setTimestamp()
+            .setColor(Config.colors.default);
 
         try {
             birthdayChannel = guild.channels.resolve(
@@ -42,7 +57,7 @@ export class BirthdayService {
 
         if (!birthdayRole && !birthdayChannel) {
             // Skip guild
-            return;
+            if (!isTest) return;
         }
 
         let birthdayUsers: GuildMember[] = [];
@@ -67,22 +82,28 @@ export class BirthdayService {
                 preventRole &&
                 !member.roles.cache.has(trustedRole.id)
             ) {
+                trustedCheckMessage = true;
+                trustedCheckRole = true;
                 continue;
             }
 
-            if (
-                birthdayRole &&
-                !(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))
-            ) {
-                ActionUtils.giveRole(member, birthdayRole);
+            if (birthdayRole) {
+                if (!(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))) {
+                    ActionUtils.giveRole(member, birthdayRole);
+                } else {
+                    trustedCheckRole = true;
+                }
             }
 
             if (
-                BdayUtils.isTimeForBirthdayMessage(guildData.MessageTime, user) &&
-                birthdayChannel &&
-                !(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))
+                (isTest || BdayUtils.isTimeForBirthdayMessage(guildData.MessageTime, user)) &&
+                birthdayChannel
             ) {
-                birthdayUsers.push(member);
+                if (!(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))) {
+                    birthdayUsers.push(member);
+                } else {
+                    trustedCheckMessage = true;
+                }
             }
         }
 
@@ -104,8 +125,11 @@ export class BirthdayService {
             let userList = FormatUtils.joinWithAnd(birthdayUsers.map(user => user.toString()));
             let message = BdayUtils.randomMessage(
                 await this.customMessageRepo.getCustomMessages(guild.id)
-            ).split('@Users').join(userList)
-            .split('<Users>').join(userList);;
+            )
+                .split('@Users')
+                .join(userList)
+                .split('<Users>')
+                .join(userList);
 
             // Find mentioned role
             let mentionSetting: string;
@@ -125,6 +149,67 @@ export class BirthdayService {
             if (mentionSetting) birthdayChannel.send(mentionSetting);
             let embed = new MessageEmbed().setDescription(message).setColor(Config.colors.default);
             await birthdayChannel.send(guildData.UseEmbed ? embed : message);
+        }
+
+        if (isTest) {
+            let member = guild.members.resolve(userDatas[0].UserDiscordId);
+            if (trustedRole) {
+                testingEmbed.addField(
+                    'User Has Trusted Role',
+                    `${
+                        member.roles.cache.has(trustedRole.id)
+                            ? `${Config.emotes.confirm} Yes`
+                            : `${Config.emotes.deny} No`
+                    }`, true
+                );
+            }
+            testingEmbed.addField(
+                'Birthday Role',
+                `${
+                    birthdayRole
+                        ? `${Config.emotes.confirm} Correctly set`
+                        : `${Config.emotes.deny} Not set or is a deleted role`
+                }`, true
+            );
+            if (trustedRole) {
+                testingEmbed.addField(
+                    'Trusted Prevents Role',
+                    `${
+                        !trustedCheckRole
+                            ? `${Config.emotes.confirm} Passed`
+                            : `${Config.emotes.deny} Trusted role/settings prevented the birthday role.`
+                    }`, true
+                );
+            }
+            testingEmbed.addField(
+                'Birthday Channel',
+                `${
+                    birthdayChannel
+                        ? `${Config.emotes.confirm} Correctly set`
+                        : `${Config.emotes.deny} Not set or is a deleted channel`
+                }`,
+                true
+            );
+            if (trustedRole) {
+                testingEmbed.addField(
+                    'Trusted Prevents Message',
+                    `${
+                        !trustedCheckMessage
+                            ? `${Config.emotes.confirm} Passed`
+                            : `${Config.emotes.deny} Trusted role/settings prevented the birthday message.`
+                    }`,
+                    true
+                );
+            }
+
+            testingEmbed.setDescription(
+                'Bellow are the checks to ensure your settings are correct for the birthday event.\n\nIf the checks are passed and either the birthday message and/or birthday role were not given ' +
+                    `when they should have then ${guild.client.user.toString()} most likely did not have the correct permissions. [(?)](https://birthdaybot.scottbucher.dev/faq)\n\nFor more help: [Join Support Server](https://discord.gg/9gUQFtz)`
+            );
+
+            if (testChannel) {
+                await testChannel.send(testingEmbed);
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-import { BirthdayService, Logger } from './services';
+import { Client, ClientOptions, PartialTypes } from 'discord.js';
+
+import { Bot } from './bot';
 import {
     ClearCommand,
     CreateCommand,
@@ -14,13 +16,11 @@ import {
     SettingsCommand,
     SetupCommand,
     SupportCommand,
+    TestCommand,
     TrustedCommand,
     UpdateCommand,
     ViewCommand,
 } from './commands';
-import { Client, ClientOptions, PartialTypes } from 'discord.js';
-import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
-import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -32,11 +32,11 @@ import {
     MessageTimeSubCommand,
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
-
-import { Api } from './api';
+import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import { BirthdayJob } from './jobs';
-import { Bot } from './bot';
+import { BirthdayService, Logger } from './services';
 import { DataAccess } from './services/database/data-access';
+import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
 
@@ -80,6 +80,7 @@ async function start(): Promise<void> {
     let nextCommand = new NextCommand(userRepo);
     let trustedCommand = new TrustedCommand(guildRepo);
     let setAttemptsCommand = new SetAttemptsCommand(userRepo);
+    let testCommand = new TestCommand(birthdayService, guildRepo);
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
@@ -131,6 +132,7 @@ async function start(): Promise<void> {
             trustedCommand,
             setAttemptsCommand,
             settingsCommand,
+            testCommand,
         ],
         guildRepo,
         userRepo
