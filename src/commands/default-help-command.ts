@@ -36,6 +36,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +
                         `\n**${prefix} settings**\*\* - View server's settings.` +
+                        `\n**${prefix} test [User]**\*\* - Test the birthday event.` +
                         `\n` +
                         '\nIf you have any question/problems please join our support server [here](https://discord.gg/9gUQFtz).'
                 )
@@ -105,6 +106,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +
                         `\n**${prefix} settings**\*\* - View server's settings.` +
+                        `\n**${prefix} test [User]**\*\* - Test the birthday event.` +
                         `\n` +
                         '\nIf you have any question/problems please join our support server [here](https://discord.gg/9gUQFtz).'
                 )
