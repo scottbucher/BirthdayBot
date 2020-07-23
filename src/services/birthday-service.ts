@@ -203,7 +203,7 @@ export class BirthdayService {
             }
 
             testingEmbed.setDescription(
-                'Bellow are the checks to ensure your settings are correct for the birthday event.\n\nIf the checks are passed and either the birthday message and/or birthday role were not given ' +
+                'Below are the checks to ensure your settings are correct for the birthday event.\n\nIf the checks are passed and either the birthday message and/or birthday role were not given ' +
                     `when they should have then ${guild.client.user.toString()} most likely did not have the correct permissions. [(?)](https://birthdaybot.scottbucher.dev/faq)\n\nFor more help: [Join Support Server](https://discord.gg/9gUQFtz)`
             );
 
