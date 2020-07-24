@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 15, 2020 at 05:35 AM
+-- Generation Time: Jul 24, 2020 at 06:24 PM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `birthdaybotdev`
+-- Database: `***REMOVED***`
 --
 
 DELIMITER $$
@@ -367,6 +367,50 @@ WHERE GuildId = @GuildId;
 
 END$$
 
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `temp` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
+DROP TEMPORARY TABLE IF EXISTS temp;
+
+SET @TotalPages = NULL;
+SET @TotalItems = NULL;
+SET @StartRow = NULL;
+SET @EndRow = NULL;
+
+CREATE TEMPORARY TABLE temp( val VARCHAR(20) );
+SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
+PREPARE stmt1 FROM @sql;
+EXECUTE stmt1;
+
+SELECT COUNT(*) INTO @TotalItems
+FROM temp AS T
+JOIN `user`AS U
+    ON U.UserDiscordId = T.val
+WHERE
+    U.Birthday IS NOT NULL AND
+    U.Timezone IS NOT NULL;SELECT CEILING(@TotalItems / IN_PageSize) INTO @TotalPages;
+
+IF (IN_Page < 0) THEN 
+    SET IN_Page = 1;
+ELSEIF (IN_Page > @TotalPages) THEN 
+    SET IN_Page = @TotalPages;
+END IF;
+
+SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
+SET @EndRow = IN_Page * IN_PageSize;
+    SELECT
+        *,
+        ROW_NUMBER() OVER (
+            ORDER BY U.Birthday
+        ) AS 'Position'
+    FROM temp AS T
+    JOIN user AS U
+        ON U.UserDiscordId = T.val
+    WHERE
+        U.Birthday IS NOT NULL AND
+        U.Timezone IS NOT NULL;
+
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `User_AddOrUpdate` (IN `IN_UserDiscordId` VARCHAR(20), IN `IN_Birthday` DATE, IN `IN_Timezone` VARCHAR(100), IN `IN_ChangesLeft` TINYINT)  BEGIN
 
 SET @UserId = NULL;
@@ -400,7 +444,8 @@ END IF;
 
 END$$
 
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_AddVote` (IN `IN_BotSiteName` VARCHAR(50), IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
+CREATE DEFINER=`admin`@`%` PROCEDURE `User_AddVote` (IN `IN_BotSiteName` VARCHAR(50), IN `IN_UserDiscordId` VARCHAR(20))  MODIFIES SQL DATA
+BEGIN
     
 INSERT INTO `vote` (
 	BotSiteName,
@@ -422,24 +467,21 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetAll` (IN `IN_UserDiscordIds` MEDIUMTEXT)  BEGIN
 
-DROP TEMPORARY TABLE IF EXISTS temp;
-CREATE TEMPORARY TABLE temp( val VARCHAR(20) );
-SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
-
-PREPARE stmt1 FROM @sql;
-EXECUTE stmt1;
-
-SELECT *
+SELECT
+    UserId,
+    UserDiscordId,
+    Birthday,
+    TimeZone,
+    ChangesLeft
 FROM (
-	SELECT *
-	FROM temp AS T
-	JOIN `user`AS U
-		ON U.UserDiscordId = T.val
-	WHERE U.Birthday IS NOT NULL AND U.Timezone IS NOT NULL
-       ORDER BY U.Birthday
+    SELECT *
+    FROM `user`
+    WHERE
+        FIND_IN_SET(UserDiscordId, IN_UserDiscordIds) > 0 AND
+        Birthday IS NOT NULL AND
+        Timezone IS NOT NULL
 ) AS UserData;
 
-DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
 CREATE DEFINER=`admin`@`%` PROCEDURE `User_GetBirthdays` (IN `IN_Birthday` VARCHAR(10))  BEGIN
@@ -450,7 +492,7 @@ WHERE DATE_FORMAT(`user`.Birthday, '%m-%d') = IN_Birthday;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
 DROP TEMPORARY TABLE IF EXISTS temp;
 
 SET @TotalPages = NULL;
@@ -458,18 +500,33 @@ SET @TotalItems = NULL;
 SET @StartRow = NULL;
 SET @EndRow = NULL;
 
-CREATE TEMPORARY TABLE temp( val VARCHAR(20) );
-SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
-PREPARE stmt1 FROM @sql;
-EXECUTE stmt1;
+SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
+SET @EndRow = IN_Page * IN_PageSize;
+
+CREATE TEMPORARY TABLE temp( UserId INT(11), UserDiscordId VARCHAR(20), Birthday DATE, TimeZone VARCHAR(100), ChangesLeft TINYINT(4), Position INT(11) );
+INSERT INTO temp
+    SELECT UserId, UserDiscordId, Birthday, TimeZone, ChangesLeft,
+    ROW_NUMBER() OVER (
+            ORDER BY Birthday
+    ) AS 'Position'
+    FROM (
+        SELECT *
+        FROM `user`
+        WHERE
+            FIND_IN_SET(UserDiscordId, IN_UserDiscordIds) > 0 AND
+               Birthday IS NOT NULL AND
+               Timezone IS NOT NULL
+    ) AS T;
 
 SELECT COUNT(*) INTO @TotalItems
-FROM temp AS T
-JOIN `user`AS U
-    ON U.UserDiscordId = T.val
+FROM temp;
+
+SELECT *
+FROM temp
+AS UserData
 WHERE
-    U.Birthday IS NOT NULL AND
-    U.Timezone IS NOT NULL;
+    Position >= @StartRow AND
+    Position <= @EndRow;
 
 SELECT CEILING(@TotalItems / IN_PageSize) INTO @TotalPages;
 
@@ -479,35 +536,14 @@ ELSEIF (IN_Page > @TotalPages) THEN
     SET IN_Page = @TotalPages;
 END IF;
 
-SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
-SET @EndRow = IN_Page * IN_PageSize;
-
-SELECT *
-FROM (
-    SELECT
-        *,
-        ROW_NUMBER() OVER (
-            ORDER BY U.Birthday
-        ) AS 'Position'
-    FROM temp AS T
-    JOIN `user`AS U
-        ON U.UserDiscordId = T.val
-    WHERE
-        U.Birthday IS NOT NULL AND
-        U.Timezone IS NOT NULL
-) AS UserData
-WHERE
-    UserData.Position >= @StartRow AND
-    UserData.Position <= @EndRow;
-
 SELECT
     @TotalItems AS 'TotalItems',
     @TotalPages as 'TotalPages';
-    
+
 DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetLastVote` (IN `IN_UserDiscordId` VARCHAR(20))  READS SQL DATA
+CREATE DEFINER=`admin`@`%` PROCEDURE `User_GetLastVote` (IN `IN_UserDiscordId` VARCHAR(20))  READS SQL DATA
 BEGIN
 
 SELECT *
