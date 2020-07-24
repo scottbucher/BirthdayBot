@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 24, 2020 at 06:24 PM
+-- Generation Time: Jul 24, 2020 at 06:28 PM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -364,50 +364,6 @@ WHERE GuildDiscordId = IN_GuildDiscordId;
 UPDATE `guild`
 SET UseEmbed = IN_Value
 WHERE GuildId = @GuildId;
-
-END$$
-
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `temp` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
-DROP TEMPORARY TABLE IF EXISTS temp;
-
-SET @TotalPages = NULL;
-SET @TotalItems = NULL;
-SET @StartRow = NULL;
-SET @EndRow = NULL;
-
-CREATE TEMPORARY TABLE temp( val VARCHAR(20) );
-SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
-PREPARE stmt1 FROM @sql;
-EXECUTE stmt1;
-
-SELECT COUNT(*) INTO @TotalItems
-FROM temp AS T
-JOIN `user`AS U
-    ON U.UserDiscordId = T.val
-WHERE
-    U.Birthday IS NOT NULL AND
-    U.Timezone IS NOT NULL;SELECT CEILING(@TotalItems / IN_PageSize) INTO @TotalPages;
-
-IF (IN_Page < 0) THEN 
-    SET IN_Page = 1;
-ELSEIF (IN_Page > @TotalPages) THEN 
-    SET IN_Page = @TotalPages;
-END IF;
-
-SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
-SET @EndRow = IN_Page * IN_PageSize;
-    SELECT
-        *,
-        ROW_NUMBER() OVER (
-            ORDER BY U.Birthday
-        ) AS 'Position'
-    FROM temp AS T
-    JOIN user AS U
-        ON U.UserDiscordId = T.val
-    WHERE
-        U.Birthday IS NOT NULL AND
-        U.Timezone IS NOT NULL;
-
 
 END$$
 
