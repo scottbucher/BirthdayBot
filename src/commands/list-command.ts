@@ -34,7 +34,6 @@ export class ListCommand implements Command {
         let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
 
         let userDataResults = await this.userRepo.getBirthdayListFull(
-            msg.guild.id,
             users,
             pageSize,
             page
