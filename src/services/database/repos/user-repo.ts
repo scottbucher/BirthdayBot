@@ -1,7 +1,8 @@
 import { UserData, UserDataResults, Vote } from '../../../models/database';
-import { SQLUtils } from '../../../utils';
+
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
+import { SQLUtils } from '../../../utils';
 
 export class UserRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -40,13 +41,11 @@ export class UserRepo {
     }
 
     public async getBirthdayListFull(
-        guildId: string,
         discordIds: string[],
         pageSize: number,
         page: number
     ): Promise<UserDataResults> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_GetFullList, [
-            guildId,
             discordIds.join(','),
             pageSize,
             page,
