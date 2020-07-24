@@ -1,5 +1,6 @@
 import mysql, { ConnectionConfig, Pool } from 'mysql';
 
+import { Logger } from '..';
 import { SQLUtils } from '../../utils';
 
 export class DataAccess {
@@ -12,9 +13,15 @@ export class DataAccess {
     public async executeProcedure(name: string, params: any[]): Promise<any> {
         let sql = SQLUtils.createProcedureSql(name, params);
         return new Promise((resolve, reject) => {
+            let startTime = Date.now();
             this.pool.query(sql, (error, results) => {
                 if (error) reject(error);
-                else resolve(results);
+                else {
+                    let endTime = Date.now();
+                    let executionSecs = +((endTime - startTime) / 1000).toFixed(3);
+                    // Logger.info(`'${name}' took ${executionSecs} seconds. Query: ${sql}`); // ToDo: Make this a debug log
+                    resolve(results);
+                }
             });
         });
     }
