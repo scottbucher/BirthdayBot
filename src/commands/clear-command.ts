@@ -21,7 +21,7 @@ export class ClearCommand implements Command {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription(
-                    'Please specify what to create!\nAccepted Values: `channel`, `role`, `trustedRole`'
+                    'Please specify what to clear!\nAccepted Values: `channel`, `role`, `trustedRole`'
                 )
                 .setColor(Config.colors.error);
             await channel.send(embed);
