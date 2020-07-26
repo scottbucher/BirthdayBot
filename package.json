@@ -2,7 +2,7 @@
     "name": "birthday-bot",
     "version": "1.0.0",
     "author": "Scott Bucher",
-    "description": "A 100% free & highly customizable birthday Discord Bot. Use bday help to start tracking birthdays!",
+    "description": "Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and 100% free!",
     "engines": {
         "node": ">=12.14.0"
     },
