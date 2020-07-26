@@ -32,11 +32,6 @@ export class ReactionAddHandler implements EventHandler {
             return;
         }
 
-        // Check if the reacted message was sent by the bot
-        if (msgReaction.message.author !== msgReaction.message.client.user) {
-            return;
-        }
-
         // Get the reacted message
         let msg: Message;
         if (msgReaction.message.partial) {
@@ -55,6 +50,11 @@ export class ReactionAddHandler implements EventHandler {
             users = await msgReaction.users.fetch();
         } catch (error) {
             Logger.error(Logs.error.userFetch, error);
+            return;
+        }
+
+        // Check if the reacted message was sent by the bot
+        if (msgReaction.message.author !== msgReaction.message.client.user) {
             return;
         }
 
