@@ -1,6 +1,6 @@
 # Birthday Bot
 
-**Discord Bot** - Track and celebrate birthdays in your discord server! Use `bday help` to get started!
+**Discord Bot** - Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and 100% free! Use `bday help` to get started!
 
 ## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot)
 
