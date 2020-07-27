@@ -3,6 +3,7 @@ import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
+import { isNumber } from 'util';
 
 let Config = require('../../config/config.json');
 
@@ -53,6 +54,14 @@ export class SetAttemptsCommand implements Command {
         try {
             amount = ParseUtils.parseInt(args[3]);
         } catch (error) {
+            let embed = new MessageEmbed()
+                .setDescription('Invalid Number!')
+                .setColor(Config.colors.error);
+            await channel.send(embed);
+            return;
+        }
+
+        if (!isNumber(amount)) {
             let embed = new MessageEmbed()
                 .setDescription('Invalid Number!')
                 .setColor(Config.colors.error);
