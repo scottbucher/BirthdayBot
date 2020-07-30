@@ -75,7 +75,7 @@ export class BirthdayJob implements Job {
                 let members: Collection<string, GuildMember>;
                 let beforeCacheSize = guild.members.cache.size;
 
-                if (!(guild.memberCount !== beforeCacheSize || guild.memberCount !== beforeCacheSize+1)) {
+                if (Math.abs(guild.memberCount - beforeCacheSize) > 1) {
                     try {
                         members = await guild.members.fetch();
                     } catch (error) {
