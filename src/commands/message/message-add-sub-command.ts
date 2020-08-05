@@ -17,11 +17,7 @@ export class MessageAddSubCommand {
         }
 
         // Get Message
-        let birthdayMessage = args
-            .slice(3)
-            .join(' ')
-            .replace(/@users?|<users?>|{users?}/gi, '<Users>');
-
+        let birthdayMessage = msg.content.substring(msg.content.indexOf('add')+3).replace(/@users?|<users?>|{users?}/gi, '<Users>');
         if (birthdayMessage.length > 300) {
             let embed = new MessageEmbed()
                 .setDescription('Custom Messages are maxed at 300 characters!')
