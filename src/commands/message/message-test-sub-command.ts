@@ -68,7 +68,7 @@ export class MessageTestSubCommand {
         let messages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
 
         if (!messages) {
-            let defaultMessage = 'Happy Birthday <Users>!'.replace('<Users>', userList);
+            let defaultMessage = `Happy Birthday ${userList}!`;
             if (guildData.UseEmbed) {
                 let embed = new MessageEmbed()
                     .setDescription(defaultMessage)
@@ -81,10 +81,10 @@ export class MessageTestSubCommand {
             }
         }
 
-        let customMessage = messages.customMessages
+        let customMessage: string = messages.customMessages
             .find(question => question.Position === position)
-            ?.Message.split('@Users').join(userList)
-            .split('<Users>').join(userList);
+            ?.Message.replace(/@Users/g, userList)
+            .replace(/<Users>/g, userList);
 
         if (!customMessage) {
             let embed = new MessageEmbed()
@@ -103,7 +103,6 @@ export class MessageTestSubCommand {
                 .setDescription(customMessage)
                 .setColor(Config.colors.default);
             await channel.send(embed);
-            return;
         } else {
             await channel.send(customMessage);
         }
