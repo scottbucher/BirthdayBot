@@ -163,7 +163,7 @@ export abstract class FormatUtils {
 
         for (let userData of userDataResults.userData) {
             description += `${
-                guild.members.resolve(userData.UserDiscordId)?.displayName || 'Unknown'
+                `**${guild.members.resolve(userData.UserDiscordId)?.displayName}**` || '**Unknown**'
             }: ${moment(userData.Birthday).format('MMMM Do')}\n\n`;
             i++;
         }
