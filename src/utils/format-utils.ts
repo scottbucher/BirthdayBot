@@ -1,7 +1,7 @@
-import { Guild, MessageEmbed, Util } from 'discord.js';
-import moment from 'moment-timezone';
-
 import { CustomMessages, UserDataResults } from '../models/database';
+import { Guild, MessageEmbed, Util } from 'discord.js';
+
+import moment from 'moment-timezone';
 
 let Config = require('../../config/config.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;
@@ -163,7 +163,7 @@ export abstract class FormatUtils {
 
         for (let userData of userDataResults.userData) {
             description += `${
-                guild.members.resolve(userData.UserDiscordId)?.toString() || 'Unknown'
+                guild.members.resolve(userData.UserDiscordId)?.displayName || 'Unknown'
             }: ${moment(userData.Birthday).format('MMMM Do')}\n\n`;
             i++;
         }
