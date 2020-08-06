@@ -1,6 +1,4 @@
-import { Client, ClientOptions, PartialTypes } from 'discord.js';
-
-import { Bot } from './bot';
+import { BirthdayService, Logger } from './services';
 import {
     ClearCommand,
     CreateCommand,
@@ -21,6 +19,9 @@ import {
     UpdateCommand,
     ViewCommand,
 } from './commands';
+import { Client, ClientOptions, DiscordAPIError, PartialTypes } from 'discord.js';
+import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
+import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -32,11 +33,10 @@ import {
     MessageTimeSubCommand,
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
-import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+
 import { BirthdayJob } from './jobs';
-import { BirthdayService, Logger } from './services';
+import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
-import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
 
@@ -157,6 +157,9 @@ async function start(): Promise<void> {
 }
 
 process.on('unhandledRejection', (reason, promise) => {
+    if (reason instanceof DiscordAPIError) {
+        if (reason.code === 10003) return;
+    }
     Logger.error('Unhandled promise rejection.', reason);
 });
 
