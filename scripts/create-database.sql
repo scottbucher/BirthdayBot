@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 24, 2020 at 06:28 PM
+-- Generation Time: Aug 06, 2020 at 05:41 AM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -423,21 +423,24 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetAll` (IN `IN_UserDiscordIds` MEDIUMTEXT)  BEGIN
 
-SELECT
-    UserId,
-    UserDiscordId,
-    Birthday,
-    TimeZone,
-    ChangesLeft
+DROP TEMPORARY TABLE IF EXISTS temp;
+CREATE TEMPORARY TABLE temp( val VARCHAR(20), INDEX(val)  );
+SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
+
+PREPARE stmt1 FROM @sql;
+EXECUTE stmt1;
+
+SELECT *
 FROM (
     SELECT *
-    FROM `user`
-    WHERE
-        FIND_IN_SET(UserDiscordId, IN_UserDiscordIds) > 0 AND
-        Birthday IS NOT NULL AND
-        Timezone IS NOT NULL
+    FROM temp AS T
+    JOIN `user`AS U
+        ON U.UserDiscordId = T.val
+    WHERE U.Birthday IS NOT NULL AND U.Timezone IS NOT NULL
+       ORDER BY U.Birthday
 ) AS UserData;
 
+DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
 CREATE DEFINER=`admin`@`%` PROCEDURE `User_GetBirthdays` (IN `IN_Birthday` VARCHAR(10))  BEGIN
@@ -456,33 +459,18 @@ SET @TotalItems = NULL;
 SET @StartRow = NULL;
 SET @EndRow = NULL;
 
-SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
-SET @EndRow = IN_Page * IN_PageSize;
-
-CREATE TEMPORARY TABLE temp( UserId INT(11), UserDiscordId VARCHAR(20), Birthday DATE, TimeZone VARCHAR(100), ChangesLeft TINYINT(4), Position INT(11) );
-INSERT INTO temp
-    SELECT UserId, UserDiscordId, Birthday, TimeZone, ChangesLeft,
-    ROW_NUMBER() OVER (
-            ORDER BY Birthday
-    ) AS 'Position'
-    FROM (
-        SELECT *
-        FROM `user`
-        WHERE
-            FIND_IN_SET(UserDiscordId, IN_UserDiscordIds) > 0 AND
-               Birthday IS NOT NULL AND
-               Timezone IS NOT NULL
-    ) AS T;
+CREATE TEMPORARY TABLE temp( val VARCHAR(20), INDEX(val) );
+SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
+PREPARE stmt1 FROM @sql;
+EXECUTE stmt1;
 
 SELECT COUNT(*) INTO @TotalItems
-FROM temp;
-
-SELECT *
-FROM temp
-AS UserData
+FROM temp AS T
+JOIN `user`AS U
+    ON U.UserDiscordId = T.val
 WHERE
-    Position >= @StartRow AND
-    Position <= @EndRow;
+    U.Birthday IS NOT NULL AND
+    U.Timezone IS NOT NULL;
 
 SELECT CEILING(@TotalItems / IN_PageSize) INTO @TotalPages;
 
@@ -492,10 +480,31 @@ ELSEIF (IN_Page > @TotalPages) THEN
     SET IN_Page = @TotalPages;
 END IF;
 
+SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
+SET @EndRow = IN_Page * IN_PageSize;
+
+SELECT *
+FROM (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (
+            ORDER BY U.Birthday
+        ) AS 'Position'
+    FROM temp AS T
+    JOIN `user`AS U
+        ON U.UserDiscordId = T.val
+    WHERE
+        U.Birthday IS NOT NULL AND
+        U.Timezone IS NOT NULL
+) AS UserData
+WHERE
+    UserData.Position >= @StartRow AND
+    UserData.Position <= @EndRow;
+
 SELECT
     @TotalItems AS 'TotalItems',
     @TotalPages as 'TotalPages';
-
+    
 DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
@@ -578,7 +587,11 @@ CREATE TABLE `vote` (
 --
 ALTER TABLE `guild`
   ADD PRIMARY KEY (`GuildId`),
-  ADD UNIQUE KEY `DiscordId` (`GuildDiscordId`);
+  ADD UNIQUE KEY `DiscordId` (`GuildDiscordId`),
+  ADD KEY `GuildDiscordId` (`GuildDiscordId`),
+  ADD KEY `BirthdayChannelDiscordId` (`BirthdayChannelDiscordId`),
+  ADD KEY `BirthdayRoleDiscordId` (`BirthdayRoleDiscordId`),
+  ADD KEY `TrustedRoleDiscordId` (`TrustedRoleDiscordId`);
 
 --
 -- Indexes for table `messages`
@@ -592,14 +605,16 @@ ALTER TABLE `messages`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`UserId`),
-  ADD UNIQUE KEY `UserDiscordId` (`UserDiscordId`);
+  ADD UNIQUE KEY `UserDiscordId` (`UserDiscordId`),
+  ADD KEY `UserDiscordId_2` (`UserDiscordId`);
 
 --
 -- Indexes for table `vote`
 --
 ALTER TABLE `vote`
   ADD PRIMARY KEY (`VoteId`),
-  ADD UNIQUE KEY `UQ_BotSiteName_UserDiscordId_VoteTime` (`BotSiteName`,`UserDiscordId`,`VoteTime`) USING BTREE;
+  ADD UNIQUE KEY `UQ_BotSiteName_UserDiscordId_VoteTime` (`BotSiteName`,`UserDiscordId`,`VoteTime`) USING BTREE,
+  ADD KEY `UserDiscordId` (`UserDiscordId`);
 
 --
 -- AUTO_INCREMENT for dumped tables
