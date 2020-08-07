@@ -67,4 +67,25 @@ export class UserRepo {
     public async addUserVote(botSiteName: string, discordId: string): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.User_AddVote, [botSiteName, discordId]);
     }
+
+    public async getUserCount(): Promise<number> {
+        let results = await this.dataAccess.executeProcedure(Procedure.User_GetTotalCount, []);
+        return SQLUtils.getFirstResult(results)[0].Total;
+    }
+
+    public async getUserBirthdaysTodayCount(birthday: string): Promise<number> {
+        let results = await this.dataAccess.executeProcedure(
+            Procedure.User_GetBirthdaysTodayCount,
+            [birthday]
+        );
+        return SQLUtils.getFirstResult(results)[0].Total;
+    }
+
+    public async getUserBirthdaysThisMonthCount(birthday: string): Promise<number> {
+        let results = await this.dataAccess.executeProcedure(
+            Procedure.User_GetBirthdaysThisMonthCount,
+            [birthday]
+        );
+        return SQLUtils.getFirstResult(results)[0].Total;
+    }
 }
