@@ -1,4 +1,4 @@
-import { Util } from 'discord.js';
+import { ShardingManager, Util } from 'discord.js';
 
 export abstract class ShardUtils {
     public static async getRecommendedShards(
@@ -20,5 +20,10 @@ export abstract class ShardUtils {
             }
         }
         return myShardIds;
+    }
+
+    public static async retrieveServerCount(shardManager: ShardingManager): Promise<number> {
+        let shardSizes = await shardManager.fetchClientValues('guilds.cache.size');
+        return shardSizes.reduce((prev, val) => prev + val, 0);
     }
 }
