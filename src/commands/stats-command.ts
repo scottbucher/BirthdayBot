@@ -4,7 +4,6 @@ import { MessageUtils, ShardUtils } from '../utils';
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
-import { versions } from 'process';
 
 let Config = require('../../config/config.json');
 let version = require('discord.js').version;
