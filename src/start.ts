@@ -19,7 +19,7 @@ import {
     UpdateCommand,
     ViewCommand,
 } from './commands';
-import { Client, ClientOptions, DiscordAPIError, PartialTypes } from 'discord.js';
+import { Client, ClientOptions, DiscordAPIError, PartialTypes, ShardingManager } from 'discord.js';
 import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
