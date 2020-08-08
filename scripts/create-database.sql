@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 06, 2020 at 05:41 AM
+-- Generation Time: Aug 08, 2020 at 07:56 PM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -451,6 +451,24 @@ WHERE DATE_FORMAT(`user`.Birthday, '%m-%d') = IN_Birthday;
 
 END$$
 
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetBirthdaysThisMonthCount` (IN `IN_Birthday` VARCHAR(10))  READS SQL DATA
+BEGIN
+
+SELECT COUNT(*) AS Total
+FROM `user`
+WHERE DATE_FORMAT(`user`.Birthday, '%m') = IN_Birthday;
+
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetBirthdaysTodayCount` (IN `IN_Birthday` VARCHAR(10))  READS SQL DATA
+BEGIN
+
+SELECT COUNT(*) AS Total
+FROM `user`
+WHERE DATE_FORMAT(`user`.Birthday, '%m-%d') = IN_Birthday;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
 DROP TEMPORARY TABLE IF EXISTS temp;
 
@@ -515,6 +533,13 @@ SELECT *
 FROM `vote`
 WHERE UserDiscordId = IN_UserDiscordId
 ORDER BY VoteId DESC LIMIT 1;
+
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetTotalCount` ()  READS SQL DATA
+BEGIN
+
+SELECT COUNT(*) AS Total FROM `user`;
 
 END$$
 
@@ -648,3 +673,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+

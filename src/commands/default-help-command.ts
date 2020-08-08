@@ -31,12 +31,16 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
+                        `\n**${prefix} docs** - View the documentation.` +
+                        `\n**${prefix} faq** - View the frequently asked questions.` +
                         `\n**${prefix} purge** - Remove your birthday data.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +
                         `\n**${prefix} settings**\*\* - View server's settings.` +
                         `\n**${prefix} test [User]**\*\* - Test the birthday event.` +
+                        `\n` +
+                        `\n**${prefix} donate** - Support developements by donating!` +
                         `\n` +
                         '\nIf you have any question/problems please join our support server [here](https://discord.gg/9gUQFtz).'
                 )
@@ -97,16 +101,20 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} set** - Set your birthday.` +
                         `\n**${prefix} view [user]** - View your birthday or a users birthday.` +
                         `\n**${prefix} next**\*\* - View next birthday(s) in the server.` +
-                        `\n***${prefix} list [page]**\*\* - View the server birthday list.` +
+                        `\n**${prefix} list [page]**\*\* - View the server birthday list.` +
                         `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
+                        `\n**${prefix} docs** - View the documentation.` +
+                        `\n**${prefix} faq** - View the frequently asked questions.` +
                         `\n**${prefix} purge** - Remove your birthday data.` +
                         `\n**${prefix} help setup** - Help for server setup.` +
                         `\n**${prefix} help message** - Help for the birthday message settings.` +
                         `\n**${prefix} help trusted** - Help for the trusted system.` +
                         `\n**${prefix} settings**\*\* - View server's settings.` +
                         `\n**${prefix} test [User]**\*\* - Test the birthday event.` +
+                        `\n` +
+                        `\n**${prefix} donate** - Support developements by donating!` +
                         `\n` +
                         '\nIf you have any question/problems please join our support server [here](https://discord.gg/9gUQFtz).'
                 )
