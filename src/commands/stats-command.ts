@@ -38,7 +38,7 @@ export class StatsCommand implements Command {
             .addField('Total Users', userCount.toLocaleString(), true)
             .addField('Total Birthdays', totalBirthdays.toLocaleString(), true)
             .addField('Total Servers', serverCount.toLocaleString(), true)
-            .addField('Shard ID', `${msg.guild.shardID + 1}/${msg.client.ws.shards.size}`, true)
+            .addField('Shard ID', `${msg.guild.shardID + 1}/${msg.client.shard.count}`, true)
             .addField('Birthdays Today', birthdaysToday, true)
             .addField('Birthdays This Month', birthdaysThisMonth, true)
             .addField('Discord.js Version', version, true);
