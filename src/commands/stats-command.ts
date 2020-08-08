@@ -41,7 +41,6 @@ export class StatsCommand implements Command {
             .addField('Birthdays Today', birthdaysToday, true)
             .addField('Birthdays This Month', birthdaysThisMonth, true)
             .addField('Discord.js Version', version, true);
-        // .addField('JS Version', )
 
         if (channel instanceof TextChannel) await channel.send(embed);
         else MessageUtils.sendDm(channel, embed);
