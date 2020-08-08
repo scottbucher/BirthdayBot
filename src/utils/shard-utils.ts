@@ -28,4 +28,11 @@ export abstract class ShardUtils {
         let shardSizes = await shardInterface.fetchClientValues('guilds.cache.size');
         return shardSizes.reduce((prev, val) => prev + val, 0);
     }
+
+    public static async retrieveUserCount(
+        shardInterface: ShardingManager | ShardClientUtil
+    ): Promise<number> {
+        let shardSizes = await shardInterface.fetchClientValues('users.cache.size');
+        return shardSizes.reduce((prev, val) => prev + val, 0);
+    }
 }
