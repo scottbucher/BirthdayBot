@@ -17,3 +17,6 @@ export { SettingsCommand } from './settings-command';
 export { NextCommand } from './next-command';
 export { MapCommand } from './map-command';
 export { TestCommand } from './test-command';
+export { FAQCommand } from './faq-command';
+export { DocumentationCommand } from './documentation-command';
+export { DonateCommand } from './donate-command';

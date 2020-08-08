@@ -3,6 +3,7 @@ import { Shard, ShardingManager } from 'discord.js';
 import { Api } from './api';
 import { BotSite } from './services/sites';
 import { Logger } from './services';
+import { ShardUtils } from './utils';
 
 let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');
@@ -37,7 +38,7 @@ export class Manager {
     }
 
     public async updateServerCount(): Promise<void> {
-        let serverCount = await this.retrieveServerCount();
+        let serverCount = await ShardUtils.retrieveServerCount(this.shardManager);
         await this.shardManager.broadcastEval(`
             this.user.setPresence({
                 activity: {
@@ -65,11 +66,6 @@ export class Manager {
 
             Logger.info(Logs.info.updateServerCountSite.replace('{BOT_SITE}', botSite.name));
         }
-    }
-
-    private async retrieveServerCount(): Promise<number> {
-        let shardSizes = await this.shardManager.fetchClientValues('guilds.cache.size');
-        return shardSizes.reduce((prev, val) => prev + val, 0);
     }
 
     private registerListeners(): void {
