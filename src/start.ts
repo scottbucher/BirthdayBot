@@ -18,6 +18,9 @@ import {
     TrustedCommand,
     UpdateCommand,
     ViewCommand,
+    FAQCommand,
+    DocumentationCommand,
+    DonateCommand,
 } from './commands';
 import { Client, ClientOptions, DiscordAPIError, PartialTypes, ShardingManager } from 'discord.js';
 import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
@@ -83,6 +86,9 @@ async function start(): Promise<void> {
     let trustedCommand = new TrustedCommand(guildRepo);
     let setAttemptsCommand = new SetAttemptsCommand(userRepo);
     let testCommand = new TestCommand(birthdayService, guildRepo);
+    let faqCommand = new FAQCommand();
+    let documentationCommand = new DocumentationCommand();
+    let donateCommand = new DonateCommand();
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
@@ -135,7 +141,10 @@ async function start(): Promise<void> {
             setAttemptsCommand,
             settingsCommand,
             testCommand,
-            statsCommand
+            statsCommand,
+            faqCommand,
+            documentationCommand,
+            donateCommand
         ],
         guildRepo,
         userRepo
