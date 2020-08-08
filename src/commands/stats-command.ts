@@ -26,7 +26,7 @@ export class StatsCommand implements Command {
         let birthdaysToday = await this.userRepo.getUserBirthdaysTodayCount(today);
         let birthdaysThisMonth = await this.userRepo.getUserBirthdaysThisMonthCount(month);
         let serverCount = await ShardUtils.retrieveServerCount(msg.client.shard);
-        let userCout = await ShardUtils.retrieveUserCount(msg.client.shard);
+        let userCount = await ShardUtils.retrieveUserCount(msg.client.shard);
 
         let embed = new MessageEmbed()
             .setColor(Config.colors.default)
@@ -35,9 +35,9 @@ export class StatsCommand implements Command {
                 `${msg.author.username}#${msg.author.discriminator}`,
                 msg.author.displayAvatarURL({ dynamic: true })
             )
-            .addField('Total Users', userCout, true)
-            .addField('Total Birthdays', totalBirthdays, true)
-            .addField('Total Servers', serverCount, true)
+            .addField('Total Users', userCount.toLocaleString(), true)
+            .addField('Total Birthdays', totalBirthdays.toLocaleString(), true)
+            .addField('Total Servers', serverCount.toLocaleString(), true)
             .addField('Shard ID', `${msg.guild.shardID + 1}/${msg.client.ws.shards.size}`, true)
             .addField('Birthdays Today', birthdaysToday, true)
             .addField('Birthdays This Month', birthdaysThisMonth, true)
