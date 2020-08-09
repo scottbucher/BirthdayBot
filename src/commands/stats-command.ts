@@ -40,8 +40,8 @@ export class StatsCommand implements Command {
             .addField('Total Birthdays', totalBirthdays.toLocaleString(), true)
             .addField('Total Servers', serverCount.toLocaleString(), true)
             .addField('Shard ID', `${shardId + 1}/${msg.client.shard.count}`, true)
-            .addField('Birthdays Today', birthdaysToday, true)
-            .addField('Birthdays This Month', birthdaysThisMonth, true)
+            .addField('Birthdays Today', birthdaysToday.toLocaleString(), true)
+            .addField('Birthdays This Month', birthdaysThisMonth.toLocaleString(), true)
             .addField('Discord.js Version', version, true);
 
         if (channel instanceof TextChannel) await channel.send(embed);
