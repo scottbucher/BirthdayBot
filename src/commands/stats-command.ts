@@ -17,7 +17,7 @@ export class StatsCommand implements Command {
     public ownerOnly = false;
     public voteOnly = false;
 
-    constructor(/*private shardManager: ShardingManager,*/ private userRepo: UserRepo) {}
+    constructor(/*private shardManager: ShardingManager,*/ private userRepo: UserRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let today = moment().format('MM-DD');
@@ -25,8 +25,17 @@ export class StatsCommand implements Command {
         let totalBirthdays = await this.userRepo.getUserCount();
         let birthdaysToday = await this.userRepo.getUserBirthdaysTodayCount(today);
         let birthdaysThisMonth = await this.userRepo.getUserBirthdaysThisMonthCount(month);
-        let serverCount = await ShardUtils.retrieveServerCount(msg.client.shard);
-        let userCount = await ShardUtils.retrieveUserCount(msg.client.shard);
+
+        let serverCount: number;
+        let userCount: number;
+
+        try {
+            serverCount = await ShardUtils.retrieveServerCount(msg.client.shard);
+            userCount = await ShardUtils.retrieveUserCount(msg.client.shard);
+        } catch (error) {
+            if  (error.name === 'SHARDING_IN_PROCESS') return; else throw error;
+        }
+
         let shardId = msg.guild?.shardID || 0;
 
         let embed = new MessageEmbed()
