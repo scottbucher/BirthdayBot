@@ -27,6 +27,7 @@ export class StatsCommand implements Command {
         let birthdaysThisMonth = await this.userRepo.getUserBirthdaysThisMonthCount(month);
         let serverCount = await ShardUtils.retrieveServerCount(msg.client.shard);
         let userCount = await ShardUtils.retrieveUserCount(msg.client.shard);
+        let shardId = msg.guild?.shardID || 0;
 
         let embed = new MessageEmbed()
             .setColor(Config.colors.default)
@@ -38,7 +39,7 @@ export class StatsCommand implements Command {
             .addField('Total Users', userCount.toLocaleString(), true)
             .addField('Total Birthdays', totalBirthdays.toLocaleString(), true)
             .addField('Total Servers', serverCount.toLocaleString(), true)
-            .addField('Shard ID', `${msg.guild.shardID + 1}/${msg.client.shard.count}`, true)
+            .addField('Shard ID', `${shardId + 1}/${msg.client.shard.count}`, true)
             .addField('Birthdays Today', birthdaysToday, true)
             .addField('Birthdays This Month', birthdaysThisMonth, true)
             .addField('Discord.js Version', version, true);
