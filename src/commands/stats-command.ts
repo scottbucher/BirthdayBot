@@ -17,7 +17,7 @@ export class StatsCommand implements Command {
     public ownerOnly = false;
     public voteOnly = false;
 
-    constructor(/*private shardManager: ShardingManager,*/ private userRepo: UserRepo) { }
+    constructor(private userRepo: UserRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let today = moment().format('MM-DD');
@@ -33,7 +33,12 @@ export class StatsCommand implements Command {
             serverCount = await ShardUtils.retrieveServerCount(msg.client.shard);
             userCount = await ShardUtils.retrieveUserCount(msg.client.shard);
         } catch (error) {
-            if  (error.name === 'SHARDING_IN_PROCESS') return; else throw error;
+            // Ignore case where stats command is run while shards are still being spawned
+            if (error.name.includes('SHARDING_IN_PROCESS')) {
+                return;
+            } else {
+                throw error;
+            }
         }
 
         let shardId = msg.guild?.shardID || 0;
