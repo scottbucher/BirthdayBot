@@ -17,7 +17,7 @@
         "select": "🖱",
         "birthday": "🎂"
     },
-    "birthdayListSize": "15",
+    "birthdayListSize": "30",
     "birthdayMessageListSize": "5",
     "mysql": {
         "host": "localhost",
