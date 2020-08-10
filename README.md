@@ -1,6 +1,11 @@
 # Birthday Bot
+[![License](https://img.shields.io/badge/license-No%20License-blue)](https://choosealicense.com/no-permission/)
+[![Stars](https://img.shields.io/github/stars/scottbucher/BirthdayBot.svg)](https://github.com/scottbucher/BirthdayBot/stargazers)
+[![GuildCount](https://img.shields.io/badge/dynamic/json.svg?label=servers&url=https%3A%2F%2Fdiscord.bots.gg%2Fapi%2Fv1%2Fbots%2F656621136808902656&query=%24.guildCount&colorB=7289DA)](https://discord.bots.gg/bots/656621136808902656)
 
 **Discord Bot** - Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and 100% free! Use `bday help` to get started!
+
+License: Birthday Bot does not have a license. This means, while Birthday Bot's code is public to anyone, you do **NOT** have permission to modify or redistribute this code. Since there is no license, the default copyright laws apply, meaning that I retain all rights to the source code and no one may reproduce, distribute, or create derivative works from it. For more details please visit [here](https://choosealicense.com/no-permission/).
 
 ## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot)
 
