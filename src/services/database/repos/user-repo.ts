@@ -40,6 +40,22 @@ export class UserRepo {
         ]);
     }
 
+    public async getBirthdayListFullFromDate(
+        discordIds: string[],
+        pageSize: number,
+        date: number
+    ): Promise<UserDataResults> {
+        let results = await this.dataAccess.executeProcedure(Procedure.User_GetFullListFromDate, [
+            discordIds.join(','),
+            pageSize,
+            date,
+        ]);
+
+        let userData = SQLUtils.getFirstResult(results);
+        let stats = SQLUtils.getSecondResultFirstRow(results);
+        return new UserDataResults(userData, stats);
+    }
+
     public async getBirthdayListFull(
         discordIds: string[],
         pageSize: number,
