@@ -43,7 +43,7 @@ export class UserRepo {
     public async getBirthdayListFullFromDate(
         discordIds: string[],
         pageSize: number,
-        date: number
+        date: string
     ): Promise<UserDataResults> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_GetFullListFromDate, [
             discordIds.join(','),
