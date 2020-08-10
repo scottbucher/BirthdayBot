@@ -21,6 +21,7 @@ export enum Procedure {
     User_Get = 'User_Get',
     User_GetAll = 'User_GetAll',
     User_GetFullList = 'User_GetFullList',
+    User_GetFullListFromDate = 'User_GetFullListFromDate',
     User_GetBirthdays = 'User_GetBirthdays',
     User_AddVote = 'User_AddVote',
     User_GetLastVote = 'User_GetLastVote',

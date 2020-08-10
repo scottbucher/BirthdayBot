@@ -27,7 +27,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} set** - Set your birthday.` +
                         `\n**${prefix} view [user]** - View your birthday or a users birthday.` +
                         `\n**${prefix} next**\*\* - View next birthday(s) in the server.` +
-                        `\n**${prefix} list [page]**\*\* - View the server birthday list.` +
+                        `\n**${prefix} list [page/date]**\*\* - View the server birthday list.` +
                         `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
@@ -101,7 +101,7 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} set** - Set your birthday.` +
                         `\n**${prefix} view [user]** - View your birthday or a users birthday.` +
                         `\n**${prefix} next**\*\* - View next birthday(s) in the server.` +
-                        `\n**${prefix} list [page]**\*\* - View the server birthday list.` +
+                        `\n**${prefix} list [page/date]**\*\* - View the server birthday list.` +
                         `\n**${prefix} map** - View the time zone map.` +
                         `\n**${prefix} invite** - Invite Birthday Bot to a server.` +
                         `\n**${prefix} support** - Join the support server.` +
