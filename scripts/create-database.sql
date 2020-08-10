@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 08, 2020 at 07:56 PM
+-- Generation Time: Aug 10, 2020 at 08:59 PM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -469,7 +469,8 @@ WHERE DATE_FORMAT(`user`.Birthday, '%m-%d') = IN_Birthday;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  READS SQL DATA
+BEGIN
 DROP TEMPORARY TABLE IF EXISTS temp;
 
 SET @TotalPages = NULL;
@@ -521,9 +522,79 @@ WHERE
 
 SELECT
     @TotalItems AS 'TotalItems',
-    @TotalPages as 'TotalPages';
+    @TotalPages as 'TotalPages',
+    IN_Page as 'Page';
     
 DROP TEMPORARY TABLE IF EXISTS temp;
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetFullListFromDate` (IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Date` VARCHAR(10))  NO SQL
+BEGIN
+DROP TEMPORARY TABLE IF EXISTS temp;
+DROP TEMPORARY TABLE IF EXISTS birthdays;
+
+SET @TotalPages = NULL;
+SET @TotalItems = NULL;
+SET @StartRow = NULL;
+SET @EndRow = NULL;
+SET @Position = NULL;
+SET @Page = NULL;
+
+CREATE TEMPORARY TABLE temp( val VARCHAR(20), INDEX(val) );
+SET @SQL = CONCAT("INSERT INTO temp (val) values ('", REPLACE(IN_UserDiscordIds, ",", "'),('"),"');");
+PREPARE stmt1 FROM @sql;
+EXECUTE stmt1;
+
+SELECT COUNT(*) INTO @TotalItems
+FROM temp AS T
+JOIN `user`AS U
+    ON U.UserDiscordId = T.val
+WHERE
+    U.Birthday IS NOT NULL AND
+    U.Timezone IS NOT NULL;
+
+CREATE TEMPORARY TABLE birthdays
+SELECT *
+FROM (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (
+                ORDER BY U.Birthday
+        ) AS 'Position'
+    FROM temp AS T
+    JOIN `user`AS U
+        ON U.UserDiscordId = T.val
+    WHERE
+        U.Birthday IS NOT NULL AND
+        U.Timezone IS NOT NULL
+) as birthdays;
+
+SELECT Position
+INTO @Position
+FROM birthdays
+WHERE DATE_FORMAT(birthdays.Birthday, '%m-%d') >= IN_DATE
+LIMIT 1;
+
+SELECT CEILING(@TotalItems / IN_PageSize) INTO @TotalPages;
+
+SELECT CEILING(@Position / IN_PageSize) INTO @Page;
+
+SET @StartRow = ((@Page - 1) * IN_PageSize) + 1;
+SET @EndRow = @Page * IN_PageSize;
+
+SELECT * FROM birthdays
+AS UserData
+WHERE
+    UserData.Position >= @StartRow AND
+    UserData.Position <= @EndRow;
+
+SELECT
+    @TotalItems AS 'TotalItems',
+    @TotalPages as 'TotalPages',
+    @Page as 'Page';
+    
+DROP TEMPORARY TABLE IF EXISTS temp;
+DROP TEMPORARY TABLE IF EXISTS birthdays;
 END$$
 
 CREATE DEFINER=`admin`@`%` PROCEDURE `User_GetLastVote` (IN `IN_UserDiscordId` VARCHAR(20))  READS SQL DATA
@@ -673,4 +744,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
