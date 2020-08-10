@@ -20,9 +20,9 @@ export class ListCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let page = 1;
 
-        if (args[1]) {
+        if (args[2]) {
             try {
-                page = ParseUtils.parseInt(args[1]);
+                page = ParseUtils.parseInt(args[2]);
             } catch (error) {
                 // Not A Number
             }
