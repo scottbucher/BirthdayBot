@@ -1,9 +1,10 @@
 # Birthday Bot
-[![Discord Bots](https://discordbots.org/api/widget/servers/656621136808902656.svg?noavatar=true)](https://discordbots.org/bot/656621136808902656)
-[![Discord Bots](https://discordbots.org/api/widget/status/656621136808902656.svg?noavatar=true)](https://discordbots.org/bot/656621136808902656)
+[![Discord Bots](https://top.gg/api/widget/servers/656621136808902656.svg)](https://top.gg/bot/656621136808902656)
+[![Discord Bots](https://top.gg/api/widget/status/656621136808902656.svg)](https://top.gg/bot/656621136808902656)
 [![License](https://img.shields.io/badge/license-No%20License-blue)](https://choosealicense.com/no-permission/)
 [![Stars](https://img.shields.io/github/stars/scottbucher/BirthdayBot.svg)](https://github.com/scottbucher/BirthdayBot/stargazers)
 [![Discord Shield](https://discordapp.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discordapp.com/invite/9gUQFtz)
+[![Discord Bots](https://top.gg/api/widget/owner/656621136808902656.svg)](https://top.gg/bot/656621136808902656)
 
 **Discord Bot** - Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and 100% free! Use `bday help` to get started!
 
