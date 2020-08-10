@@ -144,6 +144,6 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 
 For additional help join the support server [here](https://discord.gg/9gUQFtz).
 
-# License 
+## License 
 
 Birthday Bot does not have a license. This means, while Birthday Bot's code is public to anyone, you do **NOT** have permission to modify or redistribute this code. Since there is no license, the default copyright laws apply, meaning that I retain all rights to the source code and no one may reproduce, distribute, or create derivative works from it. For more details please visit [here](https://choosealicense.com/no-permission/).
