@@ -2,6 +2,7 @@
 [![License](https://img.shields.io/badge/license-No%20License-blue)](https://choosealicense.com/no-permission/)
 [![Stars](https://img.shields.io/github/stars/scottbucher/BirthdayBot.svg)](https://github.com/scottbucher/BirthdayBot/stargazers)
 [![GuildCount](https://img.shields.io/badge/dynamic/json.svg?label=servers&url=https%3A%2F%2Fdiscord.bots.gg%2Fapi%2Fv1%2Fbots%2F656621136808902656&query=%24.guildCount&colorB=7289DA)](https://discord.bots.gg/bots/656621136808902656)
+[![Discord Shield](https://discordapp.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discordapp.com/invite/9gUQFtz)
 
 **Discord Bot** - Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and 100% free! Use `bday help` to get started!
 
