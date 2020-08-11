@@ -165,13 +165,10 @@ export class ReactionAddHandler implements EventHandler {
                                 return;
                             }
 
-                            if (page !== 0 && (page < 0 || page > 1000000 || !page)) {
-                                let embed = new MessageEmbed()
-                                    .setDescription('Invalid page!')
-                                    .setColor(Config.colors.error);
-                                await channel.send(embed);
-                                return;
-                            }
+                            page = Math.round(page);
+
+                            if (!page || page <= 0 || page > 100000) page = 1;
+
                             return page;
                         }
                     },
@@ -216,13 +213,10 @@ export class ReactionAddHandler implements EventHandler {
                                 return;
                             }
 
-                            if (page !== 0 && (page < 0 || page > 1000000 || !page)) {
-                                let embed = new MessageEmbed()
-                                    .setDescription('Invalid page!')
-                                    .setColor(Config.colors.error);
-                                await channel.send(embed);
-                                return;
-                            }
+                            page = Math.round(page);
+
+                            if (!page || page <= 0 || page > 100000) page = 1;
+
                             return page;
                         }
                     },
