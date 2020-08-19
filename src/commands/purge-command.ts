@@ -1,10 +1,16 @@
 import { ActionUtils, PermissionUtils } from '../utils';
+import { CollectOptions, CollectorUtils, ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
 import { DMChannel, Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
+
+const COLLECT_OPTIONS: CollectOptions = {
+    time: Config.promptExpireTime * 1000,
+    reset: true,
+};
 
 export class PurgeCommand implements Command {
     public name: string = 'purge';
@@ -22,6 +28,17 @@ export class PurgeCommand implements Command {
         let userData = await this.userRepo.getUser(target.id); // Try and get their data
         let confirmEmbed = new MessageEmbed();
         let changesLeft = 0;
+        let stopFilter: MessageFilter = (nextMsg: Message) =>
+            nextMsg.author.id === msg.author.id &&
+            nextMsg.content.split(/\s+/)[0].toLowerCase() === Config.prefix;
+        let expireFunction: ExpireFunction = async () => {
+            await channel.send(
+                new MessageEmbed()
+                    .setTitle('Birthday Purge - Expired')
+                    .setDescription('Type `bday purge` to rerun the purge.')
+                    .setColor(Config.colors.error)
+            );
+        };
 
         if (!userData || !(userData.Birthday && userData.TimeZone)) {
             // Are they in the database?
@@ -44,8 +61,8 @@ export class PurgeCommand implements Command {
                 .setAuthor(`${target.username}#${target.discriminator}`, target.avatarURL());
 
             let description =
-                'This command will remove both your time zone and your birthday from the database. [(?)]()' +
-                `\n\nThis will not reset your birthday attempts. (You have ${changesLeft} left) [(?)]()`;
+                'This command will remove both your time zone and your birthday from the database. [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
+                `\n\nThis will not reset your birthday attempts. (You have ${changesLeft} left) [(?)](https://birthdaybot.scottbucher.dev/faq#how-many-times-can-i-set-my-birthday)`;
 
             if (changesLeft === 0) {
                 // Out of changes?
@@ -55,68 +72,46 @@ export class PurgeCommand implements Command {
             confirmEmbed.setDescription(description);
         }
 
-        let confirmationMsg = await channel.send(confirmEmbed);
-        await confirmationMsg.react(Config.emotes.confirm);
-        await confirmationMsg.react(Config.emotes.deny);
 
-        const filter = (nextReaction: MessageReaction, reactor: User) =>
-            (nextReaction.emoji.name === Config.emotes.confirm ||
-                nextReaction.emoji.name === Config.emotes.deny) &&
-            nextReaction.users.resolve(msg.client.user.id) !== null &&
-            reactor === target; // Reaction Collector Filter
+        let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let reactionCollector = confirmationMsg.createReactionCollector(filter, {
-            time: Config.promptExpireTime * 1000,
-        });
+        let confirmationMessage = await channel.send(confirmEmbed); // Send confirmation and emotes
+        for (let option of trueFalseOptions) {
+            await confirmationMessage.react(option);
+        }
 
-        let expired = true;
+        let confirmation: string = await CollectorUtils.collectByReaction(
+            confirmationMessage,
+            // Collect Filter
+            (msgReaction: MessageReaction, reactor: User) =>
+                reactor.id === target.id && trueFalseOptions.includes(msgReaction.emoji.name),
+            stopFilter,
+            // Retrieve Result
+            async (msgReaction: MessageReaction, reactor: User) => {
+                return msgReaction.emoji.name;
+            },
+            expireFunction,
+            COLLECT_OPTIONS
+        );
 
-        reactionCollector.on('collect', async (nextReaction: MessageReaction) => {
-            // Start Reaction Collector
-            // Check if bot has permission to send a message
-            if (!PermissionUtils.canSend(channel)) {
-                reactionCollector.stop();
-                expired = false;
-                return;
-            }
+        ActionUtils.deleteMessage(confirmationMessage);
 
-            await ActionUtils.deleteMessage(confirmationMsg); // Try and delete the message
+        if (confirmation === undefined) return;
 
-            expired = false;
-            reactionCollector.stop();
+        if (confirmation === Config.emotes.confirm) {
+            // Confirm
+            await this.userRepo.addOrUpdateUser(target.id, null, null, changesLeft); // Add or update user
 
-            if (nextReaction.emoji.name === Config.emotes.confirm) {
-                // Confirm
-                await this.userRepo.addOrUpdateUser(target.id, null, null, changesLeft); // Add or update user
-
-                let embed = new MessageEmbed()
-                    .setDescription('Successfully purged your data from the database.')
-                    .setColor(Config.colors.success);
-                await channel.send(embed);
-            } else if (nextReaction.emoji.name === Config.emotes.deny) {
-                // Cancel
-                let embed = new MessageEmbed()
-                    .setDescription('Request Canceled.')
-                    .setColor(Config.colors.error);
-                await channel.send(embed);
-            }
-        });
-
-        reactionCollector.on('end', async () => {
-            // Check if I have permission to send a message
-            if (!PermissionUtils.canSend(channel)) {
-                expired = false;
-                reactionCollector.stop();
-                return;
-            }
-
-            if (expired) {
-                let embed = new MessageEmbed()
-                    .setTitle('User Data Purge - Expired')
-                    .setDescription('Type `bday purge` to rerun the process.')
-                    .setColor(Config.colors.error);
-                await channel.send(embed);
-            }
-        });
+            let embed = new MessageEmbed()
+                .setDescription('Successfully purged your data from the database.')
+                .setColor(Config.colors.success);
+            await channel.send(embed);
+        } else if (confirmation === Config.emotes.deny) {
+            // Cancel
+            let embed = new MessageEmbed()
+                .setDescription('Request Canceled.')
+                .setColor(Config.colors.error);
+            await channel.send(embed);
+        }
     }
 }
