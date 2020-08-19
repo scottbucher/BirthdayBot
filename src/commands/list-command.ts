@@ -34,7 +34,7 @@ export class ListCommand implements Command {
                 // Not A Number
             }
 
-            if (!page) date = await Chrono.parseDate(input); // Try an parse a date
+            if (!page) date = Chrono.parseDate(input); // Try an parse a date
 
             if (!page || page <= 0 || page > 100000) page = 1;
         }
