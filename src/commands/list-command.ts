@@ -23,7 +23,7 @@ export class ListCommand implements Command {
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let page = 1;
-        let date: string;
+        let date;
 
         let input = args.slice(2).join(' ');
 
