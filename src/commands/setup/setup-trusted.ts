@@ -120,7 +120,7 @@ export class SetupTrusted {
                         // If it couldn't find the role, the role was in another guild, or the role the everyone role
                         if (
                             !roleInput ||
-                            roleInput.guild.id !== guild.id ||
+                            roleInput.id === guild.id ||
                             nextMsg?.content.toLowerCase() === 'everyone'
                         ) {
                             let embed = new MessageEmbed()

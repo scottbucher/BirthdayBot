@@ -58,7 +58,7 @@ export class UpdateCommand implements Command {
             }
 
             // Could it find the channel in either check?
-            if (!birthdayChannel || birthdayChannel.id === msg.guild.id) {
+            if (!birthdayChannel) {
                 let embed = new MessageEmbed()
                     .setDescription('Invalid channel!')
                     .setColor(Config.colors.error);
@@ -106,7 +106,7 @@ export class UpdateCommand implements Command {
 
             if (
                 !birthdayRole ||
-                birthdayRole.guild.id !== msg.guild.id ||
+                birthdayRole.id === msg.guild.id ||
                 args[3].toLowerCase() === 'everyone'
             ) {
                 let embed = new MessageEmbed()
@@ -163,7 +163,7 @@ export class UpdateCommand implements Command {
 
             if (
                 !trustedRole ||
-                trustedRole.guild.id !== msg.guild.id ||
+                trustedRole.id === msg.guild.id ||
                 args[3].toLowerCase() === 'everyone'
             ) {
                 let embed = new MessageEmbed()
