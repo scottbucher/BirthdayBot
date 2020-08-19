@@ -46,8 +46,8 @@ export class SetCommand implements Command {
         let expireFunction: ExpireFunction = async () => {
             await channel.send(
                 new MessageEmbed()
-                    .setTitle('Birthday Setup - Expired')
-                    .setDescription('Type `bday set` to rerun the setup.')
+                    .setTitle('Birthday Set - Expired')
+                    .setDescription('Type `bday set` to rerun the birthday set.')
                     .setColor(Config.colors.error)
             );
         };
