@@ -57,7 +57,7 @@ export class SetCommand implements Command {
             // Check if the user is trying to set another person's birthday
             if (channel instanceof DMChannel) {
                 let embed = new MessageEmbed()
-                    .setDescription(`You cannot request to set another user's information in a DM!`)
+                    .setDescription(`You cannot request to set another user's information in a DM!\nIf you are try to setting your own, only input \`bday set\`!`)
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
@@ -66,7 +66,7 @@ export class SetCommand implements Command {
             if (!msg.member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) {
                 // Only admins can set other's birthday
                 let embed = new MessageEmbed()
-                    .setDescription('Only admins may suggest birthdays for other users!')
+                    .setDescription('Only admins may suggest birthdays for other users!\nIf you are try to setting your own, only input `bday set`!')
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
