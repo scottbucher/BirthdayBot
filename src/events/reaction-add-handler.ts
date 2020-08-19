@@ -73,12 +73,12 @@ export class ReactionAddHandler implements EventHandler {
         try {
             users = await msgReaction.users.fetch();
         } catch (error) {
-            Logger.error(Logs.error.userFetch, error);
+            Logger.error(Logs.error.userFetch, error);``
             return;
         }
 
         // Check if the reacted message was sent by the bot
-        if (msgReaction.message.author !== msgReaction.message.client.user) {
+        if (msg.author !== msgReaction.message.client.user) {
             return;
         }
 
