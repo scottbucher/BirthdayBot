@@ -26,14 +26,14 @@ export class DataAccess {
         });
     }
 
-    private reconnect() {
+    private reconnect(): void {
         this.pool = mysql.createPool({
             ...this.dbConfig,
             typeCast: (field, next) => this.typeCast(field, next),
         });
     }
 
-    private typeCast(field: any, next: any) {
+    private typeCast(field: any, next: any): any {
         if (field.type === 'TINY' && field.length === 1) {
             return field.string() === '1';
         } else {
