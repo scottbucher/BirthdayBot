@@ -100,7 +100,7 @@ export class MessageHandler {
         if (userVote) sinceLastVote = `${now.diff(lastVote, 'hours').toString()} hours ago.`;
         if (command.voteOnly && (!userVote || lastVote.add(1, 'day') < now)) {
             let embed = new MessageEmbed()
-                .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.avatarURL())
+                .setAuthor(msg.author.tag, msg.author.avatarURL())
                 .setThumbnail('https://i.imgur.com/wak8g4V.png')
                 .setTitle('Vote Required!')
                 .setDescription('This command requires you to have voted in the past 24 hours!')
