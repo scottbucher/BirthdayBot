@@ -11,21 +11,11 @@ export abstract class SQLUtils {
         return typeof param === 'boolean' ? +param : param;
     }
 
-    public static getFirstResult(results: any): any {
-        return results[0];
+    public static getTable(results: any, index: number): any {
+        return results[index];
     }
 
-    public static getSecondResult(results: any): any {
-        return results[1];
-    }
-
-    public static getFirstResultFirstRow(results: any): any {
-        let firstResult = this.getFirstResult(results);
-        return !firstResult ? null : firstResult[0];
-    }
-
-    public static getSecondResultFirstRow(results: any): any {
-        let secondResult = this.getSecondResult(results);
-        return !secondResult ? null : secondResult[0];
+    public static getRow(results: any, tableIndex: number, rowIndex: number): any {
+        return results[tableIndex]?.[rowIndex];
     }
 }
