@@ -1,9 +1,8 @@
-import bodyParser from 'body-parser';
-import express from 'express';
-
-import { VoteData } from './models/database';
 import { Logger } from './services';
 import { UserRepo } from './services/database/repos';
+import { VoteData } from './models/database';
+import bodyParser from 'body-parser';
+import express from 'express';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -19,6 +18,7 @@ export class Api {
 
         // Capture a vote
         app.post('/votes', async (req, res) => {
+            // Check if a request as authorization
             if (req.headers?.authorization !== Config.apiAuthentication) {
                 res.sendStatus(401);
                 return;
