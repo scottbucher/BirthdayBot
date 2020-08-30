@@ -15,7 +15,7 @@ export class CustomMessageRepo {
             discordId,
         ]);
 
-        let customMessages = SQLUtils.getFirstResult(results);
+        let customMessages = SQLUtils.getTable(results, 0);
         return new CustomMessages(customMessages, null);
     }
 
@@ -38,8 +38,8 @@ export class CustomMessageRepo {
             page,
         ]);
 
-        let customMessageData = SQLUtils.getFirstResult(results);
-        let stats = SQLUtils.getSecondResultFirstRow(results);
+        let customMessageData = SQLUtils.getTable(results, 0);
+        let stats = SQLUtils.getRow(results, 1, 0);
         return new CustomMessages(customMessageData, stats);
     }
 }

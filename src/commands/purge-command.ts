@@ -58,7 +58,7 @@ export class PurgeCommand implements Command {
                 .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
                 .setColor(Config.colors.default)
                 .setTimestamp()
-                .setAuthor(`${target.username}#${target.discriminator}`, target.avatarURL());
+                .setAuthor(target.tag, target.avatarURL());
 
             let description =
                 'This command will remove both your time zone and your birthday from the database. [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
