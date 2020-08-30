@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser';
 import express from 'express';
 
 import { VoteData } from './models/database';
@@ -14,8 +13,8 @@ export class Api {
     constructor(private userRepo: UserRepo) {}
 
     public async start(): Promise<void> {
-        // Tell express to use body-parsers JSON parsing
-        app.use(bodyParser.json());
+        // Tell express to use JSON parsing
+        app.use(express.json());
 
         // Capture a vote
         app.post('/votes', async (req, res) => {

@@ -9,21 +9,21 @@ export class UserRepo {
 
     public async getUser(discordId: string): Promise<UserData> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_Get, [discordId]);
-        return SQLUtils.getFirstResultFirstRow(results);
+        return SQLUtils.getRow(results, 0, 0);
     }
 
     public async getUserVote(discordId: string): Promise<Vote> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_GetLastVote, [
             discordId,
         ]);
-        return SQLUtils.getFirstResultFirstRow(results);
+        return SQLUtils.getRow(results, 0, 0);
     }
 
     public async getAllUsers(discordIds: string[]): Promise<UserData[]> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_GetAll, [
             discordIds.join(','),
         ]);
-        return SQLUtils.getFirstResult(results);
+        return SQLUtils.getTable(results, 0);
     }
 
     public async addOrUpdateUser(
@@ -51,8 +51,8 @@ export class UserRepo {
             date,
         ]);
 
-        let userData = SQLUtils.getFirstResult(results);
-        let stats = SQLUtils.getSecondResultFirstRow(results);
+        let userData = SQLUtils.getTable(results, 0);
+        let stats = SQLUtils.getRow(results, 1, 0);
         return new UserDataResults(userData, stats);
     }
 
@@ -67,8 +67,8 @@ export class UserRepo {
             page,
         ]);
 
-        let userData = SQLUtils.getFirstResult(results);
-        let stats = SQLUtils.getSecondResultFirstRow(results);
+        let userData = SQLUtils.getTable(results, 0);
+        let stats = SQLUtils.getRow(results, 1, 0);
         return new UserDataResults(userData, stats);
     }
 
@@ -77,7 +77,7 @@ export class UserRepo {
             birthday,
         ]);
 
-        return SQLUtils.getFirstResult(results);
+        return SQLUtils.getTable(results, 0);
     }
 
     public async addUserVote(botSiteName: string, discordId: string): Promise<void> {
@@ -86,7 +86,7 @@ export class UserRepo {
 
     public async getUserCount(): Promise<number> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_GetTotalCount, []);
-        return SQLUtils.getFirstResult(results)[0].Total;
+        return SQLUtils.getRow(results, 0, 0).Total;
     }
 
     public async getUserBirthdaysTodayCount(birthday: string): Promise<number> {
@@ -94,7 +94,7 @@ export class UserRepo {
             Procedure.User_GetBirthdaysTodayCount,
             [birthday]
         );
-        return SQLUtils.getFirstResult(results)[0].Total;
+        return SQLUtils.getRow(results, 0, 0).Total;
     }
 
     public async getUserBirthdaysThisMonthCount(birthday: string): Promise<number> {
@@ -102,6 +102,6 @@ export class UserRepo {
             Procedure.User_GetBirthdaysThisMonthCount,
             [birthday]
         );
-        return SQLUtils.getFirstResult(results)[0].Total;
+        return SQLUtils.getRow(results, 0, 0).Total;
     }
 }
