@@ -148,7 +148,7 @@ export class SetCommand implements Command {
             .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
             .setColor(Config.colors.default)
             .setTimestamp()
-            .setAuthor(`${target.username}#${target.discriminator}`, target.avatarURL());
+            .setAuthor(target.tag, target.avatarURL());
 
         if (suggest) timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
         else timeZoneEmbed.setTitle('User Setup - Time Zone');
@@ -195,7 +195,7 @@ export class SetCommand implements Command {
             .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
             .setColor(Config.colors.default)
             .setTimestamp()
-            .setAuthor(`${target.username}#${target.discriminator}`, target.avatarURL());
+            .setAuthor(target.tag, target.avatarURL());
 
         if (suggest) birthdayEmbed.setTitle(`Setup For ${target.username} - Birthday`);
         else birthdayEmbed.setTitle('User Setup - Birthday');

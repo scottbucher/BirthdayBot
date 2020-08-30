@@ -8,14 +8,14 @@ export class GuildRepo {
 
     public async getGuild(discordId: string): Promise<GuildData> {
         let results = await this.dataAccess.executeProcedure(Procedure.Guild_Get, [discordId]);
-        return SQLUtils.getFirstResultFirstRow(results);
+        return SQLUtils.getRow(results, 0, 0);
     }
 
     public async getGuilds(discordIds: string[]): Promise<GuildData[]> {
         let results = await this.dataAccess.executeProcedure(Procedure.Guild_GetAll, [
             discordIds.join(','),
         ]);
-        return SQLUtils.getFirstResult(results);
+        return SQLUtils.getTable(results, 0);
     }
 
     public async addOrUpdateGuild(
