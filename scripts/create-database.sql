@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.6.6deb4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Aug 10, 2020 at 08:59 PM
--- Server version: 10.3.22-MariaDB-0+deb10u1
--- PHP Version: 7.3.14-1~deb10u1
+-- Host: localhost:3306
+-- Generation Time: Aug 30, 2020 at 11:18 PM
+-- Server version: 10.3.23-MariaDB-1:10.3.23+maria~stretch
+-- PHP Version: 7.0.33-0+deb9u6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -19,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `***REMOVED***`
+-- Database: `birthdaybot`
 --
 
 DELIMITER $$
@@ -451,7 +449,7 @@ WHERE DATE_FORMAT(`user`.Birthday, '%m-%d') = IN_Birthday;
 
 END$$
 
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetBirthdaysThisMonthCount` (IN `IN_Birthday` VARCHAR(10))  READS SQL DATA
+CREATE DEFINER=`admin`@`%` PROCEDURE `User_GetBirthdaysThisMonthCount` (IN `IN_Birthday` VARCHAR(10))  READS SQL DATA
 BEGIN
 
 SELECT COUNT(*) AS Total
@@ -460,7 +458,7 @@ WHERE DATE_FORMAT(`user`.Birthday, '%m') = IN_Birthday;
 
 END$$
 
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetBirthdaysTodayCount` (IN `IN_Birthday` VARCHAR(10))  READS SQL DATA
+CREATE DEFINER=`admin`@`%` PROCEDURE `User_GetBirthdaysTodayCount` (IN `IN_Birthday` VARCHAR(10))  READS SQL DATA
 BEGIN
 
 SELECT COUNT(*) AS Total
@@ -469,8 +467,7 @@ WHERE DATE_FORMAT(`user`.Birthday, '%m-%d') = IN_Birthday;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  READS SQL DATA
-BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `User_GetFullList` (IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
 DROP TEMPORARY TABLE IF EXISTS temp;
 
 SET @TotalPages = NULL;
@@ -528,7 +525,7 @@ SELECT
 DROP TEMPORARY TABLE IF EXISTS temp;
 END$$
 
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetFullListFromDate` (IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Date` VARCHAR(10))  NO SQL
+CREATE DEFINER=`admin`@`%` PROCEDURE `User_GetFullListFromDate` (IN `IN_UserDiscordIds` MEDIUMTEXT, IN `IN_PageSize` INT, IN `IN_Date` VARCHAR(10))  READS SQL DATA
 BEGIN
 DROP TEMPORARY TABLE IF EXISTS temp;
 DROP TEMPORARY TABLE IF EXISTS birthdays;
@@ -607,7 +604,7 @@ ORDER BY VoteId DESC LIMIT 1;
 
 END$$
 
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `User_GetTotalCount` ()  READS SQL DATA
+CREATE DEFINER=`admin`@`%` PROCEDURE `User_GetTotalCount` ()  READS SQL DATA
 BEGIN
 
 SELECT COUNT(*) AS Total FROM `user`;
@@ -720,27 +717,22 @@ ALTER TABLE `vote`
 -- AUTO_INCREMENT for table `guild`
 --
 ALTER TABLE `guild`
-  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT;
-
+  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24889;
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT;
-
+  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6338;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT;
-
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96108;
 --
 -- AUTO_INCREMENT for table `vote`
 --
 ALTER TABLE `vote`
-  MODIFY `VoteId` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
+  MODIFY `VoteId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11829;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
