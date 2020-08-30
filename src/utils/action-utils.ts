@@ -17,7 +17,7 @@ export abstract class ActionUtils {
         }
     }
 
-    public static async deleteMessage(msg: Message) {
+    public static async deleteMessage(msg: Message): Promise<void> {
         try {
             await msg.delete();
         } catch (error) {

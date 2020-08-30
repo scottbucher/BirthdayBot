@@ -47,7 +47,7 @@ export class StatsCommand implements Command {
             .setColor(Config.colors.default)
             .setThumbnail(msg.client.user.displayAvatarURL({ dynamic: true }))
             .setAuthor(
-                `${msg.author.username}#${msg.author.discriminator}`,
+                msg.author.tag,
                 msg.author.displayAvatarURL({ dynamic: true })
             )
             .addField('Total Users', userCount.toLocaleString(), true)

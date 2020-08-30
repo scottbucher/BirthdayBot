@@ -100,7 +100,7 @@ export class Bot {
         }
     }
 
-    private onReactionAdd(msgReaction: any, reactor: User) {
+    private async onReactionAdd(msgReaction: any, reactor: User): Promise<void> {
         if (!this.ready) return;
         this.reactionAddHandler.process(msgReaction, reactor);
     }
