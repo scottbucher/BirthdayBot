@@ -12,7 +12,7 @@ import { GuildRepo } from '../../services/database/repos';
 let Config = require('../../../config/config.json');
 
 const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.promptExpireTime * 1000,
+    time: Config.experience.promptExpireTime * 1000,
     reset: true,
 };
 
@@ -45,7 +45,7 @@ export class SetupTrusted {
             .setTitle('Trusted Setup - Trusted Role')
             .setDescription(
                 'For help, view the trusted setup guide [here](https://birthdaybot.scottbucher.dev/server-setup/trusted-setup)!' +
-                '\n\nTo begin you must select the Trusted Role [(?)](https://birthdaybot.scottbucher.dev/faq#do-i-need-to-set-up-the-trusted-role)' +
+                    '\n\nTo begin you must select the Trusted Role [(?)](https://birthdaybot.scottbucher.dev/faq#do-i-need-to-set-up-the-trusted-role)' +
                     '\n\nPlease select an option'
             )
             .addField(

@@ -48,10 +48,10 @@ async function start(): Promise<void> {
     Logger.info('Starting Bot!');
 
     let clientOptions: ClientOptions = {
-        messageCacheMaxSize: Config.clientOptions.messageCacheMaxSize,
-        messageCacheLifetime: Config.clientOptions.messageCacheLifetime,
-        messageSweepInterval: Config.clientOptions.messageSweepInterval,
-        partials: Config.clientOptions.partials as PartialTypes[],
+        messageCacheMaxSize: Config.client.options.messageCacheMaxSize,
+        messageCacheLifetime: Config.client.options.messageCacheLifetime,
+        messageSweepInterval: Config.client.options.messageSweepInterval,
+        partials: Config.client.options.partials as PartialTypes[],
     };
 
     let client = new Client(clientOptions);
@@ -144,7 +144,7 @@ async function start(): Promise<void> {
             statsCommand,
             faqCommand,
             documentationCommand,
-            donateCommand
+            donateCommand,
         ],
         guildRepo,
         userRepo
@@ -156,7 +156,7 @@ async function start(): Promise<void> {
     let birthdayJob = new BirthdayJob(client, guildRepo, userRepo, birthdayService);
 
     let bot = new Bot(
-        Config.token,
+        Config.client.token,
         client,
         guildJoinHandler,
         guildLeaveHandler,

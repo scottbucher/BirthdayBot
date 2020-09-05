@@ -73,7 +73,7 @@ export class MessageHandler {
         }
 
         // Check if the command is a bot owner only command
-        if (command.ownerOnly && !Config.ownerIds.includes(msg.author.id)) {
+        if (command.ownerOnly && !Config.owners.includes(msg.author.id)) {
             let embed = new MessageEmbed()
                 .setDescription('This command can only be used by the bot owner!')
                 .setColor(Config.colors.error);
@@ -106,8 +106,11 @@ export class MessageHandler {
                 .setDescription('This command requires you to have voted in the past 24 hours!')
                 .addField('Last Vote', `${sinceLastVote}`, true)
                 .addField('Vote Here', '[Top.gg](https://top.gg/bot/656621136808902656/vote)', true)
-                .setFooter('While Birthday Bot is 100% free, voting helps us grow!', msg.client.user.avatarURL())
-                .setColor(Config.colors.error)
+                .setFooter(
+                    'While Birthday Bot is 100% free, voting helps us grow!',
+                    msg.client.user.avatarURL()
+                )
+                .setColor(Config.colors.error);
             await channel.send(embed);
             return;
         }

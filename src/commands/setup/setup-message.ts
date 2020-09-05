@@ -12,7 +12,7 @@ import { GuildRepo } from '../../services/database/repos';
 let Config = require('../../../config/config.json');
 
 const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.promptExpireTime * 1000,
+    time: Config.experience.promptExpireTime * 1000,
     reset: true,
 };
 
@@ -43,7 +43,7 @@ export class SetupMessage {
             .setTitle('Message Setup - Birthday Message Time')
             .setDescription(
                 'For help, view the message setup guide [here](https://birthdaybot.scottbucher.dev/server-setup/message-setup)!' +
-                '\n\nPlease give the hour for your Birthday Messages [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-message-time)' +
+                    '\n\nPlease give the hour for your Birthday Messages [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-message-time)' +
                     '\n\nAccepted Values: `0-23`\nDefault Value: `0`' +
                     '\n\n**Example Usage**: `13` (1PM)'
             )

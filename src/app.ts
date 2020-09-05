@@ -40,7 +40,7 @@ async function start(): Promise<void> {
             Debug.enabled && Debug.overrideShardCount
                 ? Debug.shardCount
                 : await ShardUtils.getRecommendedShards(
-                      Config.token,
+                      Config.client.token,
                       Config.sharding.serversPerShard
                   );
     } catch (error) {
@@ -60,7 +60,7 @@ async function start(): Promise<void> {
     }
 
     let shardManager = new ShardingManager('dist/start.js', {
-        token: Config.token,
+        token: Config.client.token,
         mode: 'worker',
         respawn: true,
         totalShards,
@@ -94,7 +94,7 @@ async function start(): Promise<void> {
         } catch (error) {
             Logger.error(Logs.error.updateServerCount, error);
         }
-    }, Config.updateInterval * 1000);
+    }, Config.jobs.updateServerCount.interval * 1000);
 }
 
 start();

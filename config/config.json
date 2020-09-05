@@ -1,7 +1,40 @@
 {
     "prefix": "bday",
-    "token": "<BOT_TOKEN>",
-    "intents": ["GUILDS", "GUILD_MEMBERS", "GUILD_PRESENCES", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
+    "owners": ["478288246858711040", "212772875793334272"],
+    "client": {
+        "token": "<BOT_TOKEN>",
+        "options": {
+            "messageCacheMaxSize": 20,
+            "messageCacheLifetime": 120,
+            "messageSweepInterval": 60,
+            "partials": ["MESSAGE", "REACTION"]
+        }
+    },
+    "mysql": {
+        "host": "localhost",
+        "database": "<DATABASE_NAME>",
+        "user": "<DATABASE_USERNAME>",
+        "password": "<DATABASE_PASSWORD>",
+        "charset": "utf8mb4",
+        "connectionLimit": 10
+    },
+    "api": {
+        "port": 8080,
+        "authentication": "<AUTHORIZATION_KEY>"
+    },
+    "jobs": {
+        "updateServerCount": {
+            "interval": 300
+        },
+        "postBirthdays": {
+            "schedule": "0 0 * * * *"
+        }
+    },
+    "experience": {
+        "promptExpireTime": 120,
+        "birthdayListSize": "30",
+        "birthdayMessageListSize": "5"
+    },
     "colors": {
         "default": "0x4eefff",
         "success": "0x1cfe86",
@@ -17,31 +50,20 @@
         "select": "🖱",
         "birthday": "🎂"
     },
-    "birthdayListSize": "30",
-    "birthdayMessageListSize": "5",
-    "mysql": {
-        "host": "localhost",
-        "database": "<DATABASE_NAME>",
-        "user": "<DATABASE_USERNAME>",
-        "password": "<DATABASE_PASSWORD>",
-        "charset": "utf8mb4",
-        "connectionLimit": 10
+    "validation": {
+        "regions": [
+            "Africa",
+            "America",
+            "Antarctica",
+            "Arctic",
+            "Asia",
+            "Atlantic",
+            "Australia",
+            "Europe",
+            "Indian",
+            "Pacific"
+        ]
     },
-    "postSchedule": "0 0 * * * *",
-    "listPageSize": 5,
-    "promptExpireTime": 120,
-    "regions": [
-        "Africa",
-        "America",
-        "Antarctica",
-        "Arctic",
-        "Asia",
-        "Atlantic",
-        "Australia",
-        "Europe",
-        "Indian",
-        "Pacific"
-    ],
     "sharding": {
         "machineId": 0,
         "machineCount": 1,
@@ -49,10 +71,6 @@
         "spawnDelay": 5,
         "spawnTimeout": 60
     },
-    "ownerIds": ["478288246858711040", "212772875793334272"],
-    "updateInterval": 300,
-    "apiPort": 8080,
-    "apiAuthentication": "<AUTHORIZATION_KEY>",
     "botSites": {
         "topGg": {
             "enabled": false,
@@ -74,11 +92,5 @@
             "url": "https://discordbotlist.com/api/bots/<BOT_ID>/stats",
             "token": "Bot <TOKEN>"
         }
-    },
-    "clientOptions": {
-        "messageCacheMaxSize": 20,
-        "messageCacheLifetime": 120,
-        "messageSweepInterval": 60,
-        "partials": ["MESSAGE", "REACTION"]
     }
 }

@@ -7,7 +7,7 @@ let Config = require('../../config/config.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;
 let zoneNames = moment.tz
     .names()
-    .filter(name => Config.regions.some(region => name.startsWith(`${region}/`)));
+    .filter(name => Config.validation.regions.some(region => name.startsWith(`${region}/`)));
 
 export abstract class FormatUtils {
     public static getRoleName(guild: Guild, roleDiscordId: string): string {
@@ -116,7 +116,10 @@ export abstract class FormatUtils {
                 'Actions',
                 '`bday message add <message>`\n`bday message remove <position>`\n`bday message clear`'
             )
-            .setFooter(`Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.birthdayListSize} per page`, guild.iconURL())
+            .setFooter(
+                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayListSize} per page`,
+                guild.iconURL()
+            )
             .setTimestamp();
 
         let i = (page - 1) * pageSize + 1;
@@ -148,7 +151,10 @@ export abstract class FormatUtils {
             .setTitle(`Birthday List | Page ${page}/${userDataResults.stats.TotalPages}`)
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
-            .setFooter(`Total Birthdays: ${userDataResults.stats.TotalItems} • ${Config.birthdayListSize} per page`, guild.iconURL())
+            .setFooter(
+                `Total Birthdays: ${userDataResults.stats.TotalItems} • ${Config.experience.birthdayListSize} per page`,
+                guild.iconURL()
+            )
             .setTimestamp();
 
         let i = (page - 1) * pageSize + 1;
@@ -160,17 +166,25 @@ export abstract class FormatUtils {
             return embed;
         }
         let description = `*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use \`bday set\`!*\n\n`;
-        let birthdays = [...new Set(userDataResults.userData.map(data => moment(data.Birthday).format('MMMM Do')))]; // remove duplicates
+        let birthdays = [
+            ...new Set(
+                userDataResults.userData.map(data => moment(data.Birthday).format('MMMM Do'))
+            ),
+        ]; // remove duplicates
 
         // Go through the list of birthdays
         for (let birthday of birthdays) {
-            let users = userDataResults.userData.filter(data =>  moment(data.Birthday).format('MMMM Do') === birthday); // Get all users with this birthday to create the sub list
+            let users = userDataResults.userData.filter(
+                data => moment(data.Birthday).format('MMMM Do') === birthday
+            ); // Get all users with this birthday to create the sub list
             let userNames: string[] = [];
             for (let user of users) {
-                userNames.push(`${guild.members.resolve(user.UserDiscordId)?.displayName}` || '**Unknown**');
+                userNames.push(
+                    `${guild.members.resolve(user.UserDiscordId)?.displayName}` || '**Unknown**'
+                );
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
-            description += `**${birthday}**: ${userList}\n` // Append the description
+            description += `**${birthday}**: ${userList}\n`; // Append the description
         }
 
         embed.setDescription(description);

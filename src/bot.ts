@@ -42,7 +42,7 @@ export class Bot {
         let postSchedule =
             Debug.enabled && Debug.overridePostScheduleEnabled
                 ? Debug.overridePostSchedule
-                : Config.postSchedule;
+                : Config.jobs.postBirthdays.schedule;
         schedule.scheduleJob(postSchedule, async () => {
             try {
                 await this.birthdayJob.run();

@@ -24,7 +24,7 @@ import { eventNames } from 'process';
 let Config = require('../../config/config.json');
 
 const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.promptExpireTime * 1000,
+    time: Config.experience.promptExpireTime * 1000,
     reset: true,
 };
 
@@ -57,7 +57,9 @@ export class SetCommand implements Command {
             // Check if the user is trying to set another person's birthday
             if (channel instanceof DMChannel) {
                 let embed = new MessageEmbed()
-                    .setDescription(`You cannot request to set another user's information in a DM!\nIf you are trying to set your own information, only input \`bday set\`!`)
+                    .setDescription(
+                        `You cannot request to set another user's information in a DM!\nIf you are trying to set your own information, only input \`bday set\`!`
+                    )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
@@ -66,7 +68,9 @@ export class SetCommand implements Command {
             if (!msg.member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) {
                 // Only admins can set other's birthday
                 let embed = new MessageEmbed()
-                    .setDescription('Only admins may suggest birthdays for other users!\nIf you are trying to set your own information, only input \`bday set\`!')
+                    .setDescription(
+                        'Only admins may suggest birthdays for other users!\nIf you are trying to set your own information, only input `bday set`!'
+                    )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
@@ -91,7 +95,9 @@ export class SetCommand implements Command {
                 !channel.permissionsFor(member).has([Permissions.FLAGS.READ_MESSAGE_HISTORY])
             ) {
                 let embed = new MessageEmbed()
-                    .setDescription('That user needs the `READ_MESSAGE_HISTORY` permission in this channel!')
+                    .setDescription(
+                        'That user needs the `READ_MESSAGE_HISTORY` permission in this channel!'
+                    )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
@@ -103,7 +109,7 @@ export class SetCommand implements Command {
 
         if (target.bot) {
             let embed = new MessageEmbed()
-                .setDescription("You can't set a birthday for a bot!")
+                .setDescription('You can\'t set a birthday for a bot!')
                 .setColor(Config.colors.error);
             await channel.send(embed);
             return;
