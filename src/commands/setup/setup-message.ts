@@ -42,8 +42,8 @@ export class SetupMessage {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Message Setup - Birthday Message Time')
             .setDescription(
-                'For help, view the message setup guide [here](https://birthdaybot.scottbucher.dev/server-setup/message-setup)!' +
-                    '\n\nPlease give the hour for your Birthday Messages [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-message-time)' +
+                `For help, view the message setup guide [here](${Config.links.docs}/server-setup/message-setup)!` +
+                    `\n\nPlease give the hour for your Birthday Messages [(?)](${Config.links.docs}/faq#what-is-the-birthday-message-time)` +
                     '\n\nAccepted Values: `0-23`\nDefault Value: `0`' +
                     '\n\n**Example Usage**: `13` (1PM)'
             )
@@ -103,7 +103,7 @@ export class SetupMessage {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Message Setup - Birthday Message Mention')
             .setDescription(
-                'Now you can set your birthday message mention! [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-message-mention)' +
+                `Now you can set your birthday message mention! [(?)](${Config.links.docs}/faq#what-is-the-birthday-message-mention)` +
                     '\n\nAcceptable inputs: `everyone`, `here`, `@role/role-name`, or `none`' +
                     '\n\nDefault Value: `none`'
             )
@@ -168,8 +168,8 @@ export class SetupMessage {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Message Setup - Embed Birthday Message')
             .setDescription(
-                'Now you can choose if the Birthday Message should be embedded or not! [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-an-embed)' +
-                    '\n\nDisable this if you use a image/gif in your Custom Birthday Message(s). [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-a-custom-birthday-message)' +
+                `Now you can choose if the Birthday Message should be embedded or not! [(?)](${Config.links.docs}/faq#what-is-an-embed)` +
+                    `\n\nDisable this if you use a image/gif in your Custom Birthday Message(s). [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)` +
                     `\n\nEnabled: ${Config.emotes.confirm}` +
                     `\nDisabled: ${Config.emotes.deny}`
             )

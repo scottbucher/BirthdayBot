@@ -17,7 +17,7 @@ export class FAQCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let embed = new MessageEmbed()
             .setDescription(
-                `View our FAQ for ${msg.client.user.toString()} [here](https://birthdaybot.scottbucher.dev/faq)!`
+                `View our FAQ for ${msg.client.user.toString()} [here](${Config.links.docs}/faq)!`
             )
             .setColor(Config.colors.default);
 

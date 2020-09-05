@@ -71,6 +71,15 @@
         "spawnDelay": 5,
         "spawnTimeout": 60
     },
+    "links": {
+        "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
+        "support": "https://discord.gg/9gUQFtz",
+        "docs": "https://birthdaybot.scottbucher.dev",
+        "vote": "https://top.gg/bot/656621136808902656/vote",
+        "donate": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url",
+        "map": "https://kevinnovak.github.io/Time-Zone-Picker/",
+        "stream": "https://www.twitch.tv/stqlth"
+    },
     "botSites": {
         "topGg": {
             "enabled": false,

@@ -22,8 +22,8 @@ export class GuildJoinHandler implements EventHandler {
             .setDescription(
                 `To view the commands of this bot use \`${prefix} help\`` +
                     `\nTo setup the bot run \`${prefix} setup\`` +
-                    '\n\nView the [Documentation](https://birthdaybot.scottbucher.dev/) or the [FAQ](https://birthdaybot.scottbucher.dev/faq).' +
-                    `\nFor more support join our discord server [here](https://discord.gg/9gUQFtz)!`
+                    `\n\nView the [Documentation](${Config.links.docs}) or the [FAQ](${Config.links.docs}/faq).` +
+                    `\nFor more support join our discord server [here](${Config.links.support})!`
             )
             .setFooter('Join our support server for help!', guild.iconURL())
             .setTimestamp()

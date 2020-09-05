@@ -17,7 +17,9 @@ export class InviteCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let embed = new MessageEmbed()
             .setDescription(
-                `Invite ${msg.client.user.toString()} to your server [here](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot)!`
+                `Invite ${msg.client.user.toString()} to your server [here](${
+                    Config.links.invite
+                })!`
             )
             .setColor(Config.colors.default);
 

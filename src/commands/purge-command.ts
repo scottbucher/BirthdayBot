@@ -66,8 +66,8 @@ export class PurgeCommand implements Command {
                 .setAuthor(target.tag, target.avatarURL());
 
             let description =
-                'This command will remove both your time zone and your birthday from the database. [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
-                `\n\nThis will not reset your birthday attempts. (You have ${changesLeft} left) [(?)](https://birthdaybot.scottbucher.dev/faq#how-many-times-can-i-set-my-birthday)`;
+                'This command will remove both your time zone and your birthday from the database. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)' +
+                `\n\nThis will not reset your birthday attempts. (You have ${changesLeft} left) [(?)](${Config.links.docs}/faq#how-many-times-can-i-set-my-birthday)`;
 
             if (changesLeft === 0) {
                 // Out of changes?

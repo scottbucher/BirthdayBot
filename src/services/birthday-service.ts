@@ -160,7 +160,8 @@ export class BirthdayService {
                         member.roles.cache.has(trustedRole.id)
                             ? `${Config.emotes.confirm} Yes`
                             : `${Config.emotes.deny} No`
-                    }`, true
+                    }`,
+                    true
                 );
             }
             testingEmbed.addField(
@@ -169,7 +170,8 @@ export class BirthdayService {
                     birthdayRole
                         ? `${Config.emotes.confirm} Correctly set`
                         : `${Config.emotes.deny} Not set or is a deleted role`
-                }`, true
+                }`,
+                true
             );
             if (trustedRole) {
                 testingEmbed.addField(
@@ -178,7 +180,8 @@ export class BirthdayService {
                         !trustedCheckRole
                             ? `${Config.emotes.confirm} Passed`
                             : `${Config.emotes.deny} Trusted role/settings prevented the birthday role.`
-                    }`, true
+                    }`,
+                    true
                 );
             }
             testingEmbed.addField(
@@ -204,7 +207,9 @@ export class BirthdayService {
 
             testingEmbed.setDescription(
                 'Below are the checks to ensure your settings are correct for the birthday event.\n\nIf the checks are passed and either the birthday message and/or birthday role were not given ' +
-                    `when they should have then ${guild.client.user.toString()} most likely did not have the correct permissions. [(?)](https://birthdaybot.scottbucher.dev/faq)\n\nFor more help: [Join Support Server](https://discord.gg/9gUQFtz)`
+                    `when they should have then ${guild.client.user.toString()} most likely did not have the correct permissions. [(?)](${
+                        Config.links.docs
+                    }/faq)\n\nFor more help: [Join Support Server](${Config.links.support})`
             );
 
             if (testChannel) {

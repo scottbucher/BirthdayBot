@@ -130,7 +130,7 @@ export abstract class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*A random birthday message is chosen for each birthday. If there are none set, it will use the default birthday message. [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-a-custom-birthday-message)*\n\n`;
+        let description = `*A random birthday message is chosen for each birthday. If there are none set, it will use the default birthday message. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
 
         for (let customMessage of customMessageResults.customMessages) {
             description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;

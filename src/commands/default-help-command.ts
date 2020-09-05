@@ -40,9 +40,9 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} settings**\*\* - View server's settings.` +
                         `\n**${prefix} test [User]**\*\* - Test the birthday event.` +
                         `\n` +
-                        `\n**${prefix} donate** - Support developements by donating!` +
+                        `\n**${prefix} donate** - Support developments by donating!` +
                         `\n` +
-                        '\nIf you have any question/problems please join our support server [here](https://discord.gg/9gUQFtz).'
+                        `\nIf you have any question/problems please join our support server [here](${Config.links.support}).`
                 )
                 .addField('Legend', '\*\* = Server Only Command')
                 .setColor(Config.colors.default);
@@ -79,7 +79,10 @@ export class DefaultHelpCommand implements Command {
                 .setColor(Config.colors.default);
         } else if (args[2].toLowerCase() === 'trusted') {
             embed
-                .setAuthor('Birthday Bot Trusted System Help - Guild Only', msg.client.user.avatarURL())
+                .setAuthor(
+                    'Birthday Bot Trusted System Help - Guild Only',
+                    msg.client.user.avatarURL()
+                )
                 .setDescription(
                     '' +
                         '\n' +
@@ -114,9 +117,9 @@ export class DefaultHelpCommand implements Command {
                         `\n**${prefix} settings**\*\* - View server's settings.` +
                         `\n**${prefix} test [User]**\*\* - Test the birthday event.` +
                         `\n` +
-                        `\n**${prefix} donate** - Support developements by donating!` +
+                        `\n**${prefix} donate** - Support developments by donating!` +
                         `\n` +
-                        '\nIf you have any question/problems please join our support server [here](https://discord.gg/9gUQFtz).'
+                        `\nIf you have any question/problems please join our support server [here](${Config.links.support}).`
                 )
                 .addField('Legend', '\*\* = Server Only Command')
                 .setColor(Config.colors.default);

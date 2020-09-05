@@ -16,9 +16,7 @@ export class SupportCommand implements Command {
 
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let embed = new MessageEmbed()
-            .setDescription(
-                `For support join our discord server [here](https://discord.gg/9gUQFtz)!`
-            )
+            .setDescription(`For support join our discord server [here](${Config.links.support})!`)
             .setColor(Config.colors.default);
 
         if (channel instanceof TextChannel) await channel.send(embed);

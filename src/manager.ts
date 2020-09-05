@@ -9,7 +9,11 @@ let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');
 
 export class Manager {
-    constructor(private shardManager: ShardingManager, private botSites: BotSite[], private api: Api) {}
+    constructor(
+        private shardManager: ShardingManager,
+        private botSites: BotSite[],
+        private api: Api
+    ) {}
 
     public async start(): Promise<void> {
         this.registerListeners();
@@ -33,7 +37,7 @@ export class Manager {
         try {
             await this.api.start();
         } catch (error) {
-            Logger.error(Logs.error.votingApiStart, error)
+            Logger.error(Logs.error.votingApiStart, error);
         }
     }
 
@@ -44,7 +48,7 @@ export class Manager {
                 activity: {
                     name: 'bdays to ${serverCount.toLocaleString()} servers',
                     type: "STREAMING",
-                    url: "https://www.twitch.tv/stqlth"
+                    url: "${Config.links.stream}"
                 }
             });
         `);

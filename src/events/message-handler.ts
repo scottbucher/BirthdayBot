@@ -105,7 +105,7 @@ export class MessageHandler {
                 .setTitle('Vote Required!')
                 .setDescription('This command requires you to have voted in the past 24 hours!')
                 .addField('Last Vote', `${sinceLastVote}`, true)
-                .addField('Vote Here', '[Top.gg](https://top.gg/bot/656621136808902656/vote)', true)
+                .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
                 .setFooter(
                     'While Birthday Bot is 100% free, voting helps us grow!',
                     msg.client.user.avatarURL()
@@ -149,7 +149,7 @@ export class MessageHandler {
                 let embed = new MessageEmbed()
                     .setDescription(`Something went wrong!`)
                     .addField('Error code', msg.id)
-                    .addField('Contact support', 'https://discord.gg/9gUQFtz')
+                    .addField('Contact support', Config.links.support)
                     .setColor(Config.colors.error);
                 await channel.send(embed);
             } catch {

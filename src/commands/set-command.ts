@@ -143,9 +143,9 @@ export class SetCommand implements Command {
             .setDescription(
                 '**Please Note**: by submitting this information you agree it can be shown to anyone.' +
                     '\n' +
-                    '\nFirst, please enter your time zone. [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
+                    `\nFirst, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)` +
                     '\n' +
-                    '\nTo find your time zone please use the [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!' +
+                    `\nTo find your time zone please use the [map time zone picker](${Config.links.map})!` +
                     '\n' +
                     '\nSimply click your location on the map and copy the name of the selected time zone. You can then enter it below.' +
                     '\n' +
@@ -195,7 +195,9 @@ export class SetCommand implements Command {
 
         let birthdayEmbed = new MessageEmbed()
             .setDescription(
-                `\n\Now, please provide ${msg.client.user.toString()} with your birth month and day [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
+                `\n\Now, please provide ${msg.client.user.toString()} with your birth month and day [(?)](${
+                    Config.links.docs
+                }/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
                     '\n\n**Example Usage** `08/28` (MM/DD)'
             )
             .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())

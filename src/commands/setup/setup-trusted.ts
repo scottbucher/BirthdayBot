@@ -44,8 +44,8 @@ export class SetupTrusted {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Trusted Setup - Trusted Role')
             .setDescription(
-                'For help, view the trusted setup guide [here](https://birthdaybot.scottbucher.dev/server-setup/trusted-setup)!' +
-                    '\n\nTo begin you must select the Trusted Role [(?)](https://birthdaybot.scottbucher.dev/faq#do-i-need-to-set-up-the-trusted-role)' +
+                `For help, view the trusted setup guide [here](${Config.links.docs}/server-setup/trusted-setup)!` +
+                    `\n\nTo begin you must select the Trusted Role [(?)](${Config.links.docs}/faq#do-i-need-to-set-up-the-trusted-role)` +
                     '\n\nPlease select an option'
             )
             .addField(
@@ -153,7 +153,7 @@ export class SetupTrusted {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Trusted Setup - Trusted Prevents Message')
             .setDescription(
-                'Should the trusted role prevent the birthday message? [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-trusted-prevents-message-role)' +
+                `Should the trusted role prevent the birthday message? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)` +
                     `\n\nTrue: ${Config.emotes.confirm}` +
                     `\nFalse: ${Config.emotes.deny}`
             )
@@ -192,7 +192,7 @@ export class SetupTrusted {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Trusted Setup - Trusted Prevents Role')
             .setDescription(
-                'Should the trusted role prevent the birthday role? [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-trusted-prevents-message-role)' +
+                `Should the trusted role prevent the birthday role? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)` +
                     `\n\nTrue: ${Config.emotes.confirm}` +
                     `\nFalse: ${Config.emotes.deny}`
             )

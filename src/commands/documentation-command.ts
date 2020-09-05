@@ -17,7 +17,9 @@ export class DocumentationCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let embed = new MessageEmbed()
             .setDescription(
-                `View our Documentation for ${msg.client.user.toString()} [here](https://birthdaybot.scottbucher.dev)!`
+                `View our Documentation for ${msg.client.user.toString()} [here](${
+                    Config.links.docs
+                })!`
             )
             .setColor(Config.colors.default);
 
