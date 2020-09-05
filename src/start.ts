@@ -37,7 +37,7 @@ import {
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
 
-import { BirthdayJob } from './jobs';
+import { PostBirthdaysJob } from './jobs';
 import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
 import { StatsCommand } from './commands/stats-command';
@@ -153,7 +153,7 @@ async function start(): Promise<void> {
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 
-    let birthdayJob = new BirthdayJob(client, guildRepo, userRepo, birthdayService);
+    let postBirthdaysJob = new PostBirthdaysJob(client, guildRepo, userRepo, birthdayService);
 
     let bot = new Bot(
         Config.client.token,
@@ -162,7 +162,7 @@ async function start(): Promise<void> {
         guildLeaveHandler,
         reactionAddHandler,
         messageHandler,
-        birthdayJob
+        postBirthdaysJob
     );
 
     await bot.start();

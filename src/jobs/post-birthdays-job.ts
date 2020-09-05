@@ -9,7 +9,7 @@ import moment from 'moment';
 
 let Logs = require('../../lang/logs.json');
 
-export class BirthdayJob implements Job {
+export class PostBirthdaysJob implements Job {
     constructor(
         private client: Client,
         private guildRepo: GuildRepo,
