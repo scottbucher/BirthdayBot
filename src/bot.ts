@@ -1,13 +1,10 @@
 import { Client, Guild, Message, MessageReaction, User } from 'discord.js';
-import schedule from 'node-schedule';
 
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
-import { PostBirthdaysJob } from './jobs';
+import { Job } from './jobs';
 import { Logger } from './services';
 
 let Logs = require('../lang/logs.json');
-let Config = require('../config/config.json');
-let Debug = require('../config/debug.json');
 
 export class Bot {
     private ready = false;
@@ -19,7 +16,7 @@ export class Bot {
         private guildLeaveHandler: GuildLeaveHandler,
         private reactionAddHandler: ReactionAddHandler,
         private messageHandler: MessageHandler,
-        private postBirthdaysJob: PostBirthdaysJob
+        private jobs: Job[]
     ) {}
 
     public async start(): Promise<void> {
@@ -39,18 +36,9 @@ export class Bot {
     }
 
     private startJobs(): void {
-        let postSchedule =
-            Debug.enabled && Debug.overridePostScheduleEnabled
-                ? Debug.overridePostSchedule
-                : Config.jobs.postBirthdays.schedule;
-        schedule.scheduleJob(postSchedule, async () => {
-            try {
-                await this.postBirthdaysJob.run();
-            } catch (error) {
-                Logger.error(Logs.error.birthdayJob, error);
-                return;
-            }
-        });
+        for (let job of this.jobs) {
+            job.start();
+        }
     }
 
     private async login(token: string): Promise<void> {

@@ -1,16 +1,18 @@
-import { BdayUtils, MathUtils } from '../utils';
-import { BirthdayService, Logger } from '../services';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-
-import { Job } from './job';
-import { UserData } from '../models/database';
 import moment from 'moment';
+import schedule from 'node-schedule';
+
+import { UserData } from '../models/database';
+import { BirthdayService, Logger } from '../services';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { BdayUtils, MathUtils } from '../utils';
+import { Job } from './job';
 
 let Logs = require('../../lang/logs.json');
 
 export class PostBirthdaysJob implements Job {
     constructor(
+        public schedule: string,
         private client: Client,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo,
@@ -18,8 +20,6 @@ export class PostBirthdaysJob implements Job {
     ) {}
 
     public async run(): Promise<void> {
-        Logger.info(Logs.info.birthdayJobStarted);
-
         let now = moment();
         let today = moment().format('MM-DD');
         let tomorrow = moment().add(1, 'day').format('MM-DD');
@@ -134,6 +134,17 @@ export class PostBirthdaysJob implements Job {
 
         // Wait for all birthday celebrations to finish
         await Promise.allSettled(promises);
-        Logger.info(Logs.info.completedBirthdayJob);
+    }
+
+    public start(): void {
+        schedule.scheduleJob(this.schedule, async () => {
+            try {
+                Logger.info(Logs.info.birthdayJobStarted);
+                await this.run();
+                Logger.info(Logs.info.completedBirthdayJob);
+            } catch (error) {
+                Logger.error(Logs.error.birthdayJob, error);
+            }
+        });
     }
 }

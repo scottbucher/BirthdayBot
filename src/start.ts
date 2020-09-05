@@ -1,8 +1,13 @@
-import { BirthdayService, Logger } from './services';
+import { Client, ClientOptions, DiscordAPIError, PartialTypes } from 'discord.js';
+
+import { Bot } from './bot';
 import {
     ClearCommand,
     CreateCommand,
     DefaultHelpCommand,
+    DocumentationCommand,
+    DonateCommand,
+    FAQCommand,
     InviteCommand,
     ListCommand,
     MapCommand,
@@ -18,13 +23,7 @@ import {
     TrustedCommand,
     UpdateCommand,
     ViewCommand,
-    FAQCommand,
-    DocumentationCommand,
-    DonateCommand,
 } from './commands';
-import { Client, ClientOptions, DiscordAPIError, PartialTypes, ShardingManager } from 'discord.js';
-import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
-import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -36,13 +35,15 @@ import {
     MessageTimeSubCommand,
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
-
-import { PostBirthdaysJob } from './jobs';
-import { Bot } from './bot';
-import { DataAccess } from './services/database/data-access';
 import { StatsCommand } from './commands/stats-command';
+import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+import { PostBirthdaysJob } from './jobs';
+import { BirthdayService, Logger } from './services';
+import { DataAccess } from './services/database/data-access';
+import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
+let Debug = require('../config/debug.json');
 
 async function start(): Promise<void> {
     Logger.info('Starting Bot!');
@@ -153,7 +154,17 @@ async function start(): Promise<void> {
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 
-    let postBirthdaysJob = new PostBirthdaysJob(client, guildRepo, userRepo, birthdayService);
+    let postBirthdaysSchedule =
+        Debug.enabled && Debug.overridePostScheduleEnabled
+            ? Debug.overridePostSchedule
+            : Config.jobs.postBirthdays.schedule;
+    let postBirthdaysJob = new PostBirthdaysJob(
+        postBirthdaysSchedule,
+        client,
+        guildRepo,
+        userRepo,
+        birthdayService
+    );
 
     let bot = new Bot(
         Config.client.token,
@@ -162,7 +173,7 @@ async function start(): Promise<void> {
         guildLeaveHandler,
         reactionAddHandler,
         messageHandler,
-        postBirthdaysJob
+        [postBirthdaysJob]
     );
 
     await bot.start();
