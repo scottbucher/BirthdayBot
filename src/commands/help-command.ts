@@ -5,7 +5,7 @@ import { Command } from './command';
 
 let Config = require('../../config/config.json'); // Possible support for server specific prefixes?
 
-export class DefaultHelpCommand implements Command {
+export class HelpCommand implements Command {
     public name: string = 'help';
     public aliases = ['?'];
     public requireSetup = false;

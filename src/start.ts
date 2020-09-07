@@ -4,10 +4,10 @@ import { Bot } from './bot';
 import {
     ClearCommand,
     CreateCommand,
-    DefaultHelpCommand,
     DocumentationCommand,
     DonateCommand,
     FAQCommand,
+    HelpCommand,
     InviteCommand,
     ListCommand,
     MapCommand,
@@ -58,7 +58,7 @@ async function start(): Promise<void> {
     let client = new Client(clientOptions);
     let dataAccess = new DataAccess(Config.mysql);
 
-    let defaultHelpCommand = new DefaultHelpCommand();
+    let helpCommand = new HelpCommand();
 
     // Repos
     let guildRepo = new GuildRepo(dataAccess);
@@ -123,7 +123,7 @@ async function start(): Promise<void> {
 
     // Events handlers
     let messageHandler = new MessageHandler(
-        defaultHelpCommand,
+        helpCommand,
         [
             setCommand,
             setupCommand,

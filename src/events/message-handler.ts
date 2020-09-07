@@ -6,18 +6,18 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { MessageUtils, PermissionUtils } from '../utils';
+import moment from 'moment';
 
 import { Command } from '../commands';
 import { Logger } from '../services';
-import moment from 'moment';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
 export class MessageHandler {
     constructor(
-        private defaultHelpCommand: Command,
+        private helpCommand: Command,
         private commands: Command[],
         private guildRepo: GuildRepo,
         private userRepo: UserRepo
@@ -58,7 +58,7 @@ export class MessageHandler {
 
         // If only a prefix, run the help command
         if (args.length === 1) {
-            await this.defaultHelpCommand.execute(args, msg, channel);
+            await this.helpCommand.execute(args, msg, channel);
             return;
         }
 
@@ -68,7 +68,7 @@ export class MessageHandler {
 
         // If no command found, run the help command
         if (!command) {
-            await this.defaultHelpCommand.execute(args, msg, channel);
+            await this.helpCommand.execute(args, msg, channel);
             return;
         }
 
