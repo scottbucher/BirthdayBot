@@ -24,7 +24,7 @@ let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
 
 const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.promptExpireTime * 1000,
+    time: Config.experience.promptExpireTime * 1000,
     reset: true,
 };
 
@@ -73,7 +73,7 @@ export class ReactionAddHandler implements EventHandler {
         try {
             users = await msgReaction.users.fetch();
         } catch (error) {
-            Logger.error(Logs.error.userFetch, error);``
+            Logger.error(Logs.error.userFetch, error);
             return;
         }
 

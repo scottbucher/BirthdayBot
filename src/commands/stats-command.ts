@@ -1,4 +1,4 @@
-import { DMChannel, Message, MessageEmbed, ShardingManager, TextChannel } from 'discord.js';
+import djs, { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { MessageUtils, ShardUtils } from '../utils';
 
 import moment from 'moment';
@@ -6,7 +6,6 @@ import { UserRepo } from '../services/database/repos';
 import { Command } from './command';
 
 let Config = require('../../config/config.json');
-let version = require('discord.js').version;
 
 export class StatsCommand implements Command {
     public name: string = 'stats';
@@ -46,17 +45,15 @@ export class StatsCommand implements Command {
         let embed = new MessageEmbed()
             .setColor(Config.colors.default)
             .setThumbnail(msg.client.user.displayAvatarURL({ dynamic: true }))
-            .setAuthor(
-                msg.author.tag,
-                msg.author.displayAvatarURL({ dynamic: true })
-            )
+            .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
             .addField('Total Users', userCount.toLocaleString(), true)
             .addField('Total Birthdays', totalBirthdays.toLocaleString(), true)
             .addField('Total Servers', serverCount.toLocaleString(), true)
             .addField('Shard ID', `${shardId + 1}/${msg.client.shard.count}`, true)
             .addField('Birthdays Today', birthdaysToday.toLocaleString(), true)
             .addField('Birthdays This Month', birthdaysThisMonth.toLocaleString(), true)
-            .addField('Discord.js Version', version, true);
+            .addField('Node.js', process.version, true)
+            .addField('discord.js', `v${djs.version}`, true);
 
         if (channel instanceof TextChannel) await channel.send(embed);
         else MessageUtils.sendDm(channel, embed);

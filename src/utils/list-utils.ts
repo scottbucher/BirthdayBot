@@ -12,7 +12,7 @@ export abstract class ListUtils {
         message: Message,
         page: number
     ): Promise<void> {
-        let pageSize = Config.birthdayListSize;
+        let pageSize = Config.experience.birthdayListSize;
 
         let users = guild.members.cache.filter(member => !member.user.bot).keyArray();
 
@@ -44,7 +44,7 @@ export abstract class ListUtils {
         message: Message,
         page: number
     ): Promise<void> {
-        let pageSize = Config.birthdayMessageListSize;
+        let pageSize = Config.experience.birthdayMessageListSize;
 
         let customMessageResults = await customMessageRepo.getCustomMessageList(
             message.guild.id,

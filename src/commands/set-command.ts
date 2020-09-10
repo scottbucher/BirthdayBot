@@ -24,7 +24,7 @@ import { eventNames } from 'process';
 let Config = require('../../config/config.json');
 
 const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.promptExpireTime * 1000,
+    time: Config.experience.promptExpireTime * 1000,
     reset: true,
 };
 
@@ -57,7 +57,9 @@ export class SetCommand implements Command {
             // Check if the user is trying to set another person's birthday
             if (channel instanceof DMChannel) {
                 let embed = new MessageEmbed()
-                    .setDescription(`You cannot request to set another user's information in a DM!\nIf you are trying to set your own information, only input \`bday set\`!`)
+                    .setDescription(
+                        `You cannot request to set another user's information in a DM!\nIf you are trying to set your own information, only input \`bday set\`!`
+                    )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
@@ -66,7 +68,9 @@ export class SetCommand implements Command {
             if (!msg.member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) {
                 // Only admins can set other's birthday
                 let embed = new MessageEmbed()
-                    .setDescription('Only admins may suggest birthdays for other users!\nIf you are trying to set your own information, only input \`bday set\`!')
+                    .setDescription(
+                        'Only admins may suggest birthdays for other users!\nIf you are trying to set your own information, only input `bday set`!'
+                    )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
@@ -91,7 +95,9 @@ export class SetCommand implements Command {
                 !channel.permissionsFor(member).has([Permissions.FLAGS.READ_MESSAGE_HISTORY])
             ) {
                 let embed = new MessageEmbed()
-                    .setDescription('That user needs the `READ_MESSAGE_HISTORY` permission in this channel!')
+                    .setDescription(
+                        'That user needs the `READ_MESSAGE_HISTORY` permission in this channel!'
+                    )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
@@ -103,7 +109,7 @@ export class SetCommand implements Command {
 
         if (target.bot) {
             let embed = new MessageEmbed()
-                .setDescription("You can't set a birthday for a bot!")
+                .setDescription('You can\'t set a birthday for a bot!')
                 .setColor(Config.colors.error);
             await channel.send(embed);
             return;
@@ -137,9 +143,9 @@ export class SetCommand implements Command {
             .setDescription(
                 '**Please Note**: by submitting this information you agree it can be shown to anyone.' +
                     '\n' +
-                    '\nFirst, please enter your time zone. [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
+                    `\nFirst, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)` +
                     '\n' +
-                    '\nTo find your time zone please use the [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!' +
+                    `\nTo find your time zone please use the [map time zone picker](${Config.links.map})!` +
                     '\n' +
                     '\nSimply click your location on the map and copy the name of the selected time zone. You can then enter it below.' +
                     '\n' +
@@ -189,7 +195,9 @@ export class SetCommand implements Command {
 
         let birthdayEmbed = new MessageEmbed()
             .setDescription(
-                `\n\Now, please provide ${msg.client.user.toString()} with your birth month and day [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
+                `\n\Now, please provide ${msg.client.user.toString()} with your birth month and day [(?)](${
+                    Config.links.docs
+                }/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
                     '\n\n**Example Usage** `08/28` (MM/DD)'
             )
             .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())

@@ -20,7 +20,7 @@ export class MessageListSubCommand {
             if (!page || page <= 0 || page > 100000) page = 1;
         }
 
-        let pageSize = Config.birthdayMessageListSize;
+        let pageSize = Config.experience.birthdayMessageListSize;
 
         let customMessageResults = await this.customMessageRepo.getCustomMessageList(
             msg.guild.id,

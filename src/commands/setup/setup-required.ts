@@ -12,7 +12,7 @@ import { GuildRepo } from '../../services/database/repos';
 let Config = require('../../../config/config.json');
 
 const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.promptExpireTime * 1000,
+    time: Config.experience.promptExpireTime * 1000,
     reset: true,
 };
 
@@ -41,8 +41,8 @@ export class SetupRequired {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Server Setup - Birthday Channel')
             .setDescription(
-                'For help, view the required setup guide [here](https://birthdaybot.scottbucher.dev/server-setup/required-setup)!' +
-                '\n\nTo begin you must set up the birthday channel [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
+                `For help, view the required setup guide [here](${Config.links.docs}/server-setup/required-setup)!` +
+                    `\n\nTo begin you must set up the birthday channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)` +
                     '\n\nPlease select an option'
             )
             .addField(
@@ -170,9 +170,9 @@ export class SetupRequired {
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Server Setup - Birthday Role')
             .setDescription(
-                'Now, set up the birthday role [(?)](https://birthdaybot.scottbucher.dev/faq#what-is-the-birthday-role)' +
-                '\nNote: The Birthday Role is actively removed from those whose birthday it isn\'t. [(?)](https://birthdaybot.scottbucher.dev/faq#what-does-it-mean-by-the-birthday-role-is-actively-removed)' +
-                '\n\nPlease select an option'
+                `Now, set up the birthday role [(?)](${Config.links.docs}/faq#what-is-the-birthday-role)` +
+                    `\nNote: The Birthday Role is actively removed from those whose birthday it isn't. [(?)](${Config.links.docs}/faq#what-does-it-mean-by-the-birthday-role-is-actively-removed)` +
+                    '\n\nPlease select an option'
             )
             .addField(
                 `Create New Role ${Config.emotes.create}\nSelect Pre-Existing Role ${Config.emotes.select}\nNo Birthday Role ${Config.emotes.deny}`,
