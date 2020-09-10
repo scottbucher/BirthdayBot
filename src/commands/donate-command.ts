@@ -17,7 +17,9 @@ export class DonateCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let embed = new MessageEmbed()
             .setDescription(
-                `You can support ${msg.client.user.toString()} by donating [here](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)!`
+                `You can support ${msg.client.user.toString()} by donating [here](${
+                    Config.links.donate
+                })!`
             )
             .setColor(Config.colors.default);
 

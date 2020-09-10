@@ -1,5 +1,5 @@
 export { Command } from './command';
-export { DefaultHelpCommand } from './default-help-command';
+export { HelpCommand } from './help-command';
 export { SetCommand } from './set-command';
 export { SetupCommand } from './setup-command';
 export { CreateCommand } from './create-command';

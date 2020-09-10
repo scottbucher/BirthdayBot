@@ -1,5 +1,10 @@
 import { ActionUtils, PermissionUtils } from '../utils';
-import { CollectOptions, CollectorUtils, ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
+import {
+    CollectOptions,
+    CollectorUtils,
+    ExpireFunction,
+    MessageFilter,
+} from 'discord.js-collector-utils';
 import { DMChannel, Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
@@ -8,7 +13,7 @@ import { UserRepo } from '../services/database/repos';
 let Config = require('../../config/config.json');
 
 const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.promptExpireTime * 1000,
+    time: Config.experience.promptExpireTime * 1000,
     reset: true,
 };
 
@@ -61,8 +66,8 @@ export class PurgeCommand implements Command {
                 .setAuthor(target.tag, target.avatarURL());
 
             let description =
-                'This command will remove both your time zone and your birthday from the database. [(?)](https://birthdaybot.scottbucher.dev/faq#why-does-birthday-bot-need-my-timezone)' +
-                `\n\nThis will not reset your birthday attempts. (You have ${changesLeft} left) [(?)](https://birthdaybot.scottbucher.dev/faq#how-many-times-can-i-set-my-birthday)`;
+                'This command will remove both your time zone and your birthday from the database. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)' +
+                `\n\nThis will not reset your birthday attempts. (You have ${changesLeft} left) [(?)](${Config.links.docs}/faq#how-many-times-can-i-set-my-birthday)`;
 
             if (changesLeft === 0) {
                 // Out of changes?
@@ -71,7 +76,6 @@ export class PurgeCommand implements Command {
             }
             confirmEmbed.setDescription(description);
         }
-
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 

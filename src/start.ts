@@ -1,8 +1,13 @@
-import { BirthdayService, Logger } from './services';
+import { Client, ClientOptions, DiscordAPIError, PartialTypes } from 'discord.js';
+
+import { Bot } from './bot';
 import {
     ClearCommand,
     CreateCommand,
-    DefaultHelpCommand,
+    DocumentationCommand,
+    DonateCommand,
+    FAQCommand,
+    HelpCommand,
     InviteCommand,
     ListCommand,
     MapCommand,
@@ -18,13 +23,7 @@ import {
     TrustedCommand,
     UpdateCommand,
     ViewCommand,
-    FAQCommand,
-    DocumentationCommand,
-    DonateCommand,
 } from './commands';
-import { Client, ClientOptions, DiscordAPIError, PartialTypes, ShardingManager } from 'discord.js';
-import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
-import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -36,28 +35,30 @@ import {
     MessageTimeSubCommand,
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
-
-import { BirthdayJob } from './jobs';
-import { Bot } from './bot';
-import { DataAccess } from './services/database/data-access';
 import { StatsCommand } from './commands/stats-command';
+import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+import { PostBirthdaysJob } from './jobs';
+import { BirthdayService, Logger } from './services';
+import { DataAccess } from './services/database/data-access';
+import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
+let Debug = require('../config/debug.json');
 
 async function start(): Promise<void> {
     Logger.info('Starting Bot!');
 
     let clientOptions: ClientOptions = {
-        messageCacheMaxSize: Config.clientOptions.messageCacheMaxSize,
-        messageCacheLifetime: Config.clientOptions.messageCacheLifetime,
-        messageSweepInterval: Config.clientOptions.messageSweepInterval,
-        partials: Config.clientOptions.partials as PartialTypes[],
+        messageCacheMaxSize: Config.client.options.messageCacheMaxSize,
+        messageCacheLifetime: Config.client.options.messageCacheLifetime,
+        messageSweepInterval: Config.client.options.messageSweepInterval,
+        partials: Config.client.options.partials as PartialTypes[],
     };
 
     let client = new Client(clientOptions);
     let dataAccess = new DataAccess(Config.mysql);
 
-    let defaultHelpCommand = new DefaultHelpCommand();
+    let helpCommand = new HelpCommand();
 
     // Repos
     let guildRepo = new GuildRepo(dataAccess);
@@ -122,7 +123,7 @@ async function start(): Promise<void> {
 
     // Events handlers
     let messageHandler = new MessageHandler(
-        defaultHelpCommand,
+        helpCommand,
         [
             setCommand,
             setupCommand,
@@ -144,7 +145,7 @@ async function start(): Promise<void> {
             statsCommand,
             faqCommand,
             documentationCommand,
-            donateCommand
+            donateCommand,
         ],
         guildRepo,
         userRepo
@@ -153,16 +154,26 @@ async function start(): Promise<void> {
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 
-    let birthdayJob = new BirthdayJob(client, guildRepo, userRepo, birthdayService);
+    let postBirthdaysSchedule =
+        Debug.enabled && Debug.overridePostScheduleEnabled
+            ? Debug.overridePostSchedule
+            : Config.jobs.postBirthdays.schedule;
+    let postBirthdaysJob = new PostBirthdaysJob(
+        postBirthdaysSchedule,
+        client,
+        guildRepo,
+        userRepo,
+        birthdayService
+    );
 
     let bot = new Bot(
-        Config.token,
+        Config.client.token,
         client,
         guildJoinHandler,
         guildLeaveHandler,
         reactionAddHandler,
         messageHandler,
-        birthdayJob
+        [postBirthdaysJob]
     );
 
     await bot.start();

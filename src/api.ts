@@ -18,7 +18,7 @@ export class Api {
         // Capture a vote
         app.post('/votes', async (req, res) => {
             // Check if a request as authorization
-            if (req.headers?.authorization !== Config.apiAuthentication) {
+            if (req.headers?.authorization !== Config.api.authentication) {
                 res.sendStatus(401);
                 return;
             }
@@ -44,6 +44,6 @@ export class Api {
         });
 
         // Voting Api has started
-        app.listen(Config.apiPort, () => Logger.info(Logs.info.startedVotingApi));
+        app.listen(Config.api.port, () => Logger.info(Logs.info.startedVotingApi));
     }
 }

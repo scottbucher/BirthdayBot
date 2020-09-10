@@ -39,7 +39,7 @@ export class ListCommand implements Command {
             if (!page || page <= 0 || page > 100000) page = 1;
         }
 
-        let pageSize = Config.birthdayListSize;
+        let pageSize = Config.experience.birthdayListSize;
 
         let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
 
@@ -47,7 +47,11 @@ export class ListCommand implements Command {
 
         if (date) {
             let input = moment(date).format('MM-DD');
-            userDataResults = await this.userRepo.getBirthdayListFullFromDate(users, pageSize, input);
+            userDataResults = await this.userRepo.getBirthdayListFullFromDate(
+                users,
+                pageSize,
+                input
+            );
         } else {
             userDataResults = await this.userRepo.getBirthdayListFull(users, pageSize, page);
         }

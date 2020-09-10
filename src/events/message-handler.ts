@@ -6,18 +6,18 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { MessageUtils, PermissionUtils } from '../utils';
+import moment from 'moment';
 
 import { Command } from '../commands';
 import { Logger } from '../services';
-import moment from 'moment';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
 export class MessageHandler {
     constructor(
-        private defaultHelpCommand: Command,
+        private helpCommand: Command,
         private commands: Command[],
         private guildRepo: GuildRepo,
         private userRepo: UserRepo
@@ -58,7 +58,7 @@ export class MessageHandler {
 
         // If only a prefix, run the help command
         if (args.length === 1) {
-            await this.defaultHelpCommand.execute(args, msg, channel);
+            await this.helpCommand.execute(args, msg, channel);
             return;
         }
 
@@ -68,12 +68,12 @@ export class MessageHandler {
 
         // If no command found, run the help command
         if (!command) {
-            await this.defaultHelpCommand.execute(args, msg, channel);
+            await this.helpCommand.execute(args, msg, channel);
             return;
         }
 
         // Check if the command is a bot owner only command
-        if (command.ownerOnly && !Config.ownerIds.includes(msg.author.id)) {
+        if (command.ownerOnly && !Config.owners.includes(msg.author.id)) {
             let embed = new MessageEmbed()
                 .setDescription('This command can only be used by the bot owner!')
                 .setColor(Config.colors.error);
@@ -105,9 +105,12 @@ export class MessageHandler {
                 .setTitle('Vote Required!')
                 .setDescription('This command requires you to have voted in the past 24 hours!')
                 .addField('Last Vote', `${sinceLastVote}`, true)
-                .addField('Vote Here', '[Top.gg](https://top.gg/bot/656621136808902656/vote)', true)
-                .setFooter('While Birthday Bot is 100% free, voting helps us grow!', msg.client.user.avatarURL())
-                .setColor(Config.colors.error)
+                .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
+                .setFooter(
+                    'While Birthday Bot is 100% free, voting helps us grow!',
+                    msg.client.user.avatarURL()
+                )
+                .setColor(Config.colors.error);
             await channel.send(embed);
             return;
         }
@@ -146,7 +149,7 @@ export class MessageHandler {
                 let embed = new MessageEmbed()
                     .setDescription(`Something went wrong!`)
                     .addField('Error code', msg.id)
-                    .addField('Contact support', 'https://discord.gg/9gUQFtz')
+                    .addField('Contact support', Config.links.support)
                     .setColor(Config.colors.error);
                 await channel.send(embed);
             } catch {
