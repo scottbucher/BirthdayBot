@@ -43,7 +43,9 @@ export class SetCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
-                [Config.prefix, ...Config.stopCommands].includes(nextMsg.content.split(/\s+/)[0].toLowerCase());
+            [Config.prefix, ...Config.stopCommands].includes(
+                nextMsg.content.split(/\s+/)[0].toLowerCase()
+            );
         let expireFunction: ExpireFunction = async () => {
             await channel.send(
                 new MessageEmbed()
@@ -138,7 +140,7 @@ export class SetCommand implements Command {
 
         if (target.bot) {
             let embed = new MessageEmbed()
-                .setDescription("You can't set a birthday for a bot!")
+                .setDescription(`You can't set a birthday for a bot!`)
                 .setColor(Config.colors.error);
             await channel.send(embed);
             return;
