@@ -1,6 +1,9 @@
-import { CustomMessages, UserDataResults } from '../models/database';
-import { Guild, MessageEmbed, Util } from 'discord.js';
+import * as Chrono from 'chrono-node';
 
+import { CustomMessages, UserDataResults } from '../models/database';
+import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
+
+import { GuildUtils } from '.';
 import moment from 'moment-timezone';
 
 let Config = require('../../config/config.json');
@@ -42,6 +45,25 @@ export abstract class FormatUtils {
     public static findZone(input: string): string {
         let zoneSearch = input.split(/\s+/).join('_').toLowerCase();
         return zoneNames.find(zone => zone.toLowerCase().includes(zoneSearch));
+    }
+
+    public static getBirthday(input: string): string {
+        // Try and get a date from the 3rd args
+        let results = Chrono.parseDate(input); // Try an parse a date
+
+        if (!results) return null;
+
+        let month = results.getMonth() + 1; // Get the numeric value of month
+        let day = results.getDate();
+        let temp = `2000-${month}-${day}`;
+        let doubleCheck = Chrono.parseDate(temp);
+
+        return doubleCheck ? temp : null;
+    }
+
+    public static getUser(msg: Message, input: string): User {
+        return msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, input)?.user || null;
+
     }
 
     public static getMonth(month: number): string {
