@@ -1,6 +1,4 @@
-import { Client, ClientOptions, DiscordAPIError, PartialTypes } from 'discord.js';
-
-import { Bot } from './bot';
+import { BirthdayService, Logger } from './services';
 import {
     ClearCommand,
     CreateCommand,
@@ -24,6 +22,9 @@ import {
     UpdateCommand,
     ViewCommand,
 } from './commands';
+import { Client, ClientOptions, DiscordAPIError, PartialTypes } from 'discord.js';
+import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
+import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -35,12 +36,11 @@ import {
     MessageTimeSubCommand,
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
-import { StatsCommand } from './commands/stats-command';
-import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
-import { PostBirthdaysJob } from './jobs';
-import { BirthdayService, Logger } from './services';
+
+import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
-import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
+import { PostBirthdaysJob } from './jobs';
+import { StatsCommand } from './commands/stats-command';
 
 let Config = require('../config/config.json');
 let Debug = require('../config/debug.json');
@@ -52,6 +52,7 @@ async function start(): Promise<void> {
         messageCacheMaxSize: Config.client.options.messageCacheMaxSize,
         messageCacheLifetime: Config.client.options.messageCacheLifetime,
         messageSweepInterval: Config.client.options.messageSweepInterval,
+        ws: { intents: Config.client.intents },
         partials: Config.client.options.partials as PartialTypes[],
     };
 
