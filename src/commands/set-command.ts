@@ -20,6 +20,7 @@ import {
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
 import { eventNames } from 'process';
+import { time } from 'console';
 
 let Config = require('../../config/config.json');
 
@@ -42,7 +43,7 @@ export class SetCommand implements Command {
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
-            nextMsg.content.split(/\s+/)[0].toLowerCase() === Config.prefix;
+                [Config.prefix, ...Config.stopCommands].includes(nextMsg.content.split(/\s+/)[0].toLowerCase());
         let expireFunction: ExpireFunction = async () => {
             await channel.send(
                 new MessageEmbed()
@@ -52,47 +53,78 @@ export class SetCommand implements Command {
             );
         };
         let target: User;
+        let birthday: string;
+        let timeZone: string;
+        let admin = false;
 
-        if (args.length === 3) {
-            // Check if the user is trying to set another person's birthday
-            if (channel instanceof DMChannel) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        `You cannot request to set another user's information in a DM!\nIf you are trying to set your own information, only input \`bday set\`!`
-                    )
-                    .setColor(Config.colors.error);
-                await channel.send(embed);
-                return;
+        // Check if the user is trying to set another person's birthday
+        if (
+            !(channel instanceof DMChannel) &&
+            msg.member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)
+        ) {
+            admin = true;
+        }
+
+        if (args.length >= 3) {
+            // Check the third arg for inputs
+            if (admin) {
+                target = FormatUtils.getUser(msg, args[2]);
             }
 
-            if (!msg.member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) {
-                // Only admins can set other's birthday
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        'Only admins may suggest birthdays for other users!\nIf you are trying to set your own information, only input `bday set`!'
-                    )
-                    .setColor(Config.colors.error);
-                await channel.send(embed);
-                return;
-            }
-            // Get who they are mentioning
-            let member = msg.mentions.members.first() || GuildUtils.findMember(msg.guild, args[2]);
-            target =
-                msg.mentions.members.first()?.user ||
-                GuildUtils.findMember(msg.guild, args[2])?.user;
-
-            // Did we find a user?
             if (!target) {
-                let embed = new MessageEmbed()
-                    .setDescription('Could not find that user!')
-                    .setColor(Config.colors.error);
-                await channel.send(embed);
-                return;
+                birthday = FormatUtils.getBirthday(args[2]);
             }
+
+            if (!birthday) {
+                timeZone = FormatUtils.findZone(args[2]); // Try and get the time zone
+            }
+        }
+
+        if (args.length >= 4) {
+            // Check the fourth arg for inputs
+            if (admin && !target) {
+                target = FormatUtils.getUser(msg, args[3]);
+            }
+
+            if (!birthday) {
+                birthday = FormatUtils.getBirthday(args[3]);
+            }
+
+            if (!timeZone) {
+                timeZone = FormatUtils.findZone(args[3]); // Try and get the time zone
+            }
+        }
+
+        if (args.length >= 5) {
+            // Check the fifth arg for inputs
+            if (admin && !target) {
+                target = FormatUtils.getUser(msg, args[4]);
+            }
+
+            if (!birthday) {
+                birthday = FormatUtils.getBirthday(args[4]);
+            }
+
+            if (!timeZone) {
+                timeZone = FormatUtils.findZone(args[4]); // Try and get the time zone
+            }
+        }
+
+        if (!target) {
+            target = msg.author;
+        } else {
+            // Get who they are mentioning
+            let member =
+                msg.mentions.members.first() ||
+                GuildUtils.findMember(msg.guild, args[2]) ||
+                GuildUtils.findMember(msg.guild, args[3]) ||
+                GuildUtils.findMember(msg.guild, args[4]);
 
             if (
                 member &&
-                !channel.permissionsFor(member).has([Permissions.FLAGS.READ_MESSAGE_HISTORY])
+                !(channel as TextChannel)
+                    .permissionsFor(member)
+                    .has([Permissions.FLAGS.READ_MESSAGE_HISTORY])
             ) {
                 let embed = new MessageEmbed()
                     .setDescription(
@@ -102,14 +134,11 @@ export class SetCommand implements Command {
                 await channel.send(embed);
                 return;
             }
-        } else {
-            // They didn't mention anyone
-            target = msg.author;
         }
 
         if (target.bot) {
             let embed = new MessageEmbed()
-                .setDescription('You can\'t set a birthday for a bot!')
+                .setDescription("You can't set a birthday for a bot!")
                 .setColor(Config.colors.error);
             await channel.send(embed);
             return;
@@ -119,11 +148,6 @@ export class SetCommand implements Command {
 
         let userData = await this.userRepo.getUser(target.id); // Try and get their data
         let changesLeft = 5; // Default # of changes
-        let birthday: string;
-        let timeZone: string;
-
-        let month: number; // Get the numeric value of month
-        let day: number;
 
         if (userData) {
             // Are they in the database?
@@ -139,127 +163,125 @@ export class SetCommand implements Command {
             }
         }
 
-        let timeZoneEmbed = new MessageEmbed()
-            .setDescription(
-                '**Please Note**: by submitting this information you agree it can be shown to anyone.' +
-                    '\n' +
-                    `\nFirst, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)` +
-                    '\n' +
-                    `\nTo find your time zone please use the [map time zone picker](${Config.links.map})!` +
-                    '\n' +
-                    '\nSimply click your location on the map and copy the name of the selected time zone. You can then enter it below.' +
-                    '\n' +
-                    '\n**Example Usage** `America/New_York`'
-            )
-            .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
-            .setColor(Config.colors.default)
-            .setTimestamp()
-            .setAuthor(target.tag, target.avatarURL());
+        if (!timeZone) {
+            let timeZoneEmbed = new MessageEmbed()
+                .setDescription(
+                    '**Please Note**: by submitting this information you agree it can be shown to anyone.' +
+                        '\n' +
+                        `\nFirst, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)` +
+                        '\n' +
+                        `\nTo find your time zone please use the [map time zone picker](${Config.links.map})!` +
+                        '\n' +
+                        '\nSimply click your location on the map and copy the name of the selected time zone. You can then enter it below.' +
+                        '\n' +
+                        '\n**Example Usage** `America/New_York`'
+                )
+                .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+                .setColor(Config.colors.default)
+                .setTimestamp()
+                .setAuthor(target.tag, target.avatarURL());
 
-        if (suggest) timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
-        else timeZoneEmbed.setTitle('User Setup - Time Zone');
+            if (suggest) timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
+            else timeZoneEmbed.setTitle('User Setup - Time Zone');
 
-        let timezoneMessage = await channel.send(timeZoneEmbed);
+            let timezoneMessage = await channel.send(timeZoneEmbed);
 
-        timeZone = await CollectorUtils.collectByMessage(
-            msg.channel,
-            // Collect Filter
-            (nextMsg: Message) => nextMsg.author.id === msg.author.id,
-            stopFilter,
-            // Retrieve Result
-            async (nextMsg: Message) => {
-                let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
-                if (!input) {
-                    let embed = new MessageEmbed()
-                        .setDescription('Invalid time zone!')
-                        .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
-                        .setTimestamp()
-                        .setColor(Config.colors.error);
-                    if (suggest) embed.setTitle(`Setup For ${target.username} - Time Zone`);
-                    else embed.setTitle('User Setup - Time Zone');
-                    await channel.send(embed);
-                    return;
-                }
+            timeZone = await CollectorUtils.collectByMessage(
+                msg.channel,
+                // Collect Filter
+                (nextMsg: Message) => nextMsg.author.id === msg.author.id,
+                stopFilter,
+                // Retrieve Result
+                async (nextMsg: Message) => {
+                    let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
+                    if (!input) {
+                        let embed = new MessageEmbed()
+                            .setDescription('Invalid time zone!')
+                            .setFooter(
+                                `Please check above and try again!`,
+                                msg.client.user.avatarURL()
+                            )
+                            .setTimestamp()
+                            .setColor(Config.colors.error);
+                        if (suggest) embed.setTitle(`Setup For ${target.username} - Time Zone`);
+                        else embed.setTitle('User Setup - Time Zone');
+                        await channel.send(embed);
+                        return;
+                    }
 
-                return input;
-            },
-            expireFunction,
-            COLLECT_OPTIONS
-        );
+                    return input;
+                },
+                expireFunction,
+                COLLECT_OPTIONS
+            );
 
-        ActionUtils.deleteMessage(timezoneMessage);
+            ActionUtils.deleteMessage(timezoneMessage);
+        }
 
         if (timeZone === undefined) {
             return;
         }
 
-        let birthdayEmbed = new MessageEmbed()
-            .setDescription(
-                `\n\Now, please provide ${msg.client.user.toString()} with your birth month and day [(?)](${
-                    Config.links.docs
-                }/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
-                    '\n\n**Example Usage** `08/28` (MM/DD)'
-            )
-            .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
-            .setColor(Config.colors.default)
-            .setTimestamp()
-            .setAuthor(target.tag, target.avatarURL());
+        if (!birthday) {
+            let birthdayEmbed = new MessageEmbed()
+                .setDescription(
+                    `\n\Now, please provide ${msg.client.user.toString()} with your birth month and day [(?)](${
+                        Config.links.docs
+                    }/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
+                        '\n\n**Example Usage** `08/28` (MM/DD)'
+                )
+                .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+                .setColor(Config.colors.default)
+                .setTimestamp()
+                .setAuthor(target.tag, target.avatarURL());
 
-        if (suggest) birthdayEmbed.setTitle(`Setup For ${target.username} - Birthday`);
-        else birthdayEmbed.setTitle('User Setup - Birthday');
+            if (suggest) birthdayEmbed.setTitle(`Setup For ${target.username} - Birthday`);
+            else birthdayEmbed.setTitle('User Setup - Birthday');
 
-        let birthdayMessage = await channel.send(birthdayEmbed);
+            let birthdayMessage = await channel.send(birthdayEmbed);
 
-        birthday = await CollectorUtils.collectByMessage(
-            msg.channel,
-            // Collect Filter
-            (nextMsg: Message) => nextMsg.author.id === msg.author.id,
-            stopFilter,
-            // Retrieve Result
-            async (nextMsg: Message) => {
-                let results = await Chrono.parseDate(nextMsg.content); // Try an parse a date
+            birthday = await CollectorUtils.collectByMessage(
+                msg.channel,
+                // Collect Filter
+                (nextMsg: Message) => nextMsg.author.id === msg.author.id,
+                stopFilter,
+                // Retrieve Result
+                async (nextMsg: Message) => {
+                    let result = FormatUtils.getBirthday(nextMsg.content);
 
-                if (!results) {
-                    let embed = new MessageEmbed()
-                        .setDescription('Invalid birthday!')
-                        .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
-                        .setTimestamp()
-                        .setColor(Config.colors.error);
-                    if (suggest) embed.setTitle(`Setup For ${target.username} - Birthday`);
-                    else embed.setTitle('User Setup - Birthday');
-                    await channel.send(embed);
-                    return;
-                }
+                    // Don't laugh at my double check it prevents the dates chrono misses on the first input
+                    if (!result) {
+                        let embed = new MessageEmbed()
+                            .setDescription('Invalid birthday!')
+                            .setFooter(
+                                `Please check above and try again!`,
+                                msg.client.user.avatarURL()
+                            )
+                            .setTimestamp()
+                            .setColor(Config.colors.error);
+                        if (suggest) embed.setTitle(`Setup For ${target.username} - Birthday`);
+                        else embed.setTitle('User Setup - Birthday');
+                        await channel.send(embed);
+                        return;
+                    }
 
-                month = results.getMonth() + 1; // Get the numeric value of month
-                day = results.getDate();
-                let temp = `2000-${month}-${day}`;
-                let doubleCheck = await Chrono.parseDate(temp);
+                    return result;
+                },
+                expireFunction,
+                COLLECT_OPTIONS
+            );
 
-                // Don't laugh at my double check it prevents the dates chrono misses on the first input
-                if (!doubleCheck) {
-                    let embed = new MessageEmbed()
-                        .setDescription('Invalid birthday!')
-                        .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
-                        .setTimestamp()
-                        .setColor(Config.colors.error);
-                    if (suggest) embed.setTitle(`Setup For ${target.username} - Birthday`);
-                    else embed.setTitle('User Setup - Birthday');
-                    await channel.send(embed);
-                    return;
-                }
-
-                return temp;
-            },
-            expireFunction,
-            COLLECT_OPTIONS
-        );
-
-        ActionUtils.deleteMessage(birthdayMessage);
+            ActionUtils.deleteMessage(birthdayMessage);
+        }
 
         if (birthday === undefined) {
             return;
         }
+
+        // Re-Parse into a Chrono date to format the output variables
+        let birthDate = Chrono.parseDate(birthday);
+        let month = birthDate.getMonth() + 1;
+        let day = birthDate.getDate();
 
         let confirmationEmbed = new MessageEmbed().setColor(Config.colors.default);
 
