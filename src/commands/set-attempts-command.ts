@@ -1,4 +1,4 @@
-import { GuildUtils, ParseUtils } from '../utils';
+import { GuildUtils, MathUtils, ParseUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
@@ -52,7 +52,7 @@ export class SetAttemptsCommand implements Command {
         let amount: number;
 
         try {
-            amount = Math.abs(ParseUtils.parseInt(args[3]));
+            amount = MathUtils.clamp(ParseUtils.parseInt(args[3]), 0, 127);
         } catch (error) {
             let embed = new MessageEmbed()
                 .setDescription('Invalid Number!')
@@ -61,7 +61,7 @@ export class SetAttemptsCommand implements Command {
             return;
         }
 
-        if (!isNumber(amount)) {
+        if (!(typeof amount === 'number') || !amount) {
             let embed = new MessageEmbed()
                 .setDescription('Invalid Number!')
                 .setColor(Config.colors.error);
