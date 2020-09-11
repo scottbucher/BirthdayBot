@@ -55,7 +55,7 @@ export class BdayUtils {
     }
 
     public static isTimeForBirthdayMessage(messageHour: number, userData: UserData): boolean {
-        if (Debug.enabled && Debug.alwaysSendBirthdayMessage) {
+        if (Debug.alwaysSendBirthdayMessage) {
             return true;
         }
 
@@ -65,7 +65,7 @@ export class BdayUtils {
     }
 
     public static isTimeForBirthdayRole(userData: UserData): boolean {
-        if (Debug.enabled && Debug.alwaysGiveBirthdayRole) {
+        if (Debug.alwaysGiveBirthdayRole) {
             return true;
         }
 
@@ -76,7 +76,7 @@ export class BdayUtils {
     }
 
     public static isBirthday(userData: UserData): boolean {
-        if (Debug.enabled && Debug.alwaysGiveBirthdayRole) {
+        if (Debug.alwaysGiveBirthdayRole) {
             return true;
         }
 
