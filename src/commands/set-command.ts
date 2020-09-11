@@ -65,13 +65,17 @@ export class SetCommand implements Command {
             admin = true;
         }
 
+        target = msg.mentions.members.first()?.user;
+
         if (args.length >= 3) {
             // Check the third arg for inputs
-            if (admin) {
+            let check = false; // This could be removed if I did it as I did it in the subsequent args check, but this is technically more efficient
+            if (admin && !target) {
                 target = FormatUtils.getUser(msg, args[2]);
+                check = true;
             }
 
-            if (!target) {
+            if (!check) {
                 birthday = FormatUtils.getBirthday(args[2]);
             }
 
