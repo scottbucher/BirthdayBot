@@ -6,12 +6,12 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
-import moment from 'moment';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
 import { Logger } from '../services';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { MessageUtils, PermissionUtils } from '../utils';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -73,9 +73,13 @@ export class MessageHandler {
         }
 
         // Check if the command is a bot owner only command
-        if (command.ownerOnly && !Config.owners.includes(msg.author.id)) {
+        let sentByOwner = Config.owners.includes(msg.author.id);
+        let sentByStaff =
+            Config.supportServerId === msg.guild.id &&
+            msg.member.roles.cache.has(Config.supportRoleId);
+        if (command.ownerOnly && !(sentByOwner || sentByStaff)) {
             let embed = new MessageEmbed()
-                .setDescription('This command can only be used by the bot owner!')
+                .setDescription('This command can only be used by Birthday Bot staff!')
                 .setColor(Config.colors.error);
 
             if (channel instanceof TextChannel) await channel.send(embed);
