@@ -1,4 +1,4 @@
-import { BotSiteConfig } from '../../models/bot-site-config';
+import { BotSiteConfig } from '../../models/config-models';
 import { HttpService } from '../http-service';
 import { BotSite } from './bot-site';
 
@@ -11,10 +11,12 @@ export class BotsOnDiscordXyzSite implements BotSite {
     }
 
     public async updateServerCount(serverCount: number): Promise<void> {
-        await this.httpService.post(
-            this.config.url,
-            { guildCount: serverCount },
-            this.config.token
-        );
+        let res = await this.httpService.post(this.config.url, this.config.token, {
+            guildCount: serverCount,
+        });
+
+        if (!res.ok) {
+            throw res;
+        }
     }
 }
