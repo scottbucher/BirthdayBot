@@ -81,7 +81,7 @@
         "machineCount": 1,
         "serversPerShard": 1000,
         "spawnDelay": 5,
-        "spawnTimeout": 60
+        "spawnTimeout": 300
     },
     "links": {
         "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",

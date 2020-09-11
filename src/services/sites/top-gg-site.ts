@@ -1,4 +1,4 @@
-import { BotSiteConfig } from '../../models/bot-site-config';
+import { BotSiteConfig } from '../../models/config-models';
 import { HttpService } from '../http-service';
 import { BotSite } from './bot-site';
 
@@ -11,10 +11,12 @@ export class TopGgSite implements BotSite {
     }
 
     public async updateServerCount(serverCount: number): Promise<void> {
-        await this.httpService.post(
-            this.config.url,
-            { server_count: serverCount },
-            this.config.token
-        );
+        let res = await this.httpService.post(this.config.url, this.config.token, {
+            server_count: serverCount,
+        });
+
+        if (!res.ok) {
+            throw res;
+        }
     }
 }
