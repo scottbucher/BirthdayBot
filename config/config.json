@@ -50,6 +50,7 @@
         "select": "🖱",
         "birthday": "🎂"
     },
+    "stopCommands": ["stop", "cancel", "exit", "close", "quit"],
     "validation": {
         "regions": [
             "Africa",
