@@ -52,7 +52,7 @@ export class SetAttemptsCommand implements Command {
         let amount: number;
 
         try {
-            amount = ParseUtils.parseInt(args[3]);
+            amount = Math.abs(ParseUtils.parseInt(args[3]));
         } catch (error) {
             let embed = new MessageEmbed()
                 .setDescription('Invalid Number!')
