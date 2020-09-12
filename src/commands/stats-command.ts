@@ -1,9 +1,9 @@
-import djs, { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { MessageUtils, ShardUtils } from '../utils';
+import djs, { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import moment from 'moment';
-import { UserRepo } from '../services/database/repos';
 import { Command } from './command';
+import { UserRepo } from '../services/database/repos';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
