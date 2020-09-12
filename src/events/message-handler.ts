@@ -74,17 +74,24 @@ export class MessageHandler {
 
         // Check if the command is a bot owner only command
         let sentByOwner = Config.owners.includes(msg.author.id);
-        let sentByStaff =
-            Config.supportServerId === msg.guild.id &&
-            msg.member.roles.cache.has(Config.supportRoleId);
-        if (command.ownerOnly && !(sentByOwner || sentByStaff)) {
-            let embed = new MessageEmbed()
-                .setDescription('This command can only be used by Birthday Bot staff!')
-                .setColor(Config.colors.error);
+        if (command.ownerOnly) {
+            if (!sentByOwner) {
+                if (!(channel instanceof DMChannel)) {
+                    let sentByStaff =
+                        Config.supportServerId === msg.guild.id &&
+                        msg.member.roles.cache.has(Config.supportRoleId);
 
-            if (channel instanceof TextChannel) await channel.send(embed);
-            else MessageUtils.sendDm(channel, embed);
-            return;
+                    if (!sentByStaff) {
+                        let embed = new MessageEmbed()
+                            .setDescription('This command can only be used by Birthday Bot staff!')
+                            .setColor(Config.colors.error);
+
+                        if (channel instanceof TextChannel) await channel.send(embed);
+                        else MessageUtils.sendDm(channel, embed);
+                        return;
+                    }
+                }
+            }
         }
 
         // Check if the command is a server only command
