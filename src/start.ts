@@ -43,7 +43,6 @@ import { PostBirthdaysJob } from './jobs';
 import { StatsCommand } from './commands/stats-command';
 
 let Config = require('../config/config.json');
-let Debug = require('../config/debug.json');
 
 async function start(): Promise<void> {
     Logger.info('Starting Bot!');
@@ -155,12 +154,8 @@ async function start(): Promise<void> {
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 
-    let postBirthdaysSchedule =
-        Debug.enabled && Debug.overridePostScheduleEnabled
-            ? Debug.overridePostSchedule
-            : Config.jobs.postBirthdays.schedule;
     let postBirthdaysJob = new PostBirthdaysJob(
-        postBirthdaysSchedule,
+        Config.jobs.postBirthdays.schedule,
         client,
         guildRepo,
         userRepo,
