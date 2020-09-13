@@ -1,11 +1,14 @@
 {
-    "enabled": false,
-    "overrideShardCount": false,
-    "shardCount": 2,
-    "skipAdminCheck": false,
-    "overridePostScheduleEnabled": true,
-    "overridePostSchedule": "0 * * * * *",
+    "alwaysSendBirthdayMessage": false,
     "alwaysGiveBirthdayRole": false,
-    "alwaysRemoveBirthdayRole": false,
-    "alwaysSendBirthdayMessage": false
+    "override": {
+        "shardMode": {
+            "enabled": false,
+            "value": "process"
+        },
+        "shardCount": {
+            "enabled": false,
+            "value": 2
+        }
+    }
 }
