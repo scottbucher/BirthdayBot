@@ -57,27 +57,19 @@ export class SetCommand implements Command {
         let target: User;
         let birthday: string;
         let timeZone: string;
-        let admin = false;
+        let dm = channel instanceof DMChannel;
 
-        // Check if the user is trying to set another person's birthday
-        if (
-            !(channel instanceof DMChannel) &&
-            msg.member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)
-        ) {
-            admin = true;
-        }
-
-        target = msg.mentions.members.first()?.user;
+        target = msg.mentions.members?.first()?.user;
 
         if (args.length >= 3) {
             // Check the third arg for inputs
-            let check = false; // This could be removed if I did it as I did it in the subsequent args check, but this is technically more efficient
-            if (admin && !target) {
+            let suggestCheck = false; // This could be removed if I did it as I did it in the subsequent args check, but this is technically more efficient
+            if (!dm && !target) {
                 target = FormatUtils.getUser(msg, args[2]);
-                check = true;
+                suggestCheck = true;
             }
 
-            if (!check) {
+            if (!suggestCheck) {
                 birthday = FormatUtils.getBirthday(args[2]);
             }
 
@@ -88,7 +80,7 @@ export class SetCommand implements Command {
 
         if (args.length >= 4) {
             // Check the fourth arg for inputs
-            if (admin && !target) {
+            if (!dm && !target) {
                 target = FormatUtils.getUser(msg, args[3]);
             }
 
@@ -103,7 +95,7 @@ export class SetCommand implements Command {
 
         if (args.length >= 5) {
             // Check the fifth arg for inputs
-            if (admin && !target) {
+            if (!dm && !target) {
                 target = FormatUtils.getUser(msg, args[4]);
             }
 
@@ -119,9 +111,19 @@ export class SetCommand implements Command {
         if (!target) {
             target = msg.author;
         } else {
+            if (!msg.member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) {
+                let embed = new MessageEmbed()
+                    .setDescription(
+                        'You do not have permission to suggest birthdays for other users!'
+                    )
+                    .setColor(Config.colors.error);
+                await channel.send(embed);
+                return;
+            }
+
             // Get who they are mentioning
             let member =
-                msg.mentions.members.first() ||
+                msg.mentions.members?.first() ||
                 GuildUtils.findMember(msg.guild, args[2]) ||
                 GuildUtils.findMember(msg.guild, args[3]) ||
                 GuildUtils.findMember(msg.guild, args[4]);
