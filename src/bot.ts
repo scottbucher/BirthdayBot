@@ -5,8 +5,6 @@ import { Job } from './jobs';
 import { Logger } from './services';
 
 let Logs = require('../lang/logs.json');
-let RateLimiter = require('limiter').RateLimiter;
-let limiters = {};
 
 export class Bot {
     private ready = false;
@@ -100,28 +98,10 @@ export class Bot {
             return;
         }
 
-        // Try to get existing limiter
-        let limiter = limiters[msg.author.id];
-
-        // Create new limiter if one doesn't exist
-        if (!limiter) {
-            limiter = new RateLimiter(1, 20000);
-            limiters[msg.author.id] = limiter;
+        try {
+            await this.messageHandler.process(msg);
+        } catch (error) {
+            Logger.error(Logs.error.message, error);
         }
-
-        // Use the limiter to perform actions
-        limiter.removeTokens(1, async (error: any, remainingRequests: number) => {
-            // Check if user went over limit
-            if (error || remainingRequests < 1) {
-                // Drop the request
-                return;
-            }
-
-            try {
-                await this.messageHandler.process(msg);
-            } catch (error) {
-                Logger.error(Logs.error.message, error);
-            }
-        });
     }
 }

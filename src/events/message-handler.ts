@@ -14,6 +14,8 @@ import { Logger } from '../services';
 import moment from 'moment';
 
 let Config = require('../../config/config.json');
+let RateLimiter = require('limiter').RateLimiter;
+let limiters = {};
 
 export class MessageHandler {
     constructor(
@@ -55,6 +57,24 @@ export class MessageHandler {
         if (args[0].toLowerCase() !== Config.prefix) {
             return;
         }
+
+        // Try to get existing limiter
+        let limiter = limiters[msg.author.id];
+
+        // Create new limiter if one doesn't exist
+        if (!limiter) {
+            limiter = new RateLimiter(1, 20000);
+            limiters[msg.author.id] = limiter;
+        }
+
+        // Use the limiter to perform actions
+        limiter.removeTokens(1, async (error: any, remainingRequests: number) => {
+            // Check if user went over limit
+            if (error || remainingRequests < 1) {
+                // Drop the request
+                return;
+            }
+        });
 
         // If only a prefix, run the help command
         if (args.length === 1) {
