@@ -142,7 +142,7 @@ async function start(): Promise<void> {
             setAttemptsCommand,
             settingsCommand,
             testCommand,
-            statsCommand,
+            // statsCommand,
             faqCommand,
             documentationCommand,
             donateCommand,
