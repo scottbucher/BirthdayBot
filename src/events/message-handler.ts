@@ -1,4 +1,5 @@
 import {
+    Channel,
     DMChannel,
     GuildMember,
     Message,
@@ -14,6 +15,8 @@ import { Logger } from '../services';
 import moment from 'moment';
 
 let Config = require('../../config/config.json');
+let RateLimiter = require('limiter').RateLimiter;
+let limiters = {};
 
 export class MessageHandler {
     constructor(
@@ -56,6 +59,32 @@ export class MessageHandler {
             return;
         }
 
+        // Try to get existing limiter
+        let limiter = limiters[msg.author.id];
+
+        // Create new limiter if one doesn't exist
+        if (!limiter) {
+            limiter = new RateLimiter(4, 20000);
+            limiters[msg.author.id] = limiter;
+        }
+
+        // Get remaining tokens
+        if (limiters[msg.author.id].getTokensRemaining() < 1) return;
+
+        // Remove a token if they have one to lose
+        limiters[msg.author.id].removeTokens(1, (error: any) => {
+            if (error) return;
+        });
+
+        // Process the command
+        await this.processCommand(args, msg, channel as TextChannel | DMChannel);
+    }
+
+    private async processCommand(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         // If only a prefix, run the help command
         if (args.length === 1) {
             await this.helpCommand.execute(args, msg, channel);
