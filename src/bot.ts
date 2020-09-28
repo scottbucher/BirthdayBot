@@ -1,6 +1,6 @@
 import { Client, Guild, Message, MessageReaction, User } from 'discord.js';
-
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+
 import { Job } from './jobs';
 import { Logger } from './services';
 
