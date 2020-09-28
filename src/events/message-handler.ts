@@ -1,4 +1,5 @@
 import {
+    Channel,
     DMChannel,
     GuildMember,
     Message,
@@ -63,19 +64,27 @@ export class MessageHandler {
 
         // Create new limiter if one doesn't exist
         if (!limiter) {
-            limiter = new RateLimiter(1, 20000);
+            limiter = new RateLimiter(4, 20000);
             limiters[msg.author.id] = limiter;
         }
 
-        // Use the limiter to perform actions
-        limiter.removeTokens(1, async (error: any, remainingRequests: number) => {
-            // Check if user went over limit
-            if (error || remainingRequests < 1) {
-                // Drop the request
-                return;
-            }
+        // Get remaining tokens
+        if (limiters[msg.author.id].getTokensRemaining() < 1) return;
+
+        // Remove a token if they have one to lose
+        limiters[msg.author.id].removeTokens(1, (error: any) => {
+            if (error) return;
         });
 
+        // Process the command
+        await this.processCommand(args, msg, channel as TextChannel | DMChannel);
+    }
+
+    private async processCommand(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         // If only a prefix, run the help command
         if (args.length === 1) {
             await this.helpCommand.execute(args, msg, channel);
