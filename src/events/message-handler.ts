@@ -64,7 +64,7 @@ export class MessageHandler {
 
         // Create new limiter if one doesn't exist
         if (!limiter) {
-            limiter = new RateLimiter(4, 20000);
+            limiter = new RateLimiter(2, 20000);
             limiters[msg.author.id] = limiter;
         }
 
