@@ -71,7 +71,7 @@ const HELP_GENERAL_DESC =
     `\n**bday help message** - Help for the birthday message settings.` +
     `\n**bday help trusted** - Help for the trusted system.` +
     `\n**bday settings**\*\* - View server's settings.` +
-    `\n**bday test [User]**\*\* - Test the birthday event.` +
+    `\n**bday test [user]**\*\* - Test the birthday event.` +
     `\n` +
     `\n**bday donate** - Support developments by donating!` +
     `\n` +
