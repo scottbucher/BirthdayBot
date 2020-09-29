@@ -136,8 +136,7 @@ export class MessageHandler {
         let userVote = await this.userRepo.getUserVote(msg.author.id);
         let now = moment();
         let lastVote = moment(userVote?.VoteTime);
-        let sinceLastVote: string = `Never`;
-        if (userVote) sinceLastVote = `${now.diff(lastVote, 'hours').toString()} hours ago.`;
+        let sinceLastVote = userVote ? lastVote.fromNow() : 'Never';
         if (command.voteOnly && (!userVote || lastVote.add(1, 'day') < now)) {
             let embed = new MessageEmbed()
                 .setAuthor(msg.author.tag, msg.author.avatarURL())
