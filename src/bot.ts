@@ -37,7 +37,7 @@ export class Bot {
 
     private startJobs(): void {
         for (let job of this.jobs) {
-            // job.start();
+            job.start();
         }
     }
 
