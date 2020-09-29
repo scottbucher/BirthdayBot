@@ -55,7 +55,7 @@ export class HelpCommand implements Command {
 
 const HELP_GENERAL_TITLE = 'Birthday Bot General Help';
 const HELP_GENERAL_DESC =
-    `Birthday Bot celebrates user's birthdays and allows for a wide variety of settings and customizability for server owners. ` +
+    `Birthday Bot helps your server celebrate birthdays with automatic birthday roles and announcements. Highly customizable and 100% free!` +
     '\n' +
     `\n**bday set** - Set your birthday.` +
     `\n**bday view [user]** - View your birthday or a users birthday.` +
