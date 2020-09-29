@@ -1,15 +1,15 @@
-import { MessageUtils, ShardUtils } from '../utils';
 import djs, { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
-
-import { Command } from './command';
-import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
+
+import { UserRepo } from '../services/database/repos';
+import { MessageUtils, ShardUtils } from '../utils';
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 
 export class StatsCommand implements Command {
     public name: string = 'stats';
-    public aliases = ['statistics', 'data'];
+    public aliases = ['stat', 'statistics', 'info', 'information', 'data'];
     public requireSetup = false;
     public guildOnly = false;
     public adminOnly = false;
