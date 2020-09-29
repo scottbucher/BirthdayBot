@@ -1,12 +1,12 @@
+import { BdayUtils, MathUtils, TimeUtils } from '../utils';
+import { BirthdayService, Logger } from '../services';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+
+import { Job } from './job';
+import { UserData } from '../models/database';
 import moment from 'moment';
 import schedule from 'node-schedule';
-
-import { UserData } from '../models/database';
-import { BirthdayService, Logger } from '../services';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { BdayUtils, MathUtils } from '../utils';
-import { Job } from './job';
 
 let Logs = require('../../lang/logs.json');
 
@@ -130,6 +130,7 @@ export class PostBirthdaysJob implements Job {
                 );
                 continue;
             }
+            await TimeUtils.sleep(100);
         }
 
         // Wait for all birthday celebrations to finish
