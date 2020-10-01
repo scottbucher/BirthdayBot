@@ -171,10 +171,15 @@ export class SetCommand implements Command {
             }
         }
 
+        let override =
+            userData.Birthday && userData.TimeZone
+                ? '__**Note**__: Your birthday is already set, continue to change it.\n\n'
+                : '';
+
         if (!timeZone) {
             let timeZoneEmbed = new MessageEmbed()
                 .setDescription(
-                    '**Please Note**: by submitting this information you agree it can be shown to anyone.' +
+                    `${override}**Important**: By submitting this information you agree it can be shown to anyone.` +
                         '\n' +
                         `\nFirst, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)` +
                         '\n' +
@@ -182,7 +187,9 @@ export class SetCommand implements Command {
                         '\n' +
                         '\nSimply click your location on the map and copy the name of the selected time zone. You can then enter it below.' +
                         '\n' +
-                        '\n**Example Usage** `America/New_York`'
+                        '\n**Example Usage** `America/New_York`' +
+                        '\n' +
+                        `\n**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!`
                 )
                 .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
                 .setColor(Config.colors.default)
@@ -233,10 +240,13 @@ export class SetCommand implements Command {
         if (!birthday) {
             let birthdayEmbed = new MessageEmbed()
                 .setDescription(
-                    `\n\Now, please provide ${msg.client.user.toString()} with your birth month and day [(?)](${
-                        Config.links.docs
-                    }/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
-                        '\n\n**Example Usage** `08/28` (MM/DD)'
+                    `${override}**Important**: By submitting this information you agree it can be shown to anyone.` +
+                        '\n' +
+                        `\nPlease enter your birth month and day. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
+                        '\n' +
+                        '\n**Example Usage** `08/28` (MM/DD)' +
+                        '\n' +
+                        `\n**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!`
                 )
                 .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
                 .setColor(Config.colors.default)
