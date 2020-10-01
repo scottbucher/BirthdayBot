@@ -172,7 +172,7 @@ export class SetCommand implements Command {
         }
 
         let override =
-            userData.Birthday && userData.TimeZone
+            userData && (userData.Birthday && userData.TimeZone)
                 ? '__**Note**__: Your birthday is already set, continue to change it.\n\n'
                 : '';
 
