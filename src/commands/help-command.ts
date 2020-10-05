@@ -117,8 +117,6 @@ const HELP_TRUSTED_DESC =
 
 const HELP_PERM_TITLE = 'Birthday Bot Permissions Help - Guild Only';
 const HELP_PERM_DESC =
-    `\n**bday setup permission** - Interactive guide for trusted system settings setup.` +
-    '\n' +
     `\n**bday create birthdayMasterRole** - Create the default birthday master role.` +
     `\n**bday update birthdayMasterRole <role>** - Update the birthday master role.` +
     `\n**bday clear birthdayMasterRole** - Clear the birthday master role.` +
