@@ -11,6 +11,7 @@ import { GuildRepo, UserRepo } from '../services/database/repos';
 import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
+import { GuildData } from '../models/database';
 import { Logger } from '../services';
 import moment from 'moment';
 
@@ -168,15 +169,16 @@ export class MessageHandler {
                     await channel.send(embed);
                     return;
                 }
-            }
-            // Check if user has permission
-            if (!this.hasPermission(msg.member, command)) {
-                let embed = new MessageEmbed()
-                    .setTitle('Permission Required!')
-                    .setDescription(`You don't have permission to run that command!`)
-                    .setColor(Config.colors.error);
-                await channel.send(embed);
-                return;
+
+                // Check if user has permission
+                if (!this.hasPermission(msg.member, command, guildData)) {
+                    let embed = new MessageEmbed()
+                        .setTitle('Permission Required!')
+                        .setDescription(`You don't have permission to run that command!`)
+                        .setColor(Config.colors.error);
+                    await channel.send(embed);
+                    return;
+                }
             }
 
             // Execute the command
@@ -212,9 +214,21 @@ export class MessageHandler {
         }
     }
 
-    private hasPermission(member: GuildMember, command: Command): boolean {
+    private hasPermission(member: GuildMember, command: Command, guildData: GuildData): boolean {
         if (command.adminOnly) {
-            return member.hasPermission(Permissions.FLAGS.ADMINISTRATOR); // return true if they have admin
+            if (member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) return true;
+
+            if (guildData) {
+                // Check if member has a required role
+                let memberRoles = member.roles.cache.map(role => role.id);
+                if (
+                    guildData.BirthdayMasterRoleDiscordId &&
+                    memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
+                ) {
+                    return true;
+                }
+            }
+            return false;
         }
         return true;
     }
