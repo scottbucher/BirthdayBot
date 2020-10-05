@@ -1,7 +1,7 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { MessageUtils } from '../utils';
 import { Command } from './command';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json'); // Possible support for server specific prefixes?
 
@@ -40,6 +40,11 @@ export class HelpCommand implements Command {
                 .setAuthor(HELP_TRUSTED_TITLE, clientAvatarUrl)
                 .setDescription(HELP_TRUSTED_DESC)
                 .setColor(Config.colors.default);
+        } else if (option === 'permissions') {
+            embed
+                .setAuthor(HELP_PERM_TITLE, clientAvatarUrl)
+                .setDescription(HELP_PERM_DESC)
+                .setColor(Config.colors.default);
         } else {
             embed
                 .setAuthor(HELP_GENERAL_TITLE, clientAvatarUrl)
@@ -70,6 +75,7 @@ const HELP_GENERAL_DESC =
     `\n**bday help setup** - Help for server setup.` +
     `\n**bday help message** - Help for the birthday message settings.` +
     `\n**bday help trusted** - Help for the trusted system.` +
+    `\n**bday help permissions** - Help for permissions.` +
     `\n**bday settings**\*\* - View server's settings.` +
     `\n**bday test [user]**\*\* - Test the birthday event.` +
     `\n` +
@@ -82,7 +88,7 @@ const HELP_SETUP_TITLE = 'Birthday Bot Setup Help - Guild Only';
 const HELP_SETUP_DESC =
     `\n**bday setup** - Interactive guide for server setup.` +
     '\n' +
-    `\n**bday create <channel/role>** - Create the default birthday role/channel.` +
+    `\n**bday create <channel/role/>** - Create the default birthday role/channel.` +
     `\n**bday update <channel/role> <#channel/@role>** - Update the birthday role/channel.` +
     `\n**bday clear <channel/role>** - Clear the birthday role/channel.`;
 
@@ -104,7 +110,17 @@ const HELP_TRUSTED_DESC =
     `\n**bday setup trusted** - Interactive guide for trusted system settings setup.` +
     '\n' +
     `\n**bday create trustedRole** - Create the default trusted role.` +
-    `\n**bday update trustedRole <channel>** - Update the trusted role.` +
+    `\n**bday update trustedRole <role>** - Update the trusted role.` +
     `\n**bday clear trustedRole ** - Clear the trusted role.` +
     `\n**bday trusted preventMsg <T/F>** - If trusted role is required for a birthday message.` +
     `\n**bday trusted preventRole <T/F>** - If trusted role is required to get the birthday role.`;
+
+const HELP_PERM_TITLE = 'Birthday Bot Permissions Help - Guild Only';
+const HELP_PERM_DESC =
+    `\n**bday setup permission** - Interactive guide for trusted system settings setup.` +
+    '\n' +
+    `\n**bday create birthdayMasterRole** - Create the default birthday master role.` +
+    `\n**bday update birthdayMasterRole <role>** - Update the birthday master role.` +
+    `\n**bday clear birthdayMasterRole** - Clear the birthday master role.` +
+    `\n**bday blacklist add <user>** - Add user to the blacklist.` +
+    `\n**bday blacklist remove <user>** - Remove user from the blacklist.`;
