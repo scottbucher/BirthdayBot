@@ -21,7 +21,7 @@ export class ClearCommand implements Command {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription(
-                    'Please specify what to clear!\nAccepted Values: `channel`, `role`, `trustedRole`'
+                    'Please specify what to clear!\nAccepted Values: `channel`, `role`, `trustedRole`, `birthdayMasterRole`'
                 )
                 .setColor(Config.colors.error);
             await channel.send(embed);
@@ -47,6 +47,13 @@ export class ClearCommand implements Command {
 
             let embed = new MessageEmbed()
                 .setDescription(`Successfully cleared the trusted role!`)
+                .setColor(Config.colors.success);
+            await channel.send(embed);
+        } else if (args[2].toLowerCase() === 'birthdaymaster' || args[2].toLowerCase() === 'birthdaymasterrole') {
+            await this.guildRepo.updateBirthdayMasterRole(msg.guild.id, '0');
+
+            let embed = new MessageEmbed()
+                .setDescription(`Successfully cleared the birthday master role!`)
                 .setColor(Config.colors.success);
             await channel.send(embed);
         }

@@ -22,7 +22,7 @@ export class UpdateCommand implements Command {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription(
-                    'Please specify what to create!\nAccepted Values: `channel`, `role`, `trustedRole`'
+                    'Please specify what to create!\nAccepted Values: `channel`, `role`, `trustedRole`, `birthdayMasterRole'
                 )
                 .setColor(Config.colors.error);
             await channel.send(embed);
@@ -143,15 +143,6 @@ export class UpdateCommand implements Command {
                 .setColor(Config.colors.success);
             await channel.send(embed);
         } else if (args[2].toLowerCase() === 'trustedrole') {
-            if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
-                let embed = new MessageEmbed()
-                    .setTitle('Not Enough Permissions!')
-                    .setDescription('The bot must have permission to manage roles!')
-                    .setColor(Config.colors.error);
-                await channel.send(embed);
-                return;
-            }
-
             // Set role with desired attributes
             let trustedRole: Role = msg.mentions.roles.first();
 
@@ -173,17 +164,6 @@ export class UpdateCommand implements Command {
                 return;
             }
 
-            if (
-                trustedRole.position >
-                msg.guild.members.resolve(msg.client.user).roles.highest.position
-            ) {
-                let embed = new MessageEmbed()
-                    .setDescription(`Trusted Role must be bellow the Bot's role!`)
-                    .setColor(Config.colors.error);
-                channel.send(embed);
-                return;
-            }
-
             if (trustedRole.managed) {
                 let embed = new MessageEmbed()
                     .setDescription(`Trusted Role cannot be managed by an external service!`)
@@ -196,6 +176,42 @@ export class UpdateCommand implements Command {
 
             let embed = new MessageEmbed()
                 .setDescription(`Successfully set the trusted role to ${trustedRole.toString()}!`)
+                .setColor(Config.colors.success);
+            await channel.send(embed);
+        } else if (args[2].toLowerCase() === 'birthdaymaster' || args[2].toLowerCase() === 'birthdaymasterrole') {
+            // Set role with desired attributes
+            let birthdayMasterRole: Role = msg.mentions.roles.first();
+
+            if (!birthdayMasterRole) {
+                birthdayMasterRole = msg.guild.roles.cache.find(role =>
+                    role.name.toLowerCase().includes(args[3].toLowerCase())
+                );
+            }
+
+            if (
+                !birthdayMasterRole ||
+                birthdayMasterRole.id === msg.guild.id ||
+                args[3].toLowerCase() === 'everyone'
+            ) {
+                let embed = new MessageEmbed()
+                    .setDescription(`Invalid Role!`)
+                    .setColor(Config.colors.error);
+                channel.send(embed);
+                return;
+            }
+
+            if (birthdayMasterRole.managed) {
+                let embed = new MessageEmbed()
+                    .setDescription(`Birthday Master Role cannot be managed by an external service!`)
+                    .setColor(Config.colors.error);
+                channel.send(embed);
+                return;
+            }
+
+            await this.guildRepo.updateBirthdayMasterRole(msg.guild.id, birthdayMasterRole?.id);
+
+            let embed = new MessageEmbed()
+                .setDescription(`Successfully set the birthday master role to ${birthdayMasterRole.toString()}!`)
                 .setColor(Config.colors.success);
             await channel.send(embed);
         }
