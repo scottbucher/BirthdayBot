@@ -37,6 +37,7 @@ import {
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
 
+import { BlacklistCommand } from './commands/blacklist-command';
 import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
 import { PostBirthdaysJob } from './jobs';
@@ -90,6 +91,7 @@ async function start(): Promise<void> {
     let faqCommand = new FAQCommand();
     let documentationCommand = new DocumentationCommand();
     let donateCommand = new DonateCommand();
+    let blacklistCommand = new BlacklistCommand(guildRepo);
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
@@ -146,6 +148,7 @@ async function start(): Promise<void> {
             faqCommand,
             documentationCommand,
             donateCommand,
+            blacklistCommand
         ],
         guildRepo,
         userRepo
