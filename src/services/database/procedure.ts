@@ -9,6 +9,7 @@ export enum Procedure {
     Guild_UpdateBirthdayChannel = 'Guild_UpdateBirthdayChannel',
     Guild_UpdateBirthdayRole = 'Guild_UpdateBirthdayRole',
     Guild_UpdateTrustedRole = 'Guild_UpdateTrustedRole',
+    Guild_UpdateBirthdayMasterRole = 'Guild_UpdateBirthdayMasterRole',
     Guild_UpdateMessageTime = 'Guild_UpdateMessageTime',
     Guild_UpdateMentionSetting = 'Guild_UpdateMentionSetting',
     Guild_UpdateUseEmbed = 'Guild_UpdateUseEmbed',

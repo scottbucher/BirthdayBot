@@ -1,7 +1,7 @@
-import { GuildData } from '../../../models/database';
-import { SQLUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
+import { GuildData } from '../../../models/database';
 import { Procedure } from '../procedure';
+import { SQLUtils } from '../../../utils';
 
 export class GuildRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -51,6 +51,13 @@ export class GuildRepo {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateTrustedRole, [
             discordId,
             trustedRoleId,
+        ]);
+    }
+
+    public async updateBirthdayMasterRole(discordId: string, birthdayMasterRoleId: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateBirthdayMasterRole, [
+            discordId,
+            birthdayMasterRoleId,
         ]);
     }
 
