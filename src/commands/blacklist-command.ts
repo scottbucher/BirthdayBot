@@ -7,9 +7,9 @@ import { Command } from './command';
 
 let Config = require('../../config/config.json');
 
-export class MessageCommand implements Command {
-    public name: string = 'message';
-    public aliases = ['msg'];
+export class BlacklistCommand implements Command {
+    public name: string = 'blacklist';
+    public aliases = ['bl', 'block', 'ban'];
     public requireSetup = true;
     public guildOnly = true;
     public adminOnly = true;
