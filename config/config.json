@@ -44,6 +44,7 @@
     "experience": {
         "promptExpireTime": 120,
         "birthdayListSize": "30",
+        "blacklistSize": "30",
         "birthdayMessageListSize": "5"
     },
     "colors": {
