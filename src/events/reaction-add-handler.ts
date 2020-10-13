@@ -1,4 +1,5 @@
 import { ActionUtils, FormatUtils, PermissionUtils } from '../utils';
+import { BlacklistRepo, CustomMessageRepo, UserRepo } from '../services/database/repos';
 import {
     CollectOptions,
     CollectorUtils,
@@ -14,7 +15,6 @@ import {
     TextChannel,
     User,
 } from 'discord.js';
-import { CustomMessageRepo, UserRepo } from '../services/database/repos';
 
 import { EventHandler } from '.';
 import { ListUtils } from '../utils/list-utils';
@@ -29,7 +29,11 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class ReactionAddHandler implements EventHandler {
-    constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
+    constructor(
+        private userRepo: UserRepo,
+        private customMessageRepo: CustomMessageRepo,
+        private blacklistRepo: BlacklistRepo
+    ) {}
 
     public async process(msgReaction: MessageReaction, reactor: User): Promise<void> {
         // Don't respond to bots, and only text channels
@@ -133,6 +137,21 @@ export class ReactionAddHandler implements EventHandler {
                 }
 
                 await ListUtils.updateBdayList(this.userRepo, msg.guild, msg, page);
+            } else if (titleArgs[1] === 'Blacklist') {
+                let page = 1;
+
+                if (titleArgs[4]) {
+                    try {
+                        if (checkNextPage) {
+                            page = FormatUtils.extractPageNumber(titleArgs.join(' ')) + 1;
+                        } else page = FormatUtils.extractPageNumber(titleArgs.join(' ')) - 1;
+                    } catch (error) {
+                        // Not A Number
+                    }
+                    if (!page) page = 1;
+                }
+
+                await ListUtils.updateBlacklistList(this.blacklistRepo, msg.guild, msg, page);
             }
         } else if (checkJumpToPage) {
             if (titleArgs[1] === 'Messages') {
@@ -231,6 +250,54 @@ export class ReactionAddHandler implements EventHandler {
                 }
 
                 await ListUtils.updateBdayList(this.userRepo, msg.guild, msg, page);
+            } else if (titleArgs[1] === 'Blacklist') {
+                let page: number;
+
+                let messageTimeEmbed = new MessageEmbed()
+                    .setDescription('Please input the page you would like to jump to:')
+                    .setColor(Config.colors.default);
+
+                let prompt = await channel.send(messageTimeEmbed);
+
+                page = await CollectorUtils.collectByMessage(
+                    msg.channel,
+                    // Collect Filter
+                    (nextMsg: Message) => nextMsg.author.id === reactor.id,
+                    stopFilter,
+                    // Retrieve Result
+                    async (nextMsg: Message) => {
+                        await ActionUtils.deleteMessage(nextMsg);
+                        if (!page && page !== 0) {
+                            // Try and get the time
+                            let page: number;
+                            try {
+                                page = parseInt(nextMsg.content.split(/\s+/)[0]);
+                            } catch (error) {
+                                let embed = new MessageEmbed()
+                                    .setDescription('Invalid page!')
+                                    .setColor(Config.colors.error);
+                                await channel.send(embed);
+                                return;
+                            }
+
+                            page = Math.round(page);
+
+                            if (!page || page <= 0 || page > 100000) page = 1;
+
+                            return page;
+                        }
+                    },
+                    expireFunction,
+                    COLLECT_OPTIONS
+                );
+
+                ActionUtils.deleteMessage(prompt);
+
+                if (page === undefined) {
+                    return;
+                }
+
+                await ListUtils.updateBlacklistList(this.blacklistRepo, msg.guild, msg, page);
             }
         }
     }

@@ -1,5 +1,10 @@
 import { BirthdayService, Logger } from './services';
-import { BlacklistAddSubCommand, BlacklistClearSubCommand, BlacklistListSubCommand, BlacklistRemoveSubCommand } from './commands/blacklist';
+import {
+    BlacklistAddSubCommand,
+    BlacklistClearSubCommand,
+    BlacklistListSubCommand,
+    BlacklistRemoveSubCommand,
+} from './commands/blacklist';
 import {
     BlacklistCommand,
     ClearCommand,
@@ -163,12 +168,12 @@ async function start(): Promise<void> {
             faqCommand,
             documentationCommand,
             donateCommand,
-            blacklistCommand
+            blacklistCommand,
         ],
         guildRepo,
         userRepo
     );
-    let reactionAddHandler = new ReactionAddHandler(userRepo, customMessageRepo);
+    let reactionAddHandler = new ReactionAddHandler(userRepo, customMessageRepo, blacklistRepo);
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 

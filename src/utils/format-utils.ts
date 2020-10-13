@@ -1,6 +1,6 @@
 import * as Chrono from 'chrono-node';
 
-import { CustomMessages, UserDataResults } from '../models/database';
+import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
 import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
 
 import { GuildUtils } from '.';
@@ -62,8 +62,11 @@ export abstract class FormatUtils {
     }
 
     public static getUser(msg: Message, input: string): User {
-        return msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, input)?.user || null;
-
+        return (
+            msg.mentions.members.first()?.user ||
+            GuildUtils.findMember(msg.guild, input)?.user ||
+            null
+        );
     }
 
     public static getMonth(month: number): string {
@@ -207,6 +210,42 @@ export abstract class FormatUtils {
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
             description += `**${birthday}**: ${userList}\n`; // Append the description
+        }
+
+        embed.setDescription(description);
+
+        return embed;
+    }
+
+    public static async getBlacklistFullEmbed(
+        guild: Guild,
+        blacklistResults: Blacklisted,
+        page: number,
+        pageSize: number
+    ): Promise<MessageEmbed> {
+        let embed = new MessageEmbed()
+            .setTitle(`Birthday Blacklist List | Page ${page}/${blacklistResults.stats.TotalPages}`)
+            .setThumbnail(guild.iconURL())
+            .setColor(Config.colors.default)
+            .setFooter(
+                `Total Birthdays: ${blacklistResults.stats.TotalItems} • ${Config.experience.blacklistSize} per page`,
+                guild.iconURL()
+            )
+            .setTimestamp();
+
+        let i = (page - 1) * pageSize + 1;
+
+        if (blacklistResults.blacklistRows.length === 0) {
+            let embed = new MessageEmbed()
+                .setDescription('**The blacklist is empty!**')
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = `*Users on this list will not have their birthdays celebrated no matter what. Edit this list with \`bday blacklist\`!*\n\n`;
+        let users = blacklistResults.blacklistRows.map(data => data.UserId);
+
+        for (let user of users) {
+            description += `**${guild.members.resolve(user)?.displayName || 'Unknown'}**: (ID: ${user})\n`; // Append the description
         }
 
         embed.setDescription(description);

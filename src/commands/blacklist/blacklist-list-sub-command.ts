@@ -1,7 +1,7 @@
+import { FormatUtils, GuildUtils, ParseUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
-import { GuildUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -9,6 +9,40 @@ export class BlacklistListSubCommand {
     constructor(private blacklistRepo: BlacklistRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
-        // Do Stuff
+        let page = 1;
+
+        if (args[3]) {
+            try {
+                page = ParseUtils.parseInt(args[3]);
+            } catch (error) {
+                // Not A Number
+            }
+            if (!page || page <= 0 || page > 100000) page = 1;
+        }
+
+        let pageSize = Config.experience.blacklistSize;
+
+        let blacklistResults = await this.blacklistRepo.getBlacklistList(
+            msg.guild.id,
+            pageSize,
+            page
+        );
+
+        if (page > blacklistResults.stats.TotalPages) page = blacklistResults.stats.TotalPages;
+
+        let embed = await FormatUtils.getBlacklistFullEmbed(
+            msg.guild,
+            blacklistResults,
+            page,
+            pageSize
+        );
+
+        let message = await channel.send(embed);
+
+        if (embed.description === '**The blacklist is empty!**') return;
+
+        if (page !== 1) await message.react(Config.emotes.previousPage);
+        if (blacklistResults.stats.TotalPages > 1) await message.react(Config.emotes.jumpToPage);
+        if (blacklistResults.stats.TotalPages > page) await message.react(Config.emotes.nextPage);
     }
 }

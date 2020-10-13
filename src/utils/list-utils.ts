@@ -1,4 +1,4 @@
-import { CustomMessageRepo, UserRepo } from '../services/database/repos';
+import { BlacklistRepo, CustomMessageRepo, UserRepo } from '../services/database/repos';
 import { Guild, Message } from 'discord.js';
 
 import { FormatUtils } from '.';
@@ -73,5 +73,39 @@ export abstract class ListUtils {
             await message.react(Config.emotes.jumpToPage);
         if (customMessageResults.stats.TotalPages > page)
             await message.react(Config.emotes.nextPage);
+    }
+
+    public static async updateBlacklistList(
+        blacklistRepo: BlacklistRepo,
+        guild: Guild,
+        message: Message,
+        page: number
+    ): Promise<void> {
+        let pageSize = Config.experience.blacklistSize;
+
+        let blacklistResults = await blacklistRepo.getBlacklistList(
+            message.guild.id,
+            pageSize,
+            page
+        );
+
+        if (page > blacklistResults.stats.TotalPages) page = blacklistResults.stats.TotalPages;
+
+        let embed = await FormatUtils.getBlacklistFullEmbed(
+            guild,
+            blacklistResults,
+            page,
+            pageSize
+        );
+
+        message = await message.edit(embed);
+
+        await message.reactions.removeAll();
+
+        if (embed.description === '**The blacklist is empty!**') return;
+
+        if (page !== 1) await message.react(Config.emotes.previousPage);
+        if (blacklistResults.stats.TotalPages > 1) await message.react(Config.emotes.jumpToPage);
+        if (blacklistResults.stats.TotalPages > page) await message.react(Config.emotes.nextPage);
     }
 }
