@@ -235,14 +235,14 @@ export abstract class FormatUtils {
 
         let i = (page - 1) * pageSize + 1;
 
-        if (blacklistResults.blacklistRows.length === 0) {
+        if (blacklistResults.blacklist.length === 0) {
             let embed = new MessageEmbed()
                 .setDescription('**The blacklist is empty!**')
                 .setColor(Config.colors.default);
             return embed;
         }
         let description = `*Users on this list will not have their birthdays celebrated no matter what. Edit this list with \`bday blacklist\`!*\n\n`;
-        let users = blacklistResults.blacklistRows.map(data => data.UserId);
+        let users = blacklistResults.blacklist.map(data => data.UserDiscordId);
 
         for (let user of users) {
             description += `**${guild.members.resolve(user)?.displayName || 'Unknown'}**: (ID: ${user})\n`; // Append the description
