@@ -1,13 +1,21 @@
 import { CustomMessages } from '../../../models/database';
-import { SQLUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
+import { SQLUtils } from '../../../utils';
 
 export class CustomMessageRepo {
     constructor(private dataAccess: DataAccess) {}
 
     public async addCustomMessage(discordId: string, message: string): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.CustomMessages_Add, [discordId, message]);
+    }
+
+    public async removeCustomMessage(discordId: string, value: number): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.CustomMessages_Remove, [discordId, value]);
+    }
+
+    public async clearCustomMessages(discordId: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.CustomMessages_Clear, [discordId]);
     }
 
     public async getCustomMessages(discordId: string): Promise<CustomMessages> {
@@ -17,14 +25,6 @@ export class CustomMessageRepo {
 
         let customMessages = SQLUtils.getTable(results, 0);
         return new CustomMessages(customMessages, null);
-    }
-
-    public async clearCustomMessages(discordId: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.CustomMessages_Clear, [discordId]);
-    }
-
-    public async removeCustomMessage(discordId: string, value: number): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.CustomMessages_Remove, [discordId, value]);
     }
 
     public async getCustomMessageList(
