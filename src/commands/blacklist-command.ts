@@ -1,7 +1,7 @@
+import { BlacklistRepo, GuildRepo } from '../services/database/repos';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
-import { GuildRepo } from '../services/database/repos';
 import { GuildUtils } from '../utils';
 
 let Config = require('../../config/config.json');
@@ -15,7 +15,7 @@ export class BlacklistCommand implements Command {
     public ownerOnly = false;
     public voteOnly = false;
 
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private blacklistRepo: BlacklistRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         if (args.length === 2) {

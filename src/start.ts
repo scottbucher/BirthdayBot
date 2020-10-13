@@ -1,4 +1,5 @@
 import { BirthdayService, Logger } from './services';
+import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 import {
     ClearCommand,
     CreateCommand,
@@ -23,7 +24,6 @@ import {
     ViewCommand,
 } from './commands';
 import { Client, ClientOptions, DiscordAPIError, PartialTypes } from 'discord.js';
-import { CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,
@@ -65,6 +65,7 @@ async function start(): Promise<void> {
     let guildRepo = new GuildRepo(dataAccess);
     let userRepo = new UserRepo(dataAccess);
     let customMessageRepo = new CustomMessageRepo(dataAccess);
+    let blacklistRepo = new BlacklistRepo(dataAccess);
 
     // Services
     let birthdayService = new BirthdayService(customMessageRepo);
@@ -91,7 +92,7 @@ async function start(): Promise<void> {
     let faqCommand = new FAQCommand();
     let documentationCommand = new DocumentationCommand();
     let donateCommand = new DonateCommand();
-    let blacklistCommand = new BlacklistCommand(guildRepo);
+    let blacklistCommand = new BlacklistCommand(blacklistRepo);
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
