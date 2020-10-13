@@ -55,7 +55,6 @@ export class StatsCommand implements Command {
             .addField('Node.js', process.version, true)
             .addField('discord.js', `v${djs.version}`, true);
 
-        if (channel instanceof TextChannel) await channel.send(embed);
-        else MessageUtils.sendDm(channel, embed);
+        await MessageUtils.send(channel, embed);
     }
 }
