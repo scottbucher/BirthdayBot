@@ -158,8 +158,8 @@ export class BirthdayService {
                     'User Has Trusted Role',
                     `${
                         member.roles.cache.has(trustedRole.id)
-                            ? `${Config.emotes.confirm} Yes`
-                            : `${Config.emotes.deny} No`
+                            ? `${Config.emotes.confirm} Yes.`
+                            : `${Config.emotes.deny} No.`
                     }`,
                     true
                 );
@@ -168,8 +168,8 @@ export class BirthdayService {
                 'Birthday Role',
                 `${
                     birthdayRole
-                        ? `${Config.emotes.confirm} Correctly set`
-                        : `${Config.emotes.deny} Not set or is a deleted role`
+                        ? `${Config.emotes.confirm} Correctly set.`
+                        : `${Config.emotes.deny} Not set or is a deleted role.`
                 }`,
                 true
             );
@@ -178,7 +178,7 @@ export class BirthdayService {
                     'Trusted Prevents Role',
                     `${
                         !trustedCheckRole
-                            ? `${Config.emotes.confirm} Passed`
+                            ? `${Config.emotes.confirm} Passed.`
                             : `${Config.emotes.deny} Trusted role/settings prevented the birthday role.`
                     }`,
                     true
@@ -188,8 +188,8 @@ export class BirthdayService {
                 'Birthday Channel',
                 `${
                     birthdayChannel
-                        ? `${Config.emotes.confirm} Correctly set`
-                        : `${Config.emotes.deny} Not set or is a deleted channel`
+                        ? `${Config.emotes.confirm} Correctly set.`
+                        : `${Config.emotes.deny} Not set or is a deleted channel.`
                 }`,
                 true
             );
@@ -198,12 +198,18 @@ export class BirthdayService {
                     'Trusted Prevents Message',
                     `${
                         !trustedCheckMessage
-                            ? `${Config.emotes.confirm} Passed`
+                            ? `${Config.emotes.confirm} Passed.`
                             : `${Config.emotes.deny} Trusted role/settings prevented the birthday message.`
                     }`,
                     true
                 );
             }
+            testingEmbed
+            .addField(
+                'Birthday Blacklist',
+                `${Config.emotes.confirm} Member is not blacklisted.`,
+                true
+            );
 
             testingEmbed.setDescription(
                 'Below are the checks to ensure your settings are correct for the birthday event.\n\nIf the checks are passed and either the birthday message and/or birthday role were not given ' +
