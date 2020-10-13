@@ -1,5 +1,4 @@
 import {
-    Channel,
     DMChannel,
     GuildMember,
     Message,
@@ -7,13 +6,13 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { MessageUtils, PermissionUtils } from '../utils';
+import moment from 'moment';
 
 import { Command } from '../commands';
 import { GuildData } from '../models/database';
 import { Logger } from '../services';
-import moment from 'moment';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 let RateLimiter = require('limiter').RateLimiter;
@@ -54,9 +53,13 @@ export class MessageHandler {
             }
         }
 
-        // Check if first argument is prefix
+        // Check if first argument is prefix or bot mention
         let args = msg.content.split(/\s+/);
-        if (args[0].toLowerCase() !== Config.prefix) {
+        if (
+            ![Config.prefix, `<@${msg.client.user.id}>`, `<@!${msg.client.user.id}>`].includes(
+                args[0].toLowerCase()
+            )
+        ) {
             return;
         }
 
@@ -116,8 +119,7 @@ export class MessageHandler {
                             .setDescription('This command can only be used by Birthday Bot staff!')
                             .setColor(Config.colors.error);
 
-                        if (channel instanceof TextChannel) await channel.send(embed);
-                        else MessageUtils.sendDm(channel, embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     }
                 }
@@ -129,7 +131,7 @@ export class MessageHandler {
             let embed = new MessageEmbed()
                 .setDescription('This command can only be used in a discord server!')
                 .setColor(Config.colors.error);
-            MessageUtils.sendDm(channel, embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 

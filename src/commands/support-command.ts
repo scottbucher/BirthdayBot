@@ -1,7 +1,7 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { Command } from './command';
 import { MessageUtils } from '../utils';
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 
@@ -19,7 +19,6 @@ export class SupportCommand implements Command {
             .setDescription(`For support join our discord server [here](${Config.links.support})!`)
             .setColor(Config.colors.default);
 
-        if (channel instanceof TextChannel) await channel.send(embed);
-        else MessageUtils.sendDm(channel, embed);
+        await MessageUtils.send(channel, embed);
     }
 }
