@@ -1,6 +1,7 @@
 import { BirthdayService, Logger } from './services';
-import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
+import { BlacklistAddSubCommand, BlacklistClearSubCommand, BlacklistRemoveSubCommand } from './commands/blacklist';
 import {
+    BlacklistCommand,
     ClearCommand,
     CreateCommand,
     DocumentationCommand,
@@ -23,6 +24,7 @@ import {
     UpdateCommand,
     ViewCommand,
 } from './commands';
+import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 import { Client, ClientOptions, DiscordAPIError, PartialTypes } from 'discord.js';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
@@ -37,7 +39,6 @@ import {
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
 
-import { BlacklistCommand } from './commands/blacklist-command';
 import { Bot } from './bot';
 import { DataAccess } from './services/database/data-access';
 import { PostBirthdaysJob } from './jobs';
@@ -92,7 +93,6 @@ async function start(): Promise<void> {
     let faqCommand = new FAQCommand();
     let documentationCommand = new DocumentationCommand();
     let donateCommand = new DonateCommand();
-    let blacklistCommand = new BlacklistCommand(blacklistRepo);
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
@@ -122,6 +122,18 @@ async function start(): Promise<void> {
         messageMentionSubCommand,
         messageEmbedSubCommand,
         messageTestSubCommand
+    );
+
+    // Blacklist Sub Commands
+    let blacklistClearSubCommand = new BlacklistClearSubCommand(blacklistRepo);
+    let blacklistAddSubCommand = new BlacklistAddSubCommand(blacklistRepo);
+    let blacklistRemoveSubCommand = new BlacklistRemoveSubCommand(blacklistRepo);
+
+    // Blacklist Command
+    let blacklistCommand = new BlacklistCommand(
+        blacklistAddSubCommand,
+        blacklistRemoveSubCommand,
+        blacklistClearSubCommand
     );
 
     // Events handlers
