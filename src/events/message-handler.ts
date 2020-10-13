@@ -52,9 +52,13 @@ export class MessageHandler {
             }
         }
 
-        // Check if first argument is prefix
+        // Check if first argument is prefix or bot mention
         let args = msg.content.split(/\s+/);
-        if (args[0].toLowerCase() !== Config.prefix) {
+        if (
+            ![Config.prefix, `<@${msg.client.user.id}>`, `<@!${msg.client.user.id}>`].includes(
+                args[0].toLowerCase()
+            )
+        ) {
             return;
         }
 
