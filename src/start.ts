@@ -1,5 +1,5 @@
 import { BirthdayService, Logger } from './services';
-import { BlacklistAddSubCommand, BlacklistClearSubCommand, BlacklistRemoveSubCommand } from './commands/blacklist';
+import { BlacklistAddSubCommand, BlacklistClearSubCommand, BlacklistListSubCommand, BlacklistRemoveSubCommand } from './commands/blacklist';
 import {
     BlacklistCommand,
     ClearCommand,
@@ -125,15 +125,17 @@ async function start(): Promise<void> {
     );
 
     // Blacklist Sub Commands
-    let blacklistClearSubCommand = new BlacklistClearSubCommand(blacklistRepo);
     let blacklistAddSubCommand = new BlacklistAddSubCommand(blacklistRepo);
     let blacklistRemoveSubCommand = new BlacklistRemoveSubCommand(blacklistRepo);
+    let blacklistClearSubCommand = new BlacklistClearSubCommand(blacklistRepo);
+    let blacklistListSubCommand = new BlacklistListSubCommand(blacklistRepo);
 
     // Blacklist Command
     let blacklistCommand = new BlacklistCommand(
         blacklistAddSubCommand,
         blacklistRemoveSubCommand,
-        blacklistClearSubCommand
+        blacklistClearSubCommand,
+        blacklistListSubCommand
     );
 
     // Events handlers
