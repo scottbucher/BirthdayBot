@@ -3,7 +3,7 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { BlacklistRepo } from '../../services/database/repos';
 import { GuildUtils } from '../../utils';
 
-let Config = require('../../config/config.json');
+let Config = require('../../../config/config.json');
 
 export class BlacklistRemoveSubCommand {
     constructor(private blacklistRepo: BlacklistRepo) {}
