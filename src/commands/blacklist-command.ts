@@ -57,14 +57,14 @@ export class BlacklistCommand implements Command {
         }
 
         if (args[2].toLowerCase() === 'add') {
-            // Add user to blacklist here
+            await this.blacklistRepo.addBlacklist(msg.guild.id, target.id);
 
             let embed = new MessageEmbed()
                 .setDescription(`Successfully added ${target.toString()} to the birthday blacklist!`)
                 .setColor(Config.colors.success);
             await channel.send(embed);
         } else if (args[2].toLowerCase() === 'remove') {
-            // Remove user from blacklist here
+            await this.blacklistRepo.removeBlacklist(msg.guild.id, target.id);
 
             let embed = new MessageEmbed()
             .setDescription(`Successfully removed ${target.toString()} from the birthday blacklist!`)
