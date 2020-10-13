@@ -33,6 +33,7 @@ export class BlacklistCommand implements Command {
             await channel.send(embed);
             return;
         }
+
         if (args[2].toLowerCase() === 'list') {
             // this.messageListSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'clear') {
@@ -41,6 +42,15 @@ export class BlacklistCommand implements Command {
             this.blacklistAddSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'remove') {
             this.blacklistRemoveSubCommand.execute(args, msg, channel);
+        } else {
+            let embed = new MessageEmbed()
+                .setTitle('Invalid Usage!')
+                .setDescription(
+                    `Please specify a sub command for the blacklist! [(?)](${Config.links.docs}/faq#what-is-the-birthday-blacklist)\nAccepted Values: \`list\`, \`add <User>\`, \`remove <User>\`, \`clear\``
+                )
+                .setColor(Config.colors.error);
+            await channel.send(embed);
+            return;
         }
     }
 }
