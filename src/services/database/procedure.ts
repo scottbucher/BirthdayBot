@@ -1,4 +1,7 @@
 export enum Procedure {
+    Blacklist_Add = 'Blacklist_Add',
+    Blacklist_Remove = 'Blacklist_Remove',
+    Blacklist_Clear = 'Blacklist_Clear',
     CustomMessages_Add = 'CustomMessages_Add',
     CustomMessages_Remove = 'CustomMessages_Remove',
     CustomMessages_Clear = 'CustomMessages_Clear',
