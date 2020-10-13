@@ -94,7 +94,7 @@ async function start(): Promise<void> {
     let nextCommand = new NextCommand(userRepo);
     let trustedCommand = new TrustedCommand(guildRepo);
     let setAttemptsCommand = new SetAttemptsCommand(userRepo);
-    let testCommand = new TestCommand(birthdayService, guildRepo);
+    let testCommand = new TestCommand(birthdayService, guildRepo, blacklistRepo);
     let faqCommand = new FAQCommand();
     let documentationCommand = new DocumentationCommand();
     let donateCommand = new DonateCommand();
@@ -182,6 +182,7 @@ async function start(): Promise<void> {
         client,
         guildRepo,
         userRepo,
+        blacklistRepo,
         birthdayService
     );
 
