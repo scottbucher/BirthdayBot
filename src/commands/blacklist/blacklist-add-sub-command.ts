@@ -40,6 +40,15 @@ export class BlacklistAddSubCommand {
             return;
         }
 
+        if (target.bot) {
+            let embed = new MessageEmbed()
+                .setTitle('Invalid Usage!')
+                .setDescription('You cannot blacklist a bot!')
+                .setColor(Config.colors.error);
+            await channel.send(embed);
+            return;
+        }
+
         await this.blacklistRepo.addBlacklist(msg.guild.id, target.id);
 
         let embed = new MessageEmbed()
