@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 13, 2020 at 02:50 AM
+-- Generation Time: Oct 13, 2020 at 07:02 AM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -38,7 +38,7 @@ WHERE GuildDiscordId = IN_GuildDiscordId;
 
 INSERT IGNORE INTO `blacklist` (
 	GuildId,
-	UserId
+	UserDiscordId
 ) VALUES (
 	@GuildId,
 	IN_UserDiscordId
@@ -58,6 +58,28 @@ DELETE
 FROM `blacklist`
 WHERE
 		GuildId = @GuildId; 
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `Blacklist_Get` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SET @Row_Number = 0;
+
+SELECT
+		*,
+        ROW_NUMBER() OVER (
+       		ORDER BY BlacklistId 
+        ) AS Position
+    FROM `blacklist`
+    WHERE GuildId = @GuildId
+ORDER BY BlacklistId;
+
 END$$
 
 CREATE DEFINER=`admin`@`localhost` PROCEDURE `Blacklist_GetList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
@@ -126,7 +148,7 @@ DELETE
 FROM `blacklist`
 WHERE
 		GuildId = @GuildId AND
-        UserId = IN_UserDiscordId;
+        UserDiscordId = IN_UserDiscordId;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Add` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Message` VARCHAR(2000))  BEGIN
@@ -742,7 +764,7 @@ DELIMITER ;
 CREATE TABLE `blacklist` (
   `BlacklistId` int(11) NOT NULL,
   `GuildId` int(11) NOT NULL,
-  `UserId` varchar(20) NOT NULL
+  `UserDiscordId` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -813,8 +835,8 @@ CREATE TABLE `vote` (
 --
 ALTER TABLE `blacklist`
   ADD PRIMARY KEY (`BlacklistId`),
-  ADD UNIQUE KEY `UQ_GuildIdUserId` (`GuildId`,`UserId`) USING BTREE,
-  ADD KEY `UserId` (`UserId`);
+  ADD UNIQUE KEY `UQ_GuildIdUserDiscordId` (`GuildId`,`UserDiscordId`) USING BTREE,
+  ADD KEY `UserId` (`UserDiscordId`);
 
 --
 -- Indexes for table `guild`
