@@ -6,7 +6,8 @@ export abstract class GuildUtils {
         return guild.members.cache.find(
             member =>
                 member.displayName.toLowerCase().includes(search) ||
-                member.user.username.toLowerCase().includes(search)
+                member.user.username.toLowerCase().includes(search) ||
+                member.user.id.includes(search)
         );
     }
 }
