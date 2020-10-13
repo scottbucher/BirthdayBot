@@ -36,6 +36,6 @@ export class GuildJoinHandler implements EventHandler {
         }
 
         let ownerChannel = await guild.owner.createDM();
-        await MessageUtils.sendDm(ownerChannel, embed);
+        await MessageUtils.send(ownerChannel, embed);
     }
 }

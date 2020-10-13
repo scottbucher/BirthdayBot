@@ -1,5 +1,4 @@
 import {
-    Channel,
     DMChannel,
     GuildMember,
     Message,
@@ -7,12 +6,12 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { MessageUtils, PermissionUtils } from '../utils';
+import moment from 'moment';
 
 import { Command } from '../commands';
 import { Logger } from '../services';
-import moment from 'moment';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 let RateLimiter = require('limiter').RateLimiter;
@@ -115,8 +114,7 @@ export class MessageHandler {
                             .setDescription('This command can only be used by Birthday Bot staff!')
                             .setColor(Config.colors.error);
 
-                        if (channel instanceof TextChannel) await channel.send(embed);
-                        else MessageUtils.sendDm(channel, embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     }
                 }
@@ -128,7 +126,7 @@ export class MessageHandler {
             let embed = new MessageEmbed()
                 .setDescription('This command can only be used in a discord server!')
                 .setColor(Config.colors.error);
-            MessageUtils.sendDm(channel, embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 

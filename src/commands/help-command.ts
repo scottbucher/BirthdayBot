@@ -48,8 +48,7 @@ export class HelpCommand implements Command {
                 .setColor(Config.colors.default);
         }
 
-        if (channel instanceof TextChannel) await channel.send(embed);
-        else MessageUtils.sendDm(channel, embed);
+        await MessageUtils.send(channel, embed);
     }
 }
 
