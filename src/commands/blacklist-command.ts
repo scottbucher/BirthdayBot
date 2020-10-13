@@ -2,6 +2,7 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { BlacklistAddSubCommand } from './blacklist/blacklist-add-sub-command';
 import { BlacklistClearSubCommand } from './blacklist/blacklist-clear-sub-command';
+import { BlacklistListSubCommand } from './blacklist';
 import { BlacklistRemoveSubCommand } from './blacklist/blacklist-remove-sub-command';
 import { Command } from './command';
 
@@ -19,7 +20,8 @@ export class BlacklistCommand implements Command {
     constructor(
         private blacklistAddSubCommand: BlacklistAddSubCommand,
         private blacklistRemoveSubCommand: BlacklistRemoveSubCommand,
-        private blacklistClearSubCommand: BlacklistClearSubCommand
+        private blacklistClearSubCommand: BlacklistClearSubCommand,
+        private blacklistListSubCommand: BlacklistListSubCommand
     ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
@@ -34,14 +36,14 @@ export class BlacklistCommand implements Command {
             return;
         }
 
-        if (args[2].toLowerCase() === 'list') {
-            // this.messageListSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'clear') {
-            this.blacklistClearSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'add') {
+        if (args[2].toLowerCase() === 'add') {
             this.blacklistAddSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'remove') {
             this.blacklistRemoveSubCommand.execute(args, msg, channel);
+        } else if (args[2].toLowerCase() === 'list') {
+            this.blacklistListSubCommand.execute(args, msg, channel);
+        } else if (args[2].toLowerCase() === 'clear') {
+            this.blacklistClearSubCommand.execute(args, msg, channel);
         } else {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
