@@ -5,9 +5,8 @@ export abstract class GuildUtils {
         let search = input.toLowerCase();
         return guild.members.cache.find(
             member =>
-                member.displayName.toLowerCase().includes(search) ??
-                member.user.username.toLowerCase().includes(search) ??
-                member.user.id.includes(search)
+                member.displayName.toLowerCase().includes(search) ||
+                member.user.username.toLowerCase().includes(search)
         );
     }
 }
