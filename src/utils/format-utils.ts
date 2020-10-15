@@ -142,7 +142,7 @@ export abstract class FormatUtils {
                 '`bday message add <message>`\n`bday message remove <position>`\n`bday message clear`'
             )
             .setFooter(
-                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayListSize} per page`,
+                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
                 guild.iconURL()
             )
             .setTimestamp();
