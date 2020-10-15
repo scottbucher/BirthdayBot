@@ -228,7 +228,7 @@ export abstract class FormatUtils {
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
             .setFooter(
-                `Total Birthdays: ${blacklistResults.stats.TotalItems} • ${Config.experience.blacklistSize} per page`,
+                `Total Blacklisted Users: ${blacklistResults.stats.TotalItems} • ${Config.experience.blacklistSize} per page`,
                 guild.iconURL()
             )
             .setTimestamp();
