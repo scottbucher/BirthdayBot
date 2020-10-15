@@ -71,7 +71,7 @@ export class MessageAddSubCommand {
         let birthdayMessage: string;
 
         if (target) {
-            birthdayMessage = msg.content
+            birthdayMessage = msg.content.replace(args[3], target.toString() + ' ')
                 .substring(msg.content.indexOf('add') + 27)
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>');
         } else {
