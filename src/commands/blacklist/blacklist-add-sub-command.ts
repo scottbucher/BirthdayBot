@@ -25,14 +25,6 @@ export class BlacklistAddSubCommand {
         // Did we find a user?
         if (!target) {
             let embed = new MessageEmbed()
-                .setDescription('Could not find that user!')
-                .setColor(Config.colors.error);
-            await channel.send(embed);
-            return;
-        }
-
-        if (!target) {
-            let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription('Could not find that user!')
                 .setColor(Config.colors.error);
