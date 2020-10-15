@@ -6,8 +6,8 @@ import { SQLUtils } from '../../../utils';
 export class CustomMessageRepo {
     constructor(private dataAccess: DataAccess) {}
 
-    public async addCustomMessage(discordId: string, message: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.CustomMessages_Add, [discordId, message]);
+    public async addCustomMessage(discordId: string, message: string, userId: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.CustomMessages_Add, [discordId, message, userId]);
     }
 
     public async removeCustomMessage(discordId: string, value: number): Promise<void> {
