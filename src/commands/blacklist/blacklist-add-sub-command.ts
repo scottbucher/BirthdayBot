@@ -49,6 +49,16 @@ export class BlacklistAddSubCommand {
             return;
         }
 
+        let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
+
+        if (blacklist.blacklist.map(entry => entry.UserDiscordId).includes(msg.author.id)) {
+            let embed = new MessageEmbed()
+                .setDescription('This user is already in the blacklist!')
+                .setColor(Config.colors.error);
+            await channel.send(embed);
+            return;
+        }
+
         await this.blacklistRepo.addBlacklist(msg.guild.id, target.id);
 
         let embed = new MessageEmbed()
