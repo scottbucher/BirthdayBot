@@ -70,11 +70,14 @@ export class MessageAddSubCommand {
         // Get Message
         let birthdayMessage: string;
 
+        // Compile the birthday message
         if (target) {
+            // If the input of the target WASN'T a @mention, replace it with the <@USER_ID> format so the substring works universally
             birthdayMessage = msg.content.replace(args[3], target.toString() + ' ')
                 .substring(msg.content.indexOf('add') + 27)
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>');
         } else {
+            // Basic non user specific custom message
             birthdayMessage = msg.content
                 .substring(msg.content.indexOf('add') + 4)
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>');
@@ -123,13 +126,15 @@ export class MessageAddSubCommand {
                 return;
             }
 
+            // If there is a target, begin the checks if there is a user custom message already for the target
             if (target) {
                 let userMessage = customMessages.customMessages.filter(
                     message => message.UserDiscordId === target.id
                 );
 
+                // if it found a message for this user
                 if (userMessage.length > 0) {
-                    // There is already a message for this user
+                    // There is already a message for this user should they overwrite it?
                     let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
                     let confirmationEmbed = new MessageEmbed()
@@ -164,6 +169,7 @@ export class MessageAddSubCommand {
 
                     if (confirmation === undefined) return;
 
+                    // set the overwrite value
                     overwrite = confirmation === Config.emotes.confirm ? true : false;
                 }
             } else {
