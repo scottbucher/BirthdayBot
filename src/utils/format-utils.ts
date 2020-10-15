@@ -158,7 +158,8 @@ export abstract class FormatUtils {
         let description = `*A random birthday message is chosen for each birthday. If there are none set, it will use the default birthday message. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
 
         for (let customMessage of customMessageResults.customMessages) {
-            description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
+            let member = guild.members.resolve(customMessage.UserDiscordId);
+            description += `**${i.toLocaleString()}.** ${member ? `**${member.displayName}**: ` : ' '} ${customMessage.Message}\n\n`;
             i++;
         }
         embed.setDescription(description);
