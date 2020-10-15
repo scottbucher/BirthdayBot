@@ -66,7 +66,7 @@ export class SetCommand implements Command {
             let suggestCheck = false; // This could be removed if I did it as I did it in the subsequent args check, but this is technically more efficient
             if (!dm && !target) {
                 target = FormatUtils.getUser(msg, args[2]);
-                suggestCheck = true;
+                if (target) suggestCheck = true;
             }
 
             if (!suggestCheck) {
