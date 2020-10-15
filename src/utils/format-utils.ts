@@ -241,7 +241,7 @@ export abstract class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*Users on this list will not have their birthdays celebrated no matter what. Edit this list with \`bday blacklist\`!*\n\n`;
+        let description = `*Users on this list will not have their birthdays celebrated no matter what. Edit this list with \`bday blacklist <add/remove> <User>\`!*\n\n`;
         let users = blacklistResults.blacklist.map(data => data.UserDiscordId);
 
         for (let user of users) {
