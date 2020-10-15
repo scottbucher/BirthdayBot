@@ -43,7 +43,7 @@ export class MessageRemoveSubCommand {
                 message => message.UserDiscordId === target.id
             );
 
-            if (userMessage) position = userMessage[0].Position;
+            if (userMessage.length > 0) position = userMessage[0].Position;
         }
 
         if (!position) {
