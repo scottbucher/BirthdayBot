@@ -6,13 +6,13 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
-import moment from 'moment';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
 import { GuildData } from '../models/database';
 import { Logger } from '../services';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { MessageUtils, PermissionUtils } from '../utils';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 let RateLimiter = require('limiter').RateLimiter;
@@ -68,7 +68,7 @@ export class MessageHandler {
 
         // Create new limiter if one doesn't exist
         if (!limiter) {
-            limiter = new RateLimiter(2, 20000);
+            limiter = new RateLimiter(10, 30000);
             limiters[msg.author.id] = limiter;
         }
 
