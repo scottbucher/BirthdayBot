@@ -94,6 +94,10 @@
         "map": "https://kevinnovak.github.io/Time-Zone-Picker/",
         "stream": "https://www.twitch.tv/stqlth"
     },
+    "voting": {
+        "enabled": false,
+        "hours": 24
+    },
     "botSites": {
         "topGg": {
             "enabled": false,
