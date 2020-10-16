@@ -58,7 +58,7 @@ export class MessageColorSubCommand {
                     `Please select a color or to input a custom one. [(?)](${Config.links.docs}/faq#)`
                 )
                 .addField(
-                    `${Config.emotes.colorOptions.red} Red\n${Config.emotes.colorOptions.yellow} Yellow\n${Config.emotes.colorOptions.blue} Blue\n${Config.emotes.colorOptions.green} Green\n${Config.emotes.colorOptions.orange} Orange\n${Config.emotes.colorOptions.purple} Purple\n${Config.emotes.colorOptions.white} White\n${Config.emotes.colorOptions.black} Black\n${Config.emotes.colorOptions.custom} Custom Color\n`,
+                    `${Config.emotes.colorOptions.red} Red\n${Config.emotes.colorOptions.yellow} Yellow\n${Config.emotes.colorOptions.blue} Blue\n${Config.emotes.colorOptions.green} Green\n${Config.emotes.colorOptions.orange} Orange\n${Config.emotes.colorOptions.purple} Purple\n${Config.emotes.colorOptions.black} Black\n${Config.emotes.colorOptions.custom} Custom Color\n`,
                     '\u200b'
                 )
                 .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
