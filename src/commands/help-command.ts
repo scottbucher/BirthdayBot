@@ -45,6 +45,11 @@ export class HelpCommand implements Command {
                 .setAuthor(HELP_PERM_TITLE, clientAvatarUrl)
                 .setDescription(HELP_PERM_DESC)
                 .setColor(Config.colors.default);
+        } else if (option === 'premium') {
+            embed
+                .setAuthor(HELP_PREMIUM_TITLE, clientAvatarUrl)
+                .setDescription(HELP_PREMIUM_DESC)
+                .setColor(Config.colors.default);
         } else {
             embed
                 .setAuthor(HELP_GENERAL_TITLE, clientAvatarUrl)
@@ -60,6 +65,9 @@ export class HelpCommand implements Command {
 const HELP_GENERAL_TITLE = 'Birthday Bot General Help';
 const HELP_GENERAL_DESC =
     `Birthday Bot helps your server celebrate birthdays with automatic birthday roles and announcements.` +
+    '\n' +
+    `\n**bday premium** - See information about Birthday Bot Premium.` +
+    `\n**bday help premium** - Help for Birthday Bot Premium.` +
     '\n' +
     `\n**bday set** - Set your birthday.` +
     `\n**bday view [user]** - View your birthday or a users birthday.` +
@@ -120,4 +128,12 @@ const HELP_PERM_DESC =
     `\n**bday update birthdayMasterRole <role>** - Update the birthday master role.` +
     `\n**bday clear birthdayMasterRole** - Clear the birthday master role.` +
     `\n**bday blacklist add <user>** - Add user to the blacklist.` +
-    `\n**bday blacklist remove <user>** - Remove user from the blacklist.`;
+    `\n**bday blacklist remove <user>** - Remove user from the blacklist.` +
+    `\n**bday blacklist list** - View all blacklisted users in your server.`;
+
+const HELP_PREMIUM_TITLE = 'Birthday Bot Premium Help - Guild Only';
+const HELP_PREMIUM_DESC =
+    `\n**bday premium** - View information about your server's premium.` +
+    `\n**bday message add <User> <Message>** - Add a user specific birthday message.\n - Placeholder for users: \`<Users>\`\n- Example Usage: \`bday message add @Scott Happy Birthday <Users>!\`` +
+    `\n**bday message remove <user/position>** - Remove a certain birthday message.` +
+    `\n**bday message color <color>** - Set the color of the birthday message embed.`;
