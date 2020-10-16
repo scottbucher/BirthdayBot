@@ -62,16 +62,16 @@
         "create": "🔨",
         "select": "🖱",
         "birthday": "🎂",
-        "colorOptions": {
+        "colors": {
             "red": "🟥",
             "yellow": "🟨",
             "blue": "🟦",
             "green": "🟩",
             "orange": "🟧",
             "purple": "🟪",
-            "black": "⬛",
-            "custom": "✏"
-        }
+            "black": "⬛"
+        },
+        "custom": "✏"
     },
     "stopCommands": ["stop", "cancel", "exit", "close", "quit"],
     "validation": {
