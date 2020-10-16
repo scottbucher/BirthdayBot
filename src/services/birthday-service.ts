@@ -60,7 +60,7 @@ export class BirthdayService {
             if (!isTest) return;
         }
 
-        let birthdayUsers: GuildMember[] = [];
+        let birthdayMessageUsers: GuildMember[] = [];
 
         let preventMessage = guildData.TrustedPreventsMessage;
         let preventRole = guildData.TrustedPreventsRole;
@@ -82,15 +82,18 @@ export class BirthdayService {
                 preventRole &&
                 !member.roles.cache.has(trustedRole.id)
             ) {
+                // For test cases
                 trustedCheckMessage = true;
                 trustedCheckRole = true;
                 continue;
             }
 
+            // Birthday role is actively given, no time check needed!
             if (birthdayRole) {
                 if (!(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))) {
                     ActionUtils.giveRole(member, birthdayRole);
                 } else {
+                    // For test cases
                     trustedCheckRole = true;
                 }
             }
@@ -100,8 +103,9 @@ export class BirthdayService {
                 birthdayChannel
             ) {
                 if (!(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))) {
-                    birthdayUsers.push(member);
+                    birthdayMessageUsers.push(member);
                 } else {
+                    // For test cases
                     trustedCheckMessage = true;
                 }
             }
@@ -110,9 +114,10 @@ export class BirthdayService {
         // get a string array of the userData keys
         let userDataKeys = userDatas.map(userData => userData.UserDiscordId);
 
-        // Filter OUT anyone whose in userData (whose birthday is today)
+        // Filter OUT anyone whose in userData (whose birthday is today) (This list will then have the birthday role removed since it isn't their birthday)
         members = members.filter(member => !userDataKeys.includes(member.id));
 
+        // Birthday role is actively taken, no time check needed!
         if (birthdayRole) {
             members.forEach(member => {
                 if (member.roles.cache.has(birthdayRole.id))
@@ -121,11 +126,29 @@ export class BirthdayService {
         }
 
         // Birthday Message
-        if (birthdayUsers.length > 0) {
-            let userList = FormatUtils.joinWithAnd(birthdayUsers.map(user => user.toString()));
-            let message = BdayUtils.randomMessage(
-                await this.customMessageRepo.getCustomMessages(guild.id)
-            )
+        if (birthdayMessageUsers.length > 0) {
+            let customMessages = await this.customMessageRepo.getCustomMessages(guild.id);
+
+            // We have our list of birthday message users, now, lets get a list of users who have user specific custom birthday messages
+            // Get a list of custom user specific messages
+            let customUserMessages = customMessages.customMessages.filter(
+                message => message.UserDiscordId !== '0'
+            );
+
+            // Guild Member list of people with a user specific custom birthday message
+            let usersWithSpecificMessage = birthdayMessageUsers.filter(member =>
+                customUserMessages.map(message => message.UserDiscordId).includes(member.id)
+            );
+
+            // Remove all users who have a user specific custom birthday message
+            birthdayMessageUsers = birthdayMessageUsers.filter(
+                member => !usersWithSpecificMessage.includes(member)
+            );
+
+            let userList = FormatUtils.joinWithAnd(
+                birthdayMessageUsers.map(user => user.toString())
+            );
+            let message = BdayUtils.randomMessage(customMessages)
                 .split('@Users')
                 .join(userList)
                 .split('<Users>')
@@ -146,9 +169,29 @@ export class BirthdayService {
                 mentionSetting = roleInput.toString();
             }
 
+            // Send the mention setting
             if (mentionSetting) birthdayChannel.send(mentionSetting);
+
+            // Create and send the default or the global custom birthday message that was chosen for those without a user specific custom birthday message
             let embed = new MessageEmbed().setDescription(message).setColor(Config.colors.default);
             await birthdayChannel.send(guildData.UseEmbed ? embed : message);
+
+            // Now, loop through the members with a user specific custom birthday message
+            for (let member of usersWithSpecificMessage) {
+                // Get their birthday message
+                let message = customUserMessages
+                    .find(message => message.UserDiscordId === member.user.id)
+                    .Message.split('@Users')
+                    .join(member.toString())
+                    .split('<Users>')
+                    .join(member.toString());
+
+                // Create it and send it
+                let embed = new MessageEmbed()
+                    .setDescription(message)
+                    .setColor(Config.colors.default);
+                await birthdayChannel.send(guildData.UseEmbed ? embed : message);
+            }
         }
 
         if (isTest) {
@@ -204,8 +247,7 @@ export class BirthdayService {
                     true
                 );
             }
-            testingEmbed
-            .addField(
+            testingEmbed.addField(
                 'Birthday Blacklist',
                 `${Config.emotes.confirm} Member is not blacklisted.`,
                 true
