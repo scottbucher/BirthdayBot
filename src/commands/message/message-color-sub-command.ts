@@ -22,7 +22,7 @@ export class MessageColorSubCommand {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Color')
                 .setDescription(
-                    'Please provide a valid hex color! Find hex colors [here](https://htmlcolorcodes.com/).' +
+                    `Please provide a valid hex color! Find hex colors [here](${Config.links.colors}).` +
                         '\n\nExample: `#4EEFFF` or `4EEFFF`'
                 )
                 .setTimestamp()
