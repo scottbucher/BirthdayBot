@@ -11,6 +11,7 @@ import {
 } from './message';
 
 import { Command } from './command';
+import { MessageColorSubCommand } from './message/message-color-sub-command';
 
 let Config = require('../../config/config.json');
 
@@ -31,7 +32,8 @@ export class MessageCommand implements Command {
         private messageTimeSubCommand: MessageTimeSubCommand,
         private messageMentionSubCommand: MessageMentionSubCommand,
         private messageEmbedSubCommand: MessageEmbedSubCommand,
-        private messageTestSubCommand: MessageTestSubCommand
+        private messageTestSubCommand: MessageTestSubCommand,
+        private messageColorSubCommand: MessageColorSubCommand
     ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
@@ -61,6 +63,8 @@ export class MessageCommand implements Command {
             this.messageEmbedSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'test') {
             this.messageTestSubCommand.execute(args, msg, channel);
+        } else if (args[2].toLowerCase() === 'color') {
+            this.messageColorSubCommand.execute(args, msg, channel);
         } else {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')

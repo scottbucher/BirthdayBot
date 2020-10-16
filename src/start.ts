@@ -35,6 +35,7 @@ import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
+    MessageColorSubCommand,
     MessageEmbedSubCommand,
     MessageListSubCommand,
     MessageMentionSubCommand,
@@ -116,6 +117,7 @@ async function start(): Promise<void> {
     let messageMentionSubCommand = new MessageMentionSubCommand(guildRepo);
     let messageEmbedSubCommand = new MessageEmbedSubCommand(guildRepo);
     let messageTestSubCommand = new MessageTestSubCommand(guildRepo, customMessageRepo);
+    let messageColorSubCommand = new MessageColorSubCommand(guildRepo);
 
     // Message Command
     let messageCommand = new MessageCommand(
@@ -126,7 +128,8 @@ async function start(): Promise<void> {
         messageTimSubCommand,
         messageMentionSubCommand,
         messageEmbedSubCommand,
-        messageTestSubCommand
+        messageTestSubCommand,
+        messageColorSubCommand
     );
 
     // Blacklist Sub Commands

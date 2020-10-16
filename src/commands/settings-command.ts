@@ -4,6 +4,7 @@ import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
+let Color = require('color');
 
 export class SettingsCommand implements Command {
     public name: string = 'settings';
@@ -21,7 +22,6 @@ export class SettingsCommand implements Command {
         let guildData = await this.guildRepo.getGuild(guild.id);
 
         let settingsEmbed = new MessageEmbed()
-            .setColor(Config.colors.default)
             .setAuthor(`${guild.name}'s Settings`, guild.iconURL())
             .setFooter(`© ${new Date().getFullYear()} Birthday Bot`, msg.client.user.avatarURL())
             .setTimestamp();
@@ -31,6 +31,7 @@ export class SettingsCommand implements Command {
         let mentionSetting = 'None';
         let messageTime: string;
         let trustedRole: string;
+        let birthdayMasterRole: string;
         let preventsRole = guildData.TrustedPreventsRole ? 'True' : 'False';
         let preventsMessage = guildData.TrustedPreventsMessage ? 'True' : 'False';
         let useEmbed = guildData.UseEmbed ? 'True' : 'False';
@@ -70,16 +71,32 @@ export class SettingsCommand implements Command {
                 ? 'Not Set'
                 : guild.roles.resolve(guildData.TrustedRoleDiscordId)?.toString() ||
                   '**Deleted Role**';
+        birthdayMasterRole =
+            guildData.BirthdayMasterRoleDiscordId === '0'
+                ? 'Not Set'
+                : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
+                  '**Deleted Role**';
+
+        let color: string;
+
+        try {
+            color = Color('#' + guildData.MessageEmbedColor).hex();
+        } catch (error) {
+            color = Config.colors.default;
+        }
 
         settingsEmbed
+            .setColor(color)
             .addField('Birthday Channel', birthdayChannel, true)
             .addField('Birthday Role', birthdayRole, true)
+            .addField('Birthday Master Role', birthdayMasterRole, true)
             .addField('Mention Setting', mentionSetting, true)
             .addField('Message Time', messageTime, true)
             .addField('Trusted Role', trustedRole, true)
             .addField('Trusted Prevents Role', preventsRole, true)
             .addField('Trusted Prevents Message', preventsMessage, true)
             .addField('Embed Birthday Message', useEmbed, true)
+            .addField('Birthday Message Color', color, true)
             .addField('Guild Id', guild.id, true);
 
         await channel.send(settingsEmbed);

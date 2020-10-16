@@ -5,6 +5,7 @@ import { GuildData, UserData } from '../models/database';
 import { CustomMessageRepo } from './database/repos';
 
 let Config = require('../../config/config.json');
+let Color = require('color');
 
 export class BirthdayService {
     constructor(private customMessageRepo: CustomMessageRepo) {}
@@ -172,9 +173,19 @@ export class BirthdayService {
             // Send the mention setting
             if (mentionSetting) birthdayChannel.send(mentionSetting);
 
+            let color: string;
+
+            try {
+                color = Color('#' + guildData.MessageEmbedColor).hex();
+            } catch (error) {
+                color = Config.colors.default;
+            }
+
             // Create and send the default or the global custom birthday message that was chosen for those without a user specific custom birthday message
-            let embed = new MessageEmbed().setDescription(message).setColor(Config.colors.default);
-            await birthdayChannel.send(guildData.UseEmbed ? embed : message);
+            if (birthdayMessageUsers.length > 0) {
+                let embed = new MessageEmbed().setDescription(message).setColor(color);
+                await birthdayChannel.send(guildData.UseEmbed ? embed : message);
+            }
 
             // Now, loop through the members with a user specific custom birthday message
             for (let member of usersWithSpecificMessage) {
@@ -187,9 +198,7 @@ export class BirthdayService {
                     .join(member.toString());
 
                 // Create it and send it
-                let embed = new MessageEmbed()
-                    .setDescription(message)
-                    .setColor(Config.colors.default);
+                let embed = new MessageEmbed().setDescription(message).setColor(color);
                 await birthdayChannel.send(guildData.UseEmbed ? embed : message);
             }
         }
