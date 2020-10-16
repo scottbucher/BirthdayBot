@@ -82,9 +82,9 @@ export class MessageAddSubCommand {
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>');
         }
 
-        if (birthdayMessage.length > 300) {
+        if (birthdayMessage.length > 500) {
             let embed = new MessageEmbed()
-                .setDescription('Custom Messages are maxed at 300 characters!')
+                .setDescription('Custom Messages are maxed at 500 characters!')
                 .setColor(Config.colors.error);
             await channel.send(embed);
             return;
