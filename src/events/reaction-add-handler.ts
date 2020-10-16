@@ -106,10 +106,6 @@ export class ReactionAddHandler implements EventHandler {
 
         if (!titleArgs) return;
 
-        if (checkNextPage || checkPreviousPage || checkJumpToPage)
-            await msgReaction.users.remove(reactor);
-        else return;
-
         if (checkNextPage || checkPreviousPage) {
             if (titleArgs[1] === 'Messages') {
                 let oldPage: number;
@@ -120,7 +116,7 @@ export class ReactionAddHandler implements EventHandler {
                     try {
                         oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
                         if (checkNextPage) page = oldPage + 1;
-                        else page = oldPage -1;
+                        else page = oldPage - 1;
                     } catch (error) {
                         // Not A Number
                     }
@@ -133,8 +129,13 @@ export class ReactionAddHandler implements EventHandler {
                     page
                 );
 
-                if (oldPage === 1 && checkPreviousPage) return;
-                else if (oldPage === customMessageResults.stats.TotalPages && checkNextPage) return;
+                if (
+                    (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
+                    (oldPage === customMessageResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
+                ) {
+                    await msgReaction.users.remove(reactor);
+                    return;
+                }
 
                 await ListUtils.updateMessageList(
                     customMessageResults,
@@ -143,6 +144,8 @@ export class ReactionAddHandler implements EventHandler {
                     page,
                     pageSize
                 );
+
+                await msgReaction.users.remove(reactor);
             } else if (titleArgs[1] === 'List') {
                 let oldPage: number;
                 let page = 1;
@@ -154,7 +157,7 @@ export class ReactionAddHandler implements EventHandler {
                     try {
                         oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
                         if (checkNextPage) page = oldPage + 1;
-                        else page = oldPage -1;
+                        else page = oldPage - 1;
                     } catch (error) {
                         // Not A Number
                     }
@@ -167,10 +170,17 @@ export class ReactionAddHandler implements EventHandler {
                     page
                 );
 
-                if (oldPage === 1 && checkPreviousPage) return;
-                else if (oldPage === userDataResults.stats.TotalPages && checkNextPage) return;
+                if (
+                    (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
+                    (oldPage === userDataResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
+                ) {
+                    await msgReaction.users.remove(reactor);
+                    return;
+                }
 
                 await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
+
+                await msgReaction.users.remove(reactor);
             } else if (titleArgs[1] === 'Blacklist') {
                 let oldPage: number;
                 let page = 1;
@@ -180,7 +190,7 @@ export class ReactionAddHandler implements EventHandler {
                     try {
                         oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
                         if (checkNextPage) page = oldPage + 1;
-                        else page = oldPage -1;
+                        else page = oldPage - 1;
                     } catch (error) {
                         // Not A Number
                     }
@@ -193,8 +203,13 @@ export class ReactionAddHandler implements EventHandler {
                     page
                 );
 
-                if (oldPage === 1 && checkPreviousPage) return;
-                else if (oldPage === blacklistResults.stats.TotalPages && checkNextPage) return;
+                if (
+                    (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
+                    (oldPage === blacklistResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
+                ) {
+                    await msgReaction.users.remove(reactor);
+                    return;
+                }
 
                 await ListUtils.updateBlacklistList(
                     blacklistResults,
@@ -203,6 +218,8 @@ export class ReactionAddHandler implements EventHandler {
                     page,
                     pageSize
                 );
+
+                await msgReaction.users.remove(reactor);
             }
         } else if (checkJumpToPage) {
             if (titleArgs[1] === 'Messages') {
@@ -265,6 +282,8 @@ export class ReactionAddHandler implements EventHandler {
                     page,
                     pageSize
                 );
+
+                await msgReaction.users.remove(reactor);
             } else if (titleArgs[1] === 'List') {
                 let page: number;
 
@@ -323,6 +342,8 @@ export class ReactionAddHandler implements EventHandler {
                 );
 
                 await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
+
+                await msgReaction.users.remove(reactor);
             } else if (titleArgs[1] === 'Blacklist') {
                 let page: number;
 
@@ -383,6 +404,8 @@ export class ReactionAddHandler implements EventHandler {
                     page,
                     pageSize
                 );
+
+                await msgReaction.users.remove(reactor);
             }
         }
     }
