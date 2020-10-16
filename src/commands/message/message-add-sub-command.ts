@@ -8,7 +8,6 @@ import {
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
-import e from 'express';
 
 let Config = require('../../../config/config.json');
 
