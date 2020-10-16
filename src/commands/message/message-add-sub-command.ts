@@ -29,8 +29,8 @@ export class MessageAddSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await channel.send(
                 new MessageEmbed()
-                    .setTitle('Birthday Message Clear - Expired')
-                    .setDescription('Type `bday blacklist clear` to clear the birthday blacklist.')
+                    .setTitle('Birthday Message Add - Expired')
+                    .setDescription('Type `bday message add <Message>` to add a custom birthday message.')
                     .setColor(Config.colors.error)
             );
         };
