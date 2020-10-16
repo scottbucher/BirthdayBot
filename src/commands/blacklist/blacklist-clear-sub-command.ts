@@ -48,7 +48,7 @@ export class BlacklistClearSubCommand {
                 `Are you sure you want to clear __**${blacklisted.blacklist.length}**__ blacklisted user${blacklisted.blacklist.length === 1 ? '' : 's'}?`
             )
             .setFooter('This action is irreversible!', msg.client.user.avatarURL())
-            .setColor(Config.colors.success);
+            .setColor(Config.colors.warning);
 
         let confirmationMessage = await channel.send(confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

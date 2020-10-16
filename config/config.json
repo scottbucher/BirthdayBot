@@ -50,6 +50,7 @@
     "colors": {
         "default": "0x4eefff",
         "success": "0x1cfe86",
+        "warning": "ffa255",
         "error": "0xff0000"
     },
     "emotes": {

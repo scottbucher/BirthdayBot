@@ -138,12 +138,14 @@ export class MessageAddSubCommand {
                     let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
                     let confirmationEmbed = new MessageEmbed()
+                        .setTitle('Caution')
                         .setDescription(
                             `There is already a custom message set for this user, would you like to overwrite it?` +
-                                `\nMessage: ${userMessage[0].Message}`
+                                `\n\n**Current Message**: ${userMessage[0].Message}` +
+                                `\n\n**New Message**: ${birthdayMessage}`
                         )
                         .setFooter('This action is irreversible!', msg.client.user.avatarURL())
-                        .setColor(Config.colors.success);
+                        .setColor(Config.colors.warning);
 
                     let confirmationMessage = await channel.send(confirmationEmbed); // Send confirmation and emotes
                     for (let option of trueFalseOptions) {

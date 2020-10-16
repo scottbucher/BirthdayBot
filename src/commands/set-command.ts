@@ -301,7 +301,7 @@ export class SetCommand implements Command {
         let month = birthDate.getMonth() + 1;
         let day = birthDate.getDate();
 
-        let confirmationEmbed = new MessageEmbed().setColor(Config.colors.default);
+        let confirmationEmbed = new MessageEmbed().setColor(Config.colors.warning);
 
         if (suggest) {
             confirmationEmbed

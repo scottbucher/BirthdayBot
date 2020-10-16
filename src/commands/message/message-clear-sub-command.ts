@@ -53,7 +53,7 @@ export class MessageClearSubCommand {
                 `Are you sure you want to clear __**${customMessages.customMessages.length}**__ custom message${customMessages.customMessages.length === 1 ? '' : 's'}?`
             )
             .setFooter('This action is irreversible!', msg.client.user.avatarURL())
-            .setColor(Config.colors.success);
+            .setColor(Config.colors.warning);
 
         let confirmationMessage = await channel.send(confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

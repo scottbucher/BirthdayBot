@@ -49,13 +49,13 @@ export class MessageCommand implements Command {
             this.messageListSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'clear') {
             this.messageClearSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'add') {
+        } else if (args[2].toLowerCase() === 'add' || args[2].toLowerCase() === 'create') {
             this.messageAddSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'remove') {
+        } else if (args[2].toLowerCase() === 'remove' || args[2].toLowerCase() === 'delete') {
             this.messageRemoveSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'time') {
             this.messageTimeSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'mention') {
+        } else if (args[2].toLowerCase() === 'mention' || args[2].toLowerCase() === 'role') {
             this.messageMentionSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'embed') {
             this.messageEmbedSubCommand.execute(args, msg, channel);
