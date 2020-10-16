@@ -39,17 +39,13 @@ export class MessageColorSubCommand {
         let colorHex: string;
 
         if (args.length < 4) {
-            // What color do they want
-            let colorOptions = [
-                Config.emotes.colorOptions.red,
-                Config.emotes.colorOptions.yellow,
-                Config.emotes.colorOptions.blue,
-                Config.emotes.colorOptions.green,
-                Config.emotes.colorOptions.orange,
-                Config.emotes.colorOptions.purple,
-                Config.emotes.colorOptions.black,
-                Config.emotes.colorOptions.custom,
-            ];
+            let colorOptionsText = '';
+            for (const [colorName, colorEmoji] of Object.entries(Config.emotes.colors)) {
+                colorOptionsText += `${colorEmoji} ${
+                    colorName.charAt(0).toUpperCase() + colorName.slice(1)
+                }\n`;
+            }
+            colorOptionsText += `${Config.emotes.custom} Custom Color`;
 
             let colorEmbed = new MessageEmbed()
                 .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
@@ -57,24 +53,23 @@ export class MessageColorSubCommand {
                 .setDescription(
                     `Please select a color or input a custom one. [(?)](${Config.links.docs}/faq#)`
                 )
-                .addField(
-                    `${Config.emotes.colorOptions.red} Red\n${Config.emotes.colorOptions.yellow} Yellow\n${Config.emotes.colorOptions.blue} Blue\n${Config.emotes.colorOptions.green} Green\n${Config.emotes.colorOptions.orange} Orange\n${Config.emotes.colorOptions.purple} Purple\n${Config.emotes.colorOptions.black} Black\n${Config.emotes.colorOptions.custom} Custom Color\n`,
-                    '\u200b'
-                )
+                .addField(colorOptionsText, '\u200b')
                 .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
                 .setColor(Config.colors.default)
                 .setTimestamp();
 
             let colorMessage = await channel.send(colorEmbed); // Send confirmation and emotes
-            for (let option of colorOptions) {
-                await colorMessage.react(option);
+
+            let emotes = [...Object.values(Config.emotes.colors), Config.emotes.custom];
+            for (let emote of emotes) {
+                await colorMessage.react(emote);
             }
 
             let colorChoice: string = await CollectorUtils.collectByReaction(
                 colorMessage,
                 // Collect Filter
                 (msgReaction: MessageReaction, reactor: User) =>
-                    reactor.id === msg.author.id && colorOptions.includes(msgReaction.emoji.name),
+                    reactor.id === msg.author.id && emotes.includes(msgReaction.emoji.name),
                 stopFilter,
                 // Retrieve Result
                 async (msgReaction: MessageReaction, reactor: User) => {
@@ -88,78 +83,58 @@ export class MessageColorSubCommand {
 
             if (colorChoice === undefined) return;
 
-            // set the color value
-            switch (colorChoice) {
-                case Config.emotes.colorOptions.red:
-                    colorHex = ColorUtils.findHex('red');
+            for (const [colorName, colorEmoji] of Object.entries(Config.emotes.colors)) {
+                if (colorChoice === colorEmoji) {
+                    colorHex = ColorUtils.findHex(colorName);
                     break;
-                case Config.emotes.colorOptions.yellow:
-                    colorHex = ColorUtils.findHex('yellow');
-                    break;
-                case Config.emotes.colorOptions.blue:
-                    colorHex = ColorUtils.findHex('blue');
-                    break;
-                case Config.emotes.colorOptions.green:
-                    colorHex = ColorUtils.findHex('green');
-                    break;
-                case Config.emotes.colorOptions.orange:
-                    colorHex = ColorUtils.findHex('orange');
-                    break;
-                case Config.emotes.colorOptions.purple:
-                    colorHex = ColorUtils.findHex('purple');
-                    break;
-                case Config.emotes.colorOptions.black:
-                    colorHex = ColorUtils.findHex('black');
-                    break;
-                case Config.emotes.colorOptions.custom:
-                    let inputColorEmbed = new MessageEmbed()
-                        .setDescription(
-                            `Please input what color you would like! (name, hex code, etc.)`
-                        )
-                        .setFooter(
-                            `This message expires in 2 minutes!`,
-                            msg.client.user.avatarURL()
-                        )
-                        .setColor(Config.colors.default)
-                        .setTimestamp();
+                }
+            }
 
-                    let selectMessage = await channel.send(inputColorEmbed);
+            if (colorChoice === Config.emotes.custom) {
+                let inputColorEmbed = new MessageEmbed()
+                    .setDescription(
+                        `Please input what color you would like! (name, hex code, etc.)`
+                    )
+                    .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+                    .setColor(Config.colors.default)
+                    .setTimestamp();
 
-                    colorHex = await CollectorUtils.collectByMessage(
-                        msg.channel,
-                        // Collect Filter
-                        (nextMsg: Message) => nextMsg.author.id === msg.author.id,
-                        stopFilter,
-                        // Retrieve Result
-                        async (nextMsg: Message) => {
-                            let check = ColorUtils.findHex(nextMsg.content);
+                let selectMessage = await channel.send(inputColorEmbed);
 
-                            if (!check) {
-                                let embed = new MessageEmbed()
-                                    .setTitle('Invalid Color')
-                                    .setDescription(
-                                        `Please provide a valid hex color! Find hex colors [here](${Config.links.colors}).` +
-                                            '\n\nExample: `Orange` or `Crimson`' +
-                                            '\nExample: `#4EEFFF` or `4EEFFF`'
-                                    )
-                                    .setTimestamp()
-                                    .setColor(Config.colors.error);
-                                await channel.send(embed);
-                                return;
-                            }
+                colorHex = await CollectorUtils.collectByMessage(
+                    msg.channel,
+                    // Collect Filter
+                    (nextMsg: Message) => nextMsg.author.id === msg.author.id,
+                    stopFilter,
+                    // Retrieve Result
+                    async (nextMsg: Message) => {
+                        let check = ColorUtils.findHex(nextMsg.content);
 
-                            return check;
-                        },
-                        expireFunction,
-                        COLLECT_OPTIONS
-                    );
+                        if (!check) {
+                            let embed = new MessageEmbed()
+                                .setTitle('Invalid Color')
+                                .setDescription(
+                                    `Please provide a valid hex color! Find hex colors [here](${Config.links.colors}).` +
+                                        '\n\nExample: `Orange` or `Crimson`' +
+                                        '\nExample: `#4EEFFF` or `4EEFFF`'
+                                )
+                                .setTimestamp()
+                                .setColor(Config.colors.error);
+                            await channel.send(embed);
+                            return;
+                        }
 
-                    ActionUtils.deleteMessage(selectMessage);
+                        return check;
+                    },
+                    expireFunction,
+                    COLLECT_OPTIONS
+                );
 
-                    if (colorHex === undefined) {
-                        return;
-                    }
-                    break;
+                ActionUtils.deleteMessage(selectMessage);
+
+                if (colorHex === undefined) {
+                    return;
+                }
             }
         } else {
             colorHex = ColorUtils.findHex(args[3]);
