@@ -2,9 +2,9 @@ import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
+import { ColorUtils } from '../utils/color-utils';
 
 let Config = require('../../config/config.json');
-let Color = require('color');
 
 export class SettingsCommand implements Command {
     public name: string = 'settings';
@@ -77,13 +77,7 @@ export class SettingsCommand implements Command {
                 : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
                   '**Deleted Role**';
 
-        let color: string;
-
-        try {
-            color = Color('#' + guildData.MessageEmbedColor).hex();
-        } catch (error) {
-            color = Config.colors.default;
-        }
+        let color = ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default;
 
         settingsEmbed
             .setColor(color)
