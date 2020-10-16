@@ -61,6 +61,13 @@ export class GuildRepo {
         ]);
     }
 
+    public async updateMessageEmbedColor(discordId: string, hexColor: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateMessageEmbedColor, [
+            discordId,
+            hexColor,
+        ]);
+    }
+
     public async updateMessageTime(discordId: string, messageTime: number): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateMessageTime, [
             discordId,

@@ -18,6 +18,7 @@ export enum Procedure {
     Guild_UpdateMessageTime = 'Guild_UpdateMessageTime',
     Guild_UpdateMentionSetting = 'Guild_UpdateMentionSetting',
     Guild_UpdateUseEmbed = 'Guild_UpdateUseEmbed',
+    Guild_UpdateMessageEmbedColor = 'Guild_UpdateMessageEmbedColor',
     Guild_UpdateTrustedPreventsMessage = 'Guild_UpdateTrustedPreventsMessage',
     Guild_UpdateTrustedPreventsRole = 'Guild_UpdateTrustedPreventsRole',
     Guild_SetupMessage = 'Guild_SetupMessage',

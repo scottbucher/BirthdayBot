@@ -9,4 +9,5 @@ export interface GuildData {
     TrustedPreventsRole: number;
     TrustedPreventsMessage: number;
     UseEmbed: number;
+    MessageEmbedColor: string;
 }
