@@ -45,7 +45,7 @@
         "promptExpireTime": 120,
         "birthdayListSize": "30",
         "blacklistSize": "30",
-        "birthdayMessageListSize": "5"
+        "birthdayMessageListSize": "3"
     },
     "colors": {
         "default": "0x4eefff",
@@ -61,7 +61,17 @@
         "jumpToPage": "↗️",
         "create": "🔨",
         "select": "🖱",
-        "birthday": "🎂"
+        "birthday": "🎂",
+        "colorOptions": {
+            "red": "🟥",
+            "yellow": "🟨",
+            "blue": "🟦",
+            "green": "🟩",
+            "orange": "🟧",
+            "purple": "🟪",
+            "black": "⬛",
+            "custom": "✏"
+        }
     },
     "stopCommands": ["stop", "cancel", "exit", "close", "quit"],
     "validation": {
@@ -92,7 +102,6 @@
         "vote": "https://top.gg/bot/656621136808902656/vote",
         "donate": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url",
         "map": "https://kevinnovak.github.io/Time-Zone-Picker/",
-        "colors": "https://codepen.io/meodai/full/pXNpXe",
         "stream": "https://www.twitch.tv/stqlth"
     },
     "voting": {
