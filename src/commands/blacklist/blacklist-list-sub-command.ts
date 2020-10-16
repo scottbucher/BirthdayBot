@@ -41,8 +41,8 @@ export class BlacklistListSubCommand {
 
         if (embed.description === '**The blacklist is empty!**') return;
 
-        if (page !== 1) await message.react(Config.emotes.previousPage);
-        if (blacklistResults.stats.TotalPages > 1) await message.react(Config.emotes.jumpToPage);
-        if (blacklistResults.stats.TotalPages > page) await message.react(Config.emotes.nextPage);
+        await message.react(Config.emotes.previousPage);
+        await message.react(Config.emotes.jumpToPage);
+        await message.react(Config.emotes.nextPage);
     }
 }

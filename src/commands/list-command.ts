@@ -67,8 +67,8 @@ export class ListCommand implements Command {
 
         if (embed.description === '**No Birthdays in this server!**') return;
 
-        if (userDataResults.stats.Page !== 1) await message.react(Config.emotes.previousPage);
-        if (userDataResults.stats.TotalPages > 1) await message.react(Config.emotes.jumpToPage);
-        if (userDataResults.stats.TotalPages > page) await message.react(Config.emotes.nextPage);
+        await message.react(Config.emotes.previousPage);
+        await message.react(Config.emotes.jumpToPage);
+        await message.react(Config.emotes.nextPage);
     }
 }

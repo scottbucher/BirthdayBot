@@ -106,52 +106,103 @@ export class ReactionAddHandler implements EventHandler {
 
         if (!titleArgs) return;
 
+        if (checkNextPage || checkPreviousPage || checkJumpToPage)
+            await msgReaction.users.remove(reactor);
+        else return;
+
         if (checkNextPage || checkPreviousPage) {
             if (titleArgs[1] === 'Messages') {
+                let oldPage: number;
                 let page = 1;
+                let pageSize = Config.experience.birthdayMessageListSize;
 
                 if (titleArgs[4]) {
                     try {
-                        if (checkNextPage) {
-                            page = FormatUtils.extractPageNumber(titleArgs.join(' ')) + 1;
-                        } else page = FormatUtils.extractPageNumber(titleArgs.join(' ')) - 1;
+                        oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
+                        if (checkNextPage) page = oldPage + 1;
+                        else page = oldPage -1;
                     } catch (error) {
                         // Not A Number
                     }
                     if (!page) page = 1;
                 }
 
-                await ListUtils.updateMessageList(this.customMessageRepo, msg.guild, msg, page);
+                let customMessageResults = await this.customMessageRepo.getCustomMessageList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                if (oldPage === 1 && checkPreviousPage) return;
+                else if (oldPage === customMessageResults.stats.TotalPages && checkNextPage) return;
+
+                await ListUtils.updateMessageList(
+                    customMessageResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize
+                );
             } else if (titleArgs[1] === 'List') {
+                let oldPage: number;
                 let page = 1;
+                let pageSize = Config.experience.birthdayListSize;
+
+                let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
 
                 if (titleArgs[4]) {
                     try {
-                        if (checkNextPage) {
-                            page = FormatUtils.extractPageNumber(titleArgs.join(' ')) + 1;
-                        } else page = FormatUtils.extractPageNumber(titleArgs.join(' ')) - 1;
+                        oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
+                        if (checkNextPage) page = oldPage + 1;
+                        else page = oldPage -1;
                     } catch (error) {
                         // Not A Number
                     }
                     if (!page) page = 1;
                 }
 
-                await ListUtils.updateBdayList(this.userRepo, msg.guild, msg, page);
+                let userDataResults = await this.userRepo.getBirthdayListFull(
+                    users,
+                    pageSize,
+                    page
+                );
+
+                if (oldPage === 1 && checkPreviousPage) return;
+                else if (oldPage === userDataResults.stats.TotalPages && checkNextPage) return;
+
+                await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
             } else if (titleArgs[1] === 'Blacklist') {
+                let oldPage: number;
                 let page = 1;
+                let pageSize = Config.experience.blacklistSize;
 
                 if (titleArgs[4]) {
                     try {
-                        if (checkNextPage) {
-                            page = FormatUtils.extractPageNumber(titleArgs.join(' ')) + 1;
-                        } else page = FormatUtils.extractPageNumber(titleArgs.join(' ')) - 1;
+                        oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
+                        if (checkNextPage) page = oldPage + 1;
+                        else page = oldPage -1;
                     } catch (error) {
                         // Not A Number
                     }
                     if (!page) page = 1;
                 }
 
-                await ListUtils.updateBlacklistList(this.blacklistRepo, msg.guild, msg, page);
+                let blacklistResults = await this.blacklistRepo.getBlacklistList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                if (oldPage === 1 && checkPreviousPage) return;
+                else if (oldPage === blacklistResults.stats.TotalPages && checkNextPage) return;
+
+                await ListUtils.updateBlacklistList(
+                    blacklistResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize
+                );
             }
         } else if (checkJumpToPage) {
             if (titleArgs[1] === 'Messages') {
@@ -197,11 +248,23 @@ export class ReactionAddHandler implements EventHandler {
 
                 ActionUtils.deleteMessage(prompt);
 
-                if (page === undefined) {
-                    return;
-                }
+                if (page === undefined) return;
 
-                await ListUtils.updateMessageList(this.customMessageRepo, msg.guild, msg, page);
+                let pageSize = Config.experience.birthdayMessageListSize;
+
+                let customMessageResults = await this.customMessageRepo.getCustomMessageList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                await ListUtils.updateMessageList(
+                    customMessageResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize
+                );
             } else if (titleArgs[1] === 'List') {
                 let page: number;
 
@@ -249,7 +312,17 @@ export class ReactionAddHandler implements EventHandler {
                     return;
                 }
 
-                await ListUtils.updateBdayList(this.userRepo, msg.guild, msg, page);
+                let pageSize = Config.experience.birthdayListSize;
+
+                let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
+
+                let userDataResults = await this.userRepo.getBirthdayListFull(
+                    users,
+                    pageSize,
+                    page
+                );
+
+                await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
             } else if (titleArgs[1] === 'Blacklist') {
                 let page: number;
 
@@ -293,11 +366,23 @@ export class ReactionAddHandler implements EventHandler {
 
                 ActionUtils.deleteMessage(prompt);
 
-                if (page === undefined) {
-                    return;
-                }
+                if (page === undefined) return;
 
-                await ListUtils.updateBlacklistList(this.blacklistRepo, msg.guild, msg, page);
+                let pageSize = Config.experience.blacklistSize;
+
+                let blacklistResults = await this.blacklistRepo.getBlacklistList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                await ListUtils.updateBlacklistList(
+                    blacklistResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize
+                );
             }
         }
     }
