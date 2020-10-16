@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 13, 2020 at 07:02 AM
+-- Generation Time: Oct 16, 2020 at 05:49 AM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -151,23 +151,39 @@ WHERE
         UserDiscordId = IN_UserDiscordId;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Add` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Message` VARCHAR(2000))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Add` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Message` VARCHAR(2000), IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
 
 SET @GuildId = NULL;
 SET @MessageId = NULL;
+SET @UserMessage = NULL;
 
 SELECT GuildId
 INTO @GuildId
 FROM `guild`
 WHERE GuildDiscordId = IN_GuildDiscordId;
 
-INSERT INTO `messages` (
-	GuildId,
-	Message
-) VALUES (
-	@GuildId,
-	IN_Message
-);
+SELECT MessageId
+INTO @UserMessage
+FROM `messages`
+WHERE GuildId = @GuildId AND UserDiscordId = IN_UserDiscordId;
+
+IF @UserMessage IS NULL THEN
+	INSERT INTO `messages` (
+		GuildId,
+		Message,
+    	UserDiscordId
+	) VALUES (
+		@GuildId,
+		IN_Message,
+    	IN_UserDiscordId
+	);
+ELSE
+	UPDATE `messages`
+    SET
+    	Message = IN_Message
+    WHERE MessageId = @UserMessage;
+END IF;
+
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Clear` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
@@ -428,6 +444,21 @@ WHERE GuildDiscordId = IN_GuildDiscordId;
 
 UPDATE `guild`
 SET MentionSetting = IN_MentionSetting
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `Guild_UpdateMessageEmbedColor` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_HexColor` VARCHAR(6))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET MessageEmbedColor = IN_HexColor
 WHERE GuildId = @GuildId;
 
 END$$
@@ -784,7 +815,8 @@ CREATE TABLE `guild` (
   `MessageTime` tinyint(4) NOT NULL DEFAULT 0,
   `TrustedPreventsRole` tinyint(1) NOT NULL DEFAULT 1,
   `TrustedPreventsMessage` tinyint(1) NOT NULL DEFAULT 1,
-  `UseEmbed` tinyint(1) NOT NULL DEFAULT 1
+  `UseEmbed` tinyint(1) NOT NULL DEFAULT 1,
+  `MessageEmbedColor` varchar(6) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -796,7 +828,8 @@ CREATE TABLE `guild` (
 CREATE TABLE `messages` (
   `MessageId` int(11) NOT NULL,
   `GuildId` int(11) DEFAULT NULL,
-  `Message` varchar(300) CHARACTER SET utf8mb4 NOT NULL
+  `Message` varchar(300) CHARACTER SET utf8mb4 NOT NULL,
+  `UserDiscordId` varchar(20) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -855,7 +888,8 @@ ALTER TABLE `guild`
 --
 ALTER TABLE `messages`
   ADD PRIMARY KEY (`MessageId`),
-  ADD KEY `FK_Messages_GuildId` (`GuildId`);
+  ADD KEY `FK_Messages_GuildId` (`GuildId`),
+  ADD KEY `UserDiscordId` (`UserDiscordId`);
 
 --
 -- Indexes for table `user`
