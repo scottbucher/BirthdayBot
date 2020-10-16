@@ -22,6 +22,7 @@
         "discord.js": "12.3.1",
         "discord.js-collector-utils": "1.0.13",
         "express": "4.17.1",
+        "express-promise-router": "^4.0.1",
         "limiter": "^1.1.5",
         "moment-timezone": "0.5.31",
         "mysql": "2.18.1",

@@ -11,8 +11,7 @@ let Config = require('../config/config.json');
 export class Manager {
     constructor(
         private shardManager: ShardingManager,
-        private botSites: BotSite[],
-        private api: Api
+        private botSites: BotSite[]
     ) {}
 
     public async start(): Promise<void> {
@@ -34,11 +33,6 @@ export class Manager {
             Logger.error(Logs.error.updateServerCount, error);
         }
 
-        try {
-            await this.api.start();
-        } catch (error) {
-            Logger.error(Logs.error.votingApiStart, error);
-        }
     }
 
     public async updateServerCount(): Promise<void> {
