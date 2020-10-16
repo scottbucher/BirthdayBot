@@ -134,26 +134,31 @@ export class MessageHandler {
             return;
         }
 
-        // Get the user's last vote and check if the command requires a vote
-        let userVote = await this.userRepo.getUserVote(msg.author.id);
-        let now = moment();
-        let lastVote = moment(userVote?.VoteTime);
-        let sinceLastVote = userVote ? lastVote.fromNow() : 'Never';
-        if (command.voteOnly && (!userVote || lastVote.add(1, 'day') < now)) {
-            let embed = new MessageEmbed()
-                .setAuthor(msg.author.tag, msg.author.avatarURL())
-                .setThumbnail('https://i.imgur.com/wak8g4V.png')
-                .setTitle('Vote Required!')
-                .setDescription('This command requires you to have voted in the past 24 hours!')
-                .addField('Last Vote', `${sinceLastVote}`, true)
-                .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
-                .setFooter(
-                    'While Birthday Bot is 100% free, voting helps us grow!',
-                    msg.client.user.avatarURL()
-                )
-                .setColor(Config.colors.error);
-            await channel.send(embed);
-            return;
+        if (Config.voting.enabled) {
+            // Get the user's last vote and check if the command requires a vote
+            let userVote = await this.userRepo.getUserVote(msg.author.id);
+            let voteTime = moment(userVote?.VoteTime);
+            let voteTimeAgo = userVote ? voteTime.fromNow() : 'Never';
+
+            if (
+                command.voteOnly &&
+                (!userVote || voteTime.clone().add(Config.voting.hours, 'hours') < moment())
+            ) {
+                let embed = new MessageEmbed()
+                    .setAuthor(msg.author.tag, msg.author.avatarURL())
+                    .setThumbnail('https://i.imgur.com/wak8g4V.png')
+                    .setTitle('Vote Required!')
+                    .setDescription('This command requires you to have voted in the past 24 hours!')
+                    .addField('Last Vote', `${voteTimeAgo}`, true)
+                    .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
+                    .setFooter(
+                        'While Birthday Bot is 100% free, voting helps us grow!',
+                        msg.client.user.avatarURL()
+                    )
+                    .setColor(Config.colors.error);
+                await channel.send(embed);
+                return;
+            }
         }
 
         try {
