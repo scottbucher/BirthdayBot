@@ -36,7 +36,7 @@ export class MessageColorSubCommand {
                     .setColor(Config.colors.error)
             );
         };
-        let color: string;
+        let colorHex: string;
 
         if (args.length < 4) {
             // What color do they want
@@ -91,25 +91,25 @@ export class MessageColorSubCommand {
             // set the color value
             switch (colorChoice) {
                 case Config.emotes.colorOptions.red:
-                    color = ColorUtils.findHex('red');
+                    colorHex = ColorUtils.findHex('red');
                     break;
                 case Config.emotes.colorOptions.yellow:
-                    color = ColorUtils.findHex('yellow');
+                    colorHex = ColorUtils.findHex('yellow');
                     break;
                 case Config.emotes.colorOptions.blue:
-                    color = ColorUtils.findHex('blue');
+                    colorHex = ColorUtils.findHex('blue');
                     break;
                 case Config.emotes.colorOptions.green:
-                    color = ColorUtils.findHex('green');
+                    colorHex = ColorUtils.findHex('green');
                     break;
                 case Config.emotes.colorOptions.orange:
-                    color = ColorUtils.findHex('orange');
+                    colorHex = ColorUtils.findHex('orange');
                     break;
                 case Config.emotes.colorOptions.purple:
-                    color = ColorUtils.findHex('purple');
+                    colorHex = ColorUtils.findHex('purple');
                     break;
                 case Config.emotes.colorOptions.black:
-                    color = ColorUtils.findHex('black');
+                    colorHex = ColorUtils.findHex('black');
                     break;
                 case Config.emotes.colorOptions.custom:
                     let inputColorEmbed = new MessageEmbed()
@@ -125,7 +125,7 @@ export class MessageColorSubCommand {
 
                     let selectMessage = await channel.send(inputColorEmbed);
 
-                    color = await CollectorUtils.collectByMessage(
+                    colorHex = await CollectorUtils.collectByMessage(
                         msg.channel,
                         // Collect Filter
                         (nextMsg: Message) => nextMsg.author.id === msg.author.id,
@@ -156,16 +156,16 @@ export class MessageColorSubCommand {
 
                     ActionUtils.deleteMessage(selectMessage);
 
-                    if (color === undefined) {
+                    if (colorHex === undefined) {
                         return;
                     }
                     break;
             }
         } else {
-            color = ColorUtils.findHex(args[3]);
+            colorHex = ColorUtils.findHex(args[3]);
         }
 
-        if (!color) {
+        if (!colorHex) {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Color')
                 .setDescription(
@@ -179,14 +179,18 @@ export class MessageColorSubCommand {
             return;
         }
 
+        let colorName = ColorUtils.findName(colorHex);
+
         let embed = new MessageEmbed()
             .setDescription(
-                `${msg.client.user.toString()} will now use the hex color **#${color}** in birthday messages!` +
+                `${msg.client.user.toString()} will now use the hex color **#${
+                    colorName ? `${colorHex} (${colorName})` : colorHex
+                }** in birthday messages!` +
                     `\n\nHint: You can see an example of the color on the left side of this embed!`
             )
-            .setColor(color);
+            .setColor(colorHex);
 
-        await this.guildRepo.updateMessageEmbedColor(msg.guild.id, color);
+        await this.guildRepo.updateMessageEmbedColor(msg.guild.id, colorHex);
 
         await channel.send(embed);
     }
