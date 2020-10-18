@@ -1,8 +1,8 @@
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
-import { PermissionUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -27,14 +27,14 @@ export class UpdateCommand implements Command {
                     'Please specify what to create!\nAccepted Values: `channel`, `role`, `trustedRole`, `birthdayMasterRole'
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         } else if (args.length === 3) {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription('Please specify what to update it with!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -44,7 +44,7 @@ export class UpdateCommand implements Command {
                     .setTitle('Not Enough Permissions!')
                     .setDescription('The bot must have permission to manage channel!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -64,7 +64,7 @@ export class UpdateCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription('Invalid channel!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -75,7 +75,7 @@ export class UpdateCommand implements Command {
                         `I don't have permission to send messages in ${birthdayChannel.toString()}!`
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -86,14 +86,14 @@ export class UpdateCommand implements Command {
                     `Successfully set the birthday channel to ${birthdayChannel.toString()}!`
                 )
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else if (args[2].toLowerCase() === 'role') {
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
                 let embed = new MessageEmbed()
                     .setTitle('Not Enough Permissions!')
                     .setDescription('The bot must have permission to manage roles!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -114,7 +114,7 @@ export class UpdateCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription(`Invalid Role!`)
                     .setColor(Config.colors.error);
-                channel.send(embed);
+                MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -125,7 +125,7 @@ export class UpdateCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription(`Birthday Role must be bellow the Bot's role!`)
                     .setColor(Config.colors.error);
-                channel.send(embed);
+                MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -133,7 +133,7 @@ export class UpdateCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription(`Birthday Role cannot be managed by an external service!`)
                     .setColor(Config.colors.error);
-                channel.send(embed);
+                MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -143,7 +143,7 @@ export class UpdateCommand implements Command {
                 .setDescription(`Successfully set the birthday role to ${birthdayRole.toString()}!`)
                 .setFooter('This role is actively removed from those whose birthday it isn\'t.')
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else if (args[2].toLowerCase() === 'trustedrole') {
             // Set role with desired attributes
             let trustedRole: Role = msg.mentions.roles.first();
@@ -162,7 +162,7 @@ export class UpdateCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription(`Invalid Role!`)
                     .setColor(Config.colors.error);
-                channel.send(embed);
+                MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -170,7 +170,7 @@ export class UpdateCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription(`Trusted Role cannot be managed by an external service!`)
                     .setColor(Config.colors.error);
-                channel.send(embed);
+                MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -179,7 +179,7 @@ export class UpdateCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription(`Successfully set the trusted role to ${trustedRole.toString()}!`)
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else if (args[2].toLowerCase() === 'birthdaymaster' || args[2].toLowerCase() === 'birthdaymasterrole') {
             // Set role with desired attributes
             let birthdayMasterRole: Role = msg.mentions.roles.first();
@@ -198,7 +198,7 @@ export class UpdateCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription(`Invalid Role!`)
                     .setColor(Config.colors.error);
-                channel.send(embed);
+                MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -206,7 +206,7 @@ export class UpdateCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription(`Birthday Master Role cannot be managed by an external service!`)
                     .setColor(Config.colors.error);
-                channel.send(embed);
+                MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -215,7 +215,7 @@ export class UpdateCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription(`Successfully set the birthday master role to ${birthdayMasterRole.toString()}!`)
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         }
     }
 }

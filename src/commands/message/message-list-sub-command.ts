@@ -1,4 +1,4 @@
-import { FormatUtils, ParseUtils } from '../../utils';
+import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
@@ -38,7 +38,7 @@ export class MessageListSubCommand {
             pageSize
         );
 
-        let message = await channel.send(embed);
+        let message = await MessageUtils.send(channel, embed);
 
         if (embed.description === '**No Custom Birthday Messages!**') return;
 

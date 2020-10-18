@@ -1,4 +1,4 @@
-import { BdayUtils, FormatUtils } from '../utils';
+import { BdayUtils, FormatUtils, MessageUtils } from '../utils';
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
@@ -29,7 +29,7 @@ export class NextCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('No one has set their birthday in this server! :(')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -41,7 +41,7 @@ export class NextCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('There are no upcoming birthdays!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -53,6 +53,6 @@ export class NextCommand implements Command {
         let embed = new MessageEmbed()
             .setDescription(`${userStringList}'s birthday is next on **${nextBirthday}**!`)
             .setColor(Config.colors.default);
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }

@@ -5,6 +5,7 @@ import { BlacklistClearSubCommand } from './blacklist/blacklist-clear-sub-comman
 import { BlacklistListSubCommand } from './blacklist';
 import { BlacklistRemoveSubCommand } from './blacklist/blacklist-remove-sub-command';
 import { Command } from './command';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -34,7 +35,7 @@ export class BlacklistCommand implements Command {
                     `Please specify a sub command for the blacklist! [(?)](${Config.links.docs}/faq#what-is-the-birthday-blacklist)\nAccepted Values: \`list\`, \`add <User>\`, \`remove <User>\`, \`clear\``
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -53,7 +54,7 @@ export class BlacklistCommand implements Command {
                     `Please specify a sub command for the blacklist! [(?)](${Config.links.docs}/faq#what-is-the-birthday-blacklist)\nAccepted Values: \`list\`, \`add <User>\`, \`remove <User>\`, \`clear\``
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
     }

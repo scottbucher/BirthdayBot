@@ -1,7 +1,7 @@
+import { GuildUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
-import { GuildUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -15,7 +15,7 @@ export class MessageRemoveSubCommand {
                     'Please provide a message number!\nFind this using `bday message list`!'
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -26,7 +26,7 @@ export class MessageRemoveSubCommand {
             let embed = new MessageEmbed()
                 .setDescription('This server doesn\'t have any custom messages!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -54,7 +54,7 @@ export class MessageRemoveSubCommand {
                     .setTitle('Invalid position!')
                     .setDescription('Use `bday message list` to view your server\'s custom messages!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
         }
@@ -67,7 +67,7 @@ export class MessageRemoveSubCommand {
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -81,7 +81,7 @@ export class MessageRemoveSubCommand {
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -94,6 +94,6 @@ export class MessageRemoveSubCommand {
             .setFooter(`${Config.emotes.confirm} Message removed.`, msg.client.user.avatarURL())
             .setTimestamp()
             .setColor(Config.colors.success);
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }

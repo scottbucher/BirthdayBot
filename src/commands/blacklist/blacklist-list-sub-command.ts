@@ -1,4 +1,4 @@
-import { FormatUtils, GuildUtils, ParseUtils } from '../../utils';
+import { FormatUtils, GuildUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
@@ -37,7 +37,7 @@ export class BlacklistListSubCommand {
             pageSize
         );
 
-        let message = await channel.send(embed);
+        let message = await MessageUtils.send(channel, embed);
 
         if (embed.description === '**The blacklist is empty!**') return;
 

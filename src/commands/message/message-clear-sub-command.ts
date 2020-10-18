@@ -1,3 +1,4 @@
+import { ActionUtils, MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -6,7 +7,6 @@ import {
 } from 'discord.js-collector-utils';
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
-import { ActionUtils } from '../../utils';
 import { CustomMessageRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
@@ -85,12 +85,12 @@ export class MessageClearSubCommand {
             let embed = new MessageEmbed()
                 .setDescription(`Successfully cleared all birthday messages from the database!`)
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else {
             let embed = new MessageEmbed()
                 .setDescription(`Action canceled.`)
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         }
     }
 }

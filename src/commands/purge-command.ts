@@ -1,4 +1,4 @@
-import { ActionUtils, PermissionUtils } from '../utils';
+import { ActionUtils, MessageUtils, PermissionUtils } from '../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -52,7 +52,7 @@ export class PurgeCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('You do not have data in the database.')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         } else {
             changesLeft = userData.ChangesLeft;
@@ -111,13 +111,13 @@ export class PurgeCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('Successfully purged your data from the database.')
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
             let embed = new MessageEmbed()
                 .setDescription('Request Canceled.')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         }
     }
 }

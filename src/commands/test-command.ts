@@ -1,9 +1,9 @@
 import { BlacklistRepo, GuildRepo } from '../services/database/repos';
 import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
+import { GuildUtils, MessageUtils } from '../utils';
 
 import { BirthdayService } from '../services';
 import { Command } from './command';
-import { GuildUtils } from '../utils';
 import { UserData } from '../models/database';
 import moment from 'moment';
 
@@ -48,7 +48,7 @@ export class TestCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription('Could not find that user!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
         } else {

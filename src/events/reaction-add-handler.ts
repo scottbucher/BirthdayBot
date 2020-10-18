@@ -1,4 +1,4 @@
-import { ActionUtils, FormatUtils, PermissionUtils } from '../utils';
+import { ActionUtils, FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import { BlacklistRepo, CustomMessageRepo, UserRepo } from '../services/database/repos';
 import {
     CollectOptions,
@@ -248,7 +248,7 @@ export class ReactionAddHandler implements EventHandler {
                                 let embed = new MessageEmbed()
                                     .setDescription('Invalid page!')
                                     .setColor(Config.colors.error);
-                                await channel.send(embed);
+                                await MessageUtils.send(channel, embed);
                                 return;
                             }
 
@@ -310,7 +310,7 @@ export class ReactionAddHandler implements EventHandler {
                                 let embed = new MessageEmbed()
                                     .setDescription('Invalid page!')
                                     .setColor(Config.colors.error);
-                                await channel.send(embed);
+                                await MessageUtils.send(channel, embed);
                                 return;
                             }
 
@@ -370,7 +370,7 @@ export class ReactionAddHandler implements EventHandler {
                                 let embed = new MessageEmbed()
                                     .setDescription('Invalid page!')
                                     .setColor(Config.colors.error);
-                                await channel.send(embed);
+                                await MessageUtils.send(channel, embed);
                                 return;
                             }
 

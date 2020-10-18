@@ -1,7 +1,6 @@
 import { CustomMessageRepo, GuildRepo } from '../../services/database/repos';
+import { FormatUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-
-import { FormatUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -17,7 +16,7 @@ export class MessageTestSubCommand {
                     'Please provide a message number!\nFind this using `bday message list`!'
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         } else if (args.length >= 5) {
             try {
@@ -37,7 +36,7 @@ export class MessageTestSubCommand {
             let embed = new MessageEmbed()
                 .setDescription('Invalid message number!\nFind this using `bday message list`!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -49,7 +48,7 @@ export class MessageTestSubCommand {
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -73,7 +72,7 @@ export class MessageTestSubCommand {
                 let embed = new MessageEmbed()
                     .setDescription(defaultMessage)
                     .setColor(Config.colors.default);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             } else {
                 await channel.send(defaultMessage);
@@ -94,7 +93,7 @@ export class MessageTestSubCommand {
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -102,7 +101,7 @@ export class MessageTestSubCommand {
             let embed = new MessageEmbed()
                 .setDescription(customMessage)
                 .setColor(Config.colors.default);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else {
             await channel.send(customMessage);
         }

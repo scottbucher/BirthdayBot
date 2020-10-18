@@ -1,3 +1,4 @@
+import { ActionUtils, MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -6,7 +7,6 @@ import {
 } from 'discord.js-collector-utils';
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
 
-import { ActionUtils } from '../../utils';
 import { GuildRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
@@ -97,7 +97,7 @@ export class SetupTrusted {
                 let embed = new MessageEmbed()
                     .setDescription(`Please mention a role or input a role's name.`)
                     .setColor(Config.colors.default);
-                let selectMessage = await channel.send(embed);
+                let selectMessage = await MessageUtils.send(channel, embed);
 
                 trustedRole = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -127,7 +127,7 @@ export class SetupTrusted {
                                 .setDescription(`Invalid role!`)
                                 .setFooter('Please try again.')
                                 .setColor(Config.colors.error);
-                            channel.send(embed);
+                            MessageUtils.send(channel, embed);
                             return;
                         }
                         return roleInput?.id;
@@ -243,7 +243,7 @@ export class SetupTrusted {
             .setColor(Config.colors.default)
             .setTimestamp();
 
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
 
         await this.guildRepo.guildSetupTrusted(guild.id, trustedRole, preventMessage, preventRole);
     }

@@ -1,6 +1,6 @@
 import * as Chrono from 'chrono-node';
 
-import { ActionUtils, FormatUtils, GuildUtils } from '../utils';
+import { ActionUtils, FormatUtils, GuildUtils, MessageUtils } from '../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -117,7 +117,7 @@ export class SetCommand implements Command {
                         'You do not have permission to suggest birthdays for other users!'
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -139,7 +139,7 @@ export class SetCommand implements Command {
                         'That user needs the `READ_MESSAGE_HISTORY` permission in this channel!'
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
         }
@@ -148,7 +148,7 @@ export class SetCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription(`You can't set a birthday for a bot!`)
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -164,7 +164,7 @@ export class SetCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription('You are out of birthday attempts!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             } else {
                 changesLeft = userData.ChangesLeft;
@@ -220,7 +220,7 @@ export class SetCommand implements Command {
                             .setColor(Config.colors.error);
                         if (suggest) embed.setTitle(`Setup For ${target.username} - Time Zone`);
                         else embed.setTitle('User Setup - Time Zone');
-                        await channel.send(embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     }
 
@@ -279,7 +279,7 @@ export class SetCommand implements Command {
                             .setColor(Config.colors.error);
                         if (suggest) embed.setTitle(`Setup For ${target.username} - Birthday`);
                         else embed.setTitle('User Setup - Birthday');
-                        await channel.send(embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     }
 
@@ -365,14 +365,14 @@ export class SetCommand implements Command {
                 )
                 .setFooter(`You now have ${changesLeft - 1} birthday attempts left.`)
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
             let embed = new MessageEmbed()
                 .setDescription('Your birthday has not been set.')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
     }

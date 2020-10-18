@@ -1,7 +1,7 @@
+import { GuildUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
-import { GuildUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -14,7 +14,7 @@ export class BlacklistAddSubCommand {
                 .setTitle('Invalid Usage!')
                 .setDescription('Please specify a user!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -28,7 +28,7 @@ export class BlacklistAddSubCommand {
                 .setTitle('Invalid Usage!')
                 .setDescription('Could not find that user!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -37,7 +37,7 @@ export class BlacklistAddSubCommand {
                 .setTitle('Invalid Usage!')
                 .setDescription('You cannot blacklist a bot!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -47,7 +47,7 @@ export class BlacklistAddSubCommand {
             let embed = new MessageEmbed()
                 .setDescription('This user is already in the blacklist!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -56,6 +56,6 @@ export class BlacklistAddSubCommand {
         let embed = new MessageEmbed()
             .setDescription(`Successfully added ${target.toString()} to the birthday blacklist!`)
             .setColor(Config.colors.success);
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }

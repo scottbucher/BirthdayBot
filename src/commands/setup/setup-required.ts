@@ -1,4 +1,4 @@
-import { ActionUtils, PermissionUtils } from '../../utils';
+import { ActionUtils, MessageUtils, PermissionUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -104,7 +104,7 @@ export class SetupRequired {
                 let embed = new MessageEmbed()
                     .setDescription(`Please mention a channel or input a channel's name.`)
                     .setColor(Config.colors.default);
-                let selectMessage = await channel.send(embed);
+                let selectMessage = await MessageUtils.send(channel, embed);
 
                 birthdayChannel = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -133,7 +133,7 @@ export class SetupRequired {
                                 .setFooter('Please try again.')
                                 .setColor(Config.colors.error);
 
-                            channel.send(embed);
+                            MessageUtils.send(channel, embed);
                             return;
                         }
 
@@ -144,7 +144,7 @@ export class SetupRequired {
                                     `I don't have permission to send messages in ${channelInput.toString()}!`
                                 )
                                 .setColor(Config.colors.error);
-                            channel.send(embed);
+                            MessageUtils.send(channel, embed);
                             return;
                         }
                         return channelInput?.id;
@@ -224,7 +224,7 @@ export class SetupRequired {
                 let embed = new MessageEmbed()
                     .setDescription(`Please mention a role or input a role's name.`)
                     .setColor(Config.colors.default);
-                let selectMessage = await channel.send(embed);
+                let selectMessage = await MessageUtils.send(channel, embed);
 
                 birthdayRole = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -254,7 +254,7 @@ export class SetupRequired {
                                 .setDescription(`Invalid role!`)
                                 .setFooter('Please try again.')
                                 .setColor(Config.colors.error);
-                            channel.send(embed);
+                            MessageUtils.send(channel, embed);
                             return;
                         }
 
@@ -266,7 +266,7 @@ export class SetupRequired {
                             let embed = new MessageEmbed()
                                 .setDescription(`Birthday Role must be bellow the Bot's role!`)
                                 .setColor(Config.colors.error);
-                            channel.send(embed);
+                            MessageUtils.send(channel, embed);
                             return;
                         }
 
@@ -277,7 +277,7 @@ export class SetupRequired {
                                     `Birthday Role cannot be managed by an external service!`
                                 )
                                 .setColor(Config.colors.error);
-                            channel.send(embed);
+                            MessageUtils.send(channel, embed);
                             return;
                         }
                         return roleInput?.id;
@@ -320,7 +320,7 @@ export class SetupRequired {
             .setColor(Config.colors.default)
             .setTimestamp();
 
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
 
         await this.guildRepo.addOrUpdateGuild(guild.id, birthdayChannel, birthdayRole);
     }

@@ -1,4 +1,4 @@
-import { GuildUtils, MathUtils, ParseUtils } from '../utils';
+import { GuildUtils, MathUtils, MessageUtils, ParseUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
@@ -27,7 +27,7 @@ export class SetAttemptsCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('Please specify a user!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
         // Get who they are mentioning
@@ -39,7 +39,7 @@ export class SetAttemptsCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('Could not find that user!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -47,7 +47,7 @@ export class SetAttemptsCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('Please specify an amount!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -59,7 +59,7 @@ export class SetAttemptsCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('Invalid Number!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -67,7 +67,7 @@ export class SetAttemptsCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('Invalid Number!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -75,7 +75,7 @@ export class SetAttemptsCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('Amount too large!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -86,7 +86,7 @@ export class SetAttemptsCommand implements Command {
             if (target !== msg.author) {
                 embed.setDescription('That user has not used any attempts');
             }
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -102,7 +102,7 @@ export class SetAttemptsCommand implements Command {
                 `Successfully set ${target.toString()}'s birthday attempts to ${amount}!`
             )
             .setColor(Config.colors.default);
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
         return;
     }
 }

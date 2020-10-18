@@ -1,7 +1,7 @@
+import { FormatUtils, MessageUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
-import { FormatUtils } from '../utils';
 import { GuildRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
@@ -27,7 +27,7 @@ export class TrustedCommand implements Command {
                     'Please specify what to create!\nAccepted Values: `preventMessage <T/F>` or `preventRole <T/F>`,'
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -37,7 +37,7 @@ export class TrustedCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription('Please provide a value! (True/False)')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -48,7 +48,7 @@ export class TrustedCommand implements Command {
                     .setTitle('Invalid Value!')
                     .setDescription('Accepted Values: `True/False`')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -61,14 +61,14 @@ export class TrustedCommand implements Command {
                         : 'Trusted Role is now not required for the birthday message!'
                 )
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else if (args[2].toLowerCase() === 'preventrole') {
             // Do Stuff
             if (args.length < 4) {
                 let embed = new MessageEmbed()
                     .setDescription('Please provide a value! (True/False)')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -79,7 +79,7 @@ export class TrustedCommand implements Command {
                     .setTitle('Invalid Value!')
                     .setDescription('Accepted Values: `True/False`')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -92,7 +92,7 @@ export class TrustedCommand implements Command {
                         : 'Trusted Role is now not required for the birthday role!'
                 )
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         }
     }
 }

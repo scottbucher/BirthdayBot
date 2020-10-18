@@ -12,6 +12,7 @@ import {
 
 import { Command } from './command';
 import { MessageColorSubCommand } from './message/message-color-sub-command';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -46,7 +47,7 @@ export class MessageCommand implements Command {
                     `Please specify a sub command for the custom birthday message! [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)\nAccepted Values: \`list\`, \`add <Value>\`, \`remove <#>\`, \`clear\`, \`time <0-23>\`, \`mention <Value>\`, \`useEmbed <T/F>\`,`
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
         if (args[2].toLowerCase() === 'list') {
@@ -74,7 +75,7 @@ export class MessageCommand implements Command {
                     `Please specify a sub command for the custom birthday message! [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)\nAccepted Values: \`list\`, \`add <Value>\`, \`remove <#>\`, \`clear\`, \`time <0-23>\`, \`mention <Value>\`, \`useEmbed <T/F>\`,`
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
     }

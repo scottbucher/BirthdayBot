@@ -1,6 +1,6 @@
 import * as Chrono from 'chrono-node';
 
-import { FormatUtils, ParseUtils } from '../utils';
+import { FormatUtils, MessageUtils, ParseUtils } from '../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
@@ -65,7 +65,7 @@ export class ListCommand implements Command {
             pageSize
         );
 
-        let message = await channel.send(embed);
+        let message = await MessageUtils.send(channel, embed);
 
         if (embed.description === '**No Birthdays in this server!**') return;
 

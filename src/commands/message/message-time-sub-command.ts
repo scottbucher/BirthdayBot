@@ -1,6 +1,7 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -12,7 +13,7 @@ export class MessageTimeSubCommand {
             let embed = new MessageEmbed()
                 .setDescription('Please provide a time! (0-23)')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -25,7 +26,7 @@ export class MessageTimeSubCommand {
                 .setTitle('Invalid time!')
                 .setDescription('Accepted Values: `0-23`')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -34,7 +35,7 @@ export class MessageTimeSubCommand {
                 .setTitle('Invalid time!')
                 .setDescription('Accepted Values: `0-23`')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
         await this.guildRepo.updateMessageTime(msg.guild.id, messageTime);
@@ -48,6 +49,6 @@ export class MessageTimeSubCommand {
         let embed = new MessageEmbed()
             .setDescription(`Successfully set the birthday message to send at **${timeOutput}**!`)
             .setColor(Config.colors.success);
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }

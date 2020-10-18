@@ -1,4 +1,4 @@
-import { ActionUtils, GuildUtils } from '../../utils';
+import { ActionUtils, GuildUtils, MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -41,7 +41,7 @@ export class MessageAddSubCommand {
             let embed = new MessageEmbed()
                 .setDescription('Please provide a message!')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -59,7 +59,7 @@ export class MessageAddSubCommand {
                     .setTitle('Invalid Usage!')
                     .setDescription('You cannot set a custom message for a bot!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             } else if (!hasPremium) {
                 // you don't have premium!!!
@@ -86,7 +86,7 @@ export class MessageAddSubCommand {
             let embed = new MessageEmbed()
                 .setDescription(`Custom Messages are maxed at ${Config.maxMessageSize.toLocaleString()} characters!`)
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -99,7 +99,7 @@ export class MessageAddSubCommand {
                         '\nEx: `bday message add Happy Birthday <Users>!`'
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -114,13 +114,13 @@ export class MessageAddSubCommand {
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             } else if (customMessages.customMessages.length >= Config.maxMessages.paid) {
                 let embed = new MessageEmbed()
                     .setDescription(`Your server has reached the maximum custom messages! (${Config.maxMessages.paid.toLocaleString()})`)
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -181,7 +181,7 @@ export class MessageAddSubCommand {
                     let embed = new MessageEmbed()
                         .setDescription('Duplicate message found for this server!')
                         .setColor(Config.colors.error);
-                    await channel.send(embed);
+                    await MessageUtils.send(channel, embed);
                     return;
                 }
             }
@@ -195,7 +195,7 @@ export class MessageAddSubCommand {
             let embed = new MessageEmbed()
                 .setDescription('Action Canceled.')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -210,6 +210,6 @@ export class MessageAddSubCommand {
                     '\n`bday message test <position> [user count]` - Test a birthday message.'
             )
             .setColor(Config.colors.success);
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }

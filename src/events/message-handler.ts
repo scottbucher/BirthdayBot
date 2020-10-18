@@ -50,7 +50,7 @@ export class MessageHandler {
                         'I need permission to **Add Reactions** & **Read Message History**!'
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
         }
@@ -180,7 +180,7 @@ export class MessageHandler {
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
         }
@@ -196,7 +196,7 @@ export class MessageHandler {
                             `Please run server setup with \`bday setup\` before using that command!`
                         )
                         .setColor(Config.colors.error);
-                    await channel.send(embed);
+                    await MessageUtils.send(channel, embed);
                     return;
                 }
 
@@ -206,7 +206,7 @@ export class MessageHandler {
                         .setTitle('Permission Required!')
                         .setDescription(`You don't have permission to run that command!`)
                         .setColor(Config.colors.error);
-                    await channel.send(embed);
+                    await MessageUtils.send(channel, embed);
                     return;
                 }
             }
@@ -222,7 +222,7 @@ export class MessageHandler {
                     .addField('Error code', msg.id)
                     .addField('Contact support', Config.links.support)
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
             } catch {
                 /*ignore*/
             }

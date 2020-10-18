@@ -1,3 +1,4 @@
+import { ActionUtils, MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -6,7 +7,6 @@ import {
 } from 'discord.js-collector-utils';
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
 
-import { ActionUtils } from '../../utils';
 import { GuildRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
@@ -72,7 +72,7 @@ export class SetupMessage {
                             .setFooter(`Please check above and try again!`, botUser.avatarURL())
                             .setTimestamp()
                             .setColor(Config.colors.error);
-                        await channel.send(embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     }
 
@@ -83,7 +83,7 @@ export class SetupMessage {
                             .setFooter(`Please check above and try again!`, botUser.avatarURL())
                             .setTimestamp()
                             .setColor(Config.colors.error);
-                        await channel.send(embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     }
                     return time;
@@ -139,7 +139,7 @@ export class SetupMessage {
                             .setFooter(`Please check above and try again!`, botUser.avatarURL())
                             .setTimestamp()
                             .setColor(Config.colors.error);
-                        await channel.send(embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     } else {
                         if (nextMsg?.content.toLowerCase() === '@here') {
@@ -241,6 +241,6 @@ export class SetupMessage {
 
         await this.guildRepo.guildSetupMessage(guild.id, messageTime, mention, useEmbed);
 
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }

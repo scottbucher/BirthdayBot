@@ -1,3 +1,4 @@
+import { ActionUtils, MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -6,7 +7,6 @@ import {
 } from 'discord.js-collector-utils';
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
-import { ActionUtils } from '../../utils';
 import { ColorUtils } from '../../utils/color-utils';
 import { GuildRepo } from '../../services/database/repos';
 
@@ -120,7 +120,7 @@ export class MessageColorSubCommand {
                                 )
                                 .setTimestamp()
                                 .setColor(Config.colors.error);
-                            await channel.send(embed);
+                            await MessageUtils.send(channel, embed);
                             return;
                         }
 
@@ -150,7 +150,7 @@ export class MessageColorSubCommand {
                 )
                 .setTimestamp()
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -167,6 +167,6 @@ export class MessageColorSubCommand {
 
         await this.guildRepo.updateMessageEmbedColor(msg.guild.id, colorHex);
 
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }

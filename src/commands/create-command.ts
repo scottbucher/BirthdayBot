@@ -2,6 +2,7 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -26,7 +27,7 @@ export class CreateCommand implements Command {
                     'Please specify what to create!\nAccepted Values: `channel`, `role`, `trustedRole`, `birthdayMasterRole`'
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -36,7 +37,7 @@ export class CreateCommand implements Command {
                     .setTitle('Not Enough Permissions!')
                     .setDescription('The bot must have permission to manage channel!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -67,14 +68,14 @@ export class CreateCommand implements Command {
                     `Successfully created the birthday channel ${birthdayChannel.toString()}!`
                 )
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else if (args[2].toLowerCase() === 'role') {
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
                 let embed = new MessageEmbed()
                     .setTitle('Not Enough Permissions!')
                     .setDescription('The bot must have permission to manage roles!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -96,14 +97,14 @@ export class CreateCommand implements Command {
                 )
                 .setFooter('This role is actively removed from those whose birthday it isn\'t.')
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else if (args[2].toLowerCase() === 'trustedrole') {
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
                 let embed = new MessageEmbed()
                     .setTitle('Not Enough Permissions!')
                     .setDescription('The bot must have permission to manage roles!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -119,14 +120,14 @@ export class CreateCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription(`Successfully created the trusted role ${trustedRole.toString()}!`)
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else if (args[2].toLowerCase() === 'birthdaymaster' || args[2].toLowerCase() === 'birthdaymasterrole') {
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
                 let embed = new MessageEmbed()
                     .setTitle('Not Enough Permissions!')
                     .setDescription('The bot must have permission to manage roles!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -142,7 +143,7 @@ export class CreateCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription(`Successfully created the birthday master role ${birthdayMasterRole.toString()}!`)
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         }
     }
 }
