@@ -13,6 +13,8 @@ export class HelpCommand implements Command {
     public adminOnly = false;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = false;
 
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let embed = new MessageEmbed();

@@ -19,8 +19,6 @@ import {
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
-import { eventNames } from 'process';
-import { time } from 'console';
 
 let Config = require('../../config/config.json');
 
@@ -37,6 +35,8 @@ export class SetCommand implements Command {
     public adminOnly = false;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = false;
 
     constructor(private userRepo: UserRepo) {}
 

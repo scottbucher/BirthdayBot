@@ -15,6 +15,8 @@ export class SetAttemptsCommand implements Command {
     public adminOnly = false;
     public ownerOnly = true;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = false;
 
     constructor(private userRepo: UserRepo) {}
 

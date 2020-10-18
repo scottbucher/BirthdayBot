@@ -15,6 +15,8 @@ export class NextCommand implements Command {
     public adminOnly = false;
     public ownerOnly = false;
     public voteOnly = true;
+    public requirePremium = false;
+    public getPremium = false;
 
     constructor(private userRepo: UserRepo) {}
 

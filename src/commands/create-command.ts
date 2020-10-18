@@ -13,6 +13,8 @@ export class CreateCommand implements Command {
     public adminOnly = true;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = false;
 
     constructor(private guildRepo: GuildRepo) {}
 

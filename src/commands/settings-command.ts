@@ -1,8 +1,8 @@
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
+import { ColorUtils } from '../utils/color-utils';
 import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
-import { ColorUtils } from '../utils/color-utils';
 
 let Config = require('../../config/config.json');
 
@@ -14,10 +14,12 @@ export class SettingsCommand implements Command {
     public adminOnly = false;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = true;
 
     constructor(private guildRepo: GuildRepo) {}
 
-    async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
+    async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean): Promise<void> {
         let guild = msg.guild;
         let guildData = await this.guildRepo.getGuild(guild.id);
 
@@ -91,7 +93,8 @@ export class SettingsCommand implements Command {
             .addField('Trusted Prevents Message', preventsMessage, true)
             .addField('Embed Birthday Message', useEmbed, true)
             .addField('Birthday Message Color', color, true)
-            .addField('Guild Id', guild.id, true);
+            .addField('Guild Id', guild.id, true)
+            .addField('Premium', hasPremium ? 'Active' : 'Not Active', true);
 
         await channel.send(settingsEmbed);
     }
