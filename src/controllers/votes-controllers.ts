@@ -22,7 +22,7 @@ export class VotesController implements Controller {
         switch (siteName) {
             case 'top-gg':
                 // Check the token of the request
-                if (req.headers.authorization !== Config.api.authentication) {
+                if (req.headers.authorization !== Config.voting.token) {
                     res.sendStatus(401);
                     return;
                 }
