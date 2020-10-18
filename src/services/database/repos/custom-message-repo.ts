@@ -27,6 +27,15 @@ export class CustomMessageRepo {
         return new CustomMessages(customMessages, null);
     }
 
+    public async getCustomUserMessages(discordId: string): Promise<CustomMessages> {
+        let results = await this.dataAccess.executeProcedure(Procedure.CustomMessages_GetUser, [
+            discordId,
+        ]);
+
+        let customMessages = SQLUtils.getTable(results, 0);
+        return new CustomMessages(customMessages, null);
+    }
+
     public async getCustomMessageList(
         guildId: string,
         pageSize: number,
