@@ -13,7 +13,9 @@
         "birthdayJobStarted": "Started birthday job.",
         "birthdayJobGuildCount": "Celebrating Birthdays for {GUILD_COUNT} guilds...",
         "completedBirthdayJob": "Completed birthday job.",
-        "startedApi": "API started on port {PORT}."
+        "startedApi": "API started on port {PORT}.",
+        "unsubRanPremiumCmd": "User '{SENDER_TAG}' ({SENDER_ID}) in guild '{GUILD_NAME}' ({GUILD_ID}) that is unsubscribed ran the premium command.",
+        "unsubRanSubCmd": "User '{SENDER_TAG}' ({SENDER_ID}) in guild '{GUILD_NAME}' ({GUILD_ID}) that is unsubscribed ran the subscribe command."
     },
     "warn": {
         "noShards": "No shards to spawn."
