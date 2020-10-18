@@ -25,7 +25,10 @@ export abstract class ListUtils {
 
         message = await message.edit(embed);
 
-        if (embed.description === '**No Birthdays in this server!**') return;
+        if (embed.description === '**No Birthdays in this server!**') {
+            await message.reactions.removeAll();
+            return;
+        }
     }
 
     public static async updateMessageList(
@@ -49,7 +52,10 @@ export abstract class ListUtils {
 
         message = await message.edit(embed);
 
-        if (embed.description === '**No Custom Birthday Messages!**') return;
+        if (embed.description === '**No Custom Birthday Messages!**') {
+            await message.reactions.removeAll();
+            return;
+        }
     }
 
     public static async updateMessageUserList(
@@ -73,7 +79,10 @@ export abstract class ListUtils {
 
         message = await message.edit(embed);
 
-        if (embed.description === '**No User-Specific Birthday Messages!**') return;
+        if (embed.description === '**No User-Specific Birthday Messages!**') {
+            await message.reactions.removeAll();
+            return;
+        }
     }
 
     public static async updateBlacklistList(
@@ -94,6 +103,9 @@ export abstract class ListUtils {
 
         message = await message.edit(embed);
 
-        if (embed.description === '**The blacklist is empty!**') return;
+        if (embed.description === '**The blacklist is empty!**') {
+            await message.reactions.removeAll();
+            return;
+        }
     }
 }
