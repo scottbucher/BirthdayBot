@@ -85,12 +85,14 @@ export class SettingsCommand implements Command {
                 : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
                   '**Deleted Role**';
 
-        let color = hasPremium
+        let colorHex = hasPremium
             ? ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
             : Config.colors.default;
 
+        let colorName = ColorUtils.findName(colorHex);
+
         settingsEmbed
-            .setColor(color)
+            .setColor(colorHex)
             .addField('Birthday Channel', birthdayChannel, true)
             .addField('Birthday Role', birthdayRole, true)
             .addField('Birthday Master Role', birthdayMasterRole, true)
@@ -100,7 +102,13 @@ export class SettingsCommand implements Command {
             .addField('Trusted Prevents Role', preventsRole, true)
             .addField('Trusted Prevents Message', preventsMessage, true)
             .addField('Embed Birthday Message', useEmbed, true)
-            .addField('Birthday Message Color', hasPremium ? color : `~~${color}~~`, true)
+            .addField(
+                'Birthday Message Color',
+                hasPremium
+                    ? `#${colorName ? `${colorHex} (${colorName})` : colorHex}`
+                    : `~~#${colorName ? `${colorHex} (${colorName})` : colorHex}~~`,
+                true
+            )
             .addField('Guild Id', guild.id, true)
             .addField('Premium', hasPremium ? 'Active' : 'Not Active', true);
 
