@@ -55,7 +55,8 @@
         "default": "#4eefff",
         "success": "#1cfe86",
         "warning": "#ffa255",
-        "error": "#ff0000"
+        "error": "#ff0000",
+        "role": "#ac1cfe"
     },
     "emotes": {
         "confirm": "✅",
