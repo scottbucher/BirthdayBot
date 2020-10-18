@@ -44,11 +44,6 @@
             "schedule": "0 0 * * * *"
         }
     },
-    "maxMessages": {
-        "free": 10,
-        "premium": 500
-    },
-    "maxMessageSize": 500,
     "experience": {
         "promptExpireTime": 120,
         "birthdayListSize": "30",
@@ -85,6 +80,13 @@
     },
     "stopCommands": ["stop", "cancel", "exit", "close", "quit"],
     "validation": {
+        "message": {
+            "maxLength": 500,
+            "maxCount": {
+                "free": 10,
+                "paid": 500
+            }
+        },
         "regions": [
             "Africa",
             "America",

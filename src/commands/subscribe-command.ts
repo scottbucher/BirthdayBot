@@ -60,8 +60,8 @@ export class SubscribeCommand implements Command {
             return;
         }
 
-        let messagesLimitFree = Config.maxMessages.free;
-        let messagesLimitPremium = Config.maxMessages.premium;
+        let messagesLimitFree = Config.validation.message.maxCount.free;
+        let messagesLimitPremium = Config.validation.message.maxCount.paid;
 
         let privateEmbed = new MessageEmbed()
             .setAuthor(msg.guild.name, msg.guild.iconURL())

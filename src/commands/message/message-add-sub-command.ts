@@ -29,7 +29,9 @@ export class MessageAddSubCommand {
             await channel.send(
                 new MessageEmbed()
                     .setTitle('Birthday Message Add - Expired')
-                    .setDescription('Type `bday message add <Message>` to add a custom birthday message.')
+                    .setDescription(
+                        'Type `bday message add <Message>` to add a custom birthday message.'
+                    )
                     .setColor(Config.colors.error)
             );
         };
@@ -76,7 +78,8 @@ export class MessageAddSubCommand {
         // Compile the birthday message
         if (target) {
             // If the input of the target WASN'T a @mention, replace it with the <@USER_ID> format so the substring works universally
-            birthdayMessage = msg.content.replace(args[3], target.toString() + ' ')
+            birthdayMessage = msg.content
+                .replace(args[3], target.toString() + ' ')
                 .substring(msg.content.indexOf('add') + 27)
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>');
         } else {
@@ -86,9 +89,11 @@ export class MessageAddSubCommand {
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>');
         }
 
-        if (birthdayMessage.length > Config.maxMessageSize) {
+        if (birthdayMessage.length > Config.validation.message.maxLength) {
             let embed = new MessageEmbed()
-                .setDescription(`Custom Messages are maxed at ${Config.maxMessageSize.toLocaleString()} characters!`)
+                .setDescription(
+                    `Custom Messages are maxed at ${Config.validation.message.maxLength.toLocaleString()} characters!`
+                )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
             return;
@@ -109,22 +114,28 @@ export class MessageAddSubCommand {
 
         let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
 
-        let globalMessageCount = customMessages.customMessages.filter(message => message.UserDiscordId === '0').length;
+        let globalMessageCount = customMessages.customMessages.filter(
+            message => message.UserDiscordId === '0'
+        ).length;
 
         if (customMessages) {
-            if (globalMessageCount >= Config.maxMessages.free && !hasPremium) {
+            if (globalMessageCount >= Config.validation.message.maxCount.free && !hasPremium) {
                 let embed = new MessageEmbed()
-                    .setDescription(`Your server has reached the maximum custom messages! (${Config.maxMessages.free.toLocaleString()})`)
+                    .setDescription(
+                        `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.free.toLocaleString()})`
+                    )
                     .setFooter(
-                        `To have up to ${Config.maxMessages.premium.toLocaleString()} custom birthday messages get Birthday Bot Premium!`,
+                        `To have up to ${Config.validation.message.maxCount.paid.toLocaleString()} custom birthday messages get Birthday Bot Premium!`,
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);
                 return;
-            } else if (globalMessageCount >= Config.maxMessages.premium) {
+            } else if (globalMessageCount >= Config.validation.message.maxCount.paid) {
                 let embed = new MessageEmbed()
-                    .setDescription(`Your server has reached the maximum custom messages! (${Config.maxMessages.premium.toLocaleString()})`)
+                    .setDescription(
+                        `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.paid.toLocaleString()})`
+                    )
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);
                 return;
