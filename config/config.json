@@ -47,9 +47,9 @@
         "birthdayMessageListSize": "5"
     },
     "colors": {
-        "default": "0x4eefff",
-        "success": "0x1cfe86",
-        "error": "0xff0000"
+        "default": "#4eefff",
+        "success": "#1cfe86",
+        "error": "#ff0000"
     },
     "emotes": {
         "confirm": "✅",
