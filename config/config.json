@@ -4,9 +4,9 @@
     "client": {
         "token": "<BOT_TOKEN>",
         "options": {
-            "messageCacheMaxSize": 20,
-            "messageCacheLifetime": 120,
-            "messageSweepInterval": 60,
+            "messageCacheMaxSize": 0,
+            "messageCacheLifetime": 0,
+            "messageSweepInterval": 1,
             "partials": ["MESSAGE", "REACTION"]
         },
         "intents": [
@@ -27,7 +27,7 @@
         "user": "<DATABASE_USERNAME>",
         "password": "<DATABASE_PASSWORD>",
         "charset": "utf8mb4",
-        "connectionLimit": 10
+        "connectionLimit": 25
     },
     "api": {
         "port": 8080
