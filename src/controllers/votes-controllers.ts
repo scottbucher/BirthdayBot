@@ -6,7 +6,6 @@ import { VoteData } from '../models/database';
 import router from 'express-promise-router';
 
 let Config = require('../../config/config.json');
-let Logs = require('../lang/logs.json');
 
 export class VotesController implements Controller {
     public path = '/site/:site/votes';
