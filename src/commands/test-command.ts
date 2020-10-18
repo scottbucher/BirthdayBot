@@ -1,4 +1,4 @@
-import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
+import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 
 import { BirthdayService } from '../services';
 import { Command } from './command';
