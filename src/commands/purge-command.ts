@@ -1,4 +1,4 @@
-import { ActionUtils, PermissionUtils } from '../utils';
+import { ActionUtils } from '../utils';
 import {
     CollectOptions,
     CollectorUtils,
