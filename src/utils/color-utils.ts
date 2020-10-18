@@ -40,6 +40,9 @@ export abstract class ColorUtils {
         if (hex.startsWith('#')) {
             hex = hex.substring(1);
         }
+        if (hex === 'FFFFFF') {
+            hex = 'FEFEFE';
+        }
         return hex;
     }
 }

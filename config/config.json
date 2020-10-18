@@ -74,7 +74,8 @@
             "green": "🟩",
             "orange": "🟧",
             "purple": "🟪",
-            "black": "⬛"
+            "black": "⬛",
+            "white": "⬜"
         },
         "custom": "✏"
     },
