@@ -38,7 +38,7 @@ export abstract class FormatUtils {
 
     public static joinWithAnd(values: string[]): string {
         return [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
-            values.length < 2 ? '' : ' and '
+            values.length < 2 ? '' : ', and '
         );
     }
 
