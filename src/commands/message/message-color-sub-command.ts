@@ -51,7 +51,7 @@ export class MessageColorSubCommand {
                 .setAuthor(`${msg.guild.name}`, msg.guild.iconURL())
                 .setTitle('Birthday Message Color Selection')
                 .setDescription(
-                    `Please select a color or input a custom one. [(?)](${Config.links.docs}/faq#)`
+                    `Please select a color or input a custom one. [(?)](${Config.links.docs}/faq#what-is-the-birthday-message-embed-color)`
                 )
                 .addField(colorOptionsText, '\u200b')
                 .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())

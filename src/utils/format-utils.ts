@@ -198,7 +198,7 @@ export abstract class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*A User specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-birthday-message)*\n\n`;
+        let description = `*A User specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*\n\n`;
 
         for (let customMessage of customMessageResults.customMessages) {
             let member = guild.members.resolve(customMessage.UserDiscordId);
