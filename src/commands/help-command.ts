@@ -131,6 +131,7 @@ const HELP_PERM_DESC =
     `\n**bday clear birthdayMasterRole** - Clear the birthday master role.` +
     `\n**bday blacklist add <user>** - Add user to the blacklist.` +
     `\n**bday blacklist remove <user>** - Remove user from the blacklist.` +
+    `\n**bday blacklist clear** - Clear the birthday blacklist.` +
     `\n**bday blacklist list** - View all blacklisted users in your server.`;
 
 const HELP_PREMIUM_TITLE = 'Birthday Bot Premium Help - Guild Only';

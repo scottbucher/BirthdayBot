@@ -138,10 +138,6 @@ export abstract class FormatUtils {
             .setTitle(`Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`)
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
-            .addField(
-                'Actions',
-                '`bday message add <message>`\n`bday message remove <position>`\n`bday message clear`'
-            )
             .setFooter(
                 `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
                 guild.iconURL()
@@ -156,7 +152,7 @@ export abstract class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*A random birthday message is chosen for each birthday. If there are none set, it will use the default birthday message. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
+        let description = `*A random birthday message is chosen for each birthday. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
 
         for (let customMessage of customMessageResults.customMessages) {
             if (hasPremium || customMessage.Position <= 10) {
@@ -166,6 +162,10 @@ export abstract class FormatUtils {
             }
             i++;
         }
+
+        if (!hasPremium && customMessageResults.stats.TotalItems > 10)
+            embed.addField('Message Limit', `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.paid}** with \`bday premium\`!\n\n`)
+
         embed.setDescription(description);
 
         return embed;
@@ -184,10 +184,6 @@ export abstract class FormatUtils {
             )
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
-            .addField(
-                'Actions',
-                '`bday message add <user> <message>`\n`bday message remove <position/user>`\n`bday message clear`'
-            )
             .setFooter(
                 `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
                 guild.iconURL()
@@ -202,7 +198,7 @@ export abstract class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*A User specific birthday message is the birthday message sent to the designated user on their birthday. Each user can only have one and the user specific message overrides any other custom message. [(?)](${Config.links.docs}/faq#what-is-a-user-birthday-message)*\n\n`;
+        let description = `*A User specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-birthday-message)*\n\n`;
 
         for (let customMessage of customMessageResults.customMessages) {
             let member = guild.members.resolve(customMessage.UserDiscordId);
@@ -217,6 +213,10 @@ export abstract class FormatUtils {
             }
             i++;
         }
+
+        if (!hasPremium)
+            embed.addField('Locked Feature', `User specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`);
+
         embed.setDescription(description);
 
         return embed;
