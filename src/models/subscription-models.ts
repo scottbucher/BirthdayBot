@@ -32,7 +32,10 @@ interface Times {
 }
 
 export enum PlanName {
-    premium = 'premium',
+    premium1 = 'premium-1',
+    premium3 = 'premium-3',
+    premium6 = 'premium-6',
+    premium12 = 'premium-12',
 }
 
 export enum SubscriptionStatusName {
