@@ -164,7 +164,10 @@ export abstract class FormatUtils {
         }
 
         if (!hasPremium && customMessageResults.stats.TotalItems > 10)
-            embed.addField('Message Limit', `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.paid}** with \`bday premium\`!\n\n`)
+            embed.addField(
+                'Message Limit',
+                `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.paid}** with \`bday premium\`!\n\n`
+            );
 
         embed.setDescription(description);
 
@@ -190,8 +193,6 @@ export abstract class FormatUtils {
             )
             .setTimestamp();
 
-        let i = (page - 1) * pageSize + 1;
-
         if (customMessageResults.customMessages.length === 0) {
             let embed = new MessageEmbed()
                 .setDescription('**No User Specific Birthday Messages!**')
@@ -203,19 +204,21 @@ export abstract class FormatUtils {
         for (let customMessage of customMessageResults.customMessages) {
             let member = guild.members.resolve(customMessage.UserDiscordId);
             if (hasPremium) {
-                description += `**${i.toLocaleString()}.** ${
-                    member ? `**${member.displayName}**: ` : 'Unknown Member '
-                } ${customMessage.Message}\n\n`;
+                description += `${member ? `**${member.displayName}**: ` : '**Unknown Member** '} ${
+                    customMessage.Message
+                }\n\n`;
             } else {
-                description += `~~**${i.toLocaleString()}.** ${
-                    member ? `**${member.displayName}**: ` : 'Unknown Member '
-                } ${customMessage.Message}~~\n\n`;
+                description += `${member ? `**${member.displayName}**: ` : '**Unknown Member** '} ${
+                    customMessage.Message
+                }~~\n\n`;
             }
-            i++;
         }
 
         if (!hasPremium)
-            embed.addField('Locked Feature', `User specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`);
+            embed.addField(
+                'Locked Feature',
+                `User specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`
+            );
 
         embed.setDescription(description);
 
