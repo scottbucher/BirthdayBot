@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 16, 2020 at 05:49 AM
+-- Generation Time: Oct 18, 2020 at 07:52 AM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -165,7 +165,7 @@ WHERE GuildDiscordId = IN_GuildDiscordId;
 SELECT MessageId
 INTO @UserMessage
 FROM `messages`
-WHERE GuildId = @GuildId AND UserDiscordId = IN_UserDiscordId;
+WHERE GuildId = @GuildId AND UserDiscordId = IN_UserDiscordId AND UserDiscordId  <> '0';
 
 IF @UserMessage IS NULL THEN
 	INSERT INTO `messages` (
@@ -218,7 +218,7 @@ SELECT
        		ORDER BY MessageId 
         ) AS Position
     FROM `messages`
-    WHERE GuildId = @GuildId
+    WHERE GuildId = @GuildId AND UserDiscordId = '0'
 ORDER BY MessageId;
 
 END$$
@@ -239,7 +239,7 @@ WHERE GuildDiscordId = IN_GuildDiscordId;
 SELECT COUNT(*) 
 INTO @TotalItems
 FROM `messages`
-WHERE GuildId = @GuildId;
+WHERE GuildId = @GuildId AND UserDiscordId = '0';
 
 SELECT CEILING(@TotalItems/IN_PageSize) INTO @TotalPages;
 
@@ -260,7 +260,81 @@ FROM (
        			ORDER BY MessageId 
             ) AS Position
     	FROM `messages`
-        WHERE GuildId = @GuildId
+        WHERE GuildId = @GuildId AND UserDiscordId = '0'
+	ORDER BY MessageId
+) AS CustomMessage
+WHERE
+    CustomMessage.Position >= @StartRow AND
+    CustomMessage.Position <= @EndRow;
+
+SELECT
+    @TotalItems AS 'TotalItems',
+    @TotalPages as 'TotalPages';
+    
+DROP TEMPORARY TABLE IF EXISTS temp;
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `CustomMessages_GetUser` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SET @Row_Number = 0;
+
+SELECT
+		*,
+        ROW_NUMBER() OVER (
+       		ORDER BY MessageId 
+        ) AS Position
+    FROM `messages`
+    WHERE GuildId = @GuildId AND UserDiscordId <> '0'
+ORDER BY MessageId;
+
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `CustomMessages_GetUserList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_PageSize` INT, IN `IN_Page` INT)  NO SQL
+BEGIN
+
+SET @GuildId = NULL;
+SET @TotalPages = NULL;
+SET @TotalItems = NULL;
+SET @StartRow = NULL;
+SET @EndRow = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SELECT COUNT(*) 
+INTO @TotalItems
+FROM `messages`
+WHERE GuildId = @GuildId AND UserDiscordId <> '0';
+
+SELECT CEILING(@TotalItems/IN_PageSize) INTO @TotalPages;
+
+IF (IN_Page < 0) THEN 
+	SET IN_Page = 1;
+ELSEIF (IN_Page > @TotalPages) THEN 
+	SET IN_Page = @TotalPages;
+END IF;
+
+SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
+SET @EndRow = IN_Page * IN_PageSize;
+
+SELECT *
+FROM (
+	SELECT
+			*,
+            ROW_NUMBER() OVER (
+       			ORDER BY MessageId 
+            ) AS Position
+    	FROM `messages`
+        WHERE GuildId = @GuildId AND UserDiscordId <> '0'
 	ORDER BY MessageId
 ) AS CustomMessage
 WHERE
@@ -828,7 +902,7 @@ CREATE TABLE `guild` (
 CREATE TABLE `messages` (
   `MessageId` int(11) NOT NULL,
   `GuildId` int(11) DEFAULT NULL,
-  `Message` varchar(300) CHARACTER SET utf8mb4 NOT NULL,
+  `Message` varchar(500) CHARACTER SET utf8mb4 NOT NULL,
   `UserDiscordId` varchar(20) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
