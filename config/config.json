@@ -3,12 +3,6 @@
     "owners": ["478288246858711040", "212772875793334272"],
     "client": {
         "token": "<BOT_TOKEN>",
-        "options": {
-            "messageCacheMaxSize": 0,
-            "messageCacheLifetime": 0,
-            "messageSweepInterval": 1,
-            "partials": ["MESSAGE", "REACTION"]
-        },
         "intents": [
             "GUILDS",
             "GUILD_PRESENCES",
@@ -17,7 +11,15 @@
             "GUILD_MESSAGE_REACTIONS",
             "DIRECT_MESSAGES",
             "DIRECT_MESSAGE_REACTIONS"
-        ]
+        ],
+        "partials": ["MESSAGE", "REACTION"],
+        "caches": {
+            "messages": {
+                "size": 0,
+                "lifetime": 0,
+                "sweepInterval": 1
+            }
+        }
     },
     "supportServerId": "660711235766976553",
     "supportRoleId": "660746189419053057",

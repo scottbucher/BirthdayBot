@@ -69,11 +69,11 @@ async function start(): Promise<void> {
 
 
     let clientOptions: ClientOptions = {
-        messageCacheMaxSize: Config.client.options.messageCacheMaxSize,
-        messageCacheLifetime: Config.client.options.messageCacheLifetime,
-        messageSweepInterval: Config.client.options.messageSweepInterval,
         ws: { intents: Config.client.intents },
-        partials: Config.client.options.partials as PartialTypes[],
+        partials: Config.client.partials,
+        messageCacheMaxSize: Config.client.caches.messages.size,
+        messageCacheLifetime: Config.client.caches.messages.lifetime,
+        messageSweepInterval: Config.client.caches.messages.sweepInterval,
     };
 
     let client = new CustomClient(clientOptions, guildRepo);
