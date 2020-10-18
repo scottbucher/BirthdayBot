@@ -138,13 +138,8 @@ export class BirthdayService {
                 : false;
             let globalMessages = await this.customMessageRepo.getCustomMessages(guild.id);
 
-            let userMessage = await this.customMessageRepo.getCustomUserMessages(guild.id);
-
-            // We have our list of birthday message users, now, lets get a list of users who have user specific custom birthday messages
             // Get a list of custom user specific messages
-            let customUserMessages = globalMessages.customMessages.filter(
-                message => message.UserDiscordId !== '0'
-            );
+            let userMessages = await this.customMessageRepo.getCustomUserMessages(guild.id);
 
             // Define variable
             let usersWithSpecificMessage: GuildMember[];
@@ -153,7 +148,9 @@ export class BirthdayService {
             if (hasPremium) {
                 // Guild Member list of people with a user specific custom birthday message
                 usersWithSpecificMessage = birthdayMessageUsers.filter(member =>
-                    customUserMessages.map(message => message.UserDiscordId).includes(member.id)
+                    userMessages.customMessages
+                        .map(message => message.UserDiscordId)
+                        .includes(member.id)
                 );
 
                 //  Remove all users who have a user specific custom birthday message
@@ -203,7 +200,7 @@ export class BirthdayService {
                 // Now, loop through the members with a user specific custom birthday message
                 for (let member of usersWithSpecificMessage) {
                     // Get their birthday message
-                    let message = customUserMessages
+                    let message = userMessages.customMessages
                         .find(message => message.UserDiscordId === member.user.id)
                         .Message.split('@Users')
                         .join(member.toString())
