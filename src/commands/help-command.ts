@@ -138,4 +138,5 @@ const HELP_PREMIUM_DESC =
     `\n**bday premium** - View information about your server's premium.` +
     `\n**bday message add <User> <Message>** - Add a user specific birthday message.\n - Placeholder for users: \`<Users>\`\n- Example Usage: \`bday message add @Scott Happy Birthday <Users>!\`` +
     `\n**bday message remove <user/position>** - Remove a certain birthday message.` +
+    `\n**bday message list user [page]** - List all user specific birthday messages.` +
     `\n**bday message color <color>** - Set the color of the birthday message embed.`;
