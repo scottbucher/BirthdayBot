@@ -1,4 +1,4 @@
-import { ActionUtils, MessageUtils, PermissionUtils } from '../utils';
+import { ActionUtils, MessageUtils } from '../utils';
 import {
     CollectOptions,
     CollectorUtils,

@@ -1,11 +1,11 @@
-import { BlacklistRepo, GuildRepo } from '../services/database/repos';
-import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
-import { GuildUtils, MessageUtils } from '../utils';
-
-import { BirthdayService } from '../services';
-import { Command } from './command';
-import { UserData } from '../models/database';
+import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 import moment from 'moment';
+
+import { UserData } from '../models/database';
+import { BirthdayService } from '../services';
+import { BlacklistRepo, GuildRepo } from '../services/database/repos';
+import { GuildUtils, MessageUtils } from '../utils';
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 
