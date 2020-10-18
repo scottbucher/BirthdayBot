@@ -14,6 +14,10 @@ export class CustomMessageRepo {
         await this.dataAccess.executeProcedure(Procedure.CustomMessages_Remove, [discordId, value]);
     }
 
+    public async removeCustomMessageUser(discordId: string, value: number): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.CustomMessage_RemoveUser, [discordId, value]);
+    }
+
     public async clearCustomMessages(discordId: string): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.CustomMessages_Clear, [discordId]);
     }
