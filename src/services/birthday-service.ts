@@ -138,7 +138,7 @@ export class BirthdayService {
                 : false;
             let globalMessages = await this.customMessageRepo.getCustomMessages(guild.id);
 
-            // Get a list of custom user specific messages
+            // Get a list of custom user-specific messages
             let userMessages = await this.customMessageRepo.getCustomUserMessages(guild.id);
 
             // Define variable
@@ -146,14 +146,14 @@ export class BirthdayService {
 
             // IF THEY HAVE PREMIUM
             if (hasPremium) {
-                // Guild Member list of people with a user specific custom birthday message
+                // Guild Member list of people with a user-specific custom birthday message
                 usersWithSpecificMessage = birthdayMessageUsers.filter(member =>
                     userMessages.customMessages
                         .map(message => message.UserDiscordId)
                         .includes(member.id)
                 );
 
-                //  Remove all users who have a user specific custom birthday message
+                //  Remove all users who have a user-specific custom birthday message
                 birthdayMessageUsers = birthdayMessageUsers.filter(
                     member => !usersWithSpecificMessage.includes(member)
                 );
@@ -190,14 +190,14 @@ export class BirthdayService {
                 ? ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
                 : Config.colors.default;
 
-            // Create and send the default or the global custom birthday message that was chosen for those without a user specific custom birthday message
+            // Create and send the default or the global custom birthday message that was chosen for those without a user-specific custom birthday message
             if (birthdayMessageUsers.length > 0) {
                 let embed = new MessageEmbed().setDescription(message).setColor(color);
                 await birthdayChannel.send(guildData.UseEmbed ? embed : message);
             }
 
             if (hasPremium) {
-                // Now, loop through the members with a user specific custom birthday message
+                // Now, loop through the members with a user-specific custom birthday message
                 for (let member of usersWithSpecificMessage) {
                     // Get their birthday message
                     let message = userMessages.customMessages

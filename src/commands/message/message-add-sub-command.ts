@@ -56,7 +56,7 @@ export class MessageAddSubCommand {
             if (target.bot) {
                 let embed = new MessageEmbed()
                     .setTitle('Invalid Usage!')
-                    .setDescription('You cannot set a user specific message for a bot!')
+                    .setDescription('You cannot set a user-specific message for a bot!')
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);
                 return;
@@ -64,7 +64,7 @@ export class MessageAddSubCommand {
                 let embed = new MessageEmbed()
                     .setTitle('Premium Required!')
                     .setDescription(
-                        `User specific birthday messages is a premium feature! View information about Birthday Bot Premium using \`bday premium\`!`
+                        `User-specific birthday messages are a premium feature! View information about Birthday Bot Premium using \`bday premium\`!`
                     )
                     .setColor(Config.colors.default);
                 await MessageUtils.send(channel, embed);
@@ -83,7 +83,7 @@ export class MessageAddSubCommand {
                 .substring(msg.content.indexOf('add') + 27)
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>');
         } else {
-            // Basic non user specific custom message
+            // Basic non user-specific custom message
             birthdayMessage = msg.content
                 .substring(msg.content.indexOf('add') + 4)
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>');
