@@ -159,15 +159,6 @@ export class BirthdayService {
                 );
             }
 
-            let userList = FormatUtils.joinWithAnd(
-                birthdayMessageUsers.map(user => user.toString())
-            );
-            let message = BdayUtils.randomMessage(globalMessages, hasPremium)
-                .split('@Users')
-                .join(userList)
-                .split('<Users>')
-                .join(userList);
-
             // Find mentioned role
             let mentionSetting: string;
             let roleInput: Role = guild.roles.resolve(guildData.MentionSetting);
@@ -192,6 +183,15 @@ export class BirthdayService {
 
             // Create and send the default or the global custom birthday message that was chosen for those without a user-specific custom birthday message
             if (birthdayMessageUsers.length > 0) {
+                let userList = FormatUtils.joinWithAnd(
+                    birthdayMessageUsers.map(user => user.toString())
+                );
+                let message = BdayUtils.randomMessage(globalMessages, hasPremium)
+                    .split('@Users')
+                    .join(userList)
+                    .split('<Users>')
+                    .join(userList);
+
                 let embed = new MessageEmbed().setDescription(message).setColor(color);
                 await MessageUtils.send(birthdayChannel, guildData.UseEmbed ? embed : message);
             }
