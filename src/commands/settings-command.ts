@@ -3,6 +3,7 @@ import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 import { ColorUtils } from '../utils/color-utils';
 import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -103,6 +104,6 @@ export class SettingsCommand implements Command {
             .addField('Guild Id', guild.id, true)
             .addField('Premium', hasPremium ? 'Active' : 'Not Active', true);
 
-        await channel.send(settingsEmbed);
+        await MessageUtils.send(channel, settingsEmbed);
     }
 }

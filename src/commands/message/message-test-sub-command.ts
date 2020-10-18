@@ -75,7 +75,7 @@ export class MessageTestSubCommand {
                 await MessageUtils.send(channel, embed);
                 return;
             } else {
-                await channel.send(defaultMessage);
+                await MessageUtils.send(channel, defaultMessage);
                 return;
             }
         }
@@ -103,7 +103,7 @@ export class MessageTestSubCommand {
                 .setColor(Config.colors.default);
             await MessageUtils.send(channel, embed);
         } else {
-            await channel.send(customMessage);
+            await MessageUtils.send(channel, customMessage);
         }
     }
 }

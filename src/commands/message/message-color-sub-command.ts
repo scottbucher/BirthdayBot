@@ -27,7 +27,7 @@ export class MessageColorSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(channel, 
                 new MessageEmbed()
                     .setTitle('Birthday Message Color Selection - Expired')
                     .setDescription(
@@ -58,7 +58,7 @@ export class MessageColorSubCommand {
                 .setColor(Config.colors.default)
                 .setTimestamp();
 
-            let colorMessage = await channel.send(colorEmbed); // Send confirmation and emotes
+            let colorMessage = await MessageUtils.send(channel, colorEmbed); // Send confirmation and emotes
 
             let emotes = [...Object.values(Config.emotes.colors), Config.emotes.custom];
             for (let emote of emotes) {
@@ -99,7 +99,7 @@ export class MessageColorSubCommand {
                     .setColor(Config.colors.default)
                     .setTimestamp();
 
-                let selectMessage = await channel.send(inputColorEmbed);
+                let selectMessage = await MessageUtils.send(channel, inputColorEmbed);
 
                 colorHex = await CollectorUtils.collectByMessage(
                     msg.channel,

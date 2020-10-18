@@ -26,7 +26,7 @@ export class SetupMessage {
             nextMsg.author.id === msg.author.id &&
                 [Config.prefix, ...Config.stopCommands].includes(nextMsg.content.split(/\s+/)[0].toLowerCase());
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(channel, 
                 new MessageEmbed()
                     .setTitle('Message Setup - Expired')
                     .setDescription('Type `bday setup message` to rerun the setup.')
@@ -51,7 +51,7 @@ export class SetupMessage {
             .setColor(Config.colors.default)
             .setTimestamp();
 
-        let timeMessage = await channel.send(messageTimeEmbed);
+        let timeMessage = await MessageUtils.send(channel, messageTimeEmbed);
 
         messageTime = await CollectorUtils.collectByMessage(
             msg.channel,
@@ -111,7 +111,7 @@ export class SetupMessage {
             .setColor(Config.colors.default)
             .setTimestamp();
 
-        let mentionMessage = await channel.send(messageMentionEmbed);
+        let mentionMessage = await MessageUtils.send(channel, messageMentionEmbed);
 
         mention = await CollectorUtils.collectByMessage(
             msg.channel,
@@ -179,7 +179,7 @@ export class SetupMessage {
 
         let reactOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let optionMessage = await channel.send(embedMessage);
+        let optionMessage = await MessageUtils.send(channel, embedMessage);
         for (let reactOption of reactOptions) {
             await optionMessage.react(reactOption);
         }

@@ -21,7 +21,7 @@ export class BlacklistClearSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(channel, 
                 new MessageEmbed()
                     .setTitle('Birthday Message Clear - Expired')
                     .setDescription('Type `bday blacklist clear` to clear the birthday blacklist.')
@@ -37,7 +37,7 @@ export class BlacklistClearSubCommand {
             confirmationEmbed
                 .setDescription('You server has not blacklisted any users!')
                 .setColor(Config.colors.error);
-            await channel.send(confirmationEmbed);
+            await MessageUtils.send(channel, confirmationEmbed);
             return;
         }
 
@@ -50,7 +50,7 @@ export class BlacklistClearSubCommand {
             .setFooter('This action is irreversible!', msg.client.user.avatarURL())
             .setColor(Config.colors.warning);
 
-        let confirmationMessage = await channel.send(confirmationEmbed); // Send confirmation and emotes
+        let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await confirmationMessage.react(option);
         }

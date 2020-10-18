@@ -77,7 +77,7 @@ export class MessageCommand implements Command {
                 let embed = new MessageEmbed()
                     .setTitle('Premium Required!')
                     .setDescription(
-                        `Custom birthday message color is a premium feature! View information about Birthday Bot Premium using \`bday premium\`!`
+                        `Custom birthday message color is a premium feature! View information about **Birthday Bot Premium** using \`bday premium\`!`
                     )
                     .setColor(Config.colors.default);
                 await MessageUtils.send(channel, embed);

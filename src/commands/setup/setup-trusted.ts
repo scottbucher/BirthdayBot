@@ -26,7 +26,7 @@ export class SetupTrusted {
             nextMsg.author.id === msg.author.id &&
                 [Config.prefix, ...Config.stopCommands].includes(nextMsg.content.split(/\s+/)[0].toLowerCase());
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(channel, 
                 new MessageEmbed()
                     .setTitle('Trusted Setup - Expired')
                     .setDescription('Type `bday setup trusted` to rerun the setup.')
@@ -58,7 +58,7 @@ export class SetupTrusted {
 
         let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 
-        let roleMessage = await channel.send(roleEmbed);
+        let roleMessage = await MessageUtils.send(channel, roleEmbed);
         for (let reactOption of reactOptions) {
             await roleMessage.react(reactOption);
         }
@@ -163,7 +163,7 @@ export class SetupTrusted {
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let settingMessage = await channel.send(preventMessageEmbed); // Send confirmation and emotes
+        let settingMessage = await MessageUtils.send(channel, preventMessageEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await settingMessage.react(option);
         }
@@ -200,7 +200,7 @@ export class SetupTrusted {
             .setColor(Config.colors.default)
             .setTimestamp();
 
-        let settingRole = await channel.send(preventRoleEmbed); // Send confirmation and emotes
+        let settingRole = await MessageUtils.send(channel, preventRoleEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await settingRole.react(option);
         }

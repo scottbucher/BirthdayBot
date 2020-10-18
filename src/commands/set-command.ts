@@ -47,7 +47,7 @@ export class SetCommand implements Command {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(channel, 
                 new MessageEmbed()
                     .setTitle('Birthday Set - Expired')
                     .setDescription('Type `bday set` to rerun the birthday set.')
@@ -199,7 +199,7 @@ export class SetCommand implements Command {
             if (suggest) timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
             else timeZoneEmbed.setTitle('User Setup - Time Zone');
 
-            let timezoneMessage = await channel.send(timeZoneEmbed);
+            let timezoneMessage = await MessageUtils.send(channel, timeZoneEmbed);
 
             timeZone = await CollectorUtils.collectByMessage(
                 msg.channel,
@@ -256,7 +256,7 @@ export class SetCommand implements Command {
             if (suggest) birthdayEmbed.setTitle(`Setup For ${target.username} - Birthday`);
             else birthdayEmbed.setTitle('User Setup - Birthday');
 
-            let birthdayMessage = await channel.send(birthdayEmbed);
+            let birthdayMessage = await MessageUtils.send(channel, birthdayEmbed);
 
             birthday = await CollectorUtils.collectByMessage(
                 msg.channel,
@@ -329,7 +329,7 @@ export class SetCommand implements Command {
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let confirmationMessage = await channel.send(confirmationEmbed); // Send confirmation and emotes
+        let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await confirmationMessage.react(option);
         }

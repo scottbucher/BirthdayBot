@@ -26,7 +26,7 @@ export class MessageAddSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(channel, 
                 new MessageEmbed()
                     .setTitle('Birthday Message Add - Expired')
                     .setDescription(
@@ -162,7 +162,7 @@ export class MessageAddSubCommand {
                         .setFooter('This action is irreversible!', msg.client.user.avatarURL())
                         .setColor(Config.colors.warning);
 
-                    let confirmationMessage = await channel.send(confirmationEmbed); // Send confirmation and emotes
+                    let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
                     for (let option of trueFalseOptions) {
                         await confirmationMessage.react(option);
                     }

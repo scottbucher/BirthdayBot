@@ -39,7 +39,8 @@ export class PurgeCommand implements Command {
             nextMsg.author.id === msg.author.id &&
             nextMsg.content.split(/\s+/)[0].toLowerCase() === Config.prefix;
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Birthday Purge - Expired')
                     .setDescription('Type `bday purge` to rerun the purge.')
@@ -81,7 +82,7 @@ export class PurgeCommand implements Command {
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let confirmationMessage = await channel.send(confirmEmbed); // Send confirmation and emotes
+        let confirmationMessage = await MessageUtils.send(channel, confirmEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await confirmationMessage.react(option);
         }

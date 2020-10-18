@@ -1,4 +1,4 @@
-import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
+import { ActionUtils, BdayUtils, FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import { GuildData, UserData } from '../models/database';
 
@@ -184,7 +184,7 @@ export class BirthdayService {
             }
 
             // Send the mention setting
-            if (mentionSetting) birthdayChannel.send(mentionSetting);
+            if (mentionSetting) MessageUtils.send(birthdayChannel, mentionSetting);
 
             let color = hasPremium
                 ? ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
@@ -193,7 +193,7 @@ export class BirthdayService {
             // Create and send the default or the global custom birthday message that was chosen for those without a user-specific custom birthday message
             if (birthdayMessageUsers.length > 0) {
                 let embed = new MessageEmbed().setDescription(message).setColor(color);
-                await birthdayChannel.send(guildData.UseEmbed ? embed : message);
+                await MessageUtils.send(birthdayChannel, guildData.UseEmbed ? embed : message);
             }
 
             if (hasPremium) {
@@ -209,7 +209,7 @@ export class BirthdayService {
 
                     // Create it and send it
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
-                    await birthdayChannel.send(guildData.UseEmbed ? embed : message);
+                    await MessageUtils.send(birthdayChannel, guildData.UseEmbed ? embed : message);
                 }
             }
         }
@@ -281,7 +281,7 @@ export class BirthdayService {
             );
 
             if (testChannel) {
-                await testChannel.send(testingEmbed);
+                await MessageUtils.send(testChannel, testingEmbed);
             }
         }
     }

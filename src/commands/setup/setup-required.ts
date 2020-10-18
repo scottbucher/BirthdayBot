@@ -28,7 +28,7 @@ export class SetupRequired {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(channel, 
                 new MessageEmbed()
                     .setTitle('Required Setup - Expired')
                     .setDescription('Type `bday setup` to rerun the setup.')
@@ -57,7 +57,7 @@ export class SetupRequired {
 
         let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 
-        let channelMessage = await channel.send(channelEmbed);
+        let channelMessage = await MessageUtils.send(channel, channelEmbed);
         for (let reactOption of reactOptions) {
             await channelMessage.react(reactOption);
         }
@@ -184,7 +184,7 @@ export class SetupRequired {
             .setColor(Config.colors.default)
             .setTimestamp();
 
-        let roleMessage = await channel.send(roleEmbed);
+        let roleMessage = await MessageUtils.send(channel, roleEmbed);
         for (let reactOption of reactOptions) {
             await roleMessage.react(reactOption);
         }

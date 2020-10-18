@@ -280,7 +280,7 @@ export class ReactionAddHandler implements EventHandler {
                     .setDescription('Please input the page you would like to jump to:')
                     .setColor(Config.colors.default);
 
-                let prompt = await channel.send(messageTimeEmbed);
+                let prompt = await MessageUtils.send(channel, messageTimeEmbed);
 
                 page = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -347,7 +347,7 @@ export class ReactionAddHandler implements EventHandler {
                     .setDescription('Please input the page you would like to jump to:')
                     .setColor(Config.colors.default);
 
-                let prompt = await channel.send(messageTimeEmbed);
+                let prompt = await MessageUtils.send(channel, messageTimeEmbed);
 
                 page = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -414,7 +414,7 @@ export class ReactionAddHandler implements EventHandler {
                     .setDescription('Please input the page you would like to jump to:')
                     .setColor(Config.colors.default);
 
-                let prompt = await channel.send(messageTimeEmbed);
+                let prompt = await MessageUtils.send(channel, messageTimeEmbed);
 
                 page = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -474,7 +474,7 @@ export class ReactionAddHandler implements EventHandler {
                     .setDescription('Please input the page you would like to jump to:')
                     .setColor(Config.colors.default);
 
-                let prompt = await channel.send(messageTimeEmbed);
+                let prompt = await MessageUtils.send(channel, messageTimeEmbed);
 
                 page = await CollectorUtils.collectByMessage(
                     msg.channel,

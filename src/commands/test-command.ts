@@ -1,11 +1,11 @@
-import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
-import moment from 'moment';
-
-import { UserData } from '../models/database';
-import { BirthdayService } from '../services';
 import { BlacklistRepo, GuildRepo } from '../services/database/repos';
 import { GuildUtils, MessageUtils } from '../utils';
+import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
+
+import { BirthdayService } from '../services';
 import { Command } from './command';
+import { UserData } from '../models/database';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -80,7 +80,7 @@ export class TestCommand implements Command {
                     `${Config.emotes.deny} Member is in the blacklist.`,
                     true
                 );
-            await channel.send(testingEmbed);
+            await MessageUtils.send(channel, testingEmbed);
             return;
         }
 
