@@ -1,4 +1,4 @@
-import { BirthdayService, Logger } from './services';
+import { BirthdayService, DiscordService, HttpService, Logger, SubscriptionService } from './services';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
@@ -46,6 +46,7 @@ import {
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
 
 import { Bot } from './bot';
+import { CustomClient } from './extensions/custom-client';
 import { DataAccess } from './services/database/data-access';
 import { PostBirthdaysJob } from './jobs';
 import { StatsCommand } from './commands/stats-command';
@@ -54,6 +55,15 @@ let Config = require('../config/config.json');
 
 async function start(): Promise<void> {
     Logger.info('Starting Bot!');
+    let dataAccess = new DataAccess(Config.mysql);
+    let httpService = new HttpService();
+
+    // Repos
+    let guildRepo = new GuildRepo(dataAccess);
+    let userRepo = new UserRepo(dataAccess);
+    let customMessageRepo = new CustomMessageRepo(dataAccess);
+    let blacklistRepo = new BlacklistRepo(dataAccess);
+
 
     let clientOptions: ClientOptions = {
         messageCacheMaxSize: Config.client.options.messageCacheMaxSize,
@@ -63,19 +73,14 @@ async function start(): Promise<void> {
         partials: Config.client.options.partials as PartialTypes[],
     };
 
-    let client = new Client(clientOptions);
-    let dataAccess = new DataAccess(Config.mysql);
+    let client = new CustomClient(clientOptions, guildRepo);
 
     let helpCommand = new HelpCommand();
 
-    // Repos
-    let guildRepo = new GuildRepo(dataAccess);
-    let userRepo = new UserRepo(dataAccess);
-    let customMessageRepo = new CustomMessageRepo(dataAccess);
-    let blacklistRepo = new BlacklistRepo(dataAccess);
-
     // Services
+    let discordService = new DiscordService(client);
     let birthdayService = new BirthdayService(customMessageRepo);
+    let subscriptionService = new SubscriptionService(httpService);
 
     // Commands
     let setCommand = new SetCommand(userRepo);

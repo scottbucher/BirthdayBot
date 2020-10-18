@@ -9,6 +9,7 @@
         "updateServerCountSite": "Updated server count on '{BOT_SITE}'.",
         "guildJoined": "Guild '{GUILD_NAME}' ({GUILD_ID}) joined.",
         "guildLeft": "Guild '{GUILD_NAME}' ({GUILD_ID}) left.",
+        "guildSubStatus": "Guild '{GUILD_NAME}' ({GUILD_ID}) '{PLAN_NAME}' subscription is now '{SUBSCRIPTION_STATUS}'.",
         "birthdayJobStarted": "Started birthday job.",
         "birthdayJobGuildCount": "Celebrating Birthdays for {GUILD_COUNT} guilds...",
         "completedBirthdayJob": "Completed birthday job.",
