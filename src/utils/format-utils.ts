@@ -195,11 +195,11 @@ export abstract class FormatUtils {
 
         if (customMessageResults.customMessages.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription('**No User Specific Birthday Messages!**')
+                .setDescription('**No User-Specific Birthday Messages!**')
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*A User specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*\n\n`;
+        let description = `*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*\n\n`;
 
         for (let customMessage of customMessageResults.customMessages) {
             let member = guild.members.resolve(customMessage.UserDiscordId);
@@ -215,10 +215,7 @@ export abstract class FormatUtils {
         }
 
         if (!hasPremium)
-            embed.addField(
-                'Locked Feature',
-                `User specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`
-            );
+            embed.addField('Locked Feature', `User-specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`);
 
         embed.setDescription(description);
 

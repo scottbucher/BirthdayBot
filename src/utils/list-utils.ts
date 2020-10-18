@@ -73,7 +73,7 @@ export abstract class ListUtils {
 
         message = await message.edit(embed);
 
-        if (embed.description === '**No User Specific Birthday Messages!**') return;
+        if (embed.description === '**No User-Specific Birthday Messages!**') return;
     }
 
     public static async updateBlacklistList(

@@ -3,7 +3,7 @@ import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Command } from './command';
 import { MessageUtils } from '../utils';
 
-let Config = require('../../config/config.json'); // Possible support for server specific prefixes?
+let Config = require('../../config/config.json'); // Possible support for server-specific prefixes?
 
 export class HelpCommand implements Command {
     public name: string = 'help';
@@ -137,7 +137,7 @@ const HELP_PERM_DESC =
 const HELP_PREMIUM_TITLE = 'Birthday Bot Premium Help - Guild Only';
 const HELP_PREMIUM_DESC =
     `\n**bday premium** - View information about your server's premium.` +
-    `\n**bday message add <User> <Message>** - Add a user specific birthday message.\n - Placeholder for users: \`<Users>\`\n- Example Usage: \`bday message add @Scott Happy Birthday <Users>!\`` +
-    `\n**bday message remove <user>** - Remove a certain user specific birthday message.` +
-    `\n**bday message list user [page]** - List all user specific birthday messages.` +
+    `\n**bday message add <User> <Message>** - Add a user-specific birthday message.\n - Placeholder for users: \`<Users>\`\n- Example Usage: \`bday message add @Scott Happy Birthday <Users>!\`` +
+    `\n**bday message remove <user>** - Remove a certain birthday message.` +
+    `\n**bday message list user [page]** - List all user-specific birthday messages.` +
     `\n**bday message color <color>** - Set the color of the birthday message embed.`;
