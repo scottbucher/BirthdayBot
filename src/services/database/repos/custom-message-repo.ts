@@ -42,4 +42,20 @@ export class CustomMessageRepo {
         let stats = SQLUtils.getRow(results, 1, 0);
         return new CustomMessages(customMessageData, stats);
     }
+
+    public async getCustomMessageUserList(
+        guildId: string,
+        pageSize: number,
+        page: number
+    ): Promise<CustomMessages> {
+        let results = await this.dataAccess.executeProcedure(Procedure.CustomMessages_GetUserList, [
+            guildId,
+            pageSize,
+            page,
+        ]);
+
+        let customMessageData = SQLUtils.getTable(results, 0);
+        let stats = SQLUtils.getRow(results, 1, 0);
+        return new CustomMessages(customMessageData, stats);
+    }
 }

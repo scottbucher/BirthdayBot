@@ -33,7 +33,8 @@ export abstract class ListUtils {
         guild: Guild,
         message: Message,
         page: number,
-        pageSize: number
+        pageSize: number,
+        hasPremium: boolean
     ): Promise<void> {
         if (page > customMessageResults.stats.TotalPages)
             page = customMessageResults.stats.TotalPages;
@@ -42,12 +43,37 @@ export abstract class ListUtils {
             guild,
             customMessageResults,
             page,
-            pageSize
+            pageSize,
+            hasPremium
         );
 
         message = await message.edit(embed);
 
         if (embed.description === '**No Custom Birthday Messages!**') return;
+    }
+
+    public static async updateMessageUserList(
+        customMessageResults: CustomMessages,
+        guild: Guild,
+        message: Message,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean
+    ): Promise<void> {
+        if (page > customMessageResults.stats.TotalPages)
+            page = customMessageResults.stats.TotalPages;
+
+        let embed = await FormatUtils.getCustomUserMessageListEmbed(
+            guild,
+            customMessageResults,
+            page,
+            pageSize,
+            hasPremium
+        );
+
+        message = await message.edit(embed);
+
+        if (embed.description === '**No User Specific Birthday Messages!**') return;
     }
 
     public static async updateBlacklistList(

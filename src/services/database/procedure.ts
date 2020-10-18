@@ -9,6 +9,7 @@ export enum Procedure {
     CustomMessages_Clear = 'CustomMessages_Clear',
     CustomMessages_Get = 'CustomMessages_Get',
     CustomMessages_GetList = 'CustomMessages_GetList',
+    CustomMessages_GetUserList = 'CustomMessages_GetUserList',
     Guild_Get = 'Guild_Get',
     Guild_GetAll = 'Guild_GetAll',
     Guild_UpdateBirthdayChannel = 'Guild_UpdateBirthdayChannel',

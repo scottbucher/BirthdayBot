@@ -7,3 +7,4 @@ export { MessageRemoveSubCommand } from './message-remove-sub-command';
 export { MessageTestSubCommand } from './message-test-sub-command';
 export { MessageTimeSubCommand } from './message-time-sub-command';
 export { MessageColorSubCommand } from './message-color-sub-command';
+export { MessageUserListSubCommand } from './message-user-list-sub-command';

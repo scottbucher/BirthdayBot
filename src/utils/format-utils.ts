@@ -131,7 +131,8 @@ export abstract class FormatUtils {
         guild: Guild,
         customMessageResults: CustomMessages,
         page: number,
-        pageSize: number
+        pageSize: number,
+        hasPremium: boolean
     ): Promise<MessageEmbed> {
         let embed = new MessageEmbed()
             .setTitle(`Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`)
@@ -158,8 +159,62 @@ export abstract class FormatUtils {
         let description = `*A random birthday message is chosen for each birthday. If there are none set, it will use the default birthday message. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
 
         for (let customMessage of customMessageResults.customMessages) {
+            if (hasPremium || customMessage.Position <= 10) {
+                description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
+            } else {
+                description += `~~**${i.toLocaleString()}.** ${customMessage.Message}~~\n\n`;
+            }
+            i++;
+        }
+        embed.setDescription(description);
+
+        return embed;
+    }
+
+    public static async getCustomUserMessageListEmbed(
+        guild: Guild,
+        customMessageResults: CustomMessages,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean
+    ): Promise<MessageEmbed> {
+        let embed = new MessageEmbed()
+            .setTitle(
+                `User Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
+            )
+            .setThumbnail(guild.iconURL())
+            .setColor(Config.colors.default)
+            .addField(
+                'Actions',
+                '`bday message add <user> <message>`\n`bday message remove <position/user>`\n`bday message clear`'
+            )
+            .setFooter(
+                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
+                guild.iconURL()
+            )
+            .setTimestamp();
+
+        let i = (page - 1) * pageSize + 1;
+
+        if (customMessageResults.customMessages.length === 0) {
+            let embed = new MessageEmbed()
+                .setDescription('**No User Specific Birthday Messages!**')
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = `*A User specific birthday message is the birthday message sent to the designated user on their birthday. Each user can only have one and the user specific message overrides any other custom message. [(?)](${Config.links.docs}/faq#what-is-a-user-birthday-message)*\n\n`;
+
+        for (let customMessage of customMessageResults.customMessages) {
             let member = guild.members.resolve(customMessage.UserDiscordId);
-            description += `**${i.toLocaleString()}.** ${member ? `**${member.displayName}**: ` : ' '} ${customMessage.Message}\n\n`;
+            if (hasPremium) {
+                description += `**${i.toLocaleString()}.** ${
+                    member ? `**${member.displayName}**: ` : 'Unknown Member '
+                } ${customMessage.Message}\n\n`;
+            } else {
+                description += `~~**${i.toLocaleString()}.** ${
+                    member ? `**${member.displayName}**: ` : 'Unknown Member '
+                } ${customMessage.Message}~~\n\n`;
+            }
             i++;
         }
         embed.setDescription(description);
@@ -246,7 +301,9 @@ export abstract class FormatUtils {
         let users = blacklistResults.blacklist.map(data => data.UserDiscordId);
 
         for (let user of users) {
-            description += `**${guild.members.resolve(user)?.displayName || 'Unknown'}**: (ID: ${user})\n`; // Append the description
+            description += `**${
+                guild.members.resolve(user)?.displayName || 'Unknown'
+            }**: (ID: ${user})\n`; // Append the description
         }
 
         embed.setDescription(description);

@@ -15,10 +15,11 @@ import {
     TextChannel,
     User,
 } from 'discord.js';
+import { Logger, SubscriptionService } from '../services';
 
 import { EventHandler } from '.';
 import { ListUtils } from '../utils/list-utils';
-import { Logger } from '../services';
+import { PlanName } from '../models/subscription-models';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -32,7 +33,8 @@ export class ReactionAddHandler implements EventHandler {
     constructor(
         private userRepo: UserRepo,
         private customMessageRepo: CustomMessageRepo,
-        private blacklistRepo: BlacklistRepo
+        private blacklistRepo: BlacklistRepo,
+        private subscriptionService: SubscriptionService
     ) {}
 
     public async process(msgReaction: MessageReaction, reactor: User): Promise<void> {
@@ -137,12 +139,61 @@ export class ReactionAddHandler implements EventHandler {
                     return;
                 }
 
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
                 await ListUtils.updateMessageList(
                     customMessageResults,
                     msg.guild,
                     msg,
                     page,
-                    pageSize
+                    pageSize,
+                    hasPremium
+                );
+
+                await msgReaction.users.remove(reactor);
+            } else if (titleArgs[0] === 'User') {
+                let oldPage: number;
+                let page = 1;
+                let pageSize = Config.experience.birthdayMessageListSize;
+
+                if (titleArgs[5]) {
+                    try {
+                        oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
+                        if (checkNextPage) page = oldPage + 1;
+                        else page = oldPage - 1;
+                    } catch (error) {
+                        // Not A Number
+                    }
+                    if (!page) page = 1;
+                }
+
+                let customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                if (
+                    (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
+                    (oldPage === customMessageResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
+                ) {
+                    await msgReaction.users.remove(reactor);
+                    return;
+                }
+
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
+                await ListUtils.updateMessageUserList(
+                    customMessageResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize,
+                    hasPremium
                 );
 
                 await msgReaction.users.remove(reactor);
@@ -275,12 +326,84 @@ export class ReactionAddHandler implements EventHandler {
                     page
                 );
 
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
                 await ListUtils.updateMessageList(
                     customMessageResults,
                     msg.guild,
                     msg,
                     page,
-                    pageSize
+                    pageSize,
+                    hasPremium
+                );
+
+                await msgReaction.users.remove(reactor);
+            } else if (titleArgs[0] === 'User') {
+                let page: number;
+
+                let messageTimeEmbed = new MessageEmbed()
+                    .setDescription('Please input the page you would like to jump to:')
+                    .setColor(Config.colors.default);
+
+                let prompt = await channel.send(messageTimeEmbed);
+
+                page = await CollectorUtils.collectByMessage(
+                    msg.channel,
+                    // Collect Filter
+                    (nextMsg: Message) => nextMsg.author.id === reactor.id,
+                    stopFilter,
+                    // Retrieve Result
+                    async (nextMsg: Message) => {
+                        await ActionUtils.deleteMessage(nextMsg);
+                        if (!page && page !== 0) {
+                            // Try and get the time
+                            let page: number;
+                            try {
+                                page = parseInt(nextMsg.content.split(/\s+/)[0]);
+                            } catch (error) {
+                                let embed = new MessageEmbed()
+                                    .setDescription('Invalid page!')
+                                    .setColor(Config.colors.error);
+                                await MessageUtils.send(channel, embed);
+                                return;
+                            }
+
+                            page = Math.round(page);
+
+                            if (!page || page <= 0 || page > 100000) page = 1;
+
+                            return page;
+                        }
+                    },
+                    expireFunction,
+                    COLLECT_OPTIONS
+                );
+
+                ActionUtils.deleteMessage(prompt);
+
+                if (page === undefined) return;
+
+                let pageSize = Config.experience.birthdayMessageListSize;
+
+                let customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
+                await ListUtils.updateMessageUserList(
+                    customMessageResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize,
+                    hasPremium
                 );
 
                 await msgReaction.users.remove(reactor);

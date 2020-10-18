@@ -12,6 +12,7 @@ import {
 
 import { Command } from './command';
 import { MessageColorSubCommand } from './message/message-color-sub-command';
+import { MessageUserListSubCommand } from './message/message-user-list-sub-command';
 import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
@@ -25,7 +26,7 @@ export class MessageCommand implements Command {
     public ownerOnly = false;
     public voteOnly = false;
     public requirePremium = false;
-    public getPremium = false;
+    public getPremium = true;
 
     constructor(
         private messageListSubCommand: MessageListSubCommand,
@@ -36,10 +37,11 @@ export class MessageCommand implements Command {
         private messageMentionSubCommand: MessageMentionSubCommand,
         private messageEmbedSubCommand: MessageEmbedSubCommand,
         private messageTestSubCommand: MessageTestSubCommand,
-        private messageColorSubCommand: MessageColorSubCommand
+        private messageColorSubCommand: MessageColorSubCommand,
+        private messageUserListSubCommand: MessageUserListSubCommand
     ) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
         if (args.length === 2) {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
@@ -50,12 +52,14 @@ export class MessageCommand implements Command {
             await MessageUtils.send(channel, embed);
             return;
         }
-        if (args[2].toLowerCase() === 'list') {
-            this.messageListSubCommand.execute(args, msg, channel);
+        if (args[2].toLowerCase() === 'list' && args[3]?.toLowerCase() !== 'user') {
+            this.messageListSubCommand.execute(args, msg, channel, hasPremium);
+        } else if ((args[2].toLowerCase() === 'list' && args[3]?.toLowerCase() === 'user') || args[2]?.toLowerCase() === 'userlist' || args[2]?.toLowerCase() === 'listuser') {
+            this.messageUserListSubCommand.execute(args, msg, channel, hasPremium);
         } else if (args[2].toLowerCase() === 'clear') {
             this.messageClearSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'add' || args[2].toLowerCase() === 'create') {
-            this.messageAddSubCommand.execute(args, msg, channel);
+            this.messageAddSubCommand.execute(args, msg, channel, hasPremium);
         } else if (args[2].toLowerCase() === 'remove' || args[2].toLowerCase() === 'delete') {
             this.messageRemoveSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'time') {
@@ -67,7 +71,18 @@ export class MessageCommand implements Command {
         } else if (args[2].toLowerCase() === 'test') {
             this.messageTestSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'color') {
-            this.messageColorSubCommand.execute(args, msg, channel);
+            if (hasPremium) {
+                this.messageColorSubCommand.execute(args, msg, channel);
+            } else {
+                let embed = new MessageEmbed()
+                    .setTitle('Premium Required!')
+                    .setDescription(
+                        `Custom birthday message color is a premium feature! View information about Birthday Bot Premium using \`bday premium\`!`
+                    )
+                    .setColor(Config.colors.default);
+                await MessageUtils.send(channel, embed);
+                return;
+            }
         } else {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')

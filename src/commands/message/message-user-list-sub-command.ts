@@ -5,7 +5,7 @@ import { CustomMessageRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
 
-export class MessageListSubCommand {
+export class MessageUserListSubCommand {
     constructor(private customMessageRepo: CustomMessageRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
@@ -22,7 +22,7 @@ export class MessageListSubCommand {
 
         let pageSize = Config.experience.birthdayMessageListSize;
 
-        let customMessageResults = await this.customMessageRepo.getCustomMessageList(
+        let customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
             msg.guild.id,
             pageSize,
             page
@@ -31,7 +31,7 @@ export class MessageListSubCommand {
         if (page > customMessageResults.stats.TotalPages)
             page = customMessageResults.stats.TotalPages;
 
-        let embed = await FormatUtils.getCustomMessageListEmbed(
+        let embed = await FormatUtils.getCustomUserMessageListEmbed(
             msg.guild,
             customMessageResults,
             page,
