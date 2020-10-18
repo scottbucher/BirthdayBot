@@ -105,7 +105,7 @@ export class BdayUtils {
             }
         } else {
             // Return the default birthday message
-            return 'Happy Birthday <Message>!';
+            return 'Happy Birthday <Users>!';
         }
     }
 }
