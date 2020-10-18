@@ -56,7 +56,8 @@ export class CustomClient extends Client {
                                 'Thanks for supporting Birthday Bot!',
                                 guild.client.user.avatarURL()
                             )
-                            .setTimestamp();
+                            .setTimestamp()
+                            .setColor(Config.colors.default);
                         MessageUtils.send(channel, embed);
                         break;
                     }
@@ -64,9 +65,7 @@ export class CustomClient extends Client {
                         let embed = new MessageEmbed()
                             .setAuthor(guild.name, guild.iconURL())
                             .setTitle('Birthday Bot Premium')
-                            .setDescription(
-                                `${guild.name}'s premium has been canceled! :(`
-                            )
+                            .setDescription(`${guild.name}'s premium has been canceled! :(`)
                             .addField(
                                 'bday premium',
                                 `View details about your subscription.\n\n[Join Support Server](${Config.links.support})`
@@ -75,17 +74,16 @@ export class CustomClient extends Client {
                                 'Consider letting us know how to improve premium!',
                                 guild.client.user.avatarURL()
                             )
-                            .setTimestamp();
-                            MessageUtils.send(channel, embed);
-                            break;
+                            .setTimestamp()
+                            .setColor(Config.colors.default);
+                        MessageUtils.send(channel, embed);
+                        break;
                     }
                     case SubscriptionStatusName.EXPIRED: {
                         let embed = new MessageEmbed()
                             .setAuthor(guild.name, guild.iconURL())
                             .setTitle('Birthday Bot Premium')
-                            .setDescription(
-                                `${guild.name}'s premium has expired! :(`
-                            )
+                            .setDescription(`${guild.name}'s premium has expired! :(`)
                             .addField(
                                 'bday premium',
                                 `Resubscribe to premium!\n\n[Join Support Server](${Config.links.support})`
@@ -94,9 +92,10 @@ export class CustomClient extends Client {
                                 'Consider letting us know how to improve premium!',
                                 guild.client.user.avatarURL()
                             )
-                            .setTimestamp();
-                            MessageUtils.send(channel, embed);
-                            break;
+                            .setTimestamp()
+                            .setColor(Config.colors.default);
+                        MessageUtils.send(channel, embed);
+                        break;
                     }
                     default: {
                         break;
