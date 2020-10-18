@@ -1,5 +1,5 @@
 import { CustomMessageRepo, GuildRepo } from '../../services/database/repos';
-import { FormatUtils, MessageUtils } from '../../utils';
+import { FormatUtils, GuildUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 let Config = require('../../../config/config.json');
@@ -13,7 +13,7 @@ export class MessageTestSubCommand {
         if (args.length < 4) {
             let embed = new MessageEmbed()
                 .setDescription(
-                    'Please provide a message number!\nFind this using `bday message list`!'
+                    'Please provide a message number or user!\nFind this using `bday message list`!'
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
@@ -26,36 +26,43 @@ export class MessageTestSubCommand {
             }
         }
 
-        userCount = userCount > 5 ? 5 : userCount;
-
-        // Try and get the time
+        // Try and find someone they are mentioning
+        let target = msg.mentions.members.first()?.user;
         let position: number;
-        try {
-            position = parseInt(args[3]);
-        } catch (error) {
-            let embed = new MessageEmbed()
-                .setDescription('Invalid message number!\nFind this using `bday message list`!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
-        }
 
-        if (!position) {
-            let embed = new MessageEmbed()
-                .setTitle('Test Custom Message')
-                .setDescription(
-                    `Message number does not exist!\nView your server's custom messages with \`bday message list\`!`
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
+        if (!target) {
+            userCount = userCount > 5 ? 5 : userCount;
+
+            // Try and get the position
+            try {
+                position = parseInt(args[3]);
+            } catch (error) {
+                let embed = new MessageEmbed()
+                    .setDescription('Invalid message number!\nFind this using `bday message list`!')
+                    .setColor(Config.colors.error);
+                await MessageUtils.send(channel, embed);
+                return;
+            }
+
+            if (!position) {
+                let embed = new MessageEmbed()
+                    .setTitle('Test Custom Message')
+                    .setDescription(
+                        `Message number does not exist!\nView your server's custom messages with \`bday message list\`!`
+                    )
+                    .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
+                    .setColor(Config.colors.error);
+                await MessageUtils.send(channel, embed);
+                return;
+            }
+        } else {
+            userCount = 1;
         }
 
         let users: string[] = [];
 
         for (let i = 0; i < userCount; i++) {
-            users.push(msg.author.toString());
+            target ? users.push(target.toString()) : users.push(msg.author.toString());
         }
 
         let userList = userCount > 1 ? FormatUtils.joinWithAnd(users) : msg.author.toString();
@@ -64,7 +71,9 @@ export class MessageTestSubCommand {
         let guildData = await this.guildRepo.getGuild(msg.guild.id);
 
         // Retrieve message to remove
-        let messages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
+        let messages = target
+            ? await this.customMessageRepo.getCustomUserMessages(msg.guild.id)
+            : await this.customMessageRepo.getCustomMessages(msg.guild.id);
 
         if (!messages) {
             let defaultMessage = `Happy Birthday ${userList}!`;
@@ -80,10 +89,15 @@ export class MessageTestSubCommand {
             }
         }
 
-        let customMessage: string = messages.customMessages
-            .find(question => question.Position === position)
-            ?.Message.replace(/@Users/g, userList)
-            .replace(/<Users>/g, userList);
+        let customMessage: string = target
+            ? messages.customMessages
+                  .find(message => message.UserDiscordId === target.id)
+                  ?.Message.replace(/@Users/g, userList)
+                  .replace(/<Users>/g, userList)
+            : messages.customMessages
+                  .find(message => message.Position === position)
+                  ?.Message.replace(/@Users/g, userList)
+                  .replace(/<Users>/g, userList);
 
         if (!customMessage) {
             let embed = new MessageEmbed()
