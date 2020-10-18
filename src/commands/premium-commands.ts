@@ -46,7 +46,7 @@ export class PremiumCommand implements Command {
                 .setAuthor(msg.guild.name, msg.guild.iconURL())
                 .setTitle('Birthday Bot Premium')
                 .setDescription(
-                    'Subscribe to Birthday Bot Premium to give this server extra features!'
+                    'Subscribe to **Birthday Bot Premium** to give this server extra features!'
                 )
                 .addField(
                     'Premium Features',

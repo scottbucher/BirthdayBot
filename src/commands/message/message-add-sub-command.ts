@@ -64,7 +64,7 @@ export class MessageAddSubCommand {
                 let embed = new MessageEmbed()
                     .setTitle('Premium Required!')
                     .setDescription(
-                        `User-specific birthday messages are a premium feature! View information about Birthday Bot Premium using \`bday premium\`!`
+                        `User-specific birthday messages are a premium feature! View information about **Birthday Bot Premium** using \`bday premium\`!`
                     )
                     .setColor(Config.colors.default);
                 await MessageUtils.send(channel, embed);
@@ -125,7 +125,7 @@ export class MessageAddSubCommand {
                         `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.free.toLocaleString()})`
                     )
                     .setFooter(
-                        `To have up to ${Config.validation.message.maxCount.paid.toLocaleString()} custom birthday messages get Birthday Bot Premium!`,
+                        `To have up to ${Config.validation.message.maxCount.paid.toLocaleString()} custom birthday messages get **Birthday Bot Premium**!`,
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);

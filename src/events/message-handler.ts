@@ -154,7 +154,7 @@ export class MessageHandler {
                 .setDescription('This command requires this server to have premium!')
                 .addField(
                     `Premium Commands`,
-                    'Subscribe to Birthday bot Premium for access to our premium features.\nSee `bday premium` for more information.'
+                    'Subscribe to **Birthday bot Premium** for access to our premium features.\nSee `bday premium` for more information.'
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
@@ -176,7 +176,7 @@ export class MessageHandler {
                     .addField('Last Vote', `${voteTimeAgo}`, true)
                     .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
                     .setFooter(
-                        'Don\'t want to vote? Try Birthday Bot Premium!',
+                        'Don\'t want to vote? Try **Birthday Bot Premium**!',
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);
