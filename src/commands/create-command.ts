@@ -80,7 +80,7 @@ export class CreateCommand implements Command {
             let birthdayRole = await msg.guild.roles.create({
                 data: {
                     name: Config.emotes.birthday,
-                    color: `0xac1cfe`,
+                    color: Config.colors.role,
                     hoist: true,
                     mentionable: true,
                 },
@@ -92,7 +92,7 @@ export class CreateCommand implements Command {
                 .setDescription(
                     `Successfully created the birthday role ${birthdayRole.toString()}!`
                 )
-                .setFooter('This role is actively removed from those whose birthday it isn\'t.')
+                .setFooter(`This role is actively removed from those whose birthday it isn't.`)
                 .setColor(Config.colors.success);
             await channel.send(embed);
         } else if (args[2].toLowerCase() === 'trustedrole') {
