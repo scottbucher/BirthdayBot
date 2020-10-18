@@ -24,7 +24,9 @@ export class SetupRequired {
         let botUser = guild.client.user;
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
-                [Config.prefix, ...Config.stopCommands].includes(nextMsg.content.split(/\s+/)[0].toLowerCase());
+            [Config.prefix, ...Config.stopCommands].includes(
+                nextMsg.content.split(/\s+/)[0].toLowerCase()
+            );
         let expireFunction: ExpireFunction = async () => {
             await channel.send(
                 new MessageEmbed()
@@ -212,7 +214,7 @@ export class SetupRequired {
                     await guild.roles.create({
                         data: {
                             name: Config.emotes.birthday,
-                            color: `0xac1cfe`,
+                            color: Config.colors.role,
                             hoist: true,
                             mentionable: true,
                         },
