@@ -30,8 +30,7 @@
         "connectionLimit": 10
     },
     "api": {
-        "port": 8080,
-        "authentication": "<AUTHORIZATION_KEY>"
+        "port": 8080
     },
     "jobs": {
         "updateServerCount": {
@@ -41,6 +40,11 @@
             "schedule": "0 0 * * * *"
         }
     },
+    "maxMessages": {
+        "free": 10,
+        "premium": 500
+    },
+    "maxMessageSize": 500,
     "experience": {
         "promptExpireTime": 120,
         "birthdayListSize": "30",
@@ -50,7 +54,7 @@
     "colors": {
         "default": "0x4eefff",
         "success": "0x1cfe86",
-        "warning": "ffa255",
+        "warning": "0xffa255",
         "error": "0xff0000"
     },
     "emotes": {
@@ -104,10 +108,12 @@
         "donate": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url",
         "map": "https://kevinnovak.github.io/Time-Zone-Picker/",
         "colors": "https://codepen.io/meodai/full/pXNpXe",
-        "stream": "https://www.twitch.tv/stqlth"
+        "stream": "https://www.twitch.tv/stqlth",
+        "autopay": "https://www.sandbox.paypal.com/myaccount/autopay"
     },
     "voting": {
         "enabled": false,
+        "token": "<TOKEN>",
         "hours": 24
     },
     "payments": {
