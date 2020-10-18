@@ -42,6 +42,7 @@ import {
     MessageRemoveSubCommand,
     MessageTestSubCommand,
     MessageTimeSubCommand,
+    MessageUserListSubCommand,
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
 
@@ -49,7 +50,9 @@ import { Bot } from './bot';
 import { CustomClient } from './extensions/custom-client';
 import { DataAccess } from './services/database/data-access';
 import { PostBirthdaysJob } from './jobs';
+import { PremiumCommand } from './commands/premium-commands';
 import { StatsCommand } from './commands/stats-command';
+import { SubscribeCommand } from './commands/subscribe-command';
 
 let Config = require('../config/config.json');
 
@@ -104,6 +107,8 @@ async function start(): Promise<void> {
     let faqCommand = new FAQCommand();
     let documentationCommand = new DocumentationCommand();
     let donateCommand = new DonateCommand();
+    let premiumCommand = new PremiumCommand(subscriptionService);
+    let subscribeCommand = new SubscribeCommand(subscriptionService);
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
@@ -123,6 +128,7 @@ async function start(): Promise<void> {
     let messageEmbedSubCommand = new MessageEmbedSubCommand(guildRepo);
     let messageTestSubCommand = new MessageTestSubCommand(guildRepo, customMessageRepo);
     let messageColorSubCommand = new MessageColorSubCommand(guildRepo);
+    let messageUserListSubCommand = new MessageUserListSubCommand(customMessageRepo);
 
     // Message Command
     let messageCommand = new MessageCommand(
@@ -134,7 +140,8 @@ async function start(): Promise<void> {
         messageMentionSubCommand,
         messageEmbedSubCommand,
         messageTestSubCommand,
-        messageColorSubCommand
+        messageColorSubCommand,
+        messageUserListSubCommand
     );
 
     // Blacklist Sub Commands
@@ -177,12 +184,14 @@ async function start(): Promise<void> {
             documentationCommand,
             donateCommand,
             blacklistCommand,
+            premiumCommand,
+            subscribeCommand,
         ],
         subscriptionService,
         guildRepo,
         userRepo
     );
-    let reactionAddHandler = new ReactionAddHandler(userRepo, customMessageRepo, blacklistRepo);
+    let reactionAddHandler = new ReactionAddHandler(userRepo, customMessageRepo, blacklistRepo, subscriptionService);
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 

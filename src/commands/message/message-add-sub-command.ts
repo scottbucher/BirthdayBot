@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 export class MessageAddSubCommand {
     constructor(private customMessageRepo: CustomMessageRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
             [Config.prefix, ...Config.stopCommands].includes(
@@ -49,20 +49,24 @@ export class MessageAddSubCommand {
         let target =
             msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, args[3])?.user;
 
-        // Do they have premium?
-        let hasPremium = false;
-
         // Did we find a user?
         if (target) {
             if (target.bot) {
                 let embed = new MessageEmbed()
                     .setTitle('Invalid Usage!')
-                    .setDescription('You cannot set a custom message for a bot!')
+                    .setDescription('You cannot set a user specific message for a bot!')
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);
                 return;
             } else if (!hasPremium) {
-                // you don't have premium!!!
+                let embed = new MessageEmbed()
+                    .setTitle('Premium Required!')
+                    .setDescription(
+                        `User specific birthday messages is a premium feature! View information about Birthday Bot Premium using \`bday premium\`!`
+                    )
+                    .setColor(Config.colors.default);
+                await MessageUtils.send(channel, embed);
+                return;
             }
         }
 
@@ -105,20 +109,22 @@ export class MessageAddSubCommand {
 
         let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
 
+        let globalMessageCount = customMessages.customMessages.filter(message => message.UserDiscordId === '0').length;
+
         if (customMessages) {
-            if (customMessages.customMessages.length >= Config.maxMessages.free && !hasPremium) {
+            if (globalMessageCount >= Config.maxMessages.free && !hasPremium) {
                 let embed = new MessageEmbed()
                     .setDescription(`Your server has reached the maximum custom messages! (${Config.maxMessages.free.toLocaleString()})`)
                     .setFooter(
-                        `To have up to ${Config.maxMessages.paid.toLocaleString()} custom birthday messages get Birthday Bot Premium!`,
+                        `To have up to ${Config.maxMessages.premium.toLocaleString()} custom birthday messages get Birthday Bot Premium!`,
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);
                 return;
-            } else if (customMessages.customMessages.length >= Config.maxMessages.paid) {
+            } else if (globalMessageCount >= Config.maxMessages.premium) {
                 let embed = new MessageEmbed()
-                    .setDescription(`Your server has reached the maximum custom messages! (${Config.maxMessages.paid.toLocaleString()})`)
+                    .setDescription(`Your server has reached the maximum custom messages! (${Config.maxMessages.premium.toLocaleString()})`)
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);
                 return;

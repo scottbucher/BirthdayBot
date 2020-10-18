@@ -7,7 +7,7 @@ export interface SubscriptionStatus {
     plan: string;
     subscriber: string;
     service: boolean;
-    subscription?: SubscriptionLink;
+    subscription?: Subscription;
     override?: Override;
     time: string;
 }

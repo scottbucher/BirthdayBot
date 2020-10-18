@@ -1,12 +1,13 @@
+import { SubscriptionLink, SubscriptionStatus } from '../models/subscription-models';
+
 import { HttpService } from './http-service';
-import { SubscriptionStatus } from '../models/subscription-models';
 
 let Config = require('../../config/config.json');
 
 export class SubscriptionService {
     constructor(private httpService: HttpService) {}
 
-    public async createSubscription(planName: string, subscriberId: string): Promise<void> {
+    public async createSubscription(planName: string, subscriberId: string): Promise<SubscriptionLink> {
         let res = await this.httpService.post(
             `${Config.payments.url}/plans/${planName}/subscriptions/${subscriberId}`,
             Config.payments.token

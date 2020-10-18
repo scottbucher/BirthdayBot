@@ -138,7 +138,7 @@ export class MessageHandler {
         }
 
         let checkVote = Config.voting.enabled && command.voteOnly;
-        let checkPremium = Config.premium.enabled && command.requirePremium;
+        let checkPremium = Config.payments.enabled && command.requirePremium;
 
         // Get premium status if needed
         let retrievePremium =
@@ -212,7 +212,7 @@ export class MessageHandler {
             }
 
             // Execute the command
-            await command.execute(args, msg, channel);
+            await command.execute(args, msg, channel, hasPremium);
         } catch (error) {
             // Notify sender that something went wrong
             Logger.error('The message-handler.ts class encountered an error!', error);
