@@ -158,7 +158,7 @@ export abstract class FormatUtils {
             if (hasPremium || customMessage.Position <= 10) {
                 description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
             } else {
-                description += `~~**${i.toLocaleString()}.** ${customMessage.Message}~~\n\n`;
+                description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n\n`;
             }
             i++;
         }
@@ -210,12 +210,15 @@ export abstract class FormatUtils {
             } else {
                 description += `${member ? `**${member.displayName}**: ` : '**Unknown Member** '} ${
                     customMessage.Message
-                }~~\n\n`;
+                }\n\n`;
             }
         }
 
         if (!hasPremium)
-            embed.addField('Locked Feature', `User-specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`);
+            embed.addField(
+                'Locked Feature',
+                `User-specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`
+            );
 
         embed.setDescription(description);
 
