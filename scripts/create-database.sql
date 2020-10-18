@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 18, 2020 at 07:52 AM
+-- Generation Time: Oct 18, 2020 at 10:50 PM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -367,7 +367,36 @@ FROM (
        				ORDER BY MessageId 
                 ) AS Position
     		FROM `messages`
-            WHERE GuildId = @GuildId
+            WHERE GuildId = @GuildId AND UserDiscordId = '0'
+) AS M
+WHERE M.Position = IN_Position;
+
+DELETE
+FROM `messages`
+WHERE
+        MessageId = @MessageId;
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `CustomMessage_RemoveUser` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Position` INT)  BEGIN
+
+SET @GuildId = NULL;
+SET @MessageId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SELECT M.MessageId
+INTO @MessageId
+FROM (
+        SELECT
+                *,
+                ROW_NUMBER() OVER (
+       				ORDER BY MessageId 
+                ) AS Position
+    		FROM `messages`
+            WHERE GuildId = @GuildId AND UserDiscordId <> '0'
 ) AS M
 WHERE M.Position = IN_Position;
 
