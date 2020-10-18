@@ -178,6 +178,7 @@ async function start(): Promise<void> {
             donateCommand,
             blacklistCommand,
         ],
+        subscriptionService,
         guildRepo,
         userRepo
     );
