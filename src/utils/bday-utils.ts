@@ -1,11 +1,13 @@
-import moment from 'moment';
-import { Moment } from 'moment-timezone';
-
 import { CustomMessages, SplitUsers, UserData } from '../models/database';
+
 import { ArrayUtils } from './array-utils';
 import { MathUtils } from './math-utils';
+import { Moment } from 'moment-timezone';
+import moment from 'moment';
 
 let Debug = require('../../config/debug.json');
+
+let Config = require('../../config/config.json');
 
 export class BdayUtils {
     public static getNextUsers(userDatas: UserData[], timeZone: string): UserData[] {
@@ -91,9 +93,19 @@ export class BdayUtils {
         return currentDateFormatted === birthdayFormatted;
     }
 
-    public static randomMessage(messages: CustomMessages): string {
+    public static randomMessage(messages: CustomMessages, hasPremium: boolean): string {
         if (messages.customMessages.length > 0) {
-            return ArrayUtils.chooseRandom(messages.customMessages).Message;
-        } else return 'Happy Birthday @Users!';
+            if (hasPremium) {
+                // Choose a random one
+                return ArrayUtils.chooseRandom(messages.customMessages).Message;
+            } else {
+                // Only choose from the first 10
+                return messages.customMessages[Math.floor(Math.random() * Config.maxMessages.free)]
+                    .Message;
+            }
+        } else {
+            // Return the default birthday message
+            return 'Happy Birthday <Message>!';
+        }
     }
 }

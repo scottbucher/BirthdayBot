@@ -81,9 +81,8 @@ async function start(): Promise<void> {
     let helpCommand = new HelpCommand();
 
     // Services
-    let discordService = new DiscordService(client);
-    let birthdayService = new BirthdayService(customMessageRepo);
     let subscriptionService = new SubscriptionService(httpService);
+    let birthdayService = new BirthdayService(customMessageRepo, subscriptionService);
 
     // Commands
     let setCommand = new SetCommand(userRepo);
