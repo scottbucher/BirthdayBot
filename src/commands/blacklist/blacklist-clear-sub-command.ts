@@ -21,7 +21,7 @@ export class BlacklistClearSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, 
+            await MessageUtils.send(channel,
                 new MessageEmbed()
                     .setTitle('Birthday Message Clear - Expired')
                     .setDescription('Type `bday blacklist clear` to clear the birthday blacklist.')
@@ -52,7 +52,7 @@ export class BlacklistClearSubCommand {
 
         let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
-            await confirmationMessageUtils.react(message, option);
+            await MessageUtils.react(confirmationMessage, option);
         }
 
         let confirmation: string = await CollectorUtils.collectByReaction(
