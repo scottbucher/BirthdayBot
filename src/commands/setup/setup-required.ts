@@ -28,7 +28,7 @@ export class SetupRequired {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, 
+            await MessageUtils.send(channel,
                 new MessageEmbed()
                     .setTitle('Required Setup - Expired')
                     .setDescription('Type `bday setup` to rerun the setup.')
@@ -59,7 +59,7 @@ export class SetupRequired {
 
         let channelMessage = await MessageUtils.send(channel, channelEmbed);
         for (let reactOption of reactOptions) {
-            await channelMessage.react(reactOption);
+            await MessageUtils.react(channelMessage, reactOption);
         }
 
         let channelOption: string = await CollectorUtils.collectByReaction(
@@ -186,7 +186,7 @@ export class SetupRequired {
 
         let roleMessage = await MessageUtils.send(channel, roleEmbed);
         for (let reactOption of reactOptions) {
-            await roleMessage.react(reactOption);
+            await MessageUtils.react(roleMessage, reactOption);
         }
 
         let roleOptions: string = await CollectorUtils.collectByReaction(

@@ -43,8 +43,8 @@ export class MessageListSubCommand {
 
         if (embed.description === '**No Custom Birthday Messages!**') return;
 
-        await message.react(Config.emotes.previousPage);
-        await message.react(Config.emotes.jumpToPage);
-        await message.react(Config.emotes.nextPage);
+        await MessageUtils.react(message, Config.emotes.previousPage);
+        await MessageUtils.react(message, Config.emotes.jumpToPage);
+        await MessageUtils.react(message, Config.emotes.nextPage);
     }
 }

@@ -26,7 +26,7 @@ export class SetupMessage {
             nextMsg.author.id === msg.author.id &&
                 [Config.prefix, ...Config.stopCommands].includes(nextMsg.content.split(/\s+/)[0].toLowerCase());
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, 
+            await MessageUtils.send(channel,
                 new MessageEmbed()
                     .setTitle('Message Setup - Expired')
                     .setDescription('Type `bday setup message` to rerun the setup.')
@@ -181,7 +181,7 @@ export class SetupMessage {
 
         let optionMessage = await MessageUtils.send(channel, embedMessage);
         for (let reactOption of reactOptions) {
-            await optionMessage.react(reactOption);
+            await MessageUtils.react(optionMessage, reactOption);
         }
 
         let messageOption: string = await CollectorUtils.collectByReaction(

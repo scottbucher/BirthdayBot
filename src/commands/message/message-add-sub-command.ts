@@ -26,7 +26,7 @@ export class MessageAddSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, 
+            await MessageUtils.send(channel,
                 new MessageEmbed()
                     .setTitle('Birthday Message Add - Expired')
                     .setDescription(
@@ -164,7 +164,7 @@ export class MessageAddSubCommand {
 
                     let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
                     for (let option of trueFalseOptions) {
-                        await confirmationMessage.react(option);
+                        await MessageUtils.react(confirmationMessage, option);
                     }
 
                     let confirmation: string = await CollectorUtils.collectByReaction(

@@ -84,7 +84,7 @@ export class PurgeCommand implements Command {
 
         let confirmationMessage = await MessageUtils.send(channel, confirmEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
-            await confirmationMessage.react(option);
+            await MessageUtils.react(confirmationMessage, option);
         }
 
         let confirmation: string = await CollectorUtils.collectByReaction(

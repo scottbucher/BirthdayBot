@@ -52,7 +52,7 @@ export class BlacklistClearSubCommand {
 
         let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
-            await confirmationMessage.react(option);
+            await confirmationMessageUtils.react(message, option);
         }
 
         let confirmation: string = await CollectorUtils.collectByReaction(

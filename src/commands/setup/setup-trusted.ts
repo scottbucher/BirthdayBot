@@ -60,7 +60,7 @@ export class SetupTrusted {
 
         let roleMessage = await MessageUtils.send(channel, roleEmbed);
         for (let reactOption of reactOptions) {
-            await roleMessage.react(reactOption);
+            await MessageUtils.react(roleMessage, reactOption);
         }
 
         let roleOptions: string = await CollectorUtils.collectByReaction(
@@ -165,7 +165,7 @@ export class SetupTrusted {
 
         let settingMessage = await MessageUtils.send(channel, preventMessageEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
-            await settingMessage.react(option);
+            await MessageUtils.react(settingMessage, option);
         }
 
         let messageOption: string = await CollectorUtils.collectByReaction(

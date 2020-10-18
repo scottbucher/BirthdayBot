@@ -47,7 +47,7 @@ export class SetCommand implements Command {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, 
+            await MessageUtils.send(channel,
                 new MessageEmbed()
                     .setTitle('Birthday Set - Expired')
                     .setDescription('Type `bday set` to rerun the birthday set.')
@@ -331,7 +331,7 @@ export class SetCommand implements Command {
 
         let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
-            await confirmationMessage.react(option);
+            await MessageUtils.react(confirmationMessage, option);
         }
 
         let confirmation: string = await CollectorUtils.collectByReaction(

@@ -26,7 +26,7 @@ export class MessageClearSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, 
+            await MessageUtils.send(channel,
                 new MessageEmbed()
                     .setTitle('Birthday Message Clear - Expired')
                     .setDescription('Type `bday message clear` to clear the birthday messages.')
@@ -57,7 +57,7 @@ export class MessageClearSubCommand {
 
         let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
-            await confirmationMessage.react(option);
+            await MessageUtils.react(confirmationMessage, option);
         }
 
         let confirmation: string = await CollectorUtils.collectByReaction(
