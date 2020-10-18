@@ -26,7 +26,8 @@ export class MessageAddSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel,
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Birthday Message Add - Expired')
                     .setDescription(
@@ -216,17 +217,30 @@ export class MessageAddSubCommand {
             return;
         }
 
-        let embed = new MessageEmbed()
-            .setDescription(
-                `Successfully added the birthday message:\n\n\`${birthdayMessage}\`\n\u200b`
-            )
-            .addField(
-                'Actions',
-                '' +
-                    '`bday message list [page]` - List all custom birthday messages.' +
-                    '\n`bday message test <position> [user count]` - Test a birthday message.'
-            )
-            .setColor(Config.colors.success);
+        let embed = new MessageEmbed().setColor(Config.colors.success);
+        if (target) {
+            embed
+                .setDescription(
+                    `Successfully added the birthday message:\n\n\`${birthdayMessage}\`\n\u200b`
+                )
+                .addField(
+                    'Actions',
+                    '' +
+                        '`bday message list [page]` - List all custom birthday messages.' +
+                        '\n`bday message test <position> [user count]` - Test a birthday message.'
+                );
+        } else {
+            embed
+                .setDescription(
+                    `Successfully added the user birthday message for ${target.toString()}:\n\n\`${birthdayMessage}\`\n\u200b`
+                )
+                .addField(
+                    'Actions',
+                    '' +
+                        '`bday message list user [page]` - List all user birthday messages.' +
+                        '\n`bday message test <user>` - Test a user birthday message.'
+                );
+        }
         await MessageUtils.send(channel, embed);
     }
 }
