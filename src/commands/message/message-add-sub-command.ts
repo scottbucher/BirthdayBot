@@ -82,9 +82,9 @@ export class MessageAddSubCommand {
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>');
         }
 
-        if (birthdayMessage.length > 500) {
+        if (birthdayMessage.length > Config.maxMessageSize) {
             let embed = new MessageEmbed()
-                .setDescription('Custom Messages are maxed at 500 characters!')
+                .setDescription(`Custom Messages are maxed at ${Config.maxMessageSize.toLocaleString()} characters!`)
                 .setColor(Config.colors.error);
             await channel.send(embed);
             return;
@@ -106,20 +106,19 @@ export class MessageAddSubCommand {
         let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
 
         if (customMessages) {
-            if (customMessages.customMessages.length >= 100 && !hasPremium) {
-                ////////////////////////////////////////////////////////////////// CHANGE THIS BACK TO 10 AFTER TESTING
+            if (customMessages.customMessages.length >= Config.maxMessages.free && !hasPremium) {
                 let embed = new MessageEmbed()
-                    .setDescription('Your server has reached the maximum custom messages! (10)')
+                    .setDescription(`Your server has reached the maximum custom messages! (${Config.maxMessages.free.toLocaleString()})`)
                     .setFooter(
-                        'To have up to 500 custom birthday messages get Birthday Bot Premium!',
+                        `To have up to ${Config.maxMessages.paid.toLocaleString()} custom birthday messages get Birthday Bot Premium!`,
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;
-            } else if (customMessages.customMessages.length >= 500) {
+            } else if (customMessages.customMessages.length >= Config.maxMessages.paid) {
                 let embed = new MessageEmbed()
-                    .setDescription('Your server has reached the maximum custom messages! (500)')
+                    .setDescription(`Your server has reached the maximum custom messages! (${Config.maxMessages.paid.toLocaleString()})`)
                     .setColor(Config.colors.error);
                 await channel.send(embed);
                 return;

@@ -7,11 +7,12 @@ import {
     TextChannel,
 } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
+import { Logger, SubscriptionService } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
 import { GuildData } from '../models/database';
-import { Logger } from '../services';
+import { PlanName } from '../models/subscription-models';
 import moment from 'moment';
 
 let Config = require('../../config/config.json');
@@ -22,6 +23,7 @@ export class MessageHandler {
     constructor(
         private helpCommand: Command,
         private commands: Command[],
+        private subscriptionService: SubscriptionService,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo
     ) {}
@@ -135,16 +137,37 @@ export class MessageHandler {
             return;
         }
 
-        if (Config.voting.enabled) {
+        let checkVote = Config.voting.enabled && command.voteOnly;
+        let checkPremium = Config.premium.enabled && command.requirePremium;
+
+        // Get premium status if needed
+        let retrievePremium =
+            Config.payments.enabled && (checkVote || command.requirePremium || command.getPremium);
+        let hasPremium = retrievePremium
+            ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+            : false;
+
+        if (checkPremium && !hasPremium) {
+            let embed = new MessageEmbed()
+                .setAuthor(msg.guild.name, msg.guild.iconURL())
+                .setTitle('Premium Required!')
+                .setDescription('This command requires this server to have premium!')
+                .addField(
+                    `Premium Commands`,
+                    'Subscribe to Birthday bot Premium for access to our premium features.\nSee `bday premium` for more information.'
+                )
+                .setColor(Config.colors.error);
+            await MessageUtils.send(channel, embed);
+            return;
+        }
+
+        if (checkVote && !hasPremium) {
             // Get the user's last vote and check if the command requires a vote
             let userVote = await this.userRepo.getUserVote(msg.author.id);
             let voteTime = moment(userVote?.VoteTime);
             let voteTimeAgo = userVote ? voteTime.fromNow() : 'Never';
 
-            if (
-                command.voteOnly &&
-                (!userVote || voteTime.clone().add(Config.voting.hours, 'hours') < moment())
-            ) {
+            if (!userVote || voteTime.clone().add(Config.voting.hours, 'hours') < moment()) {
                 let embed = new MessageEmbed()
                     .setAuthor(msg.author.tag, msg.author.avatarURL())
                     .setThumbnail('https://i.imgur.com/wak8g4V.png')
@@ -153,7 +176,7 @@ export class MessageHandler {
                     .addField('Last Vote', `${voteTimeAgo}`, true)
                     .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
                     .setFooter(
-                        'While Birthday Bot is 100% free, voting helps us grow!',
+                        'Don\'t want to vote? Try Birthday Bot Premium!',
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);
