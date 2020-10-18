@@ -105,13 +105,13 @@ export class MessageHandler {
         }
 
         // Check if the command is a bot owner only command
-        let sentByOwner = Config.owners.includes(msg.author.id);
+        let sentByOwner = Config.support.owners.includes(msg.author.id);
         if (command.ownerOnly) {
             if (!sentByOwner) {
                 if (!(channel instanceof DMChannel)) {
                     let sentByStaff =
-                        Config.supportServerId === msg.guild.id &&
-                        msg.member.roles.cache.has(Config.supportRoleId);
+                        Config.support.server === msg.guild.id &&
+                        msg.member.roles.cache.has(Config.support.role);
 
                     if (!sentByStaff) {
                         let embed = new MessageEmbed()

@@ -1,6 +1,5 @@
 {
     "prefix": "bday",
-    "owners": ["478288246858711040", "212772875793334272"],
     "client": {
         "token": "<BOT_TOKEN>",
         "intents": [
@@ -21,8 +20,6 @@
             }
         }
     },
-    "supportServerId": "660711235766976553",
-    "supportRoleId": "660746189419053057",
     "mysql": {
         "host": "localhost",
         "database": "<DATABASE_NAME>",
@@ -34,6 +31,11 @@
     "api": {
         "port": 8080,
         "authentication": "<AUTHORIZATION_KEY>"
+    },
+    "support": {
+        "owners": ["478288246858711040", "212772875793334272"],
+        "server": "660711235766976553",
+        "role": "660746189419053057"
     },
     "jobs": {
         "updateServerCount": {
