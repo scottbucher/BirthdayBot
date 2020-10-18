@@ -13,7 +13,7 @@ export class MessageUserListSubCommand {
 
         if (args[3]) {
             try {
-                page = ParseUtils.parseInt(args[3]);
+                page = ParseUtils.parseInt(args[4]);
             } catch (error) {
                 // Not A Number
             }

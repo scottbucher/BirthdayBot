@@ -54,7 +54,7 @@ export class MessageCommand implements Command {
         }
         if (args[2].toLowerCase() === 'list' && args[3]?.toLowerCase() !== 'user') {
             this.messageListSubCommand.execute(args, msg, channel, hasPremium);
-        } else if ((args[2].toLowerCase() === 'list' && args[3]?.toLowerCase() === 'user') || args[2]?.toLowerCase() === 'userlist' || args[2]?.toLowerCase() === 'listuser') {
+        } else if (args[2].toLowerCase() === 'list' && args[3]?.toLowerCase() === 'user') {
             this.messageUserListSubCommand.execute(args, msg, channel, hasPremium);
         } else if (args[2].toLowerCase() === 'clear') {
             this.messageClearSubCommand.execute(args, msg, channel);
