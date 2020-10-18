@@ -39,10 +39,4 @@ export abstract class MessageUtils {
             }
         }
     }
-
-    public static getRoleName(roleDiscordId: string, guild: Guild): string {
-        return roleDiscordId
-            ? guild.roles.resolve(roleDiscordId)?.toString() || '**Unknown**'
-            : '**None**';
-    }
 }

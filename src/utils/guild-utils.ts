@@ -10,4 +10,10 @@ export abstract class GuildUtils {
                 member.user.id.includes(search)
         );
     }
+
+    public static getRoleName(roleDiscordId: string, guild: Guild): string {
+        return roleDiscordId
+            ? guild.roles.resolve(roleDiscordId)?.toString() || '**Unknown**'
+            : '**None**';
+    }
 }
