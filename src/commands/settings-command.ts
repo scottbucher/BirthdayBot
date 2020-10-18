@@ -19,7 +19,12 @@ export class SettingsCommand implements Command {
 
     constructor(private guildRepo: GuildRepo) {}
 
-    async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean): Promise<void> {
+    async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         let guild = msg.guild;
         let guildData = await this.guildRepo.getGuild(guild.id);
 
@@ -79,7 +84,9 @@ export class SettingsCommand implements Command {
                 : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
                   '**Deleted Role**';
 
-        let color = ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default;
+        let color = hasPremium
+            ? ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
+            : Config.colors.default;
 
         settingsEmbed
             .setColor(color)
@@ -92,7 +99,7 @@ export class SettingsCommand implements Command {
             .addField('Trusted Prevents Role', preventsRole, true)
             .addField('Trusted Prevents Message', preventsMessage, true)
             .addField('Embed Birthday Message', useEmbed, true)
-            .addField('Birthday Message Color', color, true)
+            .addField('Birthday Message Color', hasPremium ? color : `~~${color}~~`, true)
             .addField('Guild Id', guild.id, true)
             .addField('Premium', hasPremium ? 'Active' : 'Not Active', true);
 
