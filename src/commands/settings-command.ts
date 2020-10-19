@@ -1,7 +1,9 @@
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
+import { ColorUtils } from '../utils/color-utils';
 import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -13,15 +15,21 @@ export class SettingsCommand implements Command {
     public adminOnly = false;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = true;
 
     constructor(private guildRepo: GuildRepo) {}
 
-    async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
+    async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         let guild = msg.guild;
         let guildData = await this.guildRepo.getGuild(guild.id);
 
         let settingsEmbed = new MessageEmbed()
-            .setColor(Config.colors.default)
             .setAuthor(`${guild.name}'s Settings`, guild.iconURL())
             .setFooter(`© ${new Date().getFullYear()} Birthday Bot`, msg.client.user.avatarURL())
             .setTimestamp();
@@ -31,6 +39,7 @@ export class SettingsCommand implements Command {
         let mentionSetting = 'None';
         let messageTime: string;
         let trustedRole: string;
+        let birthdayMasterRole: string;
         let preventsRole = guildData.TrustedPreventsRole ? 'True' : 'False';
         let preventsMessage = guildData.TrustedPreventsMessage ? 'True' : 'False';
         let useEmbed = guildData.UseEmbed ? 'True' : 'False';
@@ -70,18 +79,39 @@ export class SettingsCommand implements Command {
                 ? 'Not Set'
                 : guild.roles.resolve(guildData.TrustedRoleDiscordId)?.toString() ||
                   '**Deleted Role**';
+        birthdayMasterRole =
+            guildData.BirthdayMasterRoleDiscordId === '0'
+                ? 'Not Set'
+                : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
+                  '**Deleted Role**';
+
+        let colorHex = hasPremium
+            ? ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
+            : Config.colors.default;
+
+        let colorName = ColorUtils.findName(colorHex);
 
         settingsEmbed
+            .setColor(colorHex)
             .addField('Birthday Channel', birthdayChannel, true)
             .addField('Birthday Role', birthdayRole, true)
+            .addField('Birthday Master Role', birthdayMasterRole, true)
             .addField('Mention Setting', mentionSetting, true)
             .addField('Message Time', messageTime, true)
             .addField('Trusted Role', trustedRole, true)
             .addField('Trusted Prevents Role', preventsRole, true)
             .addField('Trusted Prevents Message', preventsMessage, true)
             .addField('Embed Birthday Message', useEmbed, true)
-            .addField('Guild Id', guild.id, true);
+            .addField(
+                'Birthday Message Color',
+                hasPremium
+                    ? `#${colorName ? `${colorHex} (${colorName})` : colorHex}`
+                    : `~~#${colorName ? `${colorHex} (${colorName})` : colorHex}~~`,
+                true
+            )
+            .addField('Guild Id', guild.id, true)
+            .addField('Premium', hasPremium ? 'Active' : 'Not Active', true);
 
-        await channel.send(settingsEmbed);
+        await MessageUtils.send(channel, settingsEmbed);
     }
 }

@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb4
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Aug 30, 2020 at 11:18 PM
--- Server version: 10.3.23-MariaDB-1:10.3.23+maria~stretch
--- PHP Version: 7.0.33-0+deb9u6
+-- Host: localhost
+-- Generation Time: Oct 18, 2020 at 10:50 PM
+-- Server version: 10.3.22-MariaDB-0+deb10u1
+-- PHP Version: 7.3.14-1~deb10u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -17,14 +19,14 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `birthdaybot`
+-- Database: `birthdaybotproddev`
 --
 
 DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Add` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Message` VARCHAR(2000))  BEGIN
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `Blacklist_Add` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
 
 SET @GuildId = NULL;
 SET @MessageId = NULL;
@@ -34,13 +36,154 @@ INTO @GuildId
 FROM `guild`
 WHERE GuildDiscordId = IN_GuildDiscordId;
 
-INSERT INTO `messages` (
+INSERT IGNORE INTO `blacklist` (
 	GuildId,
-	Message
+	UserDiscordId
 ) VALUES (
 	@GuildId,
-	IN_Message
+	IN_UserDiscordId
 );
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `Blacklist_Clear` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+DELETE
+FROM `blacklist`
+WHERE
+		GuildId = @GuildId; 
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `Blacklist_Get` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SET @Row_Number = 0;
+
+SELECT
+		*,
+        ROW_NUMBER() OVER (
+       		ORDER BY BlacklistId 
+        ) AS Position
+    FROM `blacklist`
+    WHERE GuildId = @GuildId
+ORDER BY BlacklistId;
+
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `Blacklist_GetList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_PageSize` INT, IN `IN_Page` INT)  BEGIN
+
+SET @GuildId = NULL;
+SET @TotalPages = NULL;
+SET @TotalItems = NULL;
+SET @StartRow = NULL;
+SET @EndRow = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SELECT COUNT(*) 
+INTO @TotalItems
+FROM `blacklist`
+WHERE GuildId = @GuildId;
+
+SELECT CEILING(@TotalItems/IN_PageSize) INTO @TotalPages;
+
+IF (IN_Page < 0) THEN 
+	SET IN_Page = 1;
+ELSEIF (IN_Page > @TotalPages) THEN 
+	SET IN_Page = @TotalPages;
+END IF;
+
+SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
+SET @EndRow = IN_Page * IN_PageSize;
+
+SELECT *
+FROM (
+	SELECT
+			*,
+            ROW_NUMBER() OVER (
+       			ORDER BY BlacklistId 
+            ) AS Position
+    	FROM `blacklist`
+        WHERE GuildId = @GuildId
+	ORDER BY BlacklistId
+) AS Blacklisted
+WHERE
+    Blacklisted.Position >= @StartRow AND
+    Blacklisted.Position <= @EndRow;
+
+SELECT
+    @TotalItems AS 'TotalItems',
+    @TotalPages as 'TotalPages';
+    
+DROP TEMPORARY TABLE IF EXISTS temp;
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `Blacklist_Remove` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_UserDiscordId` VARCHAR(20))  NO SQL
+BEGIN
+
+SET @GuildId = NULL;
+SET @MessageId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+DELETE
+FROM `blacklist`
+WHERE
+		GuildId = @GuildId AND
+        UserDiscordId = IN_UserDiscordId;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Add` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Message` VARCHAR(2000), IN `IN_UserDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+SET @MessageId = NULL;
+SET @UserMessage = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SELECT MessageId
+INTO @UserMessage
+FROM `messages`
+WHERE GuildId = @GuildId AND UserDiscordId = IN_UserDiscordId AND UserDiscordId  <> '0';
+
+IF @UserMessage IS NULL THEN
+	INSERT INTO `messages` (
+		GuildId,
+		Message,
+    	UserDiscordId
+	) VALUES (
+		@GuildId,
+		IN_Message,
+    	IN_UserDiscordId
+	);
+ELSE
+	UPDATE `messages`
+    SET
+    	Message = IN_Message
+    WHERE MessageId = @UserMessage;
+END IF;
+
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomMessages_Clear` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
@@ -75,7 +218,7 @@ SELECT
        		ORDER BY MessageId 
         ) AS Position
     FROM `messages`
-    WHERE GuildId = @GuildId
+    WHERE GuildId = @GuildId AND UserDiscordId = '0'
 ORDER BY MessageId;
 
 END$$
@@ -96,7 +239,7 @@ WHERE GuildDiscordId = IN_GuildDiscordId;
 SELECT COUNT(*) 
 INTO @TotalItems
 FROM `messages`
-WHERE GuildId = @GuildId;
+WHERE GuildId = @GuildId AND UserDiscordId = '0';
 
 SELECT CEILING(@TotalItems/IN_PageSize) INTO @TotalPages;
 
@@ -117,7 +260,81 @@ FROM (
        			ORDER BY MessageId 
             ) AS Position
     	FROM `messages`
-        WHERE GuildId = @GuildId
+        WHERE GuildId = @GuildId AND UserDiscordId = '0'
+	ORDER BY MessageId
+) AS CustomMessage
+WHERE
+    CustomMessage.Position >= @StartRow AND
+    CustomMessage.Position <= @EndRow;
+
+SELECT
+    @TotalItems AS 'TotalItems',
+    @TotalPages as 'TotalPages';
+    
+DROP TEMPORARY TABLE IF EXISTS temp;
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `CustomMessages_GetUser` (IN `IN_GuildDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SET @Row_Number = 0;
+
+SELECT
+		*,
+        ROW_NUMBER() OVER (
+       		ORDER BY MessageId 
+        ) AS Position
+    FROM `messages`
+    WHERE GuildId = @GuildId AND UserDiscordId <> '0'
+ORDER BY MessageId;
+
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `CustomMessages_GetUserList` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_PageSize` INT, IN `IN_Page` INT)  NO SQL
+BEGIN
+
+SET @GuildId = NULL;
+SET @TotalPages = NULL;
+SET @TotalItems = NULL;
+SET @StartRow = NULL;
+SET @EndRow = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SELECT COUNT(*) 
+INTO @TotalItems
+FROM `messages`
+WHERE GuildId = @GuildId AND UserDiscordId <> '0';
+
+SELECT CEILING(@TotalItems/IN_PageSize) INTO @TotalPages;
+
+IF (IN_Page < 0) THEN 
+	SET IN_Page = 1;
+ELSEIF (IN_Page > @TotalPages) THEN 
+	SET IN_Page = @TotalPages;
+END IF;
+
+SET @StartRow = ((IN_Page - 1) * IN_PageSize) + 1;
+SET @EndRow = IN_Page * IN_PageSize;
+
+SELECT *
+FROM (
+	SELECT
+			*,
+            ROW_NUMBER() OVER (
+       			ORDER BY MessageId 
+            ) AS Position
+    	FROM `messages`
+        WHERE GuildId = @GuildId AND UserDiscordId <> '0'
 	ORDER BY MessageId
 ) AS CustomMessage
 WHERE
@@ -150,7 +367,36 @@ FROM (
        				ORDER BY MessageId 
                 ) AS Position
     		FROM `messages`
-            WHERE GuildId = @GuildId
+            WHERE GuildId = @GuildId AND UserDiscordId = '0'
+) AS M
+WHERE M.Position = IN_Position;
+
+DELETE
+FROM `messages`
+WHERE
+        MessageId = @MessageId;
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `CustomMessage_RemoveUser` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Position` INT)  BEGIN
+
+SET @GuildId = NULL;
+SET @MessageId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+SELECT M.MessageId
+INTO @MessageId
+FROM (
+        SELECT
+                *,
+                ROW_NUMBER() OVER (
+       				ORDER BY MessageId 
+                ) AS Position
+    		FROM `messages`
+            WHERE GuildId = @GuildId AND UserDiscordId <> '0'
 ) AS M
 WHERE M.Position = IN_Position;
 
@@ -259,6 +505,21 @@ WHERE GuildId = @GuildId;
 
 END$$
 
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `Guild_UpdateBirthdayMasterRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayMasterRoleDiscordId` VARCHAR(20))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET BirthdayMasterRoleDiscordId = IN_BirthdayMasterRoleDiscordId
+WHERE GuildId = @GuildId;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `Guild_UpdateBirthdayRole` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_BirthdayRoleDiscordId` VARCHAR(20))  NO SQL
 BEGIN
 
@@ -286,6 +547,21 @@ WHERE GuildDiscordId = IN_GuildDiscordId;
 
 UPDATE `guild`
 SET MentionSetting = IN_MentionSetting
+WHERE GuildId = @GuildId;
+
+END$$
+
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `Guild_UpdateMessageEmbedColor` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_HexColor` VARCHAR(6))  BEGIN
+
+SET @GuildId = NULL;
+
+SELECT GuildId
+INTO @GuildId
+FROM `guild`
+WHERE GuildDiscordId = IN_GuildDiscordId;
+
+UPDATE `guild`
+SET MessageEmbedColor = IN_HexColor
 WHERE GuildId = @GuildId;
 
 END$$
@@ -616,6 +892,18 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `blacklist`
+--
+
+CREATE TABLE `blacklist` (
+  `BlacklistId` int(11) NOT NULL,
+  `GuildId` int(11) NOT NULL,
+  `UserDiscordId` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `guild`
 --
 
@@ -625,11 +913,13 @@ CREATE TABLE `guild` (
   `BirthdayChannelDiscordId` varchar(20) NOT NULL DEFAULT '0',
   `BirthdayRoleDiscordId` varchar(20) DEFAULT '0',
   `TrustedRoleDiscordId` varchar(20) DEFAULT '0',
+  `BirthdayMasterRoleDiscordId` varchar(20) DEFAULT '0',
   `MentionSetting` varchar(20) DEFAULT '0',
   `MessageTime` tinyint(4) NOT NULL DEFAULT 0,
   `TrustedPreventsRole` tinyint(1) NOT NULL DEFAULT 1,
   `TrustedPreventsMessage` tinyint(1) NOT NULL DEFAULT 1,
-  `UseEmbed` tinyint(1) NOT NULL DEFAULT 1
+  `UseEmbed` tinyint(1) NOT NULL DEFAULT 1,
+  `MessageEmbedColor` varchar(6) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -641,7 +931,8 @@ CREATE TABLE `guild` (
 CREATE TABLE `messages` (
   `MessageId` int(11) NOT NULL,
   `GuildId` int(11) DEFAULT NULL,
-  `Message` varchar(300) CHARACTER SET utf8mb4 NOT NULL
+  `Message` varchar(500) CHARACTER SET utf8mb4 NOT NULL,
+  `UserDiscordId` varchar(20) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -676,6 +967,14 @@ CREATE TABLE `vote` (
 --
 
 --
+-- Indexes for table `blacklist`
+--
+ALTER TABLE `blacklist`
+  ADD PRIMARY KEY (`BlacklistId`),
+  ADD UNIQUE KEY `UQ_GuildIdUserDiscordId` (`GuildId`,`UserDiscordId`) USING BTREE,
+  ADD KEY `UserId` (`UserDiscordId`);
+
+--
 -- Indexes for table `guild`
 --
 ALTER TABLE `guild`
@@ -684,14 +983,16 @@ ALTER TABLE `guild`
   ADD KEY `GuildDiscordId` (`GuildDiscordId`),
   ADD KEY `BirthdayChannelDiscordId` (`BirthdayChannelDiscordId`),
   ADD KEY `BirthdayRoleDiscordId` (`BirthdayRoleDiscordId`),
-  ADD KEY `TrustedRoleDiscordId` (`TrustedRoleDiscordId`);
+  ADD KEY `TrustedRoleDiscordId` (`TrustedRoleDiscordId`),
+  ADD KEY `BirthdayMasterRoleDiscordId` (`BirthdayMasterRoleDiscordId`);
 
 --
 -- Indexes for table `messages`
 --
 ALTER TABLE `messages`
   ADD PRIMARY KEY (`MessageId`),
-  ADD KEY `FK_Messages_GuildId` (`GuildId`);
+  ADD KEY `FK_Messages_GuildId` (`GuildId`),
+  ADD KEY `UserDiscordId` (`UserDiscordId`);
 
 --
 -- Indexes for table `user`
@@ -714,25 +1015,46 @@ ALTER TABLE `vote`
 --
 
 --
+-- AUTO_INCREMENT for table `blacklist`
+--
+ALTER TABLE `blacklist`
+  MODIFY `BlacklistId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `guild`
 --
 ALTER TABLE `guild`
-  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24889;
+  MODIFY `GuildId` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6338;
+  MODIFY `MessageId` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96108;
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `vote`
 --
 ALTER TABLE `vote`
-  MODIFY `VoteId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11829;
+  MODIFY `VoteId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `blacklist`
+--
+ALTER TABLE `blacklist`
+  ADD CONSTRAINT `blacklist_ibfk_1` FOREIGN KEY (`GuildId`) REFERENCES `guild` (`GuildId`);
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

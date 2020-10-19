@@ -1,6 +1,6 @@
 import * as Chrono from 'chrono-node';
 
-import { FormatUtils, ParseUtils } from '../utils';
+import { FormatUtils, MessageUtils, ParseUtils } from '../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
@@ -18,6 +18,8 @@ export class ListCommand implements Command {
     public adminOnly = false;
     public ownerOnly = false;
     public voteOnly = true;
+    public requirePremium = false;
+    public getPremium = false;
 
     constructor(private userRepo: UserRepo) {}
 
@@ -63,12 +65,12 @@ export class ListCommand implements Command {
             pageSize
         );
 
-        let message = await channel.send(embed);
+        let message = await MessageUtils.send(channel, embed);
 
         if (embed.description === '**No Birthdays in this server!**') return;
 
-        if (userDataResults.stats.Page !== 1) await message.react(Config.emotes.previousPage);
-        if (userDataResults.stats.TotalPages > 1) await message.react(Config.emotes.jumpToPage);
-        if (userDataResults.stats.TotalPages > page) await message.react(Config.emotes.nextPage);
+        await MessageUtils.react(message, Config.emotes.previousPage);
+        await MessageUtils.react(message, Config.emotes.jumpToPage);
+        await MessageUtils.react(message, Config.emotes.nextPage);
     }
 }

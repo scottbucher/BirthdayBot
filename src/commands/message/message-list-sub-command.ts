@@ -1,4 +1,4 @@
-import { FormatUtils, ParseUtils } from '../../utils';
+import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
@@ -8,7 +8,7 @@ let Config = require('../../../config/config.json');
 export class MessageListSubCommand {
     constructor(private customMessageRepo: CustomMessageRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
         let page = 1;
 
         if (args[3]) {
@@ -35,17 +35,16 @@ export class MessageListSubCommand {
             msg.guild,
             customMessageResults,
             page,
-            pageSize
+            pageSize,
+            hasPremium
         );
 
-        let message = await channel.send(embed);
+        let message = await MessageUtils.send(channel, embed);
 
         if (embed.description === '**No Custom Birthday Messages!**') return;
 
-        if (page !== 1) await message.react(Config.emotes.previousPage);
-        if (customMessageResults.stats.TotalPages > 1)
-            await message.react(Config.emotes.jumpToPage);
-        if (customMessageResults.stats.TotalPages > page)
-            await message.react(Config.emotes.nextPage);
+        await MessageUtils.react(message, Config.emotes.previousPage);
+        await MessageUtils.react(message, Config.emotes.jumpToPage);
+        await MessageUtils.react(message, Config.emotes.nextPage);
     }
 }

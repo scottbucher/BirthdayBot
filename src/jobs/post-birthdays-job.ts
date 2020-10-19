@@ -1,7 +1,7 @@
 import { BdayUtils, MathUtils, TimeUtils } from '../utils';
-import { BirthdayService, Logger } from '../services';
+import { BirthdayService, Logger, SubscriptionService } from '../services';
+import { BlacklistRepo, GuildRepo, UserRepo } from '../services/database/repos';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
-import { GuildRepo, UserRepo } from '../services/database/repos';
 
 import { Job } from './job';
 import { UserData } from '../models/database';
@@ -16,6 +16,7 @@ export class PostBirthdaysJob implements Job {
         private client: Client,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo,
+        private blacklistRepo: BlacklistRepo,
         private birthdayService: BirthdayService
     ) {}
 
@@ -101,9 +102,12 @@ export class PostBirthdaysJob implements Job {
                 // Get a list of memberIds
                 let memberIds = members.map(member => member.id.toString());
 
-                // Remove members who are not apart of this guild
+                // Get the blacklist data for this guild
+                let blacklistData = await this.blacklistRepo.getBlacklist(guild.id);
+
+                // Remove members who are not apart of this guild and who are not in the birthday blacklist
                 let memberUserDatas = userDatas.filter(userData =>
-                    memberIds.includes(userData.UserDiscordId)
+                    memberIds.includes(userData.UserDiscordId) && !blacklistData.blacklist.map(data => data.UserDiscordId).includes(userData.UserDiscordId)
                 );
 
                 promises.push(

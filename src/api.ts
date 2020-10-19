@@ -1,49 +1,42 @@
+import express, { ErrorRequestHandler, Express } from 'express';
+
+import { Controller } from './controllers';
 import { Logger } from './services';
-import { UserRepo } from './services/database/repos';
-import { VoteData } from './models/database';
-import express from 'express';
+import util from 'util';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
 
-const app = express();
-
 export class Api {
-    constructor(private userRepo: UserRepo) {}
+    private app: Express;
 
+    constructor(public controllers: Controller[]) {
+        this.app = express();
+        this.app.use(express.json());
+        this.setupControllers();
+    }
+
+    // Start Api
     public async start(): Promise<void> {
-        // Tell express to use JSON parsing
-        app.use(express.json());
+        let listen = util.promisify(this.app.listen.bind(this.app));
+        await listen(Config.api.port);
+        Logger.info(Logs.info.startedApi.replace('{PORT}', Config.api.port));
+    }
 
-        // Capture a vote
-        app.post('/votes', async (req, res) => {
-            // Check if a request as authorization
-            if (req.headers?.authorization !== Config.api.authentication) {
-                res.sendStatus(401);
-                return;
-            }
+    // Setup the controllers
+    private setupControllers(): void {
+        for (let controller of this.controllers) {
+            controller.router.use(this.handleError);
+            this.app.use('/', controller.router);
+        }
+    }
 
-            try {
-                let voteData = new VoteData(req.body);
-                await this.userRepo.addUserVote('top.gg', voteData.UserDiscordId);
-            } catch (error) {
-                Logger.error(
-                    Logs.error.registeringVote.replace('{USER_ID}', req.body.UserDiscordId),
-                    error
-                );
-                res.sendStatus(500);
-                return;
-            }
-
-            res.sendStatus(201);
-        });
-
-        // Voting Api Ready
-        app.get('*', (req, res) => {
-            res.redirect('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-        });
-
-        // Voting Api has started
-        app.listen(Config.api.port, () => Logger.info(Logs.info.startedVotingApi));
+    // Handle errors from the controllers
+    private handleError: ErrorRequestHandler = (error, req, res, next) => {
+        Logger.error(
+            Logs.error.apiRequest.replace('{HTTP_METHOD}', req.method).replace('{URL}', req.url),
+            error
+        );
+        res.status(500).json({ error: true, message: error.message });
     }
 }

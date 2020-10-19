@@ -1,6 +1,7 @@
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -14,7 +15,7 @@ export class MessageMentionSubCommand {
                     'Please provide a value!\nAccepted Values: `everyone`, `here`, `@role/role-name`, `none`'
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -44,7 +45,7 @@ export class MessageMentionSubCommand {
                     )
                     .setTimestamp()
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             } else {
                 if (args[3].toLowerCase() === '@here') {
@@ -80,6 +81,6 @@ export class MessageMentionSubCommand {
 
         await this.guildRepo.updateMentionSetting(msg.guild.id, mention);
 
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }

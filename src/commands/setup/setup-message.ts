@@ -1,3 +1,4 @@
+import { ActionUtils, MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -6,7 +7,6 @@ import {
 } from 'discord.js-collector-utils';
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
 
-import { ActionUtils } from '../../utils';
 import { GuildRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
@@ -26,7 +26,7 @@ export class SetupMessage {
             nextMsg.author.id === msg.author.id &&
                 [Config.prefix, ...Config.stopCommands].includes(nextMsg.content.split(/\s+/)[0].toLowerCase());
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(channel,
                 new MessageEmbed()
                     .setTitle('Message Setup - Expired')
                     .setDescription('Type `bday setup message` to rerun the setup.')
@@ -51,7 +51,7 @@ export class SetupMessage {
             .setColor(Config.colors.default)
             .setTimestamp();
 
-        let timeMessage = await channel.send(messageTimeEmbed);
+        let timeMessage = await MessageUtils.send(channel, messageTimeEmbed);
 
         messageTime = await CollectorUtils.collectByMessage(
             msg.channel,
@@ -72,7 +72,7 @@ export class SetupMessage {
                             .setFooter(`Please check above and try again!`, botUser.avatarURL())
                             .setTimestamp()
                             .setColor(Config.colors.error);
-                        await channel.send(embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     }
 
@@ -83,7 +83,7 @@ export class SetupMessage {
                             .setFooter(`Please check above and try again!`, botUser.avatarURL())
                             .setTimestamp()
                             .setColor(Config.colors.error);
-                        await channel.send(embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     }
                     return time;
@@ -111,7 +111,7 @@ export class SetupMessage {
             .setColor(Config.colors.default)
             .setTimestamp();
 
-        let mentionMessage = await channel.send(messageMentionEmbed);
+        let mentionMessage = await MessageUtils.send(channel, messageMentionEmbed);
 
         mention = await CollectorUtils.collectByMessage(
             msg.channel,
@@ -139,7 +139,7 @@ export class SetupMessage {
                             .setFooter(`Please check above and try again!`, botUser.avatarURL())
                             .setTimestamp()
                             .setColor(Config.colors.error);
-                        await channel.send(embed);
+                        await MessageUtils.send(channel, embed);
                         return;
                     } else {
                         if (nextMsg?.content.toLowerCase() === '@here') {
@@ -179,9 +179,9 @@ export class SetupMessage {
 
         let reactOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let optionMessage = await channel.send(embedMessage);
+        let optionMessage = await MessageUtils.send(channel, embedMessage);
         for (let reactOption of reactOptions) {
-            await optionMessage.react(reactOption);
+            await MessageUtils.react(optionMessage, reactOption);
         }
 
         let messageOption: string = await CollectorUtils.collectByReaction(
@@ -241,6 +241,6 @@ export class SetupMessage {
 
         await this.guildRepo.guildSetupMessage(guild.id, messageTime, mention, useEmbed);
 
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }

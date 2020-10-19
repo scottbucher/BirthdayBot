@@ -1,9 +1,9 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { MessageUtils, PermissionUtils } from '../utils';
 import { SetupMessage, SetupRequired, SetupTrusted } from './setup';
 
 import { Command } from '.';
 import { GuildRepo } from '../services/database/repos';
-import { PermissionUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -15,6 +15,8 @@ export class SetupCommand implements Command {
     public adminOnly = true;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = false;
 
     constructor(
         private guildRepo: GuildRepo,
@@ -32,7 +34,7 @@ export class SetupCommand implements Command {
                     'I need permission to **Add Reactions** and **Read Message History** in this channel!'
                 )
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -48,7 +50,7 @@ export class SetupCommand implements Command {
                         'I need permission to **Manage Channels** and **Manage Roles**!'
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -64,7 +66,7 @@ export class SetupCommand implements Command {
                 .setDescription('You must run `bday setup` before using this command!')
                 .setColor(Config.colors.error);
 
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -79,7 +81,7 @@ export class SetupCommand implements Command {
                         .setTitle('Not Enough Permissions!')
                         .setDescription('The bot must have permission to manage  roles!')
                         .setColor(Config.colors.error);
-                    await channel.send(embed);
+                    await MessageUtils.send(channel, embed);
                     return;
                 }
                 await this.setupTrusted.execute(args, msg, channel);
@@ -91,7 +93,7 @@ export class SetupCommand implements Command {
                         `Please specify which setup you'd like to run!\n\nSetup options: \`message\` or \`trusted\``
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
         }
     }

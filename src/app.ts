@@ -1,3 +1,4 @@
+import { APIMessage, ShardingManager } from 'discord.js';
 import {
     BotsOnDiscordXyzSite,
     DiscordBotListComSite,
@@ -5,12 +6,12 @@ import {
     TopGgSite,
 } from './services/sites';
 import { HttpService, Logger } from './services';
+import { RootController, SubscriptionEventsController, VotesController } from './controllers';
 
 import { Api } from './api';
 import { DataAccess } from './services/database/data-access';
 import { Manager } from './manager';
 import { ShardUtils } from './utils';
-import { ShardingManager } from 'discord.js';
 import { UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
@@ -72,18 +73,21 @@ async function start(): Promise<void> {
     // Repos
     let userRepo = new UserRepo(dataAccess);
 
-    // Voting Api
-    let api = new Api(userRepo);
-
     let manager = new Manager(
         shardManager,
         [topGgSite, botsOnDiscordXyzSite, discordBotsGgSite, discordBotListComSite].filter(
             botSite => botSite.enabled
-        ),
-        api
+        )
     );
 
+    // API
+    let rootController = new RootController();
+    let votesController = new VotesController(userRepo);
+    let subscriptionEventsController = new SubscriptionEventsController(shardManager);
+    let api = new Api([rootController, votesController, subscriptionEventsController]);
+
     // Start
+    await api.start();
     await manager.start();
 
     // Start schedule to update server count

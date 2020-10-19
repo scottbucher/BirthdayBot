@@ -1,4 +1,4 @@
-import { ActionUtils } from '../utils';
+import { ActionUtils, MessageUtils } from '../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -25,6 +25,8 @@ export class PurgeCommand implements Command {
     public adminOnly = false;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = false;
 
     constructor(private userRepo: UserRepo) {}
 
@@ -37,7 +39,8 @@ export class PurgeCommand implements Command {
             nextMsg.author.id === msg.author.id &&
             nextMsg.content.split(/\s+/)[0].toLowerCase() === Config.prefix;
         let expireFunction: ExpireFunction = async () => {
-            await channel.send(
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Birthday Purge - Expired')
                     .setDescription('Type `bday purge` to rerun the purge.')
@@ -50,7 +53,7 @@ export class PurgeCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('You do not have data in the database.')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         } else {
             changesLeft = userData.ChangesLeft;
@@ -79,9 +82,9 @@ export class PurgeCommand implements Command {
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let confirmationMessage = await channel.send(confirmEmbed); // Send confirmation and emotes
+        let confirmationMessage = await MessageUtils.send(channel, confirmEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
-            await confirmationMessage.react(option);
+            await MessageUtils.react(confirmationMessage, option);
         }
 
         let confirmation: string = await CollectorUtils.collectByReaction(
@@ -109,13 +112,13 @@ export class PurgeCommand implements Command {
             let embed = new MessageEmbed()
                 .setDescription('Successfully purged your data from the database.')
                 .setColor(Config.colors.success);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
             let embed = new MessageEmbed()
                 .setDescription('Request Canceled.')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
         }
     }
 }

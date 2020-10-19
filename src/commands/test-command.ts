@@ -1,9 +1,9 @@
+import { BlacklistRepo, GuildRepo } from '../services/database/repos';
+import { GuildUtils, MessageUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 
 import { BirthdayService } from '../services';
 import { Command } from './command';
-import { GuildRepo } from '../services/database/repos';
-import { GuildUtils } from '../utils';
 import { UserData } from '../models/database';
 import moment from 'moment';
 
@@ -19,8 +19,14 @@ export class TestCommand implements Command {
     public adminOnly = true;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = false;
 
-    constructor(private birthdayService: BirthdayService, private guildRepo: GuildRepo) {}
+    constructor(
+        private birthdayService: BirthdayService,
+        private guildRepo: GuildRepo,
+        private blacklistRepo: BlacklistRepo
+    ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let guild = msg.guild;
@@ -42,12 +48,40 @@ export class TestCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription('Could not find that user!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
         } else {
             // They didn't mention anyone
             target = msg.client.user;
+        }
+
+        // Get the blacklist data for this guild
+        let blacklistData = await this.blacklistRepo.getBlacklist(guild.id);
+
+        if (blacklistData.blacklist.map(data => data.UserDiscordId).includes(target.id)) {
+            let testingEmbed = new MessageEmbed()
+                .setThumbnail(guild.iconURL())
+                .setTitle('Birthday Event Test - [BETA]')
+                .setDescription(
+                    'Below are the checks to ensure your settings are correct for the birthday event.\n\nIf the checks are passed and either the birthday message and/or birthday role were not given ' +
+                        `when they should have then ${guild.client.user.toString()} most likely did not have the correct permissions. [(?)](${
+                            Config.links.docs
+                        }/faq)\n\nFor more help: [Join Support Server](${Config.links.support})`
+                )
+                .setFooter(
+                    'This is the info from your latest birthday event test.',
+                    guild.client.user.avatarURL()
+                )
+                .setTimestamp()
+                .setColor(Config.colors.default)
+                .addField(
+                    'Birthday Blacklist',
+                    `${Config.emotes.deny} Member is in the blacklist.`,
+                    true
+                );
+            await MessageUtils.send(channel, testingEmbed);
+            return;
         }
 
         // Mock user data for bot
@@ -58,6 +92,13 @@ export class TestCommand implements Command {
             UserDiscordId: target.id,
         };
 
-        this.birthdayService.celebrateBirthdays(guild, guildData, [userData], guild.members.cache, true, channel);
+        this.birthdayService.celebrateBirthdays(
+            guild,
+            guildData,
+            [userData],
+            guild.members.cache,
+            true,
+            channel
+        );
     }
 }

@@ -1,4 +1,5 @@
-import { ActionUtils, FormatUtils, PermissionUtils } from '../utils';
+import { ActionUtils, FormatUtils, MessageUtils, PermissionUtils } from '../utils';
+import { BlacklistRepo, CustomMessageRepo, UserRepo } from '../services/database/repos';
 import {
     CollectOptions,
     CollectorUtils,
@@ -14,11 +15,11 @@ import {
     TextChannel,
     User,
 } from 'discord.js';
-import { CustomMessageRepo, UserRepo } from '../services/database/repos';
+import { Logger, SubscriptionService } from '../services';
 
 import { EventHandler } from '.';
 import { ListUtils } from '../utils/list-utils';
-import { Logger } from '../services';
+import { PlanName } from '../models/subscription-models';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -29,7 +30,12 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class ReactionAddHandler implements EventHandler {
-    constructor(private userRepo: UserRepo, private customMessageRepo: CustomMessageRepo) {}
+    constructor(
+        private userRepo: UserRepo,
+        private customMessageRepo: CustomMessageRepo,
+        private blacklistRepo: BlacklistRepo,
+        private subscriptionService: SubscriptionService
+    ) {}
 
     public async process(msgReaction: MessageReaction, reactor: User): Promise<void> {
         // Don't respond to bots, and only text channels
@@ -104,35 +110,167 @@ export class ReactionAddHandler implements EventHandler {
 
         if (checkNextPage || checkPreviousPage) {
             if (titleArgs[1] === 'Messages') {
+                let oldPage: number;
                 let page = 1;
+                let pageSize = Config.experience.birthdayMessageListSize;
 
                 if (titleArgs[4]) {
                     try {
-                        if (checkNextPage) {
-                            page = FormatUtils.extractPageNumber(titleArgs.join(' ')) + 1;
-                        } else page = FormatUtils.extractPageNumber(titleArgs.join(' ')) - 1;
+                        oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
+                        if (checkNextPage) page = oldPage + 1;
+                        else page = oldPage - 1;
                     } catch (error) {
                         // Not A Number
                     }
                     if (!page) page = 1;
                 }
 
-                await ListUtils.updateMessageList(this.customMessageRepo, msg.guild, msg, page);
+                let customMessageResults = await this.customMessageRepo.getCustomMessageList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                if (
+                    (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
+                    (oldPage === customMessageResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
+                ) {
+                    await msgReaction.users.remove(reactor);
+                    return;
+                }
+
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
+                await ListUtils.updateMessageList(
+                    customMessageResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize,
+                    hasPremium
+                );
+
+                await msgReaction.users.remove(reactor);
+            } else if (titleArgs[0] === 'User') {
+                let oldPage: number;
+                let page = 1;
+                let pageSize = Config.experience.birthdayMessageListSize;
+
+                if (titleArgs[5]) {
+                    try {
+                        oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
+                        if (checkNextPage) page = oldPage + 1;
+                        else page = oldPage - 1;
+                    } catch (error) {
+                        // Not A Number
+                    }
+                    if (!page) page = 1;
+                }
+
+                let customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                if (
+                    (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
+                    (oldPage === customMessageResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
+                ) {
+                    await msgReaction.users.remove(reactor);
+                    return;
+                }
+
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
+                await ListUtils.updateMessageUserList(
+                    customMessageResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize,
+                    hasPremium
+                );
+
+                await msgReaction.users.remove(reactor);
             } else if (titleArgs[1] === 'List') {
+                let oldPage: number;
                 let page = 1;
+                let pageSize = Config.experience.birthdayListSize;
+
+                let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
 
                 if (titleArgs[4]) {
                     try {
-                        if (checkNextPage) {
-                            page = FormatUtils.extractPageNumber(titleArgs.join(' ')) + 1;
-                        } else page = FormatUtils.extractPageNumber(titleArgs.join(' ')) - 1;
+                        oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
+                        if (checkNextPage) page = oldPage + 1;
+                        else page = oldPage - 1;
                     } catch (error) {
                         // Not A Number
                     }
                     if (!page) page = 1;
                 }
 
-                await ListUtils.updateBdayList(this.userRepo, msg.guild, msg, page);
+                let userDataResults = await this.userRepo.getBirthdayListFull(
+                    users,
+                    pageSize,
+                    page
+                );
+
+                if (
+                    (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
+                    (oldPage === userDataResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
+                ) {
+                    await msgReaction.users.remove(reactor);
+                    return;
+                }
+
+                await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
+
+                await msgReaction.users.remove(reactor);
+            } else if (titleArgs[1] === 'Blacklist') {
+                let oldPage: number;
+                let page = 1;
+                let pageSize = Config.experience.blacklistSize;
+
+                if (titleArgs[4]) {
+                    try {
+                        oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
+                        if (checkNextPage) page = oldPage + 1;
+                        else page = oldPage - 1;
+                    } catch (error) {
+                        // Not A Number
+                    }
+                    if (!page) page = 1;
+                }
+
+                let blacklistResults = await this.blacklistRepo.getBlacklistList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                if (
+                    (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
+                    (oldPage === blacklistResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
+                ) {
+                    await msgReaction.users.remove(reactor);
+                    return;
+                }
+
+                await ListUtils.updateBlacklistList(
+                    blacklistResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize
+                );
+
+                await msgReaction.users.remove(reactor);
             }
         } else if (checkJumpToPage) {
             if (titleArgs[1] === 'Messages') {
@@ -142,7 +280,7 @@ export class ReactionAddHandler implements EventHandler {
                     .setDescription('Please input the page you would like to jump to:')
                     .setColor(Config.colors.default);
 
-                let prompt = await channel.send(messageTimeEmbed);
+                let prompt = await MessageUtils.send(channel, messageTimeEmbed);
 
                 page = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -161,7 +299,7 @@ export class ReactionAddHandler implements EventHandler {
                                 let embed = new MessageEmbed()
                                     .setDescription('Invalid page!')
                                     .setColor(Config.colors.error);
-                                await channel.send(embed);
+                                await MessageUtils.send(channel, embed);
                                 return;
                             }
 
@@ -178,11 +316,97 @@ export class ReactionAddHandler implements EventHandler {
 
                 ActionUtils.deleteMessage(prompt);
 
-                if (page === undefined) {
-                    return;
-                }
+                if (page === undefined) return;
 
-                await ListUtils.updateMessageList(this.customMessageRepo, msg.guild, msg, page);
+                let pageSize = Config.experience.birthdayMessageListSize;
+
+                let customMessageResults = await this.customMessageRepo.getCustomMessageList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
+                await ListUtils.updateMessageList(
+                    customMessageResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize,
+                    hasPremium
+                );
+
+                await msgReaction.users.remove(reactor);
+            } else if (titleArgs[0] === 'User') {
+                let page: number;
+
+                let messageTimeEmbed = new MessageEmbed()
+                    .setDescription('Please input the page you would like to jump to:')
+                    .setColor(Config.colors.default);
+
+                let prompt = await MessageUtils.send(channel, messageTimeEmbed);
+
+                page = await CollectorUtils.collectByMessage(
+                    msg.channel,
+                    // Collect Filter
+                    (nextMsg: Message) => nextMsg.author.id === reactor.id,
+                    stopFilter,
+                    // Retrieve Result
+                    async (nextMsg: Message) => {
+                        await ActionUtils.deleteMessage(nextMsg);
+                        if (!page && page !== 0) {
+                            // Try and get the time
+                            let page: number;
+                            try {
+                                page = parseInt(nextMsg.content.split(/\s+/)[0]);
+                            } catch (error) {
+                                let embed = new MessageEmbed()
+                                    .setDescription('Invalid page!')
+                                    .setColor(Config.colors.error);
+                                await MessageUtils.send(channel, embed);
+                                return;
+                            }
+
+                            page = Math.round(page);
+
+                            if (!page || page <= 0 || page > 100000) page = 1;
+
+                            return page;
+                        }
+                    },
+                    expireFunction,
+                    COLLECT_OPTIONS
+                );
+
+                ActionUtils.deleteMessage(prompt);
+
+                if (page === undefined) return;
+
+                let pageSize = Config.experience.birthdayMessageListSize;
+
+                let customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
+                await ListUtils.updateMessageUserList(
+                    customMessageResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize,
+                    hasPremium
+                );
+
+                await msgReaction.users.remove(reactor);
             } else if (titleArgs[1] === 'List') {
                 let page: number;
 
@@ -190,7 +414,7 @@ export class ReactionAddHandler implements EventHandler {
                     .setDescription('Please input the page you would like to jump to:')
                     .setColor(Config.colors.default);
 
-                let prompt = await channel.send(messageTimeEmbed);
+                let prompt = await MessageUtils.send(channel, messageTimeEmbed);
 
                 page = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -209,7 +433,7 @@ export class ReactionAddHandler implements EventHandler {
                                 let embed = new MessageEmbed()
                                     .setDescription('Invalid page!')
                                     .setColor(Config.colors.error);
-                                await channel.send(embed);
+                                await MessageUtils.send(channel, embed);
                                 return;
                             }
 
@@ -230,7 +454,81 @@ export class ReactionAddHandler implements EventHandler {
                     return;
                 }
 
-                await ListUtils.updateBdayList(this.userRepo, msg.guild, msg, page);
+                let pageSize = Config.experience.birthdayListSize;
+
+                let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
+
+                let userDataResults = await this.userRepo.getBirthdayListFull(
+                    users,
+                    pageSize,
+                    page
+                );
+
+                await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
+
+                await msgReaction.users.remove(reactor);
+            } else if (titleArgs[1] === 'Blacklist') {
+                let page: number;
+
+                let messageTimeEmbed = new MessageEmbed()
+                    .setDescription('Please input the page you would like to jump to:')
+                    .setColor(Config.colors.default);
+
+                let prompt = await MessageUtils.send(channel, messageTimeEmbed);
+
+                page = await CollectorUtils.collectByMessage(
+                    msg.channel,
+                    // Collect Filter
+                    (nextMsg: Message) => nextMsg.author.id === reactor.id,
+                    stopFilter,
+                    // Retrieve Result
+                    async (nextMsg: Message) => {
+                        await ActionUtils.deleteMessage(nextMsg);
+                        if (!page && page !== 0) {
+                            // Try and get the time
+                            let page: number;
+                            try {
+                                page = parseInt(nextMsg.content.split(/\s+/)[0]);
+                            } catch (error) {
+                                let embed = new MessageEmbed()
+                                    .setDescription('Invalid page!')
+                                    .setColor(Config.colors.error);
+                                await MessageUtils.send(channel, embed);
+                                return;
+                            }
+
+                            page = Math.round(page);
+
+                            if (!page || page <= 0 || page > 100000) page = 1;
+
+                            return page;
+                        }
+                    },
+                    expireFunction,
+                    COLLECT_OPTIONS
+                );
+
+                ActionUtils.deleteMessage(prompt);
+
+                if (page === undefined) return;
+
+                let pageSize = Config.experience.blacklistSize;
+
+                let blacklistResults = await this.blacklistRepo.getBlacklistList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                await ListUtils.updateBlacklistList(
+                    blacklistResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize
+                );
+
+                await msgReaction.users.remove(reactor);
             }
         }
     }
