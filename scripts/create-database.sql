@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 18, 2020 at 10:50 PM
+-- Generation Time: Oct 19, 2020 at 12:46 AM
 -- Server version: 10.3.22-MariaDB-0+deb10u1
 -- PHP Version: 7.3.14-1~deb10u1
 
@@ -377,7 +377,7 @@ WHERE
         MessageId = @MessageId;
 END$$
 
-CREATE DEFINER=`admin`@`localhost` PROCEDURE `CustomMessage_RemoveUser` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Position` INT)  BEGIN
+CREATE DEFINER=`admin`@`localhost` PROCEDURE `CustomMessages_RemoveUser` (IN `IN_GuildDiscordId` VARCHAR(20), IN `IN_Position` INT)  BEGIN
 
 SET @GuildId = NULL;
 SET @MessageId = NULL;
