@@ -29,8 +29,7 @@
         "connectionLimit": 25
     },
     "api": {
-        "port": 8080,
-        "authentication": "<AUTHORIZATION_KEY>"
+        "port": 8080
     },
     "support": {
         "owners": ["478288246858711040", "212772875793334272"],
@@ -48,11 +47,13 @@
     "experience": {
         "promptExpireTime": 120,
         "birthdayListSize": "30",
-        "birthdayMessageListSize": "5"
+        "blacklistSize": "30",
+        "birthdayMessageListSize": "3"
     },
     "colors": {
         "default": "#4eefff",
         "success": "#1cfe86",
+        "warning": "#ffa255",
         "error": "#ff0000",
         "role": "#ac1cfe"
     },
@@ -64,10 +65,29 @@
         "jumpToPage": "↗️",
         "create": "🔨",
         "select": "🖱",
-        "birthday": "🎂"
+        "birthday": "🎂",
+        "party": "🎉",
+        "colors": {
+            "red": "🟥",
+            "yellow": "🟨",
+            "blue": "🟦",
+            "green": "🟩",
+            "orange": "🟧",
+            "purple": "🟪",
+            "black": "⬛",
+            "white": "⬜"
+        },
+        "custom": "✏"
     },
     "stopCommands": ["stop", "cancel", "exit", "close", "quit"],
     "validation": {
+        "message": {
+            "maxLength": 500,
+            "maxCount": {
+                "free": 10,
+                "paid": 500
+            }
+        },
         "regions": [
             "Africa",
             "America",
@@ -95,11 +115,20 @@
         "vote": "https://top.gg/bot/656621136808902656/vote",
         "donate": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url",
         "map": "https://kevinnovak.github.io/Time-Zone-Picker/",
-        "stream": "https://www.twitch.tv/stqlth"
+        "colors": "https://codepen.io/meodai/full/pXNpXe",
+        "stream": "https://www.twitch.tv/stqlth",
+        "autopay": "https://www.sandbox.paypal.com/myaccount/autopay"
     },
     "voting": {
         "enabled": false,
+        "token": "<TOKEN>",
         "hours": 24
+    },
+    "payments": {
+        "enabled": false,
+        "url": "<PAYMENTS_URL>",
+        "token": "<TOKEN>",
+        "allowNewTransactions": true
     },
     "botSites": {
         "topGg": {

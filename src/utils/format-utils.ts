@@ -1,6 +1,6 @@
 import * as Chrono from 'chrono-node';
 
-import { CustomMessages, UserDataResults } from '../models/database';
+import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
 import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
 
 import { GuildUtils } from '.';
@@ -38,7 +38,7 @@ export abstract class FormatUtils {
 
     public static joinWithAnd(values: string[]): string {
         return [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
-            values.length < 2 ? '' : ' and '
+            values.length < 2 ? '' : ', and '
         );
     }
 
@@ -62,8 +62,11 @@ export abstract class FormatUtils {
     }
 
     public static getUser(msg: Message, input: string): User {
-        return msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, input)?.user || null;
-
+        return (
+            msg.mentions.members.first()?.user ||
+            GuildUtils.findMember(msg.guild, input)?.user ||
+            null
+        );
     }
 
     public static getMonth(month: number): string {
@@ -128,18 +131,15 @@ export abstract class FormatUtils {
         guild: Guild,
         customMessageResults: CustomMessages,
         page: number,
-        pageSize: number
+        pageSize: number,
+        hasPremium: boolean
     ): Promise<MessageEmbed> {
         let embed = new MessageEmbed()
             .setTitle(`Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`)
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
-            .addField(
-                'Actions',
-                '`bday message add <message>`\n`bday message remove <position>`\n`bday message clear`'
-            )
             .setFooter(
-                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayListSize} per page`,
+                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
                 guild.iconURL()
             )
             .setTimestamp();
@@ -152,12 +152,74 @@ export abstract class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*A random birthday message is chosen for each birthday. If there are none set, it will use the default birthday message. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
+        let description = `*A random birthday message is chosen for each birthday. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
 
         for (let customMessage of customMessageResults.customMessages) {
-            description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
+            if (hasPremium || customMessage.Position <= 10) {
+                description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
+            } else {
+                description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n\n`;
+            }
             i++;
         }
+
+        if (!hasPremium && customMessageResults.stats.TotalItems > 10)
+            embed.addField(
+                'Message Limit',
+                `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.paid}** with \`bday premium\`!\n\n`
+            );
+
+        embed.setDescription(description);
+
+        return embed;
+    }
+
+    public static async getCustomUserMessageListEmbed(
+        guild: Guild,
+        customMessageResults: CustomMessages,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean
+    ): Promise<MessageEmbed> {
+        let embed = new MessageEmbed()
+            .setTitle(
+                `User Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
+            )
+            .setThumbnail(guild.iconURL())
+            .setColor(Config.colors.default)
+            .setFooter(
+                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
+                guild.iconURL()
+            )
+            .setTimestamp();
+
+        if (customMessageResults.customMessages.length === 0) {
+            let embed = new MessageEmbed()
+                .setDescription('**No User-Specific Birthday Messages!**')
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = `*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*\n\n`;
+
+        for (let customMessage of customMessageResults.customMessages) {
+            let member = guild.members.resolve(customMessage.UserDiscordId);
+            if (hasPremium) {
+                description += `${member ? `**${member.displayName}**: ` : '**Unknown Member** '} ${
+                    customMessage.Message
+                }\n\n`;
+            } else {
+                description += `${member ? `**${member.displayName}**: ` : '**Unknown Member** '} ~~${
+                    customMessage.Message
+                }~~\n\n`;
+            }
+        }
+
+        if (!hasPremium)
+            embed.addField(
+                'Locked Feature',
+                `User-specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`
+            );
+
         embed.setDescription(description);
 
         return embed;
@@ -207,6 +269,44 @@ export abstract class FormatUtils {
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
             description += `**${birthday}**: ${userList}\n`; // Append the description
+        }
+
+        embed.setDescription(description);
+
+        return embed;
+    }
+
+    public static async getBlacklistFullEmbed(
+        guild: Guild,
+        blacklistResults: Blacklisted,
+        page: number,
+        pageSize: number
+    ): Promise<MessageEmbed> {
+        let embed = new MessageEmbed()
+            .setTitle(`Birthday Blacklist List | Page ${page}/${blacklistResults.stats.TotalPages}`)
+            .setThumbnail(guild.iconURL())
+            .setColor(Config.colors.default)
+            .setFooter(
+                `Total Blacklisted Users: ${blacklistResults.stats.TotalItems} • ${Config.experience.blacklistSize} per page`,
+                guild.iconURL()
+            )
+            .setTimestamp();
+
+        let i = (page - 1) * pageSize + 1;
+
+        if (blacklistResults.blacklist.length === 0) {
+            let embed = new MessageEmbed()
+                .setDescription('**The blacklist is empty!**')
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = `*Users on this list will not have their birthdays celebrated no matter what. Edit this list with \`bday blacklist <add/remove> <User>\`!*\n\n`;
+        let users = blacklistResults.blacklist.map(data => data.UserDiscordId);
+
+        for (let user of users) {
+            description += `**${
+                guild.members.resolve(user)?.displayName || 'Unknown'
+            }**: (ID: ${user})\n`; // Append the description
         }
 
         embed.setDescription(description);

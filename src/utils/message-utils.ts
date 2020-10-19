@@ -1,8 +1,10 @@
 import {
-    DiscordAPIError,
     DMChannel,
+    DiscordAPIError,
+    EmojiResolvable,
     Guild,
     Message,
+    MessageReaction,
     StringResolvable,
     TextChannel,
     User,
@@ -25,9 +27,16 @@ export abstract class MessageUtils {
         }
     }
 
-    public static getRoleName(roleDiscordId: string, guild: Guild): string {
-        return roleDiscordId
-            ? guild.roles.resolve(roleDiscordId)?.toString() || '**Unknown**'
-            : '**None**';
+    public static async react(msg: Message, emoji: EmojiResolvable): Promise<MessageReaction> {
+        try {
+            return await msg.react(emoji);
+        } catch (error) {
+            // Error code 90001: "Reaction blocked" (User blocked bot) Error code: 10008: "Unknown Message" (Message was deleted)
+            if (error instanceof DiscordAPIError && (error.code === 90001 || error.code === 10008)) {
+                return;
+            } else {
+                throw error;
+            }
+        }
     }
 }

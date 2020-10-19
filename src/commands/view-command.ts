@@ -1,7 +1,7 @@
 import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
+import { GuildUtils, MessageUtils } from '../utils';
 
 import { Command } from './command';
-import { GuildUtils } from '../utils';
 import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
 
@@ -15,6 +15,8 @@ export class ViewCommand implements Command {
     public adminOnly = false;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = false;
 
     constructor(private userRepo: UserRepo) {}
 
@@ -27,7 +29,7 @@ export class ViewCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription(`You cannot request another user's information in a DM!`)
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
 
@@ -41,7 +43,7 @@ export class ViewCommand implements Command {
                 let embed = new MessageEmbed()
                     .setDescription('Could not find that user!')
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
         } else {
@@ -58,7 +60,7 @@ export class ViewCommand implements Command {
             } else {
                 embed.setDescription('You have not set your birthday!');
             }
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -69,7 +71,7 @@ export class ViewCommand implements Command {
                 )}, ${userData.TimeZone}**!`
             )
             .setColor(Config.colors.default);
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
         return;
     }
 }

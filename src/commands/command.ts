@@ -8,5 +8,7 @@ export interface Command {
     adminOnly: boolean;
     ownerOnly: boolean;
     voteOnly: boolean;
-    execute(args: string[], msg: Message, channel: TextChannel | DMChannel): Promise<void>;
+    requirePremium: boolean;
+    getPremium: boolean;
+    execute(args: string[], msg: Message, channel: TextChannel | DMChannel, hasPremium?: boolean): Promise<void>;
 }

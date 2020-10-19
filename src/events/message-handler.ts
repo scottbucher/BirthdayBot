@@ -6,12 +6,14 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
-import moment from 'moment';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { Logger, SubscriptionService } from '../services';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
-import { Logger } from '../services';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { MessageUtils, PermissionUtils } from '../utils';
+import { GuildData } from '../models/database';
+import { PlanName } from '../models/subscription-models';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 let RateLimiter = require('limiter').RateLimiter;
@@ -21,6 +23,7 @@ export class MessageHandler {
     constructor(
         private helpCommand: Command,
         private commands: Command[],
+        private subscriptionService: SubscriptionService,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo
     ) {}
@@ -47,7 +50,7 @@ export class MessageHandler {
                         'I need permission to **Add Reactions** & **Read Message History**!'
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
         }
@@ -67,7 +70,7 @@ export class MessageHandler {
 
         // Create new limiter if one doesn't exist
         if (!limiter) {
-            limiter = new RateLimiter(2, 20000);
+            limiter = new RateLimiter(10, 30000);
             limiters[msg.author.id] = limiter;
         }
 
@@ -134,16 +137,37 @@ export class MessageHandler {
             return;
         }
 
-        if (Config.voting.enabled) {
+        let checkVote = Config.voting.enabled && command.voteOnly;
+        let checkPremium = Config.payments.enabled && command.requirePremium;
+
+        // Get premium status if needed
+        let retrievePremium =
+            Config.payments.enabled && (checkVote || command.requirePremium || command.getPremium);
+        let hasPremium = retrievePremium
+            ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+            : false;
+
+        if (checkPremium && !hasPremium) {
+            let embed = new MessageEmbed()
+                .setAuthor(msg.guild.name, msg.guild.iconURL())
+                .setTitle('Premium Required!')
+                .setDescription('This command requires this server to have premium!')
+                .addField(
+                    `Premium Commands`,
+                    'Subscribe to **Birthday bot Premium** for access to our premium features.\nSee `bday premium` for more information.'
+                )
+                .setColor(Config.colors.error);
+            await MessageUtils.send(channel, embed);
+            return;
+        }
+
+        if (checkVote && !hasPremium) {
             // Get the user's last vote and check if the command requires a vote
             let userVote = await this.userRepo.getUserVote(msg.author.id);
             let voteTime = moment(userVote?.VoteTime);
             let voteTimeAgo = userVote ? voteTime.fromNow() : 'Never';
 
-            if (
-                command.voteOnly &&
-                (!userVote || voteTime.clone().add(Config.voting.hours, 'hours') < moment())
-            ) {
+            if (!userVote || voteTime.clone().add(Config.voting.hours, 'hours') < moment()) {
                 let embed = new MessageEmbed()
                     .setAuthor(msg.author.tag, msg.author.avatarURL())
                     .setThumbnail('https://i.imgur.com/wak8g4V.png')
@@ -152,11 +176,11 @@ export class MessageHandler {
                     .addField('Last Vote', `${voteTimeAgo}`, true)
                     .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
                     .setFooter(
-                        'While Birthday Bot is 100% free, voting helps us grow!',
+                        'Don\'t want to vote? Try **Birthday Bot Premium**!',
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
                 return;
             }
         }
@@ -172,22 +196,23 @@ export class MessageHandler {
                             `Please run server setup with \`bday setup\` before using that command!`
                         )
                         .setColor(Config.colors.error);
-                    await channel.send(embed);
+                    await MessageUtils.send(channel, embed);
+                    return;
+                }
+
+                // Check if user has permission
+                if (!this.hasPermission(msg.member, command, guildData)) {
+                    let embed = new MessageEmbed()
+                        .setTitle('Permission Required!')
+                        .setDescription(`You don't have permission to run that command!`)
+                        .setColor(Config.colors.error);
+                    await MessageUtils.send(channel, embed);
                     return;
                 }
             }
-            // Check if user has permission
-            if (!this.hasPermission(msg.member, command)) {
-                let embed = new MessageEmbed()
-                    .setTitle('Permission Required!')
-                    .setDescription(`You don't have permission to run that command!`)
-                    .setColor(Config.colors.error);
-                await channel.send(embed);
-                return;
-            }
 
             // Execute the command
-            await command.execute(args, msg, channel);
+            await command.execute(args, msg, channel, hasPremium);
         } catch (error) {
             // Notify sender that something went wrong
             Logger.error('The message-handler.ts class encountered an error!', error);
@@ -197,7 +222,7 @@ export class MessageHandler {
                     .addField('Error code', msg.id)
                     .addField('Contact support', Config.links.support)
                     .setColor(Config.colors.error);
-                await channel.send(embed);
+                await MessageUtils.send(channel, embed);
             } catch {
                 /*ignore*/
             }
@@ -219,9 +244,21 @@ export class MessageHandler {
         }
     }
 
-    private hasPermission(member: GuildMember, command: Command): boolean {
+    private hasPermission(member: GuildMember, command: Command, guildData: GuildData): boolean {
         if (command.adminOnly) {
-            return member.hasPermission(Permissions.FLAGS.ADMINISTRATOR); // return true if they have admin
+            if (member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) return true;
+
+            if (guildData) {
+                // Check if member has a required role
+                let memberRoles = member.roles.cache.map(role => role.id);
+                if (
+                    guildData.BirthdayMasterRoleDiscordId &&
+                    memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
+                ) {
+                    return true;
+                }
+            }
+            return false;
         }
         return true;
     }

@@ -1,7 +1,7 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { MessageUtils } from '../utils';
 import { Command } from './command';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -13,6 +13,8 @@ export class DocumentationCommand implements Command {
     public adminOnly = false;
     public ownerOnly = false;
     public voteOnly = false;
+    public requirePremium = false;
+    public getPremium = false;
 
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let embed = new MessageEmbed()

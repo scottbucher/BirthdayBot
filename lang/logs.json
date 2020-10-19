@@ -9,9 +9,13 @@
         "updateServerCountSite": "Updated server count on '{BOT_SITE}'.",
         "guildJoined": "Guild '{GUILD_NAME}' ({GUILD_ID}) joined.",
         "guildLeft": "Guild '{GUILD_NAME}' ({GUILD_ID}) left.",
+        "guildSubStatus": "Guild '{GUILD_NAME}' ({GUILD_ID}) '{PLAN_NAME}' subscription is now '{SUBSCRIPTION_STATUS}'.",
         "birthdayJobStarted": "Started birthday job.",
         "birthdayJobGuildCount": "Celebrating Birthdays for {GUILD_COUNT} guilds...",
-        "completedBirthdayJob": "Completed birthday job."
+        "completedBirthdayJob": "Completed birthday job.",
+        "startedApi": "API started on port {PORT}.",
+        "unsubRanPremiumCmd": "User '{SENDER_TAG}' ({SENDER_ID}) in guild '{GUILD_NAME}' ({GUILD_ID}) that is unsubscribed ran the premium command.",
+        "unsubRanSubCmd": "User '{SENDER_TAG}' ({SENDER_ID}) in guild '{GUILD_NAME}' ({GUILD_ID}) that is unsubscribed ran the subscribe command."
     },
     "warn": {
         "noShards": "No shards to spawn."
@@ -20,8 +24,6 @@
         "retrieveShardCount": "An error occurred while retrieving the recommended shard count.",
         "spawnShard": "An error occurred while spawning shards.",
         "updateServerCount": "An error occurred while updating the server count.",
-        "votingApiStart": "An error occurred while starting the voting api.",
-        "registeringVote": "An error occurred while registering a vote for user with ID {USER_ID}.",
         "updateServerCountSite": "An error occurred while updating the server count on '{BOT_SITE}'.",
         "login": "An error occurred while the client attempted to login.",
         "guildJoin": "An error occurred while processing a guild join.",
@@ -33,6 +35,7 @@
         "messagePartial": "An error occurred while trying to fetch a message partial.",
         "userFetch": "An error occurred while trying to fetch the users of a reaction.",
         "fetchMembers": "An error occurred while trying to fetch the members for the guild '{GUILD_NAME}' ({GUILD_ID}).",
-        "birthdayService": "An error occurred while trying run the birthday service for '{GUILD_NAME}' ({GUILD_ID}) with {MEMBER_COUNT} members and {MEMBER_CACHE_BEFORE_COUNT} in the cache before and {MEMBER_CACHE_AFTER_COUNT} after the fetch."
+        "birthdayService": "An error occurred while trying run the birthday service for '{GUILD_NAME}' ({GUILD_ID}) with {MEMBER_COUNT} members and {MEMBER_CACHE_BEFORE_COUNT} in the cache before and {MEMBER_CACHE_AFTER_COUNT} after the fetch.",
+        "apiRequest": "An error occurred while processing a '{HTTP_METHOD}' request to '{URL}'."
     }
 }

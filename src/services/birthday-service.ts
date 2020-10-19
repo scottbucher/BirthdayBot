@@ -1,13 +1,19 @@
-import { ActionUtils, BdayUtils, FormatUtils, PermissionUtils } from '../utils';
+import { ActionUtils, BdayUtils, FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import { GuildData, UserData } from '../models/database';
 
+import { ColorUtils } from '../utils/color-utils';
 import { CustomMessageRepo } from './database/repos';
+import { PlanName } from '../models/subscription-models';
+import { SubscriptionService } from './subscription-service';
 
 let Config = require('../../config/config.json');
 
 export class BirthdayService {
-    constructor(private customMessageRepo: CustomMessageRepo) {}
+    constructor(
+        private customMessageRepo: CustomMessageRepo,
+        private subscriptionService: SubscriptionService
+    ) {}
 
     public async celebrateBirthdays(
         guild: Guild,
@@ -60,7 +66,7 @@ export class BirthdayService {
             if (!isTest) return;
         }
 
-        let birthdayUsers: GuildMember[] = [];
+        let birthdayMessageUsers: GuildMember[] = [];
 
         let preventMessage = guildData.TrustedPreventsMessage;
         let preventRole = guildData.TrustedPreventsRole;
@@ -82,15 +88,18 @@ export class BirthdayService {
                 preventRole &&
                 !member.roles.cache.has(trustedRole.id)
             ) {
+                // For test cases
                 trustedCheckMessage = true;
                 trustedCheckRole = true;
                 continue;
             }
 
+            // Birthday role is actively given, no time check needed!
             if (birthdayRole) {
                 if (!(trustedRole && preventRole && !member.roles.cache.has(trustedRole.id))) {
                     ActionUtils.giveRole(member, birthdayRole);
                 } else {
+                    // For test cases
                     trustedCheckRole = true;
                 }
             }
@@ -100,8 +109,9 @@ export class BirthdayService {
                 birthdayChannel
             ) {
                 if (!(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))) {
-                    birthdayUsers.push(member);
+                    birthdayMessageUsers.push(member);
                 } else {
+                    // For test cases
                     trustedCheckMessage = true;
                 }
             }
@@ -110,9 +120,10 @@ export class BirthdayService {
         // get a string array of the userData keys
         let userDataKeys = userDatas.map(userData => userData.UserDiscordId);
 
-        // Filter OUT anyone whose in userData (whose birthday is today)
+        // Filter OUT anyone whose in userData (whose birthday is today) (This list will then have the birthday role removed since it isn't their birthday)
         members = members.filter(member => !userDataKeys.includes(member.id));
 
+        // Birthday role is actively taken, no time check needed!
         if (birthdayRole) {
             members.forEach(member => {
                 if (member.roles.cache.has(birthdayRole.id))
@@ -121,15 +132,32 @@ export class BirthdayService {
         }
 
         // Birthday Message
-        if (birthdayUsers.length > 0) {
-            let userList = FormatUtils.joinWithAnd(birthdayUsers.map(user => user.toString()));
-            let message = BdayUtils.randomMessage(
-                await this.customMessageRepo.getCustomMessages(guild.id)
-            )
-                .split('@Users')
-                .join(userList)
-                .split('<Users>')
-                .join(userList);
+        if (birthdayMessageUsers.length > 0) {
+            let hasPremium = Config.payments.enabled
+                ? await this.subscriptionService.hasService(PlanName.premium1, guild.id)
+                : false;
+            let globalMessages = await this.customMessageRepo.getCustomMessages(guild.id);
+
+            // Get a list of custom user-specific messages
+            let userMessages = await this.customMessageRepo.getCustomUserMessages(guild.id);
+
+            // Define variable
+            let usersWithSpecificMessage: GuildMember[];
+
+            // IF THEY HAVE PREMIUM
+            if (hasPremium) {
+                // Guild Member list of people with a user-specific custom birthday message
+                usersWithSpecificMessage = birthdayMessageUsers.filter(member =>
+                    userMessages.customMessages
+                        .map(message => message.UserDiscordId)
+                        .includes(member.id)
+                );
+
+                //  Remove all users who have a user-specific custom birthday message
+                birthdayMessageUsers = birthdayMessageUsers.filter(
+                    member => !usersWithSpecificMessage.includes(member)
+                );
+            }
 
             // Find mentioned role
             let mentionSetting: string;
@@ -146,9 +174,44 @@ export class BirthdayService {
                 mentionSetting = roleInput.toString();
             }
 
-            if (mentionSetting) birthdayChannel.send(mentionSetting);
-            let embed = new MessageEmbed().setDescription(message).setColor(Config.colors.default);
-            await birthdayChannel.send(guildData.UseEmbed ? embed : message);
+            // Send the mention setting
+            if (mentionSetting) MessageUtils.send(birthdayChannel, mentionSetting);
+
+            let color = hasPremium
+                ? ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
+                : Config.colors.default;
+
+            // Create and send the default or the global custom birthday message that was chosen for those without a user-specific custom birthday message
+            if (birthdayMessageUsers.length > 0) {
+                let userList = FormatUtils.joinWithAnd(
+                    birthdayMessageUsers.map(user => user.toString())
+                );
+                let message = BdayUtils.randomMessage(globalMessages, hasPremium)
+                    .split('@Users')
+                    .join(userList)
+                    .split('<Users>')
+                    .join(userList);
+
+                let embed = new MessageEmbed().setDescription(message).setColor(color);
+                await MessageUtils.send(birthdayChannel, guildData.UseEmbed ? embed : message);
+            }
+
+            if (hasPremium) {
+                // Now, loop through the members with a user-specific custom birthday message
+                for (let member of usersWithSpecificMessage) {
+                    // Get their birthday message
+                    let message = userMessages.customMessages
+                        .find(message => message.UserDiscordId === member.user.id)
+                        .Message.split('@Users')
+                        .join(member.toString())
+                        .split('<Users>')
+                        .join(member.toString());
+
+                    // Create it and send it
+                    let embed = new MessageEmbed().setDescription(message).setColor(color);
+                    await MessageUtils.send(birthdayChannel, guildData.UseEmbed ? embed : message);
+                }
+            }
         }
 
         if (isTest) {
@@ -158,8 +221,8 @@ export class BirthdayService {
                     'User Has Trusted Role',
                     `${
                         member.roles.cache.has(trustedRole.id)
-                            ? `${Config.emotes.confirm} Yes`
-                            : `${Config.emotes.deny} No`
+                            ? `${Config.emotes.confirm} Yes.`
+                            : `${Config.emotes.deny} No.`
                     }`,
                     true
                 );
@@ -168,8 +231,8 @@ export class BirthdayService {
                 'Birthday Role',
                 `${
                     birthdayRole
-                        ? `${Config.emotes.confirm} Correctly set`
-                        : `${Config.emotes.deny} Not set or is a deleted role`
+                        ? `${Config.emotes.confirm} Correctly set.`
+                        : `${Config.emotes.deny} Not set or is a deleted role.`
                 }`,
                 true
             );
@@ -178,7 +241,7 @@ export class BirthdayService {
                     'Trusted Prevents Role',
                     `${
                         !trustedCheckRole
-                            ? `${Config.emotes.confirm} Passed`
+                            ? `${Config.emotes.confirm} Passed.`
                             : `${Config.emotes.deny} Trusted role/settings prevented the birthday role.`
                     }`,
                     true
@@ -188,8 +251,8 @@ export class BirthdayService {
                 'Birthday Channel',
                 `${
                     birthdayChannel
-                        ? `${Config.emotes.confirm} Correctly set`
-                        : `${Config.emotes.deny} Not set or is a deleted channel`
+                        ? `${Config.emotes.confirm} Correctly set.`
+                        : `${Config.emotes.deny} Not set or is a deleted channel.`
                 }`,
                 true
             );
@@ -198,12 +261,17 @@ export class BirthdayService {
                     'Trusted Prevents Message',
                     `${
                         !trustedCheckMessage
-                            ? `${Config.emotes.confirm} Passed`
+                            ? `${Config.emotes.confirm} Passed.`
                             : `${Config.emotes.deny} Trusted role/settings prevented the birthday message.`
                     }`,
                     true
                 );
             }
+            testingEmbed.addField(
+                'Birthday Blacklist',
+                `${Config.emotes.confirm} Member is not blacklisted.`,
+                true
+            );
 
             testingEmbed.setDescription(
                 'Below are the checks to ensure your settings are correct for the birthday event.\n\nIf the checks are passed and either the birthday message and/or birthday role were not given ' +
@@ -213,7 +281,7 @@ export class BirthdayService {
             );
 
             if (testChannel) {
-                await testChannel.send(testingEmbed);
+                await MessageUtils.send(testChannel, testingEmbed);
             }
         }
     }

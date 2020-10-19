@@ -20,3 +20,6 @@ export { TestCommand } from './test-command';
 export { FAQCommand } from './faq-command';
 export { DocumentationCommand } from './documentation-command';
 export { DonateCommand } from './donate-command';
+export { BlacklistCommand } from './blacklist-command';
+export { PremiumCommand } from './premium-commands';
+export { SubscribeCommand } from './subscribe-command';

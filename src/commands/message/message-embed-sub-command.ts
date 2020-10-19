@@ -1,7 +1,7 @@
+import { FormatUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
-import { FormatUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -13,7 +13,7 @@ export class MessageEmbedSubCommand {
             let embed = new MessageEmbed()
                 .setDescription('Please provide a value! (True/False)')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -24,7 +24,7 @@ export class MessageEmbedSubCommand {
                 .setTitle('Invalid Value!')
                 .setDescription('Accepted Values: `True/False`')
                 .setColor(Config.colors.error);
-            await channel.send(embed);
+            await MessageUtils.send(channel, embed);
             return;
         }
 
@@ -37,6 +37,6 @@ export class MessageEmbedSubCommand {
                     : 'The birthday message will no longer be embedded!'
             )
             .setColor(Config.colors.success);
-        await channel.send(embed);
+        await MessageUtils.send(channel, embed);
     }
 }
