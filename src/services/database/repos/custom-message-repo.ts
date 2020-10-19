@@ -15,7 +15,7 @@ export class CustomMessageRepo {
     }
 
     public async removeCustomMessageUser(discordId: string, value: number): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.CustomMessage_RemoveUser, [discordId, value]);
+        await this.dataAccess.executeProcedure(Procedure.CustomMessages_RemoveUser, [discordId, value]);
     }
 
     public async clearCustomMessages(discordId: string): Promise<void> {
