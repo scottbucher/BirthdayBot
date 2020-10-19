@@ -28,7 +28,7 @@ export class MessageRemoveSubCommand {
 
         if (!customMessages && !userMessages) {
             let embed = new MessageEmbed()
-                .setDescription("This server doesn't have any custom messages!")
+                .setDescription('This server doesn\'t have any custom messages!')
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
             return;
@@ -38,8 +38,7 @@ export class MessageRemoveSubCommand {
         let position: number;
 
         // Try and find someone they are mentioning
-        let target =
-            msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, args[3])?.user;
+        let target = msg.mentions.members.first()?.user;
 
         // Did we find a user?
         if (target) {
@@ -57,7 +56,7 @@ export class MessageRemoveSubCommand {
                 let embed = new MessageEmbed()
                     .setTitle('Invalid position!')
                     .setDescription(
-                        "Use `bday message list` to view your server's custom messages!"
+                        'Use `bday message list` to view your server\'s custom messages!'
                     )
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);
