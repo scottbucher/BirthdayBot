@@ -218,7 +218,7 @@ export class MessageAddSubCommand {
         }
 
         let embed = new MessageEmbed().setColor(Config.colors.success);
-        if (target) {
+        if (!target) {
             embed
                 .setDescription(
                     `Successfully added the birthday message:\n\n\`${birthdayMessage}\`\n\u200b`
