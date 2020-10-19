@@ -134,7 +134,7 @@ export class PostBirthdaysJob implements Job {
                 );
                 continue;
             }
-            await TimeUtils.sleep(100);
+            await TimeUtils.sleep(250);
         }
 
         // Wait for all birthday celebrations to finish
