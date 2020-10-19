@@ -176,7 +176,7 @@ export class MessageHandler {
                     .addField('Last Vote', `${voteTimeAgo}`, true)
                     .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
                     .setFooter(
-                        'Don\'t want to vote? Try **Birthday Bot Premium**!',
+                        'Don\'t want to vote? Try Birthday Bot Premium!',
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);
