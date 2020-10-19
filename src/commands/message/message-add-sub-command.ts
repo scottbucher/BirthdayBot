@@ -49,8 +49,7 @@ export class MessageAddSubCommand {
         }
 
         // Try and find someone they are mentioning
-        let target =
-            msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, args[3])?.user;
+        let target = msg.mentions.members.first()?.user;
 
         // Did we find a user?
         if (target) {
