@@ -177,9 +177,12 @@ export class BirthdayService {
             // Send the mention setting
             if (mentionSetting) MessageUtils.send(birthdayChannel, mentionSetting);
 
-            let color = hasPremium
-                ? ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
-                : Config.colors.default;
+            let color = guildData.MessageEmbedColor === '0' ? Config.colors.default : null;
+
+            color =
+                !color && hasPremium
+                    ? '#' + ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
+                    : Config.colors.default;
 
             // Create and send the default or the global custom birthday message that was chosen for those without a user-specific custom birthday message
             if (birthdayMessageUsers.length > 0) {
