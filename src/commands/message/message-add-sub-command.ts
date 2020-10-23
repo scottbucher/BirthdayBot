@@ -64,8 +64,13 @@ export class MessageAddSubCommand {
                 let embed = new MessageEmbed()
                     .setTitle('Premium Required!')
                     .setDescription(
-                        `User-specific birthday messages are a premium feature! View information about **Birthday Bot Premium** using \`bday premium\`!`
+                        'User-specific birthday messages are a premium feature! View information about **Birthday Bot Premium** using `bday premium`!'
                     )
+                    .setFooter(
+                        'Premium helps us support and maintain the bot!',
+                        msg.client.user.avatarURL()
+                    )
+                    .setTimestamp()
                     .setColor(Config.colors.default);
                 await MessageUtils.send(channel, embed);
                 return;

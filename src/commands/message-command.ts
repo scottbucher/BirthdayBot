@@ -79,6 +79,11 @@ export class MessageCommand implements Command {
                     .setDescription(
                         `Custom birthday message color is a premium feature! View information about **Birthday Bot Premium** using \`bday premium\`!`
                     )
+                    .setFooter(
+                        'Premium helps us support and maintain the bot!',
+                        msg.client.user.avatarURL()
+                    )
+                    .setTimestamp()
                     .setColor(Config.colors.default);
                 await MessageUtils.send(channel, embed);
                 return;

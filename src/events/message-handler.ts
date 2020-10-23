@@ -149,14 +149,15 @@ export class MessageHandler {
 
         if (checkPremium && !hasPremium) {
             let embed = new MessageEmbed()
-                .setAuthor(msg.guild.name, msg.guild.iconURL())
                 .setTitle('Premium Required!')
                 .setDescription('This command requires this server to have premium!')
                 .addField(
                     `Premium Commands`,
                     'Subscribe to **Birthday bot Premium** for access to our premium features.\nSee `bday premium` for more information.'
                 )
-                .setColor(Config.colors.error);
+                .setFooter('Premium helps us support and maintain the bot!', msg.client.user.avatarURL())
+                .setTimestamp()
+                .setColor(Config.colors.default);
             await MessageUtils.send(channel, embed);
             return;
         }
