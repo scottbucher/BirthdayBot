@@ -1,6 +1,6 @@
 import * as Chrono from 'chrono-node';
 
-import { ActionUtils, FormatUtils, GuildUtils, MessageUtils } from '../utils';
+import { ActionUtils, FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -16,9 +16,9 @@ import {
     TextChannel,
     User,
 } from 'discord.js';
+import { GuildRepo, UserRepo } from '../services/database/repos';
 
 import { Command } from './command';
-import { UserRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -38,7 +38,7 @@ export class SetCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) {}
+    constructor(private guilRepo: GuildRepo, private userRepo: UserRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -111,7 +111,9 @@ export class SetCommand implements Command {
         if (!target) {
             target = msg.author;
         } else {
-            if (!msg.member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) {
+            let guildData = await this.guilRepo.getGuild(msg.guild.id);
+
+            if (guildData && !PermissionUtils.hasPermission(msg.member, guildData)) {
                 let embed = new MessageEmbed()
                     .setDescription(
                         'You do not have permission to suggest birthdays for other users!'

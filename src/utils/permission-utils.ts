@@ -1,4 +1,7 @@
-import { DMChannel, Permissions, TextChannel } from 'discord.js';
+import { DMChannel, GuildMember, Permissions, TextChannel } from 'discord.js';
+
+import { Command } from '../commands';
+import { GuildData } from '../models/database';
 
 export abstract class PermissionUtils {
     public static canSend(channel: TextChannel | DMChannel): boolean {
@@ -45,5 +48,24 @@ export abstract class PermissionUtils {
         return channel
             .permissionsFor(channel.client.user)
             .has([Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY]);
+    }
+
+    public static hasPermission(member: GuildMember, guildData: GuildData, command?: Command): boolean {
+        if (!command || command.adminOnly) {
+            if (member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) return true;
+
+            if (guildData) {
+                // Check if member has a required role
+                let memberRoles = member.roles.cache.map(role => role.id);
+                if (
+                    guildData.BirthdayMasterRoleDiscordId &&
+                    memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
+                ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
     }
 }
