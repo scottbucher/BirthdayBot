@@ -85,7 +85,7 @@ async function start(): Promise<void> {
     let birthdayService = new BirthdayService(customMessageRepo, subscriptionService);
 
     // Commands
-    let setCommand = new SetCommand(userRepo);
+    let setCommand = new SetCommand(guildRepo, userRepo);
     let statsCommand = new StatsCommand(userRepo);
 
     let createCommand = new CreateCommand(guildRepo);
