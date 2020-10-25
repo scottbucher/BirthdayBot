@@ -34,7 +34,7 @@ export class PostBirthdaysJob implements Job {
             ...(await this.userRepo.getUsersWithBirthday(yesterday)),
         ];
 
-        if (!MathUtils.isLeap(now.year()) && today === '02-28') {
+        if (!MathUtils.isLeap(now.year()) && (today === '02-28' || tomorrow === '02-28' || yesterday === '02-28')) {
             // Add leap year birthdays to list
             userDatas.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
         }
