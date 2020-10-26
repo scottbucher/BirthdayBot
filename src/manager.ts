@@ -1,6 +1,5 @@
 import { Shard, ShardingManager } from 'discord.js';
 
-import { Api } from './api';
 import { BotSite } from './services/sites';
 import { Logger } from './services';
 import { ShardUtils } from './utils';

@@ -1,4 +1,4 @@
-import { Blacklisted, CustomMessages } from '../../../models/database';
+import { Blacklisted } from '../../../models/database';
 
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';

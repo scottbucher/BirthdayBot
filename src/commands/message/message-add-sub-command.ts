@@ -1,4 +1,4 @@
-import { ActionUtils, GuildUtils, MessageUtils } from '../../utils';
+import { ActionUtils, MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,

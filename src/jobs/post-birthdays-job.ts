@@ -1,5 +1,5 @@
 import { BdayUtils, MathUtils, TimeUtils } from '../utils';
-import { BirthdayService, Logger, SubscriptionService } from '../services';
+import { BirthdayService, Logger } from '../services';
 import { BlacklistRepo, GuildRepo, UserRepo } from '../services/database/repos';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 

@@ -1,10 +1,4 @@
-import {
-    BirthdayService,
-    DiscordService,
-    HttpService,
-    Logger,
-    SubscriptionService,
-} from './services';
+import { BirthdayService, HttpService, Logger, SubscriptionService } from './services';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
@@ -36,7 +30,7 @@ import {
     ViewCommand,
 } from './commands';
 import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
-import { Client, ClientOptions, DiscordAPIError, PartialTypes } from 'discord.js';
+import { ClientOptions, DiscordAPIError } from 'discord.js';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,

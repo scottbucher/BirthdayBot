@@ -1,4 +1,4 @@
-import { APIMessage, ShardingManager } from 'discord.js';
+import { ShardingManager } from 'discord.js';
 import {
     BotsOnDiscordXyzSite,
     DiscordBotListComSite,

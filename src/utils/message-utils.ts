@@ -2,7 +2,6 @@ import {
     DMChannel,
     DiscordAPIError,
     EmojiResolvable,
-    Guild,
     Message,
     MessageReaction,
     StringResolvable,
