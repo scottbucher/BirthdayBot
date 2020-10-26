@@ -87,15 +87,14 @@ export class SettingsCommand implements Command {
 
         let colorHex = guildData.MessageEmbedColor === '0' ? Config.colors.default : null;
 
-        colorHex =
-            !colorHex && hasPremium
-                ? '#' + ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
-                : Config.colors.default;
+        colorHex = !colorHex
+            ? '#' + ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
+            : Config.colors.default;
 
         let colorName = ColorUtils.findName(colorHex);
 
         settingsEmbed
-            .setColor(colorHex)
+            .setColor(hasPremium ? colorHex : Config.colors.default)
             .addField('Birthday Channel', birthdayChannel, true)
             .addField('Birthday Role', birthdayRole, true)
             .addField('Birthday Master Role', birthdayMasterRole, true)
@@ -107,7 +106,7 @@ export class SettingsCommand implements Command {
             .addField('Embed Birthday Message', useEmbed, true)
             .addField(
                 'Birthday Message Color',
-                hasPremium
+                hasPremium || colorHex === Config.colors.default
                     ? `${colorName ? `${colorHex} (${colorName})` : colorHex}`
                     : `~~${colorName ? `${colorHex} (${colorName})` : colorHex}~~`,
                 true

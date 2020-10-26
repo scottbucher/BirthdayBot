@@ -1,17 +1,9 @@
-import {
-    DMChannel,
-    GuildMember,
-    Message,
-    MessageEmbed,
-    Permissions,
-    TextChannel,
-} from 'discord.js';
+import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
 import { Logger, SubscriptionService } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
-import { GuildData } from '../models/database';
 import { PlanName } from '../models/subscription-models';
 import moment from 'moment';
 
@@ -205,7 +197,7 @@ export class MessageHandler {
                 }
 
                 // Check if user has permission
-                if (!this.hasPermission(msg.member, command, guildData)) {
+                if (!PermissionUtils.hasPermission(msg.member, guildData, command)) {
                     let embed = new MessageEmbed()
                         .setTitle('Permission Required!')
                         .setDescription(`You don't have permission to run that command!`)
@@ -246,24 +238,5 @@ export class MessageHandler {
                 return cmd;
             }
         }
-    }
-
-    private hasPermission(member: GuildMember, command: Command, guildData: GuildData): boolean {
-        if (command.adminOnly) {
-            if (member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) return true;
-
-            if (guildData) {
-                // Check if member has a required role
-                let memberRoles = member.roles.cache.map(role => role.id);
-                if (
-                    guildData.BirthdayMasterRoleDiscordId &&
-                    memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
-                ) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return true;
     }
 }

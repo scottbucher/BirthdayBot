@@ -49,6 +49,15 @@ export abstract class FormatUtils {
 
     public static getBirthday(input: string): string {
         // Try and get a date from the 3rd args
+        if (
+            input === '02/29' ||
+            input === '2/29' ||
+            input.toLowerCase() === 'february 29' ||
+            input.toLowerCase() === 'feb 29' ||
+            input.toLowerCase() === 'february 29th' ||
+            input.toLowerCase() === 'feb 29th'
+        )
+            input = '2000-02-29';
         let results = Chrono.parseDate(input); // Try an parse a date
 
         if (!results) return null;
