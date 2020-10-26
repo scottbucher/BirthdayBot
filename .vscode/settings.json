@@ -1,4 +1,7 @@
 {
+    "[typescript]": {
+        "editor.formatOnSave": true
+    },
     "cSpell.words": [
         "Bucher",
         "Novak",
