@@ -106,8 +106,12 @@ export class PostBirthdaysJob implements Job {
                 let blacklistData = await this.blacklistRepo.getBlacklist(guild.id);
 
                 // Remove members who are not apart of this guild and who are not in the birthday blacklist
-                let memberUserDatas = userDatas.filter(userData =>
-                    memberIds.includes(userData.UserDiscordId) && !blacklistData.blacklist.map(data => data.UserDiscordId).includes(userData.UserDiscordId)
+                let memberUserDatas = userDatas.filter(
+                    userData =>
+                        memberIds.includes(userData.UserDiscordId) &&
+                        !blacklistData.blacklist
+                            .map(data => data.UserDiscordId)
+                            .includes(userData.UserDiscordId)
                 );
 
                 promises.push(

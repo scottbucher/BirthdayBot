@@ -10,5 +10,10 @@ export interface Command {
     voteOnly: boolean;
     requirePremium: boolean;
     getPremium: boolean;
-    execute(args: string[], msg: Message, channel: TextChannel | DMChannel, hasPremium?: boolean): Promise<void>;
+    execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel,
+        hasPremium?: boolean
+    ): Promise<void>;
 }

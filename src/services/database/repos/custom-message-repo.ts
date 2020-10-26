@@ -6,8 +6,16 @@ import { SQLUtils } from '../../../utils';
 export class CustomMessageRepo {
     constructor(private dataAccess: DataAccess) {}
 
-    public async addCustomMessage(discordId: string, message: string, userId: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.CustomMessages_Add, [discordId, message, userId]);
+    public async addCustomMessage(
+        discordId: string,
+        message: string,
+        userId: string
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.CustomMessages_Add, [
+            discordId,
+            message,
+            userId,
+        ]);
     }
 
     public async removeCustomMessage(discordId: string, value: number): Promise<void> {
@@ -15,7 +23,10 @@ export class CustomMessageRepo {
     }
 
     public async removeCustomMessageUser(discordId: string, value: number): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.CustomMessages_RemoveUser, [discordId, value]);
+        await this.dataAccess.executeProcedure(Procedure.CustomMessages_RemoveUser, [
+            discordId,
+            value,
+        ]);
     }
 
     public async clearCustomMessages(discordId: string): Promise<void> {

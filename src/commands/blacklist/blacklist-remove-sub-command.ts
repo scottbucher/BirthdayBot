@@ -53,7 +53,7 @@ export class BlacklistRemoveSubCommand {
 
         if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(msg.author.id)) {
             let embed = new MessageEmbed()
-                .setDescription('This user isn\'t in the blacklist!')
+                .setDescription("This user isn't in the blacklist!")
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
             return;
@@ -62,7 +62,9 @@ export class BlacklistRemoveSubCommand {
         await this.blacklistRepo.removeBlacklist(msg.guild.id, target.id);
 
         let embed = new MessageEmbed()
-            .setDescription(`Successfully removed ${target.toString()} from the birthday blacklist!`)
+            .setDescription(
+                `Successfully removed ${target.toString()} from the birthday blacklist!`
+            )
             .setColor(Config.colors.success);
         await MessageUtils.send(channel, embed);
     }

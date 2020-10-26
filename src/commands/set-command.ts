@@ -47,7 +47,8 @@ export class SetCommand implements Command {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel,
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Birthday Set - Expired')
                     .setDescription('Type `bday set` to rerun the birthday set.')
@@ -172,7 +173,7 @@ export class SetCommand implements Command {
         }
 
         let override =
-            userData && (userData.Birthday && userData.TimeZone)
+            userData && userData.Birthday && userData.TimeZone
                 ? '__**Note**__: Your birthday is already set, continue to change it.\n\n'
                 : '';
 

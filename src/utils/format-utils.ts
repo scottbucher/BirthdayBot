@@ -208,9 +208,9 @@ export abstract class FormatUtils {
                     customMessage.Message
                 }\n\n`;
             } else {
-                description += `${member ? `**${member.displayName}**: ` : '**Unknown Member** '} ~~${
-                    customMessage.Message
-                }~~\n\n`;
+                description += `${
+                    member ? `**${member.displayName}**: ` : '**Unknown Member** '
+                } ~~${customMessage.Message}~~\n\n`;
             }
         }
 

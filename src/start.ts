@@ -1,4 +1,10 @@
-import { BirthdayService, DiscordService, HttpService, Logger, SubscriptionService } from './services';
+import {
+    BirthdayService,
+    DiscordService,
+    HttpService,
+    Logger,
+    SubscriptionService,
+} from './services';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
@@ -66,7 +72,6 @@ async function start(): Promise<void> {
     let userRepo = new UserRepo(dataAccess);
     let customMessageRepo = new CustomMessageRepo(dataAccess);
     let blacklistRepo = new BlacklistRepo(dataAccess);
-
 
     let clientOptions: ClientOptions = {
         ws: { intents: Config.client.intents },
@@ -190,7 +195,12 @@ async function start(): Promise<void> {
         guildRepo,
         userRepo
     );
-    let reactionAddHandler = new ReactionAddHandler(userRepo, customMessageRepo, blacklistRepo, subscriptionService);
+    let reactionAddHandler = new ReactionAddHandler(
+        userRepo,
+        customMessageRepo,
+        blacklistRepo,
+        subscriptionService
+    );
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 

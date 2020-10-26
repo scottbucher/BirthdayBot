@@ -141,7 +141,7 @@ export class UpdateCommand implements Command {
 
             let embed = new MessageEmbed()
                 .setDescription(`Successfully set the birthday role to ${birthdayRole.toString()}!`)
-                .setFooter('This role is actively removed from those whose birthday it isn\'t.')
+                .setFooter("This role is actively removed from those whose birthday it isn't.")
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
         } else if (args[2].toLowerCase() === 'trustedrole') {
@@ -180,7 +180,10 @@ export class UpdateCommand implements Command {
                 .setDescription(`Successfully set the trusted role to ${trustedRole.toString()}!`)
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
-        } else if (args[2].toLowerCase() === 'birthdaymaster' || args[2].toLowerCase() === 'birthdaymasterrole') {
+        } else if (
+            args[2].toLowerCase() === 'birthdaymaster' ||
+            args[2].toLowerCase() === 'birthdaymasterrole'
+        ) {
             // Set role with desired attributes
             let birthdayMasterRole: Role = msg.mentions.roles.first();
 
@@ -204,7 +207,9 @@ export class UpdateCommand implements Command {
 
             if (birthdayMasterRole.managed) {
                 let embed = new MessageEmbed()
-                    .setDescription(`Birthday Master Role cannot be managed by an external service!`)
+                    .setDescription(
+                        `Birthday Master Role cannot be managed by an external service!`
+                    )
                     .setColor(Config.colors.error);
                 MessageUtils.send(channel, embed);
                 return;
@@ -213,7 +218,9 @@ export class UpdateCommand implements Command {
             await this.guildRepo.updateBirthdayMasterRole(msg.guild.id, birthdayMasterRole?.id);
 
             let embed = new MessageEmbed()
-                .setDescription(`Successfully set the birthday master role to ${birthdayMasterRole.toString()}!`)
+                .setDescription(
+                    `Successfully set the birthday master role to ${birthdayMasterRole.toString()}!`
+                )
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
         }

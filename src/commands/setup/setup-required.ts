@@ -28,7 +28,8 @@ export class SetupRequired {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel,
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Required Setup - Expired')
                     .setDescription('Type `bday setup` to rerun the setup.')

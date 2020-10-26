@@ -9,10 +9,7 @@ let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');
 
 export class Manager {
-    constructor(
-        private shardManager: ShardingManager,
-        private botSites: BotSite[]
-    ) {}
+    constructor(private shardManager: ShardingManager, private botSites: BotSite[]) {}
 
     public async start(): Promise<void> {
         this.registerListeners();
@@ -32,7 +29,6 @@ export class Manager {
         } catch (error) {
             Logger.error(Logs.error.updateServerCount, error);
         }
-
     }
 
     public async updateServerCount(): Promise<void> {

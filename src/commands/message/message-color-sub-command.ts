@@ -27,7 +27,8 @@ export class MessageColorSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel,
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Birthday Message Color Selection - Expired')
                     .setDescription(
