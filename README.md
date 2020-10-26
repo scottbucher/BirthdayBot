@@ -1,4 +1,5 @@
 # Birthday Bot
+
 [![Discord Bots](https://top.gg/api/widget/servers/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
 [![Discord Bots](https://top.gg/api/widget/status/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
 [![License](https://img.shields.io/badge/license-No%20License-blue)](https://choosealicense.com/no-permission/)
@@ -19,6 +20,7 @@
 In your Discord server Birthday Bot will track your users' birthdays and using their time zone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord, use Birthday Bots trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone.
 
 ## Setting your birthday
+
 Birthday Bot makes everything easy using an easily to follow process.
 
 Start by using `bday set`.
@@ -68,82 +70,56 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 
 ### Utilities
 
-* `set` - Set your birthday.
-
-* `purge` - Remove your birthday data.
-
-* `next` - View the next birthday(s) in the server.
-
-* `view [name]` - View your birthday or a user's birthday.
-
-* `invite` - Invite Birthday Bot to a server.
-
-* `support` - Join the support server.
-
-* `map` - View the timezone map.
+-   `set` - Set your birthday.
+-   `purge` - Remove your birthday data.
+-   `next` - View the next birthday(s) in the server.
+-   `view [name]` - View your birthday or a user's birthday.
+-   `invite` - Invite Birthday Bot to a server.
+-   `support` - Join the support server.
+-   `map` - View the timezone map.
 
 ### Information
 
-* `help` - Help with Birthday Bot
-
-* `help setup` - Help for server setup.
-
-* `help setup message` - Help for the birthday message settings.
-
-* `help setup trusted` - Help for the trusted system.
-
-* `settings` - View server's settings.
+-   `help` - Help with Birthday Bot
+-   `help setup` - Help for server setup.
+-   `help setup message` - Help for the birthday message settings.
+-   `help setup trusted` - Help for the trusted system.
+-   `settings` - View server's settings.
 
 ### Server Confirguration (Admins only)
 
 #### Required Settings
 
-* `setup` - Interactive guide for server setup.
-
-* `create <channel/role>` - Create the default birthday role/channel.
-
-* `update <channel/role> <#channel/@role>` - Update the birthday role/channel.
-
-* `clear <channel/role>` - Clear the birthday channel/role
+-   `setup` - Interactive guide for server setup.
+-   `create <channel/role>` - Create the default birthday role/channel.
+-   `update <channel/role> <#channel/@role>` - Update the birthday role/channel.
+-   `clear <channel/role>` - Clear the birthday channel/role
 
 #### Birthday Message Settings
 
-* `setup message` - Interactive guide for message settings setup.
-
-* `message list [page]` - List all custom birthday messages.
-
-* `message add <message>` - Add a custom birthday message.
-
-* `message remove <position>` - Remove a certain birthday message.
-
-* `message clear` - Clear all custom birthday messages.
-
-* `message time <0-23>` - Set the birthday message time.
-
-* `message mention <role/group>` - Set the birthday message mention setting.
-
-* `message embed <T/F>` - Should the birthday message be embedded.
-
-* `message test <position> [user count]` - Test a birthday message.
+-   `setup message` - Interactive guide for message settings setup.
+-   `message list [page]` - List all custom birthday messages.
+-   `message add <message>` - Add a custom birthday message.
+-   `message remove <position>` - Remove a certain birthday message.
+-   `message clear` - Clear all custom birthday messages.
+-   `message time <0-23>` - Set the birthday message time.
+-   `message mention <role/group>` - Set the birthday message mention setting.
+-   `message embed <T/F>` - Should the birthday message be embedded.
+-   `message test <position> [user count]` - Test a birthday message.
 
 #### Trusted System Settings
 
-* `setup trusted` - Interactive guide for trusted system settings setup.
-
-* `create trustedRole` - Create the default trusted role.
-
-* `updated trustedRole <channel/role>` - Update the trusted role.
-
-* `clear trustedRole` - Clear the trusted role.
-
-* `trusted preventMsg <T/F>` - If trusted role is required for a birthday message.
-
-* `trusted preventRole <T/F>` - If trusted role is required to get the birthday role.
+-   `setup trusted` - Interactive guide for trusted system settings setup.
+-   `create trustedRole` - Create the default trusted role.
+-   `updated trustedRole <channel/role>` - Update the trusted role.
+-   `clear trustedRole` - Clear the trusted role.
+-   `trusted preventMsg <T/F>` - If trusted role is required for a birthday message.
+-   `trusted preventRole <T/F>` - If trusted role is required to get the birthday role.
 
 ## Help
 
 For additional help join the support server [here](https://discord.gg/9gUQFtz).
 
-## License 
+## License
 
 Birthday Bot does not have a license. This means, while Birthday Bot's code is public to anyone, you do **NOT** have permission to modify or redistribute this code. Since there is no license, the default copyright laws apply, meaning that I retain all rights to the source code and no one may reproduce, distribute, or create derivative works from it. For more details please visit [here](https://choosealicense.com/no-permission/).

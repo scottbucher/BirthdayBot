@@ -1,8 +1,8 @@
 ---
 description: >-
-  This guide aims to help walk you through each step of Birthday Bot's optional
-  server setup process as well as show the functionality of our interactive
-  setup commands.
+    This guide aims to help walk you through each step of Birthday Bot's optional
+    server setup process as well as show the functionality of our interactive
+    setup commands.
 ---
 
 # Optional Setup
@@ -15,7 +15,7 @@ Start by using `bday setup optional`.
 
 The first prompt in the optional setup process will ask for a time to send the birthday message. This server setting allows server admins to prevent pinging users at the default midnight time.
 
- For this example we will input 9 as our time, which corresponds to 9-AM.
+For this example we will input 9 as our time, which corresponds to 9-AM.
 
 {% hint style="warning" %}
 The only input accepted for this step is 0-23, 0 being 12-AM \(midnight\), and 23 being 11-PM.
@@ -27,7 +27,7 @@ Once your birthday message time is set, you will receive the next prompt for a c
 
 ![](https://i.imgur.com/XzKmkB9.png)
 
-The custom birthday message is very customizable and allows for a placeholder of  `@Users` which will, when the birthday message runs, replace itself with the birthday user\(s\) names. If you wish to not have a custom birthday message input `default` to set the message to its default value. 
+The custom birthday message is very customizable and allows for a placeholder of `@Users` which will, when the birthday message runs, replace itself with the birthday user\(s\) names. If you wish to not have a custom birthday message input `default` to set the message to its default value.
 
 For this example we will input a custom birthday message using the **@Users** placeholder.
 
@@ -41,7 +41,7 @@ Once you have set the custom birthday message, you will now receive a prompt to 
 
 ![](https://i.imgur.com/7gqJXss.png)
 
-Whichever group or role you select will be the group/role which is mentioned \(@Input\) when a birthday message is sent. 
+Whichever group or role you select will be the group/role which is mentioned \(@Input\) when a birthday message is sent.
 
 For this example we will select the input `everyone`, which will @everyone when a birthday message is sent.
 
@@ -90,8 +90,3 @@ For this example we will select **No** by clicking the **X**.
 The bot now knows \(In this example\) to send a birthday message for all users, regardless of role, but to only give the special birthday role to those with the trusted role.
 
 This completes the optional setup process. For other server setting commands which are not in the setup interactive guide please visit [here](../commands.md#server-configuration-admins-only).
-
-
-
-
-
