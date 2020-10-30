@@ -1,4 +1,4 @@
-import { Blacklisted, CustomMessages } from '../../../models/database';
+import { Blacklisted } from '../../../models/database';
 
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
@@ -20,9 +20,7 @@ export class BlacklistRepo {
     }
 
     public async getBlacklist(discordId: string): Promise<Blacklisted> {
-        let results = await this.dataAccess.executeProcedure(Procedure.Blacklist_Get, [
-            discordId,
-        ]);
+        let results = await this.dataAccess.executeProcedure(Procedure.Blacklist_Get, [discordId]);
 
         let blacklist = SQLUtils.getTable(results, 0);
         return new Blacklisted(blacklist, null);

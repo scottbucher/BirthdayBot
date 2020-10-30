@@ -100,7 +100,9 @@ export class BdayUtils {
                 return ArrayUtils.chooseRandom(messages.customMessages).Message;
             } else {
                 // Only choose from the first 10
-                return ArrayUtils.chooseRandom(messages.customMessages.slice(0, Config.validation.message.maxCount.free)).Message;
+                return ArrayUtils.chooseRandom(
+                    messages.customMessages.slice(0, Config.validation.message.maxCount.free)
+                ).Message;
             }
         } else {
             // Return the default birthday message

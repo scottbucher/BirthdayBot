@@ -1,10 +1,7 @@
-import { BlacklistRepo, CustomMessageRepo, UserRepo } from '../services/database/repos';
 import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
-import { Guild, Message, MessageReaction } from 'discord.js';
+import { Guild, Message } from 'discord.js';
 
 import { FormatUtils } from '.';
-
-let Config = require('../../config/config.json');
 
 export abstract class ListUtils {
     public static async updateBdayList(

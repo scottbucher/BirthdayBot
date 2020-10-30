@@ -1,9 +1,8 @@
-import { GuildUtils, MessageUtils } from '../../utils';
+import { MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { CustomMessage } from '../../models/database';
 import { CustomMessageRepo } from '../../services/database/repos';
-import e from 'express';
 
 let Config = require('../../../config/config.json');
 
@@ -28,7 +27,7 @@ export class MessageRemoveSubCommand {
 
         if (!customMessages && !userMessages) {
             let embed = new MessageEmbed()
-                .setDescription('This server doesn\'t have any custom messages!')
+                .setDescription(`This server doesn't have any custom messages!`)
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
             return;
@@ -56,7 +55,7 @@ export class MessageRemoveSubCommand {
                 let embed = new MessageEmbed()
                     .setTitle('Invalid position!')
                     .setDescription(
-                        'Use `bday message list` to view your server\'s custom messages!'
+                        `Use \`bday message list\` to view your server's custom messages!`
                     )
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);

@@ -1,5 +1,5 @@
-import { FormatUtils, GuildUtils, MessageUtils, ParseUtils } from '../../utils';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
+import { Message, TextChannel } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
 

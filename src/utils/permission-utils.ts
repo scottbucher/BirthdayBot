@@ -50,7 +50,11 @@ export abstract class PermissionUtils {
             .has([Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY]);
     }
 
-    public static hasPermission(member: GuildMember, guildData: GuildData, command?: Command): boolean {
+    public static hasPermission(
+        member: GuildMember,
+        guildData: GuildData,
+        command?: Command
+    ): boolean {
         if (!command || command.adminOnly) {
             if (member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) return true;
 

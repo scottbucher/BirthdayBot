@@ -1,10 +1,4 @@
-import { APIMessage, ShardingManager } from 'discord.js';
-import {
-    BotsOnDiscordXyzSite,
-    DiscordBotListComSite,
-    DiscordBotsGgSite,
-    TopGgSite,
-} from './services/sites';
+import { ShardingManager } from 'discord.js';
 import { HttpService, Logger } from './services';
 import { RootController, SubscriptionEventsController, VotesController } from './controllers';
 
@@ -13,6 +7,7 @@ import { DataAccess } from './services/database/data-access';
 import { Manager } from './manager';
 import { ShardUtils } from './utils';
 import { UserRepo } from './services/database/repos';
+import { UpdateServerCountJob } from './jobs';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -21,18 +16,6 @@ let Debug = require('../config/debug.json');
 async function start(): Promise<void> {
     Logger.info(Logs.info.started);
     let httpService = new HttpService();
-
-    // Bot sites
-    let topGgSite = new TopGgSite(Config.botSites.topGg, httpService);
-    let botsOnDiscordXyzSite = new BotsOnDiscordXyzSite(
-        Config.botSites.botsOnDiscordXyz,
-        httpService
-    );
-    let discordBotsGgSite = new DiscordBotsGgSite(Config.botSites.discordBotsGg, httpService);
-    let discordBotListComSite = new DiscordBotListComSite(
-        Config.botSites.discordBotListCom,
-        httpService
-    );
 
     // Sharding
     let totalShards = 0;
@@ -73,12 +56,14 @@ async function start(): Promise<void> {
     // Repos
     let userRepo = new UserRepo(dataAccess);
 
-    let manager = new Manager(
+    let updateServerCountJob = new UpdateServerCountJob(
+        Config.jobs.updateServerCount.schedule,
+        Config.botSites,
         shardManager,
-        [topGgSite, botsOnDiscordXyzSite, discordBotsGgSite, discordBotListComSite].filter(
-            botSite => botSite.enabled
-        )
+        httpService
     );
+
+    let manager = new Manager(shardManager, [updateServerCountJob]);
 
     // API
     let rootController = new RootController();
@@ -89,15 +74,6 @@ async function start(): Promise<void> {
     // Start
     await api.start();
     await manager.start();
-
-    // Start schedule to update server count
-    setInterval(async () => {
-        try {
-            await manager.updateServerCount();
-        } catch (error) {
-            Logger.error(Logs.error.updateServerCount, error);
-        }
-    }, Config.jobs.updateServerCount.interval * 1000);
 }
 
 start();

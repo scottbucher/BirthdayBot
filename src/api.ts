@@ -38,5 +38,5 @@ export class Api {
             error
         );
         res.status(500).json({ error: true, message: error.message });
-    }
+    };
 }

@@ -24,9 +24,12 @@ export class SetupTrusted {
         let botUser = guild.client.user;
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
-                [Config.prefix, ...Config.stopCommands].includes(nextMsg.content.split(/\s+/)[0].toLowerCase());
+            [Config.prefix, ...Config.stopCommands].includes(
+                nextMsg.content.split(/\s+/)[0].toLowerCase()
+            );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, 
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Trusted Setup - Expired')
                     .setDescription('Type `bday setup trusted` to rerun the setup.')

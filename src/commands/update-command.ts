@@ -172,7 +172,7 @@ export class UpdateCommand implements Command {
 
             let embed = new MessageEmbed()
                 .setDescription(`Successfully set the birthday role to ${birthdayRole.toString()}!`)
-                .setFooter('This role is actively removed from those whose birthday it isn\'t.')
+                .setFooter(`This role is actively removed from those whose birthday it isn't.`)
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
         } else if (args[2].toLowerCase() === 'trustedrole') {

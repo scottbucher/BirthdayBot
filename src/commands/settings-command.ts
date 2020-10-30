@@ -85,9 +85,7 @@ export class SettingsCommand implements Command {
                 : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
                   '**Deleted Role**';
 
-        let colorHex = guildData.MessageEmbedColor === '0'
-            ? Config.colors.default
-            : null;
+        let colorHex = guildData.MessageEmbedColor === '0' ? Config.colors.default : null;
 
         colorHex = !colorHex
             ? '#' + ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default

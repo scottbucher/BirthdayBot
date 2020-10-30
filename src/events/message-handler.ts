@@ -1,17 +1,9 @@
-import {
-    DMChannel,
-    GuildMember,
-    Message,
-    MessageEmbed,
-    Permissions,
-    TextChannel,
-} from 'discord.js';
+import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
 import { Logger, SubscriptionService } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
-import { GuildData } from '../models/database';
 import { PlanName } from '../models/subscription-models';
 import moment from 'moment';
 
@@ -155,7 +147,10 @@ export class MessageHandler {
                     `Premium Commands`,
                     'Subscribe to **Birthday bot Premium** for access to our premium features.\nSee `bday premium` for more information.'
                 )
-                .setFooter('Premium helps us support and maintain the bot!', msg.client.user.avatarURL())
+                .setFooter(
+                    'Premium helps us support and maintain the bot!',
+                    msg.client.user.avatarURL()
+                )
                 .setTimestamp()
                 .setColor(Config.colors.default);
             await MessageUtils.send(channel, embed);
@@ -177,7 +172,7 @@ export class MessageHandler {
                     .addField('Last Vote', `${voteTimeAgo}`, true)
                     .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
                     .setFooter(
-                        'Don\'t want to vote? Try Birthday Bot Premium!',
+                        `Don't want to vote? Try Birthday Bot Premium!`,
                         msg.client.user.avatarURL()
                     )
                     .setColor(Config.colors.error);

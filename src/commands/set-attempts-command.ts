@@ -3,7 +3,6 @@ import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
-import { isNumber } from 'util';
 
 let Config = require('../../config/config.json');
 

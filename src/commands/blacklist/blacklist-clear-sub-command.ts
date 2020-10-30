@@ -1,5 +1,10 @@
 import { ActionUtils, MessageUtils } from '../../utils';
-import { CollectOptions, CollectorUtils, ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
+import {
+    CollectOptions,
+    CollectorUtils,
+    ExpireFunction,
+    MessageFilter,
+} from 'discord.js-collector-utils';
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
@@ -21,7 +26,8 @@ export class BlacklistClearSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel,
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Birthday Message Clear - Expired')
                     .setDescription('Type `bday blacklist clear` to clear the birthday blacklist.')
@@ -45,7 +51,9 @@ export class BlacklistClearSubCommand {
 
         confirmationEmbed
             .setDescription(
-                `Are you sure you want to clear __**${blacklisted.blacklist.length}**__ blacklisted user${blacklisted.blacklist.length === 1 ? '' : 's'}?`
+                `Are you sure you want to clear __**${
+                    blacklisted.blacklist.length
+                }**__ blacklisted user${blacklisted.blacklist.length === 1 ? '' : 's'}?`
             )
             .setFooter('This action is irreversible!', msg.client.user.avatarURL())
             .setColor(Config.colors.warning);
