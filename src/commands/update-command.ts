@@ -137,6 +137,37 @@ export class UpdateCommand implements Command {
                 return;
             }
 
+            let membersWithRole = birthdayRole.members.size;
+
+            if (membersWithRole > 0 && membersWithRole < 100) {
+                let embed = new MessageEmbed()
+                    .setTitle('Warning')
+                    .setDescription(
+                        `We have detected that __**${membersWithRole}**__ user${
+                            membersWithRole > 1 ? 's' : ''
+                        } already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
+                    )
+                    .setFooter(
+                        'The Bot removes the Birthday Role from anyone whose birthday it isn\'t!',
+                        msg.client.user.avatarURL()
+                    )
+                    .setColor(Config.colors.warning);
+                MessageUtils.send(channel, embed);
+            } else if (membersWithRole > 100) {
+                let embed = new MessageEmbed()
+                    .setTitle('Error')
+                    .setDescription(
+                        `We have detected that __**${membersWithRole}**__ users already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
+                    )
+                    .setFooter(
+                        'The Bot removes the Birthday Role from anyone whose birthday it isn\'t!',
+                        msg.client.user.avatarURL()
+                    )
+                    .setColor(Config.colors.error);
+                MessageUtils.send(channel, embed);
+                return;
+            }
+
             await this.guildRepo.updateBirthdayRole(msg.guild.id, birthdayRole?.id);
 
             let embed = new MessageEmbed()
@@ -180,7 +211,10 @@ export class UpdateCommand implements Command {
                 .setDescription(`Successfully set the trusted role to ${trustedRole.toString()}!`)
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
-        } else if (args[2].toLowerCase() === 'birthdaymaster' || args[2].toLowerCase() === 'birthdaymasterrole') {
+        } else if (
+            args[2].toLowerCase() === 'birthdaymaster' ||
+            args[2].toLowerCase() === 'birthdaymasterrole'
+        ) {
             // Set role with desired attributes
             let birthdayMasterRole: Role = msg.mentions.roles.first();
 
@@ -204,7 +238,9 @@ export class UpdateCommand implements Command {
 
             if (birthdayMasterRole.managed) {
                 let embed = new MessageEmbed()
-                    .setDescription(`Birthday Master Role cannot be managed by an external service!`)
+                    .setDescription(
+                        `Birthday Master Role cannot be managed by an external service!`
+                    )
                     .setColor(Config.colors.error);
                 MessageUtils.send(channel, embed);
                 return;
@@ -213,7 +249,9 @@ export class UpdateCommand implements Command {
             await this.guildRepo.updateBirthdayMasterRole(msg.guild.id, birthdayMasterRole?.id);
 
             let embed = new MessageEmbed()
-                .setDescription(`Successfully set the birthday master role to ${birthdayMasterRole.toString()}!`)
+                .setDescription(
+                    `Successfully set the birthday master role to ${birthdayMasterRole.toString()}!`
+                )
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
         }

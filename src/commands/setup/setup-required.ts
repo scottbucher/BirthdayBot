@@ -28,7 +28,8 @@ export class SetupRequired {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel,
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Required Setup - Expired')
                     .setDescription('Type `bday setup` to rerun the setup.')
@@ -282,6 +283,38 @@ export class SetupRequired {
                             MessageUtils.send(channel, embed);
                             return;
                         }
+
+                        let membersWithRole = roleInput.members.size;
+
+                        if (membersWithRole > 0 && membersWithRole < 100) {
+                            let embed = new MessageEmbed()
+                                .setTitle('Warning')
+                                .setDescription(
+                                    `We have detected that __**${membersWithRole}**__ user${
+                                        membersWithRole > 1 ? 's' : ''
+                                    } already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
+                                )
+                                .setFooter(
+                                    'The Bot removes the Birthday Role from anyone whose birthday it isn\'t!',
+                                    msg.client.user.avatarURL()
+                                )
+                                .setColor(Config.colors.warning);
+                            MessageUtils.send(channel, embed);
+                        } else if (membersWithRole > 100) {
+                            let embed = new MessageEmbed()
+                                .setTitle('Error')
+                                .setDescription(
+                                    `We have detected that __**${membersWithRole}**__ users already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
+                                )
+                                .setFooter(
+                                    'The Bot removes the Birthday Role from anyone whose birthday it isn\'t!',
+                                    msg.client.user.avatarURL()
+                                )
+                                .setColor(Config.colors.error);
+                            MessageUtils.send(channel, embed);
+                            return;
+                        }
+
                         return roleInput?.id;
                     },
                     expireFunction,
