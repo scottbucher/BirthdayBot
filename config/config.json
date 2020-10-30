@@ -1,7 +1,7 @@
 {
     "prefix": "bday",
     "client": {
-        "token": "<BOT_TOKEN>",
+        "token": "***REMOVED***",
         "intents": [
             "GUILDS",
             "GUILD_PRESENCES",
@@ -21,10 +21,10 @@
         }
     },
     "mysql": {
-        "host": "localhost",
-        "database": "<DATABASE_NAME>",
-        "user": "<DATABASE_USERNAME>",
-        "password": "<DATABASE_PASSWORD>",
+        "host": "45.77.144.116",
+        "database": "***REMOVED***",
+        "user": "scott",
+        "password": "***REMOVED***",
         "charset": "utf8mb4",
         "connectionLimit": 25
     },
@@ -125,9 +125,9 @@
         "hours": 24
     },
     "payments": {
-        "enabled": false,
-        "url": "<PAYMENTS_URL>",
-        "token": "<TOKEN>",
+        "enabled": true,
+        "url": "***REMOVED***",
+        "token": "***REMOVED***",
         "allowNewTransactions": true
     },
     "botSites": [
