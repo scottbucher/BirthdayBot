@@ -104,6 +104,7 @@ export class ReactionAddHandler implements EventHandler {
         let expireFunction: ExpireFunction = async () => {
             return;
         };
+
         let titleArgs = msg.embeds[0]?.title?.split(/\s+/);
 
         if (!titleArgs) return;
