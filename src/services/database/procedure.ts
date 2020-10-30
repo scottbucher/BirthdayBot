@@ -37,5 +37,5 @@ export enum Procedure {
     User_GetLastVote = 'User_GetLastVote',
     User_GetTotalCount = 'User_GetTotalCount',
     User_GetBirthdaysTodayCount = 'User_GetBirthdaysTodayCount',
-    User_GetBirthdaysThisMonthCount = 'User_GetBirthdaysThisMonthCount'
+    User_GetBirthdaysThisMonthCount = 'User_GetBirthdaysThisMonthCount',
 }

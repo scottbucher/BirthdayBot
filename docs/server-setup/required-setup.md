@@ -1,7 +1,7 @@
 ---
 description: >-
-  This guide aims to help walk you through each step of the server setup process
-  as well as show the functionality of our interactive setup commands.
+    This guide aims to help walk you through each step of the server setup process
+    as well as show the functionality of our interactive setup commands.
 ---
 
 # Required Setup
@@ -24,7 +24,7 @@ Once the birthday channel is set, you will receive a second prompt.
 
 ![](https://i.imgur.com/rvoIvKk.png)
 
-This prompt is very similar to the previous with the same three options, however, this time, for the birthday **role**. 
+This prompt is very similar to the previous with the same three options, however, this time, for the birthday **role**.
 
 Again, we will choose the second option.
 
@@ -41,8 +41,3 @@ If your desired role is not **mention-able** in the Discord role settings, you w
 {% endhint %}
 
 This completes the required setup process. Read about an optional setup guide [here](optional-setup.md) or view other server setting commands [here](../commands.md#server-configuration-admins-only).
-
-
-
-
-
