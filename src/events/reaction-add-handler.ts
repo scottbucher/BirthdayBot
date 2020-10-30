@@ -6,15 +6,7 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import {
-    Collection,
-    Guild,
-    Message,
-    MessageEmbed,
-    MessageReaction,
-    TextChannel,
-    User,
-} from 'discord.js';
+import { Collection, Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 import { Logger, SubscriptionService } from '../services';
 
 import { EventHandler } from '.';

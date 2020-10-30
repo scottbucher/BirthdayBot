@@ -26,7 +26,8 @@ export class MessageClearSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel,
+            await MessageUtils.send(
+                channel,
                 new MessageEmbed()
                     .setTitle('Birthday Message Clear - Expired')
                     .setDescription('Type `bday message clear` to clear the birthday messages.')
@@ -50,7 +51,9 @@ export class MessageClearSubCommand {
 
         confirmationEmbed
             .setDescription(
-                `Are you sure you want to clear __**${customMessages.customMessages.length}**__ custom message${customMessages.customMessages.length === 1 ? '' : 's'}?`
+                `Are you sure you want to clear __**${
+                    customMessages.customMessages.length
+                }**__ custom message${customMessages.customMessages.length === 1 ? '' : 's'}?`
             )
             .setFooter('This action is irreversible!', msg.client.user.avatarURL())
             .setColor(Config.colors.warning);

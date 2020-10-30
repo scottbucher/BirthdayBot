@@ -121,7 +121,10 @@ export class CreateCommand implements Command {
                 .setDescription(`Successfully created the trusted role ${trustedRole.toString()}!`)
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
-        } else if (args[2].toLowerCase() === 'birthdaymaster' || args[2].toLowerCase() === 'birthdaymasterrole') {
+        } else if (
+            args[2].toLowerCase() === 'birthdaymaster' ||
+            args[2].toLowerCase() === 'birthdaymasterrole'
+        ) {
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
                 let embed = new MessageEmbed()
                     .setTitle('Not Enough Permissions!')
@@ -141,7 +144,9 @@ export class CreateCommand implements Command {
             await this.guildRepo.updateBirthdayMasterRole(msg.guild.id, birthdayMasterRole?.id);
 
             let embed = new MessageEmbed()
-                .setDescription(`Successfully created the birthday master role ${birthdayMasterRole.toString()}!`)
+                .setDescription(
+                    `Successfully created the birthday master role ${birthdayMasterRole.toString()}!`
+                )
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
         }

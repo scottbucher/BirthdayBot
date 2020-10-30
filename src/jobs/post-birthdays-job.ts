@@ -1,5 +1,5 @@
 import { BdayUtils, MathUtils, TimeUtils } from '../utils';
-import { BirthdayService, Logger, SubscriptionService } from '../services';
+import { BirthdayService, Logger } from '../services';
 import { BlacklistRepo, GuildRepo, UserRepo } from '../services/database/repos';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 
@@ -34,7 +34,10 @@ export class PostBirthdaysJob implements Job {
             ...(await this.userRepo.getUsersWithBirthday(yesterday)),
         ];
 
-        if (!MathUtils.isLeap(now.year()) && (today === '02-28' || tomorrow === '02-28' || yesterday === '02-28')) {
+        if (
+            !MathUtils.isLeap(now.year()) &&
+            (today === '02-28' || tomorrow === '02-28' || yesterday === '02-28')
+        ) {
             // Add leap year birthdays to list
             userDatas.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
         }
@@ -106,8 +109,12 @@ export class PostBirthdaysJob implements Job {
                 let blacklistData = await this.blacklistRepo.getBlacklist(guild.id);
 
                 // Remove members who are not apart of this guild and who are not in the birthday blacklist
-                let memberUserDatas = userDatas.filter(userData =>
-                    memberIds.includes(userData.UserDiscordId) && !blacklistData.blacklist.map(data => data.UserDiscordId).includes(userData.UserDiscordId)
+                let memberUserDatas = userDatas.filter(
+                    userData =>
+                        memberIds.includes(userData.UserDiscordId) &&
+                        !blacklistData.blacklist
+                            .map(data => data.UserDiscordId)
+                            .includes(userData.UserDiscordId)
                 );
 
                 promises.push(

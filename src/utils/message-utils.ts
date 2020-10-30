@@ -2,7 +2,6 @@ import {
     DMChannel,
     DiscordAPIError,
     EmojiResolvable,
-    Guild,
     Message,
     MessageReaction,
     StringResolvable,
@@ -32,7 +31,10 @@ export abstract class MessageUtils {
             return await msg.react(emoji);
         } catch (error) {
             // Error code 90001: "Reaction blocked" (User blocked bot) Error code: 10008: "Unknown Message" (Message was deleted)
-            if (error instanceof DiscordAPIError && (error.code === 90001 || error.code === 10008)) {
+            if (
+                error instanceof DiscordAPIError &&
+                (error.code === 90001 || error.code === 10008)
+            ) {
                 return;
             } else {
                 throw error;

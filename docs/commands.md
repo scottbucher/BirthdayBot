@@ -4,9 +4,9 @@ description: This page lists all usage and information about Birthday Bot's comm
 
 # Commands
 
-#### Prefix: `bday` 
+#### Prefix: `bday`
 
-Please note the space after **bday**  in the prefix. Each command should be run as follows:  
+Please note the space after **bday** in the prefix. Each command should be run as follows:  
 `bday <command>`  
 Example Command Usage: `bday set`
 
@@ -79,4 +79,3 @@ Example Command Usage: `bday set`
 `config trusted preventMessage <true/false>` - Should the bot only send birthday messages for people with the trusted role.
 
 `config trusted preventRole <true/false>` - Should the bot only give the birthday role for people with the trusted role.
-

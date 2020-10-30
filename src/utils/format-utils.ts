@@ -250,8 +250,6 @@ export abstract class FormatUtils {
             )
             .setTimestamp();
 
-        let i = (page - 1) * pageSize + 1;
-
         if (userDataResults.userData.length === 0) {
             let embed = new MessageEmbed()
                 .setDescription('**No Birthdays in this server!**')
@@ -300,8 +298,6 @@ export abstract class FormatUtils {
                 guild.iconURL()
             )
             .setTimestamp();
-
-        let i = (page - 1) * pageSize + 1;
 
         if (blacklistResults.blacklist.length === 0) {
             let embed = new MessageEmbed()

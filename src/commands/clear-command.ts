@@ -52,7 +52,10 @@ export class ClearCommand implements Command {
                 .setDescription(`Successfully cleared the trusted role!`)
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
-        } else if (args[2].toLowerCase() === 'birthdaymaster' || args[2].toLowerCase() === 'birthdaymasterrole') {
+        } else if (
+            args[2].toLowerCase() === 'birthdaymaster' ||
+            args[2].toLowerCase() === 'birthdaymasterrole'
+        ) {
             await this.guildRepo.updateBirthdayMasterRole(msg.guild.id, '0');
 
             let embed = new MessageEmbed()

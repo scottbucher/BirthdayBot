@@ -6,16 +6,16 @@ In your Discord server Birthday Bot will track your users' birthdays and using t
 
 ## **Features**:
 
-* Each user can input their birthday & time zone into the bot which stores that information into a database allowing the bot to know on what day and what time zone to celebrate the user's birthday
-* Server owners have heavy control over how, when, and what Birthday Bot does in their Discord
-  * Customization of the Birthday Message \(Message contents and design\)
-  * Customizable Birthday Role and/or Birthday Channel
-  * Custom Birthday Message Time
-  * Customizable Trusted Role System - Using this system server owners decide whose birthdays are celebrated in their Discord. Additionally, server owners can toggle whether the Trusted Role is only required to receive the Birthday Role or Birthday Message, or both.
-* All birthdays are stored Globally. This means if you have multiple Discord servers that you own or are in with Birthday Bot, your users will only have to input their birthday and time zone once.
-* View upcoming birthdays as well as birthdays for other users.
-* Clear your information from the database at any time.
-* Near 24/7 up-time!
+-   Each user can input their birthday & time zone into the bot which stores that information into a database allowing the bot to know on what day and what time zone to celebrate the user's birthday
+-   Server owners have heavy control over how, when, and what Birthday Bot does in their Discord
+    -   Customization of the Birthday Message \(Message contents and design\)
+    -   Customizable Birthday Role and/or Birthday Channel
+    -   Custom Birthday Message Time
+    -   Customizable Trusted Role System - Using this system server owners decide whose birthdays are celebrated in their Discord. Additionally, server owners can toggle whether the Trusted Role is only required to receive the Birthday Role or Birthday Message, or both.
+-   All birthdays are stored Globally. This means if you have multiple Discord servers that you own or are in with Birthday Bot, your users will only have to input their birthday and time zone once.
+-   View upcoming birthdays as well as birthdays for other users.
+-   Clear your information from the database at any time.
+-   Near 24/7 up-time!
 
 #### Support & Troubleshooting
 

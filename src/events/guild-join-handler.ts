@@ -21,7 +21,7 @@ export class GuildJoinHandler implements EventHandler {
             .setTitle('Thank you for using Birthday Bot!')
             .setDescription(
                 `To support the bot and unlock special features use \`${prefix} premium\` in your server.` +
-                `\n\nTo view the commands of this bot use \`${prefix} help\`.` +
+                    `\n\nTo view the commands of this bot use \`${prefix} help\`.` +
                     `\nTo setup the bot run \`${prefix} setup\`.` +
                     `\nTo set your birthday use \`${prefix} set\`.` +
                     `\n\nView the [Documentation](${Config.links.docs}) or the [FAQ](${Config.links.docs}/faq.).` +
@@ -34,7 +34,9 @@ export class GuildJoinHandler implements EventHandler {
         // Get someone to message
         let user = guild.owner;
         if (!user) {
-            user = guild.members.cache.find(member => member.hasPermission(Permissions.FLAGS.ADMINISTRATOR));
+            user = guild.members.cache.find(member =>
+                member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)
+            );
         }
 
         if (!user) return;

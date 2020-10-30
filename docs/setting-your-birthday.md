@@ -33,7 +33,7 @@ Ensure this is the correct information, then confirm by clicking the check mark.
 {% hint style="info" %}
 Each user only has a limited amount of Birthday Sets. These multiple sets are made to account for incorrect information input, time zone changes, etc.
 
-[Learn more](faq.md#how-many-times-can-i-set-my-birthday) 
+[Learn more](faq.md#how-many-times-can-i-set-my-birthday)
 {% endhint %}
 
 ![](https://i.imgur.com/hG9lfFB.png)
@@ -41,10 +41,7 @@ Each user only has a limited amount of Birthday Sets. These multiple sets are ma
 For users that is it! Server owners will have to do a bit more but Birthday Bot makes it easy with an interactive setup. For more information on server setup follow our guide here.
 
 {% hint style="info" %}
-Birthday Bot stores your information in a secure database, but also allows users to remove their personal data at any time. 
+Birthday Bot stores your information in a secure database, but also allows users to remove their personal data at any time.
 
 [Learn how](commands.md)
 {% endhint %}
-
-
-
