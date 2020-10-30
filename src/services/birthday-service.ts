@@ -126,11 +126,13 @@ export class BirthdayService {
         // Birthday role is actively taken, no time check needed!
         if (birthdayRole) {
             let userIds = userDatas.map(userData => userData.UserDiscordId);
-            let removeFromMembers = members.filter(member => userIds.includes(member.id));
-            removeFromMembers.forEach(member => {
-                if (member.roles.cache.has(birthdayRole.id))
+            let removeFromMembers = members
+                .filter(
+                    member => userIds.includes(member.id) && member.roles.cache.has(birthdayRole.id)
+                )
+                .forEach(member => {
                     ActionUtils.removeRole(member, birthdayRole);
-            });
+                });
         }
 
         // Birthday Message
