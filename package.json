@@ -2,7 +2,7 @@
     "name": "birthday-bot",
     "version": "1.0.0",
     "author": "Scott Bucher",
-    "description": "Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and 100% free!",
+    "description": "Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and easy to use!",
     "private": true,
     "engines": {
         "node": ">=12.14.0"
