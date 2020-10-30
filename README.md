@@ -7,7 +7,7 @@
 [![Discord Shield](https://discordapp.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discordapp.com/invite/9gUQFtz)
 [![Discord Bots](https://top.gg/api/widget/owner/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
 
-**Discord Bot** - Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and 100% free! Use `bday help` to get started!
+**Discord Bot** - Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and easy to use! Use `bday help` to get started!
 
 ## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot)
 
@@ -70,6 +70,8 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 
 ### Utilities
 
+-   `premium` - View information about birthday bot premium.
+-   `subscribe` - Subscribe to birthday bot premium.
 -   `set` - Set your birthday.
 -   `purge` - Remove your birthday data.
 -   `next` - View the next birthday(s) in the server.
@@ -86,7 +88,7 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 -   `help setup trusted` - Help for the trusted system.
 -   `settings` - View server's settings.
 
-### Server Confirguration (Admins only)
+### Server Configuration (Admins only)
 
 #### Required Settings
 
@@ -115,6 +117,24 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 -   `clear trustedRole` - Clear the trusted role.
 -   `trusted preventMsg <T/F>` - If trusted role is required for a birthday message.
 -   `trusted preventRole <T/F>` - If trusted role is required to get the birthday role.
+
+#### Permission Settings
+
+-   `create birthdayMasterRole` - Create the default birthday master role.
+-   `updated birthdayMasterRole <channel/role>` - Update the birthday master role.
+-   `clear birthdayMasterRole` - Clear the trusted role.
+-   `blacklist add <User>` - Add a user to the birthday blacklist.
+-   `blacklist remove <User>` - Remove a user from the birthday blacklist.
+-   `blacklist clear` - Clear the birthday blacklist.
+-   `blacklist list` - View the birthday blacklist list.
+
+### Premium Commands
+
+-   `premium` - View information about birthday bot premium.
+-   `message add <User> <Message>` - Add a user specific birthday message. User <Users> as the placeholder. Full example usage: bday message add @Scott Happy Birthday <Users>!
+-   `message remove <user/position>` - Remove a certain birthday message.
+-   `message remove <user/position>` - Remove a certain birthday message.
+-   `message color [color]` - Set the birthday message embed color.
 
 ## Help
 
