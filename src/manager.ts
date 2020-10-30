@@ -1,14 +1,13 @@
 import { Shard, ShardingManager } from 'discord.js';
 
-import { BotSite } from './services/sites';
 import { Logger } from './services';
-import { ShardUtils } from './utils';
+import { Job } from './jobs';
 
 let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');
 
 export class Manager {
-    constructor(private shardManager: ShardingManager, private botSites: BotSite[]) {}
+    constructor(private shardManager: ShardingManager, private jobs: Job[]) {}
 
     public async start(): Promise<void> {
         this.registerListeners();
@@ -23,46 +22,17 @@ export class Manager {
             return;
         }
 
-        try {
-            await this.updateServerCount();
-        } catch (error) {
-            Logger.error(Logs.error.updateServerCount, error);
-        }
-    }
-
-    public async updateServerCount(): Promise<void> {
-        let serverCount = await ShardUtils.retrieveServerCount(this.shardManager);
-        await this.shardManager.broadcastEval(`
-            this.user.setPresence({
-                activity: {
-                    name: 'bdays to ${serverCount.toLocaleString()} servers',
-                    type: "STREAMING",
-                    url: "${Config.links.stream}"
-                }
-            });
-        `);
-
-        Logger.info(
-            Logs.info.updatedServerCount.replace('{SERVER_COUNT}', serverCount.toLocaleString())
-        );
-
-        for (let botSite of this.botSites) {
-            try {
-                await botSite.updateServerCount(serverCount);
-            } catch (error) {
-                Logger.error(
-                    Logs.error.updateServerCountSite.replace('{BOT_SITE}', botSite.name),
-                    error
-                );
-                continue;
-            }
-
-            Logger.info(Logs.info.updateServerCountSite.replace('{BOT_SITE}', botSite.name));
-        }
+        this.startJobs();
     }
 
     private registerListeners(): void {
         this.shardManager.on('shardCreate', shard => this.onShardCreate(shard));
+    }
+
+    private startJobs(): void {
+        for (let job of this.jobs) {
+            job.start();
+        }
     }
 
     private onShardCreate(shard: Shard): void {
