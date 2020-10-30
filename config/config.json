@@ -38,7 +38,7 @@
     },
     "jobs": {
         "updateServerCount": {
-            "interval": 300
+            "schedule": "0 */5 * * * *"
         },
         "postBirthdays": {
             "schedule": "0 0 * * * *"
@@ -130,26 +130,34 @@
         "token": "<TOKEN>",
         "allowNewTransactions": true
     },
-    "botSites": {
-        "topGg": {
+    "botSites": [
+        {
+            "name": "top.gg",
             "enabled": false,
             "url": "https://top.gg/api/bots/<BOT_ID>/stats",
-            "token": "<TOKEN>"
+            "authorization": "<TOKEN>",
+            "body": "{\"server_count\":{{SERVER_COUNT}}}"
         },
-        "botsOnDiscordXyz": {
+        {
+            "name": "bots.ondiscord.xyz",
             "enabled": false,
             "url": "https://bots.ondiscord.xyz/bot-api/bots/<BOT_ID>/guilds",
-            "token": "<TOKEN>"
+            "authorization": "<TOKEN>",
+            "body": "{\"guildCount\":{{SERVER_COUNT}}}"
         },
-        "discordBotsGg": {
+        {
+            "name": "discord.bots.gg",
             "enabled": false,
             "url": "https://discord.bots.gg/api/v1/bots/<BOT_ID>/stats",
-            "token": "<TOKEN>"
+            "authorization": "<TOKEN>",
+            "body": "{\"guildCount\":{{SERVER_COUNT}}}"
         },
-        "discordBotListCom": {
+        {
+            "name": "discordbotlist.com",
             "enabled": false,
             "url": "https://discordbotlist.com/api/bots/<BOT_ID>/stats",
-            "token": "Bot <TOKEN>"
+            "authorization": "Bot <TOKEN>",
+            "body": "{\"guilds\":{{SERVER_COUNT}}}"
         }
-    }
+    ]
 }
