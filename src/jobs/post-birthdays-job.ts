@@ -103,12 +103,12 @@ export class PostBirthdaysJob implements Job {
                 }
 
                 // Get a list of memberIds
-                let memberIds = members.map(member => member.id.toString());
+                let memberIds = members.map(member => member.id);
 
                 // Get the blacklist data for this guild
                 let blacklistData = await this.blacklistRepo.getBlacklist(guild.id);
 
-                // Remove members who are not apart of this guild and who are not in the birthday blacklist
+                // Remove members who are not apart of this guild and who are in the birthday blacklist
                 let memberUserDatas = userDatas.filter(
                     userData =>
                         memberIds.includes(userData.UserDiscordId) &&
