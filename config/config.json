@@ -1,7 +1,7 @@
 {
     "prefix": "bday",
     "client": {
-        "token": "NjUzNzkyOTYwODI3MjI4MTg1.Xe8KJA.o1hPUP1OJ1gCcQt8T07EynF-ewc",
+        "token": "<BOT_TOKEN>",
         "intents": [
             "GUILDS",
             "GUILD_PRESENCES",
