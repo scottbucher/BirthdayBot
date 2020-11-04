@@ -58,7 +58,6 @@ async function start(): Promise<void> {
 
     let updateServerCountJob = new UpdateServerCountJob(
         Config.jobs.updateServerCount.schedule,
-        Config.botSites,
         shardManager,
         httpService
     );
