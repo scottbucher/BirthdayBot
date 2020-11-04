@@ -8,6 +8,7 @@
     "[typescript]": {
         "editor.formatOnSave": true
     },
+    "cSpell.enabled": true,
     "cSpell.words": [
         "Bucher",
         "Novak",
@@ -17,7 +18,9 @@
         "chrono",
         "customizability",
         "datas",
+        "discordbotlist",
         "isnt",
+        "ondiscord",
         "parens",
         "repos",
         "respawn"
