@@ -295,7 +295,7 @@ export class SetupRequired {
                                     } already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
                                 )
                                 .setFooter(
-                                    'The Bot removes the Birthday Role from anyone whose birthday it isn\'t!',
+                                    `The Bot removes the Birthday Role from anyone whose birthday it isn't!`,
                                     msg.client.user.avatarURL()
                                 )
                                 .setColor(Config.colors.warning);
@@ -307,7 +307,7 @@ export class SetupRequired {
                                     `We have detected that __**${membersWithRole}**__ users already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
                                 )
                                 .setFooter(
-                                    'The Bot removes the Birthday Role from anyone whose birthday it isn\'t!',
+                                    `The Bot removes the Birthday Role from anyone whose birthday it isn't!`,
                                     msg.client.user.avatarURL()
                                 )
                                 .setColor(Config.colors.error);
