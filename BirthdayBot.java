@@ -7,19 +7,21 @@ public class Main {
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd");
 
     public static void main(String[] args) {
-        String today = dateFormat.format(new Date());
-
         List<String> birthdays = new ArrayList<>();
 
+        String today = dateFormat.format(new Date());
         switch (today) {
             case "08-28": {
                 birthdays.add("Scott");
+                break;
             }
             case "11-28": {
                 birthdays.add("Kevin");
+                break;
             }
             default: {
                 birthdays.add("No one");
+                break;
             }
         }
 
