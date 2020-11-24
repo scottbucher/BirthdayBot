@@ -1,17 +1,18 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { Logger, SubscriptionService } from '../services';
-import { MessageUtils, PermissionUtils } from '../utils';
+import { RateLimiter } from 'discord.js-rate-limiter';
+import moment from 'moment';
 
 import { Command } from '../commands';
 import { PlanName } from '../models/subscription-models';
-import moment from 'moment';
+import { Logger, SubscriptionService } from '../services';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { MessageUtils, PermissionUtils } from '../utils';
 
 let Config = require('../../config/config.json');
-let RateLimiter = require('limiter').RateLimiter;
-let limiters = {};
 
 export class MessageHandler {
+    private rateLimiter = new RateLimiter(10, 30000);
+
     constructor(
         private helpCommand: Command,
         private commands: Command[],
@@ -57,22 +58,11 @@ export class MessageHandler {
             return;
         }
 
-        // Try to get existing limiter
-        let limiter = limiters[msg.author.id];
-
-        // Create new limiter if one doesn't exist
-        if (!limiter) {
-            limiter = new RateLimiter(10, 30000);
-            limiters[msg.author.id] = limiter;
+        // Check if user is rate limited
+        let limited = this.rateLimiter.take(msg.author.id);
+        if (limited) {
+            return;
         }
-
-        // Get remaining tokens
-        if (limiters[msg.author.id].getTokensRemaining() < 1) return;
-
-        // Remove a token if they have one to lose
-        limiters[msg.author.id].removeTokens(1, (error: any) => {
-            if (error) return;
-        });
 
         // Process the command
         await this.processCommand(args, msg, channel as TextChannel | DMChannel);
