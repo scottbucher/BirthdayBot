@@ -11,7 +11,10 @@ import { MessageUtils, PermissionUtils } from '../utils';
 let Config = require('../../config/config.json');
 
 export class MessageHandler {
-    private rateLimiter = new RateLimiter(10, 30000);
+    private rateLimiter = new RateLimiter(
+        Config.rateLimiting.commands.amount,
+        Config.rateLimiting.commands.interval * 1000
+    );
 
     constructor(
         private helpCommand: Command,
