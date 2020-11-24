@@ -10,7 +10,7 @@ let Config = require('../../config/config.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;
 let zoneNames = moment.tz
     .names()
-    .filter(name => Config.validation.regions.some(region => name.startsWith(`${region}/`)));
+    .filter(name => Config.validation.regions.some((region: any) => name.startsWith(`${region}/`)));
 
 export abstract class FormatUtils {
     public static getRoleName(guild: Guild, roleDiscordId: string): string {
