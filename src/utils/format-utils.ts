@@ -7,6 +7,7 @@ import { GuildUtils } from '.';
 import moment from 'moment-timezone';
 
 let Config = require('../../config/config.json');
+let Abbreviations = require('../../config/abbreviations.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;
 let zoneNames = moment.tz
     .names()
@@ -40,6 +41,10 @@ export abstract class FormatUtils {
         return [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
             values.length < 2 ? '' : ', and '
         );
+    }
+
+    public static checkAbbreviation(input: string): boolean {
+        return Abbreviations.abbreviations.includes(input.toUpperCase());
     }
 
     public static findZone(input: string): string {

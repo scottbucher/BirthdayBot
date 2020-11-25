@@ -75,14 +75,16 @@ export class SetCommand implements Command {
             }
 
             if (!birthday) {
-                timeZone = FormatUtils.findZone(args[2]); // Try and get the time zone
+                if (!FormatUtils.checkAbbreviation(args[2])) {
+                    timeZone = FormatUtils.findZone(args[2]); // Try and get the time zone
+                }
             }
         }
 
         if (args.length >= 4) {
             // Check the fourth arg for inputs
             if (!dm && !target) {
-                target = FormatUtils.getUser(msg, args[3]);
+                target = msg.mentions.members.first()?.user;
             }
 
             if (!birthday) {
@@ -90,14 +92,16 @@ export class SetCommand implements Command {
             }
 
             if (!timeZone) {
-                timeZone = FormatUtils.findZone(args[3]); // Try and get the time zone
+                if (!FormatUtils.checkAbbreviation(args[2])) {
+                    timeZone = FormatUtils.findZone(args[2]); // Try and get the time zone
+                }
             }
         }
 
         if (args.length >= 5) {
             // Check the fifth arg for inputs
             if (!dm && !target) {
-                target = FormatUtils.getUser(msg, args[4]);
+                target = msg.mentions.members.first()?.user;
             }
 
             if (!birthday) {
@@ -190,7 +194,7 @@ export class SetCommand implements Command {
                         '\n' +
                         '\nSimply click your location on the map and copy the name of the selected time zone. You can then enter it below.' +
                         '\n' +
-                        '\n**Example Usage** `America/New_York`' +
+                        '\n**Example Usage:** `America/New_York`' +
                         '\n' +
                         `\n**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!`
                 )
@@ -211,6 +215,21 @@ export class SetCommand implements Command {
                 stopFilter,
                 // Retrieve Result
                 async (nextMsg: Message) => {
+                    if (FormatUtils.checkAbbreviation(nextMsg.content)) {
+                        let embed = new MessageEmbed()
+                            .setDescription('Invalid time zone! Do not use timezone abbreviations!')
+                            .setFooter(
+                                `Please check above and try again!`,
+                                msg.client.user.avatarURL()
+                            )
+                            .setTimestamp()
+                            .setColor(Config.colors.error);
+                        if (suggest) embed.setTitle(`Setup For ${target.username} - Time Zone`);
+                        else embed.setTitle('User Setup - Time Zone');
+                        await MessageUtils.send(channel, embed);
+                        return;
+                    }
+
                     let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
                     if (!input) {
                         let embed = new MessageEmbed()
@@ -247,7 +266,7 @@ export class SetCommand implements Command {
                         '\n' +
                         `\nPlease enter your birth month and day. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
                         '\n' +
-                        '\n**Example Usage** `08/28` (MM/DD)' +
+                        '\n**Example Usage:** `08/28` (MM/DD)' +
                         '\n' +
                         `\n**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!`
                 )
