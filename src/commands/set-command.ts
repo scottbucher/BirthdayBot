@@ -92,8 +92,8 @@ export class SetCommand implements Command {
             }
 
             if (!timeZone) {
-                if (!FormatUtils.checkAbbreviation(args[2])) {
-                    timeZone = FormatUtils.findZone(args[2]); // Try and get the time zone
+                if (!FormatUtils.checkAbbreviation(args[3])) {
+                    timeZone = FormatUtils.findZone(args[3]); // Try and get the time zone
                 }
             }
         }
@@ -109,7 +109,9 @@ export class SetCommand implements Command {
             }
 
             if (!timeZone) {
-                timeZone = FormatUtils.findZone(args[4]); // Try and get the time zone
+                if (!FormatUtils.checkAbbreviation(args[4])) {
+                    timeZone = FormatUtils.findZone(args[4]); // Try and get the time zone
+                }
             }
         }
 
