@@ -40,6 +40,10 @@
         "commands": {
             "amount": 10,
             "interval": 30
+        },
+        "list": {
+            "amount": 1,
+            "interval": 120
         }
     },
     "jobs": {
