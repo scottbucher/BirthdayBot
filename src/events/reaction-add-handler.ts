@@ -12,6 +12,7 @@ import { Logger, SubscriptionService } from '../services';
 import { EventHandler } from '.';
 import { ListUtils } from '../utils/list-utils';
 import { PlanName } from '../models/subscription-models';
+import { RateLimiter } from 'discord.js-rate-limiter';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -22,6 +23,23 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class ReactionAddHandler implements EventHandler {
+    private rateLimiter = new RateLimiter(
+        Config.rateLimiting.list.amount,
+        Config.rateLimiting.list.interval * 1000
+    );
+    private messageLimiter = new RateLimiter(
+        Config.rateLimiting.commands.amount,
+        Config.rateLimiting.commands.interval * 1000
+    );
+    private blacklistLimiter = new RateLimiter(
+        Config.rateLimiting.commands.amount,
+        Config.rateLimiting.commands.interval * 1000
+    );
+    private userMessagesLimiter = new RateLimiter(
+        Config.rateLimiting.commands.amount,
+        Config.rateLimiting.commands.interval * 1000
+    );
+
     constructor(
         private userRepo: UserRepo,
         private customMessageRepo: CustomMessageRepo,
@@ -267,6 +285,11 @@ export class ReactionAddHandler implements EventHandler {
             }
         } else if (checkJumpToPage) {
             if (titleArgs[1] === 'Messages') {
+                // Check if user is rate limited
+                let limited = this.messageLimiter.take(reactor.id);
+                if (limited) {
+                    return;
+                }
                 let page: number;
 
                 let messageTimeEmbed = new MessageEmbed()
@@ -334,6 +357,11 @@ export class ReactionAddHandler implements EventHandler {
 
                 await msgReaction.users.remove(reactor);
             } else if (titleArgs[0] === 'User') {
+                // Check if user is rate limited
+                let limited = this.userMessagesLimiter.take(reactor.id);
+                if (limited) {
+                    return;
+                }
                 let page: number;
 
                 let messageTimeEmbed = new MessageEmbed()
@@ -402,6 +430,11 @@ export class ReactionAddHandler implements EventHandler {
                 await msgReaction.users.remove(reactor);
             } else if (titleArgs[1] === 'List') {
                 let page: number;
+                // Check if user is rate limited
+                let limited = this.rateLimiter.take(reactor.id);
+                if (limited) {
+                    return;
+                }
 
                 let messageTimeEmbed = new MessageEmbed()
                     .setDescription('Please input the page you would like to jump to:')
@@ -462,6 +495,11 @@ export class ReactionAddHandler implements EventHandler {
                 await msgReaction.users.remove(reactor);
             } else if (titleArgs[1] === 'Blacklist') {
                 let page: number;
+                // Check if user is rate limited
+                let limited = this.blacklistLimiter.take(reactor.id);
+                if (limited) {
+                    return;
+                }
 
                 let messageTimeEmbed = new MessageEmbed()
                     .setDescription('Please input the page you would like to jump to:')
