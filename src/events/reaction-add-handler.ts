@@ -74,7 +74,7 @@ export class ReactionAddHandler implements EventHandler {
 
         // Get the reacted message
         let msg: Message;
-        if (msgReaction.message.partial) {
+        if (msgReaction.message?.partial) {
             try {
                 msg = await msgReaction.message.fetch();
             } catch (error) {
@@ -146,7 +146,7 @@ export class ReactionAddHandler implements EventHandler {
                     (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
                     (oldPage === customMessageResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
                 ) {
-                    await msgReaction.users.remove(reactor);
+                    await MessageUtils.removeReaction(msgReaction, reactor);
                     return;
                 }
 
@@ -163,7 +163,7 @@ export class ReactionAddHandler implements EventHandler {
                     hasPremium
                 );
 
-                await msgReaction.users.remove(reactor);
+                await MessageUtils.removeReaction(msgReaction, reactor);
             } else if (titleArgs[0] === 'User') {
                 let oldPage: number;
                 let page = 1;
@@ -190,7 +190,7 @@ export class ReactionAddHandler implements EventHandler {
                     (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
                     (oldPage === customMessageResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
                 ) {
-                    await msgReaction.users.remove(reactor);
+                    await MessageUtils.removeReaction(msgReaction, reactor);
                     return;
                 }
 
@@ -207,7 +207,7 @@ export class ReactionAddHandler implements EventHandler {
                     hasPremium
                 );
 
-                await msgReaction.users.remove(reactor);
+                await MessageUtils.removeReaction(msgReaction, reactor);
             } else if (titleArgs[1] === 'List') {
                 let oldPage: number;
                 let page = 1;
@@ -236,13 +236,13 @@ export class ReactionAddHandler implements EventHandler {
                     (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
                     (oldPage === userDataResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
                 ) {
-                    await msgReaction.users.remove(reactor);
+                    await MessageUtils.removeReaction(msgReaction, reactor);
                     return;
                 }
 
                 await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
 
-                await msgReaction.users.remove(reactor);
+                await MessageUtils.removeReaction(msgReaction, reactor);
             } else if (titleArgs[1] === 'Blacklist') {
                 let oldPage: number;
                 let page = 1;
@@ -269,7 +269,7 @@ export class ReactionAddHandler implements EventHandler {
                     (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
                     (oldPage === blacklistResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
                 ) {
-                    await msgReaction.users.remove(reactor);
+                    await MessageUtils.removeReaction(msgReaction, reactor);
                     return;
                 }
 
@@ -281,7 +281,7 @@ export class ReactionAddHandler implements EventHandler {
                     pageSize
                 );
 
-                await msgReaction.users.remove(reactor);
+                await MessageUtils.removeReaction(msgReaction, reactor);
             }
         } else if (checkJumpToPage) {
             if (titleArgs[1] === 'Messages') {
@@ -355,7 +355,7 @@ export class ReactionAddHandler implements EventHandler {
                     hasPremium
                 );
 
-                await msgReaction.users.remove(reactor);
+                await MessageUtils.removeReaction(msgReaction, reactor);
             } else if (titleArgs[0] === 'User') {
                 // Check if user is rate limited
                 let limited = this.userMessagesLimiter.take(reactor.id);
@@ -427,7 +427,7 @@ export class ReactionAddHandler implements EventHandler {
                     hasPremium
                 );
 
-                await msgReaction.users.remove(reactor);
+                await MessageUtils.removeReaction(msgReaction, reactor);
             } else if (titleArgs[1] === 'List') {
                 let page: number;
                 // Check if user is rate limited
@@ -492,7 +492,7 @@ export class ReactionAddHandler implements EventHandler {
 
                 await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
 
-                await msgReaction.users.remove(reactor);
+                await MessageUtils.removeReaction(msgReaction, reactor);
             } else if (titleArgs[1] === 'Blacklist') {
                 let page: number;
                 // Check if user is rate limited
@@ -559,7 +559,7 @@ export class ReactionAddHandler implements EventHandler {
                     pageSize
                 );
 
-                await msgReaction.users.remove(reactor);
+                await MessageUtils.removeReaction(msgReaction, reactor);
             }
         }
     }
