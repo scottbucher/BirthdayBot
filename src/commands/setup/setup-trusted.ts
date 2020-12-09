@@ -80,7 +80,7 @@ export class SetupTrusted {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(roleMessage);
+        MessageUtils.delete(roleMessage);
 
         if (roleOptions === undefined) return;
 
@@ -139,7 +139,7 @@ export class SetupTrusted {
                     COLLECT_OPTIONS
                 );
 
-                ActionUtils.deleteMessage(selectMessage);
+                MessageUtils.delete(selectMessage);
 
                 if (trustedRole === undefined) {
                     return;
@@ -185,7 +185,7 @@ export class SetupTrusted {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(settingMessage);
+        MessageUtils.delete(settingMessage);
 
         if (roleOptions === undefined) return;
 
@@ -222,7 +222,7 @@ export class SetupTrusted {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(settingRole);
+        MessageUtils.delete(settingRole);
 
         if (roleOptions === undefined) return;
 

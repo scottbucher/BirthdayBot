@@ -87,4 +87,20 @@ export abstract class MessageUtils {
             }
         }
     }
+
+    public static async delete(message: Message): Promise<MessageReaction> {
+        try {
+            if (message.deletable) await message.delete();
+        } catch (error) {
+            // Error code 50001: "Missing Access", Error code: 10008: "Unknown Message" (Message was deleted), Error code: 50013: "Missing Permission"
+            if (
+                error instanceof DiscordAPIError &&
+                (error.code === 50001 || error.code === 10008 || error.code === 50013)
+            ) {
+                return;
+            } else {
+                throw error;
+            }
+        }
+    }
 }

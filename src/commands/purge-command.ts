@@ -101,7 +101,7 @@ export class PurgeCommand implements Command {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(confirmationMessage);
+        MessageUtils.delete(confirmationMessage);
 
         if (confirmation === undefined) return;
 

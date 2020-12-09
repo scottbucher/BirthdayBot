@@ -16,12 +16,4 @@ export abstract class ActionUtils {
             // Can't take that role
         }
     }
-
-    public static async deleteMessage(msg: Message): Promise<void> {
-        try {
-            await msg.delete();
-        } catch (error) {
-            // Can't delete message
-        }
-    }
 }

@@ -77,7 +77,7 @@ export class SetupRequired {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(channelMessage);
+        MessageUtils.delete(channelMessage);
 
         if (channelOption === undefined) return;
 
@@ -156,7 +156,7 @@ export class SetupRequired {
                     COLLECT_OPTIONS
                 );
 
-                ActionUtils.deleteMessage(selectMessage);
+                MessageUtils.delete(selectMessage);
 
                 if (birthdayChannel === undefined) {
                     return;
@@ -204,7 +204,7 @@ export class SetupRequired {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(roleMessage);
+        MessageUtils.delete(roleMessage);
 
         if (roleOptions === undefined) return;
 
@@ -321,7 +321,7 @@ export class SetupRequired {
                     COLLECT_OPTIONS
                 );
 
-                ActionUtils.deleteMessage(selectMessage);
+                MessageUtils.delete(selectMessage);
 
                 if (birthdayRole === undefined) {
                     return;

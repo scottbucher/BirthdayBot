@@ -77,7 +77,7 @@ export class MessageClearSubCommand {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(confirmationMessage);
+        MessageUtils.delete(confirmationMessage);
 
         if (confirmation === undefined) return;
 

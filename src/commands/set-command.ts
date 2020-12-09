@@ -254,7 +254,7 @@ export class SetCommand implements Command {
                 COLLECT_OPTIONS
             );
 
-            ActionUtils.deleteMessage(timezoneMessage);
+            MessageUtils.delete(timezoneMessage);
         }
 
         if (timeZone === undefined) {
@@ -313,7 +313,7 @@ export class SetCommand implements Command {
                 COLLECT_OPTIONS
             );
 
-            ActionUtils.deleteMessage(birthdayMessage);
+            MessageUtils.delete(birthdayMessage);
         }
 
         if (birthday === undefined) {
@@ -372,7 +372,7 @@ export class SetCommand implements Command {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(confirmationMessage);
+        MessageUtils.delete(confirmationMessage);
 
         if (confirmation === undefined) return;
 

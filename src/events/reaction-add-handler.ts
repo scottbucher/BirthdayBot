@@ -305,7 +305,7 @@ export class ReactionAddHandler implements EventHandler {
                     stopFilter,
                     // Retrieve Result
                     async (nextMsg: Message) => {
-                        await ActionUtils.deleteMessage(nextMsg);
+                        await MessageUtils.delete(nextMsg);
                         if (!page && page !== 0) {
                             // Try and get the time
                             let page: number;
@@ -330,7 +330,7 @@ export class ReactionAddHandler implements EventHandler {
                     COLLECT_OPTIONS
                 );
 
-                ActionUtils.deleteMessage(prompt);
+                MessageUtils.delete(prompt);
 
                 if (page === undefined) return;
 
@@ -377,7 +377,7 @@ export class ReactionAddHandler implements EventHandler {
                     stopFilter,
                     // Retrieve Result
                     async (nextMsg: Message) => {
-                        await ActionUtils.deleteMessage(nextMsg);
+                        await MessageUtils.delete(nextMsg);
                         if (!page && page !== 0) {
                             // Try and get the time
                             let page: number;
@@ -402,7 +402,7 @@ export class ReactionAddHandler implements EventHandler {
                     COLLECT_OPTIONS
                 );
 
-                ActionUtils.deleteMessage(prompt);
+                MessageUtils.delete(prompt);
 
                 if (page === undefined) return;
 
@@ -449,7 +449,7 @@ export class ReactionAddHandler implements EventHandler {
                     stopFilter,
                     // Retrieve Result
                     async (nextMsg: Message) => {
-                        await ActionUtils.deleteMessage(nextMsg);
+                        await MessageUtils.delete(nextMsg);
                         if (!page && page !== 0) {
                             // Try and get the time
                             let page: number;
@@ -474,7 +474,7 @@ export class ReactionAddHandler implements EventHandler {
                     COLLECT_OPTIONS
                 );
 
-                ActionUtils.deleteMessage(prompt);
+                MessageUtils.delete(prompt);
 
                 if (page === undefined) {
                     return;
@@ -514,7 +514,7 @@ export class ReactionAddHandler implements EventHandler {
                     stopFilter,
                     // Retrieve Result
                     async (nextMsg: Message) => {
-                        await ActionUtils.deleteMessage(nextMsg);
+                        await MessageUtils.delete(nextMsg);
                         if (!page && page !== 0) {
                             // Try and get the time
                             let page: number;
@@ -539,7 +539,7 @@ export class ReactionAddHandler implements EventHandler {
                     COLLECT_OPTIONS
                 );
 
-                ActionUtils.deleteMessage(prompt);
+                MessageUtils.delete(prompt);
 
                 if (page === undefined) return;
 

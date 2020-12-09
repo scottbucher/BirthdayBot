@@ -96,7 +96,7 @@ export class SetupMessage {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(timeMessage);
+        MessageUtils.delete(timeMessage);
 
         if (messageTime === undefined) {
             return;
@@ -161,7 +161,7 @@ export class SetupMessage {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(mentionMessage);
+        MessageUtils.delete(mentionMessage);
 
         if (mention === undefined) {
             return;
@@ -201,7 +201,7 @@ export class SetupMessage {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(optionMessage);
+        MessageUtils.delete(optionMessage);
 
         if (messageOption === undefined) return;
 

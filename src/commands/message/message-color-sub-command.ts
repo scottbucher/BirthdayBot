@@ -80,7 +80,7 @@ export class MessageColorSubCommand {
                 COLLECT_OPTIONS
             );
 
-            ActionUtils.deleteMessage(colorMessage);
+            MessageUtils.delete(colorMessage);
 
             if (colorChoice === undefined) return;
 
@@ -131,7 +131,7 @@ export class MessageColorSubCommand {
                     COLLECT_OPTIONS
                 );
 
-                ActionUtils.deleteMessage(selectMessage);
+                MessageUtils.delete(selectMessage);
 
                 if (colorHex === undefined) {
                     return;

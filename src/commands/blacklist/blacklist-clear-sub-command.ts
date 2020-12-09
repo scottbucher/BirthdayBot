@@ -77,7 +77,7 @@ export class BlacklistClearSubCommand {
             COLLECT_OPTIONS
         );
 
-        ActionUtils.deleteMessage(confirmationMessage);
+        MessageUtils.delete(confirmationMessage);
 
         if (confirmation === undefined) return;
 
