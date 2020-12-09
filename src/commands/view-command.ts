@@ -71,6 +71,14 @@ export class ViewCommand implements Command {
                 )}, ${userData.TimeZone}**!`
             )
             .setColor(Config.colors.default);
+
+        if (msg.author === target) {
+            embed.setFooter(
+                `You currently have ${userData.ChangesLeft} birthday attempt${
+                    userData.ChangesLeft > 1 ? 's' : ''
+                } left.`
+            );
+        }
         await MessageUtils.send(channel, embed);
         return;
     }
