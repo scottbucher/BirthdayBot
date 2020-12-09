@@ -3,11 +3,14 @@ import {
     DiscordAPIError,
     EmojiResolvable,
     Message,
+    MessageEmbed,
     MessageReaction,
     StringResolvable,
     TextChannel,
     User,
 } from 'discord.js';
+
+let Config = require('../../config/config.json');
 
 export abstract class MessageUtils {
     public static async send(
@@ -32,12 +35,18 @@ export abstract class MessageUtils {
         try {
             return await target.edit(content);
         } catch (error) {
-            // Error code 10008: "Unknown Message" (User blocked bot or DM disabled), Error code 10013: "Unknown User", Error code 50001: "Missing Access"
+            // Error code 10008: "Unknown Message" (User blocked bot or DM disabled), Error code 10013: "Unknown User"
             if (
                 error instanceof DiscordAPIError &&
-                (error.code === 10008 || error.code === 10013 || error.code === 50001)
+                (error.code === 10008 || error.code === 10013)
             ) {
                 return;
+            } else if (error.code === 50001) {
+                // Error code 50001: "Missing Access"
+                let embed = new MessageEmbed()
+                    .setColor(Config.colors.error)
+                    .setDescription('I do not have permission to edit that message!');
+                this.send(target.channel as TextChannel, embed);
             } else {
                 throw error;
             }

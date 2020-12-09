@@ -76,7 +76,7 @@ export class ReactionAddHandler implements EventHandler {
         let msg: Message;
         if (msgReaction.message?.partial) {
             try {
-                msg = await msgReaction.message.fetch();
+                msg = await msgReaction.message?.fetch();
             } catch (error) {
                 Logger.error(Logs.error.messagePartial, error);
                 return;
@@ -87,7 +87,7 @@ export class ReactionAddHandler implements EventHandler {
 
         let users: Collection<string, User>;
         try {
-            users = await msgReaction.users.fetch();
+            users = await msgReaction?.users.fetch();
         } catch (error) {
             Logger.error(Logs.error.userFetch, error);
             return;
