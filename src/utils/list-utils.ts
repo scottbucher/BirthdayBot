@@ -2,6 +2,7 @@ import { Blacklisted, CustomMessages, UserDataResults } from '../models/database
 import { Guild, Message } from 'discord.js';
 
 import { FormatUtils } from '.';
+import { MessageUtils } from './message-utils';
 
 export abstract class ListUtils {
     public static async updateBdayList(
@@ -20,7 +21,7 @@ export abstract class ListUtils {
             pageSize
         );
 
-        message = await message.edit(embed);
+        message = await MessageUtils.edit(message, embed);
 
         if (embed.description === '**No Birthdays in this server!**') {
             await message.reactions.removeAll();
@@ -47,7 +48,7 @@ export abstract class ListUtils {
             hasPremium
         );
 
-        message = await message.edit(embed);
+        message = await MessageUtils.edit(message, embed);
 
         if (embed.description === '**No Custom Birthday Messages!**') {
             await message.reactions.removeAll();
@@ -74,7 +75,7 @@ export abstract class ListUtils {
             hasPremium
         );
 
-        message = await message.edit(embed);
+        message = await MessageUtils.edit(message, embed);
 
         if (embed.description === '**No User-Specific Birthday Messages!**') {
             await message.reactions.removeAll();
@@ -98,7 +99,7 @@ export abstract class ListUtils {
             pageSize
         );
 
-        message = await message.edit(embed);
+        message = await MessageUtils.edit(message, embed);
 
         if (embed.description === '**The blacklist is empty!**') {
             await message.reactions.removeAll();

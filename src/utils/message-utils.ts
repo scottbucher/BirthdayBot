@@ -28,6 +28,21 @@ export abstract class MessageUtils {
             }
         }
     }
+    public static async edit(target: Message, content: StringResolvable): Promise<Message> {
+        try {
+            return await target.edit(content);
+        } catch (error) {
+            // Error code 10008: "Unknown Message" (User blocked bot or DM disabled), Error code 10013: "Unknown User", Error code 50001: "Missing Access"
+            if (
+                error instanceof DiscordAPIError &&
+                (error.code === 10008 || error.code === 10013 || error.code === 50001)
+            ) {
+                return;
+            } else {
+                throw error;
+            }
+        }
+    }
 
     public static async react(msg: Message, emoji: EmojiResolvable): Promise<MessageReaction> {
         try {
