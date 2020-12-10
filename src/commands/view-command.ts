@@ -64,20 +64,29 @@ export class ViewCommand implements Command {
             return;
         }
 
-        let embed = new MessageEmbed()
-            .setDescription(
-                `${target.toString()}'s birthday is on **${moment(userData.Birthday).format(
-                    'MMMM Do'
-                )}, ${userData.TimeZone}**!`
-            )
-            .setColor(Config.colors.default);
+        let embed = new MessageEmbed();
 
         if (msg.author === target) {
-            embed.setFooter(
-                `You currently have ${userData.ChangesLeft} birthday attempt${
-                    userData.ChangesLeft > 1 ? 's' : ''
-                } left.`
-            );
+            embed
+                .setDescription(
+                    `Your birthday is on **${moment(userData.Birthday).format('MMMM Do')}, ${
+                        userData.TimeZone
+                    }**!`
+                )
+                .setColor(Config.colors.default)
+                .setFooter(
+                    `You currently have ${userData.ChangesLeft} birthday attempt${
+                        userData.ChangesLeft > 1 ? 's' : ''
+                    } left.`
+                );
+        } else {
+            embed
+                .setDescription(
+                    `${target.toString()}'s birthday is on **${moment(userData.Birthday).format(
+                        'MMMM Do'
+                    )}, ${userData.TimeZone}**!`
+                )
+                .setColor(Config.colors.default);
         }
         await MessageUtils.send(channel, embed);
         return;
