@@ -7,8 +7,7 @@ import {
 } from './commands/blacklist';
 import {
     BlacklistCommand,
-    ClearCommand,
-    CreateCommand,
+    ConfigCommand,
     DocumentationCommand,
     DonateCommand,
     FAQCommand,
@@ -27,11 +26,15 @@ import {
     SupportCommand,
     TestCommand,
     TrustedCommand,
-    UpdateCommand,
     ViewCommand,
 } from './commands';
 import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
 import { ClientOptions, DiscordAPIError } from 'discord.js';
+import {
+    ConfigBirthdayMasterRoleSubCommand,
+    ConfigChannelSubCommand,
+    ConfigRoleSubCommand,
+} from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,
@@ -46,6 +49,11 @@ import {
     MessageUserListSubCommand,
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
+import {
+    TrustedPreventMsgSubCommand,
+    TrustedPreventRoleSubCommand,
+    TrustedRoleSubCommand,
+} from './commands/trusted';
 
 import { Bot } from './bot';
 import { CustomClient } from './extensions/custom-client';
@@ -88,9 +96,6 @@ async function start(): Promise<void> {
     let setCommand = new SetCommand(guildRepo, userRepo);
     let statsCommand = new StatsCommand(userRepo);
 
-    let createCommand = new CreateCommand(guildRepo);
-    let updateCommand = new UpdateCommand(guildRepo);
-    let clearCommand = new ClearCommand(guildRepo);
     let settingsCommand = new SettingsCommand(guildRepo);
 
     let listCommand = new ListCommand(userRepo);
@@ -100,7 +105,6 @@ async function start(): Promise<void> {
     let mapCommand = new MapCommand();
     let viewCommand = new ViewCommand(userRepo);
     let nextCommand = new NextCommand(userRepo);
-    let trustedCommand = new TrustedCommand(guildRepo);
     let setAttemptsCommand = new SetAttemptsCommand(userRepo);
     let testCommand = new TestCommand(birthdayService, guildRepo, blacklistRepo);
     let faqCommand = new FAQCommand();
@@ -145,6 +149,30 @@ async function start(): Promise<void> {
         messageUserListSubCommand
     );
 
+    // Config Sub Commands
+    let configChannelSubCommand = new ConfigChannelSubCommand(guildRepo);
+    let configRoleSubCommand = new ConfigRoleSubCommand(guildRepo);
+    let configBirthdayMasterRoleSubCommand = new ConfigBirthdayMasterRoleSubCommand(guildRepo);
+
+    // Config Command
+    let configCommand = new ConfigCommand(
+        configBirthdayMasterRoleSubCommand,
+        configChannelSubCommand,
+        configRoleSubCommand
+    );
+
+    // Trusted Sub Commands
+    let trustedRoleSubCommand = new TrustedRoleSubCommand(guildRepo);
+    let trustedPreventMsgSubCommand = new TrustedPreventMsgSubCommand(guildRepo);
+    let trustedPreventRoleSubCommand = new TrustedPreventRoleSubCommand(guildRepo);
+
+    // Trusted Command
+    let trustedCommand = new TrustedCommand(
+        trustedRoleSubCommand,
+        trustedPreventMsgSubCommand,
+        trustedPreventRoleSubCommand
+    );
+
     // Blacklist Sub Commands
     let blacklistAddSubCommand = new BlacklistAddSubCommand(blacklistRepo);
     let blacklistRemoveSubCommand = new BlacklistRemoveSubCommand(blacklistRepo);
@@ -165,9 +193,6 @@ async function start(): Promise<void> {
         [
             setCommand,
             setupCommand,
-            createCommand,
-            updateCommand,
-            clearCommand,
             messageCommand,
             listCommand,
             purgeCommand,
@@ -188,6 +213,7 @@ async function start(): Promise<void> {
             premiumCommand,
             subscribeCommand,
             setNameFormatCommand,
+            configCommand,
         ],
         subscriptionService,
         guildRepo,
