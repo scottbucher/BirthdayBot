@@ -117,7 +117,7 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 -   `trusted preventMsg <T/F>` - If trusted role is required for a birthday message.
 -   `trusted preventRole <T/F>` - If trusted role is required to get the birthday role.
 
-#### Permission Settings
+#### Blacklist Settings
 
 -   `blacklist add <User>` - Add a user to the birthday blacklist.
 -   `blacklist remove <User>` - Remove a user from the birthday blacklist.
