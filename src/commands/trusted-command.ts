@@ -1,21 +1,6 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import {
-    MessageAddSubCommand,
-    MessageClearSubCommand,
-    MessageEmbedSubCommand,
-    MessageListSubCommand,
-    MessageMentionSubCommand,
-    MessageRemoveSubCommand,
-    MessageTestSubCommand,
-    MessageTimeSubCommand,
-} from './message';
 
 import { Command } from './command';
-import { ConfigBirthdayMasterRoleSubCommand } from './config/config-birthday-master-role-sub-command';
-import { ConfigChannelSubCommand } from './config/config-channel-sub-command';
-import { ConfigRoleSubCommand } from './config/config-role-sub-command';
-import { MessageColorSubCommand } from './message/message-color-sub-command';
-import { MessageUserListSubCommand } from './message/message-user-list-sub-command';
 import { MessageUtils } from '../utils';
 import { TrustedPreventMsgSubCommand } from './trusted/trusted-prevent-msg-sub-command';
 import { TrustedPreventRoleSubCommand } from './trusted/trusted-prevent-role-sub-command';
