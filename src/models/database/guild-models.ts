@@ -11,4 +11,6 @@ export interface GuildData {
     UseEmbed: number;
     MessageEmbedColor: string;
     MentionFormat: string;
+    DefaultTimezone: string;
+    UseTimezone: string;
 }

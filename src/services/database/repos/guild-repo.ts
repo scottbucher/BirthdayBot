@@ -92,6 +92,20 @@ export class GuildRepo {
         ]);
     }
 
+    public async updateDefaultTimezone(discordId: string, timezone: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateDefaultTimezone, [
+            discordId,
+            timezone,
+        ]);
+    }
+
+    public async updateUseTimezone(discordId: string, value: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateUseTimezone, [
+            discordId,
+            value,
+        ]);
+    }
+
     public async updateUseEmbed(discordId: string, value: number): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateUseEmbed, [discordId, value]);
     }
