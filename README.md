@@ -84,8 +84,9 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 
 -   `help` - Help with Birthday Bot
 -   `help setup` - Help for server setup.
--   `help setup message` - Help for the birthday message settings.
--   `help setup trusted` - Help for the trusted system.
+-   `help message` - Help for the birthday message settings.
+-   `help trusted` - Help for the trusted system.
+-   `help blacklist` - Help for the blacklist system.
 -   `settings` - View server's settings.
 
 ### Server Configuration (Admins only)
@@ -93,9 +94,9 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 #### Required Settings
 
 -   `setup` - Interactive guide for server setup.
--   `create <channel/role>` - Create the default birthday role/channel.
--   `update <channel/role> <#channel/@role>` - Update the birthday role/channel.
--   `clear <channel/role>` - Clear the birthday channel/role
+-   `config channel <create/clear/#channel>` - Set the birthday channel.
+-   `config role <create/clear/@role>` - Set the birthday role.
+-   `config birthdayMasterRole <create/clear/@role>` - Set the birthday master role.
 
 #### Birthday Message Settings
 
@@ -112,17 +113,12 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 #### Trusted System Settings
 
 -   `setup trusted` - Interactive guide for trusted system settings setup.
--   `create trustedRole` - Create the default trusted role.
--   `updated trustedRole <channel/role>` - Update the trusted role.
--   `clear trustedRole` - Clear the trusted role.
+-   `trusted role <create/clear/@role>` - Set the trusted role.
 -   `trusted preventMsg <T/F>` - If trusted role is required for a birthday message.
 -   `trusted preventRole <T/F>` - If trusted role is required to get the birthday role.
 
 #### Permission Settings
 
--   `create birthdayMasterRole` - Create the default birthday master role.
--   `updated birthdayMasterRole <channel/role>` - Update the birthday master role.
--   `clear birthdayMasterRole` - Clear the trusted role.
 -   `blacklist add <User>` - Add a user to the birthday blacklist.
 -   `blacklist remove <User>` - Remove a user from the birthday blacklist.
 -   `blacklist clear` - Clear the birthday blacklist.
