@@ -46,7 +46,8 @@ export class MessageCommand implements Command {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription(
-                    `Please specify a sub command for the custom birthday message! [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)\nAccepted Values: \`list\`, \`add <Value>\`, \`remove <#>\`, \`clear\`, \`time <0-23>\`, \`mention <Value>\`, \`useEmbed <T/F>\``
+                    `Please specify a sub command for the custom birthday message! [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)\n` +
+                        `Accepted Values: \`list\`, \`add <Value>\`, \`remove <#>\`, \`clear\`, \`time <0-23>\`, \`mention <Value>\`, \`useEmbed <T/F>\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
@@ -92,7 +93,8 @@ export class MessageCommand implements Command {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription(
-                    `Please specify a sub command for the custom birthday message! [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)\nAccepted Values: \`list\`, \`add <Value>\`, \`remove <#>\`, \`clear\`, \`time <0-23>\`, \`mention <Value>\`, \`useEmbed <T/F>\`,`
+                    `Please specify a sub command for the custom birthday message! [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)\n` +
+                        `Accepted Values: \`list\`, \`add <Value>\`, \`remove <#>\`, \`clear\`, \`time <0-23>\`, \`mention <Value>\`, \`useEmbed <T/F>\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
