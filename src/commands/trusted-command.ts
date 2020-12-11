@@ -1,14 +1,31 @@
-import { FormatUtils, MessageUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import {
+    MessageAddSubCommand,
+    MessageClearSubCommand,
+    MessageEmbedSubCommand,
+    MessageListSubCommand,
+    MessageMentionSubCommand,
+    MessageRemoveSubCommand,
+    MessageTestSubCommand,
+    MessageTimeSubCommand,
+} from './message';
 
 import { Command } from './command';
-import { GuildRepo } from '../services/database/repos';
+import { ConfigBirthdayMasterRoleSubCommand } from './config/config-birthday-master-role-sub-command';
+import { ConfigChannelSubCommand } from './config/config-channel-sub-command';
+import { ConfigRoleSubCommand } from './config/config-role-sub-command';
+import { MessageColorSubCommand } from './message/message-color-sub-command';
+import { MessageUserListSubCommand } from './message/message-user-list-sub-command';
+import { MessageUtils } from '../utils';
+import { TrustedPreventMsgSubCommand } from './trusted/trusted-prevent-msg-sub-command';
+import { TrustedPreventRoleSubCommand } from './trusted/trusted-prevent-role-sub-command';
+import { TrustedRoleSubCommand } from './trusted/trusted-role-sub-command';
 
 let Config = require('../../config/config.json');
 
 export class TrustedCommand implements Command {
     public name: string = 'trusted';
-    public aliases = [];
+    public aliases = ['important'];
     public requireSetup = true;
     public guildOnly = true;
     public adminOnly = true;
@@ -17,82 +34,43 @@ export class TrustedCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(
+        private trustedRoleSubCommand: TrustedRoleSubCommand,
+        private trustedPreventMsgSubCommand: TrustedPreventMsgSubCommand,
+        private trustedPreventRoleSubCommand: TrustedPreventRoleSubCommand
+    ) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
         if (args.length === 2) {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription(
-                    'Please specify what to create!\nAccepted Values: `preventMessage <T/F>` or `preventRole <T/F>`,'
+                    `Please specify a config value to change!\n` +
+                        `Accepted Values: \`role\`, \`preventMsg\`, \`preventRole\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
             return;
         }
-
-        if (args[2].toLowerCase() === 'preventmsg' || args[2].toLowerCase() === 'preventmessage') {
-            // Do Stuff
-            if (args.length < 4) {
-                let embed = new MessageEmbed()
-                    .setDescription('Please provide a value! (True/False)')
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
-                return;
-            }
-
-            let preventMessage = FormatUtils.findBoolean(args[3]);
-
-            if (preventMessage === undefined || preventMessage === null) {
-                let embed = new MessageEmbed()
-                    .setTitle('Invalid Value!')
-                    .setDescription('Accepted Values: `True/False`')
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
-                return;
-            }
-
-            await this.guildRepo.updateTrustedPreventsMessage(msg.guild.id, preventMessage ? 1 : 0);
-
-            let embed = new MessageEmbed()
-                .setDescription(
-                    preventMessage
-                        ? 'Trusted Role is now required for the birthday message!'
-                        : 'Trusted Role is now not required for the birthday message!'
-                )
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+        if (args[2].toLowerCase() === 'role') {
+            this.trustedRoleSubCommand.execute(args, msg, channel);
+        } else if (
+            args[2].toLowerCase() === 'preventmsg' ||
+            args[2].toLowerCase() === 'preventmessage'
+        ) {
+            this.trustedPreventMsgSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'preventrole') {
-            // Do Stuff
-            if (args.length < 4) {
-                let embed = new MessageEmbed()
-                    .setDescription('Please provide a value! (True/False)')
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
-                return;
-            }
-
-            let preventRole = FormatUtils.findBoolean(args[3]);
-
-            if (preventRole === undefined || preventRole === null) {
-                let embed = new MessageEmbed()
-                    .setTitle('Invalid Value!')
-                    .setDescription('Accepted Values: `True/False`')
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
-                return;
-            }
-
-            await this.guildRepo.updateTrustedPreventsRole(msg.guild.id, preventRole ? 1 : 0);
-
+            this.trustedPreventRoleSubCommand.execute(args, msg, channel);
+        } else {
             let embed = new MessageEmbed()
+                .setTitle('Invalid Usage!')
                 .setDescription(
-                    preventRole
-                        ? 'Trusted Role is now required for the birthday role!'
-                        : 'Trusted Role is now not required for the birthday role!'
+                    `Please specify a config value to change!\n` +
+                        `Accepted Values: \`role\`, \`preventMsg\`, \`preventRole\``
                 )
-                .setColor(Config.colors.success);
+                .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
+            return;
         }
     }
 }
