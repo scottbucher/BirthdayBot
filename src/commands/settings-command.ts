@@ -93,6 +93,14 @@ export class SettingsCommand implements Command {
 
         let colorName = ColorUtils.findName(colorHex);
 
+        let colorOutput =
+            hasPremium || colorHex === Config.colors.default
+                ? `${colorName ? `${colorHex} (${colorName})` : colorHex}`
+                : `~~${colorName ? `${colorHex} (${colorName})` : colorHex}~~`;
+
+        let nameFormat =
+            guildData.NameFormat.charAt(0).toUpperCase() + guildData.NameFormat.slice(1);
+
         settingsEmbed
             .setColor(hasPremium ? colorHex : Config.colors.default)
             .addField('Birthday Channel', birthdayChannel, true)
@@ -104,13 +112,8 @@ export class SettingsCommand implements Command {
             .addField('Trusted Prevents Role', preventsRole, true)
             .addField('Trusted Prevents Message', preventsMessage, true)
             .addField('Embed Birthday Message', useEmbed, true)
-            .addField(
-                'Birthday Message Color',
-                hasPremium || colorHex === Config.colors.default
-                    ? `${colorName ? `${colorHex} (${colorName})` : colorHex}`
-                    : `~~${colorName ? `${colorHex} (${colorName})` : colorHex}~~`,
-                true
-            )
+            .addField('Name Format', nameFormat, true)
+            .addField('Birthday Message Color', colorOutput.toUpperCase(), true)
             .addField('Guild Id', guild.id, true)
             .addField('Premium', hasPremium ? 'Active' : 'Not Active', true);
 
