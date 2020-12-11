@@ -10,7 +10,7 @@ export interface GuildData {
     TrustedPreventsMessage: number;
     UseEmbed: number;
     MessageEmbedColor: string;
-    MentionFormat: string;
+    NameFormat: string;
     DefaultTimezone: string;
     UseTimezone: string;
 }

@@ -189,13 +189,13 @@ export class BirthdayService {
             if (birthdayMessageUsers.length > 0) {
                 let userList: string;
                 // Format the user list based off the servers name format
-                if (guildData.MentionFormat === 'mention')
+                if (guildData.NameFormat === 'mention')
                     FormatUtils.joinWithAnd(birthdayMessageUsers.map(user => user.toString()));
-                else if (guildData.MentionFormat === 'username')
+                else if (guildData.NameFormat === 'username')
                     FormatUtils.joinWithAnd(birthdayMessageUsers.map(user => user.user.username));
-                else if (guildData.MentionFormat === 'nickname')
+                else if (guildData.NameFormat === 'nickname')
                     FormatUtils.joinWithAnd(birthdayMessageUsers.map(user => user.nickname));
-                else if (guildData.MentionFormat === 'tag')
+                else if (guildData.NameFormat === 'tag')
                     FormatUtils.joinWithAnd(
                         birthdayMessageUsers.map(
                             user => `${user.user.username}#${user.user.discriminator}`
