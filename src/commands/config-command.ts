@@ -13,6 +13,7 @@ import {
 import { Command } from './command';
 import { ConfigBirthdayMasterRoleSubCommand } from './config/config-birthday-master-role-sub-command';
 import { ConfigChannelSubCommand } from './config/config-channel-sub-command';
+import { ConfigNameFormatSubCommand } from './config/config-name-format-sub-command';
 import { ConfigRoleSubCommand } from './config/config-role-sub-command';
 import { MessageColorSubCommand } from './message/message-color-sub-command';
 import { MessageUserListSubCommand } from './message/message-user-list-sub-command';
@@ -34,7 +35,8 @@ export class ConfigCommand implements Command {
     constructor(
         private configBirthdayMasterRole: ConfigBirthdayMasterRoleSubCommand,
         private configChannelSubCommand: ConfigChannelSubCommand,
-        private configRoleSubCommand: ConfigRoleSubCommand
+        private configRoleSubCommand: ConfigRoleSubCommand,
+        private configNameFormatSubCommand: ConfigNameFormatSubCommand
     ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
@@ -61,7 +63,7 @@ export class ConfigCommand implements Command {
         } else if (args[2].toLowerCase() === 'role') {
             this.configRoleSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'nameformat') {
-            // process sub-command
+            this.configNameFormatSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'timezone') {
             // process sub-command
         } else if (args[2].toLowerCase() === 'usetimezone') {

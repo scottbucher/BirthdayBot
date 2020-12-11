@@ -22,5 +22,4 @@ export { DonateCommand } from './donate-command';
 export { BlacklistCommand } from './blacklist-command';
 export { PremiumCommand } from './premium-commands';
 export { SubscribeCommand } from './subscribe-command';
-export { SetNameFormatCommand } from './set-name-format-command';
 export { ConfigCommand } from './config-command';
