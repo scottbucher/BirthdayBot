@@ -10,3 +10,4 @@ export { ArrayUtils } from './array-utils';
 export { BdayUtils } from './bday-utils';
 export { GuildUtils } from './guild-utils';
 export { TimeUtils } from './time-utils';
+export { InvalidUtils } from './invalid-utils';
