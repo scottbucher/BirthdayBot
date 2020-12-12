@@ -119,9 +119,9 @@ const HELP_TRUSTED_TITLE = 'Birthday Bot Trusted System Help - Guild Only';
 const HELP_TRUSTED_DESC =
     `\n**bday setup trusted** - Interactive guide for trusted system settings setup.` +
     '\n' +
-    `\n**bday trusted role <create/clear/@role>** - Set the trusted role.` +
-    `\n**bday trusted preventMsg <T/F>** - If trusted role is required for a birthday message.` +
-    `\n**bday trusted preventRole <T/F>** - If trusted role is required to get the birthday role.`;
+    `\n**bday config trustedRole <create/clear/@role>** - Set the trusted role.` +
+    `\n**bday config trustedPreventsMsg <T/F>** - If trusted role is required for a birthday message.` +
+    `\n**bday config trustedPreventsRole <T/F>** - If trusted role is required to get the birthday role.`;
 
 const HELP_BLACKLIST_TITLE = 'Birthday Bot Blacklist Help - Guild Only';
 const HELP_BLACKLIST_DESC =
