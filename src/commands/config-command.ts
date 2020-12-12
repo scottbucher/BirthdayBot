@@ -81,7 +81,7 @@ export class ConfigCommand implements Command {
                 .setTitle('Invalid Usage!')
                 .setDescription(
                     `Please specify a config value to change!\n` +
-                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\``
+                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
