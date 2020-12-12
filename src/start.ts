@@ -33,9 +33,11 @@ import {
     ConfigChannelSubCommand,
     ConfigNameFormatSubCommand,
     ConfigRoleSubCommand,
+    ConfigTimezoneSubCommand,
     ConfigTrustedPreventsMsgSubCommand,
     ConfigTrustedPreventsRoleSubCommand,
     ConfigTrustedRoleSubCommand,
+    ConfigUseTimezoneSubCommand,
 } from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
@@ -152,6 +154,8 @@ async function start(): Promise<void> {
     let configTrustedRoleSubCommand = new ConfigTrustedRoleSubCommand(guildRepo);
     let configTrustedPreventMsgSubCommand = new ConfigTrustedPreventsMsgSubCommand(guildRepo);
     let configTrustedPreventRoleSubCommand = new ConfigTrustedPreventsRoleSubCommand(guildRepo);
+    let configTimezoneSubCommand = new ConfigTimezoneSubCommand(guildRepo);
+    let configUseTimezoneSubCommand = new ConfigUseTimezoneSubCommand(guildRepo);
 
     // Config Command
     let configCommand = new ConfigCommand(
@@ -161,7 +165,9 @@ async function start(): Promise<void> {
         configNameFormatSubCommand,
         configTrustedRoleSubCommand,
         configTrustedPreventMsgSubCommand,
-        configTrustedPreventRoleSubCommand
+        configTrustedPreventRoleSubCommand,
+        configTimezoneSubCommand,
+        configUseTimezoneSubCommand
     );
 
     // Blacklist Sub Commands
