@@ -64,7 +64,7 @@ export abstract class InvalidUtils {
             .setTitle('Role Hierarchy Error!')
             .setColor(Config.colors.error)
             .setDescription(
-                `The birthday role must be bellow ${target.client.user.toString()}'s role.` +
+                `The birthday role must be below ${target.client.user.toString()}'s role.` +
                     `\nAdditional Note: ${target.client.user.toString()}'s role must be higher than the users it is assigning the birthday role to.` +
                     `\n\nExample Role Hierarchy:\n\`Birthday Bot's Role\`\n\`Birthday Role\`\n\`Birthday User's Highest Role\`` +
                     `\n\nEssentially the bot is unable to give a role to someone with a higher role than them or give a role that is higher than the bot's.`

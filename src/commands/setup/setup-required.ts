@@ -267,7 +267,7 @@ export class SetupRequired {
                             guild.members.resolve(botUser).roles.highest.position
                         ) {
                             let embed = new MessageEmbed()
-                                .setDescription(`Birthday Role must be bellow the Bot's role!`)
+                                .setDescription(`Birthday Role must be below the Bot's role!`)
                                 .setColor(Config.colors.error);
                             MessageUtils.send(channel, embed);
                             return;
