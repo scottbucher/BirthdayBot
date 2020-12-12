@@ -24,7 +24,6 @@ import {
     SetupCommand,
     SupportCommand,
     TestCommand,
-    TrustedCommand,
     ViewCommand,
 } from './commands';
 import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
@@ -34,6 +33,9 @@ import {
     ConfigChannelSubCommand,
     ConfigNameFormatSubCommand,
     ConfigRoleSubCommand,
+    ConfigTrustedPreventsMsgSubCommand,
+    ConfigTrustedPreventsRoleSubCommand,
+    ConfigTrustedRoleSubCommand,
 } from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
@@ -49,11 +51,6 @@ import {
     MessageUserListSubCommand,
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
-import {
-    TrustedPreventMsgSubCommand,
-    TrustedPreventRoleSubCommand,
-    TrustedRoleSubCommand,
-} from './commands/trusted';
 
 import { Bot } from './bot';
 import { CustomClient } from './extensions/custom-client';
@@ -152,25 +149,19 @@ async function start(): Promise<void> {
     let configRoleSubCommand = new ConfigRoleSubCommand(guildRepo);
     let configBirthdayMasterRoleSubCommand = new ConfigBirthdayMasterRoleSubCommand(guildRepo);
     let configNameFormatSubCommand = new ConfigNameFormatSubCommand(guildRepo);
+    let configTrustedRoleSubCommand = new ConfigTrustedRoleSubCommand(guildRepo);
+    let configTrustedPreventMsgSubCommand = new ConfigTrustedPreventsMsgSubCommand(guildRepo);
+    let configTrustedPreventRoleSubCommand = new ConfigTrustedPreventsRoleSubCommand(guildRepo);
 
     // Config Command
     let configCommand = new ConfigCommand(
         configBirthdayMasterRoleSubCommand,
         configChannelSubCommand,
         configRoleSubCommand,
-        configNameFormatSubCommand
-    );
-
-    // Trusted Sub Commands
-    let trustedRoleSubCommand = new TrustedRoleSubCommand(guildRepo);
-    let trustedPreventMsgSubCommand = new TrustedPreventMsgSubCommand(guildRepo);
-    let trustedPreventRoleSubCommand = new TrustedPreventRoleSubCommand(guildRepo);
-
-    // Trusted Command
-    let trustedCommand = new TrustedCommand(
-        trustedRoleSubCommand,
-        trustedPreventMsgSubCommand,
-        trustedPreventRoleSubCommand
+        configNameFormatSubCommand,
+        configTrustedRoleSubCommand,
+        configTrustedPreventMsgSubCommand,
+        configTrustedPreventRoleSubCommand
     );
 
     // Blacklist Sub Commands
@@ -201,7 +192,6 @@ async function start(): Promise<void> {
             mapCommand,
             viewCommand,
             nextCommand,
-            trustedCommand,
             setAttemptsCommand,
             settingsCommand,
             testCommand,

@@ -10,7 +10,6 @@ export { InviteCommand } from './invite-command';
 export { SupportCommand } from './support-command';
 export { PurgeCommand } from './purge-command';
 export { ViewCommand } from './view-command';
-export { TrustedCommand } from './trusted-command';
 export { SetAttemptsCommand } from './set-attempts-command';
 export { SettingsCommand } from './settings-command';
 export { NextCommand } from './next-command';

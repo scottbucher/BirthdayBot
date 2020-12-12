@@ -8,11 +8,11 @@ let Config = require('../../../config/config.json');
 const errorEmbed = new MessageEmbed()
     .setTitle('Invalid Usage!')
     .setDescription(
-        `Please specify an option!\n\n\`bday trusted role create\` - Creates the default trusted role.\n\`bday trusted role clear\` - Clears the trusted role.\n\`bday config trusted @role\` - Set the trusted role.`
+        `Please specify an option!\n\n\`bday config trustedRole create\` - Creates the default trusted role.\n\`bday config role clear\` - Clears the trusted role.\n\`bday config trustedRole @role\` - Set the trusted role.`
     )
     .setColor(Config.colors.error);
 
-export class TrustedRoleSubCommand {
+export class ConfigTrustedRoleSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {

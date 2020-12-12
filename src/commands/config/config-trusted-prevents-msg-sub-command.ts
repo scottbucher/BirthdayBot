@@ -10,7 +10,7 @@ const errorEmbed = new MessageEmbed()
     .setDescription('Please provide a value! (True/False)')
     .setColor(Config.colors.error);
 
-export class TrustedPreventRoleSubCommand {
+export class ConfigTrustedPreventsMsgSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
@@ -19,9 +19,9 @@ export class TrustedPreventRoleSubCommand {
             return;
         }
 
-        let preventRole = FormatUtils.findBoolean(args[3]);
+        let preventMessage = FormatUtils.findBoolean(args[3]);
 
-        if (preventRole === undefined || preventRole === null) {
+        if (preventMessage === undefined || preventMessage === null) {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Value!')
                 .setDescription('Accepted Values: `True/False`')
@@ -30,13 +30,13 @@ export class TrustedPreventRoleSubCommand {
             return;
         }
 
-        await this.guildRepo.updateTrustedPreventsRole(msg.guild.id, preventRole ? 1 : 0);
+        await this.guildRepo.updateTrustedPreventsMessage(msg.guild.id, preventMessage ? 1 : 0);
 
         let embed = new MessageEmbed()
             .setDescription(
-                preventRole
-                    ? 'Trusted Role is now required for the birthday role!'
-                    : 'Trusted Role is now not required for the birthday role!'
+                preventMessage
+                    ? 'Trusted Role is now required for the birthday message!'
+                    : 'Trusted Role is now not required for the birthday message!'
             )
             .setColor(Config.colors.success);
         await MessageUtils.send(channel, embed);

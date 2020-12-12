@@ -5,6 +5,9 @@ import { ConfigBirthdayMasterRoleSubCommand } from './config/config-birthday-mas
 import { ConfigChannelSubCommand } from './config/config-channel-sub-command';
 import { ConfigNameFormatSubCommand } from './config/config-name-format-sub-command';
 import { ConfigRoleSubCommand } from './config/config-role-sub-command';
+import { ConfigTrustedPreventsMsgSubCommand } from './config/config-trusted-prevents-msg-sub-command';
+import { ConfigTrustedPreventsRoleSubCommand } from './config/config-trusted-prevents-role-sub-command';
+import { ConfigTrustedRoleSubCommand } from './config/config-trusted-role-sub-command';
 import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
@@ -24,7 +27,10 @@ export class ConfigCommand implements Command {
         private configBirthdayMasterRole: ConfigBirthdayMasterRoleSubCommand,
         private configChannelSubCommand: ConfigChannelSubCommand,
         private configRoleSubCommand: ConfigRoleSubCommand,
-        private configNameFormatSubCommand: ConfigNameFormatSubCommand
+        private configNameFormatSubCommand: ConfigNameFormatSubCommand,
+        private configTrustedRoleSubCommand: ConfigTrustedRoleSubCommand,
+        private configTrustedPreventsMsgSubCommand: ConfigTrustedPreventsMsgSubCommand,
+        private configTrustedPreventsRoleSubCommand: ConfigTrustedPreventsRoleSubCommand
     ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
@@ -56,6 +62,15 @@ export class ConfigCommand implements Command {
             // process sub-command
         } else if (args[2].toLowerCase() === 'usetimezone') {
             // process sub-command
+        } else if (args[2].toLowerCase() === 'trustedrole') {
+            this.configTrustedRoleSubCommand.execute(args, msg, channel);
+        } else if (
+            args[2].toLowerCase() === 'trustedpreventsmsg' ||
+            args[2].toLowerCase() === 'trustedpreventsmessage'
+        ) {
+            this.configTrustedPreventsMsgSubCommand.execute(args, msg, channel);
+        } else if (args[2].toLowerCase() === 'trustedpreventsrole') {
+            this.configTrustedPreventsRoleSubCommand.execute(args, msg, channel);
         } else {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
