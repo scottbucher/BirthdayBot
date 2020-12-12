@@ -8,7 +8,7 @@ let Config = require('../../../config/config.json');
 const errorEmbed = new MessageEmbed()
     .setTitle('Invalid Usage!')
     .setDescription(
-        `Please specify an option!\n\n\`bday config trustedRole create\` - Creates the default trusted role.\n\`bday config role clear\` - Clears the trusted role.\n\`bday config trustedRole @role\` - Set the trusted role.`
+        `Please specify an option!\n\n\`bday config trustedRole create\` - Creates the default trusted role.\n\`bday config trustedRole clear\` - Clears the trusted role.\n\`bday config trustedRole @role\` - Set the trusted role.`
     )
     .setColor(Config.colors.error);
 
