@@ -39,7 +39,7 @@ export class ConfigCommand implements Command {
                 .setTitle('Invalid Usage!')
                 .setDescription(
                     `Please specify a config value to change!\n` +
-                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\``
+                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
@@ -66,10 +66,15 @@ export class ConfigCommand implements Command {
             this.configTrustedRoleSubCommand.execute(args, msg, channel);
         } else if (
             args[2].toLowerCase() === 'trustedpreventsmsg' ||
-            args[2].toLowerCase() === 'trustedpreventsmessage'
+            args[2].toLowerCase() === 'trustedpreventsmessage' ||
+            args[2].toLowerCase() === 'trustedpreventmsg' ||
+            args[2].toLowerCase() === 'trustedpreventmessage'
         ) {
             this.configTrustedPreventsMsgSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'trustedpreventsrole') {
+        } else if (
+            args[2].toLowerCase() === 'trustedpreventsrole' ||
+            args[2].toLowerCase() === 'trustedpreventrole'
+        ) {
             this.configTrustedPreventsRoleSubCommand.execute(args, msg, channel);
         } else {
             let embed = new MessageEmbed()
