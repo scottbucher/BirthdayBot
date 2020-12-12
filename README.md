@@ -113,9 +113,9 @@ The following are commands for BirthdayBot. To run a command, prefix the command
 #### Trusted System Settings
 
 -   `setup trusted` - Interactive guide for trusted system settings setup.
--   `trusted role <create/clear/@role>` - Set the trusted role.
--   `trusted preventMsg <T/F>` - If trusted role is required for a birthday message.
--   `trusted preventRole <T/F>` - If trusted role is required to get the birthday role.
+-   `config trustedRole <create/clear/@role>` - Set the trusted role.
+-   `config trustedPreventsMsg <T/F>` - If trusted role is required for a birthday message.
+-   `config trustedPreventsRole <T/F>` - If trusted role is required to get the birthday role.
 
 #### Permission Settings
 
