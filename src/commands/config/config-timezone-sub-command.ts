@@ -7,13 +7,11 @@ let Config = require('../../../config/config.json');
 
 const errorEmbed = new MessageEmbed()
     .setTitle('Invalid Usage!')
-    .setDescription(
-        `Please input a timezone! To find your timezone plesae use \`bday map\``
-    )
+    .setDescription(`Please input a timezone! To find your timezone please use \`bday map\``)
     .setColor(Config.colors.error);
 
 export class ConfigTimezoneSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         if (args.length === 3) {
@@ -21,14 +19,10 @@ export class ConfigTimezoneSubCommand {
             return;
         }
 
-
         if (FormatUtils.checkAbbreviation(args[3])) {
             let embed = new MessageEmbed()
                 .setDescription('Invalid time zone! Do not use timezone abbreviations!')
-                .setFooter(
-                    `Please check above and try again!`,
-                    msg.client.user.avatarURL()
-                )
+                .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
                 .setTimestamp()
                 .setTitle('Default Server Timezone Selection')
                 .setColor(Config.colors.error);
@@ -40,10 +34,7 @@ export class ConfigTimezoneSubCommand {
         if (!timezone) {
             let embed = new MessageEmbed()
                 .setDescription('Invalid time zone!')
-                .setFooter(
-                    `Please check above and try again!`,
-                    msg.client.user.avatarURL()
-                )
+                .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
                 .setTimestamp()
                 .setTitle('Default Server Timezone Selection')
                 .setColor(Config.colors.error);

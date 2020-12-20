@@ -35,7 +35,7 @@ export class ConfigCommand implements Command {
         private configTrustedPreventsRoleSubCommand: ConfigTrustedPreventsRoleSubCommand,
         private configTimezoneSubCommand: ConfigTimezoneSubCommand,
         private configUseTimezoneSubCommand: ConfigUseTimezoneSubCommand
-    ) { }
+    ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
         if (args.length === 2) {
@@ -43,7 +43,7 @@ export class ConfigCommand implements Command {
                 .setTitle('Invalid Usage!')
                 .setDescription(
                     `Please specify a config value to change!\n` +
-                    `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
+                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
@@ -85,7 +85,7 @@ export class ConfigCommand implements Command {
                 .setTitle('Invalid Usage!')
                 .setDescription(
                     `Please specify a config value to change!\n` +
-                    `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
+                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);

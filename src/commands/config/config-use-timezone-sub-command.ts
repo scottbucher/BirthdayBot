@@ -1,4 +1,4 @@
-import { FormatUtils, MessageUtils } from '../../utils';
+import { MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
@@ -13,7 +13,7 @@ const errorEmbed = new MessageEmbed()
     .setColor(Config.colors.error);
 
 export class ConfigUseTimezoneSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         if (args.length === 3) {
