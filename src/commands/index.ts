@@ -1,5 +1,3 @@
-import { fr } from 'chrono-node';
-
 export { Command } from './command';
 export { HelpCommand } from './help-command';
 export { SetCommand } from './set-command';

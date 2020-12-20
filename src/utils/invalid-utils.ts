@@ -1,12 +1,4 @@
-import {
-    DMChannel,
-    Message,
-    MessageEmbed,
-    Role,
-    StringResolvable,
-    TextChannel,
-    User,
-} from 'discord.js';
+import { DMChannel, MessageEmbed, Role, TextChannel, User } from 'discord.js';
 
 import { MessageUtils } from './message-utils';
 
@@ -15,7 +7,7 @@ let Config = require('../../config/config.json');
 export abstract class InvalidUtils {
     public static async notEnoughPermissions(
         target: User | DMChannel | TextChannel,
-        permissions: String[]
+        permissions: string[]
     ): Promise<void> {
         let permList = permissions.map(perm => `\`${perm}\``).join('\n');
         let embed = new MessageEmbed()
@@ -38,7 +30,7 @@ export abstract class InvalidUtils {
     public static async cantSendInChannel(
         target: User | DMChannel | TextChannel,
         issueChannel: User | DMChannel | TextChannel,
-        permissions: String[]
+        permissions: string[]
     ): Promise<void> {
         let permList = permissions.map(perm => `\`${perm}\``).join('\n');
         let embed = new MessageEmbed()
