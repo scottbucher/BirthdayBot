@@ -9,6 +9,8 @@ import { ConfigTrustedPreventsMsgSubCommand } from './config/config-trusted-prev
 import { ConfigTrustedPreventsRoleSubCommand } from './config/config-trusted-prevents-role-sub-command';
 import { ConfigTrustedRoleSubCommand } from './config/config-trusted-role-sub-command';
 import { MessageUtils } from '../utils';
+import { ConfigTimezoneSubCommand } from './config/config-timezone-sub-command';
+import { ConfigUseTimezoneSubCommand } from './config/config-use-timezone-sub-command';
 
 let Config = require('../../config/config.json');
 
@@ -30,8 +32,10 @@ export class ConfigCommand implements Command {
         private configNameFormatSubCommand: ConfigNameFormatSubCommand,
         private configTrustedRoleSubCommand: ConfigTrustedRoleSubCommand,
         private configTrustedPreventsMsgSubCommand: ConfigTrustedPreventsMsgSubCommand,
-        private configTrustedPreventsRoleSubCommand: ConfigTrustedPreventsRoleSubCommand
-    ) {}
+        private configTrustedPreventsRoleSubCommand: ConfigTrustedPreventsRoleSubCommand,
+        private configTimezoneSubCommand: ConfigTimezoneSubCommand,
+        private configUseTimezoneSubCommand: ConfigUseTimezoneSubCommand
+    ) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
         if (args.length === 2) {
@@ -39,7 +43,7 @@ export class ConfigCommand implements Command {
                 .setTitle('Invalid Usage!')
                 .setDescription(
                     `Please specify a config value to change!\n` +
-                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
+                    `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
@@ -59,9 +63,9 @@ export class ConfigCommand implements Command {
         } else if (args[2].toLowerCase() === 'nameformat') {
             this.configNameFormatSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'timezone') {
-            // process sub-command
+            this.configTimezoneSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'usetimezone') {
-            // process sub-command
+            this.configUseTimezoneSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'trustedrole') {
             this.configTrustedRoleSubCommand.execute(args, msg, channel);
         } else if (
@@ -81,7 +85,7 @@ export class ConfigCommand implements Command {
                 .setTitle('Invalid Usage!')
                 .setDescription(
                     `Please specify a config value to change!\n` +
-                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
+                    `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
