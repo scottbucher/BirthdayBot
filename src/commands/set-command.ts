@@ -1,6 +1,5 @@
 import * as Chrono from 'chrono-node';
 
-import { FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -16,9 +15,11 @@ import {
     TextChannel,
     User,
 } from 'discord.js';
+import { FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 import { GuildRepo, UserRepo } from '../services/database/repos';
 
 import { Command } from './command';
+import { GuildData } from '../models/database';
 
 let Config = require('../../config/config.json');
 
@@ -26,6 +27,8 @@ const COLLECT_OPTIONS: CollectOptions = {
     time: Config.experience.promptExpireTime * 1000,
     reset: true,
 };
+
+const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
 export class SetCommand implements Command {
     public name: string = 'set';
@@ -38,7 +41,7 @@ export class SetCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private guilRepo: GuildRepo, private userRepo: UserRepo) {}
+    constructor(private guildRepo: GuildRepo, private userRepo: UserRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -59,6 +62,7 @@ export class SetCommand implements Command {
         let birthday: string;
         let timeZone: string;
         let dm = channel instanceof DMChannel;
+        let guildData: GuildData;
 
         target = msg.mentions.members?.first()?.user;
 
@@ -118,7 +122,7 @@ export class SetCommand implements Command {
         if (!target) {
             target = msg.author;
         } else {
-            let guildData = await this.guilRepo.getGuild(msg.guild.id);
+            guildData = await this.guildRepo.getGuild(msg.guild.id);
 
             if (guildData && !PermissionUtils.hasPermission(msg.member, guildData)) {
                 let embed = new MessageEmbed()
@@ -177,6 +181,48 @@ export class SetCommand implements Command {
                 return;
             } else {
                 changesLeft = userData.ChangesLeft;
+            }
+        }
+        if (!guildData) guildData = await this.guildRepo.getGuild(msg.guild.id);
+        if (guildData?.DefaultTimezone !== '0') {
+            let useTimezoneEmbed = new MessageEmbed()
+                .setDescription(
+                    `This server has a default timezone of **${guildData.DefaultTimezone}**, do you want to use this timezone?`
+                )
+                .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
+                .setColor(Config.colors.default)
+                .setTimestamp()
+                .setAuthor(target.tag, target.avatarURL());
+
+            if (suggest) useTimezoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
+            else useTimezoneEmbed.setTitle('User Setup - Time Zone');
+
+            let confirmationMessage = await MessageUtils.send(channel, useTimezoneEmbed); // Send confirmation and emotes
+            for (let option of trueFalseOptions) {
+                await MessageUtils.react(confirmationMessage, option);
+            }
+
+            let confirmation: string = await CollectorUtils.collectByReaction(
+                confirmationMessage,
+                // Collect Filter
+                (msgReaction: MessageReaction, reactor: User) =>
+                    reactor.id === target.id && trueFalseOptions.includes(msgReaction.emoji.name),
+                stopFilter,
+                // Retrieve Result
+                async (msgReaction: MessageReaction, reactor: User) => {
+                    return msgReaction.emoji.name;
+                },
+                expireFunction,
+                COLLECT_OPTIONS
+            );
+
+            MessageUtils.delete(confirmationMessage);
+
+            if (confirmation === undefined) return;
+
+            if (confirmation === Config.emotes.confirm) {
+                // Confirm
+                timeZone = guildData.DefaultTimezone;
             }
         }
 
@@ -328,30 +374,49 @@ export class SetCommand implements Command {
         let confirmationEmbed = new MessageEmbed().setColor(Config.colors.warning);
 
         if (suggest) {
-            confirmationEmbed
-                .setDescription(
+            // If an admin is setting the information
+            confirmationEmbed.setFooter(
+                `${target.username} has ${changesLeft} attempts left. By clicking confirm they will use one of them.`,
+                msg.client.user.avatarURL()
+            );
+            if (userData) {
+                // If it isn't their first time setting their information
+                confirmationEmbed.setDescription(
+                    `Your birthday is already set ${target.toString()}, please confirm this information is correct to change it: **${FormatUtils.getMonth(
+                        month
+                    )} ${day}, ${timeZone}**`
+                );
+            } else {
+                // Their first time setting their information
+                confirmationEmbed.setDescription(
                     `${target.toString()}, please confirm this information is correct: **${FormatUtils.getMonth(
                         month
                     )} ${day}, ${timeZone}**`
-                )
-                .setFooter(
-                    `${target.username} has ${changesLeft} attempts left. By clicking confirm they will use one of them.`,
-                    msg.client.user.avatarURL()
                 );
+            }
         } else {
-            confirmationEmbed
-                .setDescription(
+            // User setting their own information
+            confirmationEmbed.setFooter(
+                `You have ${changesLeft} attempts left. By clicking confirm you will use one of them.`,
+                msg.client.user.avatarURL()
+            );
+
+            if (userData) {
+                // If it isn't their first time setting their information
+                confirmationEmbed.setDescription(
+                    `Your birthday is already set, please confirm this information is correct to change it: **${FormatUtils.getMonth(
+                        month
+                    )} ${day}, ${timeZone}**`
+                );
+            } else {
+                // Their first time setting their information
+                confirmationEmbed.setDescription(
                     `Please confirm this information is correct: **${FormatUtils.getMonth(
                         month
                     )} ${day}, ${timeZone}**`
-                )
-                .setFooter(
-                    `You have ${changesLeft} attempts left. By clicking confirm you will use one of them.`,
-                    msg.client.user.avatarURL()
                 );
+            }
         }
-
-        let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
         let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
