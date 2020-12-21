@@ -119,7 +119,7 @@ export class SetCommand implements Command {
             }
         }
 
-        if (!target) {
+        if (!target || channel instanceof DMChannel) {
             target = msg.author;
         } else {
             guildData = await this.guildRepo.getGuild(msg.guild.id);
@@ -183,7 +183,8 @@ export class SetCommand implements Command {
                 changesLeft = userData.ChangesLeft;
             }
         }
-        if (!guildData) guildData = await this.guildRepo.getGuild(msg.guild.id);
+        if (!(channel instanceof DMChannel) && !guildData)
+            guildData = await this.guildRepo.getGuild(msg.guild.id);
         if (guildData?.DefaultTimezone !== '0') {
             let useTimezoneEmbed = new MessageEmbed()
                 .setDescription(
