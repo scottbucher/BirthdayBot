@@ -292,7 +292,7 @@ export class MessageAddSubCommand {
 
             // Replace with valid placeholders
             memberAnniversaryMessage = msg.content
-                .substring(msg.content.indexOf('memberAnniversary') + type.length + 1)
+                .substring(msg.content.toLowerCase().indexOf(type) + type.length + 1)
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>')
                 .replace(/@years?|<years?>|{years?}/gi, '<Years>');
 
@@ -316,8 +316,8 @@ export class MessageAddSubCommand {
                         '' +
                             'Please include the `<Users>` and `<Years>` placeholder somewhere in the message. This indicates where anniversary usernames and the year will appear.' +
                             '\n' +
-                            '\nEx: `bday message add <Users> is celebrating <Years> apart of our discord!`' +
-                            '\n\nNote: The `s` after the year count will be handled by the bot, you do not have to include it.'
+                            '\nEx: `bday message add <Users> is celebrating <Years> year(s) in the discord!`' +
+                            '\n\nNote: The `<Years>` placeholder is just a number!'
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                     .setColor(Config.colors.error);
@@ -327,11 +327,11 @@ export class MessageAddSubCommand {
 
             let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
-            let birthdayMessages = customMessages.customMessages.filter(
+            let memberAnniversaryMessages = customMessages.customMessages.filter(
                 message => message.Type === 'memberanniversary'
             );
 
-            let globalMessageCount = birthdayMessages.filter(
+            let globalMessageCount = memberAnniversaryMessages.filter(
                 message => message.UserDiscordId === '0'
             ).length;
 
@@ -358,8 +358,8 @@ export class MessageAddSubCommand {
                     return;
                 }
 
-                // Don't allow duplicate birthday messages for non user messages
-                let duplicateMessage = birthdayMessages
+                // Don't allow duplicate member anniversary messages
+                let duplicateMessage = memberAnniversaryMessages
                     .map(message => message.Message)
                     .includes(memberAnniversaryMessage);
                 if (duplicateMessage) {
@@ -390,8 +390,132 @@ export class MessageAddSubCommand {
                         '\n`bday message test memberAnniversary <position> [user count]` - Test a member anniversary message.'
                 );
             await MessageUtils.send(channel, embed);
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         } else if (type === 'serveranniversary') {
             // It is a server anniversary message
+            if (!hasPremium) {
+                let embed = new MessageEmbed()
+                    .setTitle('Premium Required!')
+                    .setDescription(
+                        'Custom server anniversary messages are a premium only feature! View information about **Birthday Bot Premium** using `bday premium`!'
+                    )
+                    .setFooter(
+                        'Premium helps us support and maintain the bot!',
+                        msg.client.user.avatarURL()
+                    )
+                    .setTimestamp()
+                    .setColor(Config.colors.default);
+                await MessageUtils.send(channel, embed);
+                return;
+            }
+
+            // Get Message
+            let memberAnniversaryMessage: string;
+
+            // Replace with valid placeholders
+            memberAnniversaryMessage = msg.content
+                .substring(msg.content.toLowerCase().indexOf(type) + type.length + 1)
+                .replace(/@users?|<users?>|{users?}/gi, '<ServerName>')
+                .replace(/@years?|<years?>|{years?}/gi, '<Years>');
+
+            if (memberAnniversaryMessage.length > Config.validation.message.maxLength) {
+                let embed = new MessageEmbed()
+                    .setDescription(
+                        `Custom Messages are maxed at ${Config.validation.message.maxLength.toLocaleString()} characters!`
+                    )
+                    .setColor(Config.colors.error);
+                await MessageUtils.send(channel, embed);
+                return;
+            }
+
+            if (!memberAnniversaryMessage.includes('<Years>')) {
+                let embed = new MessageEmbed()
+                    .setTitle('Invalid Message')
+                    .setDescription(
+                        '' +
+                            'Please include the `<Years>` placeholder somewhere in the message. This indicates where anniversary year will appear.' +
+                            '\n' +
+                            '\nEx: `bday message add <ServerName> is now <Years> years old!' +
+                            '\n\nNote: The `<Years>` placeholder is just a number!' +
+                            "\n\nNote: The `<ServerName>` placeholder is not required and displays the server's name!"
+                    )
+                    .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
+                    .setColor(Config.colors.error);
+                await MessageUtils.send(channel, embed);
+                return;
+            }
+
+            let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
+
+            let serverAnniversaryMessages = customMessages.customMessages.filter(
+                message => message.Type === 'serveranniversary'
+            );
+
+            let globalMessageCount = serverAnniversaryMessages.filter(
+                message => message.UserDiscordId === '0'
+            ).length;
+
+            if (customMessages) {
+                if (globalMessageCount >= Config.validation.message.maxCount.free && !hasPremium) {
+                    let embed = new MessageEmbed()
+                        .setDescription(
+                            `Your server has reached the maximum custom member anniversary messages! (${Config.validation.message.maxCount.free.toLocaleString()})`
+                        )
+                        .setFooter(
+                            `To have up to ${Config.validation.message.maxCount.paid.toLocaleString()} custom member anniversary messages get **Birthday Bot Premium**!`,
+                            msg.client.user.avatarURL()
+                        )
+                        .setColor(Config.colors.error);
+                    await MessageUtils.send(channel, embed);
+                    return;
+                } else if (globalMessageCount >= Config.validation.message.maxCount.paid) {
+                    let embed = new MessageEmbed()
+                        .setDescription(
+                            `Your server has reached the maximum custom member anniversary messages! (${Config.validation.message.maxCount.paid.toLocaleString()})`
+                        )
+                        .setColor(Config.colors.error);
+                    await MessageUtils.send(channel, embed);
+                    return;
+                }
+
+                // Don't allow duplicate server anniversary
+                let duplicateMessage = serverAnniversaryMessages
+                    .map(message => message.Message)
+                    .includes(memberAnniversaryMessage);
+                if (duplicateMessage) {
+                    let embed = new MessageEmbed()
+                        .setDescription('Duplicate message found for this server!')
+                        .setColor(Config.colors.error);
+                    await MessageUtils.send(channel, embed);
+                    return;
+                }
+            }
+
+            await this.customMessageRepo.addCustomMessage(
+                msg.guild.id,
+                memberAnniversaryMessage,
+                '0',
+                type
+            );
+
+            let embed = new MessageEmbed()
+                .setColor(Config.colors.success)
+                .setDescription(
+                    `Successfully added the member anniversary message:\n\n\`${memberAnniversaryMessage}\`\n\u200b`
+                )
+                .addField(
+                    'Actions',
+                    '' +
+                        '`bday message list memberAnniversary [page]` - List all custom member anniversary messages.' +
+                        '\n`bday message test memberAnniversary <position> [user count]` - Test a member anniversary message.'
+                );
+            await MessageUtils.send(channel, embed);
         } else {
             let embed = new MessageEmbed()
                 .setDescription('Please provide a message type!')
