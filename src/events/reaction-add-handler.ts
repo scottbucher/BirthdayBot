@@ -1,4 +1,3 @@
-import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import { BlacklistRepo, CustomMessageRepo, UserRepo } from '../services/database/repos';
 import {
     CollectOptions,
@@ -7,6 +6,7 @@ import {
     MessageFilter,
 } from 'discord.js-collector-utils';
 import { Collection, Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
+import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import { Logger, SubscriptionService } from '../services';
 
 import { EventHandler } from '.';
@@ -139,7 +139,8 @@ export class ReactionAddHandler implements EventHandler {
                 let customMessageResults = await this.customMessageRepo.getCustomMessageList(
                     msg.guild.id,
                     pageSize,
-                    page
+                    page,
+                    'birthday'
                 );
 
                 if (
@@ -183,7 +184,8 @@ export class ReactionAddHandler implements EventHandler {
                 let customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
                     msg.guild.id,
                     pageSize,
-                    page
+                    page,
+                    'birthday'
                 );
 
                 if (
@@ -339,7 +341,8 @@ export class ReactionAddHandler implements EventHandler {
                 let customMessageResults = await this.customMessageRepo.getCustomMessageList(
                     msg.guild.id,
                     pageSize,
-                    page
+                    page,
+                    'birthday'
                 );
 
                 let hasPremium = Config.payments.enabled
@@ -411,7 +414,8 @@ export class ReactionAddHandler implements EventHandler {
                 let customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
                     msg.guild.id,
                     pageSize,
-                    page
+                    page,
+                    'birthday'
                 );
 
                 let hasPremium = Config.payments.enabled

@@ -137,10 +137,16 @@ export class BirthdayService {
             let hasPremium = Config.payments.enabled
                 ? await this.subscriptionService.hasService(PlanName.premium1, guild.id)
                 : false;
-            let globalMessages = await this.customMessageRepo.getCustomMessages(guild.id);
+            let globalMessages = await this.customMessageRepo.getCustomMessages(
+                guild.id,
+                'birthday'
+            );
 
             // Get a list of custom user-specific messages
-            let userMessages = await this.customMessageRepo.getCustomUserMessages(guild.id);
+            let userMessages = await this.customMessageRepo.getCustomUserMessages(
+                guild.id,
+                'birthday'
+            );
 
             // Define variable
             let usersWithSpecificMessage: GuildMember[];
