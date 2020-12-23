@@ -26,6 +26,13 @@ export class MessageTestSubCommand {
             }
         }
 
+        let type = args[3]?.toLowerCase();
+
+        if (type === 'birthday') {
+        } else if (type === 'memberanniversary') {
+        } else if (type === 'serveranniversary') {
+        }
+
         // Try and find someone they are mentioning
         let target = msg.mentions.members.first()?.user;
         let position: number;
@@ -72,8 +79,8 @@ export class MessageTestSubCommand {
 
         // Retrieve message to remove
         let messages = target
-            ? await this.customMessageRepo.getCustomUserMessages(msg.guild.id)
-            : await this.customMessageRepo.getCustomMessages(msg.guild.id);
+            ? await this.customMessageRepo.getCustomUserMessages(msg.guild.id, type)
+            : await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
         if (!messages) {
             let defaultMessage = `Happy Birthday ${userList}!`;

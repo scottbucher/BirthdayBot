@@ -1,4 +1,3 @@
-import { MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -9,6 +8,7 @@ import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'disco
 
 import { ColorUtils } from '../../utils/color-utils';
 import { GuildRepo } from '../../services/database/repos';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 

@@ -1,5 +1,5 @@
 import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
-import { Message, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
 
@@ -13,11 +13,25 @@ export class MessageListSubCommand {
 
         if (args[3]) {
             try {
-                page = ParseUtils.parseInt(args[3]);
+                page = ParseUtils.parseInt(args[4]);
             } catch (error) {
                 // Not A Number
             }
             if (!page || page <= 0 || page > 100000) page = 1;
+        }
+
+        let type = args[3]?.toLowerCase();
+
+        if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
+            let embed = new MessageEmbed()
+                .setTitle('Custom Message List')
+                .setDescription(
+                    `Please specify a message type! Accepted Values: \`birthday\`, \`memberAnniversary\`, \`serverAnniversary\``
+                )
+                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
+                .setColor(Config.colors.error);
+            await MessageUtils.send(channel, embed);
+            return;
         }
 
         let pageSize = Config.experience.birthdayMessageListSize;
@@ -25,7 +39,8 @@ export class MessageListSubCommand {
         let customMessageResults = await this.customMessageRepo.getCustomMessageList(
             msg.guild.id,
             pageSize,
-            page
+            page,
+            type
         );
 
         if (page > customMessageResults.stats.TotalPages)
@@ -36,7 +51,8 @@ export class MessageListSubCommand {
             customMessageResults,
             page,
             pageSize,
-            hasPremium
+            hasPremium,
+            type
         );
 
         let message = await MessageUtils.send(channel, embed);

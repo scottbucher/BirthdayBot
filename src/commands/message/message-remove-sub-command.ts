@@ -1,8 +1,8 @@
-import { MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { CustomMessage } from '../../models/database';
 import { CustomMessageRepo } from '../../services/database/repos';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -20,10 +20,17 @@ export class MessageRemoveSubCommand {
             return;
         }
 
-        // Retrieve message to remove
-        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
+        let type = args[3]?.toLowerCase();
 
-        let userMessages = await this.customMessageRepo.getCustomUserMessages(msg.guild.id);
+        if (type === 'birthday') {
+        } else if (type === 'memberAnniversary') {
+        } else if (type === 'serveranniversary') {
+        }
+
+        // Retrieve message to remove
+        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
+
+        let userMessages = await this.customMessageRepo.getCustomUserMessages(msg.guild.id, type);
 
         if (!customMessages && !userMessages) {
             let embed = new MessageEmbed()
@@ -100,8 +107,8 @@ export class MessageRemoveSubCommand {
 
         // Remove the question base on if it is a user or global message
         target
-            ? await this.customMessageRepo.removeCustomMessageUser(msg.guild.id, position)
-            : await this.customMessageRepo.removeCustomMessage(msg.guild.id, position);
+            ? await this.customMessageRepo.removeCustomMessageUser(msg.guild.id, position, type)
+            : await this.customMessageRepo.removeCustomMessage(msg.guild.id, position, type);
 
         let embed = new MessageEmbed()
             .setTitle('Remove Custom Message')

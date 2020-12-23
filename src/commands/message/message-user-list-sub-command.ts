@@ -25,7 +25,8 @@ export class MessageUserListSubCommand {
         let customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
             msg.guild.id,
             pageSize,
-            page
+            page,
+            'birthday'
         );
 
         if (page > customMessageResults.stats.TotalPages)

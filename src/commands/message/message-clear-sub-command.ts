@@ -1,4 +1,3 @@
-import { MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -8,6 +7,7 @@ import {
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -35,7 +35,14 @@ export class MessageClearSubCommand {
             );
         };
 
-        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
+        let type = args[3]?.toLowerCase();
+
+        if (type === 'birthday') {
+        } else if (type === 'memberanniversary') {
+        } else if (type === 'serveranniversary') {
+        }
+
+        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
         let confirmationEmbed = new MessageEmbed();
 
@@ -83,7 +90,7 @@ export class MessageClearSubCommand {
 
         if (confirmation === Config.emotes.confirm) {
             // Confirm
-            await this.customMessageRepo.clearCustomMessages(msg.guild.id);
+            await this.customMessageRepo.clearCustomMessages(msg.guild.id, type);
 
             let embed = new MessageEmbed()
                 .setDescription(`Successfully cleared all birthday messages from the database!`)
