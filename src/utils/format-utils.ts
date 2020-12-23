@@ -146,10 +146,10 @@ export abstract class FormatUtils {
         customMessageResults: CustomMessages,
         page: number,
         pageSize: number,
-        hasPremium: boolean
+        hasPremium: boolean,
+        type: string
     ): Promise<MessageEmbed> {
         let embed = new MessageEmbed()
-            .setTitle(`Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`)
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
             .setFooter(
@@ -162,11 +162,15 @@ export abstract class FormatUtils {
 
         if (customMessageResults.customMessages.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription('**No Custom Birthday Messages!**')
-                .setColor(Config.colors.default);
+                .setColor(Config.colors.default)
+                .setDescription(
+                    `**No Custom ${
+                        type === 'birthday' ? 'Birthday' : 'Member Anniversary'
+                    } Messages!**`
+                );
             return embed;
         }
-        let description = `*A random birthday message is chosen for each birthday. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
+        let description = '';
 
         for (let customMessage of customMessageResults.customMessages) {
             if (hasPremium || customMessage.Position <= 10) {
@@ -177,11 +181,30 @@ export abstract class FormatUtils {
             i++;
         }
 
-        if (!hasPremium && customMessageResults.stats.TotalItems > 10)
-            embed.addField(
-                'Message Limit',
-                `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.paid}** with \`bday premium\`!\n\n`
+        if (type === 'birthday') {
+            embed.setTitle(
+                `Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
             );
+
+            description += `*A random birthday message is chosen for each birthday. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
+
+            if (!hasPremium && customMessageResults.stats.TotalItems > 10)
+                embed.addField(
+                    'Message Limit',
+                    `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.paid}** with \`bday premium\`!\n\n`
+                );
+        } else if (type === 'memberanniversary') {
+            embed.setTitle(
+                `User Anniversary Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
+            );
+            description += `*A random message is chosen for each member anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-user-anniversary-message)*\n\n`;
+
+            if (!hasPremium && customMessageResults.stats.TotalItems > 10)
+                embed.addField(
+                    'Message Limit',
+                    `The free version of Birthday Bot can' only have up to **${Config.validation.message.maxCount.free}** custom member anniversary messages. Unlock up to **${Config.validation.message.maxCount.paid}**' with \`bday premium\`!\n\n`
+                );
+        }
 
         embed.setDescription(description);
 

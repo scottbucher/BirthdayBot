@@ -45,7 +45,8 @@ export abstract class ListUtils {
             customMessageResults,
             page,
             pageSize,
-            hasPremium
+            hasPremium,
+            'birthday'
         );
 
         message = await MessageUtils.edit(message, embed);
