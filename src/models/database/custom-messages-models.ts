@@ -13,5 +13,6 @@ export class CustomMessages {
 export class CustomMessage {
     Message: string;
     UserDiscordId: string;
+    Type: string;
     Position: number;
 }
