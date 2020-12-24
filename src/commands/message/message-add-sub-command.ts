@@ -148,22 +148,25 @@ export class MessageAddSubCommand {
             ).length;
 
             if (customMessages) {
-                if (globalMessageCount >= Config.validation.message.maxCount.free && !hasPremium) {
+                if (
+                    globalMessageCount >= Config.validation.message.maxCount.birthday.free &&
+                    !hasPremium
+                ) {
                     let embed = new MessageEmbed()
                         .setDescription(
-                            `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.free.toLocaleString()})`
+                            `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.birthday.free.toLocaleString()})`
                         )
                         .setFooter(
-                            `To have up to ${Config.validation.message.maxCount.paid.toLocaleString()} custom birthday messages get **Birthday Bot Premium**!`,
+                            `To have up to ${Config.validation.message.maxCount.birthday.paid.toLocaleString()} custom birthday messages get **Birthday Bot Premium**!`,
                             msg.client.user.avatarURL()
                         )
                         .setColor(Config.colors.error);
                     await MessageUtils.send(channel, embed);
                     return;
-                } else if (globalMessageCount >= Config.validation.message.maxCount.paid) {
+                } else if (globalMessageCount >= Config.validation.message.maxCount.birthday.paid) {
                     let embed = new MessageEmbed()
                         .setDescription(
-                            `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.paid.toLocaleString()})`
+                            `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.birthday.paid.toLocaleString()})`
                         )
                         .setColor(Config.colors.error);
                     await MessageUtils.send(channel, embed);
@@ -336,22 +339,28 @@ export class MessageAddSubCommand {
             ).length;
 
             if (customMessages) {
-                if (globalMessageCount >= Config.validation.message.maxCount.free && !hasPremium) {
+                if (
+                    globalMessageCount >=
+                        Config.validation.message.maxCount.memberAnniversary.free &&
+                    !hasPremium
+                ) {
                     let embed = new MessageEmbed()
                         .setDescription(
-                            `Your server has reached the maximum custom member anniversary messages! (${Config.validation.message.maxCount.free.toLocaleString()})`
+                            `Your server has reached the maximum custom member anniversary messages! (${Config.validation.message.maxCount.memberAnniversary.free.toLocaleString()})`
                         )
                         .setFooter(
-                            `To have up to ${Config.validation.message.maxCount.paid.toLocaleString()} custom member anniversary messages get **Birthday Bot Premium**!`,
+                            `To have up to ${Config.validation.message.maxCount.memberAnniversary.paid.toLocaleString()} custom member anniversary messages get **Birthday Bot Premium**!`,
                             msg.client.user.avatarURL()
                         )
                         .setColor(Config.colors.error);
                     await MessageUtils.send(channel, embed);
                     return;
-                } else if (globalMessageCount >= Config.validation.message.maxCount.paid) {
+                } else if (
+                    globalMessageCount >= Config.validation.message.maxCount.memberAnniversary.paid
+                ) {
                     let embed = new MessageEmbed()
                         .setDescription(
-                            `Your server has reached the maximum custom member anniversary messages! (${Config.validation.message.maxCount.paid.toLocaleString()})`
+                            `Your server has reached the maximum custom member anniversary messages! (${Config.validation.message.maxCount.memberAnniversary.paid.toLocaleString()})`
                         )
                         .setColor(Config.colors.error);
                     await MessageUtils.send(channel, embed);
@@ -462,22 +471,28 @@ export class MessageAddSubCommand {
             ).length;
 
             if (customMessages) {
-                if (globalMessageCount >= Config.validation.message.maxCount.free && !hasPremium) {
+                if (
+                    globalMessageCount >=
+                        Config.validation.message.maxCount.serverAnniversary.free &&
+                    !hasPremium
+                ) {
                     let embed = new MessageEmbed()
                         .setDescription(
-                            `Your server has reached the maximum custom member anniversary messages! (${Config.validation.message.maxCount.free.toLocaleString()})`
+                            `Your server has reached the maximum custom server anniversary messages! (${Config.validation.message.maxCount.serverAnniversary.free.toLocaleString()})`
                         )
                         .setFooter(
-                            `To have up to ${Config.validation.message.maxCount.paid.toLocaleString()} custom member anniversary messages get **Birthday Bot Premium**!`,
+                            `To have up to ${Config.validation.message.maxCount.birthday.paid.toLocaleString()} custom member server messages get **Birthday Bot Premium**!`,
                             msg.client.user.avatarURL()
                         )
                         .setColor(Config.colors.error);
                     await MessageUtils.send(channel, embed);
                     return;
-                } else if (globalMessageCount >= Config.validation.message.maxCount.paid) {
+                } else if (
+                    globalMessageCount >= Config.validation.message.maxCount.serverAnniversary.paid
+                ) {
                     let embed = new MessageEmbed()
                         .setDescription(
-                            `Your server has reached the maximum custom member anniversary messages! (${Config.validation.message.maxCount.paid.toLocaleString()})`
+                            `Your server has reached the maximum custom server anniversary messages! (${Config.validation.message.maxCount.serverAnniversary.paid.toLocaleString()})`
                         )
                         .setColor(Config.colors.error);
                     await MessageUtils.send(channel, embed);
@@ -507,13 +522,13 @@ export class MessageAddSubCommand {
             let embed = new MessageEmbed()
                 .setColor(Config.colors.success)
                 .setDescription(
-                    `Successfully added the member anniversary message:\n\n\`${memberAnniversaryMessage}\`\n\u200b`
+                    `Successfully added the server anniversary message:\n\n\`${memberAnniversaryMessage}\`\n\u200b`
                 )
                 .addField(
                     'Actions',
                     '' +
-                        '`bday message list memberAnniversary [page]` - List all custom member anniversary messages.' +
-                        '\n`bday message test memberAnniversary <position> [user count]` - Test a member anniversary message.'
+                        '`bday message list serverAnniversary [page]` - List all custom server anniversary messages.' +
+                        '\n`bday message test serverAnniversary <position> [user count]` - Test a server anniversary message.'
                 );
             await MessageUtils.send(channel, embed);
         } else {
