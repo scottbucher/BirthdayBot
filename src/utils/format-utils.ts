@@ -165,7 +165,11 @@ export abstract class FormatUtils {
                 .setColor(Config.colors.default)
                 .setDescription(
                     `**No Custom ${
-                        type === 'birthday' ? 'Birthday' : 'Member Anniversary'
+                        type === 'birthday'
+                            ? 'Birthday'
+                            : type === 'memberanniversary'
+                            ? 'Member Anniversary'
+                            : 'Server Anniversary'
                     } Messages!**`
                 );
             return embed;
@@ -173,7 +177,19 @@ export abstract class FormatUtils {
         let description = '';
 
         for (let customMessage of customMessageResults.customMessages) {
-            if (hasPremium || customMessage.Position <= 10) {
+            // dynamically check which ones to cross out due to the server not having premium anymore
+            // Todo: clean up the if logic
+            if (
+                hasPremium ||
+                (customMessage.Position <= Config.validation.message.maxCount.birthday.free &&
+                    type === 'birthday') ||
+                (customMessage.Position <=
+                    Config.validation.message.maxCount.memberAnniversary.free &&
+                    type === 'memberanniversary') ||
+                (customMessage.Position <=
+                    Config.validation.message.maxCount.serverAnniversary.free &&
+                    type === 'serveranniversary')
+            ) {
                 description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n\n`;
@@ -191,18 +207,29 @@ export abstract class FormatUtils {
             if (!hasPremium && customMessageResults.stats.TotalItems > 10)
                 embed.addField(
                     'Message Limit',
-                    `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.paid}** with \`bday premium\`!\n\n`
+                    `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.birthday.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.birthday.paid}** with \`bday premium\`!\n\n`
                 );
         } else if (type === 'memberanniversary') {
             embed.setTitle(
-                `User Anniversary Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
+                `Member Anniversary Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
             );
             description += `*A random message is chosen for each member anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-user-anniversary-message)*\n\n`;
 
             if (!hasPremium && customMessageResults.stats.TotalItems > 10)
                 embed.addField(
                     'Message Limit',
-                    `The free version of Birthday Bot can' only have up to **${Config.validation.message.maxCount.free}** custom member anniversary messages. Unlock up to **${Config.validation.message.maxCount.paid}**' with \`bday premium\`!\n\n`
+                    `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.memberAnniversary.free}** custom member anniversary messages. Unlock up to **${Config.validation.message.maxCount.memberAnniversary.paid}**' with \`bday premium\`!\n\n`
+                );
+        } else if (type === 'serveranniversary') {
+            embed.setTitle(
+                `Server Anniversary Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
+            );
+            description += `*A random message is chosen for each server anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-server-anniversary-message)*\n\n`;
+
+            if (!hasPremium && customMessageResults.stats.TotalItems > 10)
+                embed.addField(
+                    'Message Limit',
+                    `The free version of Birthday Bot can't have custom server anniversary messages. Unlock up to **${Config.validation.message.maxCount.serverAnniversary.paid}**' with \`bday premium\`!\n\n`
                 );
         }
 
