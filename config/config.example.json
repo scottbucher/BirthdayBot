@@ -96,7 +96,7 @@
             "maxCount": {
                 "maxCount": {
                     "birthday": {
-                        "free": 10,
+                        "free": 5,
                         "paid": 500
                     },
                     "memberAnniversary": {
@@ -104,7 +104,7 @@
                         "paid": 500
                     },
                     "serverAnniversary": {
-                        "free": 0,
+                        "free": 5,
                         "paid": 500
                     }
             }
