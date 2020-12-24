@@ -57,7 +57,7 @@ export class MessageListSubCommand {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description === '**No Custom Birthday Messages!**') return;
+        if (embed.description.includes('**No Custom')) return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);
         await MessageUtils.react(message, Config.emotes.jumpToPage);

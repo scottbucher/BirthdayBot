@@ -35,7 +35,8 @@ export abstract class ListUtils {
         message: Message,
         page: number,
         pageSize: number,
-        hasPremium: boolean
+        hasPremium: boolean,
+        type: string
     ): Promise<void> {
         if (page > customMessageResults.stats.TotalPages)
             page = customMessageResults.stats.TotalPages;
@@ -46,12 +47,12 @@ export abstract class ListUtils {
             page,
             pageSize,
             hasPremium,
-            'birthday'
+            type
         );
 
         message = await MessageUtils.edit(message, embed);
 
-        if (embed.description === '**No Custom Birthday Messages!**') {
+        if (embed.description.includes('**No Custom')) {
             await message.reactions.removeAll();
             return;
         }

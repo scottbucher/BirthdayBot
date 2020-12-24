@@ -120,7 +120,10 @@ export class ReactionAddHandler implements EventHandler {
         if (!titleArgs) return;
 
         if (checkNextPage || checkPreviousPage) {
-            if (titleArgs[1] === 'Messages') {
+            if (
+                titleArgs[1] === 'Messages' ||
+                (titleArgs[0] !== 'User' && titleArgs[2] === 'Messages')
+            ) {
                 let oldPage: number;
                 let page = 1;
                 let pageSize = Config.experience.birthdayMessageListSize;
@@ -136,11 +139,16 @@ export class ReactionAddHandler implements EventHandler {
                     if (!page) page = 1;
                 }
 
+                let type = 'birthday';
+
+                if (titleArgs[0] === 'Member') type = 'memberanniversary';
+                else if (titleArgs[0] === 'Server') type = 'serveranniversary';
+
                 let customMessageResults = await this.customMessageRepo.getCustomMessageList(
                     msg.guild.id,
                     pageSize,
                     page,
-                    'birthday'
+                    type
                 );
 
                 if (
@@ -161,7 +169,8 @@ export class ReactionAddHandler implements EventHandler {
                     msg,
                     page,
                     pageSize,
-                    hasPremium
+                    hasPremium,
+                    type
                 );
 
                 await MessageUtils.removeReaction(msgReaction, reactor);
@@ -286,7 +295,10 @@ export class ReactionAddHandler implements EventHandler {
                 await MessageUtils.removeReaction(msgReaction, reactor);
             }
         } else if (checkJumpToPage) {
-            if (titleArgs[1] === 'Messages') {
+            if (
+                titleArgs[1] === 'Messages' ||
+                (titleArgs[0] !== 'User' && titleArgs[2] === 'Messages')
+            ) {
                 // Check if user is rate limited
                 let limited = this.messageLimiter.take(reactor.id);
                 if (limited) {
@@ -338,11 +350,16 @@ export class ReactionAddHandler implements EventHandler {
 
                 let pageSize = Config.experience.birthdayMessageListSize;
 
+                let type = 'birthday';
+
+                if (titleArgs[0] === 'Member') type = 'memberanniversary';
+                else if (titleArgs[0] === 'Server') type = 'serveranniversary';
+
                 let customMessageResults = await this.customMessageRepo.getCustomMessageList(
                     msg.guild.id,
                     pageSize,
                     page,
-                    'birthday'
+                    type
                 );
 
                 let hasPremium = Config.payments.enabled
@@ -355,7 +372,8 @@ export class ReactionAddHandler implements EventHandler {
                     msg,
                     page,
                     pageSize,
-                    hasPremium
+                    hasPremium,
+                    type
                 );
 
                 await MessageUtils.removeReaction(msgReaction, reactor);
