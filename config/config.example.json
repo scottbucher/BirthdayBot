@@ -94,8 +94,19 @@
         "message": {
             "maxLength": 500,
             "maxCount": {
-                "free": 10,
-                "paid": 500
+                "maxCount": {
+                    "birthday": {
+                        "free": 10,
+                        "paid": 500
+                    },
+                    "memberAnniversary": {
+                        "free": 5,
+                        "paid": 500
+                    },
+                    "serverAnniversary": {
+                        "free": 0,
+                        "paid": 500
+                    }
             }
         },
         "regions": [
