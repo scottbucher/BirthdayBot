@@ -349,7 +349,7 @@ export class MessageAddSubCommand {
                             `Your server has reached the maximum custom member anniversary messages! (${Config.validation.message.maxCount.memberAnniversary.free.toLocaleString()})`
                         )
                         .setFooter(
-                            `To have up to ${Config.validation.message.maxCount.memberAnniversary.paid.toLocaleString()} custom member anniversary messages get **Birthday Bot Premium**!`,
+                            `To have up to ${Config.validation.message.maxCount.memberAnniversary.paid.toLocaleString()} custom member anniversary messages get Birthday Bot Premium!`,
                             msg.client.user.avatarURL()
                         )
                         .setColor(Config.colors.error);
@@ -408,22 +408,6 @@ export class MessageAddSubCommand {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         } else if (type === 'serveranniversary') {
             // It is a server anniversary message
-            if (!hasPremium) {
-                let embed = new MessageEmbed()
-                    .setTitle('Premium Required!')
-                    .setDescription(
-                        'Custom server anniversary messages are a premium only feature! View information about **Birthday Bot Premium** using `bday premium`!'
-                    )
-                    .setFooter(
-                        'Premium helps us support and maintain the bot!',
-                        msg.client.user.avatarURL()
-                    )
-                    .setTimestamp()
-                    .setColor(Config.colors.default);
-                await MessageUtils.send(channel, embed);
-                return;
-            }
-
             // Get Message
             let memberAnniversaryMessage: string;
 
@@ -450,9 +434,9 @@ export class MessageAddSubCommand {
                         '' +
                             'Please include the `<Years>` placeholder somewhere in the message. This indicates where anniversary year will appear.' +
                             '\n' +
-                            '\nEx: `bday message add serverAnniversary <ServerName> is now <Years> years old!' +
+                            '\nEx: `bday message add serverAnniversary <Server> is now <Years> years old!`' +
                             '\n\nNote: The `<Years>` placeholder is just a number!' +
-                            "\n\nNote: The `<ServerName>` placeholder is not required and displays the server's name!"
+                            "\n\nNote: The `<Server>` placeholder is not required and displays the server's name!"
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                     .setColor(Config.colors.error);
@@ -481,7 +465,7 @@ export class MessageAddSubCommand {
                             `Your server has reached the maximum custom server anniversary messages! (${Config.validation.message.maxCount.serverAnniversary.free.toLocaleString()})`
                         )
                         .setFooter(
-                            `To have up to ${Config.validation.message.maxCount.birthday.paid.toLocaleString()} custom member server messages get **Birthday Bot Premium**!`,
+                            `To have up to ${Config.validation.message.maxCount.birthday.paid.toLocaleString()} custom member server messages get Birthday Bot Premium**!`,
                             msg.client.user.avatarURL()
                         )
                         .setColor(Config.colors.error);
