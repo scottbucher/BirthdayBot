@@ -130,7 +130,7 @@ export class MessageAddSubCommand {
                         '' +
                             'Please include the `<Users>` placeholder somewhere in the message. This indicates where birthday usernames will appear.' +
                             '\n' +
-                            '\nEx: `bday message add Happy Birthday <Users>!`'
+                            '\nEx: `bday message add birthday Happy Birthday <Users>!`'
                     )
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);
@@ -319,7 +319,7 @@ export class MessageAddSubCommand {
                         '' +
                             'Please include the `<Users>` and `<Years>` placeholder somewhere in the message. This indicates where anniversary usernames and the year will appear.' +
                             '\n' +
-                            '\nEx: `bday message add <Users> is celebrating <Years> year(s) in the discord!`' +
+                            '\nEx: `bday message memberAnniversary <Users> is celebrating <Years> year(s) in the discord!`' +
                             '\n\nNote: The `<Years>` placeholder is just a number!'
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
@@ -450,7 +450,7 @@ export class MessageAddSubCommand {
                         '' +
                             'Please include the `<Years>` placeholder somewhere in the message. This indicates where anniversary year will appear.' +
                             '\n' +
-                            '\nEx: `bday message add <ServerName> is now <Years> years old!' +
+                            '\nEx: `bday message add serverAnniversary <ServerName> is now <Years> years old!' +
                             '\n\nNote: The `<Years>` placeholder is just a number!' +
                             "\n\nNote: The `<ServerName>` placeholder is not required and displays the server's name!"
                     )
