@@ -1,6 +1,6 @@
+import { CustomMessage, CustomMessages } from '../../models/database';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { CustomMessage } from '../../models/database';
 import { CustomMessageRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
 
@@ -10,44 +10,58 @@ export class MessageRemoveSubCommand {
     constructor(private customMessageRepo: CustomMessageRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
-        if (args.length < 4) {
+        let type = args[3]?.toLowerCase();
+
+        if (
+            !type ||
+            (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
+        ) {
+            let embed = new MessageEmbed()
+                .setTitle('Remove Custom Message')
+                .setDescription(
+                    `Please specify a message type! Accepted Values: \`birthday\`, \`memberAnniversary\`, \`serverAnniversary\``
+                )
+                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
+                .setColor(Config.colors.error);
+            await MessageUtils.send(channel, embed);
+            return;
+        }
+
+        if (args.length < 5) {
             let embed = new MessageEmbed()
                 .setDescription(
-                    'Please provide a message number!\nFind this using `bday message list`!'
+                    'Please provide a message number!\nFind this using `bday message list <type>`!'
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
             return;
         }
 
-        let type = args[3]?.toLowerCase();
-
-        if (type === 'birthday') {
-        } else if (type === 'memberAnniversary') {
-        } else if (type === 'serveranniversary') {
-        }
-
-        // Retrieve message to remove
-        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
-
-        let userMessages = await this.customMessageRepo.getCustomUserMessages(msg.guild.id, type);
-
-        if (!customMessages && !userMessages) {
-            let embed = new MessageEmbed()
-                .setDescription(`This server doesn't have any custom messages!`)
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
-        }
+        // Try and find someone they are mentioning
+        let target = msg.mentions.members.first()?.user;
 
         // Try and get the position
         let position: number;
 
-        // Try and find someone they are mentioning
-        let target = msg.mentions.members.first()?.user;
+        // Retrieve message to remove
+        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
+        let userMessages: CustomMessages;
 
-        // Did we find a user?
-        if (target) {
+        if (type === 'birthday') {
+            let userMessages = await this.customMessageRepo.getCustomUserMessages(
+                msg.guild.id,
+                type
+            );
+
+            if (target && !userMessages) {
+                let embed = new MessageEmbed()
+                    .setDescription(
+                        `This server doesn't have any user specific custom birthday messages!`
+                    )
+                    .setColor(Config.colors.error);
+                await MessageUtils.send(channel, embed);
+                return;
+            }
             let userMessage = userMessages.customMessages.filter(
                 message => message.UserDiscordId === target.id
             );
@@ -57,12 +71,12 @@ export class MessageRemoveSubCommand {
 
         if (!position) {
             try {
-                position = parseInt(args[3]);
+                position = parseInt(args[4]);
             } catch (error) {
                 let embed = new MessageEmbed()
                     .setTitle('Invalid position!')
                     .setDescription(
-                        `Use \`bday message list\` to view your server's custom messages!`
+                        `Use \`bday message list <type>\` to view your server's custom messages!`
                     )
                     .setColor(Config.colors.error);
                 await MessageUtils.send(channel, embed);
@@ -74,7 +88,7 @@ export class MessageRemoveSubCommand {
             let embed = new MessageEmbed()
                 .setTitle('Remove Custom Message')
                 .setDescription(
-                    `Message number does not exist!\nView your server's custom messages with \`bday message list\`!`
+                    `Message number does not exist!\nView your server's custom messages with \`bday message list <type>\`!`
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);
@@ -97,7 +111,7 @@ export class MessageRemoveSubCommand {
             let embed = new MessageEmbed()
                 .setTitle('Remove Custom Message')
                 .setDescription(
-                    `Message number does not exist!\nView your server's custom messages with \`bday message list\`!`
+                    `Message number does not exist!\nView your server's custom messages with \`bday message list <type>\`!`
                 )
                 .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                 .setColor(Config.colors.error);
