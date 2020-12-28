@@ -4,7 +4,7 @@ import { Guild, Message } from 'discord.js';
 import { FormatUtils } from '.';
 import { MessageUtils } from './message-utils';
 
-export abstract class ListUtils {
+export class ListUtils {
     public static async updateBdayList(
         userDataResults: UserDataResults,
         guild: Guild,
