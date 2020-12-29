@@ -42,23 +42,23 @@ export class SettingsCommand implements Command {
         let birthdayMasterRole: string;
         let preventsRole = guildData.TrustedPreventsRole ? 'True' : 'False';
         let preventsMessage = guildData.TrustedPreventsMessage ? 'True' : 'False';
-        let useEmbed = guildData.UseEmbed ? 'True' : 'False';
 
         // Get Message Time
-        if (guildData.MessageTime === 0) messageTime = '12:00 AM';
-        else if (guildData.MessageTime === 12) messageTime = '12:00 PM';
-        else if (guildData.MessageTime < 12) messageTime = guildData.MessageTime + ':00 AM';
-        else messageTime = guildData.MessageTime - 12 + ':00 PM';
+        if (guildData.BirthdayMessageTime === 0) messageTime = '12:00 AM';
+        else if (guildData.BirthdayMessageTime === 12) messageTime = '12:00 PM';
+        else if (guildData.BirthdayMessageTime < 12)
+            messageTime = guildData.BirthdayMessageTime + ':00 AM';
+        else messageTime = guildData.BirthdayMessageTime - 12 + ':00 PM';
 
         // Find mentioned role
-        let roleInput: Role = guild.roles.resolve(guildData.MentionSetting);
+        let roleInput: Role = guild.roles.resolve(guildData.BirthdayMentionSetting);
 
         if (!roleInput || roleInput.guild.id !== msg.guild.id) {
             if (
-                guildData.MentionSetting.toLowerCase() === 'everyone' ||
-                guildData.MentionSetting.toLowerCase() === 'here'
+                guildData.BirthdayMentionSetting.toLowerCase() === 'everyone' ||
+                guildData.BirthdayMentionSetting.toLowerCase() === 'here'
             ) {
-                mentionSetting = '@' + guildData.MentionSetting;
+                mentionSetting = '@' + guildData.BirthdayMentionSetting;
             }
         } else {
             mentionSetting = roleInput.toString();
@@ -85,24 +85,11 @@ export class SettingsCommand implements Command {
                 : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
                   '**Deleted Role**';
 
-        let colorHex = guildData.MessageEmbedColor === '0' ? Config.colors.default : null;
-
-        colorHex = !colorHex
-            ? '#' + ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
-            : Config.colors.default;
-
-        let colorName = ColorUtils.findName(colorHex);
-
-        let colorOutput =
-            hasPremium || colorHex === Config.colors.default
-                ? `${colorName ? `${colorHex} (${colorName})` : colorHex}`
-                : `~~${colorName ? `${colorHex} (${colorName})` : colorHex}~~`;
-
         let nameFormat =
             guildData.NameFormat.charAt(0).toUpperCase() + guildData.NameFormat.slice(1);
 
         settingsEmbed
-            .setColor(hasPremium ? colorHex : Config.colors.default)
+            .setColor(Config.colors.default)
             .addField('Birthday Channel', birthdayChannel, true)
             .addField('Birthday Role', birthdayRole, true)
             .addField('Birthday Master Role', birthdayMasterRole, true)
@@ -111,9 +98,7 @@ export class SettingsCommand implements Command {
             .addField('Trusted Role', trustedRole, true)
             .addField('Trusted Prevents Role', preventsRole, true)
             .addField('Trusted Prevents Message', preventsMessage, true)
-            .addField('Embed Birthday Message', useEmbed, true)
             .addField('Name Format', nameFormat, true)
-            .addField('Birthday Message Color', colorOutput.toUpperCase(), true)
             .addField('Guild Id', guild.id, true)
             .addField('Premium', hasPremium ? 'Active' : 'Not Active', true);
 

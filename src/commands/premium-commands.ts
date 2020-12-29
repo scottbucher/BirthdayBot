@@ -33,8 +33,8 @@ export class PremiumCommand implements Command {
             return;
         }
 
-        let messagesLimitFree = Config.validation.message.maxCount.free;
-        let messagesLimitPremium = Config.validation.message.maxCount.paid;
+        let messagesLimitFree = Config.validation.message.maxCount.birthday.free;
+        let messagesLimitPremium = Config.validation.message.maxCount.birthday.paid;
 
         let subStatus = await this.subscriptionService.getSubscription(
             PlanName.premium1,
