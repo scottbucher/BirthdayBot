@@ -3,7 +3,7 @@ import { DMChannel, GuildMember, Permissions, TextChannel } from 'discord.js';
 import { Command } from '../commands';
 import { GuildData } from '../models/database';
 
-export abstract class PermissionUtils {
+export class PermissionUtils {
     public static canSend(channel: TextChannel | DMChannel): boolean {
         if (channel instanceof DMChannel) return true;
 

@@ -4,7 +4,7 @@ import { MessageUtils } from './message-utils';
 
 let Config = require('../../config/config.json');
 
-export abstract class InvalidUtils {
+export class InvalidUtils {
     public static async notEnoughPermissions(
         target: User | DMChannel | TextChannel,
         permissions: string[]

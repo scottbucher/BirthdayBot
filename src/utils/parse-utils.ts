@@ -1,4 +1,4 @@
-export abstract class ParseUtils {
+export class ParseUtils {
     public static parseInt(input: string): number {
         return parseInt(input.replace(/,/g, ''));
     }

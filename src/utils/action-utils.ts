@@ -1,6 +1,6 @@
 import { DiscordAPIError, GuildMember, Role } from 'discord.js';
 
-export abstract class ActionUtils {
+export class ActionUtils {
     public static async giveRole(member: GuildMember, role: Role): Promise<void> {
         try {
             await member.roles.add(role);

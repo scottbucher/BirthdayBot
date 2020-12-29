@@ -13,7 +13,7 @@ let zoneNames = moment.tz
     .names()
     .filter(name => Config.validation.regions.some((region: any) => name.startsWith(`${region}/`)));
 
-export abstract class FormatUtils {
+export class FormatUtils {
     public static getRoleName(guild: Guild, roleDiscordId: string): string {
         return roleDiscordId
             ? guild.roles.resolve(roleDiscordId)?.toString() || '**Unknown**'

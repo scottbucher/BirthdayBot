@@ -2,7 +2,7 @@ let colors: { name: string; hex: string }[] = require('color-name-list');
 
 const COLOR_HEX_REGEX = /#?[0-9A-F]{6}/i;
 
-export abstract class ColorUtils {
+export class ColorUtils {
     public static isHex(input: string): boolean {
         return COLOR_HEX_REGEX.test(input);
     }
