@@ -43,8 +43,6 @@ import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
-    MessageColorSubCommand,
-    MessageEmbedSubCommand,
     MessageListSubCommand,
     MessageMentionSubCommand,
     MessageRemoveSubCommand,
@@ -127,9 +125,7 @@ async function start(): Promise<void> {
     let messageRemoveSubCommand = new MessageRemoveSubCommand(customMessageRepo);
     let messageTimSubCommand = new MessageTimeSubCommand(guildRepo);
     let messageMentionSubCommand = new MessageMentionSubCommand(guildRepo);
-    let messageEmbedSubCommand = new MessageEmbedSubCommand(guildRepo);
     let messageTestSubCommand = new MessageTestSubCommand(guildRepo, customMessageRepo);
-    let messageColorSubCommand = new MessageColorSubCommand(guildRepo);
     let messageUserListSubCommand = new MessageUserListSubCommand(customMessageRepo);
 
     // Message Command
@@ -140,9 +136,7 @@ async function start(): Promise<void> {
         messageRemoveSubCommand,
         messageTimSubCommand,
         messageMentionSubCommand,
-        messageEmbedSubCommand,
         messageTestSubCommand,
-        messageColorSubCommand,
         messageUserListSubCommand
     );
 
