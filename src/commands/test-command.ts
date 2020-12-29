@@ -33,7 +33,7 @@ export class TestCommand implements Command {
 
         let guildData = await this.guildRepo.getGuild(msg.guild.id);
         // Mock message time to current hour
-        guildData.MessageTime = moment().tz(MOCK_TIME_ZONE).hour();
+        guildData.BirthdayMessageTime = moment().tz(MOCK_TIME_ZONE).hour();
 
         let target: User;
 

@@ -105,7 +105,8 @@ export class BirthdayService {
             }
 
             if (
-                (isTest || BdayUtils.isTimeForBirthdayMessage(guildData.MessageTime, user)) &&
+                (isTest ||
+                    BdayUtils.isTimeForBirthdayMessage(guildData.BirthdayMessageTime, user)) &&
                 birthdayChannel
             ) {
                 if (!(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))) {
@@ -168,14 +169,14 @@ export class BirthdayService {
 
             // Find mentioned role
             let mentionSetting: string;
-            let roleInput: Role = guild.roles.resolve(guildData.MentionSetting);
+            let roleInput: Role = guild.roles.resolve(guildData.BirthdayMentionSetting);
 
             if (!roleInput || roleInput.guild.id !== guild.id) {
                 if (
-                    guildData.MentionSetting.toLowerCase() === 'everyone' ||
-                    guildData.MentionSetting.toLowerCase() === 'here'
+                    guildData.BirthdayMentionSetting.toLowerCase() === 'everyone' ||
+                    guildData.BirthdayMentionSetting.toLowerCase() === 'here'
                 ) {
-                    mentionSetting = '@' + guildData.MentionSetting;
+                    mentionSetting = '@' + guildData.BirthdayMentionSetting;
                 }
             } else {
                 mentionSetting = roleInput.toString();
@@ -183,13 +184,6 @@ export class BirthdayService {
 
             // Send the mention setting
             if (mentionSetting) MessageUtils.send(birthdayChannel, mentionSetting);
-
-            let color = guildData.MessageEmbedColor === '0' ? Config.colors.default : null;
-
-            color =
-                !color && hasPremium
-                    ? '#' + ColorUtils.findHex(guildData.MessageEmbedColor) ?? Config.colors.default
-                    : Config.colors.default;
 
             // Create and send the default or the global custom birthday message that was chosen for those without a user-specific custom birthday message
             if (birthdayMessageUsers.length > 0) {
@@ -208,30 +202,52 @@ export class BirthdayService {
                         )
                     );
 
-                let message = BdayUtils.randomMessage(globalMessages, hasPremium)
-                    .split('@Users')
-                    .join(userList)
-                    .split('<Users>')
-                    .join(userList);
+                let chosenMessage = BdayUtils.randomMessage(globalMessages, hasPremium);
+                let color = Config.colors.default;
+                let useEmbed = true;
+                let message = 'Happy Birthday <Users>!';
 
+                if (chosenMessage) {
+                    message = chosenMessage.Message.split('@Users')
+                        .join(userList)
+                        .split('<Users>')
+                        .join(userList);
+
+                    color = chosenMessage.Color === '0' ? Config.colors.default : null;
+
+                    color =
+                        !color && hasPremium
+                            ? '#' + ColorUtils.findHex(chosenMessage.Color) ?? Config.colors.default
+                            : Config.colors.default;
+                }
                 let embed = new MessageEmbed().setDescription(message).setColor(color);
-                await MessageUtils.send(birthdayChannel, guildData.UseEmbed ? embed : message);
+                await MessageUtils.send(birthdayChannel, useEmbed ? embed : message);
             }
 
             if (hasPremium) {
+                let color = Config.colors.default;
                 // Now, loop through the members with a user-specific custom birthday message
                 for (let member of usersWithSpecificMessage) {
                     // Get their birthday message
-                    let message = userMessages.customMessages
-                        .find(message => message.UserDiscordId === member.user.id)
-                        .Message.split('@Users')
+                    let userMessage = userMessages.customMessages.find(
+                        message => message.UserDiscordId === member.user.id
+                    );
+
+                    let message = userMessage.Message.split('@Users')
                         .join(member.toString())
                         .split('<Users>')
                         .join(member.toString());
 
+                    color = userMessage.Color === '0' ? Config.colors.default : null;
+
+                    color =
+                        !color && hasPremium
+                            ? '#' + ColorUtils.findHex(userMessage.Color) ?? Config.colors.default
+                            : Config.colors.default;
+
                     // Create it and send it
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
-                    await MessageUtils.send(birthdayChannel, guildData.UseEmbed ? embed : message);
+                    await MessageUtils.send(birthdayChannel, userMessage.Embed ? embed : message);
                 }
             }
         }

@@ -83,28 +83,20 @@ export class MessageTestSubCommand {
             : await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
         if (!messages) {
-            let defaultMessage = `Happy Birthday ${userList}!`;
-            if (guildData.UseEmbed) {
-                let embed = new MessageEmbed()
-                    .setDescription(defaultMessage)
-                    .setColor(Config.colors.default);
-                await MessageUtils.send(channel, embed);
-                return;
-            } else {
-                await MessageUtils.send(channel, defaultMessage);
-                return;
-            }
+            let embed = new MessageEmbed()
+                .setDescription(`Happy Birthday ${userList}!`)
+                .setColor(Config.colors.default);
+            await MessageUtils.send(channel, embed);
+            return;
         }
 
+        let chosenMessage = target
+            ? messages.customMessages.find(message => message.UserDiscordId === target.id)
+            : messages.customMessages.find(message => message.Position === position);
+
         let customMessage: string = target
-            ? messages.customMessages
-                  .find(message => message.UserDiscordId === target.id)
-                  ?.Message.replace(/@Users/g, userList)
-                  .replace(/<Users>/g, userList)
-            : messages.customMessages
-                  .find(message => message.Position === position)
-                  ?.Message.replace(/@Users/g, userList)
-                  .replace(/<Users>/g, userList);
+            ? chosenMessage?.Message.replace(/@Users/g, userList).replace(/<Users>/g, userList)
+            : chosenMessage?.Message.replace(/@Users/g, userList).replace(/<Users>/g, userList);
 
         if (!customMessage) {
             let embed = new MessageEmbed()
@@ -118,7 +110,7 @@ export class MessageTestSubCommand {
             return;
         }
 
-        if (guildData.UseEmbed) {
+        if (chosenMessage.Embed) {
             let embed = new MessageEmbed()
                 .setDescription(customMessage)
                 .setColor(Config.colors.default);
