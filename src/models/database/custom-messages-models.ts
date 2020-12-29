@@ -15,4 +15,6 @@ export class CustomMessage {
     UserDiscordId: string;
     Type: string;
     Position: number;
+    Color: string;
+    Embed: number;
 }

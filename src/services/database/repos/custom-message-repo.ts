@@ -10,13 +10,17 @@ export class CustomMessageRepo {
         discordId: string,
         message: string,
         userId: string,
-        type: string
+        type: string,
+        color: string,
+        embed: number
     ): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Message_Add, [
             discordId,
             message,
             userId,
             type,
+            color,
+            embed,
         ]);
     }
 
