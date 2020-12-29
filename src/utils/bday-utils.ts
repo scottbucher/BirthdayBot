@@ -1,4 +1,4 @@
-import { CustomMessages, SplitUsers, UserData } from '../models/database';
+import { CustomMessage, CustomMessages, SplitUsers, StatsData, UserData } from '../models/database';
 
 import { ArrayUtils } from './array-utils';
 import { MathUtils } from './math-utils';
@@ -93,20 +93,23 @@ export class BdayUtils {
         return currentDateFormatted === birthdayFormatted;
     }
 
-    public static randomMessage(messages: CustomMessages, hasPremium: boolean): string {
+    public static randomMessage(messages: CustomMessages, hasPremium: boolean): CustomMessage {
         if (messages.customMessages.length > 0) {
             if (hasPremium) {
                 // Choose a random one
-                return ArrayUtils.chooseRandom(messages.customMessages).Message;
+                return ArrayUtils.chooseRandom(messages.customMessages);
             } else {
                 // Only choose from the first 10
                 return ArrayUtils.chooseRandom(
-                    messages.customMessages.slice(0, Config.validation.message.maxCount.free)
+                    messages.customMessages.slice(
+                        0,
+                        Config.validation.message.maxCount.birthday.free
+                    )
                 ).Message;
             }
         } else {
-            // Return the default birthday message
-            return 'Happy Birthday <Users>!';
+            // Return null
+            return null;
         }
     }
 }
