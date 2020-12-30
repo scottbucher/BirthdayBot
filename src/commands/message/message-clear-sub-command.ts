@@ -37,10 +37,24 @@ export class MessageClearSubCommand {
 
         let type = args[3]?.toLowerCase();
 
-        if (type === 'birthday') {
-        } else if (type === 'memberanniversary') {
-        } else if (type === 'serveranniversary') {
+        if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
+            let embed = new MessageEmbed()
+                .setTitle('Clear Custom Message(s)')
+                .setDescription(
+                    `Please specify a message type! Accepted Values: \`birthday\`, \`memberAnniversary\`, \`serverAnniversary\``
+                )
+                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
+                .setColor(Config.colors.error);
+            await MessageUtils.send(channel, embed);
+            return;
         }
+
+        let displayType =
+            type === 'birthday'
+                ? 'birthday'
+                : type === 'memberanniversary'
+                ? 'member anniversary'
+                : 'server anniversary';
 
         let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
@@ -48,7 +62,7 @@ export class MessageClearSubCommand {
 
         if (customMessages.customMessages.length === 0) {
             confirmationEmbed
-                .setDescription('You server has not set any custom birthday messages!')
+                .setDescription(`You server has not set any custom ${displayType} messages!`)
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, confirmationEmbed);
             return;
@@ -60,7 +74,9 @@ export class MessageClearSubCommand {
             .setDescription(
                 `Are you sure you want to clear __**${
                     customMessages.customMessages.length
-                }**__ custom message${customMessages.customMessages.length === 1 ? '' : 's'}?`
+                }**__ custom ${displayType} message${
+                    customMessages.customMessages.length === 1 ? '' : 's'
+                }?`
             )
             .setFooter('This action is irreversible!', msg.client.user.avatarURL())
             .setColor(Config.colors.warning);
@@ -93,7 +109,9 @@ export class MessageClearSubCommand {
             await this.customMessageRepo.clearCustomMessages(msg.guild.id, type);
 
             let embed = new MessageEmbed()
-                .setDescription(`Successfully cleared all birthday messages from the database!`)
+                .setDescription(
+                    `Successfully cleared all custom ${displayType} messages from the database!`
+                )
                 .setColor(Config.colors.success);
             await MessageUtils.send(channel, embed);
         } else {
