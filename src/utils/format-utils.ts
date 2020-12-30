@@ -4,6 +4,7 @@ import { Blacklisted, CustomMessages, UserDataResults } from '../models/database
 import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
 
 import { GuildUtils } from '.';
+import { TrustedRoles } from '../models/database/trusted-role-models';
 import moment from 'moment-timezone';
 
 let Config = require('../../config/config.json');
@@ -204,7 +205,11 @@ export class FormatUtils {
 
             description += `*A random birthday message is chosen for each birthday. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
 
-            if (!hasPremium && customMessageResults.stats.TotalItems > 10)
+            if (
+                !hasPremium &&
+                customMessageResults.stats.TotalItems >
+                    Config.validation.message.maxCount.birthday.free
+            )
                 embed.addField(
                     'Message Limit',
                     `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.birthday.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.birthday.paid}** with \`bday premium\`!\n\n`
@@ -215,7 +220,11 @@ export class FormatUtils {
             );
             description += `*A random message is chosen for each member anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-user-anniversary-message)*\n\n`;
 
-            if (!hasPremium && customMessageResults.stats.TotalItems > 10)
+            if (
+                !hasPremium &&
+                customMessageResults.stats.TotalItems >
+                    Config.validation.message.maxCount.memberAnniversary.free
+            )
                 embed.addField(
                     'Message Limit',
                     `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.memberAnniversary.free}** custom member anniversary messages. Unlock up to **${Config.validation.message.maxCount.memberAnniversary.paid}**' with \`bday premium\`!\n\n`
@@ -226,7 +235,11 @@ export class FormatUtils {
             );
             description += `*A random message is chosen for each server anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-server-anniversary-message)*\n\n`;
 
-            if (!hasPremium && customMessageResults.stats.TotalItems > 10)
+            if (
+                !hasPremium &&
+                customMessageResults.stats.TotalItems >
+                    Config.validation.message.maxCount.serverAnniversary.free
+            )
                 embed.addField(
                     'Message Limit',
                     `The free version of Birthday Bot can't have custom server anniversary messages. Unlock up to **${Config.validation.message.maxCount.serverAnniversary.paid}**' with \`bday premium\`!\n\n`
@@ -282,6 +295,65 @@ export class FormatUtils {
             embed.addField(
                 'Locked Feature',
                 `User-specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`
+            );
+
+        embed.setDescription(description);
+
+        return embed;
+    }
+
+    public static async getTrustedRoleList(
+        guild: Guild,
+        trustedRoleResults: TrustedRoles,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean
+    ): Promise<MessageEmbed> {
+        let embed = new MessageEmbed()
+            .setTitle(`Trusted Roles | Page ${page}/${trustedRoleResults.stats.TotalPages}`)
+            .setThumbnail(guild.iconURL())
+            .setColor(Config.colors.default)
+            .setFooter(
+                `Total Trusted Roles: ${trustedRoleResults.stats.TotalItems} • ${Config.experience.trustedRoleListSize} per page`,
+                guild.iconURL()
+            )
+            .setTimestamp();
+
+        let i = (page - 1) * pageSize + 1;
+
+        if (trustedRoleResults.trustedRoles.length === 0) {
+            let embed = new MessageEmbed()
+                .setDescription('**No Trusted Roles!**')
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = `*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with \`bday config\` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*\n\n`;
+
+        for (let trustedRole of trustedRoleResults.trustedRoles) {
+            // dynamically check which ones to cross out due to the server not having premium anymore
+            let role = guild.roles.resolve(trustedRole.TrustedRoleDiscordId);
+            if (
+                hasPremium ||
+                trustedRole.Position <= Config.validation.trustedRoles.maxCount.free
+            ) {
+                description += `**${i.toLocaleString()}.** ${
+                    role ? `${role.toString()} ` : '**Deleted Role** '
+                }\n\n`;
+            } else {
+                description += `**${i.toLocaleString()}.** ${
+                    role ? `~~${role.toString()}~~ ` : '**Deleted Role** '
+                }\n\n`;
+            }
+            i++;
+        }
+
+        if (
+            !hasPremium &&
+            trustedRoleResults.stats.TotalItems > Config.validation.trustedRoles.maxCount.free
+        )
+            embed.addField(
+                'Trusted Role Limit',
+                `The free version of Birthday Bot can only have up to **${Config.validation.trustedRoles.maxCount.free}** trusted roles. Unlock up to **${Config.validation.trustedRoles.maxCount.paid}** with \`bday premium\`!\n\n`
             );
 
         embed.setDescription(description);
