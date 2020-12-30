@@ -233,6 +233,7 @@ async function start(): Promise<void> {
         userRepo,
         customMessageRepo,
         blacklistRepo,
+        trustedRoleRepo,
         subscriptionService
     );
     let guildJoinHandler = new GuildJoinHandler();

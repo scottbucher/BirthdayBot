@@ -13,6 +13,7 @@ import { EventHandler } from '.';
 import { ListUtils } from '../utils/list-utils';
 import { PlanName } from '../models/subscription-models';
 import { RateLimiter } from 'discord.js-rate-limiter';
+import { TrustedRoleRepo } from '../services/database/repos/trusted-role-repo';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -39,11 +40,16 @@ export class ReactionAddHandler implements EventHandler {
         Config.rateLimiting.commands.amount,
         Config.rateLimiting.commands.interval * 1000
     );
+    private trustedRoleLimiter = new RateLimiter(
+        Config.rateLimiting.commands.amount,
+        Config.rateLimiting.commands.interval * 1000
+    );
 
     constructor(
         private userRepo: UserRepo,
         private customMessageRepo: CustomMessageRepo,
         private blacklistRepo: BlacklistRepo,
+        private trustedRoleRepo: TrustedRoleRepo,
         private subscriptionService: SubscriptionService
     ) {}
 
@@ -254,6 +260,49 @@ export class ReactionAddHandler implements EventHandler {
                 await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
 
                 await MessageUtils.removeReaction(msgReaction, reactor);
+            } else if (titleArgs[0] === 'Trusted') {
+                let oldPage: number;
+                let page = 1;
+                let pageSize = Config.experience.trustedRoleListSize;
+                if (titleArgs[4]) {
+                    try {
+                        oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
+                        if (checkNextPage) page = oldPage + 1;
+                        else page = oldPage - 1;
+                    } catch (error) {
+                        // Not A Number
+                    }
+                    if (!page) page = 1;
+                }
+
+                let trustedRoleResults = await this.trustedRoleRepo.getTrustedRoleList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                if (
+                    (oldPage === 1 && checkPreviousPage) || // if the old page was page 1 and they are trying to decrease
+                    (oldPage === trustedRoleResults.stats.TotalPages && checkNextPage) // if the  old page was the max page and they are trying to increase
+                ) {
+                    await MessageUtils.removeReaction(msgReaction, reactor);
+                    return;
+                }
+
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
+                await ListUtils.updateTrustedRoleList(
+                    trustedRoleResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize,
+                    hasPremium
+                );
+
+                await MessageUtils.removeReaction(msgReaction, reactor);
             } else if (titleArgs[1] === 'Blacklist') {
                 let oldPage: number;
                 let page = 1;
@@ -442,6 +491,78 @@ export class ReactionAddHandler implements EventHandler {
 
                 await ListUtils.updateMessageUserList(
                     customMessageResults,
+                    msg.guild,
+                    msg,
+                    page,
+                    pageSize,
+                    hasPremium
+                );
+
+                await MessageUtils.removeReaction(msgReaction, reactor);
+            } else if (titleArgs[0] === 'Trusted') {
+                // Check if user is rate limited
+                let limited = this.trustedRoleLimiter.take(reactor.id);
+                if (limited) {
+                    return;
+                }
+                let page: number;
+
+                let messageTimeEmbed = new MessageEmbed()
+                    .setDescription('Please input the page you would like to jump to:')
+                    .setColor(Config.colors.default);
+
+                let prompt = await MessageUtils.send(channel, messageTimeEmbed);
+
+                page = await CollectorUtils.collectByMessage(
+                    msg.channel,
+                    // Collect Filter
+                    (nextMsg: Message) => nextMsg.author.id === reactor.id,
+                    stopFilter,
+                    // Retrieve Result
+                    async (nextMsg: Message) => {
+                        await MessageUtils.delete(nextMsg);
+                        if (!page && page !== 0) {
+                            // Try and get the time
+                            let page: number;
+                            try {
+                                page = parseInt(nextMsg.content.split(/\s+/)[0]);
+                            } catch (error) {
+                                let embed = new MessageEmbed()
+                                    .setDescription('Invalid page!')
+                                    .setColor(Config.colors.error);
+                                await MessageUtils.send(channel, embed);
+                                return;
+                            }
+
+                            page = Math.round(page);
+
+                            if (!page || page <= 0 || page > 100000) page = 1;
+
+                            return page;
+                        }
+                    },
+                    expireFunction,
+                    COLLECT_OPTIONS
+                );
+
+                MessageUtils.delete(prompt);
+
+                if (page === undefined) return;
+
+                let pageSize = Config.experience.trustedRoleListSize;
+
+                let trustedRoleResults = await this.trustedRoleRepo.getTrustedRoleList(
+                    msg.guild.id,
+                    pageSize,
+                    page
+                );
+
+                let hasPremium = Config.payments.enabled
+                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                    : false;
+
+                await ListUtils.updateTrustedRoleList(
+                    trustedRoleResults,
                     msg.guild,
                     msg,
                     page,

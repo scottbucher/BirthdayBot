@@ -65,8 +65,7 @@ export class ListUtils {
         message: Message,
         page: number,
         pageSize: number,
-        hasPremium: boolean,
-        type: string
+        hasPremium: boolean
     ): Promise<void> {
         if (page > trustedRoleResults.stats.TotalPages) page = trustedRoleResults.stats.TotalPages;
 
