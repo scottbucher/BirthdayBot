@@ -8,7 +8,6 @@ import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'disco
 
 import { ColorUtils } from '../../utils/color-utils';
 import { CustomMessageRepo } from '../../services/database/repos';
-import { Logger } from '../../services';
 import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
@@ -165,7 +164,7 @@ export class MessageAddSubCommand {
                             `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.birthday.free.toLocaleString()})`
                         )
                         .setFooter(
-                            `To have up to ${Config.validation.message.maxCount.birthday.paid.toLocaleString()} custom birthday messages get **Birthday Bot Premium**!`,
+                            `To have up to ${Config.validation.message.maxCount.birthday.paid.toString()} custom birthday messages get Birthday Bot Premium!`,
                             msg.client.user.avatarURL()
                         )
                         .setColor(Config.colors.error);
