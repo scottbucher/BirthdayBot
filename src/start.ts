@@ -24,6 +24,7 @@ import {
     SetupCommand,
     SupportCommand,
     TestCommand,
+    TrustedRoleCommand,
     ViewCommand,
 } from './commands';
 import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
@@ -36,7 +37,6 @@ import {
     ConfigTimezoneSubCommand,
     ConfigTrustedPreventsMsgSubCommand,
     ConfigTrustedPreventsRoleSubCommand,
-    ConfigTrustedRoleSubCommand,
     ConfigUseTimezoneSubCommand,
 } from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
@@ -51,6 +51,12 @@ import {
     MessageUserListSubCommand,
 } from './commands/message';
 import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
+import {
+    TrustedRoleAddSubCommand,
+    TrustedRoleClearSubCommand,
+    TrustedRoleListSubCommand,
+    TrustedRoleRemoveSubCommand,
+} from './commands/trusted';
 
 import { Bot } from './bot';
 import { CustomClient } from './extensions/custom-client';
@@ -59,6 +65,7 @@ import { PostBirthdaysJob } from './jobs';
 import { PremiumCommand } from './commands/premium-commands';
 import { StatsCommand } from './commands/stats-command';
 import { SubscribeCommand } from './commands/subscribe-command';
+import { TrustedRoleRepo } from './services/database/repos/trusted-role-repo';
 
 let Config = require('../config/config.json');
 
@@ -72,6 +79,7 @@ async function start(): Promise<void> {
     let userRepo = new UserRepo(dataAccess);
     let customMessageRepo = new CustomMessageRepo(dataAccess);
     let blacklistRepo = new BlacklistRepo(dataAccess);
+    let trustedRoleRepo = new TrustedRoleRepo(dataAccess);
 
     let clientOptions: ClientOptions = {
         ws: { intents: Config.client.intents },
@@ -145,7 +153,6 @@ async function start(): Promise<void> {
     let configRoleSubCommand = new ConfigRoleSubCommand(guildRepo);
     let configBirthdayMasterRoleSubCommand = new ConfigBirthdayMasterRoleSubCommand(guildRepo);
     let configNameFormatSubCommand = new ConfigNameFormatSubCommand(guildRepo);
-    let configTrustedRoleSubCommand = new ConfigTrustedRoleSubCommand(guildRepo);
     let configTrustedPreventMsgSubCommand = new ConfigTrustedPreventsMsgSubCommand(guildRepo);
     let configTrustedPreventRoleSubCommand = new ConfigTrustedPreventsRoleSubCommand(guildRepo);
     let configTimezoneSubCommand = new ConfigTimezoneSubCommand(guildRepo);
@@ -157,7 +164,6 @@ async function start(): Promise<void> {
         configChannelSubCommand,
         configRoleSubCommand,
         configNameFormatSubCommand,
-        configTrustedRoleSubCommand,
         configTrustedPreventMsgSubCommand,
         configTrustedPreventRoleSubCommand,
         configTimezoneSubCommand,
@@ -176,6 +182,20 @@ async function start(): Promise<void> {
         blacklistRemoveSubCommand,
         blacklistClearSubCommand,
         blacklistListSubCommand
+    );
+
+    // Trusted Role Sub Commands
+    let trustedRoleAddSubCommand = new TrustedRoleAddSubCommand(trustedRoleRepo);
+    let trustedRoleRemoveSubCommand = new TrustedRoleRemoveSubCommand(trustedRoleRepo);
+    let trustedRoleClearSubCommand = new TrustedRoleClearSubCommand(trustedRoleRepo);
+    let trustedRoleListSubCommand = new TrustedRoleListSubCommand(trustedRoleRepo);
+
+    // Trusted Role Command
+    let trustedRoleCommand = new TrustedRoleCommand(
+        trustedRoleAddSubCommand,
+        trustedRoleRemoveSubCommand,
+        trustedRoleClearSubCommand,
+        trustedRoleListSubCommand
     );
 
     // Events handlers
@@ -203,6 +223,7 @@ async function start(): Promise<void> {
             premiumCommand,
             subscribeCommand,
             configCommand,
+            trustedRoleCommand,
         ],
         subscriptionService,
         guildRepo,

@@ -7,3 +7,4 @@ export { UserData } from './user-models';
 export { VoteData } from './vote-data-models';
 export { Vote } from './vote-models';
 export { Blacklisted } from './blacklisted-models';
+export { TrustedRole } from './trusted-role-models';

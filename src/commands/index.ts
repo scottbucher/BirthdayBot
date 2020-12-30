@@ -20,3 +20,4 @@ export { BlacklistCommand } from './blacklist-command';
 export { PremiumCommand } from './premium-commands';
 export { SubscribeCommand } from './subscribe-command';
 export { ConfigCommand } from './config-command';
+export { TrustedRoleCommand } from './trusted-role-command';
