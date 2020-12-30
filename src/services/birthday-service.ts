@@ -53,7 +53,7 @@ export class BirthdayService {
             // No Birthday Channel
         }
         try {
-            trustedRole = guild.roles.resolve(guildData.TrustedRoleDiscordId);
+            // trustedRole = guild.roles.resolve(guildData.TrustedRoleDiscordId);/////////////////////////////////////////////FIX///////////////////////////////////////////////////
         } catch (error) {
             // No Birthday Channel
         }
