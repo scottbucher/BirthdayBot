@@ -2,7 +2,6 @@ export interface GuildData {
     GuildDiscordId: string;
     BirthdayChannelDiscordId: string;
     BirthdayRoleDiscordId: string;
-    TrustedRoleDiscordId: string;
     BirthdayMasterRoleDiscordId: string;
     BirthdayMentionSetting: string;
     MemberAnniversaryChannelDiscordId: string;
