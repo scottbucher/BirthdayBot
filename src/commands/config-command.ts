@@ -1,16 +1,17 @@
+import {
+    ConfigBirthdayMasterRoleSubCommand,
+    ConfigChannelSubCommand,
+    ConfigNameFormatSubCommand,
+    ConfigRoleSubCommand,
+    ConfigTimezoneSubCommand,
+    ConfigTrustedPreventsMsgSubCommand,
+    ConfigTrustedPreventsRoleSubCommand,
+    ConfigUseTimezoneSubCommand,
+} from './config';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
-import { ConfigBirthdayMasterRoleSubCommand } from './config/config-birthday-master-role-sub-command';
-import { ConfigChannelSubCommand } from './config/config-channel-sub-command';
-import { ConfigNameFormatSubCommand } from './config/config-name-format-sub-command';
-import { ConfigRoleSubCommand } from './config/config-role-sub-command';
-import { ConfigTrustedPreventsMsgSubCommand } from './config/config-trusted-prevents-msg-sub-command';
-import { ConfigTrustedPreventsRoleSubCommand } from './config/config-trusted-prevents-role-sub-command';
-import { ConfigTrustedRoleSubCommand } from './config/config-trusted-role-sub-command';
 import { MessageUtils } from '../utils';
-import { ConfigTimezoneSubCommand } from './config/config-timezone-sub-command';
-import { ConfigUseTimezoneSubCommand } from './config/config-use-timezone-sub-command';
 
 let Config = require('../../config/config.json');
 
@@ -30,7 +31,6 @@ export class ConfigCommand implements Command {
         private configChannelSubCommand: ConfigChannelSubCommand,
         private configRoleSubCommand: ConfigRoleSubCommand,
         private configNameFormatSubCommand: ConfigNameFormatSubCommand,
-        private configTrustedRoleSubCommand: ConfigTrustedRoleSubCommand,
         private configTrustedPreventsMsgSubCommand: ConfigTrustedPreventsMsgSubCommand,
         private configTrustedPreventsRoleSubCommand: ConfigTrustedPreventsRoleSubCommand,
         private configTimezoneSubCommand: ConfigTimezoneSubCommand,
@@ -66,8 +66,6 @@ export class ConfigCommand implements Command {
             this.configTimezoneSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'usetimezone') {
             this.configUseTimezoneSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'trustedrole') {
-            this.configTrustedRoleSubCommand.execute(args, msg, channel);
         } else if (
             args[2].toLowerCase() === 'trustedpreventsmsg' ||
             args[2].toLowerCase() === 'trustedpreventsmessage' ||

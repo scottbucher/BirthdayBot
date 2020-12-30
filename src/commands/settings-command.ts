@@ -1,6 +1,5 @@
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
-import { ColorUtils } from '../utils/color-utils';
 import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
 import { MessageUtils } from '../utils';
@@ -38,7 +37,6 @@ export class SettingsCommand implements Command {
         let birthdayRole: string;
         let mentionSetting = 'None';
         let messageTime: string;
-        let trustedRole: string;
         let birthdayMasterRole: string;
         let preventsRole = guildData.TrustedPreventsRole ? 'True' : 'False';
         let preventsMessage = guildData.TrustedPreventsMessage ? 'True' : 'False';
@@ -74,11 +72,6 @@ export class SettingsCommand implements Command {
                 ? 'Not Set'
                 : guild.roles.resolve(guildData.BirthdayRoleDiscordId)?.toString() ||
                   '**Deleted Role**';
-        trustedRole =
-            guildData.TrustedRoleDiscordId === '0'
-                ? 'Not Set'
-                : guild.roles.resolve(guildData.TrustedRoleDiscordId)?.toString() ||
-                  '**Deleted Role**';
         birthdayMasterRole =
             guildData.BirthdayMasterRoleDiscordId === '0'
                 ? 'Not Set'
@@ -95,7 +88,6 @@ export class SettingsCommand implements Command {
             .addField('Birthday Master Role', birthdayMasterRole, true)
             .addField('Mention Setting', mentionSetting, true)
             .addField('Message Time', messageTime, true)
-            .addField('Trusted Role', trustedRole, true)
             .addField('Trusted Prevents Role', preventsRole, true)
             .addField('Trusted Prevents Message', preventsMessage, true)
             .addField('Name Format', nameFormat, true)
