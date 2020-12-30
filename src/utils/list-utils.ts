@@ -3,6 +3,7 @@ import { Guild, Message } from 'discord.js';
 
 import { FormatUtils } from '.';
 import { MessageUtils } from './message-utils';
+import { TrustedRoles } from '../models/database/trusted-role-models';
 
 export class ListUtils {
     public static async updateBdayList(
@@ -53,6 +54,33 @@ export class ListUtils {
         message = await MessageUtils.edit(message, embed);
 
         if (embed.description.includes('**No Custom')) {
+            await message.reactions.removeAll();
+            return;
+        }
+    }
+
+    public static async updateTrustedRoleList(
+        trustedRoleResults: TrustedRoles,
+        guild: Guild,
+        message: Message,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean,
+        type: string
+    ): Promise<void> {
+        if (page > trustedRoleResults.stats.TotalPages) page = trustedRoleResults.stats.TotalPages;
+
+        let embed = await FormatUtils.getTrustedRoleList(
+            guild,
+            trustedRoleResults,
+            page,
+            pageSize,
+            hasPremium
+        );
+
+        message = await MessageUtils.edit(message, embed);
+
+        if (embed.description.includes('**No Trusted')) {
             await message.reactions.removeAll();
             return;
         }
