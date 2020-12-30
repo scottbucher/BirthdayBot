@@ -12,4 +12,5 @@ export class TrustedRoles {
 
 export class TrustedRole {
     TrustedRoleDiscordId: string;
+    Position: number;
 }
