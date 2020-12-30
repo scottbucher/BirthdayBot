@@ -58,7 +58,8 @@
         "promptExpireTime": 120,
         "birthdayListSize": "30",
         "blacklistSize": "30",
-        "birthdayMessageListSize": "3"
+        "birthdayMessageListSize": "3",
+        "trustedRoleListSize": "10"
     },
     "colors": {
         "default": "#4eefff",
