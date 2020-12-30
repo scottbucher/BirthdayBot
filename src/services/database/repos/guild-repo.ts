@@ -47,13 +47,6 @@ export class GuildRepo {
         ]);
     }
 
-    public async updateTrustedRole(discordId: string, trustedRoleId: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateTrustedRole, [
-            discordId,
-            trustedRoleId,
-        ]);
-    }
-
     public async updateBirthdayMasterRole(
         discordId: string,
         birthdayMasterRoleId: string
