@@ -94,20 +94,23 @@
         "message": {
             "maxLength": 500,
             "maxCount": {
-                "maxCount": {
-                    "birthday": {
-                        "free": 5,
-                        "paid": 500
-                    },
-                    "memberAnniversary": {
-                        "free": 5,
-                        "paid": 500
-                    },
-                    "serverAnniversary": {
-                        "free": 5,
-                        "paid": 500
-                    }
+                "birthday": {
+                    "free": 5,
+                    "paid": 500
+                },
+                "memberAnniversary": {
+                    "free": 5,
+                    "paid": 500
+                },
+                "serverAnniversary": {
+                    "free": 5,
+                    "paid": 500
+                }
             }
+        },
+        "trustedRoles": {
+            "free": 1,
+            "paid": 500
         },
         "regions": [
             "Africa",
