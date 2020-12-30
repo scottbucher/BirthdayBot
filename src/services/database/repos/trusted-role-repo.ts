@@ -19,10 +19,9 @@ export class TrustedRoleRepo {
         await this.dataAccess.executeProcedure(Procedure.TrustedRole_Clear, [discordId]);
     }
 
-    public async getTrustedRoles(discordId: string, roleId: string): Promise<TrustedRoles> {
+    public async getTrustedRoles(discordId: string): Promise<TrustedRoles> {
         let results = await this.dataAccess.executeProcedure(Procedure.TrustedRole_Get, [
             discordId,
-            roleId,
         ]);
 
         let trustedRoles = SQLUtils.getTable(results, 0);
