@@ -111,7 +111,7 @@
         "trustedRoles": {
             "maxCount": {
                 "free": 1,
-                "paid": 500
+                "paid": 250
             }
         },
         "regions": [
