@@ -109,8 +109,10 @@
             }
         },
         "trustedRoles": {
-            "free": 1,
-            "paid": 500
+            "maxCount": {
+                "free": 1,
+                "paid": 500
+            }
         },
         "regions": [
             "Africa",
