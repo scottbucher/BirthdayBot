@@ -53,27 +53,21 @@ export class TrustedRoleAddSubCommand {
 
         if (
             trustedRoles &&
-            trustedRoles.stats.TotalItems >= Config.validation.trustedRole.free &&
-            !hasPremium
-        ) {
-        }
-
-        if (
-            trustedRoles &&
-            trustedRoles.stats.TotalItems >= Config.validation.trustedRoles.maxCount.free &&
+            trustedRoles.trustedRoles.length >= Config.validation.trustedRoles.maxCount.free &&
             !hasPremium
         ) {
             let embed = new MessageEmbed()
                 .setDescription(`Your server is limited to one trusted role!`)
                 .setFooter(
-                    `To have up to ${Config.validation.trustedRoles.maxCount.paid.toLocaleString()} trusted roles get **Birthday Bot Premium**!`,
+                    `To have up to ${Config.validation.trustedRoles.maxCount.paid.toLocaleString()} trusted roles get Birthday Bot Premium!`,
                     msg.client.user.avatarURL()
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
             return;
         } else if (
-            trustedRoles.stats.TotalItems >= Config.validation.message.maxCount.birthday.paid
+            trustedRoles &&
+            trustedRoles.trustedRoles.length >= Config.validation.message.maxCount.birthday.paid
         ) {
             let embed = new MessageEmbed()
                 .setDescription(
