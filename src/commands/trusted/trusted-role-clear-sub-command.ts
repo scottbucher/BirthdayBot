@@ -4,7 +4,7 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { MessageUtils } from '../../utils';
 import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo';

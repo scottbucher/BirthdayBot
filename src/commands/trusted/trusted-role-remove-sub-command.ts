@@ -19,6 +19,11 @@ export class TrustedRoleRemoveSubCommand {
         let trustedRole: Role = msg.mentions.roles.first();
         let position: number;
 
+        if (args.length <= 3) {
+            await MessageUtils.send(channel, errorEmbed);
+            return;
+        }
+
         if (!trustedRole) {
             trustedRole = msg.guild.roles.cache.find(
                 role =>

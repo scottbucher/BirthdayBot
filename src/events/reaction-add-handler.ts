@@ -29,7 +29,7 @@ export class ReactionAddHandler implements EventHandler {
         Config.rateLimiting.list.amount,
         Config.rateLimiting.list.interval * 1000
     );
-    //custom message list
+    // Custom message list
     private messageLimiter = new RateLimiter(
         Config.rateLimiting.list.amount,
         Config.rateLimiting.list.interval * 1000

@@ -1,4 +1,4 @@
-import { CustomMessage, CustomMessages, SplitUsers, StatsData, UserData } from '../models/database';
+import { CustomMessage, CustomMessages, SplitUsers, UserData } from '../models/database';
 
 import { ArrayUtils } from './array-utils';
 import { MathUtils } from './math-utils';
