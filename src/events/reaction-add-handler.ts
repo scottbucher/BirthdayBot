@@ -203,7 +203,10 @@ export class ReactionAddHandler implements EventHandler {
                 )
                     page = customMessageResults.stats.TotalPages;
 
-                if (oldPage === customMessageResults.stats.TotalPages && checkNextPage) return;
+                if (oldPage === customMessageResults.stats.TotalPages && checkNextPage) {
+                    await MessageUtils.removeReaction(msgReaction, reactor);
+                    return;
+                }
                 await ListUtils.updateMessageList(
                     customMessageResults,
                     msg.guild,
