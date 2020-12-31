@@ -71,9 +71,11 @@
     "emotes": {
         "confirm": "✅",
         "deny": "❌",
+        "fastReverse": "⏪",
         "nextPage": "➡️",
-        "previousPage": "⬅️",
         "jumpToPage": "↗️",
+        "previousPage": "⬅️",
+        "fastForward": "⏩",
         "create": "🔨",
         "select": "🖱",
         "birthday": "🎂",
