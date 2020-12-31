@@ -168,6 +168,7 @@ export class ReactionAddHandler implements EventHandler {
             if (oldPage <= Config.experience.fastRewindAmount && checkFastRewind) page = 1;
 
             if (titleArgs.includes('Messages')) {
+                pageSize = Config.experience.birthdayMessageListSize;
                 let customMessageResults: CustomMessages;
                 hasPremium = Config.payments.enabled
                     ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
@@ -180,12 +181,11 @@ export class ReactionAddHandler implements EventHandler {
 
                 if (titleArgs[0] === 'User') {
                     user = true;
-                    pageSize = Config.experience.birthdayMessageListSize;
                     customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
                         msg.guild.id,
                         pageSize,
                         page,
-                        'birthday'
+                        type
                     );
                 } else {
                     customMessageResults = await this.customMessageRepo.getCustomMessageList(
