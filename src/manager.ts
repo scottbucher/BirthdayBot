@@ -10,6 +10,12 @@ export class Manager {
     constructor(private shardManager: ShardingManager, private jobs: Job[]) {}
 
     public async start(): Promise<void> {
+        Logger.info(
+            Logs.info.spawningShards.replace(
+                '{SHARD_COUNT}',
+                this.shardManager.totalShards.toLocaleString()
+            )
+        );
         this.registerListeners();
         try {
             await this.shardManager.spawn(

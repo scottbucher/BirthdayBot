@@ -1,6 +1,7 @@
 {
     "info": {
         "started": "Application started.",
+        "spawningShards": "Spawning {SHARD_COUNT} shards.",
         "launchedShard": "Launched Shard {SHARD_ID}.",
         "startedJobs": "Started job schedules.",
         "startedVotingApi": "Started the voting api.",
