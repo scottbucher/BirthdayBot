@@ -24,25 +24,30 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class ReactionAddHandler implements EventHandler {
+    // Bday list limiter
     private rateLimiter = new RateLimiter(
         Config.rateLimiting.list.amount,
         Config.rateLimiting.list.interval * 1000
     );
+    //custom message list
     private messageLimiter = new RateLimiter(
-        Config.rateLimiting.commands.amount,
-        Config.rateLimiting.commands.interval * 1000
+        Config.rateLimiting.list.amount,
+        Config.rateLimiting.list.interval * 1000
     );
+    // bday blacklist list
     private blacklistLimiter = new RateLimiter(
-        Config.rateLimiting.commands.amount,
-        Config.rateLimiting.commands.interval * 1000
+        Config.rateLimiting.list.amount,
+        Config.rateLimiting.list.interval * 1000
     );
+    // user message list
     private userMessagesLimiter = new RateLimiter(
-        Config.rateLimiting.commands.amount,
-        Config.rateLimiting.commands.interval * 1000
+        Config.rateLimiting.list.amount,
+        Config.rateLimiting.list.interval * 1000
     );
+    // Trusted Role limiter
     private trustedRoleLimiter = new RateLimiter(
-        Config.rateLimiting.commands.amount,
-        Config.rateLimiting.commands.interval * 1000
+        Config.rateLimiting.list.amount,
+        Config.rateLimiting.list.interval * 1000
     );
 
     constructor(
