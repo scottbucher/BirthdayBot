@@ -143,8 +143,6 @@ export class ReactionAddHandler implements EventHandler {
             let hasPremium: boolean;
             let user = false;
 
-            await MessageUtils.removeReaction(msgReaction, reactor);
-
             try {
                 oldPage = FormatUtils.extractPageNumber(titleArgs.join(' '));
                 if (!oldPage) return;
@@ -285,8 +283,9 @@ export class ReactionAddHandler implements EventHandler {
                     pageSize
                 );
             }
-        } else if (checkJumpToPage) {
+
             await MessageUtils.removeReaction(msgReaction, reactor);
+        } else if (checkJumpToPage) {
             // Jump to page
             let user = false;
             let pageSize: number;
@@ -458,6 +457,7 @@ export class ReactionAddHandler implements EventHandler {
                     pageSize
                 );
             }
+            await MessageUtils.removeReaction(msgReaction, reactor);
         }
     }
 }
