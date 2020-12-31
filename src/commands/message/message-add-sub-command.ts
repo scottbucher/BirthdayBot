@@ -364,7 +364,7 @@ export class MessageAddSubCommand {
                             '\n' +
                             '\nEx: `bday message add serverAnniversary <Server> is now <Years> years old!`' +
                             '\n\nNote: The `<Years>` placeholder is just a number!' +
-                            "\n\nNote: The `<Server>` placeholder is not required and displays the server's name!"
+                            `\n\nNote: The \`<Server>\` placeholder is not required and displays the server's name!`
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                     .setColor(Config.colors.error);
@@ -545,7 +545,7 @@ export class MessageAddSubCommand {
         let description: string;
 
         if (type === 'birthday') {
-            if ((userId = '0')) {
+            if (userId === '0') {
                 embed.addField(
                     'Actions',
                     '' +

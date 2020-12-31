@@ -28,10 +28,11 @@ export class MessageTestSubCommand {
 
         let type = args[3]?.toLowerCase();
 
-        if (type === 'birthday') {
-        } else if (type === 'memberanniversary') {
-        } else if (type === 'serveranniversary') {
-        }
+        // TODO: Implement
+        // if (type === 'birthday') {
+        // } else if (type === 'memberanniversary') {
+        // } else if (type === 'serveranniversary') {
+        // }
 
         // Try and find someone they are mentioning
         let target = msg.mentions.members.first()?.user;
