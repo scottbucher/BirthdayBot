@@ -160,6 +160,7 @@ export class ReactionAddHandler implements EventHandler {
                 oldPage === 1 &&
                 checkPreviousPage // if the old page was page 1 and they are trying to decrease
             ) {
+                await MessageUtils.removeReaction(msgReaction, reactor);
                 return;
             }
 
