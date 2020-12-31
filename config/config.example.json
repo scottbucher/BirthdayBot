@@ -56,6 +56,8 @@
     },
     "experience": {
         "promptExpireTime": 120,
+        "fastForwardAmount": "5",
+        "fastRewindAmount": "5",
         "birthdayListSize": "30",
         "blacklistSize": "30",
         "birthdayMessageListSize": "3",
