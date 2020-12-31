@@ -248,7 +248,10 @@ export class ReactionAddHandler implements EventHandler {
                 )
                     page = trustedRoleResults.stats.TotalPages;
 
-                if (oldPage === trustedRoleResults.stats.TotalPages && checkNextPage) return;
+                if (oldPage === trustedRoleResults.stats.TotalPages && checkNextPage) {
+                    await MessageUtils.removeReaction(msgReaction, reactor);
+                    return;
+                }
 
                 await ListUtils.updateTrustedRoleList(
                     trustedRoleResults,
@@ -273,7 +276,10 @@ export class ReactionAddHandler implements EventHandler {
                 )
                     page = blacklistResults.stats.TotalPages;
 
-                if (oldPage === blacklistResults.stats.TotalPages && checkNextPage) return;
+                if (oldPage === blacklistResults.stats.TotalPages && checkNextPage) {
+                    await MessageUtils.removeReaction(msgReaction, reactor);
+                    return;
+                }
 
                 await ListUtils.updateBlacklistList(
                     blacklistResults,
