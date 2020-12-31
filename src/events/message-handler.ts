@@ -25,13 +25,12 @@ export class MessageHandler {
     ) {}
 
     public async process(msg: Message): Promise<void> {
-        if (msg.partial) return;
-
-        // Ignore bots & System messages
-        if (msg.author.bot || msg.system) return;
+        // Don't respond to partial messages, system messages, or bots
+        if (msg.partial || msg.system || msg.author.bot) return;
 
         let channel = msg.channel;
 
+        // Only handle messages from text or DM channels
         if (!(channel instanceof TextChannel || channel instanceof DMChannel)) return;
 
         if (channel instanceof TextChannel) {
@@ -83,8 +82,7 @@ export class MessageHandler {
         }
 
         // Try to find the command the user wants
-        let userCommand = args[1];
-        let command = this.getCommand(userCommand);
+        let command = this.findCommand(args[1]);
 
         // If no command found, run the help command
         if (!command) {
@@ -220,16 +218,11 @@ export class MessageHandler {
         }
     }
 
-    private getCommand(userCommand: string): Command {
-        userCommand = userCommand.toLowerCase();
-        for (let cmd of this.commands) {
-            if (cmd.name === userCommand.toLowerCase()) {
-                return cmd;
-            }
-
-            if (cmd.aliases.includes(userCommand)) {
-                return cmd;
-            }
-        }
+    private findCommand(input: string): Command {
+        input = input.toLowerCase();
+        return (
+            this.commands.find(command => command.name === input) ??
+            this.commands.find(command => command.aliases.includes(input))
+        );
     }
 }
