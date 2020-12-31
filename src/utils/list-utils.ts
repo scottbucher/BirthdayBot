@@ -1,5 +1,5 @@
 import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
-import { Guild, Message } from 'discord.js';
+import { Guild, Message, MessageEmbed } from 'discord.js';
 
 import { FormatUtils } from '.';
 import { MessageUtils } from './message-utils';
@@ -24,7 +24,7 @@ export class ListUtils {
 
         message = await MessageUtils.edit(message, embed);
 
-        if (embed.description === '**No Birthdays in this server!**') {
+        if (!embed.title) {
             await message.reactions.removeAll();
             return;
         }
@@ -37,23 +37,36 @@ export class ListUtils {
         page: number,
         pageSize: number,
         hasPremium: boolean,
-        type: string
+        type: string,
+        user: boolean
     ): Promise<void> {
         if (page > customMessageResults.stats.TotalPages)
             page = customMessageResults.stats.TotalPages;
 
-        let embed = await FormatUtils.getCustomMessageListEmbed(
-            guild,
-            customMessageResults,
-            page,
-            pageSize,
-            hasPremium,
-            type
-        );
+        let embed: MessageEmbed;
+
+        if (user) {
+            embed = await FormatUtils.getCustomUserMessageListEmbed(
+                guild,
+                customMessageResults,
+                page,
+                pageSize,
+                hasPremium
+            );
+        } else {
+            embed = await FormatUtils.getCustomMessageListEmbed(
+                guild,
+                customMessageResults,
+                page,
+                pageSize,
+                hasPremium,
+                type
+            );
+        }
 
         message = await MessageUtils.edit(message, embed);
 
-        if (embed.description.includes('**No Custom')) {
+        if (!embed.title) {
             await message.reactions.removeAll();
             return;
         }
@@ -79,34 +92,7 @@ export class ListUtils {
 
         message = await MessageUtils.edit(message, embed);
 
-        if (embed.description.includes('**No Trusted')) {
-            await message.reactions.removeAll();
-            return;
-        }
-    }
-
-    public static async updateMessageUserList(
-        customMessageResults: CustomMessages,
-        guild: Guild,
-        message: Message,
-        page: number,
-        pageSize: number,
-        hasPremium: boolean
-    ): Promise<void> {
-        if (page > customMessageResults.stats.TotalPages)
-            page = customMessageResults.stats.TotalPages;
-
-        let embed = await FormatUtils.getCustomUserMessageListEmbed(
-            guild,
-            customMessageResults,
-            page,
-            pageSize,
-            hasPremium
-        );
-
-        message = await MessageUtils.edit(message, embed);
-
-        if (embed.description === '**No User-Specific Birthday Messages!**') {
+        if (!embed.title) {
             await message.reactions.removeAll();
             return;
         }
@@ -130,7 +116,7 @@ export class ListUtils {
 
         message = await MessageUtils.edit(message, embed);
 
-        if (embed.description === '**The blacklist is empty!**') {
+        if (!embed.title) {
             await message.reactions.removeAll();
             return;
         }
