@@ -201,7 +201,6 @@ export class SetCommand implements Command {
                 Lang.getEmbed('defaultTimeZoneAvailable', LangCode.EN, {
                     TIMEZONE: guildData.DefaultTimezone,
                 })
-                    .setColor(Config.colors.default)
                     .setTimestamp()
                     .setAuthor(target.tag, target.avatarURL())
                     .setTitle(timeZoneTitle)
@@ -262,7 +261,6 @@ export class SetCommand implements Command {
                             channel,
                             Lang.getEmbed('invalidTimezoneAbbreviation', LangCode.EN)
                                 .setTimestamp()
-                                .setColor(Config.colors.error)
                                 .setTitle(timeZoneTitle)
                         );
                         return;
@@ -274,7 +272,6 @@ export class SetCommand implements Command {
                             channel,
                             Lang.getEmbed('invalidTimezone', LangCode.EN)
                                 .setTimestamp()
-                                .setColor(Config.colors.error)
                                 .setTitle(timeZoneTitle)
                         );
                         return;
@@ -318,7 +315,6 @@ export class SetCommand implements Command {
                             channel,
                             Lang.getEmbed('invalidBirthday', LangCode.EN)
                                 .setTimestamp()
-                                .setColor(Config.colors.error)
                                 .setTitle(birthdayTitle)
                         );
                         return;
