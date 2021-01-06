@@ -15,10 +15,11 @@ import {
     User,
 } from 'discord.js';
 import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
-import { Logger, SubscriptionService } from '../services';
+import { Lang, Logger, SubscriptionService } from '../services';
 
 import { CustomMessages } from '../models/database';
 import { EventHandler } from '.';
+import { LangCode } from '../models/enums';
 import { ListUtils } from '../utils/list-utils';
 import { PlanName } from '../models/subscription-models';
 import { RateLimiter } from 'discord.js-rate-limiter';
@@ -184,19 +185,19 @@ export class ReactionAddHandler implements EventHandler {
 
             if (oldPage <= Config.experience.fastRewindAmount && checkFastRewind) page = 1;
 
-            if (titleArgs.includes('Messages')) {
+            if (msg.embeds[0]?.title?.includes(Lang.getRef('messages', LangCode.EN))) {
                 pageSize = Config.experience.birthdayMessageListSize;
                 let customMessageResults: CustomMessages;
-                hasPremium = Config.payments.enabled
-                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
-                    : false;
+                hasPremium =
+                    !Config.payments.enabled ||
+                    (await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id));
 
                 let type = 'birthday';
 
                 if (titleArgs[0] === 'Member') type = 'memberanniversary';
                 else if (titleArgs[0] === 'Server') type = 'serveranniversary';
 
-                if (titleArgs[0] === 'User') {
+                if (msg.embeds[0]?.title?.includes(Lang.getRef('user', LangCode.EN))) {
                     user = true;
                     customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
                         msg.guild.id,
@@ -235,7 +236,11 @@ export class ReactionAddHandler implements EventHandler {
                     type,
                     user
                 );
-            } else if (titleArgs[1] === 'List') {
+            } else if (
+                msg.embeds[0]?.title?.includes(
+                    Lang.getRef('birthday', LangCode.EN) + ' ' + Lang.getRef('list', LangCode.EN)
+                )
+            ) {
                 pageSize = Config.experience.birthdayListSize;
                 let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
 
@@ -252,16 +257,22 @@ export class ReactionAddHandler implements EventHandler {
                 )
                     page = userDataResults.stats.TotalPages;
 
-                if (oldPage === userDataResults.stats.TotalPages && checkNextPage) return;
+                if (oldPage === userDataResults.stats.TotalPages && checkNextPage) {
+                    await MessageUtils.removeReaction(msgReaction, reactor);
+                    return;
+                }
 
                 await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
-            } else if (titleArgs[0] === 'Trusted') {
+            } else if (msg.embeds[0]?.title?.includes(Lang.getRef('trustedRoles', LangCode.EN))) {
                 pageSize = Config.experience.trustedRoleListSize;
                 let trustedRoleResults = await this.trustedRoleRepo.getTrustedRoleList(
                     msg.guild.id,
                     pageSize,
                     page
                 );
+                hasPremium =
+                    !Config.payments.enabled ||
+                    (await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id));
 
                 if (
                     oldPage >=
@@ -283,7 +294,7 @@ export class ReactionAddHandler implements EventHandler {
                     pageSize,
                     hasPremium
                 );
-            } else if (titleArgs[1] === 'Blacklist') {
+            } else if (msg.embeds[0]?.title?.includes(Lang.getRef('blacklist', LangCode.EN))) {
                 pageSize = Config.experience.blacklistSize;
                 let blacklistResults = await this.blacklistRepo.getBlacklistList(
                     msg.guild.id,
@@ -321,8 +332,8 @@ export class ReactionAddHandler implements EventHandler {
             let oldPage: number;
             // Check if user is rate limited
 
-            if (titleArgs.includes('Messages')) {
-                user = titleArgs[0] === 'User';
+            if (msg.embeds[0]?.title?.includes(Lang.getRef('messages', LangCode.EN))) {
+                user = titleArgs[0] === Lang.getRef('user', LangCode.EN);
                 pageSize = Config.experience.birthdayMessageListSize;
                 if (user) {
                     let limited = this.userMessagesLimiter.take(reactor.id);
@@ -335,19 +346,23 @@ export class ReactionAddHandler implements EventHandler {
                         return;
                     }
                 }
-            } else if (titleArgs[1] === 'List') {
+            } else if (
+                msg.embeds[0]?.title?.includes(
+                    Lang.getRef('birthday', LangCode.EN) + ' ' + Lang.getRef('list', LangCode.EN)
+                )
+            ) {
                 pageSize = Config.experience.birthdayListSize;
                 let limited = this.rateLimiter.take(reactor.id);
                 if (limited) {
                     return;
                 }
-            } else if (titleArgs[0] === 'Trusted') {
+            } else if (msg.embeds[0]?.title?.includes(Lang.getRef('trustedRoles', LangCode.EN))) {
                 pageSize = Config.experience.trustedRoleListSize;
                 let limited = this.trustedRoleLimiter.take(reactor.id);
                 if (limited) {
                     return;
                 }
-            } else if (titleArgs[1] === 'Blacklist') {
+            } else if (msg.embeds[0]?.title?.includes(Lang.getRef('blacklist', LangCode.EN))) {
                 pageSize = Config.experience.blacklistSize;
                 let limited = this.blacklistLimiter.take(reactor.id);
                 if (limited) {
@@ -357,11 +372,7 @@ export class ReactionAddHandler implements EventHandler {
 
             let page: number;
 
-            let messageTimeEmbed = new MessageEmbed()
-                .setDescription('Please input the page you would like to jump to:')
-                .setColor(Config.colors.default);
-
-            let prompt = await MessageUtils.send(channel, messageTimeEmbed);
+            let prompt = await MessageUtils.send(channel, Lang.getEmbed('inputPage', LangCode.EN));
 
             page = await CollectorUtils.collectByMessage(
                 msg.channel,
@@ -377,10 +388,10 @@ export class ReactionAddHandler implements EventHandler {
                         try {
                             page = parseInt(nextMsg.content.split(/\s+/)[0]);
                         } catch (error) {
-                            let embed = new MessageEmbed()
-                                .setDescription('Invalid page!')
-                                .setColor(Config.colors.error);
-                            await MessageUtils.send(channel, embed);
+                            await MessageUtils.send(
+                                channel,
+                                Lang.getEmbed('invalidPage', LangCode.EN)
+                            );
                             return;
                         }
 
@@ -406,11 +417,11 @@ export class ReactionAddHandler implements EventHandler {
                 // Not A Number
             }
 
-            if (titleArgs.includes('Messages')) {
+            if (msg.embeds[0]?.title?.includes(Lang.getRef('messages', LangCode.EN))) {
                 let customMessageResults: CustomMessages;
-                hasPremium = Config.payments.enabled
-                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
-                    : false;
+                hasPremium =
+                    !Config.payments.enabled ||
+                    (await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id));
 
                 let type = 'birthday';
 
@@ -441,7 +452,11 @@ export class ReactionAddHandler implements EventHandler {
                     type,
                     user
                 );
-            } else if (titleArgs[1] === 'List') {
+            } else if (
+                msg.embeds[0]?.title?.includes(
+                    Lang.getRef('birthday', LangCode.EN) + ' ' + Lang.getRef('list', LangCode.EN)
+                )
+            ) {
                 let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
 
                 let userDataResults = await this.userRepo.getBirthdayListFull(
@@ -451,16 +466,16 @@ export class ReactionAddHandler implements EventHandler {
                 );
 
                 await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
-            } else if (titleArgs[0] === 'Trusted') {
+            } else if (msg.embeds[0]?.title?.includes(Lang.getRef('trustedRoles', LangCode.EN))) {
                 let trustedRoleResults = await this.trustedRoleRepo.getTrustedRoleList(
                     msg.guild.id,
                     pageSize,
                     page
                 );
 
-                hasPremium = Config.payments.enabled
-                    ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
-                    : false;
+                hasPremium =
+                    !Config.payments.enabled ||
+                    (await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id));
 
                 await ListUtils.updateTrustedRoleList(
                     trustedRoleResults,
@@ -470,7 +485,7 @@ export class ReactionAddHandler implements EventHandler {
                     pageSize,
                     hasPremium
                 );
-            } else if (titleArgs[1] === 'Blacklist') {
+            } else if (msg.embeds[0]?.title?.includes(Lang.getRef('blacklist', LangCode.EN))) {
                 let blacklistResults = await this.blacklistRepo.getBlacklistList(
                     msg.guild.id,
                     pageSize,

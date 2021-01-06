@@ -42,6 +42,13 @@
             "description": "This server has a default timezone of **{{TIMEZONE}}**, do you want to use this timezone?",
             "color": "{{REF:colorSuccess}}"
         },
+        "inputPage": {
+            "description": "Please input the page you would like to jump to:"
+        },
+        "invalidPage": {
+            "description": "Invalid page!",
+            "color": "{{REF:colorError}}"
+        },
         "confirmFirstBirthday": {
             "description": "{{TARGET}}, please confirm this information is correct: **{{BIRTHDAY}}, {{TIMEZONE}}**",
             "color": "{{REF:colorWarn}}"
@@ -240,7 +247,7 @@
         "userBirthdayMessageListDescription": "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*\n\n",
         "userBirthdayMessageListFieldTitle": "Locked Feature",
         "userBirthdayMessageListFieldText": "User-specific messages are a premium only feature. Unlock them with `bday premium`!\n\n",
-        "trustedRoleListDescription": "`*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `bday config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*\n\n`",
+        "trustedRoleListDescription": "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `bday config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*\n\n",
         "trustedRoleListFieldTitle": "Trusted Role Limit",
         "trustedRoleListFieldText": "The free version of Birthday Bot can only have up to **{{MAX_FREE_TRUSTED_ROLES}}** trusted roles. Unlock up to **{{MAX_PAID_TRUSTED_ROLES}}** with `bday premium`!\n\n",
         "birthdayListDescription": "*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use `bday set`!*\n\n",
