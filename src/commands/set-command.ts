@@ -201,7 +201,6 @@ export class SetCommand implements Command {
                 Lang.getEmbed('defaultTimeZoneAvailable', LangCode.EN, {
                     TIMEZONE: guildData.DefaultTimezone,
                 })
-                    .setTimestamp()
                     .setAuthor(target.tag, target.avatarURL())
                     .setTitle(timeZoneTitle)
             ); // Send confirmation and emotes
@@ -259,9 +258,9 @@ export class SetCommand implements Command {
                     if (FormatUtils.checkAbbreviation(nextMsg.content)) {
                         await MessageUtils.send(
                             channel,
-                            Lang.getEmbed('invalidTimezoneAbbreviation', LangCode.EN)
-                                .setTimestamp()
-                                .setTitle(timeZoneTitle)
+                            Lang.getEmbed('invalidTimeZoneAbbreviation', LangCode.EN).setTitle(
+                                timeZoneTitle
+                            )
                         );
                         return;
                     }
@@ -270,9 +269,7 @@ export class SetCommand implements Command {
                     if (!input) {
                         await MessageUtils.send(
                             channel,
-                            Lang.getEmbed('invalidTimezone', LangCode.EN)
-                                .setTimestamp()
-                                .setTitle(timeZoneTitle)
+                            Lang.getEmbed('invalidTimezone', LangCode.EN).setTitle(timeZoneTitle)
                         );
                         return;
                     }
@@ -313,9 +310,7 @@ export class SetCommand implements Command {
                     if (!result) {
                         await MessageUtils.send(
                             channel,
-                            Lang.getEmbed('invalidBirthday', LangCode.EN)
-                                .setTimestamp()
-                                .setTitle(birthdayTitle)
+                            Lang.getEmbed('invalidBirthday', LangCode.EN).setTitle(birthdayTitle)
                         );
                         return;
                     }
