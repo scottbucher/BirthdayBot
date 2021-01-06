@@ -18,11 +18,12 @@
                 "",
                 "**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!"
             ],
-            "footer": "{{REF:expireFooter}}",
+            "footer": {
+                "text": "{{REF:expireFooter}}"
+            },
             "timestamp": true
         },
         "birthdaySetupBirthday": {
-            "title": "",
             "description": [
                 "{{OVERRIDE}}**Important**: By submitting this information you agree it can be shown to anyone.",
                 "",
@@ -32,7 +33,10 @@
                 "",
                 "**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!"
             ],
-            "footer": "{{REF:expireFooter}}"
+            "footer": {
+                "text": "{{REF:expireFooter}}"
+            },
+            "timestamp": true
         },
         "defaultTimeZoneAvailable": {
             "description": "This server has a default timezone of **{{TIMEZONE}}**, do you want to use this timezone?",
@@ -48,7 +52,10 @@
         },
         "setBirthday": {
             "description": "Successfully set your birthday to **{{BIRTHDAY}}, {{TIMEZONE}}**",
-            "footer": "{{REF:attemptsFooter}}"
+            "footer": {
+                "text": "{{REF:attemptsFooter}}"
+            },
+            "timestamp": true
         },
         "birthdayExpired": {
             "title": "Birthday Set - Expired",
@@ -91,12 +98,27 @@
         },
         "invalidTimezone": {
             "description": "Invalid time zone!",
-            "footer": "{{REF:tryAgainFooter}}",
+            "footer": {
+                "text": "{{REF:tryAgainFooter}}"
+            },
+            "timestamp": true,
             "color": "{{REF:colorError}}"
         },
         "invalidTimeZoneAbbreviation": {
             "description": "Invalid time zone! Do not use timezone abbreviations!",
-            "footer": "{{REF:tryAgainFooter}}",
+            "footer": {
+                "text": "{{REF:tryAgainFooter}}"
+            },
+            "timestamp": true,
+            "color": "{{REF:colorError}}"
+        },
+        "invalidMessageType": {
+            "title": "Custom Message List",
+            "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+            "footer": {
+                "text": "{{REF:actionFailedFooter}}"
+            },
+            "timestamp": true,
             "color": "{{REF:colorError}}"
         },
         "invalidRole": {
@@ -118,7 +140,10 @@
         "serverOnlyCommand": {
             "title": "Server Only Command!",
             "description": "This command can only be used in a server.",
-            "footer": "Please try again in a server!",
+            "footer": {
+                "text": "Please try again in a server!"
+            },
+            "timestamp": true,
             "color": "{{REF:colorError}}"
         },
         "permissionRequired": {
@@ -192,18 +217,33 @@
         "expireFooter": "This message expires in 2 minutes!",
         "tryAgainFooter": "Please check above and try again!",
         "attemptsFooter": "You now have {{AMOUNT}} birthday attempts left.",
+        "actionFailedFooter": "{{REF:deny}} Action Failed.",
         "useAttemptFooter": "You have {{CHANGES_LEFT}} attempts left. By clicking confirm you will use one of them.",
         "useAttemptForTargetFooter": "{{TARGET}} has {{CHANGES_LEFT}} attempts left. By clicking confirm they will use one of them.",
+        "noBirthdays": "**No Birthdays in this server!**",
+        "noCustomBirthdayMessages": "**No Custom Birthday Messages!**",
+        "noCustomUserSpecificBirthdayMessages": "**No User-Specific Birthday Messages!**",
+        "noCustomMemberAnniversaryMessages": "**No Custom Member Anniversary Messages!**",
+        "noCustomServerAnniversaryMessages": "**No Custom Server Anniversary Messages!**",
+        "noTrustedRoles": "**No Trusted Roles!**",
+        "emptyBlacklist": "**The Birthday Blacklist is empty!**",
         "missingEmbedPerms": [
             "I don't have all permissions required to send messages here!",
             "",
             "Please allow me to **Read Messages**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
         ],
+        "messageListTitle": "{{TYPE}} Messages | Page {{PAGE}}/{{TOTAL_PAGES}}",
+        "messageListDescription": "*A random {{TYPE}} message is chosen for each {{TYPE}}. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*\n\n",
+        "messageListPremiumFieldTitle": "Message Limit",
+        "messageListPremiumFieldText": "The free version of Birthday Bot can only have up to **{{MAX_FREE_MESSAGES}}** custom {{TYPE}} messages. Unlock up to **{{MAX_PAID_MESSAGES}}** with `bday premium`!",
+        "messageListPremiumFooter": "Total Messages: {{TOTAL_MESSAGES}} • {{PER_PAGE}} per page",
         "birthdayOverride": "__**Note**__: Your birthday is already set, continue to change it.\n\n",
         "setupForUser": "Setup For {{TARGET}} - {{VALUE}}",
         "userSetup": "User Setup - {{VALUE}}",
         "timeZone": "Time Zone",
         "birthday": "Birthday",
+        "memberAnniversary": "Member Anniversary",
+        "serverAnniversary": "Server Anniversary",
         "confirm": "✅",
         "deny": "❌",
         "create": "🔨",
