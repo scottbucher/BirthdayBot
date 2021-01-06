@@ -17,9 +17,11 @@ import {
 } from 'discord.js';
 import { FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 import { GuildRepo, UserRepo } from '../services/database/repos';
+import { Lang, Logger } from '../services';
 
 import { Command } from './command';
 import { GuildData } from '../models/database';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -50,13 +52,7 @@ export class SetCommand implements Command {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                new MessageEmbed()
-                    .setTitle('Birthday Set - Expired')
-                    .setDescription('Type `bday set` to rerun the birthday set.')
-                    .setColor(Config.colors.error)
-            );
+            await MessageUtils.send(channel, Lang.getEmbed('birthdayExpired', LangCode.EN));
         };
         let target: User;
         let birthday: string;
@@ -125,12 +121,7 @@ export class SetCommand implements Command {
             guildData = await this.guildRepo.getGuild(msg.guild.id);
 
             if (guildData && !PermissionUtils.hasPermission(msg.member, guildData)) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        'You do not have permission to suggest birthdays for other users!'
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(channel, Lang.getEmbed('cantSuggest', LangCode.EN));
                 return;
             }
 
@@ -141,30 +132,29 @@ export class SetCommand implements Command {
                 GuildUtils.findMember(msg.guild, args[3]) ||
                 GuildUtils.findMember(msg.guild, args[4]);
 
+            if (member.user.bot) {
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('cantSetTimeZoneForBot', LangCode.EN)
+                );
+                return;
+            }
+
             if (
                 member &&
                 !(channel as TextChannel)
                     .permissionsFor(member)
                     .has([Permissions.FLAGS.READ_MESSAGE_HISTORY])
             ) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        'That user needs the `READ_MESSAGE_HISTORY` permission in this channel!'
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('memberNeedsMessageHistory', LangCode.EN, {
+                        MEMBER: member.toString(),
+                    })
+                );
                 return;
             }
         }
-
-        if (target.bot) {
-            let embed = new MessageEmbed()
-                .setDescription(`You can't set a birthday for a bot!`)
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
-        }
-
         let suggest = target !== msg.author;
 
         let userData = await this.userRepo.getUser(target.id); // Try and get their data
@@ -174,10 +164,7 @@ export class SetCommand implements Command {
             // Are they in the database?
             if (userData.ChangesLeft === 0) {
                 // Out of changes?
-                let embed = new MessageEmbed()
-                    .setDescription('You are out of birthday attempts!')
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(channel, Lang.getEmbed('outOfAttempts', LangCode.EN));
                 return;
             } else {
                 changesLeft = userData.ChangesLeft;
@@ -185,20 +172,40 @@ export class SetCommand implements Command {
         }
         if (!(channel instanceof DMChannel) && !guildData)
             guildData = await this.guildRepo.getGuild(msg.guild.id);
-        if (guildData?.DefaultTimezone !== '0') {
-            let useTimezoneEmbed = new MessageEmbed()
-                .setDescription(
-                    `This server has a default timezone of **${guildData.DefaultTimezone}**, do you want to use this timezone?`
-                )
-                .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
-                .setColor(Config.colors.default)
-                .setTimestamp()
-                .setAuthor(target.tag, target.avatarURL());
 
-            if (suggest) useTimezoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
-            else useTimezoneEmbed.setTitle('User Setup - Time Zone');
+        let birthdayTitle = suggest
+            ? Lang.getRef('setupForUser', LangCode.EN, {
+                  TARGET: target.username,
+                  VALUE: Lang.getRef('birthday', LangCode.EN),
+              })
+            : Lang.getRef('userSetup', LangCode.EN, {
+                  VALUE: Lang.getRef('birthday', LangCode.EN),
+              });
+        let timeZoneTitle = suggest
+            ? Lang.getRef('setupForUser', LangCode.EN, {
+                  TARGET: target.username,
+                  VALUE: Lang.getRef('timeZone', LangCode.EN),
+              })
+            : Lang.getRef('userSetup', LangCode.EN, {
+                  VALUE: Lang.getRef('timeZone', LangCode.EN),
+              });
 
-            let confirmationMessage = await MessageUtils.send(channel, useTimezoneEmbed); // Send confirmation and emotes
+        // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
+        if (
+            guildData?.DefaultTimezone !== '0' &&
+            timeZone &&
+            timeZone != guildData?.DefaultTimezone
+        ) {
+            let confirmationMessage = await MessageUtils.send(
+                channel,
+                Lang.getEmbed('defaultTimeZoneAvailable', LangCode.EN, {
+                    TIMEZONE: guildData.DefaultTimezone,
+                })
+                    .setColor(Config.colors.default)
+                    .setTimestamp()
+                    .setAuthor(target.tag, target.avatarURL())
+                    .setTitle(timeZoneTitle)
+            ); // Send confirmation and emotes
             for (let option of trueFalseOptions) {
                 await MessageUtils.react(confirmationMessage, option);
             }
@@ -207,7 +214,8 @@ export class SetCommand implements Command {
                 confirmationMessage,
                 // Collect Filter
                 (msgReaction: MessageReaction, reactor: User) =>
-                    reactor.id === target.id && trueFalseOptions.includes(msgReaction.emoji.name),
+                    reactor.id === msg.author.id &&
+                    trueFalseOptions.includes(msgReaction.emoji.name),
                 stopFilter,
                 // Retrieve Result
                 async (msgReaction: MessageReaction, reactor: User) => {
@@ -229,33 +237,18 @@ export class SetCommand implements Command {
 
         let override =
             userData && userData.Birthday && userData.TimeZone
-                ? '__**Note**__: Your birthday is already set, continue to change it.\n\n'
+                ? Lang.getRef('birthdayOverride', LangCode.EN)
                 : '';
 
         if (!timeZone) {
-            let timeZoneEmbed = new MessageEmbed()
-                .setDescription(
-                    `${override}**Important**: By submitting this information you agree it can be shown to anyone.` +
-                        '\n' +
-                        `\nFirst, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)` +
-                        '\n' +
-                        `\nTo find your time zone please use the [map time zone picker](${Config.links.map})!` +
-                        '\n' +
-                        '\nSimply click your location on the map and copy the name of the selected time zone. You can then enter it below.' +
-                        '\n' +
-                        '\n**Example Usage:** `America/New_York`' +
-                        '\n' +
-                        `\n**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!`
-                )
-                .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
-                .setColor(Config.colors.default)
-                .setTimestamp()
-                .setAuthor(target.tag, target.avatarURL());
-
-            if (suggest) timeZoneEmbed.setTitle(`Setup For ${target.username} - Time Zone`);
-            else timeZoneEmbed.setTitle('User Setup - Time Zone');
-
-            let timezoneMessage = await MessageUtils.send(channel, timeZoneEmbed);
+            let timezoneMessage = await MessageUtils.send(
+                channel,
+                Lang.getEmbed('birthdaySetupTimeZone', LangCode.EN, {
+                    OVERRIDE: override,
+                })
+                    .setAuthor(target.tag, target.avatarURL())
+                    .setTitle(timeZoneTitle)
+            );
 
             timeZone = await CollectorUtils.collectByMessage(
                 msg.channel,
@@ -265,33 +258,25 @@ export class SetCommand implements Command {
                 // Retrieve Result
                 async (nextMsg: Message) => {
                     if (FormatUtils.checkAbbreviation(nextMsg.content)) {
-                        let embed = new MessageEmbed()
-                            .setDescription('Invalid time zone! Do not use timezone abbreviations!')
-                            .setFooter(
-                                `Please check above and try again!`,
-                                msg.client.user.avatarURL()
-                            )
-                            .setTimestamp()
-                            .setColor(Config.colors.error);
-                        if (suggest) embed.setTitle(`Setup For ${target.username} - Time Zone`);
-                        else embed.setTitle('User Setup - Time Zone');
-                        await MessageUtils.send(channel, embed);
+                        await MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('invalidTimezoneAbbreviation', LangCode.EN)
+                                .setTimestamp()
+                                .setColor(Config.colors.error)
+                                .setTitle(timeZoneTitle)
+                        );
                         return;
                     }
 
                     let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
                     if (!input) {
-                        let embed = new MessageEmbed()
-                            .setDescription('Invalid time zone!')
-                            .setFooter(
-                                `Please check above and try again!`,
-                                msg.client.user.avatarURL()
-                            )
-                            .setTimestamp()
-                            .setColor(Config.colors.error);
-                        if (suggest) embed.setTitle(`Setup For ${target.username} - Time Zone`);
-                        else embed.setTitle('User Setup - Time Zone');
-                        await MessageUtils.send(channel, embed);
+                        await MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('invalidTimezone', LangCode.EN)
+                                .setTimestamp()
+                                .setColor(Config.colors.error)
+                                .setTitle(timeZoneTitle)
+                        );
                         return;
                     }
 
@@ -309,25 +294,14 @@ export class SetCommand implements Command {
         }
 
         if (!birthday) {
-            let birthdayEmbed = new MessageEmbed()
-                .setDescription(
-                    `${override}**Important**: By submitting this information you agree it can be shown to anyone.` +
-                        '\n' +
-                        `\nPlease enter your birth month and day. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)` +
-                        '\n' +
-                        '\n**Example Usage:** `08/28` (MM/DD)' +
-                        '\n' +
-                        `\n**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!`
-                )
-                .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
-                .setColor(Config.colors.default)
-                .setTimestamp()
-                .setAuthor(target.tag, target.avatarURL());
-
-            if (suggest) birthdayEmbed.setTitle(`Setup For ${target.username} - Birthday`);
-            else birthdayEmbed.setTitle('User Setup - Birthday');
-
-            let birthdayMessage = await MessageUtils.send(channel, birthdayEmbed);
+            let birthdayMessage = await MessageUtils.send(
+                channel,
+                Lang.getEmbed('birthdaySetupBirthday', LangCode.EN, {
+                    OVERRIDE: override,
+                })
+                    .setAuthor(target.tag, target.avatarURL())
+                    .setTitle(birthdayTitle)
+            );
 
             birthday = await CollectorUtils.collectByMessage(
                 msg.channel,
@@ -340,17 +314,13 @@ export class SetCommand implements Command {
 
                     // Don't laugh at my double check it prevents the dates chrono misses on the first input
                     if (!result) {
-                        let embed = new MessageEmbed()
-                            .setDescription('Invalid birthday!')
-                            .setFooter(
-                                `Please check above and try again!`,
-                                msg.client.user.avatarURL()
-                            )
-                            .setTimestamp()
-                            .setColor(Config.colors.error);
-                        if (suggest) embed.setTitle(`Setup For ${target.username} - Birthday`);
-                        else embed.setTitle('User Setup - Birthday');
-                        await MessageUtils.send(channel, embed);
+                        await MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('invalidBirthday', LangCode.EN)
+                                .setTimestamp()
+                                .setColor(Config.colors.error)
+                                .setTitle(birthdayTitle)
+                        );
                         return;
                     }
 
@@ -372,51 +342,34 @@ export class SetCommand implements Command {
         let month = birthDate.getMonth() + 1;
         let day = birthDate.getDate();
 
-        let confirmationEmbed = new MessageEmbed().setColor(Config.colors.warning);
+        let confirmationEmbed: MessageEmbed;
+
+        if (userData) {
+            confirmationEmbed = Lang.getEmbed('confirmChangeBirthday', LangCode.EN, {
+                TARGET: target.toString(),
+                BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
+                TIMEZONE: timeZone,
+            });
+        } else {
+            confirmationEmbed = Lang.getEmbed('confirmFirstBirthday', LangCode.EN, {
+                TARGET: target.toString(),
+                BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
+                TIMEZONE: timeZone,
+            });
+        }
 
         if (suggest) {
-            // If an admin is setting the information
             confirmationEmbed.setFooter(
-                `${target.username} has ${changesLeft} attempts left. By clicking confirm they will use one of them.`,
-                msg.client.user.avatarURL()
+                Lang.getRef('useAttemptFooter', LangCode.EN, { CHANGES_LEFT: `${changesLeft}` })
             );
-            if (userData) {
-                // If it isn't their first time setting their information
-                confirmationEmbed.setDescription(
-                    `Your birthday is already set ${target.toString()}, please confirm this information is correct to change it: **${FormatUtils.getMonth(
-                        month
-                    )} ${day}, ${timeZone}**`
-                );
-            } else {
-                // Their first time setting their information
-                confirmationEmbed.setDescription(
-                    `${target.toString()}, please confirm this information is correct: **${FormatUtils.getMonth(
-                        month
-                    )} ${day}, ${timeZone}**`
-                );
-            }
-        } else {
-            // User setting their own information
+        }
+        {
             confirmationEmbed.setFooter(
-                `You have ${changesLeft} attempts left. By clicking confirm you will use one of them.`,
-                msg.client.user.avatarURL()
+                Lang.getRef('useAttemptForTargetFooter', LangCode.EN, {
+                    TARGET: target.username,
+                    CHANGES_LEFT: `${changesLeft}`,
+                })
             );
-
-            if (userData) {
-                // If it isn't their first time setting their information
-                confirmationEmbed.setDescription(
-                    `Your birthday is already set, please confirm this information is correct to change it: **${FormatUtils.getMonth(
-                        month
-                    )} ${day}, ${timeZone}**`
-                );
-            } else {
-                // Their first time setting their information
-                confirmationEmbed.setDescription(
-                    `Please confirm this information is correct: **${FormatUtils.getMonth(
-                        month
-                    )} ${day}, ${timeZone}**`
-                );
-            }
         }
 
         let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
@@ -444,25 +397,22 @@ export class SetCommand implements Command {
 
         if (confirmation === Config.emotes.confirm) {
             // Confirm
-
             await this.userRepo.addOrUpdateUser(target.id, birthday, timeZone, changesLeft - 1); // Add or update user
 
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `Successfully set your birthday to **${FormatUtils.getMonth(
-                        month
-                    )} ${day}, ${timeZone}**`
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('setBirthday', LangCode.EN, {
+                    BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
+                    TIMEZONE: timeZone,
+                    AMOUNT: `${changesLeft - 1}`,
+                }).setFooter(
+                    Lang.getRef('attemptsFooter', LangCode.EN, { AMOUNT: `${changesLeft - 1}` })
                 )
-                .setFooter(`You now have ${changesLeft - 1} birthday attempts left.`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            );
             return;
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
-            let embed = new MessageEmbed()
-                .setDescription('Your birthday has not been set.')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('actionCanceled', LangCode.EN));
             return;
         }
     }

@@ -3,126 +3,184 @@
         "color": "#4eefff"
     },
     "embeds": {
-        "userPrompts": {
-            "birthdayAlreadySet": "__**Note**__: Your birthday is already set, continue to change it.\n\n",
-            "birthdaySetupTimeZone": {
-                "title": "",
-                "description": "",
-                "footer": ""
-            },
-            "birthdaySetupBirthday": {
-                "title": "",
-                "description": "",
-                "footer": ""
-            }
+        "birthdayAlreadySet": "__**Note**__: Your birthday is already set, continue to change it.\n\n",
+        "birthdaySetupTimeZone": {
+            "description": [
+                "{{OVERRIDE}}**Important**: By submitting this information you agree it can be shown to anyone.",
+                "",
+                "First, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                "",
+                "To find your time zone please use the [map time zone picker](${Config.links.map})!",
+                "",
+                "Simply click your location on the map and copy the name of the selected time zone. You can then enter it below.",
+                "",
+                "**Example Usage:** `America/New_York`",
+                "",
+                "**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!"
+            ],
+            "footer": "{{REF:expireFooter}}",
+            "timestamp": true
         },
-        "serverPrompts": {
-            "defaultTimeZoneAvailable": {
-                "description": "This server has a default timezone of **{{TIMEZONE}}**, do you want to use this timezone?",
-                "footer": "{{REF:expireFooter}}"
-            }
+        "birthdaySetupBirthday": {
+            "title": "",
+            "description": [
+                "{{OVERRIDE}}**Important**: By submitting this information you agree it can be shown to anyone.",
+                "",
+                "Please enter your birth month and day. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)",
+                "",
+                "**Example Usage:** `08/28` (MM/DD)",
+                "",
+                "**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!"
+            ],
+            "footer": "{{REF:expireFooter}}"
         },
-        "errors": {
-            "noArgs": {
-                "title": "Invalid Usage!",
-                "description": "Please specify an option!\n\n{{OPTIONS}}",
-                "color": "{{REF:colorError}}"
-            },
-            "outOfAttempts": {
-                "description": "You are out of birthday attempts!",
-                "color": "{{REF:colorError}}"
-            },
-            "invalidTimeZone": {
-                "description": "You can't set a birthday for a bot!",
-                "color": "{{REF:colorError}}"
-            },
-            "invalidBirthday": {
-                "description": "Invalid birthday!",
-                "color": "{{REF:colorError}}"
-            },
-            "invalidRole": {
-                "description": "Invalid role!",
-                "color": "{{REF:colorError}}"
-            },
-            "invalidChannel": {
-                "description": "Invalid channel!",
-                "color": "{{REF:colorError}}"
-            },
-            "invalidHour": {
-                "description": "Invalid hour!",
-                "color": "{{REF:colorError}}"
-            },
-            "cantSetForBot": {
-                "description": "You can't set a birthday for a bot!",
-                "color": "{{REF:colorError}}"
-            },
-            "serverOnlyCommand": {
-                "title": "Server Only Command!",
-                "description": "This command can only be used in a server.",
-                "footer": "Please try again in a server!",
-                "color": "{{REF:colorError}}"
-            },
-            "permissionRequired": {
-                "title": "Permission Required!",
-                "description": "You don't have permission to run that command!",
-                "color": "{{REF:colorError}}"
-            },
-            "commandError": {
-                "description": "Something went wrong!",
-                "fields": [
-                    {
-                        "name": "Error code",
-                        "value": "{{ERROR_CODE}}"
-                    },
-                    {
-                        "name": "Contact support",
-                        "value": "{{REF:linkSupport}}"
-                    }
-                ],
-                "color": "{{REF:colorError}}"
-            }
+        "defaultTimeZoneAvailable": {
+            "description": "This server has a default timezone of **{{TIMEZONE}}**, do you want to use this timezone?",
+            "color": "{{REF:colorSuccess}}"
         },
-        "general": {
-            "help": {
-                "title": "{{REF:botName}} - Help",
-                "description": "{{REF:botDescription}}",
-                "fields": [
-                    {
-                        "name": "Commands",
-                        "value": [
-                            "**bot test** - Run the test command.",
-                            "**bot info** - More information about {{REF:botName}}."
-                        ]
-                    },
-                    {
-                        "name": "Links",
-                        "value": ["{{REF:linkSupportEmbed}}", "{{REF:linkInviteEmbed}}"]
-                    }
-                ]
-            },
-            "info": {
-                "title": "{{REF:botName}} - Info",
-                "fields": [
-                    { "name": "Node.js", "value": "{{NODE_VERSION}}" },
-                    { "name": "TypeScript", "value": "{{TS_VERSION}}" },
-                    { "name": "ECMAScript", "value": "{{ES_VERSION}}" },
-                    { "name": "discord.js", "value": "{{DJS_VERSION}}" },
-                    {
-                        "name": "Created With",
-                        "value": ["{{REF:linkTemplateEmbed}}"]
-                    },
-                    {
-                        "name": "Links",
-                        "value": ["{{REF:linkSupportEmbed}}", "{{REF:linkInviteEmbed}}"]
-                    }
-                ]
-            }
+        "confirmFirstBirthday": {
+            "description": "{{TARGET}}, please confirm this information is correct: **{{BIRTHDAY}}, {{TIMEZONE}}**",
+            "color": "{{REF:colorWarn}}"
+        },
+        "confirmChangeBirthday": {
+            "description": "{{TARGET}}, your birthday is already set, please confirm this information is correct to change it: **{{BIRTHDAY}}, {{TIMEZONE}}**",
+            "color": "{{REF:colorWarn}}"
+        },
+        "setBirthday": {
+            "description": "Successfully set your birthday to **{{BIRTHDAY}}, {{TIMEZONE}}**",
+            "footer": "{{REF:attemptsFooter}}"
+        },
+        "birthdayExpired": {
+            "title": "Birthday Set - Expired",
+            "description": "Type `bday set` to rerun the birthday setup.",
+            "color": "{{REF:colorError}}"
+        },
+        "actionCanceled": {
+            "description": "{{REF:deny}} Action canceled.",
+            "color": "{{REF:colorError}}"
+        },
+        "actionFailed": {
+            "title": "{{TITLE}}",
+            "description": "{{REF:deny}} Action failed.",
+            "color": "{{REF:colorError}}"
+        },
+        "noArgs": {
+            "title": "Invalid Usage!",
+            "description": "Please specify an option!\n\n{{OPTIONS}}",
+            "color": "{{REF:colorError}}"
+        },
+        "outOfAttempts": {
+            "description": "You are out of birthday attempts!",
+            "color": "{{REF:colorError}}"
+        },
+        "memberNeedsMessageHistory": {
+            "description": "{{MEMBER}} needs the `READ_MESSAGE_HISTORY` permission in this channel!",
+            "color": "{{REF:colorError}}"
+        },
+        "cantSuggest": {
+            "description": "You do not have permission to suggest birthdays for other users!",
+            "color": "{{REF:colorError}}"
+        },
+        "cantSetTimeZoneForBot": {
+            "description": "You can't set a birthday for a bot!",
+            "color": "{{REF:colorError}}"
+        },
+        "invalidBirthday": {
+            "description": "Invalid birthday!",
+            "color": "{{REF:colorError}}"
+        },
+        "invalidTimezone": {
+            "description": "Invalid time zone!",
+            "footer": "{{REF:tryAgainFooter}}",
+            "color": "{{REF:colorError}}"
+        },
+        "invalidTimeZoneAbbreviation": {
+            "description": "Invalid time zone! Do not use timezone abbreviations!",
+            "footer": "{{REF:tryAgainFooter}}",
+            "color": "{{REF:colorError}}"
+        },
+        "invalidRole": {
+            "description": "Invalid role!",
+            "color": "{{REF:colorError}}"
+        },
+        "invalidChannel": {
+            "description": "Invalid channel!",
+            "color": "{{REF:colorError}}"
+        },
+        "invalidHour": {
+            "description": "Invalid hour!",
+            "color": "{{REF:colorError}}"
+        },
+        "cantSetForBot": {
+            "description": "You can't set a birthday for a bot!",
+            "color": "{{REF:colorError}}"
+        },
+        "serverOnlyCommand": {
+            "title": "Server Only Command!",
+            "description": "This command can only be used in a server.",
+            "footer": "Please try again in a server!",
+            "color": "{{REF:colorError}}"
+        },
+        "permissionRequired": {
+            "title": "Permission Required!",
+            "description": "You don't have permission to run that command!",
+            "color": "{{REF:colorError}}"
+        },
+        "commandError": {
+            "description": "Something went wrong!",
+            "fields": [
+                {
+                    "name": "Error code",
+                    "value": "{{ERROR_CODE}}"
+                },
+                {
+                    "name": "Contact support",
+                    "value": "{{REF:linkSupport}}"
+                }
+            ],
+            "color": "{{REF:colorError}}"
+        },
+        "help": {
+            "title": "{{REF:botName}} - Help",
+            "description": "{{REF:botDescription}}",
+            "fields": [
+                {
+                    "name": "Commands",
+                    "value": [
+                        "**bot test** - Run the test command.",
+                        "**bot info** - More information about {{REF:botName}}."
+                    ]
+                },
+                {
+                    "name": "Links",
+                    "value": ["{{REF:linkSupportEmbed}}", "{{REF:linkInviteEmbed}}"]
+                }
+            ]
+        },
+        "info": {
+            "title": "{{REF:botName}} - Info",
+            "fields": [
+                { "name": "Node.js", "value": "{{NODE_VERSION}}" },
+                { "name": "TypeScript", "value": "{{TS_VERSION}}" },
+                { "name": "ECMAScript", "value": "{{ES_VERSION}}" },
+                { "name": "discord.js", "value": "{{DJS_VERSION}}" },
+                {
+                    "name": "Created With",
+                    "value": ["{{REF:linkTemplateEmbed}}"]
+                },
+                {
+                    "name": "Links",
+                    "value": ["{{REF:linkSupportEmbed}}", "{{REF:linkInviteEmbed}}"]
+                }
+            ]
         }
     },
     "refs": {
         "botName": "Birthday Bot",
         "botDescription": "{{REF:linkTemplateEmbed}} helps your server track and celebrate birthdays by automatically celebrating them with numerous fun and extremely customizable features.",
         "colorError": "#ff0000",
+        "colorSuccess": "#1cfe86",
+        "colorWarn": "#ffa255",
         "linkInvite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
         "linkInviteEmbed": "Invite {{BOT_MENTION}} to your server [here]({{REF:linkInvite}})!",
         "linkSupport": "https://discord.gg/9gUQFtz",
@@ -132,10 +190,26 @@
         "linkTemplateEmbed": "[Discord Bot TypeScript Template]({{REF:linkTemplate}})",
         "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
         "expireFooter": "This message expires in 2 minutes!",
+        "tryAgainFooter": "Please check above and try again!",
+        "attemptsFooter": "You now have {{AMOUNT}} birthday attempts left.",
+        "useAttemptFooter": "You have {{CHANGES_LEFT}} attempts left. By clicking confirm you will use one of them.",
+        "useAttemptForTargetFooter": "{{TARGET}} has {{CHANGES_LEFT}} attempts left. By clicking confirm they will use one of them.",
         "missingEmbedPerms": [
             "I don't have all permissions required to send messages here!",
             "",
             "Please allow me to **Read Messages**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
-        ]
-    }
+        ],
+        "birthdayOverride": "__**Note**__: Your birthday is already set, continue to change it.\n\n",
+        "setupForUser": "Setup For {{TARGET}} - {{VALUE}}",
+        "userSetup": "User Setup - {{VALUE}}",
+        "timeZone": "Time Zone",
+        "birthday": "Birthday",
+        "confirm": "✅",
+        "deny": "❌",
+        "create": "🔨",
+        "select": "🖱",
+        "birthdayEmote": "🎂",
+        "party": "🎉"
+    },
+    "regexes": {}
 }
