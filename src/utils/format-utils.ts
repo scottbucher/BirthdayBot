@@ -4,6 +4,8 @@ import { Blacklisted, CustomMessages, UserDataResults } from '../models/database
 import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
 
 import { GuildUtils } from '.';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import { TrustedRoles } from '../models/database/trusted-role-models';
 import moment from 'moment-timezone';
 
@@ -154,7 +156,10 @@ export class FormatUtils {
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
             .setFooter(
-                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
+                Lang.getRef('messageListPremiumFooter', LangCode.EN, {
+                    TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
+                    PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                }),
                 guild.iconURL()
             )
             .setTimestamp();
@@ -165,32 +170,32 @@ export class FormatUtils {
             let embed = new MessageEmbed()
                 .setColor(Config.colors.default)
                 .setDescription(
-                    `**No Custom ${
-                        type === 'birthday'
-                            ? 'Birthday'
-                            : type === 'memberanniversary'
-                            ? 'Member Anniversary'
-                            : 'Server Anniversary'
-                    } Messages!**`
+                    type === 'birthday'
+                        ? Lang.getRef('noCustomBirthdayMessages', LangCode.EN)
+                        : type === 'memberanniversary'
+                        ? Lang.getRef('noCustomMemberAnniversaryMessages', LangCode.EN)
+                        : Lang.getRef('noCustomServerAnniversaryMessages', LangCode.EN)
                 );
             return embed;
         }
         let description = '';
 
+        let maxMessagesFree: number =
+            type === 'memberanniversary'
+                ? Config.validation.message.maxCount.memberAnniversary.free
+                : type === 'serveranniversary'
+                ? Config.validation.message.maxCount.serverAnniversary.free
+                : Config.validation.message.maxCount.birthday.free;
+        let maxMessagesPaid: number =
+            type === 'memberanniversary'
+                ? Config.validation.message.maxCount.memberAnniversary.paid
+                : type === 'serveranniversary'
+                ? Config.validation.message.maxCount.serverAnniversary.paid
+                : Config.validation.message.maxCount.birthday.paid;
+
         for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
-            // Todo: clean up the if logic
-            if (
-                hasPremium ||
-                (customMessage.Position <= Config.validation.message.maxCount.birthday.free &&
-                    type === 'birthday') ||
-                (customMessage.Position <=
-                    Config.validation.message.maxCount.memberAnniversary.free &&
-                    type === 'memberanniversary') ||
-                (customMessage.Position <=
-                    Config.validation.message.maxCount.serverAnniversary.free &&
-                    type === 'serveranniversary')
-            ) {
+            if (hasPremium || customMessage.Position <= maxMessagesFree) {
                 description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n\n`;
@@ -198,53 +203,34 @@ export class FormatUtils {
             i++;
         }
 
-        if (type === 'birthday') {
-            embed.setTitle(
-                `Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
+        let langType =
+            type === 'memberanniversary'
+                ? 'memberAnniversary'
+                : type === 'serveranniversary'
+                ? 'serverAnniversary'
+                : type;
+
+        embed.setTitle(
+            Lang.getRef('messageListTitle', LangCode.EN, {
+                TYPE: Lang.getRef(langType, LangCode.EN),
+                PAGE: page.toString(),
+                TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
+            })
+        );
+
+        description += Lang.getRef('messageListDescription', LangCode.EN, {
+            TYPE: Lang.getRef(langType, LangCode.EN),
+        });
+
+        if (!hasPremium && customMessageResults.stats.TotalItems > maxMessagesFree)
+            embed.addField(
+                Lang.getRef('messageListPremiumFieldTitle', LangCode.EN),
+                Lang.getRef('messageListPremiumFieldText', LangCode.EN, {
+                    MAX_FREE_MESSAGES: maxMessagesFree.toString(),
+                    TYPE: Lang.getRef('birthday', LangCode.EN),
+                    MAX_PAID_MESSAGES: maxMessagesPaid.toString(),
+                })
             );
-
-            description += `*A random birthday message is chosen for each birthday. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
-
-            if (
-                !hasPremium &&
-                customMessageResults.stats.TotalItems >
-                    Config.validation.message.maxCount.birthday.free
-            )
-                embed.addField(
-                    'Message Limit',
-                    `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.birthday.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.birthday.paid}** with \`bday premium\`!\n\n`
-                );
-        } else if (type === 'memberanniversary') {
-            embed.setTitle(
-                `Member Anniversary Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
-            );
-            description += `*A random message is chosen for each member anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-user-anniversary-message)*\n\n`;
-
-            if (
-                !hasPremium &&
-                customMessageResults.stats.TotalItems >
-                    Config.validation.message.maxCount.memberAnniversary.free
-            )
-                embed.addField(
-                    'Message Limit',
-                    `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.memberAnniversary.free}** custom member anniversary messages. Unlock up to **${Config.validation.message.maxCount.memberAnniversary.paid}**' with \`bday premium\`!\n\n`
-                );
-        } else if (type === 'serveranniversary') {
-            embed.setTitle(
-                `Server Anniversary Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
-            );
-            description += `*A random message is chosen for each server anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-server-anniversary-message)*\n\n`;
-
-            if (
-                !hasPremium &&
-                customMessageResults.stats.TotalItems >
-                    Config.validation.message.maxCount.serverAnniversary.free
-            )
-                embed.addField(
-                    'Message Limit',
-                    `The free version of Birthday Bot can't have custom server anniversary messages. Unlock up to **${Config.validation.message.maxCount.serverAnniversary.paid}**' with \`bday premium\`!\n\n`
-                );
-        }
 
         embed.setDescription(description);
 
@@ -272,7 +258,7 @@ export class FormatUtils {
 
         if (customMessageResults.customMessages.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription('**No User-Specific Birthday Messages!**')
+                .setDescription(Lang.getRef('noCustomUserSpecificBirthdayMessages', LangCode.EN))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -323,7 +309,7 @@ export class FormatUtils {
 
         if (trustedRoleResults.trustedRoles.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription('**No Trusted Roles!**')
+                .setDescription(Lang.getRef('noTrustedRoles', LangCode.EN))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -379,7 +365,7 @@ export class FormatUtils {
 
         if (userDataResults.userData.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription('**No Birthdays in this server!**')
+                .setDescription(Lang.getRef('noBirthdays', LangCode.EN))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -428,7 +414,7 @@ export class FormatUtils {
 
         if (blacklistResults.blacklist.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription('**The blacklist is empty!**')
+                .setDescription(Lang.getRef('emptyBlacklist', LangCode.EN))
                 .setColor(Config.colors.default);
             return embed;
         }
