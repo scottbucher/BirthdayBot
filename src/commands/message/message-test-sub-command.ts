@@ -76,7 +76,7 @@ export class MessageTestSubCommand {
         let userList = userCount > 1 ? FormatUtils.joinWithAnd(users) : msg.author.toString();
 
         // Get guild data
-        let guildData = await this.guildRepo.getGuild(msg.guild.id);
+        // let guildData = await this.guildRepo.getGuild(msg.guild.id);
 
         // Retrieve message to remove
         let messages = target

@@ -9,7 +9,6 @@ import {
     Collection,
     DiscordAPIError,
     Message,
-    MessageEmbed,
     MessageReaction,
     TextChannel,
     User,
