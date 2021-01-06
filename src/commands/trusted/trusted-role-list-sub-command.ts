@@ -1,6 +1,8 @@
 import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
 
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo';
 
 let Config = require('../../../config/config.json');
@@ -40,7 +42,7 @@ export class TrustedRoleListSubCommand {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description.includes('**No Trusted')) return;
+        if (embed.description === Lang.getRef('noTrustedRoles', LangCode.EN)) return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);
         await MessageUtils.react(message, Config.emotes.jumpToPage);

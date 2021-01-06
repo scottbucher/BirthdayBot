@@ -2,6 +2,8 @@ import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
@@ -42,7 +44,8 @@ export class MessageUserListSubCommand {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description === '**No Custom Birthday Messages!**') return;
+        if (embed.description === Lang.getRef('noCustomUserSpecificBirthdayMessages', LangCode.EN))
+            return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);
         await MessageUtils.react(message, Config.emotes.jumpToPage);

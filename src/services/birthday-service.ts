@@ -135,9 +135,9 @@ export class BirthdayService {
 
         // Birthday Message
         if (birthdayMessageUsers.length > 0) {
-            let hasPremium = Config.payments.enabled
-                ? await this.subscriptionService.hasService(PlanName.premium1, guild.id)
-                : false;
+            let hasPremium =
+                !Config.payments.enabled ||
+                (await this.subscriptionService.hasService(PlanName.premium1, guild.id));
             let globalMessages = await this.customMessageRepo.getCustomMessages(
                 guild.id,
                 'birthday'
