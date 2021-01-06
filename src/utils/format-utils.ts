@@ -257,9 +257,9 @@ export class FormatUtils {
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
             .setFooter(
-                Lang.getRef('messageListFooter', LangCode.EN, {
+                Lang.getRef('listFooter', LangCode.EN, {
                     TYPE:
-                        Lang.getRef('total', LangCode.EN) +
+                        Lang.getRef('user', LangCode.EN) +
                         ' ' +
                         Lang.getRef('messages', LangCode.EN),
                     TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
