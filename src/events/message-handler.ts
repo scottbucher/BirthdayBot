@@ -126,9 +126,11 @@ export class MessageHandler {
         // Get premium status if needed
         let retrievePremium =
             Config.payments.enabled && (checkVote || command.requirePremium || command.getPremium);
-        let hasPremium = retrievePremium
-            ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
-            : false;
+        let hasPremium =
+            !Config.payments.enabled ||
+            (retrievePremium
+                ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                : false);
 
         if (checkPremium && !hasPremium) {
             let embed = new MessageEmbed()
