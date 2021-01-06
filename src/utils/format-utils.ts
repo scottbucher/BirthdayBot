@@ -156,7 +156,8 @@ export class FormatUtils {
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
             .setFooter(
-                Lang.getRef('messageListPremiumFooter', LangCode.EN, {
+                Lang.getRef('listFooter', LangCode.EN, {
+                    TYPE: Lang.getRef('messages', LangCode.EN),
                     TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
                     PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
                 }),
@@ -211,8 +212,9 @@ export class FormatUtils {
                 : type;
 
         embed.setTitle(
-            Lang.getRef('messageListTitle', LangCode.EN, {
-                TYPE: Lang.getRef(langType, LangCode.EN),
+            Lang.getRef('listTitle', LangCode.EN, {
+                TYPE:
+                    Lang.getRef(langType, LangCode.EN) + ' ' + Lang.getRef('messages', LangCode.EN),
                 PAGE: page.toString(),
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
             })
@@ -246,12 +248,23 @@ export class FormatUtils {
     ): Promise<MessageEmbed> {
         let embed = new MessageEmbed()
             .setTitle(
-                `User Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
+                Lang.getRef('listTitle', LangCode.EN, {
+                    TYPE: Lang.getRef('user', LangCode.EN) + ' Messages',
+                    PAGE: page.toString(),
+                    TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
+                })
             )
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
             .setFooter(
-                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
+                Lang.getRef('messageListFooter', LangCode.EN, {
+                    TYPE:
+                        Lang.getRef('total', LangCode.EN) +
+                        ' ' +
+                        Lang.getRef('messages', LangCode.EN),
+                    TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
+                    PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                }),
                 guild.iconURL()
             )
             .setTimestamp();
@@ -262,25 +275,29 @@ export class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*\n\n`;
+        let description = Lang.getRef('userBirthdayMessageListDescription', LangCode.EN);
 
         for (let customMessage of customMessageResults.customMessages) {
             let member = guild.members.resolve(customMessage.UserDiscordId);
             if (hasPremium) {
-                description += `${member ? `**${member.displayName}**: ` : '**Unknown Member** '} ${
-                    customMessage.Message
-                }\n\n`;
+                description += `${
+                    member
+                        ? `**${member.displayName}**: `
+                        : `**${Lang.getRef('unknownMember', LangCode.EN)}** `
+                } ${customMessage.Message}\n\n`;
             } else {
                 description += `${
-                    member ? `**${member.displayName}**: ` : '**Unknown Member** '
+                    member
+                        ? `**${member.displayName}**: `
+                        : `**${Lang.getRef('unknownMember', LangCode.EN)}** `
                 } ~~${customMessage.Message}~~\n\n`;
             }
         }
 
         if (!hasPremium)
             embed.addField(
-                'Locked Feature',
-                `User-specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`
+                Lang.getRef('userBirthdayMessageListFieldTitle', LangCode.EN),
+                Lang.getRef('userBirthdayMessageListFieldText', LangCode.EN)
             );
 
         embed.setDescription(description);
@@ -296,11 +313,21 @@ export class FormatUtils {
         hasPremium: boolean
     ): Promise<MessageEmbed> {
         let embed = new MessageEmbed()
-            .setTitle(`Trusted Roles | Page ${page}/${trustedRoleResults.stats.TotalPages}`)
+            .setTitle(
+                Lang.getRef('listTitle', LangCode.EN, {
+                    TYPE: Lang.getRef('trustedRoles', LangCode.EN),
+                    PAGE: page.toString(),
+                    TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
+                })
+            )
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
             .setFooter(
-                `Total Trusted Roles: ${trustedRoleResults.stats.TotalItems} • ${Config.experience.trustedRoleListSize} per page`,
+                Lang.getRef('listFooter', LangCode.EN, {
+                    TYPE: Lang.getRef('trustedRoles', LangCode.EN),
+                    TOTAL_MESSAGES: trustedRoleResults.stats.TotalItems.toString(),
+                    PER_PAGE: Config.experience.trustedRoleListSize.toString(),
+                }),
                 guild.iconURL()
             )
             .setTimestamp();
@@ -313,7 +340,7 @@ export class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with \`bday config\` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*\n\n`;
+        let description = Lang.getRef('trustedRoleListDescription', LangCode.EN);
 
         for (let trustedRole of trustedRoleResults.trustedRoles) {
             // dynamically check which ones to cross out due to the server not having premium anymore
@@ -323,11 +350,13 @@ export class FormatUtils {
                 trustedRole.Position <= Config.validation.trustedRoles.maxCount.free
             ) {
                 description += `**${i.toLocaleString()}.** ${
-                    role ? `${role.toString()} ` : '**Deleted Role** '
+                    role ? `${role.toString()} ` : `**** `
                 }\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ${
-                    role ? `~~${role.toString()}~~ ` : '**Deleted Role** '
+                    role
+                        ? `~~${role.toString()}~~ `
+                        : `**${Lang.getRef('deletedRole', LangCode.EN)}** `
                 }\n\n`;
             }
             i++;
@@ -338,8 +367,11 @@ export class FormatUtils {
             trustedRoleResults.stats.TotalItems > Config.validation.trustedRoles.maxCount.free
         )
             embed.addField(
-                'Trusted Role Limit',
-                `The free version of Birthday Bot can only have up to **${Config.validation.trustedRoles.maxCount.free}** trusted roles. Unlock up to **${Config.validation.trustedRoles.maxCount.paid}** with \`bday premium\`!\n\n`
+                Lang.getRef('trustedRoleListFieldTitle', LangCode.EN),
+                Lang.getRef('trustedRoleListFieldText', LangCode.EN, {
+                    MAX_FREE_TRUSTED_ROLES: Config.validation.trustedRoles.maxCount.free.toString(),
+                    MAX_PAID_TRUSTED_ROLES: Config.validation.trustedRoles.maxCount.paid.toString(),
+                })
             );
 
         embed.setDescription(description);
@@ -354,11 +386,24 @@ export class FormatUtils {
         pageSize: number
     ): Promise<MessageEmbed> {
         let embed = new MessageEmbed()
-            .setTitle(`Birthday List | Page ${page}/${userDataResults.stats.TotalPages}`)
+            .setTitle(
+                Lang.getRef('listTitle', LangCode.EN, {
+                    TYPE:
+                        Lang.getRef('birthday', LangCode.EN) +
+                        ' ' +
+                        Lang.getRef('list', LangCode.EN),
+                    PAGE: page.toString(),
+                    TOTAL_PAGES: userDataResults.stats.TotalPages.toString(),
+                })
+            )
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
             .setFooter(
-                `Total Birthdays: ${userDataResults.stats.TotalItems} • ${Config.experience.birthdayListSize} per page`,
+                Lang.getRef('listFooter', LangCode.EN, {
+                    TYPE: Lang.getRef('birthdays', LangCode.EN),
+                    TOTAL_MESSAGES: userDataResults.stats.TotalItems.toString(),
+                    PER_PAGE: Config.experience.trustedRoleListSize.toString(),
+                }),
                 guild.iconURL()
             )
             .setTimestamp();
@@ -369,7 +414,7 @@ export class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use \`bday set\`!*\n\n`;
+        let description = Lang.getRef('birthdayListDescription', LangCode.EN);
         let birthdays = [
             ...new Set(
                 userDataResults.userData.map(data => moment(data.Birthday).format('MMMM Do'))
@@ -384,7 +429,8 @@ export class FormatUtils {
             let userNames: string[] = [];
             for (let user of users) {
                 userNames.push(
-                    `${guild.members.resolve(user.UserDiscordId)?.displayName}` || '**Unknown**'
+                    `${guild.members.resolve(user.UserDiscordId)?.displayName}` ||
+                        `**${Lang.getRef('unknownMember', LangCode.EN)}**`
                 );
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
@@ -403,11 +449,27 @@ export class FormatUtils {
         pageSize: number
     ): Promise<MessageEmbed> {
         let embed = new MessageEmbed()
-            .setTitle(`Birthday Blacklist List | Page ${page}/${blacklistResults.stats.TotalPages}`)
+            .setTitle(
+                Lang.getRef('listTitle', LangCode.EN, {
+                    TYPE:
+                        Lang.getRef('birthday', LangCode.EN) +
+                        ' ' +
+                        Lang.getRef('blacklist', LangCode.EN),
+                    PAGE: page.toString(),
+                    TOTAL_PAGES: blacklistResults.stats.TotalPages.toString(),
+                })
+            )
             .setThumbnail(guild.iconURL())
             .setColor(Config.colors.default)
             .setFooter(
-                `Total Blacklisted Users: ${blacklistResults.stats.TotalItems} • ${Config.experience.blacklistSize} per page`,
+                Lang.getRef('listFooter', LangCode.EN, {
+                    TYPE:
+                        Lang.getRef('blacklisted', LangCode.EN) +
+                        ' ' +
+                        Lang.getRef('users', LangCode.EN),
+                    TOTAL_MESSAGES: blacklistResults.stats.TotalItems.toString(),
+                    PER_PAGE: Config.experience.trustedRoleListSize.toString(),
+                }),
                 guild.iconURL()
             )
             .setTimestamp();
@@ -418,12 +480,13 @@ export class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*Users on this list will not have their birthdays celebrated no matter what. Edit this list with \`bday blacklist <add/remove> <User>\`!*\n\n`;
+        let description = Lang.getRef('blacklistDescription', LangCode.EN);
         let users = blacklistResults.blacklist.map(data => data.UserDiscordId);
 
         for (let user of users) {
             description += `**${
-                guild.members.resolve(user)?.displayName || 'Unknown'
+                guild.members.resolve(user)?.displayName ||
+                `**${Lang.getRef('unknownMember', LangCode.EN)}**`
             }**: (ID: ${user})\n`; // Append the description
         }
 
