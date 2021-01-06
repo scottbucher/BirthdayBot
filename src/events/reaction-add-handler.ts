@@ -5,7 +5,15 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Collection, Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
+import {
+    Collection,
+    DiscordAPIError,
+    Message,
+    MessageEmbed,
+    MessageReaction,
+    TextChannel,
+    User,
+} from 'discord.js';
 import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import { Logger, SubscriptionService } from '../services';
 
@@ -93,8 +101,18 @@ export class ReactionAddHandler implements EventHandler {
             try {
                 msg = await msgReaction.message?.fetch();
             } catch (error) {
-                Logger.error(Logs.error.messagePartial, error);
-                return;
+                // Error code 10003: "Unknown Channel"
+                // Error code 10008: "Unknown Message" (message was deleted)
+                // Error code 50001: "Missing Access"
+                if (
+                    error instanceof DiscordAPIError &&
+                    [10003, 10008, 50001].includes(error.code)
+                ) {
+                    return;
+                } else {
+                    Logger.error(Logs.error.messagePartial, error);
+                    return;
+                }
             }
         } else {
             msg = msgReaction.message;
