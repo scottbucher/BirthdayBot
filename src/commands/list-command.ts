@@ -4,6 +4,8 @@ import { FormatUtils, MessageUtils, ParseUtils } from '../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import { UserDataResults } from '../models/database';
 import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
@@ -67,7 +69,7 @@ export class ListCommand implements Command {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description === '**No Birthdays in this server!**') return;
+        if (embed.description === Lang.getRef('noBirthdays', LangCode.EN)) return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);
         await MessageUtils.react(message, Config.emotes.jumpToPage);

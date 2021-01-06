@@ -2,6 +2,8 @@ import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
@@ -23,14 +25,7 @@ export class MessageListSubCommand {
         let type = args[3]?.toLowerCase();
 
         if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
-            let embed = new MessageEmbed()
-                .setTitle('Custom Message List')
-                .setDescription(
-                    `Please specify a message type! Accepted Values: \`birthday\`, \`memberAnniversary\`, \`serverAnniversary\``
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('invalidMessageType', LangCode.EN));
             return;
         }
 
@@ -57,7 +52,12 @@ export class MessageListSubCommand {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description.includes('**No Custom')) return;
+        if (
+            embed.description === Lang.getRef('noCustomBirthdayMessages', LangCode.EN) ||
+            embed.description === Lang.getRef('noCustomMemberAnniversaryMessages', LangCode.EN) ||
+            embed.description === Lang.getRef('noCustomServerAnniversaryMessages', LangCode.EN)
+        )
+            return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);
         await MessageUtils.react(message, Config.emotes.jumpToPage);

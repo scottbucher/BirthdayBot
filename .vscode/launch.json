@@ -20,6 +20,16 @@
             "preLaunchTask": "tsc",
             "internalConsoleOptions": "openOnSessionStart",
             "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Start",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}\\dist\\start.js",
+            "preLaunchTask": "tsc",
+            "internalConsoleOptions": "openOnSessionStart",
+            "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
+        },
     ]
 }
