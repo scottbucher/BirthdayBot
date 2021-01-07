@@ -143,7 +143,7 @@
                 "description": "Successfully cleared the birthday blacklist!",
                 "color": "{{REF:colors.success}}"
             },
-            "blacklistClearExired": {
+            "blacklistClearExpired": {
                 "title": "Blacklist Clear - Expired",
                 "description": "Type `bday blacklist clear` to clear the birthday blacklist.",
                 "color": "{{REF:colors.error}}"
@@ -169,10 +169,7 @@
         "validation": {
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": [
-                    "Please specify an option!",
-                    "{{OPTIONS}}"
-                ],
+                "description": ["Please specify an option!", "{{OPTIONS}}"],
                 "color": "{{REF:colors.error}}"
             },
             "outOfAttempts": {
@@ -232,7 +229,7 @@
                 "color": "{{REF:colors.error}}"
             },
             "noUserFound": {
-                "description": "Could not finid that user!",
+                "description": "Could not find that user!",
                 "color": "{{REF:colors.error}}"
             },
             "cantBlacklistBot": {
@@ -312,10 +309,7 @@
                     },
                     {
                         "name": "Links",
-                        "value": [
-                            "{{REF:link.supportEmbed}}",
-                            "{{REF:link.inviteEmbed}}"
-                        ]
+                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
                     }
                 ]
             }
@@ -342,16 +336,11 @@
                     },
                     {
                         "name": "Created With",
-                        "value": [
-                            "{{REF:link.templateEmbed}}"
-                        ]
+                        "value": ["{{REF:link.templateEmbed}}"]
                     },
                     {
                         "name": "Links",
-                        "value": [
-                            "{{REF:link.supportEmbed}}",
-                            "{{REF:link.inviteEmbed}}"
-                        ]
+                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
                     }
                 ]
             }
@@ -634,6 +623,5 @@
                 "Please allow me to **Read Messages**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
             ]
         }
-    },
-    "regexes": {}
+    }
 }
