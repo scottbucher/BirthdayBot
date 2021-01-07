@@ -17,10 +17,10 @@ import {
 } from 'discord.js';
 import { FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 import { GuildRepo, UserRepo } from '../services/database/repos';
-import { Lang } from '../services';
 
 import { Command } from './command';
 import { GuildData } from '../models/database';
+import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
@@ -52,7 +52,7 @@ export class SetCommand implements Command {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, Lang.getEmbed('birthdayExpired', LangCode.EN));
+            await MessageUtils.send(channel, Lang.getEmbed('results.birthdayExpired', LangCode.EN));
         };
         let target: User;
         let birthday: string;
@@ -121,7 +121,10 @@ export class SetCommand implements Command {
             guildData = await this.guildRepo.getGuild(msg.guild.id);
 
             if (guildData && !PermissionUtils.hasPermission(msg.member, guildData)) {
-                await MessageUtils.send(channel, Lang.getEmbed('cantSuggest', LangCode.EN));
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.cantSuggest', LangCode.EN)
+                );
                 return;
             }
 
@@ -135,7 +138,7 @@ export class SetCommand implements Command {
             if (member.user.bot) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('cantSetTimeZoneForBot', LangCode.EN)
+                    Lang.getEmbed('validation.cantSetTimeZoneForBot', LangCode.EN)
                 );
                 return;
             }
@@ -148,7 +151,7 @@ export class SetCommand implements Command {
             ) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('memberNeedsMessageHistory', LangCode.EN, {
+                    Lang.getEmbed('validation.memberNeedsMessageHistory', LangCode.EN, {
                         MEMBER: member.toString(),
                     })
                 );
@@ -164,7 +167,10 @@ export class SetCommand implements Command {
             // Are they in the database?
             if (userData.ChangesLeft === 0) {
                 // Out of changes?
-                await MessageUtils.send(channel, Lang.getEmbed('outOfAttempts', LangCode.EN));
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.outOfAttempts', LangCode.EN)
+                );
                 return;
             } else {
                 changesLeft = userData.ChangesLeft;
@@ -172,23 +178,6 @@ export class SetCommand implements Command {
         }
         if (!(channel instanceof DMChannel) && !guildData)
             guildData = await this.guildRepo.getGuild(msg.guild.id);
-
-        let birthdayTitle = suggest
-            ? Lang.getRef('setupForUser', LangCode.EN, {
-                  TARGET: target.username,
-                  VALUE: Lang.getRef('birthday', LangCode.EN),
-              })
-            : Lang.getRef('userSetup', LangCode.EN, {
-                  VALUE: Lang.getRef('birthday', LangCode.EN),
-              });
-        let timeZoneTitle = suggest
-            ? Lang.getRef('setupForUser', LangCode.EN, {
-                  TARGET: target.username,
-                  VALUE: Lang.getRef('timeZone', LangCode.EN),
-              })
-            : Lang.getRef('userSetup', LangCode.EN, {
-                  VALUE: Lang.getRef('timeZone', LangCode.EN),
-              });
 
         // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
         if (
@@ -200,9 +189,8 @@ export class SetCommand implements Command {
                 channel,
                 Lang.getEmbed('defaultTimeZoneAvailable', LangCode.EN, {
                     TIMEZONE: guildData.DefaultTimezone,
-                })
-                    .setAuthor(target.tag, target.avatarURL())
-                    .setTitle(timeZoneTitle)
+                    TARGET: target.username,
+                }).setAuthor(target.tag, target.avatarURL())
             ); // Send confirmation and emotes
             for (let option of trueFalseOptions) {
                 await MessageUtils.react(confirmationMessage, option);
@@ -233,19 +221,14 @@ export class SetCommand implements Command {
             }
         }
 
-        let override =
-            userData && userData.Birthday && userData.TimeZone
-                ? Lang.getRef('birthdayOverride', LangCode.EN)
-                : '';
+        let embedChoice = userData && userData.Birthday && userData.TimeZone ? 'Change' : '';
 
         if (!timeZone) {
             let timezoneMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('birthdaySetupTimeZone', LangCode.EN, {
-                    OVERRIDE: override,
-                })
-                    .setAuthor(target.tag, target.avatarURL())
-                    .setTitle(timeZoneTitle)
+                Lang.getEmbed('userPrompts.birthdaySetupTimeZone' + embedChoice, LangCode.EN, {
+                    TARGET: target.username,
+                }).setAuthor(target.tag, target.avatarURL())
             );
 
             timeZone = await CollectorUtils.collectByMessage(
@@ -258,9 +241,9 @@ export class SetCommand implements Command {
                     if (FormatUtils.checkAbbreviation(nextMsg.content)) {
                         await MessageUtils.send(
                             channel,
-                            Lang.getEmbed('invalidTimeZoneAbbreviation', LangCode.EN).setTitle(
-                                timeZoneTitle
-                            )
+                            Lang.getEmbed('validation.invalidTimeZoneAbbreviation', LangCode.EN, {
+                                TARGET: target.username,
+                            })
                         );
                         return;
                     }
@@ -269,7 +252,9 @@ export class SetCommand implements Command {
                     if (!input) {
                         await MessageUtils.send(
                             channel,
-                            Lang.getEmbed('invalidTimezone', LangCode.EN).setTitle(timeZoneTitle)
+                            Lang.getEmbed('validation.invalidTimezone', LangCode.EN, {
+                                TARGET: target.username,
+                            })
                         );
                         return;
                     }
@@ -290,11 +275,9 @@ export class SetCommand implements Command {
         if (!birthday) {
             let birthdayMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('birthdaySetupBirthday', LangCode.EN, {
-                    OVERRIDE: override,
-                })
-                    .setAuthor(target.tag, target.avatarURL())
-                    .setTitle(birthdayTitle)
+                Lang.getEmbed('userPrompts.birthdaySetupBirthday' + embedChoice, LangCode.EN, {
+                    TARGET: target.username,
+                }).setAuthor(target.tag, target.avatarURL())
             );
 
             birthday = await CollectorUtils.collectByMessage(
@@ -310,7 +293,9 @@ export class SetCommand implements Command {
                     if (!result) {
                         await MessageUtils.send(
                             channel,
-                            Lang.getEmbed('invalidBirthday', LangCode.EN).setTitle(birthdayTitle)
+                            Lang.getEmbed('validation.invalidBirthday', LangCode.EN, {
+                                TARGET: target.username,
+                            })
                         );
                         return;
                     }
@@ -335,33 +320,19 @@ export class SetCommand implements Command {
 
         let confirmationEmbed: MessageEmbed;
 
-        if (userData) {
-            confirmationEmbed = Lang.getEmbed('confirmChangeBirthday', LangCode.EN, {
-                TARGET: target.toString(),
-                BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
-                TIMEZONE: timeZone,
-            });
-        } else {
-            confirmationEmbed = Lang.getEmbed('confirmFirstBirthday', LangCode.EN, {
-                TARGET: target.toString(),
-                BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
-                TIMEZONE: timeZone,
-            });
-        }
+        let confirmationEmbedChoice =
+            userData && userData.Birthday && userData.TimeZone
+                ? 'userPrompts.confirmChangeBirthday'
+                : 'userPrompts.confirmFirstBirthday';
+        confirmationEmbedChoice += suggest ? 'Suggest' : '';
 
-        if (suggest) {
-            confirmationEmbed.setFooter(
-                Lang.getRef('useAttemptFooter', LangCode.EN, { CHANGES_LEFT: `${changesLeft}` })
-            );
-        }
-        {
-            confirmationEmbed.setFooter(
-                Lang.getRef('useAttemptForTargetFooter', LangCode.EN, {
-                    TARGET: target.username,
-                    CHANGES_LEFT: `${changesLeft}`,
-                })
-            );
-        }
+        confirmationEmbed = Lang.getEmbed(confirmationEmbedChoice, LangCode.EN, {
+            TARGET: target.toString(),
+            BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
+            TIMEZONE: timeZone,
+            TARGET_FOOTER: target.username,
+            CHANGES_LEFT: `${changesLeft}`,
+        });
 
         let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
@@ -392,18 +363,16 @@ export class SetCommand implements Command {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('setBirthday', LangCode.EN, {
+                Lang.getEmbed('results.setBirthday', LangCode.EN, {
                     BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                     TIMEZONE: timeZone,
                     AMOUNT: `${changesLeft - 1}`,
-                }).setFooter(
-                    Lang.getRef('attemptsFooter', LangCode.EN, { AMOUNT: `${changesLeft - 1}` })
-                )
+                })
             );
             return;
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
-            await MessageUtils.send(channel, Lang.getEmbed('actionCanceled', LangCode.EN));
+            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN));
             return;
         }
     }
