@@ -187,21 +187,9 @@ export class BirthdayService {
 
             // Create and send the default or the global custom birthday message that was chosen for those without a user-specific custom birthday message
             if (birthdayMessageUsers.length > 0) {
-                let userList: string;
-                // Format the user list based off the servers name format
-                if (guildData.MentionFormat === 'mention')
-                    FormatUtils.joinWithAnd(birthdayMessageUsers.map(user => user.toString()));
-                else if (guildData.MentionFormat === 'username')
-                    FormatUtils.joinWithAnd(birthdayMessageUsers.map(user => user.user.username));
-                else if (guildData.MentionFormat === 'nickname')
-                    FormatUtils.joinWithAnd(birthdayMessageUsers.map(user => user.nickname));
-                else if (guildData.MentionFormat === 'tag')
-                    FormatUtils.joinWithAnd(
-                        birthdayMessageUsers.map(
-                            user => `${user.user.username}#${user.user.discriminator}`
-                        )
-                    );
-
+                let userList = FormatUtils.joinWithAnd(
+                    birthdayMessageUsers.map(user => user.toString())
+                );
                 let message = BdayUtils.randomMessage(globalMessages, hasPremium)
                     .split('@Users')
                     .join(userList)

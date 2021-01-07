@@ -10,5 +10,4 @@ export interface GuildData {
     TrustedPreventsMessage: number;
     UseEmbed: number;
     MessageEmbedColor: string;
-    MentionFormat: string;
 }

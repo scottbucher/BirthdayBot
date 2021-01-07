@@ -20,7 +20,6 @@ export enum Procedure {
     Guild_UpdateBirthdayMasterRole = 'Guild_UpdateBirthdayMasterRole',
     Guild_UpdateMessageTime = 'Guild_UpdateMessageTime',
     Guild_UpdateMentionSetting = 'Guild_UpdateMentionSetting',
-    Guild_UpdateNameFormat = 'Guild_UpdateNameFormat',
     Guild_UpdateUseEmbed = 'Guild_UpdateUseEmbed',
     Guild_UpdateMessageEmbedColor = 'Guild_UpdateMessageEmbedColor',
     Guild_UpdateTrustedPreventsMessage = 'Guild_UpdateTrustedPreventsMessage',

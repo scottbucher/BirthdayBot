@@ -85,13 +85,6 @@ export class GuildRepo {
         ]);
     }
 
-    public async updateNameFormat(discordId: string, format: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateNameFormat, [
-            discordId,
-            format,
-        ]);
-    }
-
     public async updateUseEmbed(discordId: string, value: number): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateUseEmbed, [discordId, value]);
     }

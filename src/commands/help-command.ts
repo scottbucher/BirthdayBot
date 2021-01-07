@@ -99,8 +99,7 @@ const HELP_SETUP_DESC =
     '\n' +
     `\n**bday create <channel/role/>** - Create the default birthday role/channel.` +
     `\n**bday update <channel/role> <#channel/@role>** - Update the birthday role/channel.` +
-    `\n**bday clear <channel/role>** - Clear the birthday role/channel.` +
-    `\n**bday nameFormat <default/username/nickname/mention/tag>** - Decide how member's names will appear.`;
+    `\n**bday clear <channel/role>** - Clear the birthday role/channel.`;
 
 const HELP_MESSAGE_TITLE = 'Birthday Bot Message Help - Guild Only';
 const HELP_MESSAGE_DESC =
