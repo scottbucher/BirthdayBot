@@ -7,7 +7,7 @@ import { MessageUtils } from '../../utils';
 let Config = require('../../../config/config.json');
 
 export class MessageRemoveSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) { }
+    constructor(private customMessageRepo: CustomMessageRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let type = args[3]?.toLowerCase();
@@ -104,11 +104,11 @@ export class MessageRemoveSubCommand {
         // find the position based on if it is a user or global message
         target
             ? (message = userMessages.customMessages.find(
-                question => question.Position === position
-            ))
+                  question => question.Position === position
+              ))
             : (message = customMessages.customMessages.find(
-                question => question.Position === position
-            ));
+                  question => question.Position === position
+              ));
 
         if (!message) {
             let embed = new MessageEmbed()

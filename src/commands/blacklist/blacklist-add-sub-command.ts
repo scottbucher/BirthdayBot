@@ -8,11 +8,14 @@ import { LangCode } from '../../models/enums';
 let Config = require('../../../config/config.json');
 
 export class BlacklistAddSubCommand {
-    constructor(private blacklistRepo: BlacklistRepo) { }
+    constructor(private blacklistRepo: BlacklistRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         if (args.length === 3) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noUserSpecified', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noUserSpecified', LangCode.EN)
+            );
             return;
         }
 
@@ -27,19 +30,28 @@ export class BlacklistAddSubCommand {
         }
 
         if (target.bot) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.cantBlacklistBot', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.cantBlacklistBot', LangCode.EN)
+            );
             return;
         }
 
         let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
         if (blacklist.blacklist.map(entry => entry.UserDiscordId).includes(target.id)) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.userAlreadyInBlacklist', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.userAlreadyInBlacklist', LangCode.EN)
+            );
             return;
         }
 
         await this.blacklistRepo.addBlacklist(msg.guild.id, target.id);
 
-        await MessageUtils.send(channel, Lang.getEmbed('results.blacklistAddSuccess', LangCode.EN, { TARGET: target.toString() }));
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.blacklistAddSuccess', LangCode.EN, { TARGET: target.toString() })
+        );
     }
 }
