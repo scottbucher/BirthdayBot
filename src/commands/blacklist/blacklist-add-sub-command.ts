@@ -2,19 +2,17 @@ import { GuildUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
 export class BlacklistAddSubCommand {
-    constructor(private blacklistRepo: BlacklistRepo) {}
+    constructor(private blacklistRepo: BlacklistRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         if (args.length === 3) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription('Please specify a user!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noUserSpecified', LangCode.EN));
             return;
         }
 
@@ -24,38 +22,24 @@ export class BlacklistAddSubCommand {
 
         // Did we find a user?
         if (!target) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription('Could not find that user!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noUserFound', LangCode.EN));
             return;
         }
 
         if (target.bot) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription('You cannot blacklist a bot!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.cantBlacklistBot', LangCode.EN));
             return;
         }
 
         let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
         if (blacklist.blacklist.map(entry => entry.UserDiscordId).includes(target.id)) {
-            let embed = new MessageEmbed()
-                .setDescription('This user is already in the blacklist!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.userAlreadyInBlacklist', LangCode.EN));
             return;
         }
 
         await this.blacklistRepo.addBlacklist(msg.guild.id, target.id);
 
-        let embed = new MessageEmbed()
-            .setDescription(`Successfully added ${target.toString()} to the birthday blacklist!`)
-            .setColor(Config.colors.success);
-        await MessageUtils.send(channel, embed);
+        await MessageUtils.send(channel, Lang.getEmbed('results.blacklistAddSuccess', LangCode.EN, { TARGET: target.toString() }));
     }
 }

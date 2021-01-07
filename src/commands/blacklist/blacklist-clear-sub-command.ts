@@ -30,14 +30,14 @@ export class BlacklistClearSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.blacklistClearExpired', LangCode.EN)
+                Lang.getEmbed('results.blacklistClearExired', LangCode.EN)
             );
         };
 
         let blacklisted = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
         if (blacklisted.blacklist.length === 0) {
-            await MessageUtils.send(channel, Lang.getEmbed('results.emptyBlacklist', LangCode.EN));
+            await MessageUtils.send(channel, Lang.getEmbed('validation.emptyBlacklist', LangCode.EN));
             return;
         }
 

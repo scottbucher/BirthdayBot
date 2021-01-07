@@ -2,19 +2,17 @@ import { GuildUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
+import { LangCode } from '../../models/enums';
+import { Lang } from '../../services';
 
 let Config = require('../../../config/config.json');
 
 export class BlacklistRemoveSubCommand {
-    constructor(private blacklistRepo: BlacklistRepo) {}
+    constructor(private blacklistRepo: BlacklistRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         if (args.length === 3) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription('Please specify a user!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noUserSpecified', LangCode.EN));
             return;
         }
 
@@ -24,48 +22,24 @@ export class BlacklistRemoveSubCommand {
 
         // Did we find a user?
         if (!target) {
-            let embed = new MessageEmbed()
-                .setDescription('Could not find that user!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
-        }
-
-        if (!target) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription('Could not find that user!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noUserFound', LangCode.EN));
             return;
         }
 
         if (target.bot) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription('You cannot blacklist a bot!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.cantBlacklistBot', LangCode.EN));
             return;
         }
 
         let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
         if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(msg.author.id)) {
-            let embed = new MessageEmbed()
-                .setDescription(`This user isn't in the blacklist!`)
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.userNotInBlacklist', LangCode.EN));
             return;
         }
 
         await this.blacklistRepo.removeBlacklist(msg.guild.id, target.id);
 
-        let embed = new MessageEmbed()
-            .setDescription(
-                `Successfully removed ${target.toString()} from the birthday blacklist!`
-            )
-            .setColor(Config.colors.success);
-        await MessageUtils.send(channel, embed);
+        await MessageUtils.send(channel, Lang.getEmbed('results.blacklistAddSuccess', LangCode.EN, { TARGET: target.toString() }));
     }
 }

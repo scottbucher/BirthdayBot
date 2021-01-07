@@ -7,7 +7,7 @@
             "blacklistClearConfirmation": {
                 "description": "Are you sure you want to clear __**{{TOTAL}}**__ blacklisted user(s)?",
                 "footer": {
-                    "text": "{{RED:footers.irreversible}}"
+                    "text": "{{REF:footers.irreversible}}"
                 },
                 "color": "{{REF:colors.warn}}"
             }
@@ -148,6 +148,14 @@
                 "description": "Type `bday blacklist clear` to clear the birthday blacklist.",
                 "color": "{{REF:colors.error}}"
             },
+            "blacklistAddSuccess": {
+                "description": "Successfully removed {{TARGET}} from the birthday blacklist!",
+                "color": "{{REF:colors.success}}"
+            },
+            "blacklistRemoveSuccess": {
+                "description": "Successfully added {{TARGET}} to the birthday blacklist!",
+                "color": "{{REF:colors.success}}"
+            },
             "actionCanceled": {
                 "description": "{{REF:emotes.deny}} Action canceled.",
                 "color": "{{REF:colors.error}}"
@@ -217,6 +225,26 @@
             },
             "invalidRole": {
                 "description": "Invalid role!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noUserSpecified": {
+                "description": "Please specify a user!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noUserFound": {
+                "description": "Could not finid that user!",
+                "color": "{{REF:colors.error}}"
+            },
+            "cantBlacklistBot": {
+                "description": "You cannot blacklist a bot!",
+                "color": "{{REF:colors.error}}"
+            },
+            "userAlreadyInBlacklist": {
+                "description": "That user is already in the blacklist!",
+                "color": "{{REF:colors.error}}"
+            },
+            "userNotInBlacklist": {
+                "description": "That user is not in the blacklist!",
                 "color": "{{REF:colors.error}}"
             },
             "invalidChannel": {
