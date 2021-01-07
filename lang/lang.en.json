@@ -3,278 +3,395 @@
         "color": "#4eefff"
     },
     "embeds": {
-        "birthdayAlreadySet": "__**Note**__: Your birthday is already set, continue to change it.\n\n",
-        "birthdaySetupTimeZone": {
-            "description": [
-                "{{OVERRIDE}}**Important**: By submitting this information you agree it can be shown to anyone.",
-                "",
-                "First, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
-                "",
-                "To find your time zone please use the [map time zone picker](${Config.links.map})!",
-                "",
-                "Simply click your location on the map and copy the name of the selected time zone. You can then enter it below.",
-                "",
-                "**Example Usage:** `America/New_York`",
-                "",
-                "**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!"
-            ],
-            "footer": {
-                "text": "{{REF:expireFooter}}"
-            },
-            "timestamp": true
-        },
-        "birthdaySetupBirthday": {
-            "description": [
-                "{{OVERRIDE}}**Important**: By submitting this information you agree it can be shown to anyone.",
-                "",
-                "Please enter your birth month and day. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)",
-                "",
-                "**Example Usage:** `08/28` (MM/DD)",
-                "",
-                "**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!"
-            ],
-            "footer": {
-                "text": "{{REF:expireFooter}}"
-            },
-            "timestamp": true
-        },
-        "defaultTimeZoneAvailable": {
-            "description": "This server has a default timezone of **{{TIMEZONE}}**, do you want to use this timezone?",
-            "color": "{{REF:colorSuccess}}"
-        },
-        "inputPage": {
-            "description": "Please input the page you would like to jump to:"
-        },
-        "invalidPage": {
-            "description": "Invalid page!",
-            "color": "{{REF:colorError}}"
-        },
-        "confirmFirstBirthday": {
-            "description": "{{TARGET}}, please confirm this information is correct: **{{BIRTHDAY}}, {{TIMEZONE}}**",
-            "color": "{{REF:colorWarn}}"
-        },
-        "confirmChangeBirthday": {
-            "description": "{{TARGET}}, your birthday is already set, please confirm this information is correct to change it: **{{BIRTHDAY}}, {{TIMEZONE}}**",
-            "color": "{{REF:colorWarn}}"
-        },
-        "setBirthday": {
-            "description": "Successfully set your birthday to **{{BIRTHDAY}}, {{TIMEZONE}}**",
-            "footer": {
-                "text": "{{REF:attemptsFooter}}"
-            },
-            "timestamp": true
-        },
-        "birthdayExpired": {
-            "title": "Birthday Set - Expired",
-            "description": "Type `bday set` to rerun the birthday setup.",
-            "color": "{{REF:colorError}}"
-        },
-        "actionCanceled": {
-            "description": "{{REF:deny}} Action canceled.",
-            "color": "{{REF:colorError}}"
-        },
-        "actionFailed": {
-            "title": "{{TITLE}}",
-            "description": "{{REF:deny}} Action failed.",
-            "color": "{{REF:colorError}}"
-        },
-        "noArgs": {
-            "title": "Invalid Usage!",
-            "description": "Please specify an option!\n\n{{OPTIONS}}",
-            "color": "{{REF:colorError}}"
-        },
-        "outOfAttempts": {
-            "description": "You are out of birthday attempts!",
-            "color": "{{REF:colorError}}"
-        },
-        "memberNeedsMessageHistory": {
-            "description": "{{MEMBER}} needs the `READ_MESSAGE_HISTORY` permission in this channel!",
-            "color": "{{REF:colorError}}"
-        },
-        "cantSuggest": {
-            "description": "You do not have permission to suggest birthdays for other users!",
-            "color": "{{REF:colorError}}"
-        },
-        "cantSetTimeZoneForBot": {
-            "description": "You can't set a birthday for a bot!",
-            "color": "{{REF:colorError}}"
-        },
-        "invalidBirthday": {
-            "description": "Invalid birthday!",
-            "color": "{{REF:colorError}}"
-        },
-        "invalidTimezone": {
-            "description": "Invalid time zone!",
-            "footer": {
-                "text": "{{REF:tryAgainFooter}}"
-            },
-            "timestamp": true,
-            "color": "{{REF:colorError}}"
-        },
-        "invalidTimeZoneAbbreviation": {
-            "description": "Invalid time zone! Do not use timezone abbreviations!",
-            "footer": {
-                "text": "{{REF:tryAgainFooter}}"
-            },
-            "timestamp": true,
-            "color": "{{REF:colorError}}"
-        },
-        "invalidMessageType": {
-            "title": "Custom Message List",
-            "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
-            "footer": {
-                "text": "{{REF:actionFailedFooter}}"
-            },
-            "timestamp": true,
-            "color": "{{REF:colorError}}"
-        },
-        "invalidRole": {
-            "description": "Invalid role!",
-            "color": "{{REF:colorError}}"
-        },
-        "invalidChannel": {
-            "description": "Invalid channel!",
-            "color": "{{REF:colorError}}"
-        },
-        "invalidHour": {
-            "description": "Invalid hour!",
-            "color": "{{REF:colorError}}"
-        },
-        "cantSetForBot": {
-            "description": "You can't set a birthday for a bot!",
-            "color": "{{REF:colorError}}"
-        },
-        "serverOnlyCommand": {
-            "title": "Server Only Command!",
-            "description": "This command can only be used in a server.",
-            "footer": {
-                "text": "Please try again in a server!"
-            },
-            "timestamp": true,
-            "color": "{{REF:colorError}}"
-        },
-        "permissionRequired": {
-            "title": "Permission Required!",
-            "description": "You don't have permission to run that command!",
-            "color": "{{REF:colorError}}"
-        },
-        "commandError": {
-            "description": "Something went wrong!",
-            "fields": [
-                {
-                    "name": "Error code",
-                    "value": "{{ERROR_CODE}}"
+        "serverPrompts": {},
+        "userPrompts": {
+            "birthdaySetupTimeZone": {
+                "description": [
+                    "{{OVERRIDE}}**Important**: By submitting this information you agree it can be shown to anyone.",
+                    "",
+                    "First, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "",
+                    "To find your time zone please use the [map time zone picker](${Config.links.map})!",
+                    "",
+                    "Simply click your location on the map and copy the name of the selected time zone. You can then enter it below.",
+                    "",
+                    "**Example Usage:** `America/New_York`",
+                    "",
+                    "**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!"
+                ],
+                "footer": {
+                    "text": "{{REF:expireFooter}}"
                 },
-                {
-                    "name": "Contact support",
-                    "value": "{{REF:linkSupport}}"
-                }
-            ],
-            "color": "{{REF:colorError}}"
+                "timestamp": true
+            },
+            "birthdaySetupBirthday": {
+                "description": [
+                    "{{OVERRIDE}}**Important**: By submitting this information you agree it can be shown to anyone.",
+                    "",
+                    "Please enter your birth month and day. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)",
+                    "",
+                    "**Example Usage:** `08/28` (MM/DD)",
+                    "",
+                    "**Info**: Birthdays are stored globally, meaning you only have to set your birthday once!"
+                ],
+                "footer": {
+                    "text": "{{REF:expireFooter}}"
+                },
+                "timestamp": true
+            },
+            "defaultTimeZoneAvailable": {
+                "description": "This server has a default timezone of **{{TIMEZONE}}**, do you want to use this timezone?",
+                "color": "{{REF:colorSuccess}}"
+            },
+            "inputPage": {
+                "description": "Please input the page you would like to jump to:"
+            },
+            "confirmFirstBirthday": {
+                "description": "{{TARGET}}, please confirm this information is correct: **{{BIRTHDAY}}, {{TIMEZONE}}**",
+                "color": "{{REF:colorWarn}}"
+            },
+            "confirmChangeBirthday": {
+                "description": "{{TARGET}}, your birthday is already set, please confirm this information is correct to change it: **{{BIRTHDAY}}, {{TIMEZONE}}**",
+                "color": "{{REF:colorWarn}}"
+            }
+        },
+        "results": {
+            "setBirthday": {
+                "description": "Successfully set your birthday to **{{BIRTHDAY}}, {{TIMEZONE}}**",
+                "footer": {
+                    "text": "{{REF:attemptsFooter}}"
+                },
+                "timestamp": true
+            },
+            "birthdayExpired": {
+                "title": "Birthday Set - Expired",
+                "description": "Type `bday set` to rerun the birthday setup.",
+                "color": "{{REF:colorError}}"
+            },
+            "actionCanceled": {
+                "description": "{{REF:deny}} Action canceled.",
+                "color": "{{REF:colorError}}"
+            },
+            "actionFailed": {
+                "title": "{{TITLE}}",
+                "description": "{{REF:deny}} Action failed.",
+                "color": "{{REF:colorError}}"
+            }
+        },
+        "validation": {
+            "noArgs": {
+                "title": "Invalid Usage!",
+                "description": "Please specify an option!\n\n{{OPTIONS}}",
+                "color": "{{REF:colorError}}"
+            },
+            "outOfAttempts": {
+                "description": "You are out of birthday attempts!",
+                "color": "{{REF:colorError}}"
+            },
+            "memberNeedsMessageHistory": {
+                "description": "{{MEMBER}} needs the `READ_MESSAGE_HISTORY` permission in this channel!",
+                "color": "{{REF:colorError}}"
+            },
+            "cantSuggest": {
+                "description": "You do not have permission to suggest birthdays for other users!",
+                "color": "{{REF:colorError}}"
+            },
+            "cantSetTimeZoneForBot": {
+                "description": "You can't set a birthday for a bot!",
+                "color": "{{REF:colorError}}"
+            },
+            "invalidBirthday": {
+                "description": "Invalid birthday!",
+                "color": "{{REF:colorError}}"
+            },
+            "invalidTimezone": {
+                "description": "Invalid time zone!",
+                "footer": {
+                    "text": "{{REF:tryAgainFooter}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colorError}}"
+            },
+            "invalidTimeZoneAbbreviation": {
+                "description": "Invalid time zone! Do not use timezone abbreviations!",
+                "footer": {
+                    "text": "{{REF:tryAgainFooter}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colorError}}"
+            },
+            "invalidMessageType": {
+                "title": "Custom Message List",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "footer": {
+                    "text": "{{REF:actionFailedFooter}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colorError}}"
+            },
+            "invalidRole": {
+                "description": "Invalid role!",
+                "color": "{{REF:colorError}}"
+            },
+            "invalidChannel": {
+                "description": "Invalid channel!",
+                "color": "{{REF:colorError}}"
+            },
+            "invalidHour": {
+                "description": "Invalid hour!",
+                "color": "{{REF:colorError}}"
+            },
+            "cantSetForBot": {
+                "description": "You can't set a birthday for a bot!",
+                "color": "{{REF:colorError}}"
+            },
+            "serverOnlyCommand": {
+                "title": "Server Only Command!",
+                "description": "This command can only be used in a server.",
+                "footer": {
+                    "text": "Please try again in a server!"
+                },
+                "timestamp": true,
+                "color": "{{REF:colorError}}"
+            },
+            "invalidPage": {
+                "description": "Invalid page!",
+                "color": "{{REF:colorError}}"
+            },
+            "permissionRequired": {
+                "title": "Permission Required!",
+                "description": "You don't have permission to run that command!",
+                "color": "{{REF:colorError}}"
+            }
+        },
+        "errors": {
+            "command": {
+                "description": "Something went wrong!",
+                "fields": [
+                    {
+                        "name": "Error code",
+                        "value": "{{ERROR_CODE}}"
+                    },
+                    {
+                        "name": "Contact support",
+                        "value": "{{REF:links.support}}"
+                    }
+                ],
+                "color": "{{REF:colors.error}}"
+            }
         },
         "help": {
-            "title": "{{REF:botName}} - Help",
-            "description": "{{REF:botDescription}}",
-            "fields": [
-                {
-                    "name": "Commands",
-                    "value": [
-                        "**bot test** - Run the test command.",
-                        "**bot info** - More information about {{REF:botName}}."
-                    ]
-                },
-                {
-                    "name": "Links",
-                    "value": ["{{REF:linkSupportEmbed}}", "{{REF:linkInviteEmbed}}"]
-                }
-            ]
+            "general": {
+                "title": "{{REF:botName}} - Help",
+                "description": "{{REF:botDescription}}",
+                "fields": [
+                    {
+                        "name": "Commands",
+                        "value": [
+                            "**bot test** - Run the test command.",
+                            "**bot info** - More information about {{REF:botName}}."
+                        ]
+                    },
+                    {
+                        "name": "Links",
+                        "value": ["{{REF:linkSupportEmbed}}", "{{REF:linkInviteEmbed}}"]
+                    }
+                ]
+            }
         },
         "info": {
-            "title": "{{REF:botName}} - Info",
-            "fields": [
-                { "name": "Node.js", "value": "{{NODE_VERSION}}" },
-                { "name": "TypeScript", "value": "{{TS_VERSION}}" },
-                { "name": "ECMAScript", "value": "{{ES_VERSION}}" },
-                { "name": "discord.js", "value": "{{DJS_VERSION}}" },
-                {
-                    "name": "Created With",
-                    "value": ["{{REF:linkTemplateEmbed}}"]
+            "general": {
+                "title": "{{REF:botName}} - Info",
+                "fields": [
+                    { "name": "Node.js", "value": "{{NODE_VERSION}}" },
+                    { "name": "TypeScript", "value": "{{TS_VERSION}}" },
+                    { "name": "ECMAScript", "value": "{{ES_VERSION}}" },
+                    { "name": "discord.js", "value": "{{DJS_VERSION}}" },
+                    {
+                        "name": "Created With",
+                        "value": ["{{REF:linkTemplateEmbed}}"]
+                    },
+                    {
+                        "name": "Links",
+                        "value": ["{{REF:linkSupportEmbed}}", "{{REF:linkInviteEmbed}}"]
+                    }
+                ]
+            }
+        },
+        "list": {
+            "birthday": {
+                "title": "{{REF:list.listTitle}}",
+                "description": ["*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use `bday set`!*", "", "{{LIST_DATA}}"],
+                "footer": {
+                    "text": "{{REF:list.listFooter}}"
                 },
-                {
-                    "name": "Links",
-                    "value": ["{{REF:linkSupportEmbed}}", "{{REF:linkInviteEmbed}}"]
-                }
-            ]
+                "thumbnail": "{{THUMBNAIL}}",
+                "timestamp": true
+            },
+            "customMessageFree": {
+                "title": "{{REF:list.listTitle}}",
+                "description": ["*A random {{TYPE}} message is chosen for each {{TYPE}}. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*", "", "{{LIST_DATA}}"],
+                "footer": {
+                    "text": "{{REF:list.listFooter}}"
+                },
+                "thumbnail": "{{THUMBNAIL}}",
+                "timestamp": true
+            },
+            "customMessagePremium": {
+                "title": "{{REF:list.listTitle}}",
+                "description": ["*A random {{TYPE}} message is chosen for each {{TYPE}}. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*", "", "{{LIST_DATA}}"],
+                "footer": {
+                    "text": "{{REF:list.listFooter}}"
+                },
+                "fields": [
+                    { "name": "{{REF:list.messageListPremiumFieldTitle}}", "value": "{{REF:list.messageListPremiumFieldText}}" }
+                ],
+                "thumbnail": "{{THUMBNAIL}}",
+                "timestamp": true
+            },
+            "customUserMessageFree": {
+                "title": "{{REF:list.listTitle}}",
+                "description": ["*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*", "", "{{LIST_DATA}}"],
+                "footer": {
+                    "text": "{{REF:list.listFooter}}"
+                },
+                "thumbnail": "{{THUMBNAIL}}",
+                "timestamp": true
+            },
+            "customUserMessagePremium": {
+                "title": "{{REF:list.listTitle}}",
+                "description": ["*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*", "", "{{LIST_DATA}}"],
+                "footer": {
+                    "text": "{{REF:list.listFooter}}"
+                },
+                "fields": [
+                    { "name": "{{REF:list.userBirthdayMessageListFieldTitle}}", "value": "{{REF:list.userBirthdayMessageListFieldText}}" }
+                ],
+                "thumbnail": "{{THUMBNAIL}}",
+                "timestamp": true
+            },
+            "trustedRoleFree": {
+                "title": "{{REF:list.listTitle}}",
+                "description": ["*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `bday config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*", "", "{{LIST_DATA}}"],
+                "footer": {
+                    "text": "{{REF:list.listFooter}}"
+                },
+                "thumbnail": "{{THUMBNAIL}}",
+                "timestamp": true
+            },
+            "trustedRolePremium": {
+                "title": "{{REF:list.listTitle}}",
+                "description": ["*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `bday config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*", "", "{{LIST_DATA}}"],
+                "footer": {
+                    "text": "{{REF:list.listFooter}}"
+                },
+                "fields": [
+                    { "name": "{{REF:list.trustedRoleListFieldTitle}}", "value": "{{REF:list.trustedRoleListFieldText}}" }
+                ],
+                "thumbnail": "{{THUMBNAIL}}",
+                "timestamp": true
+            },
+            "blacklist": {
+                "title": "{{REF:list.listTitle}}",
+                "description": ["*Users on this list will not have their birthdays celebrated no matter what. Edit this list with `bday blacklist <add/remove> <User>`!*", "", "{{LIST_DATA}}"],
+                "footer": {
+                    "text": "{{REF:list.listFooter}}"
+                },
+                "thumbnail": "{{THUMBNAIL}}",
+                "timestamp": true
+            }
         }
     },
     "refs": {
-        "botName": "Birthday Bot",
-        "botDescription": "{{REF:linkTemplateEmbed}} helps your server track and celebrate birthdays by automatically celebrating them with numerous fun and extremely customizable features.",
-        "colorError": "#ff0000",
-        "colorSuccess": "#1cfe86",
-        "colorWarn": "#ffa255",
-        "linkInvite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
-        "linkInviteEmbed": "Invite {{BOT_MENTION}} to your server [here]({{REF:linkInvite}})!",
-        "linkSupport": "https://discord.gg/9gUQFtz",
-        "linkSupportEmbed": "For support join our discord server [here]({{REF:linkSupport}})!",
-        "linkStream": "https://www.twitch.tv/stqlth",
-        "linkTemplate": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
-        "linkTemplateEmbed": "[Discord Bot TypeScript Template]({{REF:linkTemplate}})",
-        "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
-        "expireFooter": "This message expires in 2 minutes!",
-        "tryAgainFooter": "Please check above and try again!",
-        "attemptsFooter": "You now have {{AMOUNT}} birthday attempts left.",
-        "actionFailedFooter": "{{REF:deny}} Action Failed.",
-        "useAttemptFooter": "You have {{CHANGES_LEFT}} attempts left. By clicking confirm you will use one of them.",
-        "useAttemptForTargetFooter": "{{TARGET}} has {{CHANGES_LEFT}} attempts left. By clicking confirm they will use one of them.",
-        "noBirthdays": "**No Birthdays in this server!**",
-        "noCustomBirthdayMessages": "**No Custom Birthday Messages!**",
-        "noCustomUserSpecificBirthdayMessages": "**No User-Specific Birthday Messages!**",
-        "noCustomMemberAnniversaryMessages": "**No Custom Member Anniversary Messages!**",
-        "noCustomServerAnniversaryMessages": "**No Custom Server Anniversary Messages!**",
-        "noTrustedRoles": "**No Trusted Roles!**",
-        "emptyBlacklist": "**The Birthday Blacklist is empty!**",
-        "missingEmbedPerms": [
-            "I don't have all permissions required to send messages here!",
-            "",
-            "Please allow me to **Read Messages**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
-        ],
-        "listTitle": "{{TYPE}} | Page {{PAGE}}/{{TOTAL_PAGES}}",
-        "listFooter": "Total {{TYPE}}: {{TOTAL_MESSAGES}} • {{PER_PAGE}} per page",
-        "messageListDescription": "*A random {{TYPE}} message is chosen for each {{TYPE}}. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*\n\n",
-        "messageListPremiumFieldTitle": "Message Limit",
-        "messageListPremiumFieldText": "The free version of Birthday Bot can only have up to **{{MAX_FREE_MESSAGES}}** custom {{TYPE}} messages. Unlock up to **{{MAX_PAID_MESSAGES}}** with `bday premium`!",
-        "userBirthdayMessageListDescription": "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*\n\n",
-        "userBirthdayMessageListFieldTitle": "Locked Feature",
-        "userBirthdayMessageListFieldText": "User-specific messages are a premium only feature. Unlock them with `bday premium`!\n\n",
-        "trustedRoleListDescription": "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `bday config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*\n\n",
-        "trustedRoleListFieldTitle": "Trusted Role Limit",
-        "trustedRoleListFieldText": "The free version of Birthday Bot can only have up to **{{MAX_FREE_TRUSTED_ROLES}}** trusted roles. Unlock up to **{{MAX_PAID_TRUSTED_ROLES}}** with `bday premium`!\n\n",
-        "birthdayListDescription": "*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use `bday set`!*\n\n",
-        "blacklistDescription": "*Users on this list will not have their birthdays celebrated no matter what. Edit this list with `bday blacklist <add/remove> <User>`!*\n\n",
-        "birthdayOverride": "__**Note**__: Your birthday is already set, continue to change it.\n\n",
-        "setupForUser": "Setup For {{TARGET}} - {{VALUE}}",
-        "userSetup": "User Setup - {{VALUE}}",
-        "timeZone": "Time Zone",
-        "birthday": "Birthday",
-        "trustedRoles": "Trusted Roles",
-        "total": "Total",
-        "messages": "Messages",
-        "blacklist": "Blacklist",
-        "blacklisted": "Blacklisted",
-        "user": "User",
-        "users": "Users",
-        "list": "List",
-        "unknownMember": "Unknown Member",
-        "deletedRole": "Deleted Role",
-        "memberAnniversary": "Member Anniversary",
-        "serverAnniversary": "Server Anniversary",
-        "confirm": "✅",
-        "deny": "❌",
-        "create": "🔨",
-        "select": "🖱",
-        "birthdayEmote": "🎂",
-        "party": "🎉"
+        "meta": {
+            "language": "English"
+        },
+        "general": {
+            "botName": "Birthday Bot",
+            "botDescription": "{{REF:links.linkTemplateEmbed}} helps your server track and celebrate birthdays by automatically celebrating them with numerous fun and extremely customizable features."
+        },
+        "colors": {
+            "colorError": "#ff0000",
+            "colorSuccess": "#1cfe86",
+            "colorWarn": "#ffa255"
+        },
+        "emotes": {
+            "confirm": "✅",
+            "deny": "❌",
+            "create": "🔨",
+            "select": "🖱",
+            "birthdayEmote": "🎂",
+            "party": "🎉"
+        },
+        "links": {
+            "linkInvite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
+            "linkSupport": "https://discord.gg/9gUQFtz",
+            "linkStream": "https://www.twitch.tv/stqlth",
+            "linkTemplate": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
+            "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
+            "linkSupportEmbed": "For support join our discord server [here]({{REF:links.linkSupport}})!",
+            "linkInviteEmbed": "Invite {{BOT_MENTION}} to your server [here]({{REF:links.linkInvite}})!",
+            "linkTemplateEmbed": "[Discord Bot TypeScript Template]({{REF:links.linkTemplate}})"
+        },
+        "footers": {
+            "expireFooter": "This message expires in 2 minutes!",
+            "tryAgainFooter": "Please check above and try again!",
+            "attemptsFooter": "You now have {{AMOUNT}} birthday attempts left.",
+            "actionFailedFooter": "{{REF:deny}} Action Failed.",
+            "useAttemptFooter": "You have {{CHANGES_LEFT}} attempts left. By clicking confirm you will use one of them.",
+            "useAttemptForTargetFooter": "{{TARGET}} has {{CHANGES_LEFT}} attempts left. By clicking confirm they will use one of them."
+        },
+        "prompts": {
+            "birthdayOverride": "__**Note**__: Your birthday is already set, continue to change it.\n\n",
+            "setupForUser": "Setup For {{TARGET}} - {{VALUE}}",
+            "userSetup": "User Setup - {{VALUE}}"
+        },
+        "list": {
+            "listTitle": "{{TYPE}} | Page {{PAGE}}/{{TOTAL_PAGES}}",
+            "listFooter": "Total {{TYPE}}: {{TOTAL_MESSAGES}} • {{PER_PAGE}} per page",
+            "noTrustedRoles": "**No Trusted Roles!**",
+            "noBirthdays": "**No Birthdays in this server!**",
+            "emptyBlacklist": "**The Birthday Blacklist is empty!**",
+            "noCustomBirthdayMessages": "**No Custom Birthday Messages!**",
+            "noCustomUserSpecificBirthdayMessages": "**No User-Specific Birthday Messages!**",
+            "noCustomMemberAnniversaryMessages": "**No Custom Member Anniversary Messages!**",
+            "noCustomServerAnniversaryMessages": "**No Custom Server Anniversary Messages!**",
+            "messageListPremiumFieldTitle": "Message Limit",
+            "messageListPremiumFieldText": "The free version of Birthday Bot can only have up to **{{MAX_FREE}}** custom {{TYPE}} messages. Unlock up to **{{MAX_PAID}}** with `bday premium`!",
+            "userBirthdayMessageListFieldTitle": "Locked Feature",
+            "userBirthdayMessageListFieldText": "User-specific messages are a premium only feature. Unlock them with `bday premium`!\n\n",
+            "trustedRoleListFieldTitle": "Trusted Role Limit",
+            "trustedRoleListFieldText": "The free version of Birthday Bot can only have up to **{{MAX_FREE_TRUSTED_ROLES}}** trusted roles. Unlock up to **{{MAX_PAID_TRUSTED_ROLES}}** with `bday premium`!\n\n"
+        },
+        "terms": {
+            "timeZone": "Time Zone",
+            "birthday": "Birthday",
+            "user": "User",
+            "users": "Users",
+            "list": "List",
+            "total": "Total",
+            "messages": "Messages",
+            "memberAnniversary": "Member Anniversary",
+            "serverAnniversary": "Server Anniversary",
+            "trustedRoles": "Trusted Roles",
+            "blacklist": "Blacklist",
+            "blacklisted": "Blacklisted",
+            "unknownMember": "Unknown Member",
+            "deletedRole": "Deleted Role"
+        },
+        "boolean": {
+            "yes": "Yes",
+            "no": "No",
+            "true": "True",
+            "false": "false"
+        },
+        "messages": {
+            "missingEmbedPerms": [
+                "I don't have all permissions required to send messages here!",
+                "",
+                "Please allow me to **Read Messages**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
+            ]
+        }
     },
     "regexes": {}
 }

@@ -25,7 +25,10 @@ export class MessageListSubCommand {
         let type = args[3]?.toLowerCase();
 
         if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
-            await MessageUtils.send(channel, Lang.getEmbed('invalidMessageType', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidMessageType', LangCode.EN)
+            );
             return;
         }
 
