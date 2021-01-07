@@ -3,7 +3,15 @@
         "color": "#4eefff"
     },
     "embeds": {
-        "serverPrompts": {},
+        "serverPrompts": {
+            "blacklistClearConfirmation": {
+                "description": "Are you sure you want to clear __**{{TOTAL}}**__ blacklisted user(s)?",
+                "footer": {
+                    "text": "{{RED:footers.irreversible}}"
+                },
+                "color": "{{REF:colors.warn}}"
+            }
+        },
         "userPrompts": {
             "birthdaySetupTimeZone": {
                 "title": "Time Zone Setup - {{TARGET}}",
@@ -131,6 +139,15 @@
                 "description": "Type `bday set` to rerun the birthday setup.",
                 "color": "{{REF:colors.error}}"
             },
+            "blacklistClearSuccess": {
+                "description": "Successfully cleared the birthday blacklist!",
+                "color": "{{REF:colors.success}}"
+            },
+            "blacklistClearExired": {
+                "title": "Blacklist Clear - Expired",
+                "description": "Type `bday blacklist clear` to clear the birthday blacklist.",
+                "color": "{{REF:colors.error}}"
+            },
             "actionCanceled": {
                 "description": "{{REF:emotes.deny}} Action canceled.",
                 "color": "{{REF:colors.error}}"
@@ -144,7 +161,10 @@
         "validation": {
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": ["Please specify an option!", "{{OPTIONS}}"],
+                "description": [
+                    "Please specify an option!",
+                    "{{OPTIONS}}"
+                ],
                 "color": "{{REF:colors.error}}"
             },
             "outOfAttempts": {
@@ -228,6 +248,10 @@
                 "title": "Permission Required!",
                 "description": "You don't have permission to run that command!",
                 "color": "{{REF:colors.error}}"
+            },
+            "emptyBlacklist": {
+                "description": "Your server has not blacklisted any users!",
+                "color": "{{REF:colors.error}}"
             }
         },
         "errors": {
@@ -260,7 +284,10 @@
                     },
                     {
                         "name": "Links",
-                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
+                        "value": [
+                            "{{REF:link.supportEmbed}}",
+                            "{{REF:link.inviteEmbed}}"
+                        ]
                     }
                 ]
             }
@@ -269,17 +296,34 @@
             "general": {
                 "title": "{{REF:bot.name}} - Info",
                 "fields": [
-                    { "name": "Node.js", "value": "{{NODE_VERSION}}" },
-                    { "name": "TypeScript", "value": "{{TS_VERSION}}" },
-                    { "name": "ECMAScript", "value": "{{ES_VERSION}}" },
-                    { "name": "discord.js", "value": "{{DJS_VERSION}}" },
+                    {
+                        "name": "Node.js",
+                        "value": "{{NODE_VERSION}}"
+                    },
+                    {
+                        "name": "TypeScript",
+                        "value": "{{TS_VERSION}}"
+                    },
+                    {
+                        "name": "ECMAScript",
+                        "value": "{{ES_VERSION}}"
+                    },
+                    {
+                        "name": "discord.js",
+                        "value": "{{DJS_VERSION}}"
+                    },
                     {
                         "name": "Created With",
-                        "value": ["{{REF:link.templateEmbed}}"]
+                        "value": [
+                            "{{REF:link.templateEmbed}}"
+                        ]
                     },
                     {
                         "name": "Links",
-                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
+                        "value": [
+                            "{{REF:link.supportEmbed}}",
+                            "{{REF:link.inviteEmbed}}"
+                        ]
                     }
                 ]
             }
@@ -495,7 +539,8 @@
         "footers": {
             "expire": "This message expires in 2 minutes!",
             "tryAgain": "Please check above and try again!",
-            "actionFailed": "{{REF:emotes.deny}} Action Failed."
+            "actionFailed": "{{REF:emotes.deny}} Action Failed.",
+            "irreversible": "This action is irreversible!"
         },
         "prompts": {
             "setupForUser": "Setup For {{TARGET}} - {{VALUE}}",
