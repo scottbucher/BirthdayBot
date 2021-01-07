@@ -7,7 +7,7 @@ import { MessageUtils } from '../../utils';
 let Config = require('../../../config/config.json');
 
 export class MessageRemoveSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) {}
+    constructor(private customMessageRepo: CustomMessageRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let type = args[3]?.toLowerCase();
@@ -48,25 +48,28 @@ export class MessageRemoveSubCommand {
         let userMessages: CustomMessages;
 
         if (type === 'birthday') {
-            let userMessages = await this.customMessageRepo.getCustomUserMessages(
-                msg.guild.id,
-                type
-            );
+            if (target) {
+                userMessages = await this.customMessageRepo.getCustomUserMessages(
+                    msg.guild.id,
+                    type
+                );
 
-            if (target && !userMessages) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        `This server doesn't have any user specific custom birthday messages!`
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
-                return;
+                if (!userMessages) {
+                    let embed = new MessageEmbed()
+                        .setDescription(
+                            `This server doesn't have any user specific custom birthday messages!`
+                        )
+                        .setColor(Config.colors.error);
+                    await MessageUtils.send(channel, embed);
+                    return;
+                }
+
+                let userMessage = userMessages.customMessages.filter(
+                    message => message.UserDiscordId === target.id
+                );
+
+                if (userMessage.length > 0) position = userMessage[0].Position;
             }
-            let userMessage = userMessages.customMessages.filter(
-                message => message.UserDiscordId === target.id
-            );
-
-            if (userMessage.length > 0) position = userMessage[0].Position;
         }
 
         if (!position) {
@@ -101,11 +104,11 @@ export class MessageRemoveSubCommand {
         // find the position based on if it is a user or global message
         target
             ? (message = userMessages.customMessages.find(
-                  question => question.Position === position
-              ))
+                question => question.Position === position
+            ))
             : (message = customMessages.customMessages.find(
-                  question => question.Position === position
-              ));
+                question => question.Position === position
+            ));
 
         if (!message) {
             let embed = new MessageEmbed()

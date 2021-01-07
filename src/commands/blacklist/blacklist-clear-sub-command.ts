@@ -8,6 +8,8 @@ import {
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
@@ -17,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class BlacklistClearSubCommand {
-    constructor(private blacklistRepo: BlacklistRepo) {}
+    constructor(private blacklistRepo: BlacklistRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -28,37 +30,20 @@ export class BlacklistClearSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                new MessageEmbed()
-                    .setTitle('Birthday Message Clear - Expired')
-                    .setDescription('Type `bday blacklist clear` to clear the birthday blacklist.')
-                    .setColor(Config.colors.error)
+                Lang.getEmbed('results.blacklistClearExpired', LangCode.EN)
             );
         };
 
         let blacklisted = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
-        let confirmationEmbed = new MessageEmbed();
-
         if (blacklisted.blacklist.length === 0) {
-            confirmationEmbed
-                .setDescription('You server has not blacklisted any users!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, confirmationEmbed);
+            await MessageUtils.send(channel, Lang.getEmbed('results.emptyBlacklist', LangCode.EN));
             return;
         }
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        confirmationEmbed
-            .setDescription(
-                `Are you sure you want to clear __**${
-                    blacklisted.blacklist.length
-                }**__ blacklisted user${blacklisted.blacklist.length === 1 ? '' : 's'}?`
-            )
-            .setFooter('This action is irreversible!', msg.client.user.avatarURL())
-            .setColor(Config.colors.warning);
-
-        let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
+        let confirmationMessage = await MessageUtils.send(channel, Lang.getEmbed('serverPrompts.blacklistClearConfirmation', LangCode.EN, { TOTAL: blacklisted.blacklist.length.toString() })); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await MessageUtils.react(confirmationMessage, option);
         }
@@ -85,15 +70,9 @@ export class BlacklistClearSubCommand {
             // Confirm
             await this.blacklistRepo.clearBlacklist(msg.guild.id);
 
-            let embed = new MessageEmbed()
-                .setDescription(`Successfully cleared the birthday blacklist!`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('results.blacklistClearSuccess', LangCode.EN));
         } else {
-            let embed = new MessageEmbed()
-                .setDescription(`Action canceled.`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN));
         }
     }
 }
