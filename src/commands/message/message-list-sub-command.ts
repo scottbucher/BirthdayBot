@@ -1,5 +1,5 @@
 import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
