@@ -28,10 +28,11 @@ export class MessageTestSubCommand {
 
         let type = args[3]?.toLowerCase();
 
-        if (type === 'birthday') {
-        } else if (type === 'memberanniversary') {
-        } else if (type === 'serveranniversary') {
-        }
+        // TODO: Implement
+        // if (type === 'birthday') {
+        // } else if (type === 'memberanniversary') {
+        // } else if (type === 'serveranniversary') {
+        // }
 
         // Try and find someone they are mentioning
         let target = msg.mentions.members.first()?.user;
@@ -75,7 +76,7 @@ export class MessageTestSubCommand {
         let userList = userCount > 1 ? FormatUtils.joinWithAnd(users) : msg.author.toString();
 
         // Get guild data
-        let guildData = await this.guildRepo.getGuild(msg.guild.id);
+        // let guildData = await this.guildRepo.getGuild(msg.guild.id);
 
         // Retrieve message to remove
         let messages = target

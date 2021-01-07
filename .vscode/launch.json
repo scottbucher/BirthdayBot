@@ -30,6 +30,6 @@
             "preLaunchTask": "tsc",
             "internalConsoleOptions": "openOnSessionStart",
             "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
-        },
+        }
     ]
 }

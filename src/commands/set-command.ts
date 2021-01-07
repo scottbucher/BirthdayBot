@@ -17,7 +17,7 @@ import {
 } from 'discord.js';
 import { FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 import { GuildRepo, UserRepo } from '../services/database/repos';
-import { Lang, Logger } from '../services';
+import { Lang } from '../services';
 
 import { Command } from './command';
 import { GuildData } from '../models/database';
@@ -194,7 +194,7 @@ export class SetCommand implements Command {
         if (
             guildData?.DefaultTimezone !== '0' &&
             timeZone &&
-            timeZone != guildData?.DefaultTimezone
+            timeZone !== guildData?.DefaultTimezone
         ) {
             let confirmationMessage = await MessageUtils.send(
                 channel,
