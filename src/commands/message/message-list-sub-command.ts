@@ -53,9 +53,10 @@ export class MessageListSubCommand {
         let message = await MessageUtils.send(channel, embed);
 
         if (
-            embed.description === Lang.getRef('noCustomBirthdayMessages', LangCode.EN) ||
-            embed.description === Lang.getRef('noCustomMemberAnniversaryMessages', LangCode.EN) ||
-            embed.description === Lang.getRef('noCustomServerAnniversaryMessages', LangCode.EN)
+            embed.description === Lang.getRef('list.noCustomBirthdayMessages', LangCode.EN) ||
+            embed.description ===
+                Lang.getRef('list.noCustomMemberAnniversaryMessages', LangCode.EN) ||
+            embed.description === Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN)
         )
             return;
 

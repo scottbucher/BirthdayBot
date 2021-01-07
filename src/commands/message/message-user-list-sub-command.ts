@@ -44,7 +44,10 @@ export class MessageUserListSubCommand {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description === Lang.getRef('noCustomUserSpecificBirthdayMessages', LangCode.EN))
+        if (
+            embed.description ===
+            Lang.getRef('list.noCustomUserSpecificBirthdayMessages', LangCode.EN)
+        )
             return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);

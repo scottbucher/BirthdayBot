@@ -69,7 +69,7 @@ export class ListCommand implements Command {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description === Lang.getRef('noBirthdays', LangCode.EN)) return;
+        if (embed.description === Lang.getRef('list.noBirthdays', LangCode.EN)) return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);
         await MessageUtils.react(message, Config.emotes.jumpToPage);
