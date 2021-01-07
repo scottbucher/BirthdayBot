@@ -21,6 +21,7 @@ import {
     PurgeCommand,
     SetAttemptsCommand,
     SetCommand,
+    SetNameFormatCommand,
     SettingsCommand,
     SetupCommand,
     SupportCommand,
@@ -116,6 +117,8 @@ async function start(): Promise<void> {
     // Setup Command
     let setupCommand = new SetupCommand(guildRepo, setupRequired, setupMessage, setupTrusted);
 
+    let setNameFormatCommand = new SetNameFormatCommand(guildRepo);
+
     // Message Sub Commands
     let messageListSubCommand = new MessageListSubCommand(customMessageRepo);
     let messageClearSubCommand = new MessageClearSubCommand(customMessageRepo);
@@ -184,6 +187,7 @@ async function start(): Promise<void> {
             blacklistCommand,
             premiumCommand,
             subscribeCommand,
+            setNameFormatCommand,
         ],
         subscriptionService,
         guildRepo,
