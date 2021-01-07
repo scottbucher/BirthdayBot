@@ -163,8 +163,8 @@ export class FormatUtils {
                     type === 'birthday'
                         ? Lang.getRef('list.noCustomBirthdayMessages', LangCode.EN)
                         : type === 'memberanniversary'
-                        ? Lang.getRef('list.noCustomMemberAnniversaryMessages', LangCode.EN)
-                        : Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN)
+                            ? Lang.getRef('list.noCustomMemberAnniversaryMessages', LangCode.EN)
+                            : Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN)
                 );
             return embed;
         }
@@ -174,14 +174,14 @@ export class FormatUtils {
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.free
                 : type === 'serveranniversary'
-                ? Config.validation.message.maxCount.serverAnniversary.free
-                : Config.validation.message.maxCount.birthday.free;
+                    ? Config.validation.message.maxCount.serverAnniversary.free
+                    : Config.validation.message.maxCount.birthday.free;
         let maxMessagesPaid: number =
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.paid
                 : type === 'serveranniversary'
-                ? Config.validation.message.maxCount.serverAnniversary.paid
-                : Config.validation.message.maxCount.birthday.paid;
+                    ? Config.validation.message.maxCount.serverAnniversary.paid
+                    : Config.validation.message.maxCount.birthday.paid;
 
         for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
@@ -197,8 +197,8 @@ export class FormatUtils {
             type === 'memberanniversary'
                 ? 'memberAnniversary'
                 : type === 'serveranniversary'
-                ? 'serverAnniversary'
-                : type;
+                    ? 'serverAnniversary'
+                    : type;
 
         let listEmbed = 'list.';
 
@@ -207,8 +207,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessagePaid'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessagePaid'
-                    : 'birthdayMessagePaid';
+                        ? 'serverAnniversaryMessagePaid'
+                        : 'birthdayMessagePaid';
             embed = Lang.getEmbed(listEmbed, LangCode.EN, {
                 TYPE: langType,
                 PAGE: page.toString(),
@@ -224,8 +224,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessageFree'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessageFree'
-                    : 'birthdayMessageFree';
+                        ? 'serverAnniversaryMessageFree'
+                        : 'birthdayMessageFree';
             embed = Lang.getEmbed(listEmbed, LangCode.EN, {
                 TYPE: langType,
                 PAGE: page.toString(),
@@ -261,17 +261,15 @@ export class FormatUtils {
         for (let customMessage of customMessageResults.customMessages) {
             let member = guild.members.resolve(customMessage.UserDiscordId);
             if (hasPremium) {
-                description += `${
-                    member
+                description += `${member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN)}** `
-                } ${customMessage.Message}\n\n`;
+                    } ${customMessage.Message}\n\n`;
             } else {
-                description += `${
-                    member
+                description += `${member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN)}** `
-                } ~~${customMessage.Message}~~\n\n`;
+                    } ~~${customMessage.Message}~~\n\n`;
             }
         }
 
@@ -314,15 +312,13 @@ export class FormatUtils {
                 hasPremium ||
                 trustedRole.Position <= Config.validation.trustedRoles.maxCount.free
             ) {
-                description += `**${i.toLocaleString()}.** ${
-                    role ? `${role.toString()} ` : `**** `
-                }\n\n`;
+                description += `**${i.toLocaleString()}.** ${role ? `${role.toString()} ` : `**** `
+                    }\n\n`;
             } else {
-                description += `**${i.toLocaleString()}.** ${
-                    role
+                description += `**${i.toLocaleString()}.** ${role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('terms.deletedRole', LangCode.EN)}** `
-                }\n\n`;
+                    }\n\n`;
             }
             i++;
         }
@@ -350,7 +346,7 @@ export class FormatUtils {
             });
         }
 
-        return embed;
+        return embed.setThumbnail(guild.iconURL());
     }
 
     public static async getBirthdayListFullEmbed(
@@ -382,7 +378,7 @@ export class FormatUtils {
             for (let user of users) {
                 userNames.push(
                     `${guild.members.resolve(user.UserDiscordId)?.displayName}` ||
-                        `**${Lang.getRef('terms.unknownMember', LangCode.EN)}**`
+                    `**${Lang.getRef('terms.unknownMember', LangCode.EN)}**`
                 );
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
@@ -397,7 +393,7 @@ export class FormatUtils {
             PER_PAGE: Config.experience.birthdayListSize.toString(),
         });
 
-        return embed;
+        return embed.setThumbnail(guild.iconURL());
     }
 
     public static async getBlacklistFullEmbed(
@@ -418,10 +414,9 @@ export class FormatUtils {
         let users = blacklistResults.blacklist.map(data => data.UserDiscordId);
 
         for (let user of users) {
-            description += `**${
-                guild.members.resolve(user)?.displayName ||
+            description += `**${guild.members.resolve(user)?.displayName ||
                 `**${Lang.getRef('terms.unknownMember', LangCode.EN)}**`
-            }**: (ID: ${user})\n`; // Append the description
+                }**: (ID: ${user})\n`; // Append the description
         }
 
         embed = Lang.getEmbed('list.blacklist', LangCode.EN, {
@@ -432,7 +427,7 @@ export class FormatUtils {
             PER_PAGE: Config.experience.blacklistSize.toString(),
         });
 
-        return embed;
+        return embed.setThumbnail(guild.iconURL());
     }
 
     public static extractPageNumber(input: string): number {
