@@ -200,8 +200,16 @@ export class FormatUtils {
                 ? 'serverAnniversary'
                 : type;
 
+        let listEmbed = 'list.';
+
         if (!hasPremium && customMessageResults.stats.TotalItems > maxMessagesFree) {
-            embed = Lang.getEmbed('customMessagePremium', LangCode.EN, {
+            listEmbed +=
+                type === 'memberanniversary'
+                    ? 'memberAnniversaryMessagePaid'
+                    : type === 'serveranniversary'
+                    ? 'serverAnniversaryMessagePaid'
+                    : 'birthdayMessagePaid';
+            embed = Lang.getEmbed(listEmbed, LangCode.EN, {
                 TYPE: langType,
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -210,21 +218,25 @@ export class FormatUtils {
                 PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
                 MAX_FREE: maxMessagesFree.toString(),
                 MAX_PAID: maxMessagesPaid.toString(),
-                THUMBNAIL: guild.iconURL(),
             });
         } else {
-            embed = Lang.getEmbed('customMessageFree', LangCode.EN, {
+            listEmbed +=
+                type === 'memberanniversary'
+                    ? 'memberAnniversaryMessageFree'
+                    : type === 'serveranniversary'
+                    ? 'serverAnniversaryMessageFree'
+                    : 'birthdayMessageFree';
+            embed = Lang.getEmbed(listEmbed, LangCode.EN, {
                 TYPE: langType,
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
                 TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
                 PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
-                THUMBNAIL: guild.iconURL(),
             });
         }
 
-        return embed;
+        return embed.setThumbnail(guild.iconURL());
     }
 
     public static async getCustomUserMessageListEmbed(
@@ -234,38 +246,17 @@ export class FormatUtils {
         pageSize: number,
         hasPremium: boolean
     ): Promise<MessageEmbed> {
-        let embed = new MessageEmbed()
-            .setTitle(
-                Lang.getRef('listTitle', LangCode.EN, {
-                    TYPE: Lang.getRef('user', LangCode.EN) + ' Messages',
-                    PAGE: page.toString(),
-                    TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
-                })
-            )
-            .setThumbnail(guild.iconURL())
-            .setColor(Config.colors.default)
-            .setFooter(
-                Lang.getRef('listFooter', LangCode.EN, {
-                    TYPE:
-                        Lang.getRef('user', LangCode.EN) +
-                        ' ' +
-                        Lang.getRef('messages', LangCode.EN),
-                    TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
-                    PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
-                }),
-                guild.iconURL()
-            )
-            .setTimestamp();
+        let embed: MessageEmbed;
 
         if (customMessageResults.customMessages.length === 0) {
-            let embed = new MessageEmbed()
+            embed = new MessageEmbed()
                 .setDescription(
                     Lang.getRef('list.noCustomUserSpecificBirthdayMessages', LangCode.EN)
                 )
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = Lang.getRef('userBirthdayMessageListDescription', LangCode.EN);
+        let description = '';
 
         for (let customMessage of customMessageResults.customMessages) {
             let member = guild.members.resolve(customMessage.UserDiscordId);
@@ -273,24 +264,26 @@ export class FormatUtils {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
-                        : `**${Lang.getRef('unknownMember', LangCode.EN)}** `
+                        : `**${Lang.getRef('terms.unknownMember', LangCode.EN)}** `
                 } ${customMessage.Message}\n\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
-                        : `**${Lang.getRef('unknownMember', LangCode.EN)}** `
+                        : `**${Lang.getRef('terms.unknownMember', LangCode.EN)}** `
                 } ~~${customMessage.Message}~~\n\n`;
             }
         }
 
-        if (!hasPremium)
-            embed.addField(
-                Lang.getRef('userBirthdayMessageListFieldTitle', LangCode.EN),
-                Lang.getRef('userBirthdayMessageListFieldText', LangCode.EN)
-            );
+        let embedType = hasPremium ? 'list.customUserMessageFree' : 'list.customUserMessagePaid';
 
-        embed.setDescription(description);
+        embed = Lang.getEmbed(embedType, LangCode.EN, {
+            PAGE: page.toString(),
+            LIST_DATA: description,
+            TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
+            TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
+            PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+        });
 
         return embed;
     }
@@ -302,25 +295,7 @@ export class FormatUtils {
         pageSize: number,
         hasPremium: boolean
     ): Promise<MessageEmbed> {
-        let embed = new MessageEmbed()
-            .setTitle(
-                Lang.getRef('listTitle', LangCode.EN, {
-                    TYPE: Lang.getRef('trustedRoles', LangCode.EN),
-                    PAGE: page.toString(),
-                    TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
-                })
-            )
-            .setThumbnail(guild.iconURL())
-            .setColor(Config.colors.default)
-            .setFooter(
-                Lang.getRef('listFooter', LangCode.EN, {
-                    TYPE: Lang.getRef('trustedRoles', LangCode.EN),
-                    TOTAL_MESSAGES: trustedRoleResults.stats.TotalItems.toString(),
-                    PER_PAGE: Config.experience.trustedRoleListSize.toString(),
-                }),
-                guild.iconURL()
-            )
-            .setTimestamp();
+        let embed: MessageEmbed;
 
         let i = (page - 1) * pageSize + 1;
 
@@ -330,7 +305,7 @@ export class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = Lang.getRef('trustedRoleListDescription', LangCode.EN);
+        let description = '';
 
         for (let trustedRole of trustedRoleResults.trustedRoles) {
             // dynamically check which ones to cross out due to the server not having premium anymore
@@ -346,7 +321,7 @@ export class FormatUtils {
                 description += `**${i.toLocaleString()}.** ${
                     role
                         ? `~~${role.toString()}~~ `
-                        : `**${Lang.getRef('deletedRole', LangCode.EN)}** `
+                        : `**${Lang.getRef('terms.deletedRole', LangCode.EN)}** `
                 }\n\n`;
             }
             i++;
@@ -355,16 +330,25 @@ export class FormatUtils {
         if (
             !hasPremium &&
             trustedRoleResults.stats.TotalItems > Config.validation.trustedRoles.maxCount.free
-        )
-            embed.addField(
-                Lang.getRef('trustedRoleListFieldTitle', LangCode.EN),
-                Lang.getRef('trustedRoleListFieldText', LangCode.EN, {
-                    MAX_FREE_TRUSTED_ROLES: Config.validation.trustedRoles.maxCount.free.toString(),
-                    MAX_PAID_TRUSTED_ROLES: Config.validation.trustedRoles.maxCount.paid.toString(),
-                })
-            );
-
-        embed.setDescription(description);
+        ) {
+            embed = Lang.getEmbed('list.trustedRolePaid', LangCode.EN, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: trustedRoleResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.trustedRoleListSize.toString(),
+                MAX_FREE: Config.validation.trustedRoles.maxCount.free.toString(),
+                MAX_PAID: Config.validation.trustedRoles.maxCount.paid.toString(),
+            });
+        } else {
+            embed = Lang.getEmbed('list.trustedRoleFree', LangCode.EN, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: trustedRoleResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.trustedRoleListSize.toString(),
+            });
+        }
 
         return embed;
     }
@@ -375,36 +359,14 @@ export class FormatUtils {
         page: number,
         pageSize: number
     ): Promise<MessageEmbed> {
-        let embed = new MessageEmbed()
-            .setTitle(
-                Lang.getRef('listTitle', LangCode.EN, {
-                    TYPE:
-                        Lang.getRef('birthday', LangCode.EN) +
-                        ' ' +
-                        Lang.getRef('list', LangCode.EN),
-                    PAGE: page.toString(),
-                    TOTAL_PAGES: userDataResults.stats.TotalPages.toString(),
-                })
-            )
-            .setThumbnail(guild.iconURL())
-            .setColor(Config.colors.default)
-            .setFooter(
-                Lang.getRef('listFooter', LangCode.EN, {
-                    TYPE: Lang.getRef('birthdays', LangCode.EN),
-                    TOTAL_MESSAGES: userDataResults.stats.TotalItems.toString(),
-                    PER_PAGE: Config.experience.trustedRoleListSize.toString(),
-                }),
-                guild.iconURL()
-            )
-            .setTimestamp();
-
+        let embed: MessageEmbed;
         if (userDataResults.userData.length === 0) {
             let embed = new MessageEmbed()
                 .setDescription(Lang.getRef('list.noBirthdays', LangCode.EN))
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = Lang.getRef('birthdayListDescription', LangCode.EN);
+        let description = '';
         let birthdays = [
             ...new Set(
                 userDataResults.userData.map(data => moment(data.Birthday).format('MMMM Do'))
@@ -420,14 +382,20 @@ export class FormatUtils {
             for (let user of users) {
                 userNames.push(
                     `${guild.members.resolve(user.UserDiscordId)?.displayName}` ||
-                        `**${Lang.getRef('unknownMember', LangCode.EN)}**`
+                        `**${Lang.getRef('terms.unknownMember', LangCode.EN)}**`
                 );
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
             description += `**${birthday}**: ${userList}\n`; // Append the description
         }
 
-        embed.setDescription(description);
+        embed = Lang.getEmbed('list.birthday', LangCode.EN, {
+            PAGE: page.toString(),
+            LIST_DATA: description,
+            TOTAL_PAGES: userDataResults.stats.TotalPages.toString(),
+            TOTAL_BIRTHDAYS: userDataResults.stats.TotalItems.toString(),
+            PER_PAGE: Config.experience.birthdayListSize.toString(),
+        });
 
         return embed;
     }
@@ -438,31 +406,7 @@ export class FormatUtils {
         page: number,
         pageSize: number
     ): Promise<MessageEmbed> {
-        let embed = new MessageEmbed()
-            .setTitle(
-                Lang.getRef('listTitle', LangCode.EN, {
-                    TYPE:
-                        Lang.getRef('birthday', LangCode.EN) +
-                        ' ' +
-                        Lang.getRef('blacklist', LangCode.EN),
-                    PAGE: page.toString(),
-                    TOTAL_PAGES: blacklistResults.stats.TotalPages.toString(),
-                })
-            )
-            .setThumbnail(guild.iconURL())
-            .setColor(Config.colors.default)
-            .setFooter(
-                Lang.getRef('listFooter', LangCode.EN, {
-                    TYPE:
-                        Lang.getRef('blacklisted', LangCode.EN) +
-                        ' ' +
-                        Lang.getRef('users', LangCode.EN),
-                    TOTAL_MESSAGES: blacklistResults.stats.TotalItems.toString(),
-                    PER_PAGE: Config.experience.trustedRoleListSize.toString(),
-                }),
-                guild.iconURL()
-            )
-            .setTimestamp();
+        let embed: MessageEmbed;
 
         if (blacklistResults.blacklist.length === 0) {
             let embed = new MessageEmbed()
@@ -470,17 +414,23 @@ export class FormatUtils {
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = Lang.getRef('blacklistDescription', LangCode.EN);
+        let description = '';
         let users = blacklistResults.blacklist.map(data => data.UserDiscordId);
 
         for (let user of users) {
             description += `**${
                 guild.members.resolve(user)?.displayName ||
-                `**${Lang.getRef('unknownMember', LangCode.EN)}**`
+                `**${Lang.getRef('terms.unknownMember', LangCode.EN)}**`
             }**: (ID: ${user})\n`; // Append the description
         }
 
-        embed.setDescription(description);
+        embed = Lang.getEmbed('list.blacklist', LangCode.EN, {
+            PAGE: page.toString(),
+            LIST_DATA: description,
+            TOTAL_PAGES: blacklistResults.stats.TotalPages.toString(),
+            TOTAL_BLACKLIST: blacklistResults.stats.TotalItems.toString(),
+            PER_PAGE: Config.experience.blacklistSize.toString(),
+        });
 
         return embed;
     }
