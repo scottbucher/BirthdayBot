@@ -2,6 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Start Dev",
+            "type": "node",
+            "request": "launch",
+            "protocol": "inspector",
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/ts-node-dev",
+            "args": ["${workspaceRoot}/src/start.ts"],
+            "restart": true,
+            "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
+        },
+        {
             "type": "node",
             "request": "launch",
             "name": "Start",
@@ -17,16 +28,6 @@
             "name": "Start Shard",
             "skipFiles": ["<node_internals>/**"],
             "program": "${workspaceFolder}\\dist\\app.js",
-            "preLaunchTask": "tsc",
-            "internalConsoleOptions": "openOnSessionStart",
-            "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Start",
-            "skipFiles": ["<node_internals>/**"],
-            "program": "${workspaceFolder}\\dist\\start.js",
             "preLaunchTask": "tsc",
             "internalConsoleOptions": "openOnSessionStart",
             "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
