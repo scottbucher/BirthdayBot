@@ -2,15 +2,12 @@ import { InvalidUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = new MessageEmbed()
-    .setTitle('Invalid Usage!')
-    .setDescription(
-        `Please specify an option!\n\n\`bday config role create\` - Creates the default birthday role.\n\`bday config role clear\` - Clears the birthday role.\n\`bday config role @role\` - Set the birthday role.`
-    )
-    .setColor(Config.colors.error);
+const errorEmbed = Lang.getEmbed('validation.invalidBirthdayRoleAction', LangCode.EN);
 
 export class ConfigRoleSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -42,21 +39,20 @@ export class ConfigRoleSubCommand {
 
             await this.guildRepo.updateBirthdayRole(msg.guild.id, birthdayRole?.id);
 
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `Successfully created the birthday role ${birthdayRole.toString()}!`
-                )
-                .setFooter(`This role is actively removed from those whose birthday it isn't.`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.birthdayRoleCreated', LangCode.EN, {
+                    ROLE: birthdayRole.toString(),
+                })
+            );
         } else if (args[3].toLowerCase() === 'clear') {
             // User wants to clear the birthday role
             await this.guildRepo.updateBirthdayRole(msg.guild.id, '0');
 
-            let embed = new MessageEmbed()
-                .setDescription(`Successfully cleared the birthday role!`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.birthdayRoleCleared', LangCode.EN)
+            );
         } else {
             // See if a role was specified
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
@@ -80,10 +76,10 @@ export class ConfigRoleSubCommand {
                 birthdayRole.id === msg.guild.id ||
                 args[3].toLowerCase() === 'everyone'
             ) {
-                let embed = new MessageEmbed()
-                    .setDescription(`Invalid Role!`)
-                    .setColor(Config.colors.error);
-                MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.invalidRole', LangCode.EN)
+                );
                 return;
             }
 
@@ -96,51 +92,39 @@ export class ConfigRoleSubCommand {
             }
 
             if (birthdayRole.managed) {
-                let embed = new MessageEmbed()
-                    .setDescription(`Birthday Role cannot be managed by an external service!`)
-                    .setColor(Config.colors.error);
-                MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.birthdayRoleManaged', LangCode.EN)
+                );
                 return;
             }
 
             let membersWithRole = birthdayRole.members.size;
 
             if (membersWithRole > 0 && membersWithRole < 100) {
-                let embed = new MessageEmbed()
-                    .setTitle('Warning')
-                    .setDescription(
-                        `We have detected that __**${membersWithRole}**__ user${
-                            membersWithRole > 1 ? 's' : ''
-                        } already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
-                    )
-                    .setFooter(
-                        `The Bot removes the Birthday Role from anyone whose birthday it isn't!`,
-                        msg.client.user.avatarURL()
-                    )
-                    .setColor(Config.colors.warning);
-                MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.warnBirthdayRoleSize', LangCode.EN, {
+                        AMOUNT: membersWithRole.toString(),
+                    })
+                );
             } else if (membersWithRole > 100) {
-                let embed = new MessageEmbed()
-                    .setTitle('Error')
-                    .setDescription(
-                        `We have detected that __**${membersWithRole}**__ users already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
-                    )
-                    .setFooter(
-                        `The Bot removes the Birthday Role from anyone whose birthday it isn't!`,
-                        msg.client.user.avatarURL()
-                    )
-                    .setColor(Config.colors.error);
-                MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.denyBirthdayRoleSize', LangCode.EN, {
+                        AMOUNT: membersWithRole.toString(),
+                    })
+                );
                 return;
             }
 
             await this.guildRepo.updateBirthdayRole(msg.guild.id, birthdayRole?.id);
-
-            let embed = new MessageEmbed()
-                .setDescription(`Successfully set the birthday role to ${birthdayRole.toString()}!`)
-                .setFooter(`This role is actively removed from those whose birthday it isn't.`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.birthdayRoleSet', LangCode.EN, {
+                    ROLE: birthdayRole.toString(),
+                })
+            );
         }
     }
 }

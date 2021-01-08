@@ -168,6 +168,24 @@
                 "description": "Successfully cleared the birthday master role!",
                 "color": "{{REF:colors.success}}"
             },
+            "birthdayRoleCreated": {
+                "description": "Successfully created the master role {{ROLE}}!",
+                "footer": {
+                    "text": "This role is actively removed from those whose birthday it isn't."
+                },
+                "color": "{{REF:colors.success}}"
+            },
+            "birthdayRoleSet": {
+                "description": "Successfully set the birthday role to {{ROLE}}!",
+                "footer": {
+                    "text": "This role is actively removed from those whose birthday it isn't."
+                },
+                "color": "{{REF:colors.success}}"
+            },
+            "birthdayRoleCleared": {
+                "description": "Successfully cleared the birthday role!",
+                "color": "{{REF:colors.success}}"
+            },
             "nameFormatSet": {
                 "description": ["Successfully updated your name format setting to `{{SETTING}}`!", "Name will now appear in this format: **{{FORMAT}}**"],
                 "color": "{{REF:colors.success}}"
@@ -290,6 +308,21 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "invalidBirthdayRoleAction": {
+                "title": "Birthday Role",
+                "description": [
+                    "Please specify an option!",
+                    "",
+                    "`bday config role create` - Creates the default birthday role.",
+                    "`bday config role clear` - Clears the birthday role.",
+                    "`bday config role @role` - Set the birthday role."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
             "invalidUseTimezoneAction": {
                 "title": "Use Time Zone Setting",
                 "description": [
@@ -339,6 +372,30 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "warnBirthdayRoleSize": {
+                "title": "Birthday Role - Warning",
+                "description": [
+                    "We have detected that __**{{AMOUNT}}**__ users already have that role!",
+                    "The Birthday Role should ONLY be the role that users GET on their birthday!"
+                ],
+                "footer": {
+                    "text": "The Bot removes the Birthday Role from anyone whose birthday it isn't!"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.warn}}"
+            },
+            "denyBirthdayRoleSize": {
+                "title": "Birthday Role - Error",
+                "description": [
+                    "We have detected that __**{{AMOUNT}}**__ users already have that role!",
+                    "The Birthday Role should ONLY be the role that users GET on their birthday!"
+                ],
+                "footer": {
+                    "text": "The Bot removes the Birthday Role from anyone whose birthday it isn't!"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
             "noTimeZone": {
                 "description": "Please input a timezone! To find your timezone please use `bday map`!",
                 "color": "{{REF:colors.error}}"
@@ -373,6 +430,10 @@
             },
             "masterRoleManaged": {
                 "description": "Birthday Master Role cannot be managed by an external service!",
+                "color": "{{REF:colors.error}}"
+            },
+            "birthdayRoleManaged": {
+                "description": "Birthday Role cannot be managed by an external service!",
                 "color": "{{REF:colors.error}}"
             },
             "invalidChannel": {
