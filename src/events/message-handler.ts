@@ -9,6 +9,7 @@ import { RateLimiter } from 'discord.js-rate-limiter';
 import moment from 'moment';
 
 let Config = require('../../config/config.json');
+let Logs = require('../../lang/logs.json');
 
 export class MessageHandler {
     private rateLimiter = new RateLimiter(
@@ -203,20 +204,44 @@ export class MessageHandler {
             // Execute the command
             await command.execute(args, msg, channel, hasPremium);
         } catch (error) {
-            // Notify sender that something went wrong
-            Logger.error('The message-handler.ts class encountered an error!', error);
+            // Try to notify sender of command error
             try {
-                let embed = new MessageEmbed()
-                    .setDescription(`Something went wrong!`)
-                    .addField('Error code', msg.id)
-                    .addField('Contact support', Config.links.support)
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    new MessageEmbed()
+                        .setDescription(`Something went wrong!`)
+                        .addField('Error code', msg.id)
+                        .addField('Contact support', Config.links.support)
+                        .setColor(Config.colors.error)
+                );
             } catch {
-                /*ignore*/
+                // Ignore
             }
 
-            return;
+            // Log command error
+            if (msg.channel instanceof DMChannel) {
+                Logger.error(
+                    Logs.error.commandDm
+                        .replace('{MESSAGE_ID}', msg.id)
+                        .replace('{COMMAND_NAME}', command.name)
+                        .replace('{SENDER_TAG}', msg.author.tag)
+                        .replace('{SENDER_ID}', msg.author.id),
+                    error
+                );
+            } else if (msg.channel instanceof TextChannel) {
+                Logger.error(
+                    Logs.error.commandGuild
+                        .replace('{MESSAGE_ID}', msg.id)
+                        .replace('{COMMAND_NAME}', command.name)
+                        .replace('{SENDER_TAG}', msg.author.tag)
+                        .replace('{SENDER_ID}', msg.author.id)
+                        .replace('{CHANNEL_NAME}', msg.channel.name)
+                        .replace('{CHANNEL_ID}', msg.channel.id)
+                        .replace('{GUILD_NAME}', msg.guild.name)
+                        .replace('{GUILD_ID}', msg.guild.id),
+                    error
+                );
+            }
         }
     }
 
