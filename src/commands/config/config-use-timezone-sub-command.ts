@@ -1,16 +1,13 @@
-import { MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = new MessageEmbed()
-    .setTitle('Invalid Usage!')
-    .setDescription(
-        `Please select a option:\n\`server\` - Celebrate birthdays based on the server's timezone.\n\`user\` - Celebrate birthdays based on the user's timezone.`
-    )
-    .setColor(Config.colors.error);
+const errorEmbed = Lang.getEmbed('validation.invalidUseTimezoneAction', LangCode.EN);
 
 export class ConfigUseTimezoneSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -29,10 +26,9 @@ export class ConfigUseTimezoneSubCommand {
         }
 
         await this.guildRepo.updateUseTimezone(msg.guild.id, option);
-
-        let embed = new MessageEmbed()
-            .setDescription(`Birthdays will now be celebrated based on the ${option}'s timezone!`)
-            .setColor(Config.colors.success);
-        await MessageUtils.send(msg.channel as TextChannel, embed);
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.useTimeZoneSettingSet', LangCode.EN, { OPTION: option })
+        );
     }
 }

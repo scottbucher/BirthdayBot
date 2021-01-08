@@ -1,4 +1,3 @@
-import { MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -10,6 +9,7 @@ import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'disco
 import { BlacklistRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class BlacklistClearSubCommand {
-    constructor(private blacklistRepo: BlacklistRepo) { }
+    constructor(private blacklistRepo: BlacklistRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -30,20 +30,28 @@ export class BlacklistClearSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.blacklistClearExired', LangCode.EN)
+                Lang.getEmbed('results.blacklistClearExpired', LangCode.EN)
             );
         };
 
         let blacklisted = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
         if (blacklisted.blacklist.length === 0) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.emptyBlacklist', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.emptyBlacklist', LangCode.EN)
+            );
             return;
         }
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let confirmationMessage = await MessageUtils.send(channel, Lang.getEmbed('serverPrompts.blacklistClearConfirmation', LangCode.EN, { TOTAL: blacklisted.blacklist.length.toString() })); // Send confirmation and emotes
+        let confirmationMessage = await MessageUtils.send(
+            channel,
+            Lang.getEmbed('serverPrompts.blacklistClearConfirmation', LangCode.EN, {
+                TOTAL: blacklisted.blacklist.length.toString(),
+            })
+        ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await MessageUtils.react(confirmationMessage, option);
         }
@@ -70,7 +78,10 @@ export class BlacklistClearSubCommand {
             // Confirm
             await this.blacklistRepo.clearBlacklist(msg.guild.id);
 
-            await MessageUtils.send(channel, Lang.getEmbed('results.blacklistClearSuccess', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.blacklistClearSuccess', LangCode.EN)
+            );
         } else {
             await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN));
         }

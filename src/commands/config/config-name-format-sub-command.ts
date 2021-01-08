@@ -1,7 +1,9 @@
-import { MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -17,17 +19,15 @@ export class ConfigNameFormatSubCommand {
             setting !== 'nickname' &&
             setting !== 'tag'
         ) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Setting')
-                .setDescription(
-                    `Accepted Values:\n\`mention (default)\`:${msg.author.toString()}\n\`username\`: **${
-                        msg.author.username
-                    }**\n\`nickname\`: **${msg.member.displayName}**\n\`tag\`: **${
-                        msg.author.username
-                    }#${msg.author.discriminator}**\n`
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidNameFormat', LangCode.EN, {
+                    MENTION: msg.author.toString(),
+                    USERNAME: msg.author.username,
+                    NICKNAME: msg.member.displayName,
+                    TAG: `${msg.author.username}#${msg.author.discriminator}`,
+                })
+            );
             return;
         }
 
@@ -35,20 +35,19 @@ export class ConfigNameFormatSubCommand {
 
         await this.guildRepo.updateNameFormat(msg.guild.id, setting);
 
-        let embed = new MessageEmbed()
-            .setColor(Config.colors.success)
-            .setDescription(
-                `Successfully updated your name format setting to \`${setting}\`!\nNames will now appear in this format: **${
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.nameFormatSet', LangCode.EN, {
+                SETTING: setting,
+                FORMAT:
                     setting === 'mention'
                         ? msg.author.toString()
                         : setting === 'nickname'
                         ? msg.member.displayName
                         : setting === 'username'
                         ? msg.author.username
-                        : `${msg.author.username}#${msg.author.discriminator}`
-                }**`
-            );
-
-        if (args[2].toLowerCase()) await MessageUtils.send(channel, embed);
+                        : `${msg.author.username}#${msg.author.discriminator}`,
+            })
+        );
     }
 }

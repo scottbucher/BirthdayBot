@@ -2,13 +2,12 @@ import { FormatUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = new MessageEmbed()
-    .setTitle('Invalid Usage!')
-    .setDescription('Please provide a value! (True/False)')
-    .setColor(Config.colors.error);
+const errorEmbed = Lang.getEmbed('validation.noTrueFalse', LangCode.EN);
 
 export class ConfigTrustedPreventsRoleSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -22,23 +21,18 @@ export class ConfigTrustedPreventsRoleSubCommand {
         let preventRole = FormatUtils.findBoolean(args[3]);
 
         if (preventRole === undefined || preventRole === null) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Value!')
-                .setDescription('Accepted Values: `True/False`')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidTrueFalseTrustedPreventsRole', LangCode.EN)
+            );
             return;
         }
 
         await this.guildRepo.updateTrustedPreventsRole(msg.guild.id, preventRole ? 1 : 0);
 
-        let embed = new MessageEmbed()
-            .setDescription(
-                preventRole
-                    ? 'Trusted Role is now required for the birthday role!'
-                    : 'Trusted Role is now not required for the birthday role!'
-            )
-            .setColor(Config.colors.success);
-        await MessageUtils.send(channel, embed);
+        let value = preventRole
+            ? 'results.trustedPreventsRoleYes'
+            : 'results.trustedPreventsRoleNo';
+        await MessageUtils.send(channel, Lang.getEmbed(value, LangCode.EN));
     }
 }

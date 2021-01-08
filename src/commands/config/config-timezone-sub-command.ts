@@ -2,14 +2,12 @@ import { FormatUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = new MessageEmbed()
-    .setTitle('Invalid Usage!')
-    .setDescription(`Please input a timezone! To find your timezone please use \`bday map\``)
-    .setColor(Config.colors.error);
-
+const errorEmbed = Lang.getEmbed('validation.noTimeZone', LangCode.EN);
 export class ConfigTimezoneSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
@@ -20,33 +18,27 @@ export class ConfigTimezoneSubCommand {
         }
 
         if (FormatUtils.checkAbbreviation(args[3])) {
-            let embed = new MessageEmbed()
-                .setDescription('Invalid time zone! Do not use timezone abbreviations!')
-                .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
-                .setTimestamp()
-                .setTitle('Default Server Timezone Selection')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidServerTimeZoneAbbreviation', LangCode.EN)
+            );
             return;
         }
 
         let timezone = FormatUtils.findZone(args[3]); // Try and get the time zone
         if (!timezone) {
-            let embed = new MessageEmbed()
-                .setDescription('Invalid time zone!')
-                .setFooter(`Please check above and try again!`, msg.client.user.avatarURL())
-                .setTimestamp()
-                .setTitle('Default Server Timezone Selection')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidServerTimeZone', LangCode.EN)
+            );
             return;
         }
 
         await this.guildRepo.updateDefaultTimezone(msg.guild.id, timezone);
 
-        let embed = new MessageEmbed()
-            .setDescription(`Successfully set your server's default timezone to **${timezone}**`)
-            .setColor(Config.colors.success);
-        await MessageUtils.send(msg.channel as TextChannel, embed);
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.defaultTimeZoneSet', LangCode.EN, { TIMEZONE: timezone })
+        );
     }
 }

@@ -2,15 +2,12 @@ import { InvalidUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = new MessageEmbed()
-    .setTitle('Invalid Usage!')
-    .setDescription(
-        `Please specify an option!\n\n\`bday config birthdayMasterRole create\` - Creates the default birthday master role.\n\`bday config birthdayMasterRole clear\` - Clears the birthday master role.\n\`bday config birthdayMasterRole @role\` - Set the birthday master role.`
-    )
-    .setColor(Config.colors.error);
+const errorEmbed = Lang.getEmbed('validation.invalidMasterAction', LangCode.EN);
 
 export class ConfigBirthdayMasterRoleSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -39,20 +36,20 @@ export class ConfigBirthdayMasterRoleSubCommand {
 
             await this.guildRepo.updateBirthdayMasterRole(msg.guild.id, birthdayMasterRole?.id);
 
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `Successfully created the birthday master role ${birthdayMasterRole.toString()}!`
-                )
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.masterRoleCreated', LangCode.EN, {
+                    ROLE: birthdayMasterRole.toString(),
+                })
+            );
         } else if (args[3].toLowerCase() === 'clear') {
             // User wants to clear the birthday master role
             await this.guildRepo.updateBirthdayMasterRole(msg.guild.id, '0');
 
-            let embed = new MessageEmbed()
-                .setDescription(`Successfully cleared the birthday master role!`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.masterRoleCleared', LangCode.EN)
+            );
         } else {
             // See if a role was specified
             let birthdayMasterRole: Role = msg.mentions.roles.first();
@@ -68,31 +65,29 @@ export class ConfigBirthdayMasterRoleSubCommand {
                 birthdayMasterRole.id === msg.guild.id ||
                 args[3].toLowerCase() === 'everyone'
             ) {
-                let embed = new MessageEmbed()
-                    .setDescription(`Invalid Role!`)
-                    .setColor(Config.colors.error);
-                MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.invalidRole', LangCode.EN)
+                );
                 return;
             }
 
             if (birthdayMasterRole.managed) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        `Birthday Master Role cannot be managed by an external service!`
-                    )
-                    .setColor(Config.colors.error);
-                MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.masterRoleManaged', LangCode.EN)
+                );
                 return;
             }
 
             await this.guildRepo.updateBirthdayMasterRole(msg.guild.id, birthdayMasterRole?.id);
 
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `Successfully set the birthday master role to ${birthdayMasterRole.toString()}!`
-                )
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.masterRoleSet', LangCode.EN, {
+                    ROLE: birthdayMasterRole.toString(),
+                })
+            );
         }
     }
 }

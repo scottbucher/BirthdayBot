@@ -143,7 +143,7 @@
                 "description": "Successfully cleared the birthday blacklist!",
                 "color": "{{REF:colors.success}}"
             },
-            "blacklistClearExired": {
+            "blacklistClearExpired": {
                 "title": "Blacklist Clear - Expired",
                 "description": "Type `bday blacklist clear` to clear the birthday blacklist.",
                 "color": "{{REF:colors.error}}"
@@ -154,6 +154,46 @@
             },
             "blacklistRemoveSuccess": {
                 "description": "Successfully added {{TARGET}} to the birthday blacklist!",
+                "color": "{{REF:colors.success}}"
+            },
+            "masterRoleCreated": {
+                "description": "Successfully created the birthday master role {{ROLE}}!",
+                "color": "{{REF:colors.success}}"
+            },
+            "masterRoleSet": {
+                "description": "Successfully set the birthday master role to {{ROLE}}!",
+                "color": "{{REF:colors.success}}"
+            },
+            "masterRoleCleared": {
+                "description": "Successfully cleared the birthday master role!",
+                "color": "{{REF:colors.success}}"
+            },
+            "nameFormatSet": {
+                "description": ["Successfully updated your name format setting to `{{SETTING}}`!", "Name will now appear in this format: **{{FORMAT}}**"],
+                "color": "{{REF:colors.success}}"
+            },
+            "defaultTimeZoneSet": {
+                "description": "Successfully set your server's default timezone to **{{TIMEZONE}}**!",
+                "color": "{{REF:colors.success}}"
+            },
+            "useTimeZoneSettingSet": {
+                "description": "Birthdays will now be celebrated based on the {{OPTION}}'s timezone!",
+                "color": "{{REF:colors.success}}"
+            },
+            "trustedPreventsMessageYes": {
+                "description": "Trusted Role is now required for the birthday message!",
+                "color": "{{REF:colors.success}}"
+            },
+            "trustedPreventsMessageNo": {
+                "description": "Trusted Role is now not required for the birthday message!",
+                "color": "{{REF:colors.success}}"
+            },
+            "trustedPreventsRoleYes": {
+                "description": "Trusted Role is now required for the birthday role!",
+                "color": "{{REF:colors.success}}"
+            },
+            "trustedPreventsRoleNo": {
+                "description": "Trusted Role is now not required for the birthday role!",
                 "color": "{{REF:colors.success}}"
             },
             "actionCanceled": {
@@ -169,10 +209,7 @@
         "validation": {
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": [
-                    "Please specify an option!",
-                    "{{OPTIONS}}"
-                ],
+                "description": ["Please specify an option!", "{{OPTIONS}}"],
                 "color": "{{REF:colors.error}}"
             },
             "outOfAttempts": {
@@ -223,6 +260,93 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "invalidNameFormat": {
+                "title": "Invalid Name Format",
+                "description": [
+                    "Accepted Values",
+                    "`mention (default)`: **{{MENTION}}**",
+                    "`username`: **{{USERNAME}}**",
+                    "`nickname`: **{{NICKNAME}}**",
+                    "`tag:` **{{TAG}}**"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidMasterAction": {
+                "title": "Birthday Master Role",
+                "description": [
+                    "Please specify an option!",
+                    "",
+                    "`bday config birthdayMasterRole create` - Creates the birthday master role.",
+                    "`bday config birthdayMasterRole clear` - Clears the birthday master role.",
+                    "`bday config birthdayMasterRole @role` - Set the birthday master role."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidUseTimezoneAction": {
+                "title": "Use Time Zone Setting",
+                "description": [
+                    "Please select an option:",
+                    "`server` - Celebrate birthdays based on the server's timezone.",
+                    "`user` - Celebrate birthdays based on the user's timezone."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidServerTimeZone": {
+                "title": "Default Server Timezone Selection",
+                "description": "Invalid time zone!",
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidServerTimeZoneAbbreviation": {
+                "title": "Default Server Timezone Selection",
+                "description": "Invalid time zone! Do not use timezone abbreviations!",
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidTrueFalseTrustedPreventsRole": {
+                "title": "Trusted Role Prevents Role",
+                "description": "Please provide a value! (True/False)",
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidTrueFalseTrustedPreventsMessage": {
+                "title": "Trusted Role Prevents Message",
+                "description": "Please provide a value! (True/False)",
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "noTimeZone": {
+                "description": "Please input a timezone! To find your timezone please use `bday map`!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noTrueFalse": {
+                "description": "Please provide a value! (True/False)",
+                "color": "{{REF:colors.error}}"
+            },
             "invalidRole": {
                 "description": "Invalid role!",
                 "color": "{{REF:colors.error}}"
@@ -232,7 +356,7 @@
                 "color": "{{REF:colors.error}}"
             },
             "noUserFound": {
-                "description": "Could not finid that user!",
+                "description": "Could not find that user!",
                 "color": "{{REF:colors.error}}"
             },
             "cantBlacklistBot": {
@@ -245,6 +369,10 @@
             },
             "userNotInBlacklist": {
                 "description": "That user is not in the blacklist!",
+                "color": "{{REF:colors.error}}"
+            },
+            "masterRoleManaged": {
+                "description": "Birthday Master Role cannot be managed by an external service!",
                 "color": "{{REF:colors.error}}"
             },
             "invalidChannel": {
@@ -312,10 +440,7 @@
                     },
                     {
                         "name": "Links",
-                        "value": [
-                            "{{REF:link.supportEmbed}}",
-                            "{{REF:link.inviteEmbed}}"
-                        ]
+                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
                     }
                 ]
             }
@@ -342,16 +467,11 @@
                     },
                     {
                         "name": "Created With",
-                        "value": [
-                            "{{REF:link.templateEmbed}}"
-                        ]
+                        "value": ["{{REF:link.templateEmbed}}"]
                     },
                     {
                         "name": "Links",
-                        "value": [
-                            "{{REF:link.supportEmbed}}",
-                            "{{REF:link.inviteEmbed}}"
-                        ]
+                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
                     }
                 ]
             }
@@ -602,6 +722,8 @@
         "terms": {
             "timeZone": "Time Zone",
             "birthday": "Birthday",
+            "birthdays": "Birthdays",
+            "channelTopic": "Birthdays Announcements!",
             "user": "User",
             "users": "Users",
             "list": "List",
