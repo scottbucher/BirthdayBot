@@ -24,6 +24,13 @@ export class MessageListSubCommand {
 
         let type = args[3]?.toLowerCase();
 
+        type =
+            type === 'member'
+                ? 'memberanniversary'
+                : type === 'server'
+                ? 'serveranniversary'
+                : type;
+
         if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
             await MessageUtils.send(
                 channel,

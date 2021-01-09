@@ -37,6 +37,13 @@ export class MessageClearSubCommand {
 
         let type = args[3]?.toLowerCase();
 
+        type =
+            type === 'member'
+                ? 'memberanniversary'
+                : type === 'server'
+                ? 'serveranniversary'
+                : type;
+
         if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
             let embed = new MessageEmbed()
                 .setTitle('Clear Custom Message(s)')
