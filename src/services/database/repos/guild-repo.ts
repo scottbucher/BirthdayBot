@@ -49,7 +49,7 @@ export class GuildRepo {
 
     public async updateServerAnniversaryChannel(
         discordId: string,
-        birthdayChannelId: string
+        channelId: string
     ): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateServerAnniversaryChannel, [
             discordId,

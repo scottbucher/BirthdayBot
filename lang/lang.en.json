@@ -186,8 +186,66 @@
                 "description": "Successfully cleared the birthday role!",
                 "color": "{{REF:colors.success}}"
             },
+
+
+
+
+
+
+
+
+            "birthdayChannelCreated": {
+                "description": "Successfully created the birthday channel {{CHANNEL}}!",
+                "color": "{{REF:colors.success}}"
+            },
+            "birthdayChannelCleared": {
+                "description": "Successfully cleared the birthday channel!",
+                "color": "{{REF:colors.success}}"
+            },
+            "birthdayChannelSet": {
+                "description": "Successfully set the birthday channel to {{CHANNEL}}",
+                "color": "{{REF:colors.success}}"
+            },
+            "memberAnniversaryChannelCreated": {
+                "description": "Successfully created the member anniversary channel {{CHANNEL}}!",
+                "color": "{{REF:colors.success}}"
+            },
+            "memberAnniversaryChannelCleared": {
+                "description": "Successfully cleared the member anniversary channel!",
+                "color": "{{REF:colors.success}}"
+            },
+            "memberAnniversaryChannelSet": {
+                "description": "Successfully set the member anniversary channel to {{CHANNEL}}",
+                "color": "{{REF:colors.success}}"
+            },
+            "serverAnniversaryChannelCreated": {
+                "description": "Successfully created the server anniversary channel {{CHANNEL}}!",
+                "color": "{{REF:colors.success}}"
+            },
+            "serverAnniversaryChannelCleared": {
+                "description": "Successfully cleared the server anniversary channel!",
+                "color": "{{REF:colors.success}}"
+            },
+            "serverAnniversaryChannelSet": {
+                "description": "Successfully set the server anniversary channel to {{CHANNEL}}",
+                "color": "{{REF:colors.success}}"
+            },
+
+
+
+
+
+
+
+
+
+
+
             "nameFormatSet": {
-                "description": ["Successfully updated your name format setting to `{{SETTING}}`!", "Name will now appear in this format: **{{FORMAT}}**"],
+                "description": [
+                    "Successfully updated your name format setting to `{{SETTING}}`!",
+                    "Name will now appear in this format: **{{FORMAT}}**"
+                ],
                 "color": "{{REF:colors.success}}"
             },
             "defaultTimeZoneSet": {
@@ -272,6 +330,30 @@
             "invalidMessageType": {
                 "title": "Custom Message List",
                 "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidChannelType": {
+                "title": "Channel Selection",
+                "description": "Please specify a channel type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidChannelAction": {
+                "title": "Channel Selection",
+                "description": [
+                    "Please specify an option!",
+                    "",
+                    "`bday config channel <type> create` - Creates the default channel of that type.",
+                    "`bday config channel <type> clear` - Clears the channel of that type.",
+                    "`bday config channel <type> #channel` - Set the channel of that type."
+                ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -802,7 +884,13 @@
             "serverAnniversaryMessages": "Server Anniversary Messages",
             "memberAnniversaryMessages": "Member Anniversary Messages",
             "trustedRoles": "Trusted Roles",
-            "blacklistList": "Blacklist List"
+            "blacklistList": "Blacklist List",
+            "birthdayChannelTitle": "{{REF:emotes.birthdayEmote}} birthdays",
+            "birthdayChannelTopic": "Birthday Announcements!",
+            "memberAnniversaryChannelTitle": "{{REF:emotes.party}} member anniversaries",
+            "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
+            "serverAnniversaryChannelTitle": "{{REF:emotes.party}} server anniversaries",
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
         },
         "boolean": {
             "yes": "Yes",

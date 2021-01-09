@@ -2,40 +2,64 @@ import { InvalidUtils, MessageUtils, PermissionUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = new MessageEmbed()
-    .setTitle('Invalid Usage!')
-    .setDescription(
-        `Please specify an option!\n\n\`bday config channel create\` - Creates the default birthday channel.\n\`bday config channel clear\` - Clears the birthday channel.\n\`bday config channel #channel\` - Set the birthday channel.`
-    )
-    .setColor(Config.colors.error);
+const errorEmbed = Lang.getEmbed('validation.invalidChannelAction', LangCode.EN);
 
 export class ConfigChannelSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
-        if (args.length === 3) {
+        let type = args[3]?.toLowerCase();
+
+        type =
+            type === 'member'
+                ? 'memberanniversary'
+                : type === 'server'
+                ? 'serveranniversary'
+                : type;
+
+        if (
+            !type ||
+            (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
+        ) {
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidChannelType', LangCode.EN)
+            );
+            return;
+        }
+
+        if (args.length === 4) {
             await MessageUtils.send(channel, errorEmbed);
             return;
         }
 
-        if (args[3].toLowerCase() === 'create') {
+        let channelId = '0';
+
+        let refType =
+            (type === 'memberanniversary'
+                ? 'memberAnniversary'
+                : type === 'serveranniversary'
+                ? 'serverAnniversary'
+                : 'birthday') + 'Channel';
+
+        if (args[4].toLowerCase() === 'create') {
             // User wants to create the default birthday channel
             if (!msg.guild.me.hasPermission('MANAGE_CHANNELS')) {
-                await InvalidUtils.notEnoughPermissions(msg.channel as TextChannel, [
-                    'MANAGE_CHANNELS',
-                ]);
+                await InvalidUtils.notEnoughPermissions(channel, ['MANAGE_CHANNELS']);
                 return;
             }
 
             // Create channel with desired attributes
-            let birthdayChannel = await msg.guild.channels.create(
-                `${Config.emotes.birthday} birthdays`,
+            let newChannel = await msg.guild.channels.create(
+                Lang.getRef('terms.' + refType + 'Title', LangCode.EN),
                 {
                     type: 'text',
-                    topic: 'Birthday Announcements!',
+                    topic: Lang.getRef('terms.' + refType + 'Topic', LangCode.EN),
                     permissionOverwrites: [
                         {
                             id: msg.guild.id,
@@ -44,52 +68,53 @@ export class ConfigChannelSubCommand {
                         },
                         {
                             id: msg.guild.me.roles.cache.filter(role => role.managed).first(),
-                            allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
+                            allow: [
+                                'VIEW_CHANNEL',
+                                'SEND_MESSAGES',
+                                'EMBED_LINKS',
+                                'ADD_REACTIONS',
+                            ],
                         },
                     ],
                 }
             );
 
-            await this.guildRepo.updateBirthdayChannel(msg.guild.id, birthdayChannel?.id);
-
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `Successfully created the birthday channel ${birthdayChannel.toString()}!`
-                )
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
-        } else if (args[3].toLowerCase() === 'clear') {
+            channelId = newChannel ? newChannel.id : '0';
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.' + refType + 'Created', LangCode.EN, {
+                    CHANNEL: newChannel.toString(),
+                })
+            );
+        } else if (args[4].toLowerCase() === 'clear') {
             // User wants to clear the birthday channel
 
-            // Clear the birthday channel
-            await this.guildRepo.updateBirthdayChannel(msg.guild.id, '0');
-
-            let embed = new MessageEmbed()
-                .setDescription(`Successfully cleared the birthday channel!`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.' + refType + 'Cleared', LangCode.EN)
+            );
         } else {
             // See if a channel was specified
 
-            let birthdayChannel: TextChannel = msg.mentions.channels.first();
+            let newChannel: TextChannel = msg.mentions.channels.first();
 
             // If could not find in mention check, try to find by name
-            if (!birthdayChannel) {
-                birthdayChannel = msg.guild.channels.cache
+            if (!newChannel) {
+                newChannel = msg.guild.channels.cache
                     .filter(channel => channel instanceof TextChannel)
                     .map(channel => channel as TextChannel)
-                    .find(channel => channel.name.toLowerCase().includes(args[3].toLowerCase()));
+                    .find(channel => channel.name.toLowerCase().includes(args[4].toLowerCase()));
             }
 
             // Could it find the channel in either check?
-            if (!birthdayChannel) {
+            if (!newChannel) {
                 await MessageUtils.send(channel, errorEmbed);
                 return;
             }
 
             // Bot needs to be able to message in the desired channel
-            if (!PermissionUtils.canSend(birthdayChannel)) {
-                await InvalidUtils.cantSendInChannel(msg.channel as TextChannel, birthdayChannel, [
+            if (!PermissionUtils.canSend(channel)) {
+                await InvalidUtils.cantSendInChannel(msg.channel as TextChannel, channel, [
                     'VIEW_CHANNEL',
                     'SEND_MESSAGES',
                     'EMBED_LINKS',
@@ -98,15 +123,24 @@ export class ConfigChannelSubCommand {
                 return;
             }
 
-            await this.guildRepo.updateBirthdayChannel(msg.guild.id, birthdayChannel?.id);
+            channelId = newChannel ? newChannel.id : '0';
 
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `Successfully set the birthday channel to ${birthdayChannel.toString()}!`
-                )
-                .setColor(Config.colors.success);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.' + refType + 'Set', LangCode.EN, {
+                    CHANNEL: newChannel.toString(),
+                })
+            );
+        }
 
-            await MessageUtils.send(channel, embed);
+        // Update the database with the channel
+
+        if (type === 'birthday') {
+            await this.guildRepo.updateBirthdayChannel(msg.guild.id, channelId);
+        } else if (type === 'memberanniversary') {
+            await this.guildRepo.updateMemberAnniversaryChannel(msg.guild.id, channelId);
+        } else if (type === 'serveranniversary') {
+            await this.guildRepo.updateServerAnniversaryChannel(msg.guild.id, channelId);
         }
     }
 }
