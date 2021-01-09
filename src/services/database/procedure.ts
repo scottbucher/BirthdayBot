@@ -15,6 +15,8 @@ export enum Procedure {
     Guild_Get = 'Guild_Get',
     Guild_GetAll = 'Guild_GetAll',
     Guild_UpdateBirthdayChannel = 'Guild_UpdateBirthdayChannel',
+    Guild_UpdateMemberAnniversaryChannel = 'Guild_UpdateMemberAnniversaryChannel',
+    Guild_UpdateServerAnniversaryChannel = 'Guild_UpdateServerAnniversaryChannel',
     Guild_UpdateBirthdayRole = 'Guild_UpdateBirthdayRole',
     Guild_UpdateBirthdayMasterRole = 'Guild_UpdateBirthdayMasterRole',
     Guild_UpdateMessageTime = 'Guild_UpdateMessageTime',

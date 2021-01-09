@@ -30,13 +30,30 @@ export class GuildRepo {
         ]);
     }
 
-    public async updateBirthdayChannel(
+    public async updateBirthdayChannel(discordId: string, channelId: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateBirthdayChannel, [
+            discordId,
+            channelId,
+        ]);
+    }
+
+    public async updateMemberAnniversaryChannel(
+        discordId: string,
+        channelId: string
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateMemberAnniversaryChannel, [
+            discordId,
+            channelId,
+        ]);
+    }
+
+    public async updateServerAnniversaryChannel(
         discordId: string,
         birthdayChannelId: string
     ): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateBirthdayChannel, [
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateServerAnniversaryChannel, [
             discordId,
-            birthdayChannelId,
+            channelId,
         ]);
     }
 
