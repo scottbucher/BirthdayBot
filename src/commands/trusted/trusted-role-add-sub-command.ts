@@ -1,14 +1,13 @@
-import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Client, Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 import { MessageUtils } from '../../utils';
 import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = new MessageEmbed()
-    .setTitle('Invalid Usage!')
-    .setDescription(`Please specify a role!`)
-    .setColor(Config.colors.error);
+const errorEmbed = Lang.getEmbed('validation.noTrustedRoleSpecified', LangCode.EN);
 
 export class TrustedRoleAddSubCommand {
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
@@ -34,18 +33,12 @@ export class TrustedRoleAddSubCommand {
             trustedRole.id === msg.guild.id ||
             args[3].toLowerCase() === 'everyone'
         ) {
-            let embed = new MessageEmbed()
-                .setDescription(`Invalid Role!`)
-                .setColor(Config.colors.error);
-            MessageUtils.send(channel, embed);
+            MessageUtils.send(channel, Lang.getEmbed('validation.invalidRole', LangCode.EN));
             return;
         }
 
         if (trustedRole.managed) {
-            let embed = new MessageEmbed()
-                .setDescription(`Trusted Role cannot be managed by an external service!`)
-                .setColor(Config.colors.error);
-            MessageUtils.send(channel, embed);
+            MessageUtils.send(channel, Lang.getEmbed('validation.trustedRoleManaged', LangCode.EN));
             return;
         }
 
@@ -56,41 +49,42 @@ export class TrustedRoleAddSubCommand {
             trustedRoles.trustedRoles.length >= Config.validation.trustedRoles.maxCount.free &&
             !hasPremium
         ) {
-            let embed = new MessageEmbed()
-                .setDescription(`Your server is limited to one trusted role!`)
-                .setFooter(
-                    `To have up to ${Config.validation.trustedRoles.maxCount.paid.toLocaleString()} trusted roles get Birthday Bot Premium!`,
-                    msg.client.user.avatarURL()
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.maxFreeTrustedRoles', LangCode.EN, {
+                    FREE_MAX: Config.validation.trustedRoles.maxCount.free.toString(),
+                    PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
+                })
+            );
             return;
         } else if (
             trustedRoles &&
             trustedRoles.trustedRoles.length >= Config.validation.message.maxCount.birthday.paid
         ) {
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `Your server has reached the maximum trusted roles! (${Config.validation.message.maxCount.birthday.paid.toLocaleString()})`
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.maxPaidTrustedRoles', LangCode.EN, {
+                    PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
+                })
+            );
             return;
         }
 
         if (trustedRoles.trustedRoles.find(role => role.TrustedRoleDiscordId === trustedRole.id)) {
-            let embed = new MessageEmbed()
-                .setDescription(`${trustedRole.toString()} is already a trusted role!`)
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.duplicateTrustedRole', LangCode.EN, {
+                    ROLE: trustedRole.toString(),
+                })
+            );
             return;
         }
 
         await this.trustedRoleRepo.addTrustedRole(msg.guild.id, trustedRole?.id);
 
-        let embed = new MessageEmbed()
-            .setDescription(`Successfully added ${trustedRole.toString()} as a trusted role!`)
-            .setColor(Config.colors.success);
-        await MessageUtils.send(channel, embed);
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.addedTrustedRole', LangCode.EN, { ROLE: trustedRole.toString() })
+        );
     }
 }

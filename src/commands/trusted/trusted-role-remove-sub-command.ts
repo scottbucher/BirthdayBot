@@ -1,15 +1,14 @@
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 import { MessageUtils } from '../../utils';
 import { TrustedRole } from '../../models/database';
 import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = new MessageEmbed()
-    .setTitle('Invalid Usage!')
-    .setDescription(`Please specify a position or role to remove!`)
-    .setColor(Config.colors.error);
+const errorEmbed = Lang.getEmbed('validation.trustedRoleNoRoleOrPosition', LangCode.EN);
 
 export class TrustedRoleRemoveSubCommand {
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
@@ -36,10 +35,7 @@ export class TrustedRoleRemoveSubCommand {
             trustedRole &&
             (trustedRole.id === msg.guild.id || args[3].toLowerCase() === 'everyone')
         ) {
-            let embed = new MessageEmbed()
-                .setDescription(`Invalid Role!`)
-                .setColor(Config.colors.error);
-            MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.invalidRole', LangCode.EN));
             return;
         }
 
@@ -57,26 +53,19 @@ export class TrustedRoleRemoveSubCommand {
             try {
                 position = parseInt(args[3]);
             } catch (error) {
-                let embed = new MessageEmbed()
-                    .setTitle('Invalid position!')
-                    .setDescription(
-                        `Use \`bday trustedRole list <type>\` to view your server's trusted roles!`
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.trustedRoleInvalidRoleOrPosition', LangCode.EN)
+                );
                 return;
             }
         }
 
         if (!position) {
-            let embed = new MessageEmbed()
-                .setTitle('Remove Trusted Role')
-                .setDescription(
-                    `Trusted Role does not exist!\nView your server's trusted roles with \`bday trustedRole list\`!`
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidTrustedRole', LangCode.EN)
+            );
             return;
         }
 
@@ -85,14 +74,10 @@ export class TrustedRoleRemoveSubCommand {
         role = trustedRoles.trustedRoles.find(r => r.Position === position);
 
         if (!role) {
-            let embed = new MessageEmbed()
-                .setTitle('Remove Trusted Role')
-                .setDescription(
-                    `Trusted Role does not exist!\nView your server's trusted roles with \`bday trustedRole list\`!`
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidTrustedRole', LangCode.EN)
+            );
             return;
         }
 
@@ -100,15 +85,11 @@ export class TrustedRoleRemoveSubCommand {
 
         let r = msg.guild.roles.resolve(role.TrustedRoleDiscordId);
 
-        let embed = new MessageEmbed()
-            .setTitle('Remove Trusted Role')
-            .setDescription(r ? r.toString() : '**Deleted Role**')
-            .setFooter(
-                `${Config.emotes.confirm} Trusted Role removed.`,
-                msg.client.user.avatarURL()
-            )
-            .setTimestamp()
-            .setColor(Config.colors.success);
-        await MessageUtils.send(channel, embed);
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.removedTrustedRole', LangCode.EN, {
+                ROLE: r ? r.toString() : '**Deleted Role**',
+            })
+        );
     }
 }

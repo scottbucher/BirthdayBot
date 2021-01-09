@@ -6,6 +6,8 @@ import {
 } from 'discord.js-collector-utils';
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 import { MessageUtils } from '../../utils';
 import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo';
 
@@ -28,37 +30,28 @@ export class TrustedRoleClearSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                new MessageEmbed()
-                    .setTitle('Trusted Role Clear - Expired')
-                    .setDescription('Type `bday trustedRole clear` to clear the trusted roles.')
-                    .setColor(Config.colors.error)
+                Lang.getEmbed('results.trustedRoleClearExpired', LangCode.EN)
             );
         };
 
         let trustedRoles = await this.trustedRoleRepo.getTrustedRoles(msg.guild.id);
 
-        let confirmationEmbed = new MessageEmbed();
-
         if (trustedRoles.trustedRoles.length === 0) {
-            confirmationEmbed
-                .setDescription(`You server has not set any trusted roles set!`)
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, confirmationEmbed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noTrustedRoles', LangCode.EN)
+            );
             return;
         }
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        confirmationEmbed
-            .setDescription(
-                `Are you sure you want to clear __**${
-                    trustedRoles.trustedRoles.length
-                }**__ trusted role${trustedRoles.trustedRoles.length === 1 ? '' : 's'}?`
-            )
-            .setFooter('This action is irreversible!', msg.client.user.avatarURL())
-            .setColor(Config.colors.warning);
-
-        let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
+        let confirmationMessage = await MessageUtils.send(
+            channel,
+            Lang.getEmbed('serverPrompts.trustedRoleClearConfirmation', LangCode.EN, {
+                TOTAL: trustedRoles.trustedRoles.length.toString(),
+            })
+        ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await MessageUtils.react(confirmationMessage, option);
         }
@@ -84,16 +77,12 @@ export class TrustedRoleClearSubCommand {
         if (confirmation === Config.emotes.confirm) {
             // Confirm
             await this.trustedRoleRepo.clearTrustedRoles(msg.guild.id);
-
-            let embed = new MessageEmbed()
-                .setDescription(`Successfully cleared all trusted roles from the database!`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.clearedTrustedRole', LangCode.EN)
+            );
         } else {
-            let embed = new MessageEmbed()
-                .setDescription(`Action canceled.`)
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN));
         }
     }
 }

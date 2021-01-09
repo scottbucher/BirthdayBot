@@ -10,6 +10,13 @@
                     "text": "{{REF:footers.irreversible}}"
                 },
                 "color": "{{REF:colors.warn}}"
+            },
+            "trustedRoleClearConfirmation": {
+                "description": "Are you sure you want to clear __**{{TOTAL}}**__ trusted role(s)?",
+                "footer": {
+                    "text": "{{REF:footers.irreversible}}"
+                },
+                "color": "{{REF:colors.warn}}"
             }
         },
         "userPrompts": {
@@ -186,7 +193,6 @@
                 "description": "Successfully cleared the birthday role!",
                 "color": "{{REF:colors.success}}"
             },
-
             "birthdayChannelCreated": {
                 "description": "Successfully created the birthday channel {{CHANNEL}}!",
                 "color": "{{REF:colors.success}}"
@@ -223,7 +229,6 @@
                 "description": "Successfully set the server anniversary channel to {{CHANNEL}}",
                 "color": "{{REF:colors.success}}"
             },
-
             "nameFormatSet": {
                 "description": [
                     "Successfully updated your name format setting to `{{SETTING}}`!",
@@ -237,6 +242,23 @@
             },
             "useTimeZoneSettingSet": {
                 "description": "Birthdays will now be celebrated based on the {{OPTION}}'s timezone!",
+                "color": "{{REF:colors.success}}"
+            },
+            "trustedRoleClearExpired": {
+                "title": "Trusted Role Clear - Expired",
+                "description": "Type `bday trustedRole clear` to clear the trusted roles.",
+                "color": "{{REF:colors.error}}"
+            },
+            "addedTrustedRole": {
+                "description": "Successfully added {{ROLE}} as a trusted role!",
+                "color": "{{REF:colors.success}}"
+            },
+            "clearedTrustedRole": {
+                "description": "Successfully cleared the trusted roles!",
+                "color": "{{REF:colors.success}}"
+            },
+            "removedTrustedRole": {
+                "description": "Successfully removed the trusted role {{ROLE}}!",
                 "color": "{{REF:colors.success}}"
             },
             "trustedPreventsMessageYes": {
@@ -253,6 +275,14 @@
             },
             "trustedPreventsRoleNo": {
                 "description": "Trusted Role is now not required for the birthday role!",
+                "color": "{{REF:colors.success}}"
+            },
+            "requireAllTrustedYes": {
+                "description": "To have their birthday celebrated users now require all the trusted roles!",
+                "color": "{{REF:colors.success}}"
+            },
+            "requireAllTrustedNo": {
+                "description": "To have their birthday celebrated users now require only one of the trusted roles!",
                 "color": "{{REF:colors.success}}"
             },
             "actionCanceled": {
@@ -437,6 +467,66 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "invalidTrueFalseRequireAllTrustedMessage": {
+                "title": "RequireAllTrustedRoles",
+                "description": "Please provide a value! (True/False)",
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "noTrustedRoleSpecified": {
+                "title": "Trusted Role",
+                "description": "Please specify a role!",
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "maxFreeTrustedRoles": {
+                "description": "Your server is limited to __**{{FREE_MAX}}**__ trusted role!",
+                "footer": {
+                    "text": "To have up to {{PAID_MAX}} trusted roles get Birthday Bot Premium!"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "trustedRoleNoRoleOrPosition": {
+                "title": "Trusted Role Remove",
+                "description": "Please specify a position or role to remove!",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "trustedRoleInvalidRoleOrPosition": {
+                "title": "Trusted Role Remove - Invalid Role/Position",
+                "description": "Use `bday trustedRole list <type>` to view your server's trusted roles!",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidTrustedRole": {
+                "title": "Trusted Role Remove - Not Found",
+                "description": [
+                    "Trusted Role does not exist!",
+                    "View your server's trusted roles with `bday trustedRole list`!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "maxPaidTrustedRoles": {
+                "description": "Your server has reached the maximum trusted roles! (**{{PAID_MAX}}**)",
+                "color": "{{REF:colors.error}}"
+            },
             "warnBirthdayRoleSize": {
                 "title": "Birthday Role - Warning",
                 "description": [
@@ -465,12 +555,20 @@
                 "description": "Please input a timezone! To find your timezone please use `bday map`!",
                 "color": "{{REF:colors.error}}"
             },
+            "duplicateTrustedRole": {
+                "description": "{{ROLE}} is already a trusted role!",
+                "color": "{{REF:colors.error}}"
+            },
             "noTrueFalse": {
                 "description": "Please provide a value! (True/False)",
                 "color": "{{REF:colors.error}}"
             },
             "invalidRole": {
                 "description": "Invalid role!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noTrustedRoles": {
+                "description": "You server has not set any trusted roles set!",
                 "color": "{{REF:colors.error}}"
             },
             "noUserSpecified": {
@@ -499,6 +597,10 @@
             },
             "birthdayRoleManaged": {
                 "description": "Birthday Role cannot be managed by an external service!",
+                "color": "{{REF:colors.error}}"
+            },
+            "trustedRoleManaged": {
+                "description": "Trusted Role cannot be managed by an external service!",
                 "color": "{{REF:colors.error}}"
             },
             "invalidChannel": {
