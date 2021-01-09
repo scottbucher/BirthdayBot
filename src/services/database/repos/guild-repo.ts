@@ -134,6 +134,13 @@ export class GuildRepo {
         ]);
     }
 
+    public async updateRequireAllTrustedRoles(discordId: string, value: number): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateRequireAllTrustedRoles, [
+            discordId,
+            value,
+        ]);
+    }
+
     public async guildSetupMessage(
         discordId: string,
         messageTime: number,
