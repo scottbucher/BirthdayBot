@@ -187,13 +187,6 @@
                 "color": "{{REF:colors.success}}"
             },
 
-
-
-
-
-
-
-
             "birthdayChannelCreated": {
                 "description": "Successfully created the birthday channel {{CHANNEL}}!",
                 "color": "{{REF:colors.success}}"
@@ -230,16 +223,6 @@
                 "description": "Successfully set the server anniversary channel to {{CHANNEL}}",
                 "color": "{{REF:colors.success}}"
             },
-
-
-
-
-
-
-
-
-
-
 
             "nameFormatSet": {
                 "description": [
