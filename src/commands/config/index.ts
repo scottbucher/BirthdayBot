@@ -6,3 +6,4 @@ export { ConfigTrustedPreventsMsgSubCommand } from './config-trusted-prevents-ms
 export { ConfigTrustedPreventsRoleSubCommand } from './config-trusted-prevents-role-sub-command';
 export { ConfigTimezoneSubCommand } from './config-timezone-sub-command';
 export { ConfigUseTimezoneSubCommand } from './config-use-timezone-sub-command';
+export { ConfigRequireAllTrustedRolesSubCommand } from './config-require-all-trusted-roles-sub-command';

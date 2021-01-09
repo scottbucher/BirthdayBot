@@ -11,6 +11,7 @@ import {
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
+import { ConfigRequireAllTrustedRolesSubCommand } from './config/config-require-all-trusted-roles-sub-command';
 import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
@@ -34,7 +35,8 @@ export class ConfigCommand implements Command {
         private configTrustedPreventsMsgSubCommand: ConfigTrustedPreventsMsgSubCommand,
         private configTrustedPreventsRoleSubCommand: ConfigTrustedPreventsRoleSubCommand,
         private configTimezoneSubCommand: ConfigTimezoneSubCommand,
-        private configUseTimezoneSubCommand: ConfigUseTimezoneSubCommand
+        private configUseTimezoneSubCommand: ConfigUseTimezoneSubCommand,
+        private configRequireAllTrustedRolesSubCommand: ConfigRequireAllTrustedRolesSubCommand
     ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
@@ -43,47 +45,52 @@ export class ConfigCommand implements Command {
                 .setTitle('Invalid Usage!')
                 .setDescription(
                     `Please specify a config value to change!\n` +
-                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
+                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\`, \`requireAllTrustedRoles\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);
             return;
         }
+        let subCommand = args[2].toLowerCase();
+
         if (
-            args[2].toLowerCase() === 'birthdaymaster' ||
-            args[2].toLowerCase() === 'birthdaymasterrole' ||
-            args[2].toLowerCase() === 'master' ||
-            args[2].toLowerCase() === 'masterrole'
+            subCommand === 'birthdaymaster' ||
+            subCommand === 'birthdaymasterrole' ||
+            subCommand === 'master' ||
+            subCommand === 'masterrole'
         ) {
             this.configBirthdayMasterRole.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'channel') {
+        } else if (subCommand === 'channel') {
             this.configChannelSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'role') {
+        } else if (subCommand === 'role') {
             this.configRoleSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'nameformat') {
+        } else if (subCommand === 'nameformat') {
             this.configNameFormatSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'timezone') {
+        } else if (subCommand === 'timezone') {
             this.configTimezoneSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'usetimezone') {
+        } else if (subCommand === 'usetimezone') {
             this.configUseTimezoneSubCommand.execute(args, msg, channel);
         } else if (
-            args[2].toLowerCase() === 'trustedpreventsmsg' ||
-            args[2].toLowerCase() === 'trustedpreventsmessage' ||
-            args[2].toLowerCase() === 'trustedpreventmsg' ||
-            args[2].toLowerCase() === 'trustedpreventmessage'
+            subCommand === 'trustedpreventsmsg' ||
+            subCommand === 'trustedpreventsmessage' ||
+            subCommand === 'trustedpreventmsg' ||
+            subCommand === 'trustedpreventmessage'
         ) {
             this.configTrustedPreventsMsgSubCommand.execute(args, msg, channel);
-        } else if (
-            args[2].toLowerCase() === 'trustedpreventsrole' ||
-            args[2].toLowerCase() === 'trustedpreventrole'
-        ) {
+        } else if (subCommand === 'trustedpreventsrole' || subCommand === 'trustedpreventrole') {
             this.configTrustedPreventsRoleSubCommand.execute(args, msg, channel);
+        } else if (
+            subCommand === 'requirealltrustedroles' ||
+            subCommand === 'requirealltrusted' ||
+            subCommand === 'requireallroles'
+        ) {
+            this.configRequireAllTrustedRolesSubCommand.execute(args, msg, channel);
         } else {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')
                 .setDescription(
                     `Please specify a config value to change!\n` +
-                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\``
+                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\`, \`requireAllTrustedRoles\``
                 )
                 .setColor(Config.colors.error);
             await MessageUtils.send(channel, embed);

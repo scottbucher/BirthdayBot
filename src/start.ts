@@ -33,6 +33,7 @@ import {
     ConfigBirthdayMasterRoleSubCommand,
     ConfigChannelSubCommand,
     ConfigNameFormatSubCommand,
+    ConfigRequireAllTrustedRolesSubCommand,
     ConfigRoleSubCommand,
     ConfigTimezoneSubCommand,
     ConfigTrustedPreventsMsgSubCommand,
@@ -157,6 +158,9 @@ async function start(): Promise<void> {
     let configTrustedPreventRoleSubCommand = new ConfigTrustedPreventsRoleSubCommand(guildRepo);
     let configTimezoneSubCommand = new ConfigTimezoneSubCommand(guildRepo);
     let configUseTimezoneSubCommand = new ConfigUseTimezoneSubCommand(guildRepo);
+    let configRequireAllTrustedRolesSubCommand = new ConfigRequireAllTrustedRolesSubCommand(
+        guildRepo
+    );
 
     // Config Command
     let configCommand = new ConfigCommand(
@@ -167,7 +171,8 @@ async function start(): Promise<void> {
         configTrustedPreventMsgSubCommand,
         configTrustedPreventRoleSubCommand,
         configTimezoneSubCommand,
-        configUseTimezoneSubCommand
+        configUseTimezoneSubCommand,
+        configRequireAllTrustedRolesSubCommand
     );
 
     // Blacklist Sub Commands
