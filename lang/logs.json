@@ -31,6 +31,8 @@
         "guildLeave": "An error occurred while processing a guild leave.",
         "resolveGuild": "Guild '{GUILD_NAME}' ({GUILD_ID}) could not be resolved even though it is in the cache.",
         "message": "An error occurred while processing a message.",
+        "commandDm": "[{MESSAGE_ID}] An error occurred while executing the '{COMMAND_NAME}' command for user '{SENDER_TAG}' ({SENDER_ID}) in direct message.",
+        "commandGuild": "[{MESSAGE_ID}] An error occurred while executing the '{COMMAND_NAME}' command for user '{SENDER_TAG}' ({SENDER_ID}) in channel '{CHANNEL_NAME}' ({CHANNEL_ID}) in guild '{GUILD_NAME}' ({GUILD_ID}).",
         "birthdayJob": "An error occurred while running the birthday job.",
         "celebrateBirthday": "An error occurred while trying to celebrate birthdays for guild '{GUILD_NAME}' ({GUILD_ID}).",
         "messagePartial": "An error occurred while trying to fetch a message partial.",
