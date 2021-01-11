@@ -246,6 +246,7 @@ async function start(): Promise<void> {
 
     let postBirthdaysJob = new PostBirthdaysJob(
         Config.jobs.postBirthdays.schedule,
+        Config.jobs.postBirthdays.interval * 1000,
         client,
         guildRepo,
         userRepo,

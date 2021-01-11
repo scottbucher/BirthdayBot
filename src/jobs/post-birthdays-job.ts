@@ -13,6 +13,7 @@ let Logs = require('../../lang/logs.json');
 export class PostBirthdaysJob implements Job {
     constructor(
         public schedule: string,
+        public interval: number,
         private client: Client,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo,
@@ -141,7 +142,8 @@ export class PostBirthdaysJob implements Job {
                 );
                 continue;
             }
-            await TimeUtils.sleep(500);
+
+            await TimeUtils.sleep(this.interval);
         }
 
         // Wait for all birthday celebrations to finish
