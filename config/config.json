@@ -51,7 +51,8 @@
             "schedule": "0 */5 * * * *"
         },
         "postBirthdays": {
-            "schedule": "0 0 * * * *"
+            "schedule": "0 0 * * * *",
+            "interval": 0.6
         }
     },
     "experience": {
