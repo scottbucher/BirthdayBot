@@ -1,4 +1,12 @@
-import { Client, Constants, Guild, Message, MessageReaction, User } from 'discord.js';
+import {
+    Client,
+    Constants,
+    Guild,
+    Message,
+    MessageReaction,
+    RateLimitData,
+    User,
+} from 'discord.js';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 
 import { Job } from './jobs';
@@ -36,6 +44,9 @@ export class Bot {
             Constants.Events.MESSAGE_REACTION_ADD,
             (msgReaction: MessageReaction, reactor: User) =>
                 this.onReactionAdd(msgReaction, reactor)
+        );
+        this.client.on(Constants.Events.RATE_LIMIT, (rateLimitData: RateLimitData) =>
+            this.onRateLimit(rateLimitData)
         );
     }
 
@@ -107,5 +118,9 @@ export class Bot {
         } catch (error) {
             Logger.error(Logs.error.message, error);
         }
+    }
+
+    private async onRateLimit(rateLimitData: RateLimitData): Promise<void> {
+        Logger.error(Logs.error.rateLimit, rateLimitData);
     }
 }
