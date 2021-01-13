@@ -146,7 +146,20 @@
                 "description": "Type `bday message add <Type> <Message>` to add a custom message.",
                 "color": "{{REF:colors.error}}"
             },
+            "removeMessage": {
+                "title": "Remove Custom Message",
+                "description": "{{MESSAGE}}",
+                "footer": {
+                    "text": "{{REF:emotes.confirm}} Message Removed"
+                },
+                "color": "{{REF:colors.success}}"
+            },
             "birthdayExpired": {
+                "title": "Custom Message Clear - Expired",
+                "description": "Type `bday message clear <type>` to clear a custom message type.",
+                "color": "{{REF:colors.error}}"
+            },
+            "customMessageClearExpired": {
                 "title": "Birthday Set - Expired",
                 "description": "Type `bday set` to rerun the birthday setup.",
                 "color": "{{REF:colors.error}}"
@@ -357,6 +370,24 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "removeMessageInvalidType": {
+                "title": "Remove Custom Message",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "clearMessageInvalidType": {
+                "title": "Clear Custom Message",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
             "invalidMessageType": {
                 "title": "Custom Message List",
                 "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
@@ -540,6 +571,25 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "customMessageInvalidPosition": {
+                "title": "Remove Custom Message",
+                "description": "Use `bday message list <type>' to view your server's custom messages!",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "color": "{{REF:colors.error}}"
+            },
+            "customMessageInvalidMessageNumber": {
+                "title": "Remove Custom Message",
+                "description": [
+                    "Message number does not exist!",
+                    "View your server's custom messages with `bday message list <type>`!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "color": "{{REF:colors.error}}"
+            },
             "maxPaidTrustedRoles": {
                 "description": "Your server has reached the maximum trusted roles! (**{{PAID_MAX}}**)",
                 "color": "{{REF:colors.error}}"
@@ -599,12 +649,35 @@
                 "description": "You server has not set any trusted roles set!",
                 "color": "{{REF:colors.error}}"
             },
+            "noMessageNumer": {
+                "description": [
+                    "Please provide a message number!",
+                    "Find this using `bday message list <type>`!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noUserSpecificBirthdayMessages": {
+                "description": "This server doesn't have any user specific custom birthday messages!",
+                "color": "{{REF:colors.error}}"
+            },
             "noUserSpecified": {
                 "description": "Please specify a user!",
                 "color": "{{REF:colors.error}}"
             },
             "noUserFound": {
                 "description": "Could not find that user!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noBirthdayMessagesSet": {
+                "description": "Your server has not set any custom birthday messages.",
+                "color": "{{REF:colors.error}}"
+            },
+            "noMemberAnniversaryMessagesSet": {
+                "description": "Your server has not set any custom member anniversary messages.",
+                "color": "{{REF:colors.error}}"
+            },
+            "noServerAnniversaryMessagesSet": {
+                "description": "Your server has not set any custom server anniversary messages.",
                 "color": "{{REF:colors.error}}"
             },
             "cantBlacklistBot": {

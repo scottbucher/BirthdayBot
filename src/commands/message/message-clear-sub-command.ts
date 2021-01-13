@@ -8,6 +8,8 @@ import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'disco
 
 import { CustomMessageRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
@@ -17,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class MessageClearSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) {}
+    constructor(private customMessageRepo: CustomMessageRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -28,10 +30,7 @@ export class MessageClearSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                new MessageEmbed()
-                    .setTitle('Birthday Message Clear - Expired')
-                    .setDescription('Type `bday message clear` to clear the birthday messages.')
-                    .setColor(Config.colors.error)
+                Lang.getEmbed('results.birthdayExpired', LangCode.EN)
             );
         };
 
@@ -41,18 +40,11 @@ export class MessageClearSubCommand {
             type === 'member'
                 ? 'memberanniversary'
                 : type === 'server'
-                ? 'serveranniversary'
-                : type;
+                    ? 'serveranniversary'
+                    : type;
 
         if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
-            let embed = new MessageEmbed()
-                .setTitle('Clear Custom Message(s)')
-                .setDescription(
-                    `Please specify a message type! Accepted Values: \`birthday\`, \`memberAnniversary\`, \`serverAnniversary\``
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.clearMessageInvalidType', LangCode.EN));
             return;
         }
 
@@ -60,8 +52,8 @@ export class MessageClearSubCommand {
             type === 'birthday'
                 ? 'birthday'
                 : type === 'memberanniversary'
-                ? 'member anniversary'
-                : 'server anniversary';
+                    ? 'member anniversary'
+                    : 'server anniversary';
 
         let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
@@ -79,10 +71,8 @@ export class MessageClearSubCommand {
 
         confirmationEmbed
             .setDescription(
-                `Are you sure you want to clear __**${
-                    customMessages.customMessages.length
-                }**__ custom ${displayType} message${
-                    customMessages.customMessages.length === 1 ? '' : 's'
+                `Are you sure you want to clear __**${customMessages.customMessages.length
+                }**__ custom ${displayType} message${customMessages.customMessages.length === 1 ? '' : 's'
                 }?`
             )
             .setFooter('This action is irreversible!', msg.client.user.avatarURL())

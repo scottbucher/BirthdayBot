@@ -3,6 +3,8 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
@@ -16,24 +18,12 @@ export class MessageRemoveSubCommand {
             !type ||
             (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
         ) {
-            let embed = new MessageEmbed()
-                .setTitle('Remove Custom Message')
-                .setDescription(
-                    `Please specify a message type! Accepted Values: \`birthday\`, \`memberAnniversary\`, \`serverAnniversary\``
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.removeMessageInvalidType', LangCode.EN));
             return;
         }
 
         if (args.length < 5) {
-            let embed = new MessageEmbed()
-                .setDescription(
-                    'Please provide a message number!\nFind this using `bday message list <type>`!'
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noMessageNumer', LangCode.EN));
             return;
         }
 
@@ -55,12 +45,7 @@ export class MessageRemoveSubCommand {
                 );
 
                 if (!userMessages) {
-                    let embed = new MessageEmbed()
-                        .setDescription(
-                            `This server doesn't have any user specific custom birthday messages!`
-                        )
-                        .setColor(Config.colors.error);
-                    await MessageUtils.send(channel, embed);
+                    await MessageUtils.send(channel, Lang.getEmbed('validation.noUserSpecificBirthdayMessages', LangCode.EN));
                     return;
                 }
 
@@ -76,26 +61,13 @@ export class MessageRemoveSubCommand {
             try {
                 position = parseInt(args[4]);
             } catch (error) {
-                let embed = new MessageEmbed()
-                    .setTitle('Invalid position!')
-                    .setDescription(
-                        `Use \`bday message list <type>\` to view your server's custom messages!`
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(channel, Lang.getEmbed('validation.customMessageInvalidPosition', LangCode.EN));
                 return;
             }
         }
 
         if (!position) {
-            let embed = new MessageEmbed()
-                .setTitle('Remove Custom Message')
-                .setDescription(
-                    `Message number does not exist!\nView your server's custom messages with \`bday message list <type>\`!`
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN));
             return;
         }
 
@@ -111,14 +83,7 @@ export class MessageRemoveSubCommand {
             ));
 
         if (!message) {
-            let embed = new MessageEmbed()
-                .setTitle('Remove Custom Message')
-                .setDescription(
-                    `Message number does not exist!\nView your server's custom messages with \`bday message list <type>\`!`
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN));
             return;
         }
 
@@ -127,12 +92,6 @@ export class MessageRemoveSubCommand {
             ? await this.customMessageRepo.removeCustomMessageUser(msg.guild.id, position, type)
             : await this.customMessageRepo.removeCustomMessage(msg.guild.id, position, type);
 
-        let embed = new MessageEmbed()
-            .setTitle('Remove Custom Message')
-            .setDescription(message.Message)
-            .setFooter(`${Config.emotes.confirm} Message removed.`, msg.client.user.avatarURL())
-            .setTimestamp()
-            .setColor(Config.colors.success);
-        await MessageUtils.send(channel, embed);
+        await MessageUtils.send(channel, Lang.getEmbed('results.removeMessage', LangCode.EN, { MESSAGE: message.Message }));
     }
 }
