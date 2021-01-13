@@ -141,6 +141,11 @@
                 },
                 "timestamp": true
             },
+            "addMessageExpired": {
+                "title": "Add Custom Message - Expired",
+                "description": "Type `bday message add <Type> <Message>` to add a custom message.",
+                "color": "{{REF:colors.error}}"
+            },
             "birthdayExpired": {
                 "title": "Birthday Set - Expired",
                 "description": "Type `bday set` to rerun the birthday setup.",
@@ -298,7 +303,10 @@
         "validation": {
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": ["Please specify an option!", "{{OPTIONS}}"],
+                "description": [
+                    "Please specify an option!",
+                    "{{OPTIONS}}"
+                ],
                 "color": "{{REF:colors.error}}"
             },
             "outOfAttempts": {
@@ -336,6 +344,15 @@
                 "description": "Invalid time zone! Do not use timezone abbreviations!",
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "addMessageInvalidType": {
+                "title": "Add Custom Message",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -527,6 +544,17 @@
                 "description": "Your server has reached the maximum trusted roles! (**{{PAID_MAX}}**)",
                 "color": "{{REF:colors.error}}"
             },
+            "maxCustomMessageSize": {
+                "description": "Custom Messages are maxed at {{MAX_SIZE}} characters!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noUserPlaceholder": {
+                "description": [
+                    "Please include the `{{REF:placeHolder.users}}` placeholder somewhere in the message. This indicates where birthday usernames will appear.",
+                    "Ex: `bday message add birthday Happy Birthday {{REF:placeHodlers.users}}!`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
             "warnBirthdayRoleSize": {
                 "title": "Birthday Role - Warning",
                 "description": [
@@ -581,6 +609,14 @@
             },
             "cantBlacklistBot": {
                 "description": "You cannot blacklist a bot!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noUserMessageForBot": {
+                "description": "You cannot set a user-specific message for a bot!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noMessage": {
+                "description": "Please provide a message!",
                 "color": "{{REF:colors.error}}"
             },
             "userAlreadyInBlacklist": {
@@ -638,6 +674,18 @@
                 "color": "{{REF:colors.error}}"
             }
         },
+        "premiumPrompts": {},
+        "premiumRequired": {
+            "userSpecificMessages": {
+                "title": "{{REF:terms.premiumRequired}}",
+                "description": "User-specific birthday messages are a premium feature! View information about **{{REF:bot.name}} Premium** using `bday premium`!",
+                "footer": {
+                    "text": "{{REF:footers.whyPremium}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            }
+        },
         "errors": {
             "command": {
                 "description": "Something went wrong!",
@@ -668,7 +716,10 @@
                     },
                     {
                         "name": "Links",
-                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
+                        "value": [
+                            "{{REF:link.supportEmbed}}",
+                            "{{REF:link.inviteEmbed}}"
+                        ]
                     }
                 ]
             }
@@ -695,11 +746,16 @@
                     },
                     {
                         "name": "Created With",
-                        "value": ["{{REF:link.templateEmbed}}"]
+                        "value": [
+                            "{{REF:link.templateEmbed}}"
+                        ]
                     },
                     {
                         "name": "Links",
-                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
+                        "value": [
+                            "{{REF:link.supportEmbed}}",
+                            "{{REF:link.inviteEmbed}}"
+                        ]
                     }
                 ]
             }
@@ -916,7 +972,8 @@
             "expire": "This message expires in 2 minutes!",
             "tryAgain": "Please check above and try again!",
             "actionFailed": "{{REF:emotes.deny}} Action Failed.",
-            "irreversible": "This action is irreversible!"
+            "irreversible": "This action is irreversible!",
+            "whyPremium": "Premium helps us support and maintain the bot!"
         },
         "prompts": {
             "setupForUser": "Setup For {{TARGET}} - {{VALUE}}",
@@ -975,7 +1032,16 @@
             "memberAnniversaryChannelTitle": "{{REF:emotes.party}} member anniversaries",
             "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
             "serverAnniversaryChannelTitle": "{{REF:emotes.party}} server anniversaries",
-            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
+            "premiumRequired": "Premium Required!"
+        },
+        "placeHolders": {
+            "users": "<Users>",
+            "usersRegex": "/@users?|<users?>|{users?}/gi",
+            "years": "<Years>",
+            "yearsRegex": "/@years?|<years?>|{years?}/gi",
+            "server": "<Server>",
+            "serverRegex": "/@server?|<server?>|{server?}/gi"
         },
         "boolean": {
             "yes": "Yes",

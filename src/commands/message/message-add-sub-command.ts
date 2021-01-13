@@ -9,6 +9,8 @@ import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'disco
 import { ColorUtils } from '../../utils/color-utils';
 import { CustomMessageRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
@@ -20,7 +22,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
 export class MessageAddSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) {}
+    constructor(private customMessageRepo: CustomMessageRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -31,12 +33,7 @@ export class MessageAddSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                new MessageEmbed()
-                    .setTitle('Add Custom Message - Expired')
-                    .setDescription(
-                        'Type `bday message add <Type> <Message>` to add a custom message.'
-                    )
-                    .setColor(Config.colors.error)
+                Lang.getEmbed('results.addMessageExpired', LangCode.EN)
             );
         };
 
@@ -46,22 +43,12 @@ export class MessageAddSubCommand {
             !type ||
             (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
         ) {
-            let embed = new MessageEmbed()
-                .setTitle('Add Custom Message')
-                .setDescription(
-                    `Please specify a message type! Accepted Values: \`birthday\`, \`memberAnniversary\`, \`serverAnniversary\``
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.addMessageInvalidType', LangCode.EN));
             return;
         }
 
         if (args.length < 5) {
-            let embed = new MessageEmbed()
-                .setDescription('Please provide a message!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noMessage', LangCode.EN));
             return;
         }
 
@@ -84,63 +71,34 @@ export class MessageAddSubCommand {
             // Did we find a user?
             if (target) {
                 if (target.bot) {
-                    let embed = new MessageEmbed()
-                        .setTitle('Invalid Usage!')
-                        .setDescription('You cannot set a user-specific message for a bot!')
-                        .setColor(Config.colors.error);
-                    await MessageUtils.send(channel, embed);
+                    await MessageUtils.send(channel, Lang.getEmbed('validation.noUserMessageForBot', LangCode.EN));
                     return;
                 } else if (!hasPremium) {
-                    let embed = new MessageEmbed()
-                        .setTitle('Premium Required!')
-                        .setDescription(
-                            'User-specific birthday messages are a premium feature! View information about **Birthday Bot Premium** using `bday premium`!'
-                        )
-                        .setFooter(
-                            'Premium helps us support and maintain the bot!',
-                            msg.client.user.avatarURL()
-                        )
-                        .setTimestamp()
-                        .setColor(Config.colors.default);
-                    await MessageUtils.send(channel, embed);
+                    await MessageUtils.send(channel, Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN));
                     return;
                 }
-            }
-
-            // Compile the birthday message
-            if (target) {
+                // Compile the birthday message
+                // THIS NEEDS LOTS OF TESTING WITH DIFFERENT LANGUAGES, COULD BREAK, (might not tho)
                 // If the input of the target WASN'T a @mention, replace it with the <@USER_ID> format so the substring works universally
                 message = msg.content
                     .replace(args[4], target.toString() + ' ')
                     .substring(msg.content.indexOf(type) + type.length + 23)
-                    .replace(/@users?|<users?>|{users?}/gi, '<Users>');
+                    .replace(Lang.getRef('placeHolders.usersRegex', LangCode.EN), '<Users>');
             } else {
+                // Compile the birthday message
                 // Basic non user-specific custom message
                 message = msg.content
-                    .substring(msg.content.indexOf(type) + +type.length + 1)
-                    .replace(/@users?|<users?>|{users?}/gi, '<Users>');
+                    .substring(msg.content.indexOf(type) + type.length + 1)
+                    .replace(Lang.getRef('placeHolders.usersRegex', LangCode.EN), '<Users>');
             }
 
             if (message.length > Config.validation.message.maxLength) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        `Custom Messages are maxed at ${Config.validation.message.maxLength.toLocaleString()} characters!`
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(channel, Lang.getEmbed('validation.maxCustomMessageSize', LangCode.EN, { MAX_SIZE: Config.validation.message.maxLength.toString() }));
                 return;
             }
 
             if (!message.includes('<Users>')) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        '' +
-                            'Please include the `<Users>` placeholder somewhere in the message. This indicates where birthday usernames will appear.' +
-                            '\n' +
-                            '\nEx: `bday message add birthday Happy Birthday <Users>!`'
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(channel, Lang.getEmbed('validation.noUserPlaceholder', LangCode.EN));
                 return;
             }
 
@@ -151,7 +109,7 @@ export class MessageAddSubCommand {
             );
 
             let globalMessageCount = birthdayMessages.filter(
-                message => message.UserDiscordId === '0'
+                message => message.UserDiscordId === '0' && message.Type === type
             ).length;
 
             if (customMessages) {
@@ -195,8 +153,8 @@ export class MessageAddSubCommand {
                             .setTitle('Caution')
                             .setDescription(
                                 `There is already a custom message set for this user, would you like to overwrite it?` +
-                                    `\n\n**Current Message**: ${userMessage[0].Message}` +
-                                    `\n\n**New Message**: ${message}`
+                                `\n\n**Current Message**: ${userMessage[0].Message}` +
+                                `\n\n**New Message**: ${message}`
                             )
                             .setFooter('This action is irreversible!', msg.client.user.avatarURL())
                             .setColor(Config.colors.warning);
@@ -273,10 +231,10 @@ export class MessageAddSubCommand {
                     .setTitle('Invalid Message')
                     .setDescription(
                         '' +
-                            'Please include the `<Users>` and `<Years>` placeholder somewhere in the message. This indicates where anniversary usernames and the year will appear.' +
-                            '\n' +
-                            '\nEx: `bday message memberAnniversary <Users> is celebrating <Years> year(s) in the discord!`' +
-                            '\n\nNote: The `<Years>` placeholder is just a number!'
+                        'Please include the `<Users>` and `<Years>` placeholder somewhere in the message. This indicates where anniversary usernames and the year will appear.' +
+                        '\n' +
+                        '\nEx: `bday message memberAnniversary <Users> is celebrating <Years> year(s) in the discord!`' +
+                        '\n\nNote: The `<Years>` placeholder is just a number!'
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                     .setColor(Config.colors.error);
@@ -297,7 +255,7 @@ export class MessageAddSubCommand {
             if (customMessages) {
                 if (
                     globalMessageCount >=
-                        Config.validation.message.maxCount.memberAnniversary.free &&
+                    Config.validation.message.maxCount.memberAnniversary.free &&
                     !hasPremium
                 ) {
                     let embed = new MessageEmbed()
@@ -360,11 +318,11 @@ export class MessageAddSubCommand {
                     .setTitle('Invalid Message')
                     .setDescription(
                         '' +
-                            'Please include the `<Years>` placeholder somewhere in the message. This indicates where anniversary year will appear.' +
-                            '\n' +
-                            '\nEx: `bday message add serverAnniversary <Server> is now <Years> years old!`' +
-                            '\n\nNote: The `<Years>` placeholder is just a number!' +
-                            `\n\nNote: The \`<Server>\` placeholder is not required and displays the server's name!`
+                        'Please include the `<Years>` placeholder somewhere in the message. This indicates where anniversary year will appear.' +
+                        '\n' +
+                        '\nEx: `bday message add serverAnniversary <Server> is now <Years> years old!`' +
+                        '\n\nNote: The `<Years>` placeholder is just a number!' +
+                        `\n\nNote: The \`<Server>\` placeholder is not required and displays the server's name!`
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                     .setColor(Config.colors.error);
@@ -385,7 +343,7 @@ export class MessageAddSubCommand {
             if (customMessages) {
                 if (
                     globalMessageCount >=
-                        Config.validation.message.maxCount.serverAnniversary.free &&
+                    Config.validation.message.maxCount.serverAnniversary.free &&
                     !hasPremium
                 ) {
                     let embed = new MessageEmbed()
@@ -437,7 +395,7 @@ export class MessageAddSubCommand {
                 .setTitle('Birthday Message Color Selection')
                 .setDescription(
                     `Please input the color you would like your message. [(?)](${Config.links.docs}/faq#what-is-a-message-embed-color)` +
-                        `\nBoth color names and hex values are accepted.`
+                    `\nBoth color names and hex values are accepted.`
                 )
                 .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
                 .setColor(Config.colors.default)
@@ -459,8 +417,8 @@ export class MessageAddSubCommand {
                             .setTitle('Invalid Color')
                             .setDescription(
                                 `Please provide a valid hex color! Find hex colors [here](${Config.links.colors}).` +
-                                    '\n\nExample: `Orange` or `Crimson`' +
-                                    '\nExample: `#4EEFFF` or `4EEFFF`'
+                                '\n\nExample: `Orange` or `Crimson`' +
+                                '\nExample: `#4EEFFF` or `4EEFFF`'
                             )
                             .setTimestamp()
                             .setColor(Config.colors.error);
@@ -486,9 +444,9 @@ export class MessageAddSubCommand {
             .setTitle('Custom Message - Embedded')
             .setDescription(
                 `Should this message be embedded? [(?)](${Config.links.docs}/faq#what-is-an-embed)` +
-                    `\nHint: This message is embed! Non-embedded messages are just plain text.` +
-                    `\n\nTrue: ${Config.emotes.confirm}` +
-                    `\nFalse: ${Config.emotes.deny}`
+                `\nHint: This message is embed! Non-embedded messages are just plain text.` +
+                `\n\nTrue: ${Config.emotes.confirm}` +
+                `\nFalse: ${Config.emotes.deny}`
             )
             .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
             .setColor(Config.colors.default)
@@ -549,8 +507,8 @@ export class MessageAddSubCommand {
                 embed.addField(
                     'Actions',
                     '' +
-                        '`bday message list [page]` - List all custom birthday messages.' +
-                        '\n`bday message test <position> [user count]` - Test a birthday message.'
+                    '`bday message list [page]` - List all custom birthday messages.' +
+                    '\n`bday message test <position> [user count]` - Test a birthday message.'
                 );
 
                 description = `Successfully added the birthday message:\n\n\`${message}\`\n\u200b`;
@@ -558,8 +516,8 @@ export class MessageAddSubCommand {
                 embed.addField(
                     'Actions',
                     '' +
-                        '`bday message list user [page]` - List all user birthday messages.' +
-                        '\n`bday message test <user>` - Test a user birthday message.'
+                    '`bday message list user [page]` - List all user birthday messages.' +
+                    '\n`bday message test <user>` - Test a user birthday message.'
                 );
                 description = `Successfully added the user birthday message for ${target.toString()}:\n\n\`${message}\`\n\u200b`;
             }
@@ -567,16 +525,16 @@ export class MessageAddSubCommand {
             embed.addField(
                 'Actions',
                 '' +
-                    '`bday message list memberAnniversary [page]` - List all custom member anniversary messages.' +
-                    '\n`bday message test memberAnniversary <position> [user count]` - Test a member anniversary message.'
+                '`bday message list memberAnniversary [page]` - List all custom member anniversary messages.' +
+                '\n`bday message test memberAnniversary <position> [user count]` - Test a member anniversary message.'
             );
             description = `Successfully added the member anniversary message:\n\n\`${message}\`\n\u200b`;
         } else if (type === 'serveranniversary') {
             embed.addField(
                 'Actions',
                 '' +
-                    '`bday message list serverAnniversary [page]` - List all custom server anniversary messages.' +
-                    '\n`bday message test serverAnniversary <position> [user count]` - Test a server anniversary message.'
+                '`bday message list serverAnniversary [page]` - List all custom server anniversary messages.' +
+                '\n`bday message test serverAnniversary <position> [user count]` - Test a server anniversary message.'
             );
             description = `Successfully added the server anniversary message:\n\n\`${message}\`\n\u200b`;
         }
