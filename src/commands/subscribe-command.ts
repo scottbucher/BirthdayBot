@@ -21,7 +21,11 @@ export class SubscribeCommand implements Command {
 
     constructor(private subscriptionService: SubscriptionService) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         if (!Config.payments.enabled) {
             let embed = new MessageEmbed()
                 .setTitle('Birthday Bot Premium')

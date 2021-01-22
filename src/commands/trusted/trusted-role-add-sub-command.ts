@@ -1,4 +1,4 @@
-import { Client, Message, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Message, Role, TextChannel } from 'discord.js';
 
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
@@ -12,7 +12,12 @@ const errorEmbed = Lang.getEmbed('validation.noTrustedRoleSpecified', LangCode.E
 export class TrustedRoleAddSubCommand {
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         if (args.length === 3) {
             await MessageUtils.send(channel, errorEmbed);
             return;

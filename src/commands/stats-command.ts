@@ -20,7 +20,11 @@ export class StatsCommand implements Command {
 
     constructor(private userRepo: UserRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         let today = moment().format('MM-DD');
         let month = moment().format('MM');
         let totalBirthdays = await this.userRepo.getUserCount();

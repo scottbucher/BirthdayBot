@@ -4,7 +4,7 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
+import { Message, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
@@ -21,7 +21,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 export class TrustedRoleClearSubCommand {
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
             [Config.prefix, ...Config.stopCommands].includes(

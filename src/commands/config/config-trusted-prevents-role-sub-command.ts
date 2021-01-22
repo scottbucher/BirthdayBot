@@ -1,18 +1,16 @@
 import { FormatUtils, MessageUtils } from '../../utils';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-
-let Config = require('../../../config/config.json');
 
 const errorEmbed = Lang.getEmbed('validation.noTrueFalse', LangCode.EN);
 
 export class ConfigTrustedPreventsRoleSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
             await MessageUtils.send(channel, errorEmbed);
             return;

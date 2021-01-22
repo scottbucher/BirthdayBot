@@ -39,7 +39,12 @@ export class ConfigCommand implements Command {
         private configRequireAllTrustedRolesSubCommand: ConfigRequireAllTrustedRolesSubCommand
     ) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         if (args.length === 2) {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')

@@ -25,7 +25,7 @@ export class SetupCommand implements Command {
         private setupTrusted: SetupTrusted
     ) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // Check for permissions
         if (!PermissionUtils.canReact(channel)) {
             let embed = new MessageEmbed()

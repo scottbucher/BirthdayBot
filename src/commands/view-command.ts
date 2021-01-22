@@ -20,7 +20,11 @@ export class ViewCommand implements Command {
 
     constructor(private userRepo: UserRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         let target: User;
 
         if (args.length === 3) {

@@ -45,7 +45,11 @@ export class SetCommand implements Command {
 
     constructor(private guildRepo: GuildRepo, private userRepo: UserRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
             [Config.prefix, ...Config.stopCommands].includes(
