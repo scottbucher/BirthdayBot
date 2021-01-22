@@ -14,7 +14,7 @@ export class Language {
         [key in LangCode]: LanguageData;
     } = {
         EN: {
-            display(langCode: LangCode) {
+            display(langCode: LangCode): string {
                 return Lang.getRef('languageName', langCode);
             },
             regex: /\b(en|english)\b/i,

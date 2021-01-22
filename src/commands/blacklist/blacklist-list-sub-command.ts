@@ -10,7 +10,7 @@ let Config = require('../../../config/config.json');
 export class BlacklistListSubCommand {
     constructor(private blacklistRepo: BlacklistRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let page = 1;
 
         if (args[3]) {

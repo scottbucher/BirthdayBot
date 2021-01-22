@@ -1,18 +1,16 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 import { MessageUtils } from '../../utils';
 
-let Config = require('../../../config/config.json');
-
 const errorEmbed = Lang.getEmbed('validation.invalidUseTimezoneAction', LangCode.EN);
 
 export class ConfigUseTimezoneSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
             await MessageUtils.send(channel, errorEmbed);
             return;

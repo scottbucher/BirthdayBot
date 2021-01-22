@@ -8,7 +8,7 @@ let Config = require('../../../config/config.json');
 export class MessageTimeSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length < 4) {
             let embed = new MessageEmbed()
                 .setDescription('Please provide a time! (0-23)')

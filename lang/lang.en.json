@@ -316,10 +316,7 @@
         "validation": {
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": [
-                    "Please specify an option!",
-                    "{{OPTIONS}}"
-                ],
+                "description": ["Please specify an option!", "{{OPTIONS}}"],
                 "color": "{{REF:colors.error}}"
             },
             "outOfAttempts": {
@@ -789,10 +786,7 @@
                     },
                     {
                         "name": "Links",
-                        "value": [
-                            "{{REF:link.supportEmbed}}",
-                            "{{REF:link.inviteEmbed}}"
-                        ]
+                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
                     }
                 ]
             }
@@ -819,16 +813,11 @@
                     },
                     {
                         "name": "Created With",
-                        "value": [
-                            "{{REF:link.templateEmbed}}"
-                        ]
+                        "value": ["{{REF:link.templateEmbed}}"]
                     },
                     {
                         "name": "Links",
-                        "value": [
-                            "{{REF:link.supportEmbed}}",
-                            "{{REF:link.inviteEmbed}}"
-                        ]
+                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
                     }
                 ]
             }

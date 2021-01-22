@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 export class SetupRequired {
     constructor(private guildRepo: GuildRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let guild = channel.guild;
         let botUser = guild.client.user;
         let stopFilter: MessageFilter = (nextMsg: Message) =>

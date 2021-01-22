@@ -10,7 +10,12 @@ let Config = require('../../../config/config.json');
 export class TrustedRoleListSubCommand {
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         let page = 1;
 
         if (args[3]) {

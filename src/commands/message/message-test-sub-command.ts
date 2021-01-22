@@ -7,7 +7,7 @@ let Config = require('../../../config/config.json');
 export class MessageTestSubCommand {
     constructor(private guildRepo: GuildRepo, private customMessageRepo: CustomMessageRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let userCount = 1;
 
         if (args.length < 4) {

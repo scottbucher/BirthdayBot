@@ -20,7 +20,11 @@ export class NextCommand implements Command {
 
     constructor(private userRepo: UserRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
 
         let userDatas = await this.userRepo.getAllUsers(users);

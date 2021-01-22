@@ -1,18 +1,16 @@
 import { InvalidUtils, MessageUtils } from '../../utils';
-import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Message, Role, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-
-let Config = require('../../../config/config.json');
 
 const errorEmbed = Lang.getEmbed('validation.invalidMasterAction', LangCode.EN);
 
 export class ConfigBirthdayMasterRoleSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
             await MessageUtils.send(channel, errorEmbed);
             return;

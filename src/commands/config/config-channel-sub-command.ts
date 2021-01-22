@@ -1,18 +1,16 @@
 import { InvalidUtils, MessageUtils, PermissionUtils } from '../../utils';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-
-let Config = require('../../../config/config.json');
 
 const errorEmbed = Lang.getEmbed('validation.invalidChannelAction', LangCode.EN);
 
 export class ConfigChannelSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let type = args[3]?.toLowerCase();
 
         type =

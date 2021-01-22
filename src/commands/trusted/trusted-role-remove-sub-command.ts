@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Message, Role, TextChannel } from 'discord.js';
 
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
@@ -6,14 +6,12 @@ import { MessageUtils } from '../../utils';
 import { TrustedRole } from '../../models/database';
 import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo';
 
-let Config = require('../../../config/config.json');
-
 const errorEmbed = Lang.getEmbed('validation.trustedRoleNoRoleOrPosition', LangCode.EN);
 
 export class TrustedRoleRemoveSubCommand {
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // See if a role was specified
         let trustedRole: Role = msg.mentions.roles.first();
         let position: number;

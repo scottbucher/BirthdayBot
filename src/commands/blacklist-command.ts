@@ -27,7 +27,7 @@ export class BlacklistCommand implements Command {
         private blacklistListSubCommand: BlacklistListSubCommand
     ) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 2) {
             let embed = new MessageEmbed()
                 .setTitle('Invalid Usage!')

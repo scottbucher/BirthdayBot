@@ -24,7 +24,11 @@ export class MapCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         let embed = new MessageEmbed()
             .setDescription(
                 `[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](${Config.links.map})!` +

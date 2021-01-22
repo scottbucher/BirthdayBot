@@ -10,7 +10,12 @@ let Config = require('../../../config/config.json');
 export class MessageListSubCommand {
     constructor(private customMessageRepo: CustomMessageRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         let page = 1;
 
         if (args[3]) {

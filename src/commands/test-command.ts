@@ -28,7 +28,7 @@ export class TestCommand implements Command {
         private blacklistRepo: BlacklistRepo
     ) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let guild = msg.guild;
 
         let guildData = await this.guildRepo.getGuild(msg.guild.id);

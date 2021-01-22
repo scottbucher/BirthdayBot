@@ -19,19 +19,16 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class MessageClearSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) { }
+    constructor(private customMessageRepo: CustomMessageRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
             [Config.prefix, ...Config.stopCommands].includes(
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.birthdayExpired', LangCode.EN)
-            );
+            await MessageUtils.send(channel, Lang.getEmbed('results.birthdayExpired', LangCode.EN));
         };
 
         let type = args[3]?.toLowerCase();
@@ -40,11 +37,14 @@ export class MessageClearSubCommand {
             type === 'member'
                 ? 'memberanniversary'
                 : type === 'server'
-                    ? 'serveranniversary'
-                    : type;
+                ? 'serveranniversary'
+                : type;
 
         if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.clearMessageInvalidType', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.clearMessageInvalidType', LangCode.EN)
+            );
             return;
         }
 
@@ -52,8 +52,8 @@ export class MessageClearSubCommand {
             type === 'birthday'
                 ? 'birthday'
                 : type === 'memberanniversary'
-                    ? 'member anniversary'
-                    : 'server anniversary';
+                ? 'member anniversary'
+                : 'server anniversary';
 
         let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
@@ -71,8 +71,10 @@ export class MessageClearSubCommand {
 
         confirmationEmbed
             .setDescription(
-                `Are you sure you want to clear __**${customMessages.customMessages.length
-                }**__ custom ${displayType} message${customMessages.customMessages.length === 1 ? '' : 's'
+                `Are you sure you want to clear __**${
+                    customMessages.customMessages.length
+                }**__ custom ${displayType} message${
+                    customMessages.customMessages.length === 1 ? '' : 's'
                 }?`
             )
             .setFooter('This action is irreversible!', msg.client.user.avatarURL())

@@ -16,7 +16,11 @@ export class InviteCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         let embed = new MessageEmbed()
             .setDescription(
                 `Invite ${msg.client.user.toString()} to your server [here](${

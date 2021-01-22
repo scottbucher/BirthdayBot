@@ -22,9 +22,14 @@ const COLLECT_OPTIONS: CollectOptions = {
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
 export class MessageAddSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) { }
+    constructor(private customMessageRepo: CustomMessageRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
             [Config.prefix, ...Config.stopCommands].includes(
@@ -43,7 +48,10 @@ export class MessageAddSubCommand {
             !type ||
             (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
         ) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.addMessageInvalidType', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.addMessageInvalidType', LangCode.EN)
+            );
             return;
         }
 
@@ -71,10 +79,16 @@ export class MessageAddSubCommand {
             // Did we find a user?
             if (target) {
                 if (target.bot) {
-                    await MessageUtils.send(channel, Lang.getEmbed('validation.noUserMessageForBot', LangCode.EN));
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.noUserMessageForBot', LangCode.EN)
+                    );
                     return;
                 } else if (!hasPremium) {
-                    await MessageUtils.send(channel, Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN));
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN)
+                    );
                     return;
                 }
                 // Compile the birthday message
@@ -93,12 +107,20 @@ export class MessageAddSubCommand {
             }
 
             if (message.length > Config.validation.message.maxLength) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.maxCustomMessageSize', LangCode.EN, { MAX_SIZE: Config.validation.message.maxLength.toString() }));
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.maxCustomMessageSize', LangCode.EN, {
+                        MAX_SIZE: Config.validation.message.maxLength.toString(),
+                    })
+                );
                 return;
             }
 
             if (!message.includes('<Users>')) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.noUserPlaceholder', LangCode.EN));
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.noUserPlaceholder', LangCode.EN)
+                );
                 return;
             }
 
@@ -153,8 +175,8 @@ export class MessageAddSubCommand {
                             .setTitle('Caution')
                             .setDescription(
                                 `There is already a custom message set for this user, would you like to overwrite it?` +
-                                `\n\n**Current Message**: ${userMessage[0].Message}` +
-                                `\n\n**New Message**: ${message}`
+                                    `\n\n**Current Message**: ${userMessage[0].Message}` +
+                                    `\n\n**New Message**: ${message}`
                             )
                             .setFooter('This action is irreversible!', msg.client.user.avatarURL())
                             .setColor(Config.colors.warning);
@@ -231,10 +253,10 @@ export class MessageAddSubCommand {
                     .setTitle('Invalid Message')
                     .setDescription(
                         '' +
-                        'Please include the `<Users>` and `<Years>` placeholder somewhere in the message. This indicates where anniversary usernames and the year will appear.' +
-                        '\n' +
-                        '\nEx: `bday message memberAnniversary <Users> is celebrating <Years> year(s) in the discord!`' +
-                        '\n\nNote: The `<Years>` placeholder is just a number!'
+                            'Please include the `<Users>` and `<Years>` placeholder somewhere in the message. This indicates where anniversary usernames and the year will appear.' +
+                            '\n' +
+                            '\nEx: `bday message memberAnniversary <Users> is celebrating <Years> year(s) in the discord!`' +
+                            '\n\nNote: The `<Years>` placeholder is just a number!'
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                     .setColor(Config.colors.error);
@@ -255,7 +277,7 @@ export class MessageAddSubCommand {
             if (customMessages) {
                 if (
                     globalMessageCount >=
-                    Config.validation.message.maxCount.memberAnniversary.free &&
+                        Config.validation.message.maxCount.memberAnniversary.free &&
                     !hasPremium
                 ) {
                     let embed = new MessageEmbed()
@@ -318,11 +340,11 @@ export class MessageAddSubCommand {
                     .setTitle('Invalid Message')
                     .setDescription(
                         '' +
-                        'Please include the `<Years>` placeholder somewhere in the message. This indicates where anniversary year will appear.' +
-                        '\n' +
-                        '\nEx: `bday message add serverAnniversary <Server> is now <Years> years old!`' +
-                        '\n\nNote: The `<Years>` placeholder is just a number!' +
-                        `\n\nNote: The \`<Server>\` placeholder is not required and displays the server's name!`
+                            'Please include the `<Years>` placeholder somewhere in the message. This indicates where anniversary year will appear.' +
+                            '\n' +
+                            '\nEx: `bday message add serverAnniversary <Server> is now <Years> years old!`' +
+                            '\n\nNote: The `<Years>` placeholder is just a number!' +
+                            `\n\nNote: The \`<Server>\` placeholder is not required and displays the server's name!`
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                     .setColor(Config.colors.error);
@@ -343,7 +365,7 @@ export class MessageAddSubCommand {
             if (customMessages) {
                 if (
                     globalMessageCount >=
-                    Config.validation.message.maxCount.serverAnniversary.free &&
+                        Config.validation.message.maxCount.serverAnniversary.free &&
                     !hasPremium
                 ) {
                     let embed = new MessageEmbed()
@@ -395,7 +417,7 @@ export class MessageAddSubCommand {
                 .setTitle('Birthday Message Color Selection')
                 .setDescription(
                     `Please input the color you would like your message. [(?)](${Config.links.docs}/faq#what-is-a-message-embed-color)` +
-                    `\nBoth color names and hex values are accepted.`
+                        `\nBoth color names and hex values are accepted.`
                 )
                 .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
                 .setColor(Config.colors.default)
@@ -417,8 +439,8 @@ export class MessageAddSubCommand {
                             .setTitle('Invalid Color')
                             .setDescription(
                                 `Please provide a valid hex color! Find hex colors [here](${Config.links.colors}).` +
-                                '\n\nExample: `Orange` or `Crimson`' +
-                                '\nExample: `#4EEFFF` or `4EEFFF`'
+                                    '\n\nExample: `Orange` or `Crimson`' +
+                                    '\nExample: `#4EEFFF` or `4EEFFF`'
                             )
                             .setTimestamp()
                             .setColor(Config.colors.error);
@@ -444,9 +466,9 @@ export class MessageAddSubCommand {
             .setTitle('Custom Message - Embedded')
             .setDescription(
                 `Should this message be embedded? [(?)](${Config.links.docs}/faq#what-is-an-embed)` +
-                `\nHint: This message is embed! Non-embedded messages are just plain text.` +
-                `\n\nTrue: ${Config.emotes.confirm}` +
-                `\nFalse: ${Config.emotes.deny}`
+                    `\nHint: This message is embed! Non-embedded messages are just plain text.` +
+                    `\n\nTrue: ${Config.emotes.confirm}` +
+                    `\nFalse: ${Config.emotes.deny}`
             )
             .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
             .setColor(Config.colors.default)
@@ -507,8 +529,8 @@ export class MessageAddSubCommand {
                 embed.addField(
                     'Actions',
                     '' +
-                    '`bday message list [page]` - List all custom birthday messages.' +
-                    '\n`bday message test <position> [user count]` - Test a birthday message.'
+                        '`bday message list [page]` - List all custom birthday messages.' +
+                        '\n`bday message test <position> [user count]` - Test a birthday message.'
                 );
 
                 description = `Successfully added the birthday message:\n\n\`${message}\`\n\u200b`;
@@ -516,8 +538,8 @@ export class MessageAddSubCommand {
                 embed.addField(
                     'Actions',
                     '' +
-                    '`bday message list user [page]` - List all user birthday messages.' +
-                    '\n`bday message test <user>` - Test a user birthday message.'
+                        '`bday message list user [page]` - List all user birthday messages.' +
+                        '\n`bday message test <user>` - Test a user birthday message.'
                 );
                 description = `Successfully added the user birthday message for ${target.toString()}:\n\n\`${message}\`\n\u200b`;
             }
@@ -525,16 +547,16 @@ export class MessageAddSubCommand {
             embed.addField(
                 'Actions',
                 '' +
-                '`bday message list memberAnniversary [page]` - List all custom member anniversary messages.' +
-                '\n`bday message test memberAnniversary <position> [user count]` - Test a member anniversary message.'
+                    '`bday message list memberAnniversary [page]` - List all custom member anniversary messages.' +
+                    '\n`bday message test memberAnniversary <position> [user count]` - Test a member anniversary message.'
             );
             description = `Successfully added the member anniversary message:\n\n\`${message}\`\n\u200b`;
         } else if (type === 'serveranniversary') {
             embed.addField(
                 'Actions',
                 '' +
-                '`bday message list serverAnniversary [page]` - List all custom server anniversary messages.' +
-                '\n`bday message test serverAnniversary <position> [user count]` - Test a server anniversary message.'
+                    '`bday message list serverAnniversary [page]` - List all custom server anniversary messages.' +
+                    '\n`bday message test serverAnniversary <position> [user count]` - Test a server anniversary message.'
             );
             description = `Successfully added the server anniversary message:\n\n\`${message}\`\n\u200b`;
         }

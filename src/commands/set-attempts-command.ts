@@ -19,7 +19,7 @@ export class SetAttemptsCommand implements Command {
 
     constructor(private userRepo: UserRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let target: User;
 
         if (args.length < 3) {

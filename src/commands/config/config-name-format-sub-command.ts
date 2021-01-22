@@ -1,16 +1,14 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 import { MessageUtils } from '../../utils';
 
-let Config = require('../../../config/config.json');
-
 export class ConfigNameFormatSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let setting = args[3]?.toLowerCase();
         if (
             setting !== 'mention' &&

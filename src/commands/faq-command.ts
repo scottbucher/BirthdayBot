@@ -16,7 +16,11 @@ export class FAQCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         let embed = new MessageEmbed()
             .setDescription(
                 `View our FAQ for ${msg.client.user.toString()} [here](${Config.links.docs}/faq)!`

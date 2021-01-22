@@ -1,29 +1,33 @@
 import { CustomMessage, CustomMessages } from '../../models/database';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
-let Config = require('../../../config/config.json');
-
 export class MessageRemoveSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) { }
+    constructor(private customMessageRepo: CustomMessageRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let type = args[3]?.toLowerCase();
 
         if (
             !type ||
             (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
         ) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.removeMessageInvalidType', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.removeMessageInvalidType', LangCode.EN)
+            );
             return;
         }
 
         if (args.length < 5) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noMessageNumer', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noMessageNumer', LangCode.EN)
+            );
             return;
         }
 
@@ -45,7 +49,10 @@ export class MessageRemoveSubCommand {
                 );
 
                 if (!userMessages) {
-                    await MessageUtils.send(channel, Lang.getEmbed('validation.noUserSpecificBirthdayMessages', LangCode.EN));
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.noUserSpecificBirthdayMessages', LangCode.EN)
+                    );
                     return;
                 }
 
@@ -61,13 +68,19 @@ export class MessageRemoveSubCommand {
             try {
                 position = parseInt(args[4]);
             } catch (error) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.customMessageInvalidPosition', LangCode.EN));
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.customMessageInvalidPosition', LangCode.EN)
+                );
                 return;
             }
         }
 
         if (!position) {
-            await MessageUtils.send(channel, Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN)
+            );
             return;
         }
 
@@ -76,14 +89,17 @@ export class MessageRemoveSubCommand {
         // find the position based on if it is a user or global message
         target
             ? (message = userMessages.customMessages.find(
-                question => question.Position === position
-            ))
+                  question => question.Position === position
+              ))
             : (message = customMessages.customMessages.find(
-                question => question.Position === position
-            ));
+                  question => question.Position === position
+              ));
 
         if (!message) {
-            await MessageUtils.send(channel, Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN)
+            );
             return;
         }
 
@@ -92,6 +108,9 @@ export class MessageRemoveSubCommand {
             ? await this.customMessageRepo.removeCustomMessageUser(msg.guild.id, position, type)
             : await this.customMessageRepo.removeCustomMessage(msg.guild.id, position, type);
 
-        await MessageUtils.send(channel, Lang.getEmbed('results.removeMessage', LangCode.EN, { MESSAGE: message.Message }));
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.removeMessage', LangCode.EN, { MESSAGE: message.Message })
+        );
     }
 }

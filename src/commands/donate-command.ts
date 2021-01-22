@@ -16,7 +16,11 @@ export class DonateCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         let embed = new MessageEmbed()
             .setDescription(
                 `You can support ${msg.client.user.toString()} by donating [here](${
