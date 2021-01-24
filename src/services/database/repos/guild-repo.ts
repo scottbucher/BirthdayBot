@@ -81,18 +81,58 @@ export class GuildRepo {
         ]);
     }
 
-    public async updateMessageTime(discordId: string, messageTime: number): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateMessageTime, [
+    public async updateBirthdayMessageTime(discordId: string, messageTime: number): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateBirthdayMessageTime, [
             discordId,
             messageTime,
         ]);
     }
 
-    public async updateMentionSetting(discordId: string, mention: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateMentionSetting, [
+    public async updateMemberAnniversaryMessageTime(
+        discordId: string,
+        messageTime: number
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateMemberAnniversaryTime, [
+            discordId,
+            messageTime,
+        ]);
+    }
+
+    public async updateServerAnniversaryMessageTime(
+        discordId: string,
+        messageTime: number
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateServerAnniversaryTime, [
+            discordId,
+            messageTime,
+        ]);
+    }
+
+    public async updateBirthdayMentionSetting(discordId: string, mention: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateBirthdayMentionSetting, [
             discordId,
             mention,
         ]);
+    }
+
+    public async updateMemberAnniversaryMentionSetting(
+        discordId: string,
+        mention: string
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(
+            Procedure.Guild_UpdateMemberAnniversaryMentionSetting,
+            [discordId, mention]
+        );
+    }
+
+    public async updateServerAnniversaryMentionSetting(
+        discordId: string,
+        mention: string
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(
+            Procedure.Guild_UpdateServerAnniversaryMentionSetting,
+            [discordId, mention]
+        );
     }
 
     public async updateNameFormat(discordId: string, format: string): Promise<void> {
