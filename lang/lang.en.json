@@ -680,7 +680,10 @@
             },
             "messageNumberDoesNotExist": {
                 "title": "Test Custom Message",
-                "description": ["Message number does not exist!", "View your server's custom messages with `bday message list <type>`!"],
+                "description": [
+                    "Message number does not exist!",
+                    "View your server's custom messages with `bday message list <type>`!"
+                ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -688,7 +691,10 @@
             },
             "messageDoesNotExist": {
                 "title": "Test Custom Message",
-                "description": ["Message does not exist!", "View your server's custom messages with `bday message list <type>`!"],
+                "description": [
+                    "Message does not exist!",
+                    "View your server's custom messages with `bday message list <type>`!"
+                ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -782,7 +788,10 @@
                 "color": "{{REF:colors.error}}"
             },
             "invalidMessageNumber": {
-                "description": ["Invalid message number!", "Find this using `bday message list <type>`!"],
+                "description": [
+                    "Invalid message number!",
+                    "Find this using `bday message list <type>`!"
+                ],
                 "color": "{{REF:colors.error}}"
             },
             "invalidChannel": {
@@ -794,7 +803,10 @@
                 "color": "{{REF:colors.error}}"
             },
             "invalidMention": {
-                "description": ["Please provide a value!","Accepted Values: `everyone`, `here`, `@role/role-name`, `none`"],
+                "description": [
+                    "Please provide a value!",
+                    "Accepted Values: `everyone`, `here`, `@role/role-name`, `none`"
+                ],
                 "color": "{{REF:colors.error}}"
             },
             "cantSetForBot": {
