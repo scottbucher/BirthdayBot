@@ -1,6 +1,8 @@
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
@@ -16,20 +18,18 @@ export class MessageMentionSubCommand {
             !type ||
             (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
         ) {
-            let embed = new MessageEmbed()
-                .setDescription('Please provide a message type! -- replace with LANG')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidMessageType', LangCode.EN)
+            );
             return;
         }
 
         if (args.length < 5) {
-            let embed = new MessageEmbed()
-                .setDescription(
-                    'Please provide a value!\nAccepted Values: `everyone`, `here`, `@role/role-name`, `none`'
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidMention', LangCode.EN)
+            );
             return;
         }
 
@@ -52,14 +52,10 @@ export class MessageMentionSubCommand {
                 args[4].toLowerCase() !== '@here' &&
                 args[4].toLowerCase() !== 'none'
             ) {
-                let embed = new MessageEmbed()
-                    .setTitle('Invalid Group/Role')
-                    .setDescription(
-                        'Accepted Values: `everyone`, `here`, `@role/role-name`, `none`'
-                    )
-                    .setTimestamp()
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.invalidMentionSetting', LangCode.EN)
+                );
                 return;
             } else {
                 if (args[4].toLowerCase() === '@here') {
@@ -79,45 +75,42 @@ export class MessageMentionSubCommand {
             if (mention.toLowerCase() === 'everyone' || mention.toLowerCase() === 'here') {
                 mentionOutput = '@' + mention;
             } else if (mention.toLowerCase() === 'none') {
-                mentionOutput = `no one`;
+                mentionOutput = Lang.getRef('terms.noOne', LangCode.EN);
             }
         } else {
             mentionOutput = roleInput.toString();
         }
 
         if (type === 'birthday') {
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `${msg.client.user.toString()} will now mention ${mentionOutput} with the birthday message!`
-                )
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
-
             if (mention === 'none') mention = '0';
 
             await this.guildRepo.updateBirthdayMentionSetting(msg.guild.id, mention);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.setBirthdayMessageMention', LangCode.EN, {
+                    MENTION: mentionOutput,
+                })
+            );
         } else if (type === 'memberanniversary') {
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `${msg.client.user.toString()} will now mention ${mentionOutput} with the member anniversary message!`
-                )
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
-
             if (mention === 'none') mention = '0';
 
             await this.guildRepo.updateMemberAnniversaryMentionSetting(msg.guild.id, mention);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.setMemberAnniversaryMessageMention', LangCode.EN, {
+                    MENTION: mentionOutput,
+                })
+            );
         } else if (type === 'serveranniversary') {
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `${msg.client.user.toString()} will now mention ${mentionOutput} with the server anniversary message!`
-                )
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
-
             if (mention === 'none') mention = '0';
 
             await this.guildRepo.updateServerAnniversaryMentionSetting(msg.guild.id, mention);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.setServerAnniversaryMessageMention', LangCode.EN, {
+                    MENTION: mentionOutput,
+                })
+            );
         }
     }
 }

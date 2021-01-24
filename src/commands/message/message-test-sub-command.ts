@@ -19,22 +19,20 @@ export class MessageTestSubCommand {
             !type ||
             (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
         ) {
-            let embed = new MessageEmbed()
-                .setDescription('Please provide a message type! -- replace with LANG')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidMessageType', LangCode.EN)
+            );
             return;
         }
 
         let userCount = 1;
 
         if (args.length < 5) {
-            let embed = new MessageEmbed()
-                .setDescription(
-                    'Please provide a message number or user!\nFind this using `bday message list`!'
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noMessageNumber', LangCode.EN)
+            );
             return;
         } else if (args.length >= 6) {
             try {
@@ -54,24 +52,18 @@ export class MessageTestSubCommand {
             try {
                 position = parseInt(args[4]);
             } catch (error) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        'Invalid message number!\nFind this using `bday message list <type>`!'
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.invalidMessageNumber', LangCode.EN)
+                );
                 return;
             }
 
             if (!position) {
-                let embed = new MessageEmbed()
-                    .setTitle('Test Custom Message')
-                    .setDescription(
-                        `Message number does not exist!\nView your server's custom messages with \`bday message list <type>\`!`
-                    )
-                    .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.invalidMessageNumber', LangCode.EN)
+                );
                 return;
             }
         } else {
@@ -176,14 +168,10 @@ export class MessageTestSubCommand {
         }
 
         if (!customMessage) {
-            let embed = new MessageEmbed()
-                .setTitle('Test Custom Message')
-                .setDescription(
-                    `Message does not exist!\nView your server's custom messages with \`bday message list <type>\`!`
-                )
-                .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.messageDoesNotExist', LangCode.EN)
+            );
             return;
         }
 

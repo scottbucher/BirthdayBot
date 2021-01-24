@@ -303,6 +303,30 @@
                 "description": "To have their birthday celebrated users now require only one of the trusted roles!",
                 "color": "{{REF:colors.success}}"
             },
+            "setBirthdayMessageMention": {
+                "description": "{{BOT}} will now mention {{MENTION}} with the birthday message!",
+                "color": "{{REF:colors.success}}"
+            },
+            "setMemberAnniversaryMessageMention": {
+                "description": "{{BOT}} will now mention {{MENTION}} with the member anniversary message!",
+                "color": "{{REF:colors.success}}"
+            },
+            "setServerAnniversaryMessageMention": {
+                "description": "{{BOT}} will now mention {{MENTION}} with the server anniversary message!",
+                "color": "{{REF:colors.success}}"
+            },
+            "setBirthdayMessageTime": {
+                "description": "Successfully set the birthday message to send at **{{TIME}}**",
+                "color": "{{REF:colors.success}}"
+            },
+            "setMemberAnniversaryMessageTime": {
+                "description": "Successfully set the member anniversary message to send at **{{TIME}}**",
+                "color": "{{REF:colors.success}}"
+            },
+            "setServerAnniversaryMessageTime": {
+                "description": "Successfully set the server anniversary message to send at **{{TIME}}**",
+                "color": "{{REF:colors.success}}"
+            },
             "actionCanceled": {
                 "description": "{{REF:emotes.deny}} Action canceled.",
                 "color": "{{REF:colors.error}}"
@@ -342,7 +366,10 @@
             },
             "invalidTimezone": {
                 "title": "Time Zone Setup - {{TARGET}}",
-                "description": "Invalid time zone!",
+                "description": [
+                    "Invalid time zone!",
+                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
                 },
@@ -351,7 +378,10 @@
             },
             "invalidTimeZoneAbbreviation": {
                 "title": "Time Zone Setup - {{TARGET}}",
-                "description": "Invalid time zone! Do not use timezone abbreviations!",
+                "description": [
+                    "Invalid time zone! Do not use timezone abbreviations!",
+                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
                 },
@@ -397,6 +427,15 @@
             "invalidChannelType": {
                 "title": "Channel Selection",
                 "description": "Please specify a channel type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidMentionSetting": {
+                "title": "Invalid Group/Role",
+                "description": "Accepted Values: `everyone`, `here`, `@role/role-name`, `none`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -478,7 +517,10 @@
             },
             "invalidServerTimeZone": {
                 "title": "Default Server Timezone Selection",
-                "description": "Invalid time zone!",
+                "description": [
+                    "Invalid time zone!",
+                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
                 },
@@ -487,7 +529,10 @@
             },
             "invalidServerTimeZoneAbbreviation": {
                 "title": "Default Server Timezone Selection",
-                "description": "Invalid time zone! Do not use timezone abbreviations!",
+                "description": [
+                    "Invalid time zone! Do not use timezone abbreviations!",
+                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
                 },
@@ -627,7 +672,26 @@
                 "color": "{{REF:colors.error}}"
             },
             "noTimeZone": {
-                "description": "Please input a timezone! To find your timezone please use `bday map`!",
+                "description": [
+                    "Please input a timezone!",
+                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "messageNumberDoesNotExist": {
+                "title": "Test Custom Message",
+                "description": ["Message number does not exist!", "View your server's custom messages with `bday message list <type>`!"],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "color": "{{REF:colors.error}}"
+            },
+            "messageDoesNotExist": {
+                "title": "Test Custom Message",
+                "description": ["Message does not exist!", "View your server's custom messages with `bday message list <type>`!"],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
                 "color": "{{REF:colors.error}}"
             },
             "duplicateTrustedRole": {
@@ -638,19 +702,20 @@
                 "description": "Please provide a value! (True/False)",
                 "color": "{{REF:colors.error}}"
             },
+            "noTime": {
+                "description": "Please provide a time! (0-23)",
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidTime": {
+                "description": "Invalid time! Accepted values: `0-23`",
+                "color": "{{REF:colors.error}}"
+            },
             "invalidRole": {
                 "description": "Invalid role!",
                 "color": "{{REF:colors.error}}"
             },
             "noTrustedRoles": {
                 "description": "You server has not set any trusted roles set!",
-                "color": "{{REF:colors.error}}"
-            },
-            "noMessageNumer": {
-                "description": [
-                    "Please provide a message number!",
-                    "Find this using `bday message list <type>`!"
-                ],
                 "color": "{{REF:colors.error}}"
             },
             "noUserSpecificBirthdayMessages": {
@@ -689,6 +754,13 @@
                 "description": "Please provide a message!",
                 "color": "{{REF:colors.error}}"
             },
+            "noMessageNumber": {
+                "description": [
+                    "Please provide a message number or user!",
+                    "Find this using `bday message list <type>`!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
             "userAlreadyInBlacklist": {
                 "description": "That user is already in the blacklist!",
                 "color": "{{REF:colors.error}}"
@@ -709,12 +781,20 @@
                 "description": "Trusted Role cannot be managed by an external service!",
                 "color": "{{REF:colors.error}}"
             },
+            "invalidMessageNumber": {
+                "description": ["Invalid message number!", "Find this using `bday message list <type>`!"],
+                "color": "{{REF:colors.error}}"
+            },
             "invalidChannel": {
                 "description": "Invalid channel!",
                 "color": "{{REF:colors.error}}"
             },
             "invalidHour": {
                 "description": "Invalid hour!",
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidMention": {
+                "description": ["Please provide a value!","Accepted Values: `everyone`, `here`, `@role/role-name`, `none`"],
                 "color": "{{REF:colors.error}}"
             },
             "cantSetForBot": {
@@ -1100,7 +1180,10 @@
             "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
             "serverAnniversaryChannelTitle": "{{REF:emotes.party}} server anniversaries",
             "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
-            "premiumRequired": "Premium Required!"
+            "premiumRequired": "Premium Required!",
+            "amTime": "AM",
+            "pmTime": "PM",
+            "noOne": "no one"
         },
         "placeHolders": {
             "users": "<Users>",
