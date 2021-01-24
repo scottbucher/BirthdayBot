@@ -9,7 +9,21 @@ export class MessageTimeSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
-        if (args.length < 4) {
+        //bday message time <type> <0-23>
+        let type = args[3]?.toLowerCase();
+
+        if (
+            !type ||
+            (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
+        ) {
+            let embed = new MessageEmbed()
+                .setDescription('Please provide a message type! -- replace with LANG')
+                .setColor(Config.colors.error);
+            await MessageUtils.send(channel, embed);
+            return;
+        }
+
+        if (args.length < 5) {
             let embed = new MessageEmbed()
                 .setDescription('Please provide a time! (0-23)')
                 .setColor(Config.colors.error);
@@ -20,7 +34,7 @@ export class MessageTimeSubCommand {
         // Try and get the time
         let messageTime: number;
         try {
-            messageTime = parseInt(args[3]);
+            messageTime = parseInt(args[4]);
         } catch (error) {
             let embed = new MessageEmbed()
                 .setTitle('Invalid time!')
@@ -38,7 +52,6 @@ export class MessageTimeSubCommand {
             await MessageUtils.send(channel, embed);
             return;
         }
-        await this.guildRepo.updateMessageTime(msg.guild.id, messageTime);
 
         let timeOutput: string;
         if (messageTime === 0) timeOutput = '12:00 AM';
@@ -46,9 +59,30 @@ export class MessageTimeSubCommand {
         else if (messageTime < 12) timeOutput = messageTime + ':00 AM';
         else timeOutput = messageTime - 12 + ':00 PM';
 
-        let embed = new MessageEmbed()
-            .setDescription(`Successfully set the birthday message to send at **${timeOutput}**!`)
-            .setColor(Config.colors.success);
-        await MessageUtils.send(channel, embed);
+        if (type === 'birthday') {
+            await this.guildRepo.updateBirthdayMessageTime(msg.guild.id, messageTime);
+            let embed = new MessageEmbed()
+                .setDescription(
+                    `Successfully set the birthday message to send at **${timeOutput}**!`
+                )
+                .setColor(Config.colors.success);
+            await MessageUtils.send(channel, embed);
+        } else if (type === 'memberanniversary') {
+            await this.guildRepo.updateMemberAnniversaryMessageTime(msg.guild.id, messageTime);
+            let embed = new MessageEmbed()
+                .setDescription(
+                    `Successfully set the member anniversary message to send at **${timeOutput}**!`
+                )
+                .setColor(Config.colors.success);
+            await MessageUtils.send(channel, embed);
+        } else if (type === 'serveranniversary') {
+            await this.guildRepo.updateServerAnniversaryMessageTime(msg.guild.id, messageTime);
+            let embed = new MessageEmbed()
+                .setDescription(
+                    `Successfully set the server anniversary message to send at **${timeOutput}**!`
+                )
+                .setColor(Config.colors.success);
+            await MessageUtils.send(channel, embed);
+        }
     }
 }
