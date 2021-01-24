@@ -598,7 +598,7 @@
             "noUserPlaceholder": {
                 "description": [
                     "Please include the `{{REF:placeHolder.users}}` placeholder somewhere in the message. This indicates where birthday usernames will appear.",
-                    "Ex: `bday message add birthday Happy Birthday {{REF:placeHodlers.users}}!`"
+                    "Ex: `bday message add birthday {{REF:defaults.birthdayMessage}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -1040,6 +1040,11 @@
         "prompts": {
             "setupForUser": "Setup For {{TARGET}} - {{VALUE}}",
             "userSetup": "User Setup - {{VALUE}}"
+        },
+        "defaults": {
+            "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
+            "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.years}} years in the server {{REF:placeholders.users}}!",
+            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeholders.years}} year(s) old!"
         },
         "list": {
             "birthdayMessagesTitle": "{{REF:terms.birthdayMessages}} | {{REF:list.pageTitle}}",
