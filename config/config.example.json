@@ -62,7 +62,8 @@
         "birthdayListSize": "30",
         "blacklistSize": "30",
         "birthdayMessageListSize": "3",
-        "trustedRoleListSize": "10"
+        "trustedRoleListSize": "10",
+        "memberAnniversaryRoleListSize": "10"
     },
     "colors": {
         "default": "#4eefff",
@@ -117,6 +118,12 @@
         "trustedRoles": {
             "maxCount": {
                 "free": 1,
+                "paid": 250
+            }
+        },
+        "memberAnniversaryRole": {
+            "maxCount": {
+                "free": 0,
                 "paid": 250
             }
         },
