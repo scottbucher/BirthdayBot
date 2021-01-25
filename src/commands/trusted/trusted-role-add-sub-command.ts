@@ -64,7 +64,7 @@ export class TrustedRoleAddSubCommand {
             return;
         } else if (
             trustedRoles &&
-            trustedRoles.trustedRoles.length >= Config.validation.message.maxCount.birthday.paid
+            trustedRoles.trustedRoles.length >= Config.validation.trustedRoles.maxCount.paid
         ) {
             await MessageUtils.send(
                 channel,
