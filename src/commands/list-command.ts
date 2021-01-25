@@ -32,11 +32,7 @@ export class ListCommand implements Command {
         let input = args.slice(2).join(' ');
 
         if (input) {
-            try {
-                page = ParseUtils.parseInt(input);
-            } catch (error) {
-                // Not A Number
-            }
+            page = ParseUtils.parseInt(input);
 
             if (!page) date = Chrono.parseDate(input); // Try an parse a date
 

@@ -50,17 +50,7 @@ export class SetAttemptsCommand implements Command {
             return;
         }
 
-        let amount: number;
-
-        try {
-            amount = MathUtils.clamp(ParseUtils.parseInt(args[3]), 0, 127);
-        } catch (error) {
-            let embed = new MessageEmbed()
-                .setDescription('Invalid Number!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
-        }
+        let amount = MathUtils.clamp(ParseUtils.parseInt(args[3]), 0, 127);
 
         if (!(typeof amount === 'number') || !amount) {
             let embed = new MessageEmbed()

@@ -1,4 +1,3 @@
-import { MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -6,6 +5,7 @@ import {
     MessageFilter,
 } from 'discord.js-collector-utils';
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import { MessageUtils, ParseUtils } from '../../utils';
 
 import { GuildRepo } from '../../services/database/repos';
 
@@ -65,19 +65,7 @@ export class SetupMessage {
             async (nextMsg: Message) => {
                 if (!messageTime && messageTime !== 0) {
                     // Try and get the time
-                    let time: number;
-                    try {
-                        time = parseInt(nextMsg.content.split(/\s+/)[0]);
-                    } catch (error) {
-                        let embed = new MessageEmbed()
-                            .setTitle('Message Setup - Message Time')
-                            .setDescription('Invalid time!')
-                            .setFooter(`Please check above and try again!`, botUser.avatarURL())
-                            .setTimestamp()
-                            .setColor(Config.colors.error);
-                        await MessageUtils.send(channel, embed);
-                        return;
-                    }
+                    let time = ParseUtils.parseInt(nextMsg.content.split(/\s+/)[0]);
 
                     if (time !== 0 && (time < 0 || time > 23 || !time)) {
                         let embed = new MessageEmbed()

@@ -1,9 +1,9 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { MessageUtils, ParseUtils } from '../../utils';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -31,13 +31,7 @@ export class MessageTimeSubCommand {
         }
 
         // Try and get the time
-        let messageTime: number;
-        try {
-            messageTime = parseInt(args[4]);
-        } catch (error) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.invalidTime', LangCode.EN));
-            return;
-        }
+        let messageTime = ParseUtils.parseInt(args[4]);
 
         if (messageTime !== 0 && (messageTime < 0 || messageTime > 23 || !messageTime)) {
             await MessageUtils.send(channel, Lang.getEmbed('validation.invalidTime', LangCode.EN));

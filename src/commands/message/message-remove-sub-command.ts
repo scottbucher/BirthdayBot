@@ -1,8 +1,8 @@
 import { CustomMessage, CustomMessages } from '../../models/database';
 import { Message, TextChannel } from 'discord.js';
+import { MessageUtils, ParseUtils } from '../../utils';
 
 import { CustomMessageRepo } from '../../services/database/repos';
-import { MessageUtils } from '../../utils';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
@@ -65,21 +65,13 @@ export class MessageRemoveSubCommand {
         }
 
         if (!position) {
-            try {
-                position = parseInt(args[4]);
-            } catch (error) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.customMessageInvalidPosition', LangCode.EN)
-                );
-                return;
-            }
+            position = ParseUtils.parseInt(args[4]);
         }
 
         if (!position) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN)
+                Lang.getEmbed('validation.customMessageInvalidMessageNumber', LangCode.EN)
             );
             return;
         }

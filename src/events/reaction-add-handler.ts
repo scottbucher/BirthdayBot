@@ -13,7 +13,7 @@ import {
     TextChannel,
     User,
 } from 'discord.js';
-import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
+import { FormatUtils, MessageUtils, ParseUtils, PermissionUtils } from '../utils';
 import { Lang, Logger, SubscriptionService } from '../services';
 
 import { CustomMessages } from '../models/database';
@@ -398,16 +398,7 @@ export class ReactionAddHandler implements EventHandler {
                     await MessageUtils.delete(nextMsg);
                     if (!page && page !== 0) {
                         // Try and get the time
-                        let page: number;
-                        try {
-                            page = parseInt(nextMsg.content.split(/\s+/)[0]);
-                        } catch (error) {
-                            await MessageUtils.send(
-                                channel,
-                                Lang.getEmbed('validation.invalidPage', LangCode.EN)
-                            );
-                            return;
-                        }
+                        let page = ParseUtils.parseInt(nextMsg.content.split(/\s+/)[0]);
 
                         page = Math.round(page);
 

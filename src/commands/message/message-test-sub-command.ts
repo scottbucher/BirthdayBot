@@ -1,5 +1,5 @@
 import { CustomMessageRepo, GuildRepo } from '../../services/database/repos';
-import { FormatUtils, MessageUtils } from '../../utils';
+import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Lang } from '../../services';
@@ -35,11 +35,7 @@ export class MessageTestSubCommand {
             );
             return;
         } else if (args.length >= 6) {
-            try {
-                userCount = parseInt(args[5]);
-            } catch (error) {
-                userCount = 1;
-            }
+            userCount = ParseUtils.parseInt(args[5]);
         }
         // Try and find someone they are mentioning
         let target = msg.mentions.members.first();
@@ -49,15 +45,7 @@ export class MessageTestSubCommand {
             userCount = userCount > 5 ? 5 : userCount;
 
             // Try and get the position
-            try {
-                position = parseInt(args[4]);
-            } catch (error) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.invalidMessageNumber', LangCode.EN)
-                );
-                return;
-            }
+            position = ParseUtils.parseInt(args[4]);
 
             if (!position) {
                 await MessageUtils.send(

@@ -1,8 +1,8 @@
 import { Message, Role, TextChannel } from 'discord.js';
+import { MessageUtils, ParseUtils } from '../../utils';
 
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-import { MessageUtils } from '../../utils';
 import { TrustedRole } from '../../models/database';
 import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo';
 
@@ -48,15 +48,7 @@ export class TrustedRoleRemoveSubCommand {
         }
 
         if (!position) {
-            try {
-                position = parseInt(args[3]);
-            } catch (error) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.trustedRoleInvalidRoleOrPosition', LangCode.EN)
-                );
-                return;
-            }
+            position = ParseUtils.parseInt(args[3]);
         }
 
         if (!position) {

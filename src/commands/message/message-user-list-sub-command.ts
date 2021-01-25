@@ -19,11 +19,7 @@ export class MessageUserListSubCommand {
         let page = 1;
 
         if (args[3]) {
-            try {
-                page = ParseUtils.parseInt(args[4]);
-            } catch (error) {
-                // Not A Number
-            }
+            page = ParseUtils.parseInt(args[4]);
             if (!page || page <= 0 || page > 100000) page = 1;
         }
 
