@@ -6,10 +6,15 @@ import { SQLUtils } from '../../../utils';
 export class MemberAnniversaryRoleRepo {
     constructor(private dataAccess: DataAccess) {}
 
-    public async addMemberAnniversaryRole(discordId: string, roleId: string): Promise<void> {
+    public async addMemberAnniversaryRole(
+        discordId: string,
+        roleId: string,
+        year: number
+    ): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.MemberAnniversaryRole_Add, [
             discordId,
             roleId,
+            year,
         ]);
     }
 
