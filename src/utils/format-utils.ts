@@ -6,6 +6,8 @@ import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
 import { GuildUtils } from '.';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
+import { ParseUtils } from './parse-utils';
 import { TrustedRoles } from '../models/database/trusted-role-models';
 import moment from 'moment-timezone';
 
@@ -335,7 +337,7 @@ export class FormatUtils {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
-                TOTAL_MESSAGES: trustedRoleResults.stats.TotalItems.toString(),
+                TOTAL_ROLES: trustedRoleResults.stats.TotalItems.toString(),
                 PER_PAGE: Config.experience.trustedRoleListSize.toString(),
                 MAX_FREE: Config.validation.trustedRoles.maxCount.free.toString(),
                 MAX_PAID: Config.validation.trustedRoles.maxCount.paid.toString(),
@@ -345,7 +347,7 @@ export class FormatUtils {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
-                TOTAL_MESSAGES: trustedRoleResults.stats.TotalItems.toString(),
+                TOTAL_ROLES: trustedRoleResults.stats.TotalItems.toString(),
                 PER_PAGE: Config.experience.trustedRoleListSize.toString(),
             });
         }
@@ -435,8 +437,71 @@ export class FormatUtils {
         return embed.setThumbnail(guild.iconURL());
     }
 
+    public static async getMemberAnniversaryRoleList(
+        guild: Guild,
+        memberAnniversaryRoleResults: MemberAnniversaryRoles,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean
+    ): Promise<MessageEmbed> {
+        let embed: MessageEmbed;
+
+        if (memberAnniversaryRoleResults.memberAnniversaryRoles.length === 0) {
+            let embed = new MessageEmbed()
+                .setDescription(Lang.getRef('list.noMemberAnniversaryRoles', LangCode.EN))
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = '';
+
+        for (let memberAnniversaryRole of memberAnniversaryRoleResults.memberAnniversaryRoles) {
+            // dynamically check which ones to cross out due to the server not having premium anymore
+            let role = guild.roles.resolve(memberAnniversaryRole.MemberAnniversaryRoleDiscordId);
+            if (
+                hasPremium ||
+                memberAnniversaryRole.Position <=
+                    Config.validation.memberAnniversaryRoles.maxCount.free
+            ) {
+                description += `**Year ${memberAnniversaryRole.Year}:** ${
+                    role ? `${role.toString()} ` : `**** `
+                }\n\n`;
+            } else {
+                description += `**Year ${memberAnniversaryRole.Year}:** ${
+                    role
+                        ? `~~${role.toString()}~~ `
+                        : `**${Lang.getRef('terms.deletedRole', LangCode.EN)}** `
+                }\n\n`;
+            }
+        }
+
+        if (
+            !hasPremium &&
+            memberAnniversaryRoleResults.stats.TotalItems >
+                Config.validation.memberAnniversaryRoles.maxCount.free
+        ) {
+            embed = Lang.getEmbed('list.memberAnniversaryRolePaid', LangCode.EN, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: memberAnniversaryRoleResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: memberAnniversaryRoleResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.memberAnniversaryRoleListSize.toString(),
+                MAX_PAID: Config.validation.memberAnniversaryRoles.maxCount.paid.toString(),
+            });
+        } else {
+            embed = Lang.getEmbed('list.memberAnniversaryRoleFree', LangCode.EN, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: memberAnniversaryRoleResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: memberAnniversaryRoleResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.memberAnniversaryRoleListSize.toString(),
+            });
+        }
+
+        return embed.setThumbnail(guild.iconURL());
+    }
+
     public static extractPageNumber(input: string): number {
         let match = PAGE_REGEX.exec(input);
-        return match ? parseInt(match[1]) : null;
+        return match ? ParseUtils.parseInt(match[1]) : null;
     }
 }

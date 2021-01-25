@@ -18,10 +18,10 @@ export class MemberAnniversaryRoleRepo {
         ]);
     }
 
-    public async removeMemberAnniversaryRole(discordId: string, position: number): Promise<void> {
+    public async removeMemberAnniversaryRole(discordId: string, year: number): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.MemberAnniversaryRole_Remove, [
             discordId,
-            position,
+            year,
         ]);
     }
 

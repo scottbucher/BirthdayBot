@@ -15,6 +15,7 @@ import {
     InviteCommand,
     ListCommand,
     MapCommand,
+    MemberAnniversaryRoleCommand,
     MessageCommand,
     NextCommand,
     PurgeCommand,
@@ -47,6 +48,12 @@ import {
     ConfigUseTimezoneSubCommand,
 } from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+import {
+    MemberAnniversaryRoleAddSubCommand,
+    MemberAnniversaryRoleClearSubCommand,
+    MemberAnniversaryRoleListSubCommand,
+    MemberAnniversaryRoleRemoveSubCommand,
+} from './commands/memberAnniversaryRole';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -210,6 +217,28 @@ async function start(): Promise<void> {
         trustedRoleListSubCommand
     );
 
+    // Member Anniversary Role Sub Commands
+    let memberAnniversaryRoleAddSubCommand = new MemberAnniversaryRoleAddSubCommand(
+        memberAnniversaryRoleRepo
+    );
+    let memberAnniversaryRoleRemoveSubCommand = new MemberAnniversaryRoleRemoveSubCommand(
+        memberAnniversaryRoleRepo
+    );
+    let memberAnniversaryRoleClearSubCommand = new MemberAnniversaryRoleClearSubCommand(
+        memberAnniversaryRoleRepo
+    );
+    let memberAnniversaryRoleListSubCommand = new MemberAnniversaryRoleListSubCommand(
+        memberAnniversaryRoleRepo
+    );
+
+    // Member Anniversary Role Command
+    let memberAnniversaryRoleCommand = new MemberAnniversaryRoleCommand(
+        memberAnniversaryRoleAddSubCommand,
+        memberAnniversaryRoleRemoveSubCommand,
+        memberAnniversaryRoleClearSubCommand,
+        memberAnniversaryRoleListSubCommand
+    );
+
     // Events handlers
     let messageHandler = new MessageHandler(
         helpCommand,
@@ -236,6 +265,7 @@ async function start(): Promise<void> {
             subscribeCommand,
             configCommand,
             trustedRoleCommand,
+            memberAnniversaryRoleCommand,
         ],
         subscriptionService,
         guildRepo,

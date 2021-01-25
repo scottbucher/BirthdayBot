@@ -17,6 +17,13 @@
                     "text": "{{REF:footers.irreversible}}"
                 },
                 "color": "{{REF:colors.warn}}"
+            },
+            "memberAnniversaryRoleClearConfirmation": {
+                "description": "Are you sure you want to clear __**{{TOTAL}}**__ member anniversary role(s)?",
+                "footer": {
+                    "text": "{{REF:footers.irreversible}}"
+                },
+                "color": "{{REF:colors.warn}}"
             }
         },
         "userPrompts": {
@@ -267,16 +274,33 @@
                 "description": "Type `bday trustedRole clear` to clear the trusted roles.",
                 "color": "{{REF:colors.error}}"
             },
+            "memberAnniversaryRoleClearExpired": {
+                "title": "Member Anniversary Role Clear - Expired",
+                "description": "Type `bday memberAnniversaryRole clear` to clear the member anniversary roles.",
+                "color": "{{REF:colors.error}}"
+            },
             "addedTrustedRole": {
                 "description": "Successfully added {{ROLE}} as a trusted role!",
+                "color": "{{REF:colors.success}}"
+            },
+            "addedMemberAnniversaryRole": {
+                "description": "Successfully added {{ROLE}} as a Year {{YEAR}} member anniversary reward!",
                 "color": "{{REF:colors.success}}"
             },
             "clearedTrustedRole": {
                 "description": "Successfully cleared the trusted roles!",
                 "color": "{{REF:colors.success}}"
             },
+            "clearedMemberAnniversaryRole": {
+                "description": "Successfully cleared the member anniversary roles!",
+                "color": "{{REF:colors.success}}"
+            },
             "removedTrustedRole": {
                 "description": "Successfully removed the trusted role {{ROLE}}!",
+                "color": "{{REF:colors.success}}"
+            },
+            "removedMemberAnniversaryRole": {
+                "description": "Successfully removed the member anniversary role {{ROLE}}!",
                 "color": "{{REF:colors.success}}"
             },
             "trustedPreventsMessageYes": {
@@ -636,6 +660,10 @@
                 "description": "Your server has reached the maximum trusted roles! (**{{PAID_MAX}}**)",
                 "color": "{{REF:colors.error}}"
             },
+            "maxPaidMemberAnniversaryRoles": {
+                "description": "Your server has reached the maximum member anniversary roles! (**{{PAID_MAX}}**)",
+                "color": "{{REF:colors.error}}"
+            },
             "maxCustomMessageSize": {
                 "description": "Custom Messages are maxed at {{MAX_SIZE}} characters!",
                 "color": "{{REF:colors.error}}"
@@ -704,6 +732,10 @@
                 "description": "{{ROLE}} is already a trusted role!",
                 "color": "{{REF:colors.error}}"
             },
+            "duplicateYear": {
+                "description": "There is already a member anniversary role reward for year {{YEAR}}!",
+                "color": "{{REF:colors.error}}"
+            },
             "noTrueFalse": {
                 "description": "Please provide a value! (True/False)",
                 "color": "{{REF:colors.error}}"
@@ -722,6 +754,10 @@
             },
             "noTrustedRoles": {
                 "description": "You server has not set any trusted roles set!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noMemberAnniversaryRoles": {
+                "description": "You server has not set any member anniversary roles set!",
                 "color": "{{REF:colors.error}}"
             },
             "noUserSpecificBirthdayMessages": {
@@ -787,6 +823,10 @@
                 "description": "Trusted Role cannot be managed by an external service!",
                 "color": "{{REF:colors.error}}"
             },
+            "memberAnniversaryRoleManaged": {
+                "description": "Member Anniversary Role cannot be managed by an external service!",
+                "color": "{{REF:colors.error}}"
+            },
             "invalidMessageNumber": {
                 "description": [
                     "Invalid message number!",
@@ -796,6 +836,10 @@
             },
             "invalidChannel": {
                 "description": "Invalid channel!",
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidYear": {
+                "description": "Invalid year! (1-1000)",
                 "color": "{{REF:colors.error}}"
             },
             "invalidHour": {
@@ -1055,7 +1099,7 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.trustedRolesFooter}}"
+                    "text": "{{REF:list.rolesFooter}}"
                 },
                 "timestamp": true
             },
@@ -1067,12 +1111,42 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.trustedRolesFooter}}"
+                    "text": "{{REF:list.rolesFooter}}"
                 },
                 "fields": [
                     {
                         "name": "{{REF:list.trustedRoleFieldTitle}}",
                         "value": "{{REF:list.trustedRoleFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "memberAnniversaryRoleFree": {
+                "title": "{{REF:list.memberAnniversaryRolesTitle}}",
+                "description": [
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}"
+                },
+                "timestamp": true
+            },
+            "memberAnniversaryRolePaid": {
+                "title": "{{REF:list.memberAnniversaryRolesTitle}}",
+                "description": [
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.memberAnniversaryRoleFieldTitle}}",
+                        "value": "{{REF:list.memberAnniversaryFieldText}}"
                     }
                 ],
                 "timestamp": true
@@ -1143,11 +1217,13 @@
             "userMessagesTitle": "{{REF:terms.userMessages}} | {{REF:list.pageTitle}}",
             "memberAnniversaryMessagesTitle": "{{REF:terms.memberAnniversaryMessages}} | {{REF:list.pageTitle}}",
             "serverAnniversaryMessagesTitle": "{{REF:terms.serverAnniversaryMessages}} {{REF:terms.messages}} | {{REF:list.pageTitle}}",
-            "trustedRolesTitle": "{{REF:terms.trustedRoles}} | {{REF:list.pageTitle}}",
+            "trustedRolesTitle": "{{REF:terms.memberAnniversaryRoles}} | {{REF:list.pageTitle}}",
+            "memberAnniversaryRolesTitle": "{{REF:terms.trustedRoles}} | {{REF:list.pageTitle}}",
             "messagesFooter": "Total Message: {{TOTAL_MESSAGES}} • {{PER_PAGE}} per page",
-            "trustedRolesFooter": "Total Roles: {{TOTAL_MESSAGES}} • {{PER_PAGE}} per page",
+            "rolesFooter": "Total Roles: {{TOTAL__ROLES}} • {{PER_PAGE}} per page",
             "pageTitle": "Page {{PAGE}}/{{TOTAL_PAGES}}",
             "noTrustedRoles": "**No Trusted Roles!**",
+            "noMemberAnniversaryRoles": "**No MemberAnniversary Roles!**",
             "noBirthdays": "**No Birthdays in this server!**",
             "emptyBlacklist": "**The Birthday Blacklist is empty!**",
             "noCustomBirthdayMessages": "**No Custom Birthday Messages!**",
@@ -1161,7 +1237,9 @@
             "userBirthdayMessageFieldTitle": "Locked Feature",
             "userBirthdayMessageFieldText": "User-specific messages are a premium only feature. Unlock them with `bday premium`!",
             "trustedRoleFieldTitle": "Trusted Role Limit",
-            "trustedRoleFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** trusted roles. Unlock up to **{{MAX_PAID}}** with `bday premium`!"
+            "trustedRoleFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** trusted roles. Unlock up to **{{MAX_PAID}}** with `bday premium`!",
+            "memberAnniversaryRoleFieldTitle": "Member Anniversary Roles Unavailable",
+            "memberAnniversaryRoleFieldText": "Member anniversary roles are a premium feature **only**. Unlock up to **{{MAX_PAID}}** with `bday premium`!"
         },
         "terms": {
             "timeZone": "Time Zone",
@@ -1185,6 +1263,7 @@
             "serverAnniversaryMessages": "Server Anniversary Messages",
             "memberAnniversaryMessages": "Member Anniversary Messages",
             "trustedRoles": "Trusted Roles",
+            "memberAnniversaryRoles": "Member Anniversary Roles",
             "blacklistList": "Blacklist List",
             "birthdayChannelTitle": "{{REF:emotes.birthdayEmote}} birthdays",
             "birthdayChannelTopic": "Birthday Announcements!",

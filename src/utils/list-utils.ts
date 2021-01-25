@@ -2,6 +2,7 @@ import { Blacklisted, CustomMessages, UserDataResults } from '../models/database
 import { Guild, Message, MessageEmbed } from 'discord.js';
 
 import { FormatUtils } from '.';
+import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
 import { MessageUtils } from './message-utils';
 import { TrustedRoles } from '../models/database/trusted-role-models';
 
@@ -112,6 +113,33 @@ export class ListUtils {
             blacklistResults,
             page,
             pageSize
+        );
+
+        message = await MessageUtils.edit(message, embed);
+
+        if (!embed.title) {
+            await message.reactions.removeAll();
+            return;
+        }
+    }
+
+    public static async updateMemberAnniversaryRoleList(
+        memberAnniversaryRoleResults: MemberAnniversaryRoles,
+        guild: Guild,
+        message: Message,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean
+    ): Promise<void> {
+        if (page > memberAnniversaryRoleResults.stats.TotalPages)
+            page = memberAnniversaryRoleResults.stats.TotalPages;
+
+        let embed = await FormatUtils.getMemberAnniversaryRoleList(
+            guild,
+            memberAnniversaryRoleResults,
+            page,
+            pageSize,
+            hasPremium
         );
 
         message = await MessageUtils.edit(message, embed);
