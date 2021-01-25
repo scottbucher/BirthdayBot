@@ -27,7 +27,13 @@ import {
     TrustedRoleCommand,
     ViewCommand,
 } from './commands';
-import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
+import {
+    BlacklistRepo,
+    CustomMessageRepo,
+    GuildRepo,
+    MemberAnniversaryRoleRepo,
+    UserRepo,
+} from './services/database/repos';
 import { ClientOptions, DiscordAPIError } from 'discord.js';
 import {
     ConfigBirthdayMasterRoleSubCommand,
@@ -81,6 +87,7 @@ async function start(): Promise<void> {
     let customMessageRepo = new CustomMessageRepo(dataAccess);
     let blacklistRepo = new BlacklistRepo(dataAccess);
     let trustedRoleRepo = new TrustedRoleRepo(dataAccess);
+    let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
 
     let clientOptions: ClientOptions = {
         ws: { intents: Config.client.intents },
