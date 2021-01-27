@@ -744,6 +744,10 @@
                 "description": "Please provide a time! (0-23)",
                 "color": "{{REF:colors.error}}"
             },
+            "noYear": {
+                "description": "Please provide a year for the member anniversary role!",
+                "color": "{{REF:colors.error}}"
+            },
             "invalidTime": {
                 "description": "Invalid time! Accepted values: `0-23`",
                 "color": "{{REF:colors.error}}"
