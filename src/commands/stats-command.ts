@@ -1,5 +1,5 @@
 import { MessageUtils, ShardUtils } from '../utils';
-import djs, { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
@@ -57,9 +57,7 @@ export class StatsCommand implements Command {
             .addField('Total Servers', serverCount.toLocaleString(), true)
             .addField('Shard ID', `${shardId + 1}/${msg.client.shard.count}`, true)
             .addField('Birthdays Today', birthdaysToday.toLocaleString(), true)
-            .addField('Birthdays This Month', birthdaysThisMonth.toLocaleString(), true)
-            .addField('Node.js', process.version, true)
-            .addField('discord.js', `v${djs.version}`, true);
+            .addField('Birthdays This Month', birthdaysThisMonth.toLocaleString(), true);
 
         await MessageUtils.send(channel, embed);
     }
