@@ -13,6 +13,7 @@ import { Job } from './jobs';
 import { Logger } from './services';
 
 let Config = require('../config/config.json');
+let Debug = require('../config/debug.json');
 let Logs = require('../lang/logs.json');
 
 export class Bot {
@@ -70,8 +71,10 @@ export class Bot {
         let userTag = this.client.user.tag;
         Logger.info(Logs.info.login.replace('{USER_TAG}', userTag));
 
-        this.startJobs();
-        Logger.info(Logs.info.startedJobs);
+        if (!Debug.dummyMode.enabled) {
+            this.startJobs();
+            Logger.info(Logs.info.startedJobs);
+        }
 
         this.ready = true;
     }
@@ -81,7 +84,7 @@ export class Bot {
     }
 
     private async onGuildJoin(guild: Guild): Promise<void> {
-        if (!this.ready) {
+        if (!this.ready || Debug.dummyMode.enabled) {
             return;
         }
 
@@ -93,7 +96,7 @@ export class Bot {
     }
 
     private async onGuildLeave(guild: Guild): Promise<void> {
-        if (!this.ready) {
+        if (!this.ready || Debug.dummyMode.enabled) {
             return;
         }
 
@@ -105,12 +108,21 @@ export class Bot {
     }
 
     private async onReactionAdd(msgReaction: any, reactor: User): Promise<void> {
-        if (!this.ready) return;
+        if (
+            !this.ready ||
+            (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(reactor.id))
+        ) {
+            return;
+        }
+
         this.reactionAddHandler.process(msgReaction, reactor);
     }
 
     private async onMessage(msg: Message): Promise<void> {
-        if (!this.ready) {
+        if (
+            !this.ready ||
+            (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(msg.author.id))
+        ) {
             return;
         }
 
