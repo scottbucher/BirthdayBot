@@ -3,8 +3,9 @@ import { Shard, ShardingManager } from 'discord.js';
 import { Logger } from './services';
 import { Job } from './jobs';
 
-let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');
+let Debug = require('../config/debug.json');
+let Logs = require('../lang/logs.json');
 
 export class Manager {
     constructor(private shardManager: ShardingManager, private jobs: Job[]) {}
@@ -25,6 +26,10 @@ export class Manager {
             );
         } catch (error) {
             Logger.error(Logs.error.spawnShard, error);
+            return;
+        }
+
+        if (Debug.dummyMode.enabled) {
             return;
         }
 
