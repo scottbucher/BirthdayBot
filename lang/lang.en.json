@@ -910,6 +910,10 @@
                     }
                 ],
                 "color": "{{REF:colors.error}}"
+            },
+            "shardingInProcess": {
+                "description": "Sharding is in process. Try again later.",
+                "color": "{{REF:colors.error}}"
             }
         },
         "help": {
@@ -935,29 +939,51 @@
             "general": {
                 "title": "{{REF:bot.name}} - Info",
                 "fields": [
+                    { "name": "Author", "value": "{{REF:links.authorEmbed}}" },
                     {
-                        "name": "Node.js",
-                        "value": "{{NODE_VERSION}}"
-                    },
-                    {
-                        "name": "TypeScript",
-                        "value": "{{TS_VERSION}}"
-                    },
-                    {
-                        "name": "ECMAScript",
-                        "value": "{{ES_VERSION}}"
-                    },
-                    {
-                        "name": "discord.js",
-                        "value": "{{DJS_VERSION}}"
+                        "name": "Links",
+                        "value": ["{{REF:links.supportEmbed}}", "{{REF:links.inviteEmbed}}"]
                     },
                     {
                         "name": "Created With",
-                        "value": ["{{REF:link.templateEmbed}}"]
+                        "value": ["{{REF:links.templateEmbed}}"]
+                    }
+                ]
+            }
+        },
+        "dev": {
+            "general": {
+                "title": "{{REF:bot.name}} - Developer Info",
+                "fields": [
+                    {
+                        "name": "Versions",
+                        "value": [
+                            "**Node.js**: {{NODE_VERSION}}",
+                            "**TypeScript**: {{TS_VERSION}}",
+                            "**ECMAScript**: {{ES_VERSION}}",
+                            "**discord.js**: {{DJS_VERSION}}"
+                        ]
                     },
                     {
-                        "name": "Links",
-                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
+                        "name": "Stats",
+                        "value": ["**Shards**: {{SHARD_COUNT}}", "**Servers**: {{SERVER_COUNT}}"]
+                    },
+                    {
+                        "name": "Memory",
+                        "value": [
+                            "**RSS**: {{RSS_SIZE}} ({{RSS_SIZE_PER_SERVER}}/Server)",
+                            "**Heap**: {{HEAP_TOTAL_SIZE}} ({{HEAP_TOTAL_SIZE_PER_SERVER}}/Server)",
+                            "**Used**: {{HEAP_USED_SIZE}} ({{HEAP_USED_SIZE_PER_SERVER}}/Server)"
+                        ]
+                    },
+                    {
+                        "name": "IDs",
+                        "value": [
+                            "**Shard ID**: {{SHARD_ID}}",
+                            "**Server ID**: {{SERVER_ID}}",
+                            "**Bot ID**: {{BOT_ID}}",
+                            "**User ID**: {{USER_ID}}"
+                        ]
                     }
                 ]
             }
@@ -1194,10 +1220,12 @@
             "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
             "support": "https://discord.gg/9gUQFtz",
             "stream": "https://www.twitch.tv/stqlth",
+            "author": "https://github.com/scottbucher",
             "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
             "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
-            "supportEmbed": "For support join our discord server [here]({{REF:links.support}})!",
-            "inviteEmbed": "Invite {{BOT_MENTION}} to your server [here]({{REF:links.invite}})!",
+            "supportEmbed": "[Join Support Server]({{REF:links.support}})",
+            "inviteEmbed": "[Invite {{REF:bot.name}} to a Server!]({{REF:links.invite}})",
+            "authorEmbed": "[Scott Bucher]({{REF:links.author}})",
             "templateEmbed": "[Discord Bot TypeScript Template]({{REF:links.template}})"
         },
         "footers": {
@@ -1278,7 +1306,8 @@
             "premiumRequired": "Premium Required!",
             "amTime": "AM",
             "pmTime": "PM",
-            "noOne": "no one"
+            "noOne": "no one",
+            "na": "N/A"
         },
         "placeHolders": {
             "users": "<Users>",

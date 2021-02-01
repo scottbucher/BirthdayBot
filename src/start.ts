@@ -8,10 +8,12 @@ import {
 import {
     BlacklistCommand,
     ConfigCommand,
+    DevCommand,
     DocumentationCommand,
     DonateCommand,
     FAQCommand,
     HelpCommand,
+    InfoCommand,
     InviteCommand,
     ListCommand,
     MapCommand,
@@ -113,25 +115,25 @@ async function start(): Promise<void> {
     let birthdayService = new BirthdayService(customMessageRepo, subscriptionService);
 
     // Commands
-    let setCommand = new SetCommand(guildRepo, userRepo);
-    let statsCommand = new StatsCommand(userRepo);
-
-    let settingsCommand = new SettingsCommand(guildRepo);
-
-    let listCommand = new ListCommand(userRepo);
-    let purgeCommand = new PurgeCommand(userRepo);
-    let inviteCommand = new InviteCommand();
-    let supportCommand = new SupportCommand();
-    let mapCommand = new MapCommand();
-    let viewCommand = new ViewCommand(userRepo);
-    let nextCommand = new NextCommand(userRepo);
-    let setAttemptsCommand = new SetAttemptsCommand(userRepo);
-    let testCommand = new TestCommand(birthdayService, guildRepo, blacklistRepo);
-    let faqCommand = new FAQCommand();
+    let devCommand = new DevCommand();
     let documentationCommand = new DocumentationCommand();
     let donateCommand = new DonateCommand();
+    let faqCommand = new FAQCommand();
+    let infoCommand = new InfoCommand();
+    let inviteCommand = new InviteCommand();
+    let listCommand = new ListCommand(userRepo);
+    let mapCommand = new MapCommand();
+    let nextCommand = new NextCommand(userRepo);
     let premiumCommand = new PremiumCommand(subscriptionService);
+    let purgeCommand = new PurgeCommand(userRepo);
+    let setAttemptsCommand = new SetAttemptsCommand(userRepo);
+    let setCommand = new SetCommand(guildRepo, userRepo);
+    let settingsCommand = new SettingsCommand(guildRepo);
+    let statsCommand = new StatsCommand(userRepo);
     let subscribeCommand = new SubscribeCommand(subscriptionService);
+    let supportCommand = new SupportCommand();
+    let testCommand = new TestCommand(birthdayService, guildRepo, blacklistRepo);
+    let viewCommand = new ViewCommand(userRepo);
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
@@ -243,29 +245,31 @@ async function start(): Promise<void> {
     let messageHandler = new MessageHandler(
         helpCommand,
         [
-            setCommand,
-            setupCommand,
-            messageCommand,
-            listCommand,
-            purgeCommand,
-            inviteCommand,
-            supportCommand,
-            mapCommand,
-            viewCommand,
-            nextCommand,
-            setAttemptsCommand,
-            settingsCommand,
-            testCommand,
-            statsCommand,
-            faqCommand,
+            blacklistCommand,
+            configCommand,
+            devCommand,
             documentationCommand,
             donateCommand,
-            blacklistCommand,
-            premiumCommand,
-            subscribeCommand,
-            configCommand,
-            trustedRoleCommand,
+            faqCommand,
+            infoCommand,
+            inviteCommand,
+            listCommand,
+            mapCommand,
             memberAnniversaryRoleCommand,
+            messageCommand,
+            nextCommand,
+            premiumCommand,
+            purgeCommand,
+            setAttemptsCommand,
+            setCommand,
+            settingsCommand,
+            setupCommand,
+            statsCommand,
+            subscribeCommand,
+            supportCommand,
+            testCommand,
+            trustedRoleCommand,
+            viewCommand,
         ],
         subscriptionService,
         guildRepo,
