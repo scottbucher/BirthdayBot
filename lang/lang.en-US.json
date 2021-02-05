@@ -1211,9 +1211,9 @@
             "prefix": "bday"
         },
         "colors": {
-            "error": "#ff0000",
             "success": "#1cfe86",
-            "warn": "#ffa255"
+            "warn": "#ffa255",
+            "error": "#ff0000"
         },
         "emotes": {
             "confirm": "✅",
@@ -1225,15 +1225,15 @@
         },
         "links": {
             "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
+            "inviteEmbed": "[Invite {{REF:bot.name}} to a Server!]({{REF:links.invite}})",
             "support": "https://discord.gg/9gUQFtz",
+            "supportEmbed": "[Join Support Server]({{REF:links.support}})",
             "stream": "https://www.twitch.tv/stqlth",
             "author": "https://github.com/scottbucher",
-            "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
-            "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
-            "supportEmbed": "[Join Support Server]({{REF:links.support}})",
-            "inviteEmbed": "[Invite {{REF:bot.name}} to a Server!]({{REF:links.invite}})",
             "authorEmbed": "[Scott Bucher]({{REF:links.author}})",
-            "templateEmbed": "[Discord Bot TypeScript Template]({{REF:links.template}})"
+            "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
+            "templateEmbed": "[Discord Bot TypeScript Template]({{REF:links.template}})",
+            "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/"
         },
         "footers": {
             "expire": "This message expires in 2 minutes!",
