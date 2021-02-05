@@ -4,7 +4,7 @@ import { MessageUtils, ParseUtils } from '../../utils';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 import { TrustedRole } from '../../models/database';
-import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo';
+import { TrustedRoleRepo } from '../../services/database/repos';
 
 const errorEmbed = Lang.getEmbed('validation.trustedRoleNoRoleOrPosition', LangCode.EN);
 

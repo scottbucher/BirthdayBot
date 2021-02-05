@@ -1,9 +1,8 @@
 import { CustomMessage, CustomMessages, SplitUsers, UserData } from '../models/database';
 
-import { ArrayUtils } from './array-utils';
-import { MathUtils } from './math-utils';
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
+import { MathUtils, ArrayUtils } from '.';
 
 let Debug = require('../../config/debug.json');
 

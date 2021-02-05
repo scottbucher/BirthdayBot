@@ -2,10 +2,12 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { MessageUtils } from '../utils';
-import { TrustedRoleAddSubCommand } from './trusted/trusted-role-add-sub-command';
-import { TrustedRoleClearSubCommand } from './trusted/trusted-role-clear-sub-command';
-import { TrustedRoleListSubCommand } from './trusted/trusted-role-list-sub-command';
-import { TrustedRoleRemoveSubCommand } from './trusted/trusted-role-remove-sub-command';
+import {
+    TrustedRoleAddSubCommand,
+    TrustedRoleRemoveSubCommand,
+    TrustedRoleClearSubCommand,
+    TrustedRoleListSubCommand,
+} from './trusted';
 
 let Config = require('../../config/config.json');
 

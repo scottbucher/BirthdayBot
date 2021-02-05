@@ -1,9 +1,8 @@
 import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
 import { Guild, Message, MessageEmbed } from 'discord.js';
 
-import { FormatUtils } from '.';
+import { FormatUtils, MessageUtils } from '.';
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
-import { MessageUtils } from './message-utils';
 import { TrustedRoles } from '../models/database/trusted-role-models';
 
 export class ListUtils {

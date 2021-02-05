@@ -1,11 +1,11 @@
 export class ParseUtils {
     public static parseInt(input: string): number {
-        let number: number;
+        let int: number;
         try {
-            number = parseInt(input.replace(/,/g, ''));
+            int = parseInt(input.replace(/,/g, ''));
         } catch {
             return;
         }
-        return number;
+        return int;
     }
 }

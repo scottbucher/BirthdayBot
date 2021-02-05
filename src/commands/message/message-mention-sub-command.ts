@@ -1,17 +1,15 @@
-import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Message, Role, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 import { MessageUtils } from '../../utils';
 
-let Config = require('../../../config/config.json');
-
 export class MessageMentionSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
-        //bday message mention <type> <role>
+        // bday message mention <type> <role>
         let type = args[3]?.toLowerCase();
 
         if (

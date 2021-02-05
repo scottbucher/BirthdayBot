@@ -1,8 +1,14 @@
-import { ActionUtils, BdayUtils, FormatUtils, MessageUtils, PermissionUtils } from '../utils';
+import {
+    ActionUtils,
+    BdayUtils,
+    ColorUtils,
+    FormatUtils,
+    MessageUtils,
+    PermissionUtils,
+} from '../utils';
 import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import { GuildData, UserData } from '../models/database';
 
-import { ColorUtils } from '../utils/color-utils';
 import { CustomMessageRepo } from './database/repos';
 import { PlanName } from '../models/subscription-models';
 import { SubscriptionService } from './subscription-service';

@@ -13,16 +13,15 @@ import {
     TextChannel,
     User,
 } from 'discord.js';
-import { FormatUtils, MessageUtils, ParseUtils, PermissionUtils } from '../utils';
+import { FormatUtils, ListUtils, MessageUtils, ParseUtils, PermissionUtils } from '../utils';
 import { Lang, Logger, SubscriptionService } from '../services';
 
 import { CustomMessages } from '../models/database';
 import { EventHandler } from '.';
 import { LangCode } from '../models/enums';
-import { ListUtils } from '../utils/list-utils';
 import { PlanName } from '../models/subscription-models';
 import { RateLimiter } from 'discord.js-rate-limiter';
-import { TrustedRoleRepo } from '../services/database/repos/trusted-role-repo';
+import { TrustedRoleRepo } from '../services/database/repos';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');

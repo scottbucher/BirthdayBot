@@ -1,6 +1,6 @@
 import mysql from 'mysql';
 
-export class SQLUtils {
+export class SqlUtils {
     public static createProcedureSql(name: string, params: any[]): string {
         let sql = `Call ${name}(${new Array(params.length).fill('?').join(',')});`;
         params = params.map(this.typeCast);
