@@ -7,7 +7,7 @@ import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = Lang.getEmbed('validation.trustedRoleNoRoleOrPosition', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.trustedRoleNoRoleOrPosition', LangCode.EN_US);
 
 export class MemberAnniversaryRoleRemoveSubCommand {
     constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
@@ -23,7 +23,10 @@ export class MemberAnniversaryRoleRemoveSubCommand {
         let year = ParseUtils.parseInt(args[3]);
 
         if (!year || year > 1000 || year < 0) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.invalidYear', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidYear', LangCode.EN_US)
+            );
             return;
         }
 
@@ -36,7 +39,7 @@ export class MemberAnniversaryRoleRemoveSubCommand {
         if (!role) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.duplicateYear', LangCode.EN, { YEAR: year.toString() })
+                Lang.getEmbed('validation.duplicateYear', LangCode.EN_US, { YEAR: year.toString() })
             );
             return;
         }
@@ -47,7 +50,7 @@ export class MemberAnniversaryRoleRemoveSubCommand {
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.removedMemberAnniversaryRole', LangCode.EN, {
+            Lang.getEmbed('results.removedMemberAnniversaryRole', LangCode.EN_US, {
                 ROLE: r ? r.toString() : '**Deleted Role**',
             })
         );

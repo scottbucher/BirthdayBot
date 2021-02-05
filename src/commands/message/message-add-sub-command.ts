@@ -38,7 +38,7 @@ export class MessageAddSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.addMessageExpired', LangCode.EN)
+                Lang.getEmbed('results.addMessageExpired', LangCode.EN_US)
             );
         };
 
@@ -50,13 +50,13 @@ export class MessageAddSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.addMessageInvalidType', LangCode.EN)
+                Lang.getEmbed('validation.addMessageInvalidType', LangCode.EN_US)
             );
             return;
         }
 
         if (args.length < 5) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noMessage', LangCode.EN));
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noMessage', LangCode.EN_US));
             return;
         }
 
@@ -81,13 +81,13 @@ export class MessageAddSubCommand {
                 if (target.bot) {
                     await MessageUtils.send(
                         channel,
-                        Lang.getEmbed('validation.noUserMessageForBot', LangCode.EN)
+                        Lang.getEmbed('validation.noUserMessageForBot', LangCode.EN_US)
                     );
                     return;
                 } else if (!hasPremium) {
                     await MessageUtils.send(
                         channel,
-                        Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN)
+                        Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN_US)
                     );
                     return;
                 }
@@ -97,19 +97,19 @@ export class MessageAddSubCommand {
                 message = msg.content
                     .replace(args[4], target.toString() + ' ')
                     .substring(msg.content.indexOf(type) + type.length + 23)
-                    .replace(Lang.getRef('placeHolders.usersRegex', LangCode.EN), '<Users>');
+                    .replace(Lang.getRef('placeHolders.usersRegex', LangCode.EN_US), '<Users>');
             } else {
                 // Compile the birthday message
                 // Basic non user-specific custom message
                 message = msg.content
                     .substring(msg.content.indexOf(type) + type.length + 1)
-                    .replace(Lang.getRef('placeHolders.usersRegex', LangCode.EN), '<Users>');
+                    .replace(Lang.getRef('placeHolders.usersRegex', LangCode.EN_US), '<Users>');
             }
 
             if (message.length > Config.validation.message.maxLength) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.maxCustomMessageSize', LangCode.EN, {
+                    Lang.getEmbed('validation.maxCustomMessageSize', LangCode.EN_US, {
                         MAX_SIZE: Config.validation.message.maxLength.toString(),
                     })
                 );
@@ -119,7 +119,7 @@ export class MessageAddSubCommand {
             if (!message.includes('<Users>')) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.noUserPlaceholder', LangCode.EN)
+                    Lang.getEmbed('validation.noUserPlaceholder', LangCode.EN_US)
                 );
                 return;
             }

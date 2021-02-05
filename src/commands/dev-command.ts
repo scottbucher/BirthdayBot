@@ -35,7 +35,7 @@ export class DevCommand implements Command {
                 if (error.name.includes('SHARDING_IN_PROCESS')) {
                     await MessageUtils.send(
                         msg.channel,
-                        Lang.getEmbed('errors.shardingInProcess', LangCode.EN)
+                        Lang.getEmbed('errors.shardingInProcess', LangCode.EN_US)
                     );
                     return;
                 } else {
@@ -49,7 +49,7 @@ export class DevCommand implements Command {
         let memory = process.memoryUsage();
         await MessageUtils.send(
             msg.channel,
-            Lang.getEmbed('dev.general', LangCode.EN, {
+            Lang.getEmbed('dev.general', LangCode.EN_US, {
                 NODE_VERSION: process.version,
                 TS_VERSION: `v${typescript.version}`,
                 ES_VERSION: TsConfig.compilerOptions.target,
@@ -60,19 +60,19 @@ export class DevCommand implements Command {
                 RSS_SIZE_PER_SERVER:
                     serverCount > 0
                         ? fileSize(memory.rss / serverCount)
-                        : Lang.getRef('terms.na', LangCode.EN),
+                        : Lang.getRef('terms.na', LangCode.EN_US),
                 HEAP_TOTAL_SIZE: fileSize(memory.heapTotal),
                 HEAP_TOTAL_SIZE_PER_SERVER:
                     serverCount > 0
                         ? fileSize(memory.heapTotal / serverCount)
-                        : Lang.getRef('terms.na', LangCode.EN),
+                        : Lang.getRef('terms.na', LangCode.EN_US),
                 HEAP_USED_SIZE: fileSize(memory.heapUsed),
                 HEAP_USED_SIZE_PER_SERVER:
                     serverCount > 0
                         ? fileSize(memory.heapUsed / serverCount)
-                        : Lang.getRef('terms.na', LangCode.EN),
+                        : Lang.getRef('terms.na', LangCode.EN_US),
                 SHARD_ID: (msg.guild?.shardID ?? 0).toString(),
-                SERVER_ID: msg.guild?.id ?? Lang.getRef('other.na', LangCode.EN),
+                SERVER_ID: msg.guild?.id ?? Lang.getRef('other.na', LangCode.EN_US),
                 BOT_ID: msg.client.user.id,
                 USER_ID: msg.author.id,
             })

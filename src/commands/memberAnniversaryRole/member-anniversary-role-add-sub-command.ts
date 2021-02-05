@@ -7,7 +7,7 @@ import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = Lang.getEmbed('validation.noYear', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.noYear', LangCode.EN_US);
 
 export class MemberAnniversaryRoleAddSubCommand {
     constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
@@ -26,7 +26,10 @@ export class MemberAnniversaryRoleAddSubCommand {
         let year = ParseUtils.parseInt(args[3]);
 
         if (!year || year > 1000 || year < 0) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.invalidYear', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidYear', LangCode.EN_US)
+            );
             return;
         }
 
@@ -46,14 +49,14 @@ export class MemberAnniversaryRoleAddSubCommand {
             memberAnniversaryRole.id === msg.guild.id ||
             args[3].toLowerCase() === 'everyone'
         ) {
-            MessageUtils.send(channel, Lang.getEmbed('validation.invalidRole', LangCode.EN));
+            MessageUtils.send(channel, Lang.getEmbed('validation.invalidRole', LangCode.EN_US));
             return;
         }
 
         if (memberAnniversaryRole.managed) {
             MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.memberAnniversaryRoleManaged', LangCode.EN)
+                Lang.getEmbed('validation.memberAnniversaryRoleManaged', LangCode.EN_US)
             );
             return;
         }
@@ -65,7 +68,7 @@ export class MemberAnniversaryRoleAddSubCommand {
         if (memberAnniversaryRoles.memberAnniversaryRoles.find(role => role.Year === year)) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.duplicateYear', LangCode.EN, {
+                Lang.getEmbed('validation.duplicateYear', LangCode.EN_US, {
                     YEAR: year.toString(),
                 })
             );
@@ -80,7 +83,7 @@ export class MemberAnniversaryRoleAddSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.maxPaidMemberAnniversaryRoles', LangCode.EN, {
+                Lang.getEmbed('validation.maxPaidMemberAnniversaryRoles', LangCode.EN_US, {
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
                 })
             );
@@ -95,7 +98,7 @@ export class MemberAnniversaryRoleAddSubCommand {
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.addedMemberAnniversaryRole', LangCode.EN, {
+            Lang.getEmbed('results.addedMemberAnniversaryRole', LangCode.EN_US, {
                 ROLE: memberAnniversaryRole.toString(),
                 YEAR: year.toString(),
             })

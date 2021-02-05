@@ -18,7 +18,7 @@ export class MessageRemoveSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.removeMessageInvalidType', LangCode.EN)
+                Lang.getEmbed('validation.removeMessageInvalidType', LangCode.EN_US)
             );
             return;
         }
@@ -26,7 +26,7 @@ export class MessageRemoveSubCommand {
         if (args.length < 5) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.noMessageNumer', LangCode.EN)
+                Lang.getEmbed('validation.noMessageNumer', LangCode.EN_US)
             );
             return;
         }
@@ -51,7 +51,7 @@ export class MessageRemoveSubCommand {
                 if (!userMessages) {
                     await MessageUtils.send(
                         channel,
-                        Lang.getEmbed('validation.noUserSpecificBirthdayMessages', LangCode.EN)
+                        Lang.getEmbed('validation.noUserSpecificBirthdayMessages', LangCode.EN_US)
                     );
                     return;
                 }
@@ -71,7 +71,7 @@ export class MessageRemoveSubCommand {
         if (!position) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.customMessageInvalidMessageNumber', LangCode.EN)
+                Lang.getEmbed('validation.customMessageInvalidMessageNumber', LangCode.EN_US)
             );
             return;
         }
@@ -90,7 +90,7 @@ export class MessageRemoveSubCommand {
         if (!message) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN)
+                Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN_US)
             );
             return;
         }
@@ -102,7 +102,7 @@ export class MessageRemoveSubCommand {
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.removeMessage', LangCode.EN, { MESSAGE: message.Message })
+            Lang.getEmbed('results.removeMessage', LangCode.EN_US, { MESSAGE: message.Message })
         );
     }
 }

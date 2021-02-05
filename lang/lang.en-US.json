@@ -1195,9 +1195,15 @@
             }
         }
     },
+    "regexes": {
+        "meta": {
+            "language": "/\\b(en-US|en|en US|English)\\b/i"
+        }
+    },
     "refs": {
         "meta": {
-            "language": "English"
+            "language": "en-US",
+            "languageDisplay": "English"
         },
         "bot": {
             "name": "Birthday Bot",
@@ -1330,6 +1336,5 @@
                 "Please allow me to **Read Messages**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
             ]
         }
-    },
-    "regexes": {}
+    }
 }

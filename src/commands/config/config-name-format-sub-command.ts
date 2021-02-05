@@ -19,7 +19,7 @@ export class ConfigNameFormatSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidNameFormat', LangCode.EN, {
+                Lang.getEmbed('validation.invalidNameFormat', LangCode.EN_US, {
                     MENTION: msg.author.toString(),
                     USERNAME: msg.author.username,
                     NICKNAME: msg.member.displayName,
@@ -35,7 +35,7 @@ export class ConfigNameFormatSubCommand {
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.nameFormatSet', LangCode.EN, {
+            Lang.getEmbed('results.nameFormatSet', LangCode.EN_US, {
                 SETTING: setting,
                 FORMAT:
                     setting === 'mention'

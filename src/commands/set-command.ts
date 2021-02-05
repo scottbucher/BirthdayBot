@@ -56,7 +56,10 @@ export class SetCommand implements Command {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, Lang.getEmbed('results.birthdayExpired', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.birthdayExpired', LangCode.EN_US)
+            );
         };
         let target: User;
         let birthday: string;
@@ -127,7 +130,7 @@ export class SetCommand implements Command {
             if (guildData && !PermissionUtils.hasPermission(msg.member, guildData)) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.cantSuggest', LangCode.EN)
+                    Lang.getEmbed('validation.cantSuggest', LangCode.EN_US)
                 );
                 return;
             }
@@ -142,7 +145,7 @@ export class SetCommand implements Command {
             if (member.user.bot) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.cantSetTimeZoneForBot', LangCode.EN)
+                    Lang.getEmbed('validation.cantSetTimeZoneForBot', LangCode.EN_US)
                 );
                 return;
             }
@@ -155,7 +158,7 @@ export class SetCommand implements Command {
             ) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.memberNeedsMessageHistory', LangCode.EN, {
+                    Lang.getEmbed('validation.memberNeedsMessageHistory', LangCode.EN_US, {
                         MEMBER: member.toString(),
                     })
                 );
@@ -173,7 +176,7 @@ export class SetCommand implements Command {
                 // Out of changes?
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.outOfAttempts', LangCode.EN)
+                    Lang.getEmbed('validation.outOfAttempts', LangCode.EN_US)
                 );
                 return;
             } else {
@@ -191,7 +194,7 @@ export class SetCommand implements Command {
         ) {
             let confirmationMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('defaultTimeZoneAvailable', LangCode.EN, {
+                Lang.getEmbed('defaultTimeZoneAvailable', LangCode.EN_US, {
                     TIMEZONE: guildData.DefaultTimezone,
                     TARGET: target.username,
                 }).setAuthor(target.tag, target.avatarURL())
@@ -230,7 +233,7 @@ export class SetCommand implements Command {
         if (!timeZone) {
             let timezoneMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('userPrompts.birthdaySetupTimeZone' + embedChoice, LangCode.EN, {
+                Lang.getEmbed('userPrompts.birthdaySetupTimeZone' + embedChoice, LangCode.EN_US, {
                     TARGET: target.username,
                 }).setAuthor(target.tag, target.avatarURL())
             );
@@ -245,9 +248,13 @@ export class SetCommand implements Command {
                     if (FormatUtils.checkAbbreviation(nextMsg.content)) {
                         await MessageUtils.send(
                             channel,
-                            Lang.getEmbed('validation.invalidTimeZoneAbbreviation', LangCode.EN, {
-                                TARGET: target.username,
-                            })
+                            Lang.getEmbed(
+                                'validation.invalidTimeZoneAbbreviation',
+                                LangCode.EN_US,
+                                {
+                                    TARGET: target.username,
+                                }
+                            )
                         );
                         return;
                     }
@@ -256,7 +263,7 @@ export class SetCommand implements Command {
                     if (!input) {
                         await MessageUtils.send(
                             channel,
-                            Lang.getEmbed('validation.invalidTimezone', LangCode.EN, {
+                            Lang.getEmbed('validation.invalidTimezone', LangCode.EN_US, {
                                 TARGET: target.username,
                             })
                         );
@@ -279,7 +286,7 @@ export class SetCommand implements Command {
         if (!birthday) {
             let birthdayMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('userPrompts.birthdaySetupBirthday' + embedChoice, LangCode.EN, {
+                Lang.getEmbed('userPrompts.birthdaySetupBirthday' + embedChoice, LangCode.EN_US, {
                     TARGET: target.username,
                 }).setAuthor(target.tag, target.avatarURL())
             );
@@ -297,7 +304,7 @@ export class SetCommand implements Command {
                     if (!result) {
                         await MessageUtils.send(
                             channel,
-                            Lang.getEmbed('validation.invalidBirthday', LangCode.EN, {
+                            Lang.getEmbed('validation.invalidBirthday', LangCode.EN_US, {
                                 TARGET: target.username,
                             })
                         );
@@ -330,7 +337,7 @@ export class SetCommand implements Command {
                 : 'userPrompts.confirmFirstBirthday';
         confirmationEmbedChoice += suggest ? 'Suggest' : '';
 
-        confirmationEmbed = Lang.getEmbed(confirmationEmbedChoice, LangCode.EN, {
+        confirmationEmbed = Lang.getEmbed(confirmationEmbedChoice, LangCode.EN_US, {
             TARGET: target.toString(),
             BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
             TIMEZONE: timeZone,
@@ -367,7 +374,7 @@ export class SetCommand implements Command {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.setBirthday', LangCode.EN, {
+                Lang.getEmbed('results.setBirthday', LangCode.EN_US, {
                     BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                     TIMEZONE: timeZone,
                     AMOUNT: `${changesLeft - 1}`,
@@ -376,7 +383,10 @@ export class SetCommand implements Command {
             return;
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
-            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.actionCanceled', LangCode.EN_US)
+            );
             return;
         }
     }
