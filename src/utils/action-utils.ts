@@ -5,11 +5,10 @@ export class ActionUtils {
         try {
             await member.roles.add(role);
         } catch (error) {
-            // Error code 50001: "Missing Access", Error code: 10011: "Unknown Role" (Role was deleted), Error code: 50013: "Missing Permission"
-            if (
-                error instanceof DiscordAPIError &&
-                (error.code === 50001 || error.code === 10011 || error.code === 50013)
-            ) {
+            // 10011: "Unknown Role" (Role was deleted)
+            // 50001: "Missing Access"
+            // 50013: "Missing Permission"
+            if (error instanceof DiscordAPIError && [10011, 50001, 50013].includes(error.code)) {
                 return;
             } else {
                 throw error;
@@ -21,11 +20,10 @@ export class ActionUtils {
         try {
             await member.roles.remove(role);
         } catch (error) {
-            // Error code 50001: "Missing Access", Error code: 10011: "Unknown Role" (Role was deleted), Error code: 50013: "Missing Permission"
-            if (
-                error instanceof DiscordAPIError &&
-                (error.code === 50001 || error.code === 10011 || error.code === 50013)
-            ) {
+            // 10011: "Unknown Role" (Role was deleted)
+            // 50001: "Missing Access"
+            // 50013: "Missing Permission"
+            if (error instanceof DiscordAPIError && [10011, 50001, 50013].includes(error.code)) {
                 return;
             } else {
                 throw error;
