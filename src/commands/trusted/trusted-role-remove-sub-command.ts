@@ -6,7 +6,7 @@ import { LangCode } from '../../models/enums';
 import { TrustedRole } from '../../models/database';
 import { TrustedRoleRepo } from '../../services/database/repos';
 
-const errorEmbed = Lang.getEmbed('validation.trustedRoleNoRoleOrPosition', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.trustedRoleNoRoleOrPosition', LangCode.EN_US);
 
 export class TrustedRoleRemoveSubCommand {
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
@@ -33,7 +33,10 @@ export class TrustedRoleRemoveSubCommand {
             trustedRole &&
             (trustedRole.id === msg.guild.id || args[3].toLowerCase() === 'everyone')
         ) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.invalidRole', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidRole', LangCode.EN_US)
+            );
             return;
         }
 
@@ -54,7 +57,7 @@ export class TrustedRoleRemoveSubCommand {
         if (!position) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidTrustedRole', LangCode.EN)
+                Lang.getEmbed('validation.invalidTrustedRole', LangCode.EN_US)
             );
             return;
         }
@@ -66,7 +69,7 @@ export class TrustedRoleRemoveSubCommand {
         if (!role) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidTrustedRole', LangCode.EN)
+                Lang.getEmbed('validation.invalidTrustedRole', LangCode.EN_US)
             );
             return;
         }
@@ -77,7 +80,7 @@ export class TrustedRoleRemoveSubCommand {
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.removedTrustedRole', LangCode.EN, {
+            Lang.getEmbed('results.removedTrustedRole', LangCode.EN_US, {
                 ROLE: r ? r.toString() : '**Deleted Role**',
             })
         );

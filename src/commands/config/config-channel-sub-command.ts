@@ -5,7 +5,7 @@ import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
-const errorEmbed = Lang.getEmbed('validation.invalidChannelAction', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.invalidChannelAction', LangCode.EN_US);
 
 export class ConfigChannelSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -26,7 +26,7 @@ export class ConfigChannelSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidChannelType', LangCode.EN)
+                Lang.getEmbed('validation.invalidChannelType', LangCode.EN_US)
             );
             return;
         }
@@ -54,10 +54,10 @@ export class ConfigChannelSubCommand {
 
             // Create channel with desired attributes
             let newChannel = await msg.guild.channels.create(
-                Lang.getRef('terms.' + refType + 'Title', LangCode.EN),
+                Lang.getRef('terms.' + refType + 'Title', LangCode.EN_US),
                 {
                     type: 'text',
-                    topic: Lang.getRef('terms.' + refType + 'Topic', LangCode.EN),
+                    topic: Lang.getRef('terms.' + refType + 'Topic', LangCode.EN_US),
                     permissionOverwrites: [
                         {
                             id: msg.guild.id,
@@ -80,7 +80,7 @@ export class ConfigChannelSubCommand {
             channelId = newChannel ? newChannel.id : '0';
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.' + refType + 'Created', LangCode.EN, {
+                Lang.getEmbed('results.' + refType + 'Created', LangCode.EN_US, {
                     CHANNEL: newChannel.toString(),
                 })
             );
@@ -89,7 +89,7 @@ export class ConfigChannelSubCommand {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.' + refType + 'Cleared', LangCode.EN)
+                Lang.getEmbed('results.' + refType + 'Cleared', LangCode.EN_US)
             );
         } else {
             // See if a channel was specified
@@ -125,7 +125,7 @@ export class ConfigChannelSubCommand {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.' + refType + 'Set', LangCode.EN, {
+                Lang.getEmbed('results.' + refType + 'Set', LangCode.EN_US, {
                     CHANNEL: newChannel.toString(),
                 })
             );

@@ -47,7 +47,7 @@ export class MessageUserListSubCommand {
 
         if (
             embed.description ===
-            Lang.getRef('list.noCustomUserSpecificBirthdayMessages', LangCode.EN)
+            Lang.getRef('list.noCustomUserSpecificBirthdayMessages', LangCode.EN_US)
         )
             return;
 

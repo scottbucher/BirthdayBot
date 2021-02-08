@@ -35,7 +35,7 @@ export class MessageListSubCommand {
         if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidMessageType', LangCode.EN)
+                Lang.getEmbed('validation.invalidMessageType', LangCode.EN_US)
             );
             return;
         }
@@ -64,10 +64,11 @@ export class MessageListSubCommand {
         let message = await MessageUtils.send(channel, embed);
 
         if (
-            embed.description === Lang.getRef('list.noCustomBirthdayMessages', LangCode.EN) ||
+            embed.description === Lang.getRef('list.noCustomBirthdayMessages', LangCode.EN_US) ||
             embed.description ===
-                Lang.getRef('list.noCustomMemberAnniversaryMessages', LangCode.EN) ||
-            embed.description === Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN)
+                Lang.getRef('list.noCustomMemberAnniversaryMessages', LangCode.EN_US) ||
+            embed.description ===
+                Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN_US)
         )
             return;
 

@@ -43,7 +43,7 @@ export class TrustedRoleListSubCommand {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description === Lang.getRef('list.noTrustedRoles', LangCode.EN)) return;
+        if (embed.description === Lang.getRef('list.noTrustedRoles', LangCode.EN_US)) return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);
         await MessageUtils.react(message, Config.emotes.jumpToPage);

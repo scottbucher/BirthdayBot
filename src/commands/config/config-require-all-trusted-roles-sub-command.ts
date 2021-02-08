@@ -5,7 +5,7 @@ import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
-const errorEmbed = Lang.getEmbed('validation.noTrueFalse', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.noTrueFalse', LangCode.EN_US);
 
 export class ConfigRequireAllTrustedRolesSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -21,7 +21,7 @@ export class ConfigRequireAllTrustedRolesSubCommand {
         if (requireAll === undefined || requireAll === null) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidTrueFalseRequireAllTrustedMessage', LangCode.EN)
+                Lang.getEmbed('validation.invalidTrueFalseRequireAllTrustedMessage', LangCode.EN_US)
             );
             return;
         }
@@ -29,6 +29,6 @@ export class ConfigRequireAllTrustedRolesSubCommand {
         await this.guildRepo.updateRequireAllTrustedRoles(msg.guild.id, requireAll ? 1 : 0);
 
         let value = requireAll ? 'results.requireAllTrustedYes' : 'results.requireAllTrustedNo';
-        await MessageUtils.send(channel, Lang.getEmbed(value, LangCode.EN));
+        await MessageUtils.send(channel, Lang.getEmbed(value, LangCode.EN_US));
     }
 }

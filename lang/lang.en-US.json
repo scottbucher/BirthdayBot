@@ -150,7 +150,7 @@
             },
             "addMessageExpired": {
                 "title": "Add Custom Message - Expired",
-                "description": "Type `bday message add <Type> <Message>` to add a custom message.",
+                "description": "Type `{{REF:bot.prefix}} message add <Type> <Message>` to add a custom message.",
                 "color": "{{REF:colors.error}}"
             },
             "removeMessage": {
@@ -163,12 +163,12 @@
             },
             "birthdayExpired": {
                 "title": "Custom Message Clear - Expired",
-                "description": "Type `bday message clear <type>` to clear a custom message type.",
+                "description": "Type `{{REF:bot.prefix}} message clear <type>` to clear a custom message type.",
                 "color": "{{REF:colors.error}}"
             },
             "customMessageClearExpired": {
                 "title": "Birthday Set - Expired",
-                "description": "Type `bday set` to rerun the birthday setup.",
+                "description": "Type `{{REF:bot.prefix}} set` to rerun the birthday setup.",
                 "color": "{{REF:colors.error}}"
             },
             "blacklistClearSuccess": {
@@ -177,7 +177,7 @@
             },
             "blacklistClearExpired": {
                 "title": "Blacklist Clear - Expired",
-                "description": "Type `bday blacklist clear` to clear the birthday blacklist.",
+                "description": "Type `{{REF:bot.prefix}} blacklist clear` to clear the birthday blacklist.",
                 "color": "{{REF:colors.error}}"
             },
             "blacklistAddSuccess": {
@@ -271,12 +271,12 @@
             },
             "trustedRoleClearExpired": {
                 "title": "Trusted Role Clear - Expired",
-                "description": "Type `bday trustedRole clear` to clear the trusted roles.",
+                "description": "Type `{{REF:bot.prefix}} trustedRole clear` to clear the trusted roles.",
                 "color": "{{REF:colors.error}}"
             },
             "memberAnniversaryRoleClearExpired": {
                 "title": "Member Anniversary Role Clear - Expired",
-                "description": "Type `bday memberAnniversaryRole clear` to clear the member anniversary roles.",
+                "description": "Type `{{REF:bot.prefix}} memberAnniversaryRole clear` to clear the member anniversary roles.",
                 "color": "{{REF:colors.error}}"
             },
             "addedTrustedRole": {
@@ -471,9 +471,9 @@
                 "description": [
                     "Please specify an option!",
                     "",
-                    "`bday config channel <type> create` - Creates the default channel of that type.",
-                    "`bday config channel <type> clear` - Clears the channel of that type.",
-                    "`bday config channel <type> #channel` - Set the channel of that type."
+                    "`{{REF:bot.prefix}} config channel <type> create` - Creates the default channel of that type.",
+                    "`{{REF:bot.prefix}} config channel <type> clear` - Clears the channel of that type.",
+                    "`{{REF:bot.prefix}} config channel <type> #channel` - Set the channel of that type."
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -501,9 +501,9 @@
                 "description": [
                     "Please specify an option!",
                     "",
-                    "`bday config birthdayMasterRole create` - Creates the birthday master role.",
-                    "`bday config birthdayMasterRole clear` - Clears the birthday master role.",
-                    "`bday config birthdayMasterRole @role` - Set the birthday master role."
+                    "`{{REF:bot.prefix}} config birthdayMasterRole create` - Creates the birthday master role.",
+                    "`{{REF:bot.prefix}} config birthdayMasterRole clear` - Clears the birthday master role.",
+                    "`{{REF:bot.prefix}} config birthdayMasterRole @role` - Set the birthday master role."
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -516,9 +516,9 @@
                 "description": [
                     "Please specify an option!",
                     "",
-                    "`bday config role create` - Creates the default birthday role.",
-                    "`bday config role clear` - Clears the birthday role.",
-                    "`bday config role @role` - Set the birthday role."
+                    "`{{REF:bot.prefix}} config role create` - Creates the default birthday role.",
+                    "`{{REF:bot.prefix}} config role clear` - Clears the birthday role.",
+                    "`{{REF:bot.prefix}} config role @role` - Set the birthday role."
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -618,7 +618,7 @@
             },
             "trustedRoleInvalidRoleOrPosition": {
                 "title": "Trusted Role Remove - Invalid Role/Position",
-                "description": "Use `bday trustedRole list <type>` to view your server's trusted roles!",
+                "description": "Use `{{REF:bot.prefix}} trustedRole list <type>` to view your server's trusted roles!",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -629,7 +629,7 @@
                 "title": "Trusted Role Remove - Not Found",
                 "description": [
                     "Trusted Role does not exist!",
-                    "View your server's trusted roles with `bday trustedRole list`!"
+                    "View your server's trusted roles with `{{REF:bot.prefix}} trustedRole list`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -639,7 +639,7 @@
             },
             "customMessageInvalidPosition": {
                 "title": "Remove Custom Message",
-                "description": "Use `bday message list <type>' to view your server's custom messages!",
+                "description": "Use `{{REF:bot.prefix}} message list <type>' to view your server's custom messages!",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -649,7 +649,7 @@
                 "title": "Remove Custom Message",
                 "description": [
                     "Message number does not exist!",
-                    "View your server's custom messages with `bday message list <type>`!"
+                    "View your server's custom messages with `{{REF:bot.prefix}} message list <type>`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -671,7 +671,7 @@
             "noUserPlaceholder": {
                 "description": [
                     "Please include the `{{REF:placeHolder.users}}` placeholder somewhere in the message. This indicates where birthday usernames will appear.",
-                    "Ex: `bday message add birthday {{REF:defaults.birthdayMessage}}`"
+                    "Ex: `{{REF:bot.prefix}} message add birthday {{REF:defaults.birthdayMessage}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -710,7 +710,7 @@
                 "title": "Test Custom Message",
                 "description": [
                     "Message number does not exist!",
-                    "View your server's custom messages with `bday message list <type>`!"
+                    "View your server's custom messages with `{{REF:bot.prefix}} message list <type>`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -721,7 +721,7 @@
                 "title": "Test Custom Message",
                 "description": [
                     "Message does not exist!",
-                    "View your server's custom messages with `bday message list <type>`!"
+                    "View your server's custom messages with `{{REF:bot.prefix}} message list <type>`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -803,7 +803,7 @@
             "noMessageNumber": {
                 "description": [
                     "Please provide a message number or user!",
-                    "Find this using `bday message list <type>`!"
+                    "Find this using `{{REF:bot.prefix}} message list <type>`!"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -834,7 +834,7 @@
             "invalidMessageNumber": {
                 "description": [
                     "Invalid message number!",
-                    "Find this using `bday message list <type>`!"
+                    "Find this using `{{REF:bot.prefix}} message list <type>`!"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -888,7 +888,7 @@
         "premiumRequired": {
             "userSpecificMessages": {
                 "title": "{{REF:terms.premiumRequired}}",
-                "description": "User-specific birthday messages are a premium feature! View information about **{{REF:bot.name}} Premium** using `bday premium`!",
+                "description": "User-specific birthday messages are a premium feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
                 "footer": {
                     "text": "{{REF:footers.whyPremium}}"
                 },
@@ -992,7 +992,7 @@
             "birthday": {
                 "title": "{{REF:terms.birthdayList}} | {{REF:list.pageTitle}}",
                 "description": [
-                    "*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use `bday set`!*",
+                    "*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use `{{REF:bot.prefix}} set`!*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -1124,7 +1124,7 @@
             "trustedRoleFree": {
                 "title": "{{REF:list.trustedRolesTitle}}",
                 "description": [
-                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `bday config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `{{REF:bot.prefix}} config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -1136,7 +1136,7 @@
             "trustedRolePaid": {
                 "title": "{{REF:list.trustedRolesTitle}}",
                 "description": [
-                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `bday config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `{{REF:bot.prefix}} config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -1184,7 +1184,7 @@
             "blacklist": {
                 "title": "{{REF:terms.blacklistList}} | {{REF:list.pageTitle}}",
                 "description": [
-                    "*Users on this list will not have their birthdays celebrated no matter what. Edit this list with `bday blacklist <add/remove> <User>`!*",
+                    "*Users on this list will not have their birthdays celebrated no matter what. Edit this list with `{{REF:bot.prefix}} blacklist <add/remove> <User>`!*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -1195,18 +1195,25 @@
             }
         }
     },
+    "regexes": {
+        "meta": {
+            "language": "/\\b(en-US|en|en US|English)\\b/i"
+        }
+    },
     "refs": {
         "meta": {
-            "language": "English"
+            "language": "en-US",
+            "languageDisplay": "English"
         },
         "bot": {
             "name": "Birthday Bot",
-            "description": "{{REF:links.templateEmbed}} helps your server track and celebrate birthdays by automatically celebrating them with numerous fun and extremely customizable features."
+            "description": "{{REF:links.templateEmbed}} helps your server track and celebrate birthdays by automatically celebrating them with numerous fun and extremely customizable features.",
+            "prefix": "bday"
         },
         "colors": {
-            "error": "#ff0000",
             "success": "#1cfe86",
-            "warn": "#ffa255"
+            "warn": "#ffa255",
+            "error": "#ff0000"
         },
         "emotes": {
             "confirm": "✅",
@@ -1218,15 +1225,15 @@
         },
         "links": {
             "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
+            "inviteEmbed": "[Invite {{REF:bot.name}} to a Server!]({{REF:links.invite}})",
             "support": "https://discord.gg/9gUQFtz",
+            "supportEmbed": "[Join Support Server]({{REF:links.support}})",
             "stream": "https://www.twitch.tv/stqlth",
             "author": "https://github.com/scottbucher",
-            "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
-            "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
-            "supportEmbed": "[Join Support Server]({{REF:links.support}})",
-            "inviteEmbed": "[Invite {{REF:bot.name}} to a Server!]({{REF:links.invite}})",
             "authorEmbed": "[Scott Bucher]({{REF:links.author}})",
-            "templateEmbed": "[Discord Bot TypeScript Template]({{REF:links.template}})"
+            "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
+            "templateEmbed": "[Discord Bot TypeScript Template]({{REF:links.template}})",
+            "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/"
         },
         "footers": {
             "expire": "This message expires in 2 minutes!",
@@ -1263,15 +1270,15 @@
             "noCustomMemberAnniversaryMessages": "**No Custom Member Anniversary Messages!**",
             "noCustomServerAnniversaryMessages": "**No Custom Server Anniversary Messages!**",
             "messagePaidFieldTitle": "Message Limit",
-            "birthdayMessagePaidFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom birthday messages. Unlock up to **{{MAX_PAID}}** with `bday premium`!",
-            "memberAnniversaryMessagePaidFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom member anniversary messages. Unlock up to **{{MAX_PAID}}** with `bday premium`!",
-            "serverAnniversaryMessagePaidFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom server anniversary messages. Unlock up to **{{MAX_PAID}}** with `bday premium`!",
+            "birthdayMessagePaidFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom birthday messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
+            "memberAnniversaryMessagePaidFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom member anniversary messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
+            "serverAnniversaryMessagePaidFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom server anniversary messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
             "userBirthdayMessageFieldTitle": "Locked Feature",
-            "userBirthdayMessageFieldText": "User-specific messages are a premium only feature. Unlock them with `bday premium`!",
+            "userBirthdayMessageFieldText": "User-specific messages are a premium only feature. Unlock them with `{{REF:bot.prefix}} premium`!",
             "trustedRoleFieldTitle": "Trusted Role Limit",
-            "trustedRoleFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** trusted roles. Unlock up to **{{MAX_PAID}}** with `bday premium`!",
+            "trustedRoleFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** trusted roles. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
             "memberAnniversaryRoleFieldTitle": "Member Anniversary Roles Unavailable",
-            "memberAnniversaryRoleFieldText": "Member anniversary roles are a premium feature **only**. Unlock up to **{{MAX_PAID}}** with `bday premium`!"
+            "memberAnniversaryRoleFieldText": "Member anniversary roles are a premium feature **only**. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!"
         },
         "terms": {
             "timeZone": "Time Zone",
@@ -1330,6 +1337,5 @@
                 "Please allow me to **Read Messages**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
             ]
         }
-    },
-    "regexes": {}
+    }
 }

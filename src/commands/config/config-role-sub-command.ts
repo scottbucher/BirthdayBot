@@ -7,7 +7,7 @@ import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = Lang.getEmbed('validation.invalidBirthdayRoleAction', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.invalidBirthdayRoleAction', LangCode.EN_US);
 
 export class ConfigRoleSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -41,7 +41,7 @@ export class ConfigRoleSubCommand {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.birthdayRoleCreated', LangCode.EN, {
+                Lang.getEmbed('results.birthdayRoleCreated', LangCode.EN_US, {
                     ROLE: birthdayRole.toString(),
                 })
             );
@@ -51,7 +51,7 @@ export class ConfigRoleSubCommand {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.birthdayRoleCleared', LangCode.EN)
+                Lang.getEmbed('results.birthdayRoleCleared', LangCode.EN_US)
             );
         } else {
             // See if a role was specified
@@ -78,7 +78,7 @@ export class ConfigRoleSubCommand {
             ) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.invalidRole', LangCode.EN)
+                    Lang.getEmbed('validation.invalidRole', LangCode.EN_US)
                 );
                 return;
             }
@@ -94,7 +94,7 @@ export class ConfigRoleSubCommand {
             if (birthdayRole.managed) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.birthdayRoleManaged', LangCode.EN)
+                    Lang.getEmbed('validation.birthdayRoleManaged', LangCode.EN_US)
                 );
                 return;
             }
@@ -104,14 +104,14 @@ export class ConfigRoleSubCommand {
             if (membersWithRole > 0 && membersWithRole < 100) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.warnBirthdayRoleSize', LangCode.EN, {
+                    Lang.getEmbed('validation.warnBirthdayRoleSize', LangCode.EN_US, {
                         AMOUNT: membersWithRole.toString(),
                     })
                 );
             } else if (membersWithRole > 100) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.denyBirthdayRoleSize', LangCode.EN, {
+                    Lang.getEmbed('validation.denyBirthdayRoleSize', LangCode.EN_US, {
                         AMOUNT: membersWithRole.toString(),
                     })
                 );
@@ -121,7 +121,7 @@ export class ConfigRoleSubCommand {
             await this.guildRepo.updateBirthdayRole(msg.guild.id, birthdayRole?.id);
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.birthdayRoleSet', LangCode.EN, {
+                Lang.getEmbed('results.birthdayRoleSet', LangCode.EN_US, {
                     ROLE: birthdayRole.toString(),
                 })
             );

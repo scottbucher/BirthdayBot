@@ -30,7 +30,7 @@ export class TrustedRoleClearSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.trustedRoleClearExpired', LangCode.EN)
+                Lang.getEmbed('results.trustedRoleClearExpired', LangCode.EN_US)
             );
         };
 
@@ -39,7 +39,7 @@ export class TrustedRoleClearSubCommand {
         if (trustedRoles.trustedRoles.length === 0) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.noTrustedRoles', LangCode.EN)
+                Lang.getEmbed('validation.noTrustedRoles', LangCode.EN_US)
             );
             return;
         }
@@ -48,7 +48,7 @@ export class TrustedRoleClearSubCommand {
 
         let confirmationMessage = await MessageUtils.send(
             channel,
-            Lang.getEmbed('serverPrompts.trustedRoleClearConfirmation', LangCode.EN, {
+            Lang.getEmbed('serverPrompts.trustedRoleClearConfirmation', LangCode.EN_US, {
                 TOTAL: trustedRoles.trustedRoles.length.toString(),
             })
         ); // Send confirmation and emotes
@@ -79,10 +79,13 @@ export class TrustedRoleClearSubCommand {
             await this.trustedRoleRepo.clearTrustedRoles(msg.guild.id);
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.clearedTrustedRole', LangCode.EN)
+                Lang.getEmbed('results.clearedTrustedRole', LangCode.EN_US)
             );
         } else {
-            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.actionCanceled', LangCode.EN_US)
+            );
         }
     }
 }

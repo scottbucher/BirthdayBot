@@ -5,7 +5,7 @@ import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
-const errorEmbed = Lang.getEmbed('validation.noTrueFalse', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.noTrueFalse', LangCode.EN_US);
 
 export class ConfigTrustedPreventsMsgSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -21,7 +21,7 @@ export class ConfigTrustedPreventsMsgSubCommand {
         if (preventMessage === undefined || preventMessage === null) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidTrueFalseTrustedPreventsMessage', LangCode.EN)
+                Lang.getEmbed('validation.invalidTrueFalseTrustedPreventsMessage', LangCode.EN_US)
             );
             return;
         }
@@ -31,6 +31,6 @@ export class ConfigTrustedPreventsMsgSubCommand {
         let value = preventMessage
             ? 'results.trustedPreventsMessageYes'
             : 'results.trustedPreventsMessageNo';
-        await MessageUtils.send(channel, Lang.getEmbed(value, LangCode.EN));
+        await MessageUtils.send(channel, Lang.getEmbed(value, LangCode.EN_US));
     }
 }

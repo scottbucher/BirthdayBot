@@ -12,7 +12,7 @@ export class BlacklistRemoveSubCommand {
         if (args.length === 3) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.noUserSpecified', LangCode.EN)
+                Lang.getEmbed('validation.noUserSpecified', LangCode.EN_US)
             );
             return;
         }
@@ -23,14 +23,17 @@ export class BlacklistRemoveSubCommand {
 
         // Did we find a user?
         if (!target) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noUserFound', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noUserFound', LangCode.EN_US)
+            );
             return;
         }
 
         if (target.bot) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.cantBlacklistBot', LangCode.EN)
+                Lang.getEmbed('validation.cantBlacklistBot', LangCode.EN_US)
             );
             return;
         }
@@ -40,7 +43,7 @@ export class BlacklistRemoveSubCommand {
         if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(msg.author.id)) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.userNotInBlacklist', LangCode.EN)
+                Lang.getEmbed('validation.userNotInBlacklist', LangCode.EN_US)
             );
             return;
         }
@@ -49,7 +52,9 @@ export class BlacklistRemoveSubCommand {
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.blacklistAddSuccess', LangCode.EN, { TARGET: target.toString() })
+            Lang.getEmbed('results.blacklistAddSuccess', LangCode.EN_US, {
+                TARGET: target.toString(),
+            })
         );
     }
 }

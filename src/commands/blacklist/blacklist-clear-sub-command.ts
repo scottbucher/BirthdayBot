@@ -30,7 +30,7 @@ export class BlacklistClearSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.blacklistClearExpired', LangCode.EN)
+                Lang.getEmbed('results.blacklistClearExpired', LangCode.EN_US)
             );
         };
 
@@ -39,7 +39,7 @@ export class BlacklistClearSubCommand {
         if (blacklisted.blacklist.length === 0) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.emptyBlacklist', LangCode.EN)
+                Lang.getEmbed('validation.emptyBlacklist', LangCode.EN_US)
             );
             return;
         }
@@ -48,7 +48,7 @@ export class BlacklistClearSubCommand {
 
         let confirmationMessage = await MessageUtils.send(
             channel,
-            Lang.getEmbed('serverPrompts.blacklistClearConfirmation', LangCode.EN, {
+            Lang.getEmbed('serverPrompts.blacklistClearConfirmation', LangCode.EN_US, {
                 TOTAL: blacklisted.blacklist.length.toString(),
             })
         ); // Send confirmation and emotes
@@ -80,10 +80,13 @@ export class BlacklistClearSubCommand {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.blacklistClearSuccess', LangCode.EN)
+                Lang.getEmbed('results.blacklistClearSuccess', LangCode.EN_US)
             );
         } else {
-            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.actionCanceled', LangCode.EN_US)
+            );
         }
     }
 }

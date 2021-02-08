@@ -37,7 +37,7 @@ export class BlacklistListSubCommand {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description === Lang.getRef('list.emptyBlacklist', LangCode.EN)) return;
+        if (embed.description === Lang.getRef('list.emptyBlacklist', LangCode.EN_US)) return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);
         await MessageUtils.react(message, Config.emotes.jumpToPage);

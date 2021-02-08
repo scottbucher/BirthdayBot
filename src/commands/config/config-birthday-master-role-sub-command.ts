@@ -5,7 +5,7 @@ import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
-const errorEmbed = Lang.getEmbed('validation.invalidMasterAction', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.invalidMasterAction', LangCode.EN_US);
 
 export class ConfigBirthdayMasterRoleSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -36,7 +36,7 @@ export class ConfigBirthdayMasterRoleSubCommand {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.masterRoleCreated', LangCode.EN, {
+                Lang.getEmbed('results.masterRoleCreated', LangCode.EN_US, {
                     ROLE: birthdayMasterRole.toString(),
                 })
             );
@@ -46,7 +46,7 @@ export class ConfigBirthdayMasterRoleSubCommand {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.masterRoleCleared', LangCode.EN)
+                Lang.getEmbed('results.masterRoleCleared', LangCode.EN_US)
             );
         } else {
             // See if a role was specified
@@ -65,7 +65,7 @@ export class ConfigBirthdayMasterRoleSubCommand {
             ) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.invalidRole', LangCode.EN)
+                    Lang.getEmbed('validation.invalidRole', LangCode.EN_US)
                 );
                 return;
             }
@@ -73,7 +73,7 @@ export class ConfigBirthdayMasterRoleSubCommand {
             if (birthdayMasterRole.managed) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.masterRoleManaged', LangCode.EN)
+                    Lang.getEmbed('validation.masterRoleManaged', LangCode.EN_US)
                 );
                 return;
             }
@@ -82,7 +82,7 @@ export class ConfigBirthdayMasterRoleSubCommand {
 
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.masterRoleSet', LangCode.EN, {
+                Lang.getEmbed('results.masterRoleSet', LangCode.EN_US, {
                     ROLE: birthdayMasterRole.toString(),
                 })
             );
