@@ -1334,7 +1334,7 @@
             "missingEmbedPerms": [
                 "I don't have all permissions required to send messages here!",
                 "",
-                "Please allow me to **Read Messages**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
+                "Please allow me to **View Channel**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
             ]
         }
     }
