@@ -16,7 +16,7 @@
             "messages": {
                 "size": 0,
                 "lifetime": 0,
-                "sweepInterval": 1
+                "sweepInterval": 0
             }
         }
     },
