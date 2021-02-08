@@ -32,7 +32,6 @@
         "express": "4.17.1",
         "express-promise-router": "4.0.1",
         "filesize": "6.1.0",
-        "limiter": "1.1.5",
         "moment-timezone": "0.5.32",
         "mysql": "2.18.1",
         "node-fetch": "2.6.1",
