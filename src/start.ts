@@ -309,9 +309,11 @@ async function start(): Promise<void> {
 }
 
 process.on('unhandledRejection', (reason, promise) => {
-    if (reason instanceof DiscordAPIError) {
-        if (reason.code === 10003) return;
+    // 10003: "Unknown channel"
+    if (reason instanceof DiscordAPIError && reason.code === 10003) {
+        return;
     }
+
     Logger.error('Unhandled promise rejection.', reason);
 });
 
