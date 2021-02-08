@@ -5,7 +5,7 @@ import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 import { MessageUtils } from '../../utils';
 
-const errorEmbed = Lang.getEmbed('validation.invalidUseTimezoneAction', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.invalidUseTimezoneAction', LangCode.EN_US);
 
 export class ConfigUseTimezoneSubCommand {
     constructor(private guildRepo: GuildRepo) {}
@@ -26,7 +26,7 @@ export class ConfigUseTimezoneSubCommand {
         await this.guildRepo.updateUseTimezone(msg.guild.id, option);
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.useTimeZoneSettingSet', LangCode.EN, { OPTION: option })
+            Lang.getEmbed('results.useTimeZoneSettingSet', LangCode.EN_US, { OPTION: option })
         );
     }
 }

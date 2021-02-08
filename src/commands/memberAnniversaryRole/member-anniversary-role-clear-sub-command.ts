@@ -30,7 +30,7 @@ export class MemberAnniversaryRoleClearSubCommand {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.memberAnniversaryRoleClearExpired', LangCode.EN)
+                Lang.getEmbed('results.memberAnniversaryRoleClearExpired', LangCode.EN_US)
             );
         };
 
@@ -41,7 +41,7 @@ export class MemberAnniversaryRoleClearSubCommand {
         if (memberAnniversaryRoles.memberAnniversaryRoles.length === 0) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.noMemberAnniversaryRoles', LangCode.EN)
+                Lang.getEmbed('validation.noMemberAnniversaryRoles', LangCode.EN_US)
             );
             return;
         }
@@ -50,7 +50,7 @@ export class MemberAnniversaryRoleClearSubCommand {
 
         let confirmationMessage = await MessageUtils.send(
             channel,
-            Lang.getEmbed('serverPrompts.memberAnniversaryRoleClearConfirmation', LangCode.EN, {
+            Lang.getEmbed('serverPrompts.memberAnniversaryRoleClearConfirmation', LangCode.EN_US, {
                 TOTAL: memberAnniversaryRoles.memberAnniversaryRoles.length.toString(),
             })
         ); // Send confirmation and emotes
@@ -81,10 +81,13 @@ export class MemberAnniversaryRoleClearSubCommand {
             await this.memberAnniversaryRoleRepo.clearMemberAnniversaryRoles(msg.guild.id);
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.clearedMemberAnniversaryRole', LangCode.EN)
+                Lang.getEmbed('results.clearedMemberAnniversaryRole', LangCode.EN_US)
             );
         } else {
-            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.actionCanceled', LangCode.EN_US)
+            );
         }
     }
 }

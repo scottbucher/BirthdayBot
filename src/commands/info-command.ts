@@ -21,6 +21,6 @@ export class InfoCommand implements Command {
         msg: Message,
         channel: TextChannel | DMChannel
     ): Promise<void> {
-        await MessageUtils.send(msg.channel, Lang.getEmbed('info.general', LangCode.EN));
+        await MessageUtils.send(msg.channel, Lang.getEmbed('info.general', LangCode.EN_US));
     }
 }

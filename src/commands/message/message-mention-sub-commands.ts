@@ -20,7 +20,7 @@ export class MessageMentionSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidMessageType', LangCode.EN)
+                Lang.getEmbed('validation.invalidMessageType', LangCode.EN_US)
             );
             return;
         }
@@ -28,7 +28,7 @@ export class MessageMentionSubCommand {
         if (args.length < 5) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidMention', LangCode.EN)
+                Lang.getEmbed('validation.invalidMention', LangCode.EN_US)
             );
             return;
         }
@@ -54,7 +54,7 @@ export class MessageMentionSubCommand {
             ) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.invalidMentionSetting', LangCode.EN)
+                    Lang.getEmbed('validation.invalidMentionSetting', LangCode.EN_US)
                 );
                 return;
             } else {
@@ -75,7 +75,7 @@ export class MessageMentionSubCommand {
             if (mention.toLowerCase() === 'everyone' || mention.toLowerCase() === 'here') {
                 mentionOutput = '@' + mention;
             } else if (mention.toLowerCase() === 'none') {
-                mentionOutput = Lang.getRef('terms.noOne', LangCode.EN);
+                mentionOutput = Lang.getRef('terms.noOne', LangCode.EN_US);
             }
         } else {
             mentionOutput = roleInput.toString();
@@ -87,7 +87,7 @@ export class MessageMentionSubCommand {
             await this.guildRepo.updateBirthdayMentionSetting(msg.guild.id, mention);
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.setBirthdayMessageMention', LangCode.EN, {
+                Lang.getEmbed('results.setBirthdayMessageMention', LangCode.EN_US, {
                     MENTION: mentionOutput,
                 })
             );
@@ -97,7 +97,7 @@ export class MessageMentionSubCommand {
             await this.guildRepo.updateMemberAnniversaryMentionSetting(msg.guild.id, mention);
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.setMemberAnniversaryMessageMention', LangCode.EN, {
+                Lang.getEmbed('results.setMemberAnniversaryMessageMention', LangCode.EN_US, {
                     MENTION: mentionOutput,
                 })
             );
@@ -107,7 +107,7 @@ export class MessageMentionSubCommand {
             await this.guildRepo.updateServerAnniversaryMentionSetting(msg.guild.id, mention);
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('results.setServerAnniversaryMessageMention', LangCode.EN, {
+                Lang.getEmbed('results.setServerAnniversaryMessageMention', LangCode.EN_US, {
                     MENTION: mentionOutput,
                 })
             );

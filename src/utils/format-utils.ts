@@ -163,10 +163,10 @@ export class FormatUtils {
                 .setColor(Config.colors.default)
                 .setDescription(
                     type === 'birthday'
-                        ? Lang.getRef('list.noCustomBirthdayMessages', LangCode.EN)
+                        ? Lang.getRef('list.noCustomBirthdayMessages', LangCode.EN_US)
                         : type === 'memberanniversary'
-                        ? Lang.getRef('list.noCustomMemberAnniversaryMessages', LangCode.EN)
-                        : Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN)
+                        ? Lang.getRef('list.noCustomMemberAnniversaryMessages', LangCode.EN_US)
+                        : Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN_US)
                 );
             return embed;
         }
@@ -211,7 +211,7 @@ export class FormatUtils {
                     : type === 'serveranniversary'
                     ? 'serverAnniversaryMessagePaid'
                     : 'birthdayMessagePaid';
-            embed = Lang.getEmbed(listEmbed, LangCode.EN, {
+            embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 TYPE: langType,
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -228,7 +228,7 @@ export class FormatUtils {
                     : type === 'serveranniversary'
                     ? 'serverAnniversaryMessageFree'
                     : 'birthdayMessageFree';
-            embed = Lang.getEmbed(listEmbed, LangCode.EN, {
+            embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 TYPE: langType,
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -253,7 +253,7 @@ export class FormatUtils {
         if (customMessageResults.customMessages.length === 0) {
             embed = new MessageEmbed()
                 .setDescription(
-                    Lang.getRef('list.noCustomUserSpecificBirthdayMessages', LangCode.EN)
+                    Lang.getRef('list.noCustomUserSpecificBirthdayMessages', LangCode.EN_US)
                 )
                 .setColor(Config.colors.default);
             return embed;
@@ -266,20 +266,20 @@ export class FormatUtils {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
-                        : `**${Lang.getRef('terms.unknownMember', LangCode.EN)}** `
+                        : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
                 } ${customMessage.Message}\n\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
-                        : `**${Lang.getRef('terms.unknownMember', LangCode.EN)}** `
+                        : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
                 } ~~${customMessage.Message}~~\n\n`;
             }
         }
 
         let embedType = hasPremium ? 'list.customUserMessageFree' : 'list.customUserMessagePaid';
 
-        embed = Lang.getEmbed(embedType, LangCode.EN, {
+        embed = Lang.getEmbed(embedType, LangCode.EN_US, {
             PAGE: page.toString(),
             LIST_DATA: description,
             TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
@@ -303,7 +303,7 @@ export class FormatUtils {
 
         if (trustedRoleResults.trustedRoles.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription(Lang.getRef('list.noTrustedRoles', LangCode.EN))
+                .setDescription(Lang.getRef('list.noTrustedRoles', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -323,7 +323,7 @@ export class FormatUtils {
                 description += `**${i.toLocaleString()}.** ${
                     role
                         ? `~~${role.toString()}~~ `
-                        : `**${Lang.getRef('terms.deletedRole', LangCode.EN)}** `
+                        : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
                 }\n\n`;
             }
             i++;
@@ -333,7 +333,7 @@ export class FormatUtils {
             !hasPremium &&
             trustedRoleResults.stats.TotalItems > Config.validation.trustedRoles.maxCount.free
         ) {
-            embed = Lang.getEmbed('list.trustedRolePaid', LangCode.EN, {
+            embed = Lang.getEmbed('list.trustedRolePaid', LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
@@ -343,7 +343,7 @@ export class FormatUtils {
                 MAX_PAID: Config.validation.trustedRoles.maxCount.paid.toString(),
             });
         } else {
-            embed = Lang.getEmbed('list.trustedRoleFree', LangCode.EN, {
+            embed = Lang.getEmbed('list.trustedRoleFree', LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
@@ -364,7 +364,7 @@ export class FormatUtils {
         let embed: MessageEmbed;
         if (userDataResults.userData.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription(Lang.getRef('list.noBirthdays', LangCode.EN))
+                .setDescription(Lang.getRef('list.noBirthdays', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -384,14 +384,14 @@ export class FormatUtils {
             for (let user of users) {
                 userNames.push(
                     `${guild.members.resolve(user.UserDiscordId)?.displayName}` ||
-                        `**${Lang.getRef('terms.unknownMember', LangCode.EN)}**`
+                        `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
                 );
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
             description += `**${birthday}**: ${userList}\n`; // Append the description
         }
 
-        embed = Lang.getEmbed('list.birthday', LangCode.EN, {
+        embed = Lang.getEmbed('list.birthday', LangCode.EN_US, {
             PAGE: page.toString(),
             LIST_DATA: description,
             TOTAL_PAGES: userDataResults.stats.TotalPages.toString(),
@@ -412,7 +412,7 @@ export class FormatUtils {
 
         if (blacklistResults.blacklist.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription(Lang.getRef('list.emptyBlacklist', LangCode.EN))
+                .setDescription(Lang.getRef('list.emptyBlacklist', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -422,11 +422,11 @@ export class FormatUtils {
         for (let user of users) {
             description += `**${
                 guild.members.resolve(user)?.displayName ||
-                `**${Lang.getRef('terms.unknownMember', LangCode.EN)}**`
+                `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
             }**: (ID: ${user})\n`; // Append the description
         }
 
-        embed = Lang.getEmbed('list.blacklist', LangCode.EN, {
+        embed = Lang.getEmbed('list.blacklist', LangCode.EN_US, {
             PAGE: page.toString(),
             LIST_DATA: description,
             TOTAL_PAGES: blacklistResults.stats.TotalPages.toString(),
@@ -448,7 +448,7 @@ export class FormatUtils {
 
         if (memberAnniversaryRoleResults.memberAnniversaryRoles.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription(Lang.getRef('list.noMemberAnniversaryRoles', LangCode.EN))
+                .setDescription(Lang.getRef('list.noMemberAnniversaryRoles', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -469,7 +469,7 @@ export class FormatUtils {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role
                         ? `~~${role.toString()}~~ `
-                        : `**${Lang.getRef('terms.deletedRole', LangCode.EN)}** `
+                        : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
                 }\n\n`;
             }
         }
@@ -479,7 +479,7 @@ export class FormatUtils {
             memberAnniversaryRoleResults.stats.TotalItems >
                 Config.validation.memberAnniversaryRoles.maxCount.free
         ) {
-            embed = Lang.getEmbed('list.memberAnniversaryRolePaid', LangCode.EN, {
+            embed = Lang.getEmbed('list.memberAnniversaryRolePaid', LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: memberAnniversaryRoleResults.stats.TotalPages.toString(),
@@ -488,7 +488,7 @@ export class FormatUtils {
                 MAX_PAID: Config.validation.memberAnniversaryRoles.maxCount.paid.toString(),
             });
         } else {
-            embed = Lang.getEmbed('list.memberAnniversaryRoleFree', LangCode.EN, {
+            embed = Lang.getEmbed('list.memberAnniversaryRoleFree', LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: memberAnniversaryRoleResults.stats.TotalPages.toString(),

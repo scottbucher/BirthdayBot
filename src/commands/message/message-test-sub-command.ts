@@ -21,7 +21,7 @@ export class MessageTestSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidMessageType', LangCode.EN)
+                Lang.getEmbed('validation.invalidMessageType', LangCode.EN_US)
             );
             return;
         }
@@ -31,7 +31,7 @@ export class MessageTestSubCommand {
         if (args.length < 5) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.noMessageNumber', LangCode.EN)
+                Lang.getEmbed('validation.noMessageNumber', LangCode.EN_US)
             );
             return;
         } else if (args.length >= 6) {
@@ -50,7 +50,7 @@ export class MessageTestSubCommand {
             if (!position) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.invalidMessageNumber', LangCode.EN)
+                    Lang.getEmbed('validation.invalidMessageNumber', LangCode.EN_US)
                 );
                 return;
             }
@@ -79,7 +79,7 @@ export class MessageTestSubCommand {
                 case 'birthday': {
                     let embed = new MessageEmbed()
                         .setDescription(
-                            Lang.getRef('defaults.birthdayMessage', LangCode.EN)
+                            Lang.getRef('defaults.birthdayMessage', LangCode.EN_US)
                                 .replace(/<Users>/g, userList)
                                 .replace(/<Server>/g, msg.guild.name)
                         )
@@ -90,7 +90,7 @@ export class MessageTestSubCommand {
                 case 'memberanniversary': {
                     let embed = new MessageEmbed()
                         .setDescription(
-                            Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN)
+                            Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US)
                                 .replace(/<Users>/g, userList)
                                 .replace(
                                     /<Years>/g,
@@ -107,7 +107,7 @@ export class MessageTestSubCommand {
                 case 'serveranniversary': {
                     let embed = new MessageEmbed()
                         .setDescription(
-                            Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN)
+                            Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US)
                                 .replace(
                                     /<Years>/g,
                                     Math.floor(moment().diff(target.joinedAt, 'years')).toString()
@@ -158,7 +158,7 @@ export class MessageTestSubCommand {
         if (!customMessage) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.messageDoesNotExist', LangCode.EN)
+                Lang.getEmbed('validation.messageDoesNotExist', LangCode.EN_US)
             );
             return;
         }

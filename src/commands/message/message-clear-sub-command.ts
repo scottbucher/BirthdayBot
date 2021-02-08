@@ -28,7 +28,10 @@ export class MessageClearSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(channel, Lang.getEmbed('results.birthdayExpired', LangCode.EN));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.birthdayExpired', LangCode.EN_US)
+            );
         };
 
         let type = args[3]?.toLowerCase();
@@ -43,7 +46,7 @@ export class MessageClearSubCommand {
         if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.clearMessageInvalidType', LangCode.EN)
+                Lang.getEmbed('validation.clearMessageInvalidType', LangCode.EN_US)
             );
             return;
         }

@@ -7,7 +7,7 @@ import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = Lang.getEmbed('validation.noTrustedRoleSpecified', LangCode.EN);
+const errorEmbed = Lang.getEmbed('validation.noTrustedRoleSpecified', LangCode.EN_US);
 
 export class TrustedRoleAddSubCommand {
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
@@ -38,12 +38,15 @@ export class TrustedRoleAddSubCommand {
             trustedRole.id === msg.guild.id ||
             args[3].toLowerCase() === 'everyone'
         ) {
-            MessageUtils.send(channel, Lang.getEmbed('validation.invalidRole', LangCode.EN));
+            MessageUtils.send(channel, Lang.getEmbed('validation.invalidRole', LangCode.EN_US));
             return;
         }
 
         if (trustedRole.managed) {
-            MessageUtils.send(channel, Lang.getEmbed('validation.trustedRoleManaged', LangCode.EN));
+            MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.trustedRoleManaged', LangCode.EN_US)
+            );
             return;
         }
 
@@ -56,7 +59,7 @@ export class TrustedRoleAddSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.maxFreeTrustedRoles', LangCode.EN, {
+                Lang.getEmbed('validation.maxFreeTrustedRoles', LangCode.EN_US, {
                     FREE_MAX: Config.validation.trustedRoles.maxCount.free.toString(),
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
                 })
@@ -68,7 +71,7 @@ export class TrustedRoleAddSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.maxPaidTrustedRoles', LangCode.EN, {
+                Lang.getEmbed('validation.maxPaidTrustedRoles', LangCode.EN_US, {
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
                 })
             );
@@ -78,7 +81,7 @@ export class TrustedRoleAddSubCommand {
         if (trustedRoles.trustedRoles.find(role => role.TrustedRoleDiscordId === trustedRole.id)) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.duplicateTrustedRole', LangCode.EN, {
+                Lang.getEmbed('validation.duplicateTrustedRole', LangCode.EN_US, {
                     ROLE: trustedRole.toString(),
                 })
             );
@@ -89,7 +92,9 @@ export class TrustedRoleAddSubCommand {
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.addedTrustedRole', LangCode.EN, { ROLE: trustedRole.toString() })
+            Lang.getEmbed('results.addedTrustedRole', LangCode.EN_US, {
+                ROLE: trustedRole.toString(),
+            })
         );
     }
 }
