@@ -1,11 +1,9 @@
-import { MathUtils, MessageUtils, ParseUtils } from '../../utils';
-import { Message, Role, TextChannel } from 'discord.js';
+import { MessageUtils, ParseUtils } from '../../utils';
+import { Message, TextChannel } from 'discord.js';
 
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
-
-let Config = require('../../../config/config.json');
 
 const errorEmbed = Lang.getEmbed('validation.trustedRoleNoRoleOrPosition', LangCode.EN_US);
 

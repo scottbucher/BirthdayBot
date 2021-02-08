@@ -6,9 +6,8 @@ import {
 } from 'discord.js-collector-utils';
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
-import { ColorUtils } from '../../utils/color-utils';
 import { CustomMessageRepo } from '../../services/database/repos';
-import { MessageUtils } from '../../utils';
+import { ColorUtils, MessageUtils } from '../../utils';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 

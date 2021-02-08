@@ -1,6 +1,6 @@
 import { DMChannel, MessageEmbed, Role, TextChannel, User } from 'discord.js';
 
-import { MessageUtils } from './message-utils';
+import { MessageUtils } from '.';
 
 let Config = require('../../config/config.json');
 

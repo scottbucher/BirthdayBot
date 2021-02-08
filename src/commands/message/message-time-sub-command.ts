@@ -1,17 +1,15 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 import { MessageUtils, ParseUtils } from '../../utils';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
-let Config = require('../../../config/config.json');
-
 export class MessageTimeSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
-        //bday message time <type> <0-23>
+        // bday message time <type> <0-23>
         let type = args[3]?.toLowerCase();
 
         if (

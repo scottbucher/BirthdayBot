@@ -1,9 +1,11 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import { BlacklistAddSubCommand } from './blacklist/blacklist-add-sub-command';
-import { BlacklistClearSubCommand } from './blacklist/blacklist-clear-sub-command';
-import { BlacklistListSubCommand } from './blacklist';
-import { BlacklistRemoveSubCommand } from './blacklist/blacklist-remove-sub-command';
+import {
+    BlacklistAddSubCommand,
+    BlacklistClearSubCommand,
+    BlacklistListSubCommand,
+    BlacklistRemoveSubCommand,
+} from './blacklist';
 import { Command } from './command';
 import { MessageUtils } from '../utils';
 

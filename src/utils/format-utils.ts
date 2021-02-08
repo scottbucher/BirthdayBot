@@ -3,11 +3,10 @@ import * as Chrono from 'chrono-node';
 import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
 import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
 
-import { GuildUtils } from '.';
+import { GuildUtils, ParseUtils } from '.';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
-import { ParseUtils } from './parse-utils';
 import { TrustedRoles } from '../models/database/trusted-role-models';
 import moment from 'moment-timezone';
 

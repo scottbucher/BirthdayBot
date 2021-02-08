@@ -2,6 +2,7 @@ import {
     ConfigBirthdayMasterRoleSubCommand,
     ConfigChannelSubCommand,
     ConfigNameFormatSubCommand,
+    ConfigRequireAllTrustedRolesSubCommand,
     ConfigRoleSubCommand,
     ConfigTimezoneSubCommand,
     ConfigTrustedPreventsMsgSubCommand,
@@ -11,7 +12,6 @@ import {
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
-import { ConfigRequireAllTrustedRolesSubCommand } from './config/config-require-all-trusted-roles-sub-command';
 import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');

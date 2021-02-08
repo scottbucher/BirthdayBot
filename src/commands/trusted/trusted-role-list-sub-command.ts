@@ -3,7 +3,7 @@ import { Message, TextChannel } from 'discord.js';
 
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-import { TrustedRoleRepo } from '../../services/database/repos/trusted-role-repo';
+import { TrustedRoleRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
 

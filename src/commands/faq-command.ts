@@ -5,7 +5,7 @@ import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
-export class FAQCommand implements Command {
+export class FaqCommand implements Command {
     public name: string = 'faq';
     public aliases = [];
     public requireSetup = false;

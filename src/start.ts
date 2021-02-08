@@ -11,7 +11,7 @@ import {
     DevCommand,
     DocumentationCommand,
     DonateCommand,
-    FAQCommand,
+    FaqCommand,
     HelpCommand,
     InfoCommand,
     InviteCommand,
@@ -20,11 +20,14 @@ import {
     MemberAnniversaryRoleCommand,
     MessageCommand,
     NextCommand,
+    PremiumCommand,
     PurgeCommand,
     SetAttemptsCommand,
     SetCommand,
     SettingsCommand,
     SetupCommand,
+    StatsCommand,
+    SubscribeCommand,
     SupportCommand,
     TestCommand,
     TrustedRoleCommand,
@@ -35,6 +38,7 @@ import {
     CustomMessageRepo,
     GuildRepo,
     MemberAnniversaryRoleRepo,
+    TrustedRoleRepo,
     UserRepo,
 } from './services/database/repos';
 import { ClientOptions, DiscordAPIError } from 'discord.js';
@@ -78,10 +82,6 @@ import { Bot } from './bot';
 import { CustomClient } from './extensions/custom-client';
 import { DataAccess } from './services/database/data-access';
 import { PostBirthdaysJob } from './jobs';
-import { PremiumCommand } from './commands/premium-commands';
-import { StatsCommand } from './commands/stats-command';
-import { SubscribeCommand } from './commands/subscribe-command';
-import { TrustedRoleRepo } from './services/database/repos/trusted-role-repo';
 
 let Config = require('../config/config.json');
 
@@ -118,7 +118,7 @@ async function start(): Promise<void> {
     let devCommand = new DevCommand();
     let documentationCommand = new DocumentationCommand();
     let donateCommand = new DonateCommand();
-    let faqCommand = new FAQCommand();
+    let faqCommand = new FaqCommand();
     let infoCommand = new InfoCommand();
     let inviteCommand = new InviteCommand();
     let listCommand = new ListCommand(userRepo);
