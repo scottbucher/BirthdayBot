@@ -11,19 +11,21 @@ export class Manager {
     constructor(private shardManager: ShardingManager, private jobs: Job[]) {}
 
     public async start(): Promise<void> {
-        Logger.info(
-            Logs.info.spawningShards.replace(
-                '{SHARD_COUNT}',
-                this.shardManager.totalShards.toLocaleString()
-            )
-        );
         this.registerListeners();
+
         try {
+            Logger.info(
+                Logs.info.spawningShards.replace(
+                    '{SHARD_COUNT}',
+                    this.shardManager.totalShards.toLocaleString()
+                )
+            );
             await this.shardManager.spawn(
                 this.shardManager.totalShards,
                 Config.sharding.spawnDelay * 1000,
                 Config.sharding.spawnTimeout * 1000
             );
+            Logger.info(Logs.info.allShardsSpawned);
         } catch (error) {
             Logger.error(Logs.error.spawnShard, error);
             return;
