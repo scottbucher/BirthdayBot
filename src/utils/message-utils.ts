@@ -21,10 +21,15 @@ export class MessageUtils {
         try {
             return await target.send(content);
         } catch (error) {
+            // 10003: "Unknown channel"
+            // 10004: "Unknown guild"
             // 10013: "Unknown user"
             // 50001: "Missing access"
             // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
-            if (error instanceof DiscordAPIError && [10013, 50001, 50007].includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                [10003, 10004, 10013, 50001, 50007].includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;
@@ -32,23 +37,40 @@ export class MessageUtils {
         }
     }
 
-    public static async edit(target: Message, content: StringResolvable): Promise<Message> {
+    public static async reply(msg: Message, content: StringResolvable): Promise<Message> {
         try {
-            return await target.edit(content);
+            return await msg.reply(content);
+        } catch (error) {
+            // 10008: "Unknown Message" (Message was deleted)
+            // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+            if (error instanceof DiscordAPIError && [10008, 50007].includes(error.code)) {
+                return;
+            } else {
+                throw error;
+            }
+        }
+    }
+
+    public static async edit(msg: Message, content: StringResolvable): Promise<Message> {
+        try {
+            return await msg.edit(content);
         } catch (error) {
             if (error instanceof DiscordAPIError) {
-                // 10008: "Unknown Message" (User blocked bot or DM disabled)
+                // 10008: "Unknown Message" (Message was deleted)
                 // 10013: "Unknown User"
-                if ([10008, 10013].includes(error.code)) {
+                // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+                if ([10008, 10013, 50007].includes(error.code)) {
                     return;
                 }
 
                 // 50001: "Missing Access"
                 if ([50001].includes(error.code)) {
-                    let embed = new MessageEmbed()
-                        .setColor(Config.colors.error)
-                        .setDescription('I do not have permission to edit that message!');
-                    this.send(target.channel, embed);
+                    await this.send(
+                        msg.channel,
+                        new MessageEmbed()
+                            .setColor(Config.colors.error)
+                            .setDescription('I do not have permission to edit that message!')
+                    );
                     return;
                 }
             }
@@ -88,17 +110,20 @@ export class MessageUtils {
             }
         }
     }
-
-    public static async delete(message: Message): Promise<Message> {
+    public static async delete(msg: Message): Promise<Message> {
         try {
-            if (message.deletable) {
-                return await message.delete();
+            if (msg.deletable) {
+                return await msg.delete();
             }
         } catch (error) {
             // 10008: "Unknown Message" (Message was deleted)
             // 50001: "Missing Access"
+            // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
             // 50013: "Missing Permission"
-            if (error instanceof DiscordAPIError && [10008, 50001, 50013].includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                [10008, 50001, 50007, 50013].includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;
