@@ -1,4 +1,3 @@
-import { MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -8,6 +7,7 @@ import {
 import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -19,7 +19,12 @@ const COLLECT_OPTIONS: CollectOptions = {
 export class SetupTrusted {
     constructor(private guildRepo: GuildRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         let guild = channel.guild;
         let botUser = guild.client.user;
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -37,122 +42,11 @@ export class SetupTrusted {
             );
         };
 
-        let trustedRole: string;
         let preventMessage: number;
         let preventRole: number;
+        let requireAllTrustedRoles: number = 1;
 
-        // Create/Select/No Trusted Role
-
-        let roleEmbed = new MessageEmbed()
-            .setAuthor(`${guild.name}`, guild.iconURL())
-            .setTitle('Trusted Setup - Trusted Role')
-            .setDescription(
-                `For help, view the trusted setup guide [here](${Config.links.docs}/server-setup/trusted-setup)!` +
-                    `\n\nTo begin you must select the Trusted Role [(?)](${Config.links.docs}/faq#do-i-need-to-set-up-the-trusted-role)` +
-                    '\n\nPlease select an option'
-            )
-            .addField(
-                `Create New Role ${Config.emotes.create}\nSelect Pre-Existing Role ${Config.emotes.select}\nNo Trusted Role ${Config.emotes.deny}`,
-                '\u200b'
-            )
-            .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
-            .setColor(Config.colors.default)
-            .setTimestamp();
-
-        let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
-
-        let roleMessage = await MessageUtils.send(channel, roleEmbed);
-        for (let reactOption of reactOptions) {
-            await MessageUtils.react(roleMessage, reactOption);
-        }
-
-        let roleOptions: string = await CollectorUtils.collectByReaction(
-            roleMessage,
-            // Collect Filter
-            (msgReaction: MessageReaction, reactor: User) =>
-                reactor.id === msg.author.id && reactOptions.includes(msgReaction.emoji.name),
-            stopFilter,
-            // Retrieve Result
-            async (msgReaction: MessageReaction, reactor: User) => {
-                return msgReaction.emoji.name;
-            },
-            expireFunction,
-            COLLECT_OPTIONS
-        );
-
-        MessageUtils.delete(roleMessage);
-
-        if (roleOptions === undefined) return;
-
-        switch (roleOptions) {
-            case Config.emotes.create: {
-                // Create role with desired attributes
-                trustedRole = (
-                    await guild.roles.create({
-                        data: {
-                            name: 'BirthdayTrusted',
-                        },
-                    })
-                )?.id;
-                break;
-            }
-            case Config.emotes.select: {
-                let embed = new MessageEmbed()
-                    .setDescription(`Please mention a role or input a role's name.`)
-                    .setColor(Config.colors.default);
-                let selectMessage = await MessageUtils.send(channel, embed);
-
-                trustedRole = await CollectorUtils.collectByMessage(
-                    msg.channel,
-                    // Collect Filter
-                    (nextMsg: Message) => nextMsg.author.id === msg.author.id,
-                    // Stop Filter
-                    stopFilter,
-                    // Retrieve Result
-                    async (nextMsg: Message) => {
-                        // Find mentioned role
-                        let roleInput: Role = nextMsg.mentions.roles.first();
-
-                        // Search guild for role
-                        if (!roleInput) {
-                            roleInput = guild.roles.cache.find(role =>
-                                role.name.toLowerCase().includes(nextMsg?.content.toLowerCase())
-                            );
-                        }
-
-                        // If it couldn't find the role, the role was in another guild, or the role the everyone role
-                        if (
-                            !roleInput ||
-                            roleInput.id === guild.id ||
-                            nextMsg?.content.toLowerCase() === 'everyone'
-                        ) {
-                            let embed = new MessageEmbed()
-                                .setDescription(`Invalid role!`)
-                                .setFooter('Please try again.')
-                                .setColor(Config.colors.error);
-                            MessageUtils.send(channel, embed);
-                            return;
-                        }
-                        return roleInput?.id;
-                    },
-                    expireFunction,
-                    COLLECT_OPTIONS
-                );
-
-                MessageUtils.delete(selectMessage);
-
-                if (trustedRole === undefined) {
-                    return;
-                }
-                break;
-            }
-            case Config.emotes.deny: {
-                trustedRole = '0';
-                break;
-            }
-        }
-
-        let preventMessageEmbed = new MessageEmbed()
+        let trustedPreventsRoleEmbed = new MessageEmbed()
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Trusted Setup - Trusted Prevents Message')
             .setDescription(
@@ -166,13 +60,13 @@ export class SetupTrusted {
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let settingMessage = await MessageUtils.send(channel, preventMessageEmbed); // Send confirmation and emotes
+        let trustedPreventsRoleMessage = await MessageUtils.send(channel, trustedPreventsRoleEmbed); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
-            await MessageUtils.react(settingMessage, option);
+            await MessageUtils.react(trustedPreventsRoleMessage, option);
         }
 
-        let messageOption: string = await CollectorUtils.collectByReaction(
-            settingMessage,
+        let trustedPreventsRoleOptions: string = await CollectorUtils.collectByReaction(
+            trustedPreventsRoleMessage,
             // Collect Filter
             (msgReaction: MessageReaction, reactor: User) =>
                 reactor.id === msg.author.id && trueFalseOptions.includes(msgReaction.emoji.name),
@@ -185,13 +79,11 @@ export class SetupTrusted {
             COLLECT_OPTIONS
         );
 
-        MessageUtils.delete(settingMessage);
+        await MessageUtils.delete(trustedPreventsRoleMessage);
 
-        if (roleOptions === undefined) return;
+        if (trustedPreventsRoleOptions === undefined) return;
 
-        preventMessage = messageOption === Config.emotes.confirm ? 1 : 0;
-
-        let preventRoleEmbed = new MessageEmbed()
+        let trustedPreventsMessageEmbed = new MessageEmbed()
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Trusted Setup - Trusted Prevents Role')
             .setDescription(
@@ -203,13 +95,16 @@ export class SetupTrusted {
             .setColor(Config.colors.default)
             .setTimestamp();
 
-        let settingRole = await MessageUtils.send(channel, preventRoleEmbed); // Send confirmation and emotes
+        let trustedPreventsMessageMessage = await MessageUtils.send(
+            channel,
+            trustedPreventsMessageEmbed
+        ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
-            await settingRole.react(option);
+            await trustedPreventsMessageMessage.react(option);
         }
 
-        let roleSettingOptions: string = await CollectorUtils.collectByReaction(
-            settingRole,
+        let trustedPreventsMessageOptions: string = await CollectorUtils.collectByReaction(
+            trustedPreventsMessageMessage,
             // Collect Filter
             (msgReaction: MessageReaction, reactor: User) =>
                 reactor.id === msg.author.id && trueFalseOptions.includes(msgReaction.emoji.name),
@@ -222,32 +117,82 @@ export class SetupTrusted {
             COLLECT_OPTIONS
         );
 
-        MessageUtils.delete(settingRole);
+        await MessageUtils.delete(trustedPreventsMessageMessage);
 
-        if (roleOptions === undefined) return;
+        if (trustedPreventsMessageOptions === undefined) return;
 
-        preventRole = roleSettingOptions === Config.emotes.confirm ? 1 : 0;
+        if (hasPremium) {
+            let requireAllTrustedRolesEmbed = new MessageEmbed()
+                .setAuthor(`${guild.name}`, guild.iconURL())
+                .setTitle('Trusted Setup - Require All Trusted Roles')
+                .setDescription(
+                    `With premium you can set multiple trusted roles. Because of this, you can choose if a user needs one or all of the trusted roles to have their birthday celebrated.` +
+                        `\n\nShould birthdays require all trusted roles? [(?)](${Config.links.docs}/faq#)` +
+                        `\n\nTrue: ${Config.emotes.confirm}` +
+                        `\nFalse: ${Config.emotes.deny}`
+                )
+                .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
+                .setColor(Config.colors.default)
+                .setTimestamp();
 
-        let roleOutput =
-            trustedRole === '0'
-                ? 'Not Set'
-                : guild.roles.resolve(trustedRole)?.toString() || '**Unknown**';
+            let requireAllTrustedRolesMessage = await MessageUtils.send(
+                channel,
+                requireAllTrustedRolesEmbed
+            ); // Send confirmation and emotes
+            for (let option of trueFalseOptions) {
+                await requireAllTrustedRolesMessage.react(option);
+            }
+
+            let requireAllTrustedRolesOptions: string = await CollectorUtils.collectByReaction(
+                requireAllTrustedRolesMessage,
+                // Collect Filter
+                (msgReaction: MessageReaction, reactor: User) =>
+                    reactor.id === msg.author.id &&
+                    trueFalseOptions.includes(msgReaction.emoji.name),
+                stopFilter,
+                // Retrieve Result
+                async (msgReaction: MessageReaction, reactor: User) => {
+                    return msgReaction.emoji.name;
+                },
+                expireFunction,
+                COLLECT_OPTIONS
+            );
+
+            await MessageUtils.delete(requireAllTrustedRolesMessage);
+
+            if (requireAllTrustedRolesOptions === undefined) return;
+
+            requireAllTrustedRoles =
+                requireAllTrustedRolesOptions === Config.emotes.confirm ? 1 : 0;
+        }
+
+        preventRole = trustedPreventsMessageOptions === Config.emotes.confirm ? 1 : 0;
+        preventMessage = trustedPreventsRoleOptions === Config.emotes.confirm ? 1 : 0;
+
+        let description =
+            'You have successfully completed the trusted server setup!' +
+            `\n\n**Trusted Prevents Role**: \`${preventRole === 1 ? 'True' : 'False'}\`` +
+            `\n**Trusted Prevents Message**: \`${preventMessage === 1 ? 'True' : 'False'}\``;
+
+        description += hasPremium
+            ? `\n**Require All Trusted Roles**: \`${preventRole === 1 ? 'True' : 'False'}\``
+            : '';
 
         let embed = new MessageEmbed()
             .setAuthor(`${guild.name}`, guild.iconURL())
             .setTitle('Trusted Setup - Completed')
-            .setDescription(
-                'You have successfully completed the trusted server setup!' +
-                    `\n\n**Trusted Role**: ${roleOutput}` +
-                    `\n**Trusted Prevents Role**: \`${preventRole === 1 ? 'True' : 'False'}\`` +
-                    `\n**Trusted Prevents Message**: \`${preventMessage === 1 ? 'True' : 'False'}\``
-            )
+            .setDescription(description)
             .setFooter(`Trusted Setup Complete!`, botUser.avatarURL())
             .setColor(Config.colors.default)
             .setTimestamp();
 
         await MessageUtils.send(channel, embed);
 
-        await this.guildRepo.guildSetupTrusted(guild.id, trustedRole, preventMessage, preventRole);
+        await this.guildRepo.guildSetupTrusted(
+            guild.id,
+            requireAllTrustedRoles,
+            preventMessage,
+            preventRole
+        );
     }
 }
