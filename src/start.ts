@@ -70,7 +70,7 @@ import {
     MessageTimeSubCommand,
     MessageUserListSubCommand,
 } from './commands/message';
-import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
+import { SetupRequired, SetupTrusted } from './commands/setup';
 import {
     TrustedRoleAddSubCommand,
     TrustedRoleClearSubCommand,
@@ -137,11 +137,10 @@ async function start(): Promise<void> {
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
-    let setupMessage = new SetupMessage(guildRepo);
     let setupTrusted = new SetupTrusted(guildRepo);
 
     // Setup Command
-    let setupCommand = new SetupCommand(guildRepo, setupRequired, setupMessage, setupTrusted);
+    let setupCommand = new SetupCommand(guildRepo, setupRequired, setupTrusted);
 
     // Message Sub Commands
     let messageListSubCommand = new MessageListSubCommand(customMessageRepo);

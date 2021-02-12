@@ -1,6 +1,6 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { MessageUtils, PermissionUtils } from '../utils';
-import { SetupMessage, SetupRequired, SetupTrusted } from './setup';
+import { SetupRequired, SetupTrusted } from './setup';
 
 import { Command } from '.';
 import { GuildRepo } from '../services/database/repos';
@@ -21,7 +21,6 @@ export class SetupCommand implements Command {
     constructor(
         private guildRepo: GuildRepo,
         private setupRequired: SetupRequired,
-        private setupMessage: SetupMessage,
         private setupTrusted: SetupTrusted
     ) {}
 
@@ -72,8 +71,8 @@ export class SetupCommand implements Command {
 
         // Run the appropriate setup
         switch (args[2].toLowerCase()) {
-            case 'message':
-                await this.setupMessage.execute(args, msg, channel);
+            case 'anniversary':
+                // await this.setupMessage.execute(args, msg, channel);
                 return;
             case 'trusted':
                 if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
