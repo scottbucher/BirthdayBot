@@ -181,31 +181,29 @@ export class GuildRepo {
         ]);
     }
 
-    public async guildSetupMessage(
-        discordId: string,
-        messageTime: number,
-        mentionSetting: string,
-        useEmbed: number
-    ): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_SetupMessage, [
-            discordId,
-            messageTime,
-            mentionSetting,
-            useEmbed,
-        ]);
-    }
-
     public async guildSetupTrusted(
         discordId: string,
-        trustedRole: string,
+        requireAllTrustedRoles: number,
         preventRole: number,
         preventMessage: number
     ): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Guild_SetupTrusted, [
             discordId,
-            trustedRole,
+            requireAllTrustedRoles,
             preventRole,
             preventMessage,
+        ]);
+    }
+
+    public async guildSetupAnniversary(
+        discordId: string,
+        memberAnniversaryChannelId: string,
+        serverAnniversaryChannelId: string
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_SetupAnniversary, [
+            discordId,
+            memberAnniversaryChannelId,
+            serverAnniversaryChannelId,
         ]);
     }
 }
