@@ -16,7 +16,7 @@
             "messages": {
                 "size": 0,
                 "lifetime": 0,
-                "sweepInterval": 1
+                "sweepInterval": 0
             }
         }
     },
@@ -153,7 +153,7 @@
         }
     },
     "links": {
-        "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
+        "invite": "https://discord.com/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
         "support": "https://discord.gg/9gUQFtz",
         "docs": "https://birthdaybot.scottbucher.dev",
         "vote": "https://top.gg/bot/656621136808902656/vote",

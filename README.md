@@ -4,12 +4,12 @@
 [![Discord Bots](https://top.gg/api/widget/status/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
 [![License](https://img.shields.io/badge/license-No%20License-blue)](https://choosealicense.com/no-permission/)
 [![Stars](https://img.shields.io/github/stars/scottbucher/BirthdayBot.svg)](https://github.com/scottbucher/BirthdayBot/stargazers)
-[![Discord Shield](https://discordapp.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discordapp.com/invite/9gUQFtz)
+[![Discord Shield](https://discord.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discord.com/invite/9gUQFtz)
 [![Discord Bots](https://top.gg/api/widget/owner/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
 
 **Discord Bot** - Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and easy to use! Use `bday help` to get started!
 
-## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot)
+## [Click here to add Birthday Bot to your Discord server!](https://discord.com/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot)
 
 [Join The Support Server](https://discord.gg/9gUQFtz) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
 

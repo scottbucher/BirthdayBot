@@ -1224,7 +1224,7 @@
             "party": "🎉"
         },
         "links": {
-            "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
+            "invite": "https://discord.com/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
             "inviteEmbed": "[Invite {{REF:bot.name}} to a Server!]({{REF:links.invite}})",
             "support": "https://discord.gg/9gUQFtz",
             "supportEmbed": "[Join Support Server]({{REF:links.support}})",
@@ -1334,7 +1334,7 @@
             "missingEmbedPerms": [
                 "I don't have all permissions required to send messages here!",
                 "",
-                "Please allow me to **Read Messages**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
+                "Please allow me to **View Channel**, **Send Messages**, **Embed Links**, and **Add Reactions** in this channel."
             ]
         }
     }
