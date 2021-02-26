@@ -1,10 +1,10 @@
-import { ShardingManager } from 'discord.js';
-import schedule from 'node-schedule';
+import { HttpService, Logger } from '../services';
 
 import { BotSite } from '../models/config-models';
-import { HttpService, Logger } from '../services';
-import { ShardUtils } from '../utils';
 import { Job } from './job';
+import { ShardUtils } from '../utils';
+import { ShardingManager } from 'discord.js';
+import schedule from 'node-schedule';
 
 let Config = require('../../config/config.json');
 let BotSites: BotSite[] = require('../../config/bot-sites.json');
