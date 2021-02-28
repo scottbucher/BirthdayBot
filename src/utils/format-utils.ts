@@ -2,8 +2,8 @@ import * as Chrono from 'chrono-node';
 
 import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
 import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
-
 import { GuildUtils, ParseUtils } from '.';
+
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
@@ -59,12 +59,12 @@ export class FormatUtils {
     public static getBirthday(input: string): string {
         // Try and get a date from the 3rd args
         if (
-            input === '02/29' ||
-            input === '2/29' ||
-            input.toLowerCase() === 'february 29' ||
-            input.toLowerCase() === 'feb 29' ||
-            input.toLowerCase() === 'february 29th' ||
-            input.toLowerCase() === 'feb 29th'
+            input.includes('02/29') ||
+            input.includes('2/29') ||
+            input.toLowerCase().includes('february 29') ||
+            input.toLowerCase().includes('feb 29') ||
+            input.toLowerCase().includes('february 29th') ||
+            input.toLowerCase().includes('feb 29th')
         )
             input = '2000-02-29';
         let results = Chrono.parseDate(input); // Try an parse a date
