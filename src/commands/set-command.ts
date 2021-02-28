@@ -71,8 +71,8 @@ export class SetCommand implements Command {
         target = msg.mentions.members?.first()?.user;
 
         for (let i = 2; i < args.length; i++) {
-            if (!FormatUtils.checkAbbreviation(args[i]) && !timeZone)
-                timeZone = FormatUtils.findZone(args[i]);
+            if (!FormatUtils.checkAbbreviation(args[i])) timeZone = FormatUtils.findZone(args[i]);
+            if (timeZone) break;
         }
 
         if (!target || dm) {
