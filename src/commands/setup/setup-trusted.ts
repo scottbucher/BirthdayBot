@@ -4,9 +4,11 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import { Message, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
@@ -35,10 +37,7 @@ export class SetupTrusted {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                new MessageEmbed()
-                    .setTitle('Trusted Setup - Expired')
-                    .setDescription('Type `bday setup trusted` to rerun the setup.')
-                    .setColor(Config.colors.error)
+                Lang.getEmbed('results.trustedSetupExpired', LangCode.EN_US)
             );
         };
 
@@ -46,17 +45,10 @@ export class SetupTrusted {
         let preventRole: number;
         let requireAllTrustedRoles: number = 1;
 
-        let trustedPreventsRoleEmbed = new MessageEmbed()
-            .setAuthor(`${guild.name}`, guild.iconURL())
-            .setTitle('Trusted Setup - Trusted Prevents Message')
-            .setDescription(
-                `Should the trusted role prevent the birthday message? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)` +
-                    `\n\nTrue: ${Config.emotes.confirm}` +
-                    `\nFalse: ${Config.emotes.deny}`
-            )
-            .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
-            .setColor(Config.colors.default)
-            .setTimestamp();
+        let trustedPreventsRoleEmbed = Lang.getEmbed(
+            'serverPrompts.trustedSetupPreventsRole',
+            LangCode.EN_US
+        );
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
@@ -83,17 +75,10 @@ export class SetupTrusted {
 
         if (trustedPreventsRoleOptions === undefined) return;
 
-        let trustedPreventsMessageEmbed = new MessageEmbed()
-            .setAuthor(`${guild.name}`, guild.iconURL())
-            .setTitle('Trusted Setup - Trusted Prevents Role')
-            .setDescription(
-                `Should the trusted role prevent the birthday role? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)` +
-                    `\n\nTrue: ${Config.emotes.confirm}` +
-                    `\nFalse: ${Config.emotes.deny}`
-            )
-            .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
-            .setColor(Config.colors.default)
-            .setTimestamp();
+        let trustedPreventsMessageEmbed = Lang.getEmbed(
+            'serverPrompts.trustedSetupPreventsMessage',
+            LangCode.EN_US
+        );
 
         let trustedPreventsMessageMessage = await MessageUtils.send(
             channel,
@@ -122,18 +107,10 @@ export class SetupTrusted {
         if (trustedPreventsMessageOptions === undefined) return;
 
         if (hasPremium) {
-            let requireAllTrustedRolesEmbed = new MessageEmbed()
-                .setAuthor(`${guild.name}`, guild.iconURL())
-                .setTitle('Trusted Setup - Require All Trusted Roles')
-                .setDescription(
-                    `With premium you can set multiple trusted roles. Because of this, you can choose if a user needs one or all of the trusted roles to have their birthday celebrated.` +
-                        `\n\nShould birthdays require all trusted roles? [(?)](${Config.links.docs}/faq#)` +
-                        `\n\nTrue: ${Config.emotes.confirm}` +
-                        `\nFalse: ${Config.emotes.deny}`
-                )
-                .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
-                .setColor(Config.colors.default)
-                .setTimestamp();
+            let requireAllTrustedRolesEmbed = Lang.getEmbed(
+                'serverPrompts.trustedSetupRequireAll',
+                LangCode.EN_US
+            );
 
             let requireAllTrustedRolesMessage = await MessageUtils.send(
                 channel,
@@ -169,22 +146,16 @@ export class SetupTrusted {
         preventRole = trustedPreventsMessageOptions === Config.emotes.confirm ? 1 : 0;
         preventMessage = trustedPreventsRoleOptions === Config.emotes.confirm ? 1 : 0;
 
-        let description =
-            'You have successfully completed the trusted server setup!' +
-            `\n\n**Trusted Prevents Role**: \`${preventRole === 1 ? 'True' : 'False'}\`` +
-            `\n**Trusted Prevents Message**: \`${preventMessage === 1 ? 'True' : 'False'}\``;
-
-        description += hasPremium
-            ? `\n**Require All Trusted Roles**: \`${preventRole === 1 ? 'True' : 'False'}\``
-            : '';
-
-        let embed = new MessageEmbed()
-            .setAuthor(`${guild.name}`, guild.iconURL())
-            .setTitle('Trusted Setup - Completed')
-            .setDescription(description)
-            .setFooter(`Trusted Setup Complete!`, botUser.avatarURL())
-            .setColor(Config.colors.default)
-            .setTimestamp();
+        let embed = hasPremium
+            ? Lang.getEmbed('results.trustedSetupPremium', LangCode.EN_US, {
+                  PREVENTS_ROLE: preventRole === 1 ? 'True' : 'False',
+                  PREVENTS_MESSAGE: preventMessage === 1 ? 'True' : 'False',
+                  REQUIRE_ALL_ROLES: requireAllTrustedRoles === 1 ? 'True' : 'False',
+              })
+            : Lang.getEmbed('results.trustedSetup', LangCode.EN_US, {
+                  PREVENTS_ROLE: preventRole === 1 ? 'True' : 'False',
+                  PREVENTS_MESSAGE: preventMessage === 1 ? 'True' : 'False',
+              });
 
         await MessageUtils.send(channel, embed);
 

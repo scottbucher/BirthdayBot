@@ -78,6 +78,47 @@
                     "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
+            },
+            "trustedSetupPreventsMessage": {
+                "title": "Trusted Setup - Trusted Prevents Message",
+                "description": [
+                    "Should the trusted role prevent the birthday message? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)",
+                    "",
+                    "True: {{REF:emotes.confirm}}",
+                    "False: {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "trustedSetupPreventsRole": {
+                "title": "Trusted Setup - Trusted Prevents Role",
+                "description": [
+                    "Should the trusted role prevent the birthday role? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)",
+                    "",
+                    "True: {{REF:emotes.confirm}}",
+                    "False: {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "trustedSetupRequireAll": {
+                "title": "Trusted Setup - Require All Trusted Roles",
+                "description": [
+                    "With premium you can set multiple trusted roles. Because of this, you can choose if a user needs one or all of the trusted roles to have their birthday celebrated.",
+                    "",
+                    "Should birthdays require all trusted roles? [(?)](${Config.links.docs}/faq#)",
+                    "",
+                    "True: {{REF:emotes.confirm}}",
+                    "False: {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
             }
         },
         "userPrompts": {
@@ -197,9 +238,41 @@
         "results": {
             "requiredSetup": {
                 "title": "Server Setup - Completed",
-                "description": ["You have successfully completed the required server setup!", "", "**Birthday Channel**: {{CHANNEL}}", "**Birthday Role**: {{ROLE}}"],
+                "description": [
+                    "You have successfully completed the required server setup!",
+                    "",
+                    "**Birthday Channel**: {{CHANNEL}}",
+                    "**Birthday Role**: {{ROLE}}"
+                ],
                 "footer": {
                     "text": "All server commands unlocked!"
+                },
+                "timestamp": true
+            },
+            "trustedSetup": {
+                "title": "Trusted Setup - Completed",
+                "description": [
+                    "You have successfully completed the trusted server setup!'",
+                    "",
+                    "**Trusted Prevents Role**: {{PREVENTS_ROLE}}",
+                    "**Trusted Prevents Role**: {{PREVENTS_MESSAGE}}"
+                ],
+                "footer": {
+                    "text": "Trusted Setup Complete!"
+                },
+                "timestamp": true
+            },
+            "trustedSetupPremium": {
+                "title": "Trusted Setup - Completed",
+                "description": [
+                    "You have successfully completed the trusted server setup!'",
+                    "",
+                    "**Trusted Prevents Role**: {{PREVENTS_ROLE}}",
+                    "**Trusted Prevents Role**: {{PREVENTS_MESSAGE}}",
+                    "**Require All Trusted Roles**: {{REQUIRE_ALL_ROLES}}"
+                ],
+                "footer": {
+                    "text": "Trusted Setup Complete!"
                 },
                 "timestamp": true
             },
@@ -224,13 +297,18 @@
                 "color": "{{REF:colors.success}}"
             },
             "birthdayExpired": {
-                "title": "Custom Message Clear - Expired",
-                "description": "Type `{{REF:bot.prefix}} message clear <type>` to clear a custom message type.",
+                "title": "Birthday Set - Expired",
+                "description": "Type `{{REF:bot.prefix}} set` set your birthday.",
                 "color": "{{REF:colors.error}}"
             },
             "requireSetupExpired": {
                 "title": "Required Setup - Expired",
-                "description": "Type `{{REF:bot.prefix}}` to rerun the setup.",
+                "description": "Type `{{REF:bot.prefix}} setup` to rerun the setup.",
+                "color": "{{REF:colors.error}}"
+            },
+            "trustedSetupExpired": {
+                "title": "Trusted Setup - Expired",
+                "description": "Type `{{REF:bot.prefix}} setup trusted` to rerun the setup.",
                 "color": "{{REF:colors.error}}"
             },
             "customMessageClearExpired": {
