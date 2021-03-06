@@ -119,6 +119,54 @@
                     "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
+            },
+            "anniversarySetupMemberChannel": {
+                "title": "Anniversary Setup - Member Anniversary Channel",
+                "description": [
+                    "For help, view the anniversary setup guide [here](${Config.links.docs}/)!",
+                    "",
+                    "To begin you must set up the member anniversary channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "",
+                    "Please select an option"
+                ],
+                "fields": [
+                    {
+                        "name": [
+                            "Create New Channel {{REF:emotes.create}}",
+                            "Select Pre-Existing Channel {{REF:emotes.select}}",
+                            "No Birthday Channel {{REF:emotes.deny}}"
+                        ],
+                        "value": "\u200b"
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "anniversarySetupServerChannel": {
+                "title": "Anniversary Setup - Server Anniversary Channel",
+                "description": [
+                    "For help, view the anniversary setup guide [here](${Config.links.docs}/)!",
+                    "",
+                    "To begin you must set up the server anniversary channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "",
+                    "Please select an option"
+                ],
+                "fields": [
+                    {
+                        "name": [
+                            "Create New Channel {{REF:emotes.create}}",
+                            "Select Pre-Existing Channel {{REF:emotes.select}}",
+                            "No Birthday Channel {{REF:emotes.deny}}"
+                        ],
+                        "value": "\u200b"
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
             }
         },
         "userPrompts": {
@@ -252,7 +300,7 @@
             "trustedSetup": {
                 "title": "Trusted Setup - Completed",
                 "description": [
-                    "You have successfully completed the trusted server setup!'",
+                    "You have successfully completed the trusted server setup!",
                     "",
                     "**Trusted Prevents Role**: {{PREVENTS_ROLE}}",
                     "**Trusted Prevents Role**: {{PREVENTS_MESSAGE}}"
@@ -265,7 +313,7 @@
             "trustedSetupPremium": {
                 "title": "Trusted Setup - Completed",
                 "description": [
-                    "You have successfully completed the trusted server setup!'",
+                    "You have successfully completed the trusted server setup!",
                     "",
                     "**Trusted Prevents Role**: {{PREVENTS_ROLE}}",
                     "**Trusted Prevents Role**: {{PREVENTS_MESSAGE}}",
@@ -273,6 +321,19 @@
                 ],
                 "footer": {
                     "text": "Trusted Setup Complete!"
+                },
+                "timestamp": true
+            },
+            "anniversarySetup": {
+                "title": "Anniversary Setup - Completed",
+                "description": [
+                    "You have successfully completed the required server setup!",
+                    "",
+                    "**Member Anniversary Channel**: {{MEMBER_CHANNEL}}",
+                    "**Server Anniversary Channel**: {{SERVER_CHANNEL}}"
+                ],
+                "footer": {
+                    "text": "Anniversary Setup Complete!"
                 },
                 "timestamp": true
             },
@@ -309,6 +370,11 @@
             "trustedSetupExpired": {
                 "title": "Trusted Setup - Expired",
                 "description": "Type `{{REF:bot.prefix}} setup trusted` to rerun the setup.",
+                "color": "{{REF:colors.error}}"
+            },
+            "anniversarySetupExpired": {
+                "title": "Anniversary Setup - Expired",
+                "description": "Type `{{REF:bot.prefix}} setup anniversary` to rerun the setup.",
                 "color": "{{REF:colors.error}}"
             },
             "customMessageClearExpired": {
@@ -1421,7 +1487,11 @@
             "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.years}} years in the server {{REF:placeholders.users}}!",
             "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeholders.years}} year(s) old!",
             "birthdayChannelName": "{{REF:emotes.birthdayEmote}} birthdays",
-            "birthdayChannelTopic": "Birthdays Announcements!"
+            "birthdayChannelTopic": "Birthdays Announcements!",
+            "memberAnniversaryChannelName": "{{REF:emotes.party}} member anniversaries",
+            "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
+            "serverAnniversaryChannelName": "{{REF:emotes.party}} server anniversaries",
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
         },
         "list": {
             "birthdayMessagesTitle": "{{REF:terms.birthdayMessages}} | {{REF:list.pageTitle}}",
