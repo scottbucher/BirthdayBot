@@ -650,7 +650,7 @@
             },
             "clearMessageInvalidType": {
                 "title": "Clear Custom Message",
-                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `user`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -659,7 +659,7 @@
             },
             "invalidMessageType": {
                 "title": "Custom Message List",
-                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `user`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -906,7 +906,7 @@
             },
             "noUserPlaceholder": {
                 "description": [
-                    "Please include the `{{REF:placeHolder.users}}` placeholder somewhere in the message. This indicates where birthday usernames will appear.",
+                    "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where birthday usernames will appear.",
                     "Ex: `{{REF:bot.prefix}} message add birthday {{REF:defaults.birthdayMessage}}`"
                 ],
                 "color": "{{REF:colors.error}}"

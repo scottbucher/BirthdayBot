@@ -48,6 +48,10 @@ export class CustomMessageRepo {
         await this.dataAccess.executeProcedure(Procedure.Message_Clear, [discordId, type]);
     }
 
+    public async clearCustomUserMessages(discordId: string, type: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Message_ClearUser, [discordId, type]);
+    }
+
     public async getCustomMessages(discordId: string, type: string): Promise<CustomMessages> {
         let results = await this.dataAccess.executeProcedure(Procedure.Message_Get, [
             discordId,

@@ -8,6 +8,7 @@ export enum Procedure {
     Message_Remove = 'Message_Remove',
     Message_RemoveUser = 'Message_RemoveUser',
     Message_Clear = 'Message_Clear',
+    Message_ClearUser = 'Message_ClearUser',
     Message_Get = 'Message_Get',
     Message_GetUser = 'Message_GetUser',
     Message_GetList = 'Message_GetList',

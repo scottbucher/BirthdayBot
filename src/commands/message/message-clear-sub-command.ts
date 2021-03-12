@@ -7,9 +7,9 @@ import {
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
-import { MessageUtils } from '../../utils';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -43,7 +43,12 @@ export class MessageClearSubCommand {
                 ? 'serveranniversary'
                 : type;
 
-        if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
+        if (
+            type !== 'birthday' &&
+            type !== 'memberanniversary' &&
+            type !== 'serveranniversary' &&
+            type !== 'user'
+        ) {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.clearMessageInvalidType', LangCode.EN_US)
@@ -56,9 +61,14 @@ export class MessageClearSubCommand {
                 ? 'birthday'
                 : type === 'memberanniversary'
                 ? 'member anniversary'
-                : 'server anniversary';
+                : type === 'serveranniversary'
+                ? 'server anniversary'
+                : 'user';
 
-        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
+        let customMessages =
+            displayType === 'user'
+                ? await this.customMessageRepo.getCustomUserMessages(msg.guild.id, 'birthday')
+                : await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
         let confirmationEmbed = new MessageEmbed();
 
@@ -108,7 +118,10 @@ export class MessageClearSubCommand {
 
         if (confirmation === Config.emotes.confirm) {
             // Confirm
-            await this.customMessageRepo.clearCustomMessages(msg.guild.id, type);
+
+            displayType === 'user'
+                ? await this.customMessageRepo.clearCustomUserMessages(msg.guild.id, 'birthday')
+                : await this.customMessageRepo.clearCustomMessages(msg.guild.id, type);
 
             let embed = new MessageEmbed()
                 .setDescription(
