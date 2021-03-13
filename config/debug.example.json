@@ -1,6 +1,8 @@
 {
     "alwaysSendBirthdayMessage": false,
     "alwaysGiveBirthdayRole": false,
+    "alwaysMemberAnniversary": false,
+    "alwaysServerAnniversary": false,
     "override": {
         "shardMode": {
             "enabled": false,
