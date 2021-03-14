@@ -10,6 +10,7 @@ export { ListUtils } from './list-utils';
 export { MathUtils } from './math-utils';
 export { MessageUtils } from './message-utils';
 export { ParseUtils } from './parse-utils';
+export { PartialUtils } from './partial-utils';
 export { PermissionUtils } from './permission-utils';
 export { RegexUtils } from './regex-utils';
 export { ShardUtils } from './shard-utils';
