@@ -13,6 +13,6 @@ export { ParseUtils } from './parse-utils';
 export { PermissionUtils } from './permission-utils';
 export { RegexUtils } from './regex-utils';
 export { ShardUtils } from './shard-utils';
-export { SqlUtils as SQLUtils } from './sql-utils';
+export { SqlUtils } from './sql-utils';
 export { StringUtils } from './string-utils';
 export { TimeUtils } from './time-utils';

@@ -1,7 +1,7 @@
 import { DataAccess } from '../data-access';
 import { MemberAnniversaryRoles } from '../../../models/database/member-anniversary-role-models';
 import { Procedure } from '../procedure';
-import { SQLUtils } from '../../../utils';
+import { SqlUtils } from '../../../utils';
 
 export class MemberAnniversaryRoleRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -34,7 +34,7 @@ export class MemberAnniversaryRoleRepo {
             discordId,
         ]);
 
-        let memberAnniversaryRoles = SQLUtils.getTable(results, 0);
+        let memberAnniversaryRoles = SqlUtils.getTable(results, 0);
         return new MemberAnniversaryRoles(memberAnniversaryRoles, null);
     }
 
@@ -48,8 +48,8 @@ export class MemberAnniversaryRoleRepo {
             [guildId, pageSize, page]
         );
 
-        let memberAnniversaryRolesData = SQLUtils.getTable(results, 0);
-        let stats = SQLUtils.getRow(results, 1, 0);
+        let memberAnniversaryRolesData = SqlUtils.getTable(results, 0);
+        let stats = SqlUtils.getRow(results, 1, 0);
         return new MemberAnniversaryRoles(memberAnniversaryRolesData, stats);
     }
 }
