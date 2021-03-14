@@ -1,4 +1,5 @@
 import { ShardClientUtil, ShardingManager, Util } from 'discord.js';
+import { MathUtils } from '.';
 
 export class ShardUtils {
     public static async recommendedShards(token: string, serversPerShard: number): Promise<number> {
@@ -25,13 +26,13 @@ export class ShardUtils {
         let shardGuildCounts: number[] = await shardInterface.fetchClientValues(
             'guilds.cache.size'
         );
-        return shardGuildCounts.reduce((prev, val) => prev + val, 0);
+        return MathUtils.sum(shardGuildCounts);
     }
 
     public static async userCount(
         shardInterface: ShardingManager | ShardClientUtil
     ): Promise<number> {
         let shardUserCounts: number[] = await shardInterface.fetchClientValues('users.cache.size');
-        return shardUserCounts.reduce((prev, val) => prev + val, 0);
+        return MathUtils.sum(shardUserCounts);
     }
 }
