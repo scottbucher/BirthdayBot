@@ -35,7 +35,7 @@ export class DevCommand implements Command {
                 if (error.name.includes('SHARDING_IN_PROCESS')) {
                     await MessageUtils.send(
                         msg.channel,
-                        Lang.getEmbed('errors.shardingInProcess', LangCode.EN_US)
+                        Lang.getEmbed('errors.startupInProcess', LangCode.EN_US)
                     );
                     return;
                 } else {
