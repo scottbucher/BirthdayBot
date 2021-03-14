@@ -4,8 +4,8 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { InvalidUtils, MessageUtils, PermissionUtils } from '../../utils';
-import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import { MessageUtils, PermissionUtils } from '../../utils';
+import { Message, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
@@ -23,7 +23,7 @@ export class SetupAnniversary {
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let guild = channel.guild;
-        let botUser = guild.client.user;
+        // let botUser = guild.client.user;
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
             [Config.prefix, ...Config.stopCommands].includes(

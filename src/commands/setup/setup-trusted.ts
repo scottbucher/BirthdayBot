@@ -28,7 +28,7 @@ export class SetupTrusted {
         hasPremium: boolean
     ): Promise<void> {
         let guild = channel.guild;
-        let botUser = guild.client.user;
+        // let botUser = guild.client.user;
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
             [Config.prefix, ...Config.stopCommands].includes(

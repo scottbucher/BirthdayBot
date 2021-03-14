@@ -6,8 +6,6 @@ import moment from 'moment';
 
 let Debug = require('../../config/debug.json');
 
-let Config = require('../../config/config.json');
-
 export class AnniversaryUtils {
     public static isMemberAnniversary(
         member: GuildMember,
