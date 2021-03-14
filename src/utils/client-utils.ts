@@ -1,9 +1,8 @@
 import { Client, DiscordAPIError, Guild, GuildMember, TextChannel, User } from 'discord.js';
 
-import { RegexUtils } from '.';
+import { PermissionUtils, RegexUtils } from '.';
 import { LangCode } from '../models/enums';
 import { Lang } from '../services';
-import { PermissionUtils } from './permission-utils';
 
 const FETCH_MEMBER_LIMIT = 20;
 
