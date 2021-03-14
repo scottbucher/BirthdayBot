@@ -4,6 +4,12 @@
     },
     "embeds": {
         "serverPrompts": {
+            "inputChannel": {
+                "description": "Please mention a channel or input a channel's name."
+            },
+            "inputRole": {
+                "description": "Please mention a role or input a role's name."
+            },
             "blacklistClearConfirmation": {
                 "description": "Are you sure you want to clear __**{{TOTAL}}**__ blacklisted user(s)?",
                 "footer": {
@@ -24,6 +30,143 @@
                     "text": "{{REF:footers.irreversible}}"
                 },
                 "color": "{{REF:colors.warn}}"
+            },
+            "requiredSetupBirthdayChannel": {
+                "title": "Server Setup - Birthday Channel",
+                "description": [
+                    "For help, view the required setup guide [here](${Config.links.docs}/server-setup/required-setup)!",
+                    "",
+                    "To begin you must set up the birthday channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "",
+                    "Please select an option"
+                ],
+                "fields": [
+                    {
+                        "name": [
+                            "Create New Channel {{REF:emotes.create}}",
+                            "Select Pre-Existing Channel {{REF:emotes.select}}",
+                            "No Birthday Channel {{REF:emotes.deny}}"
+                        ],
+                        "value": "\u200b"
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "requiredSetupBirthdayRole": {
+                "title": "Server Setup - Birthday Role",
+                "description": [
+                    "Now, set up the birthday role [(?)](${Config.links.docs}/faq#what-is-the-birthday-role)",
+                    "",
+                    "Note: The Birthday Role is actively removed from those whose birthday it isn't. [(?)](${Config.links.docs}/faq#what-does-it-mean-by-the-birthday-role-is-actively-removed)",
+                    "",
+                    "Please select an option"
+                ],
+                "fields": [
+                    {
+                        "name": [
+                            "Create New Role {{REF:emotes.create}}",
+                            "Select Pre-Existing Role {{REF:emotes.select}}",
+                            "No Birthday Role {{REF:emotes.deny}}"
+                        ],
+                        "value": "\u200b"
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "trustedSetupPreventsMessage": {
+                "title": "Trusted Setup - Trusted Prevents Message",
+                "description": [
+                    "Should the trusted role prevent the birthday message? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)",
+                    "",
+                    "True: {{REF:emotes.confirm}}",
+                    "False: {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "trustedSetupPreventsRole": {
+                "title": "Trusted Setup - Trusted Prevents Role",
+                "description": [
+                    "Should the trusted role prevent the birthday role? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)",
+                    "",
+                    "True: {{REF:emotes.confirm}}",
+                    "False: {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "trustedSetupRequireAll": {
+                "title": "Trusted Setup - Require All Trusted Roles",
+                "description": [
+                    "With premium you can set multiple trusted roles. Because of this, you can choose if a user needs one or all of the trusted roles to have their birthday celebrated.",
+                    "",
+                    "Should birthdays require all trusted roles? [(?)](${Config.links.docs}/faq#)",
+                    "",
+                    "True: {{REF:emotes.confirm}}",
+                    "False: {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "anniversarySetupMemberChannel": {
+                "title": "Anniversary Setup - Member Anniversary Channel",
+                "description": [
+                    "For help, view the anniversary setup guide [here](${Config.links.docs}/)!",
+                    "",
+                    "To begin you must set up the member anniversary channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "",
+                    "Please select an option"
+                ],
+                "fields": [
+                    {
+                        "name": [
+                            "Create New Channel {{REF:emotes.create}}",
+                            "Select Pre-Existing Channel {{REF:emotes.select}}",
+                            "No Birthday Channel {{REF:emotes.deny}}"
+                        ],
+                        "value": "\u200b"
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "anniversarySetupServerChannel": {
+                "title": "Anniversary Setup - Server Anniversary Channel",
+                "description": [
+                    "For help, view the anniversary setup guide [here](${Config.links.docs}/)!",
+                    "",
+                    "To begin you must set up the server anniversary channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "",
+                    "Please select an option"
+                ],
+                "fields": [
+                    {
+                        "name": [
+                            "Create New Channel {{REF:emotes.create}}",
+                            "Select Pre-Existing Channel {{REF:emotes.select}}",
+                            "No Birthday Channel {{REF:emotes.deny}}"
+                        ],
+                        "value": "\u200b"
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
             }
         },
         "userPrompts": {
@@ -141,6 +284,59 @@
             }
         },
         "results": {
+            "requiredSetup": {
+                "title": "Server Setup - Completed",
+                "description": [
+                    "You have successfully completed the required server setup!",
+                    "",
+                    "**Birthday Channel**: {{CHANNEL}}",
+                    "**Birthday Role**: {{ROLE}}"
+                ],
+                "footer": {
+                    "text": "All server commands unlocked!"
+                },
+                "timestamp": true
+            },
+            "trustedSetup": {
+                "title": "Trusted Setup - Completed",
+                "description": [
+                    "You have successfully completed the trusted server setup!",
+                    "",
+                    "**Trusted Prevents Role**: {{PREVENTS_ROLE}}",
+                    "**Trusted Prevents Role**: {{PREVENTS_MESSAGE}}"
+                ],
+                "footer": {
+                    "text": "Trusted Setup Complete!"
+                },
+                "timestamp": true
+            },
+            "trustedSetupPremium": {
+                "title": "Trusted Setup - Completed",
+                "description": [
+                    "You have successfully completed the trusted server setup!",
+                    "",
+                    "**Trusted Prevents Role**: {{PREVENTS_ROLE}}",
+                    "**Trusted Prevents Role**: {{PREVENTS_MESSAGE}}",
+                    "**Require All Trusted Roles**: {{REQUIRE_ALL_ROLES}}"
+                ],
+                "footer": {
+                    "text": "Trusted Setup Complete!"
+                },
+                "timestamp": true
+            },
+            "anniversarySetup": {
+                "title": "Anniversary Setup - Completed",
+                "description": [
+                    "You have successfully completed the required server setup!",
+                    "",
+                    "**Member Anniversary Channel**: {{MEMBER_CHANNEL}}",
+                    "**Server Anniversary Channel**: {{SERVER_CHANNEL}}"
+                ],
+                "footer": {
+                    "text": "Anniversary Setup Complete!"
+                },
+                "timestamp": true
+            },
             "setBirthday": {
                 "description": "Successfully set your birthday to **{{BIRTHDAY}}, {{TIMEZONE}}**",
                 "footer": {
@@ -162,8 +358,23 @@
                 "color": "{{REF:colors.success}}"
             },
             "birthdayExpired": {
-                "title": "Custom Message Clear - Expired",
-                "description": "Type `{{REF:bot.prefix}} message clear <type>` to clear a custom message type.",
+                "title": "Birthday Set - Expired",
+                "description": "Type `{{REF:bot.prefix}} set` set your birthday.",
+                "color": "{{REF:colors.error}}"
+            },
+            "requireSetupExpired": {
+                "title": "Required Setup - Expired",
+                "description": "Type `{{REF:bot.prefix}} setup` to rerun the setup.",
+                "color": "{{REF:colors.error}}"
+            },
+            "trustedSetupExpired": {
+                "title": "Trusted Setup - Expired",
+                "description": "Type `{{REF:bot.prefix}} setup trusted` to rerun the setup.",
+                "color": "{{REF:colors.error}}"
+            },
+            "anniversarySetupExpired": {
+                "title": "Anniversary Setup - Expired",
+                "description": "Type `{{REF:bot.prefix}} setup anniversary` to rerun the setup.",
                 "color": "{{REF:colors.error}}"
             },
             "customMessageClearExpired": {
@@ -375,6 +586,13 @@
                 "description": "{{MEMBER}} needs the `READ_MESSAGE_HISTORY` permission in this channel!",
                 "color": "{{REF:colors.error}}"
             },
+            "noAccessToChannel": {
+                "description": [
+                    "I don't have permission to send messages in {{CHANNEL}}!",
+                    "Please allow me to **View Channel**, **Send Messages**, **Embed Links**, and **Add Reactions** in {{CHANNEL}}."
+                ],
+                "color": "{{REF:colors.error}}"
+            },
             "cantSuggest": {
                 "description": "You do not have permission to suggest birthdays for other users!",
                 "color": "{{REF:colors.error}}"
@@ -432,7 +650,7 @@
             },
             "clearMessageInvalidType": {
                 "title": "Clear Custom Message",
-                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `user`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -441,7 +659,7 @@
             },
             "invalidMessageType": {
                 "title": "Custom Message List",
-                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `user`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -462,6 +680,24 @@
                 "description": "Accepted Values: `everyone`, `here`, `@role/role-name`, `none`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "birthdayRoleUsedWarning": {
+                "title": "Warning",
+                "description": "We have detected that __**{{AMOUNT}}**__ user{{S_VALUE}} already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
+                "footer": {
+                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.warn}}"
+            },
+            "birthdayRoleUsedError": {
+                "title": "Error",
+                "description": "We have detected that __**{{AMOUNT}}**__ users already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
+                "footer": {
+                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -670,7 +906,7 @@
             },
             "noUserPlaceholder": {
                 "description": [
-                    "Please include the `{{REF:placeHolder.users}}` placeholder somewhere in the message. This indicates where birthday usernames will appear.",
+                    "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where birthday usernames will appear.",
                     "Ex: `{{REF:bot.prefix}} message add birthday {{REF:defaults.birthdayMessage}}`"
                 ],
                 "color": "{{REF:colors.error}}"
@@ -753,7 +989,7 @@
                 "color": "{{REF:colors.error}}"
             },
             "invalidRole": {
-                "description": "Invalid role!",
+                "description": "Invalid role! Please mention a role or input a role's name.",
                 "color": "{{REF:colors.error}}"
             },
             "noTrustedRoles": {
@@ -839,7 +1075,7 @@
                 "color": "{{REF:colors.error}}"
             },
             "invalidChannel": {
-                "description": "Invalid channel!",
+                "description": "Invalid channel! Please mention a channel or input a channel's name.",
                 "color": "{{REF:colors.error}}"
             },
             "invalidYear": {
@@ -1249,7 +1485,13 @@
         "defaults": {
             "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
             "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.years}} years in the server {{REF:placeholders.users}}!",
-            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeholders.years}} year(s) old!"
+            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeholders.years}} year(s) old!",
+            "birthdayChannelName": "{{REF:emotes.birthdayEmote}} birthdays",
+            "birthdayChannelTopic": "Birthdays Announcements!",
+            "memberAnniversaryChannelName": "{{REF:emotes.party}} member anniversaries",
+            "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
+            "serverAnniversaryChannelName": "{{REF:emotes.party}} server anniversaries",
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
         },
         "list": {
             "birthdayMessagesTitle": "{{REF:terms.birthdayMessages}} | {{REF:list.pageTitle}}",
@@ -1284,7 +1526,6 @@
             "timeZone": "Time Zone",
             "birthday": "Birthday",
             "birthdays": "Birthdays",
-            "channelTopic": "Birthdays Announcements!",
             "user": "User",
             "users": "Users",
             "list": "List",
@@ -1294,7 +1535,10 @@
             "serverAnniversary": "Server Anniversary",
             "blacklist": "Blacklist",
             "blacklisted": "Blacklisted",
+            "notSet": "Not Set",
             "unknownMember": "Unknown Member",
+            "unknownChannel": "Unknown Channel",
+            "unknownRole": "Unknown Role",
             "deletedRole": "Deleted Role",
             "birthdayList": "Birthday List",
             "birthdayMessages": "Birthday Messages",

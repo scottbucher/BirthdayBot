@@ -22,6 +22,7 @@ import { Command } from './command';
 import { GuildData } from '../models/database';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { join } from 'path';
 
 let Config = require('../../config/config.json');
 
@@ -62,67 +63,19 @@ export class SetCommand implements Command {
             );
         };
         let target: User;
-        let birthday: string;
+        let birthday = FormatUtils.getBirthday(args.slice(2).join(' '));
         let timeZone: string;
         let dm = channel instanceof DMChannel;
         let guildData: GuildData;
 
         target = msg.mentions.members?.first()?.user;
 
-        if (args.length >= 3) {
-            // Check the third arg for inputs
-            let suggestCheck = false; // This could be removed if I did it as I did it in the subsequent args check, but this is technically more efficient
-            if (!dm && !target) {
-                target = FormatUtils.getUser(msg, args[2]);
-                if (target) suggestCheck = true;
-            }
-
-            if (!suggestCheck) {
-                birthday = FormatUtils.getBirthday(args[2]);
-            }
-
-            if (!birthday) {
-                if (!FormatUtils.checkAbbreviation(args[2])) {
-                    timeZone = FormatUtils.findZone(args[2]); // Try and get the time zone
-                }
-            }
+        for (let i = 2; i < args.length; i++) {
+            if (!FormatUtils.checkAbbreviation(args[i])) timeZone = FormatUtils.findZone(args[i]);
+            if (timeZone) break;
         }
 
-        if (args.length >= 4) {
-            // Check the fourth arg for inputs
-            if (!dm && !target) {
-                target = msg.mentions.members.first()?.user;
-            }
-
-            if (!birthday) {
-                birthday = FormatUtils.getBirthday(args[3]);
-            }
-
-            if (!timeZone) {
-                if (!FormatUtils.checkAbbreviation(args[3])) {
-                    timeZone = FormatUtils.findZone(args[3]); // Try and get the time zone
-                }
-            }
-        }
-
-        if (args.length >= 5) {
-            // Check the fifth arg for inputs
-            if (!dm && !target) {
-                target = msg.mentions.members.first()?.user;
-            }
-
-            if (!birthday) {
-                birthday = FormatUtils.getBirthday(args[4]);
-            }
-
-            if (!timeZone) {
-                if (!FormatUtils.checkAbbreviation(args[4])) {
-                    timeZone = FormatUtils.findZone(args[4]); // Try and get the time zone
-                }
-            }
-        }
-
-        if (!target || channel instanceof DMChannel) {
+        if (!target || dm) {
             target = msg.author;
         } else {
             guildData = await this.guildRepo.getGuild(msg.guild.id);

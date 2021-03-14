@@ -1,8 +1,8 @@
-import { CustomMessage, CustomMessages, SplitUsers, UserData } from '../models/database';
+import { ArrayUtils, MathUtils } from '.';
+import { CustomMessage, CustomMessages, GuildData, SplitUsers, UserData } from '../models/database';
 
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
-import { MathUtils, ArrayUtils } from '.';
 
 let Debug = require('../../config/debug.json');
 
@@ -76,12 +76,14 @@ export class BdayUtils {
         return currentHour === 0;
     }
 
-    public static isBirthday(userData: UserData): boolean {
+    public static isBirthday(userData: UserData, guildData: GuildData): boolean {
         if (Debug.alwaysGiveBirthdayRole) {
             return true;
         }
 
-        let currentDate = moment().tz(userData.TimeZone);
+        let currentDate = moment().tz(
+            guildData.DefaultTimezone === '0' ? userData.TimeZone : guildData.DefaultTimezone
+        );
         let birthday = moment(userData.Birthday);
 
         let currentDateFormatted = currentDate.format('MM-DD');
