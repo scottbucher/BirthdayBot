@@ -1,6 +1,7 @@
 export { ActionUtils } from './action-utils';
 export { ArrayUtils } from './array-utils';
 export { BdayUtils } from './bday-utils';
+export { ClientUtils } from './client-utils';
 export { ColorUtils } from './color-utils';
 export { FormatUtils } from './format-utils';
 export { GuildUtils } from './guild-utils';
@@ -10,6 +11,8 @@ export { MathUtils } from './math-utils';
 export { MessageUtils } from './message-utils';
 export { ParseUtils } from './parse-utils';
 export { PermissionUtils } from './permission-utils';
+export { RegexUtils } from './regex-utils';
 export { ShardUtils } from './shard-utils';
 export { SqlUtils as SQLUtils } from './sql-utils';
+export { StringUtils } from './string-utils';
 export { TimeUtils } from './time-utils';
