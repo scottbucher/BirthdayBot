@@ -1,4 +1,4 @@
-import { BdayUtils, MathUtils, TimeUtils } from '../utils';
+import { BdayUtils, TimeUtils } from '../utils';
 import { BirthdayService, Logger } from '../services';
 import { BlacklistRepo, GuildRepo, UserRepo } from '../services/database/repos';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
@@ -36,7 +36,7 @@ export class PostBirthdaysJob implements Job {
         ];
 
         if (
-            !MathUtils.isLeap(now.year()) &&
+            !TimeUtils.isLeap(now.year()) &&
             (today === '02-28' || tomorrow === '02-28' || yesterday === '02-28')
         ) {
             // Add leap year birthdays to list

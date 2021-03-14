@@ -21,4 +21,8 @@ export class TimeUtils {
     public static getMomentInZone(zone: string): Moment {
         return tz(zone);
     }
+
+    public static isLeap(year: number): boolean {
+        return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+    }
 }

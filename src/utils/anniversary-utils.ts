@@ -1,7 +1,7 @@
 import { Guild, GuildMember } from 'discord.js';
 import { GuildData, UserData } from '../models/database';
 
-import { MathUtils } from './math-utils';
+import { TimeUtils } from '.';
 import moment from 'moment';
 
 let Debug = require('../../config/debug.json');
@@ -40,7 +40,7 @@ export class AnniversaryUtils {
 
         let currentDateFormatted = currentDate.format('MM-DD');
         let joinDateFormatted = joinDate.format('MM-DD');
-        if (joinDateFormatted === '02-29' && !MathUtils.isLeap(currentDate.year()))
+        if (joinDateFormatted === '02-29' && !TimeUtils.isLeap(currentDate.year()))
             joinDateFormatted = '02-28';
         return currentDateFormatted === joinDateFormatted;
     }
@@ -58,7 +58,7 @@ export class AnniversaryUtils {
         let currentDateFormatted = currentDate.format('MM-DD');
         let creationDateFormatted = creationDate.format('MM-DD');
 
-        if (creationDateFormatted === '02-29' && !MathUtils.isLeap(currentDate.year()))
+        if (creationDateFormatted === '02-29' && !TimeUtils.isLeap(currentDate.year()))
             creationDateFormatted = '02-28';
         return currentDateFormatted === creationDateFormatted;
     }
