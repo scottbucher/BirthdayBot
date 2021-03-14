@@ -35,8 +35,8 @@ export class StatsCommand implements Command {
         let userCount: number;
 
         try {
-            serverCount = await ShardUtils.retrieveServerCount(msg.client.shard);
-            userCount = await ShardUtils.retrieveUserCount(msg.client.shard);
+            serverCount = await ShardUtils.serverCount(msg.client.shard);
+            userCount = await ShardUtils.userCount(msg.client.shard);
         } catch (error) {
             // Ignore case where stats command is run while shards are still being spawned
             if (error.name.includes('SHARDING_IN_PROCESS')) {
