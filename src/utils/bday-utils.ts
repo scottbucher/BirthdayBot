@@ -1,4 +1,4 @@
-import { ArrayUtils, MathUtils } from '.';
+import { ArrayUtils, TimeUtils } from '.';
 import { CustomMessage, CustomMessages, GuildData, SplitUsers, UserData } from '../models/database';
 
 import { Moment } from 'moment-timezone';
@@ -89,7 +89,7 @@ export class BdayUtils {
         let currentDateFormatted = currentDate.format('MM-DD');
         let birthdayFormatted = birthday.format('MM-DD');
 
-        if (birthdayFormatted === '02-29' && !MathUtils.isLeap(moment().year()))
+        if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
             birthdayFormatted = '02-28';
         return currentDateFormatted === birthdayFormatted;
     }

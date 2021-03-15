@@ -22,7 +22,6 @@ import { Command } from './command';
 import { GuildData } from '../models/database';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { join } from 'path';
 
 let Config = require('../../config/config.json');
 

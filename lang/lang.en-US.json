@@ -1147,9 +1147,9 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
-            "shardingInProcess": {
-                "description": "Sharding is in process. Try again later.",
-                "color": "{{REF:colors.error}}"
+            "startupInProcess": {
+                "description": "{{REF:bot.name}} is still starting up. Try again later.",
+                "color": "{{REF:colors.warn}}"
             }
         },
         "help": {

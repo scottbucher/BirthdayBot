@@ -115,7 +115,11 @@ export class Bot {
             return;
         }
 
-        this.reactionAddHandler.process(msgReaction, reactor);
+        try {
+            this.reactionAddHandler.process(msgReaction, reactor);
+        } catch (error) {
+            Logger.error(Logs.error.reaction, error);
+        }
     }
 
     private async onMessage(msg: Message): Promise<void> {
