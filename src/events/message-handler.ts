@@ -31,6 +31,11 @@ export class MessageHandler {
 
         let channel = msg.channel;
 
+        // await MessageUtils.send(
+        //     channel,
+        //     `${msg.author.username}'s joinedAt is: \`${msg.member.joinedAt}\` and their joinedTimestamp is: \`${msg.member.joinedTimestamp}\``
+        // );
+
         // Only handle messages from text or DM channels
         if (!(channel instanceof TextChannel || channel instanceof DMChannel)) return;
 
