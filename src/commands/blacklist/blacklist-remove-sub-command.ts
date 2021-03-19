@@ -2,8 +2,8 @@ import { GuildUtils, MessageUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
-import { LangCode } from '../../models/enums';
 import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 export class BlacklistRemoveSubCommand {
     constructor(private blacklistRepo: BlacklistRepo) {}
@@ -38,9 +38,9 @@ export class BlacklistRemoveSubCommand {
             return;
         }
 
-        let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
+        let blacklist = await this.blacklistRepo.getBlacklist(target.id);
 
-        if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(msg.author.id)) {
+        if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(target.id)) {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.userNotInBlacklist', LangCode.EN_US)
