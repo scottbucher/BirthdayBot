@@ -72,6 +72,7 @@ export class Bot {
         Logger.info(Logs.info.login.replace('{USER_TAG}', userTag));
 
         this.startJobs();
+        Logger.info(Logs.info.startedJobs);
 
         this.ready = true;
     }

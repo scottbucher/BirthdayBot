@@ -1,4 +1,4 @@
-import { GuildUtils, MathUtils, MessageUtils, ParseUtils } from '../utils';
+import { ClientUtils, GuildUtils, MathUtils, MessageUtils, ParseUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js-light';
 
 import { Command } from './command';
@@ -31,7 +31,8 @@ export class SetAttemptsCommand implements Command {
         }
         // Get who they are mentioning
         target =
-            msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, args[2])?.user;
+            msg.mentions.members.first()?.user ||
+            (await ClientUtils.findMember(msg.guild, args[2]))?.user;
 
         // Did we find a user?
         if (!target) {

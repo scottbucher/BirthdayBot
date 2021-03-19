@@ -1,6 +1,13 @@
 import * as Chrono from 'chrono-node';
 
-import { ActionUtils, FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../utils';
+import {
+    ActionUtils,
+    ClientUtils,
+    FormatUtils,
+    GuildUtils,
+    MessageUtils,
+    PermissionUtils,
+} from '../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -66,7 +73,7 @@ export class SetCommand implements Command {
             // Check the third arg for inputs
             let suggestCheck = false; // This could be removed if I did it as I did it in the subsequent args check, but this is technically more efficient
             if (!dm && !target) {
-                target = FormatUtils.getUser(msg, args[2]);
+                target = await FormatUtils.getUser(msg, args[2]);
                 if (target) suggestCheck = true;
             }
 
@@ -133,9 +140,9 @@ export class SetCommand implements Command {
             // Get who they are mentioning
             let member =
                 msg.mentions.members?.first() ||
-                GuildUtils.findMember(msg.guild, args[2]) ||
-                GuildUtils.findMember(msg.guild, args[3]) ||
-                GuildUtils.findMember(msg.guild, args[4]);
+                (await ClientUtils.findMember(msg.guild, args[2])) ||
+                (await ClientUtils.findMember(msg.guild, args[3])) ||
+                (await ClientUtils.findMember(msg.guild, args[4]));
 
             if (
                 member &&

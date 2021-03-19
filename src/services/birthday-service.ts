@@ -74,7 +74,7 @@ export class BirthdayService {
         for (let user of userDatas) {
             let member: GuildMember;
             try {
-                member = guild.members.resolve(user.UserDiscordId);
+                member = members.find(u => u.id === user.UserDiscordId);
             } catch (error) {
                 // Can't find member?
                 continue;
@@ -219,7 +219,7 @@ export class BirthdayService {
         }
 
         if (isTest) {
-            let member = guild.members.resolve(userDatas[0].UserDiscordId);
+            let member = members.find(u => u.id === userDatas[0].UserDiscordId);
             if (trustedRole) {
                 testingEmbed.addField(
                     'User Has Trusted Role',

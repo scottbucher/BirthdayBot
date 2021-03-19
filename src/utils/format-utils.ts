@@ -1,9 +1,9 @@
 import * as Chrono from 'chrono-node';
 
 import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
+import { ClientUtils, GuildUtils } from '.';
 import { Guild, Message, MessageEmbed, User, Util } from 'discord.js-light';
 
-import { GuildUtils } from '.';
 import moment from 'moment-timezone';
 
 let Config = require('../../config/config.json');
@@ -18,15 +18,6 @@ export abstract class FormatUtils {
         return roleDiscordId
             ? guild.roles.resolve(roleDiscordId)?.toString() || '**Unknown**'
             : '**None**';
-    }
-
-    public static getMemberDisplayName(memberDiscordId: string, guild: Guild): string {
-        let displayName = guild.members.resolve(memberDiscordId)?.displayName;
-        return displayName ? Util.escapeMarkdown(displayName) : 'Unknown Member';
-    }
-
-    public static getMemberMention(memberDiscordId: string, guild: Guild): string {
-        return guild.members.resolve(memberDiscordId)?.toString() || 'Unknown Member';
     }
 
     public static getPercent(decimal: number): string {
@@ -75,10 +66,10 @@ export abstract class FormatUtils {
         return doubleCheck ? temp : null;
     }
 
-    public static getUser(msg: Message, input: string): User {
+    public static async getUser(msg: Message, input: string): Promise<User> {
         return (
             msg.mentions.members.first()?.user ||
-            GuildUtils.findMember(msg.guild, input)?.user ||
+            (await ClientUtils.findMember(msg.guild, input))?.user ||
             null
         );
     }
@@ -216,7 +207,7 @@ export abstract class FormatUtils {
         let description = `*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*\n\n`;
 
         for (let customMessage of customMessageResults.customMessages) {
-            let member = guild.members.resolve(customMessage.UserDiscordId);
+            let member = await ClientUtils.findMember(guild, customMessage.UserDiscordId);
             if (hasPremium) {
                 description += `${member ? `**${member.displayName}**: ` : '**Unknown Member** '} ${
                     customMessage.Message
@@ -276,7 +267,8 @@ export abstract class FormatUtils {
             let userNames: string[] = [];
             for (let user of users) {
                 userNames.push(
-                    `${guild.members.resolve(user.UserDiscordId)?.displayName}` || '**Unknown**'
+                    `${(await ClientUtils.findMember(guild, user.UserDiscordId))?.displayName}` ||
+                        '**Unknown**'
                 );
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
@@ -315,7 +307,7 @@ export abstract class FormatUtils {
 
         for (let user of users) {
             description += `**${
-                guild.members.resolve(user)?.displayName || 'Unknown'
+                (await ClientUtils.findMember(guild, user))?.displayName || 'Unknown'
             }**: (ID: ${user})\n`; // Append the description
         }
 
@@ -327,5 +319,25 @@ export abstract class FormatUtils {
     public static extractPageNumber(input: string): number {
         let match = PAGE_REGEX.exec(input);
         return match ? parseInt(match[1]) : null;
+    }
+
+    public static roleMention(guild: Guild, discordId: string): string {
+        if (discordId === '@here') {
+            return discordId;
+        }
+
+        if (discordId === guild.id) {
+            return '@everyone';
+        }
+
+        return `<@&${discordId}>`;
+    }
+
+    public static channelMention(discordId: string): string {
+        return `<#${discordId}>`;
+    }
+
+    public static userMention(discordId: string): string {
+        return `<@!${discordId}>`;
     }
 }

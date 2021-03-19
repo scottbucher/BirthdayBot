@@ -1,5 +1,5 @@
+import { ClientUtils, MessageUtils, PermissionUtils } from '../utils';
 import { Message, MessageEmbed, Role, TextChannel } from 'discord.js-light';
-import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from './command';
 import { GuildRepo } from '../services/database/repos';
@@ -120,7 +120,7 @@ export class UpdateCommand implements Command {
 
             if (
                 birthdayRole.position >
-                msg.guild.members.resolve(msg.client.user).roles.highest.position
+                (await ClientUtils.findMember(msg.guild, msg.client.user.id)).roles.highest.position
             ) {
                 let embed = new MessageEmbed()
                     .setDescription(`Birthday Role must be bellow the Bot's role!`)

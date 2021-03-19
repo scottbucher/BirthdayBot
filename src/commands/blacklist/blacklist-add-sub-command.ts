@@ -1,4 +1,4 @@
-import { GuildUtils, MessageUtils } from '../../utils';
+import { ClientUtils, GuildUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js-light';
 
 import { BlacklistRepo } from '../../services/database/repos';
@@ -20,7 +20,8 @@ export class BlacklistAddSubCommand {
 
         // Get who they are mentioning
         let target =
-            msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, args[3])?.user;
+            msg.mentions.members.first()?.user ||
+            (await ClientUtils.findMember(msg.guild, args[2]))?.user;
 
         // Did we find a user?
         if (!target) {

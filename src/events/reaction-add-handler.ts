@@ -220,7 +220,9 @@ export class ReactionAddHandler implements EventHandler {
                 let page = 1;
                 let pageSize = Config.experience.birthdayListSize;
 
-                let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
+                let users = (await msg.guild.members.fetch())
+                    .filter(member => !member.user.bot)
+                    .keyArray();
 
                 if (titleArgs[4]) {
                     try {
@@ -489,7 +491,9 @@ export class ReactionAddHandler implements EventHandler {
 
                 let pageSize = Config.experience.birthdayListSize;
 
-                let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
+                let users = (await msg.guild.members.fetch())
+                    .filter(member => !member.user.bot)
+                    .keyArray();
 
                 let userDataResults = await this.userRepo.getBirthdayListFull(
                     users,

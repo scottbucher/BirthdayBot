@@ -1,4 +1,4 @@
-import { BdayUtils, FormatUtils, MessageUtils } from '../utils';
+import { BdayUtils, ClientUtils, FormatUtils, MessageUtils } from '../utils';
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js-light';
 
 import { Command } from './command';
@@ -21,7 +21,7 @@ export class NextCommand implements Command {
     constructor(private userRepo: UserRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
-        let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
+        let users = (await msg.guild.members.fetch()).filter(member => !member.user.bot).keyArray();
 
         let userDatas = await this.userRepo.getAllUsers(users);
 
@@ -45,7 +45,9 @@ export class NextCommand implements Command {
             return;
         }
 
-        let userList = nextBirthdayUsers.map(user => msg.guild.members.resolve(user.UserDiscordId));
+        let userList = nextBirthdayUsers.map(user =>
+            ClientUtils.getUser(msg.client, user.UserDiscordId)
+        );
 
         let userStringList = FormatUtils.joinWithAnd(userList.map(user => user.toString()));
         let nextBirthday = moment(nextBirthdayUsers[0].Birthday).format('MMMM Do');

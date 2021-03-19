@@ -77,31 +77,7 @@ export class PostBirthdaysJob implements Job {
             }
 
             try {
-                let members: Collection<string, GuildMember> = guild.members.cache;
-                let beforeCacheSize = guild.members.cache.size;
-
-                if (Math.abs(guild.memberCount - beforeCacheSize) > 1) {
-                    try {
-                        members = await guild.members.fetch();
-                    } catch (error) {
-                        members = guild.members.cache;
-                        Logger.error(
-                            Logs.error.birthdayService
-                                .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                                .replace('{GUILD_NAME}', guild.name)
-                                .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                                .replace(
-                                    '{MEMBER_CACHE_BEFORE_COUNT}',
-                                    beforeCacheSize.toLocaleString()
-                                )
-                                .replace(
-                                    '{MEMBER_CACHE_AFTER_COUNT}',
-                                    guild.members.cache.size.toLocaleString()
-                                ),
-                            error
-                        );
-                    }
-                }
+                let members: Collection<string, GuildMember> = await guild.members.fetch();
 
                 // Get a list of memberIds
                 let memberIds = members.map(member => member.id);
@@ -137,7 +113,7 @@ export class PostBirthdaysJob implements Job {
                         .replace('{GUILD_ID}', guildData.GuildDiscordId)
                         .replace('{GUILD_NAME}', guild.name)
                         .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                        .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                        .replace('{MEMBER_CACHE_COUNT}', 'N/A'),
                     error
                 );
                 continue;

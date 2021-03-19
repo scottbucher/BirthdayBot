@@ -43,7 +43,7 @@ export class ListCommand implements Command {
 
         let pageSize = Config.experience.birthdayListSize;
 
-        let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
+        let users = (await msg.guild.members.fetch()).filter(member => !member.user.bot).keyArray();
 
         let userDataResults: UserDataResults;
 

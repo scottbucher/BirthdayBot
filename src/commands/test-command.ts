@@ -1,5 +1,5 @@
 import { BlacklistRepo, GuildRepo } from '../services/database/repos';
-import { GuildUtils, MessageUtils } from '../utils';
+import { ClientUtils, GuildUtils, MessageUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js-light';
 
 import { BirthdayService } from '../services';
@@ -41,7 +41,7 @@ export class TestCommand implements Command {
             // Get who they are mentioning
             target =
                 msg.mentions.members.first()?.user ||
-                GuildUtils.findMember(msg.guild, args[2])?.user;
+                (await ClientUtils.findMember(msg.guild, args[2]))?.user;
 
             // Did we find a user?
             if (!target) {
@@ -96,7 +96,7 @@ export class TestCommand implements Command {
             guild,
             guildData,
             [userData],
-            guild.members.cache,
+            await guild.members.fetch(),
             true,
             channel
         );

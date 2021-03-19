@@ -1,5 +1,5 @@
+import { ClientUtils, GuildUtils, MessageUtils } from '../utils';
 import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js-light';
-import { GuildUtils, MessageUtils } from '../utils';
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
@@ -36,7 +36,7 @@ export class ViewCommand implements Command {
             // Get who they are mentioning
             target =
                 msg.mentions.members.first()?.user ||
-                GuildUtils.findMember(msg.guild, args[2])?.user;
+                (await ClientUtils.findMember(msg.guild, args[2]))?.user;
 
             // Did we find a user?
             if (!target) {

@@ -1,4 +1,4 @@
-import { ActionUtils, MessageUtils, PermissionUtils } from '../../utils';
+import { ActionUtils, ClientUtils, MessageUtils, PermissionUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -264,7 +264,8 @@ export class SetupRequired {
                         // Check the role's position
                         if (
                             roleInput.position >
-                            guild.members.resolve(botUser).roles.highest.position
+                            (await ClientUtils.findMember(msg.guild, botUser.id)).roles.highest
+                                .position
                         ) {
                             let embed = new MessageEmbed()
                                 .setDescription(`Birthday Role must be bellow the Bot's role!`)

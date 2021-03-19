@@ -34,7 +34,7 @@ export class GuildJoinHandler implements EventHandler {
         // Get someone to message
         let user = guild.owner;
         if (!user) {
-            user = guild.members.cache.find(member =>
+            user = (await guild.members.fetch()).find(member =>
                 member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)
             );
         }
