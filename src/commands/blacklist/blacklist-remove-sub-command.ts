@@ -49,9 +49,9 @@ export class BlacklistRemoveSubCommand {
             return;
         }
 
-        let blacklist = await this.blacklistRepo.getBlacklist(target.id);
+        let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
-        if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(msg.author.id)) {
+        if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(target.id)) {
             let embed = new MessageEmbed()
                 .setDescription(`This user isn't in the blacklist!`)
                 .setColor(Config.colors.error);
