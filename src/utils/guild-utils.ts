@@ -1,4 +1,4 @@
-import { Guild, GuildMember } from 'discord.js';
+import { Guild, GuildMember } from 'discord.js-light';
 
 export abstract class GuildUtils {
     public static findMember(guild: Guild, input: string): GuildMember {

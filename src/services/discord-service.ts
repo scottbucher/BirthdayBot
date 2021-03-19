@@ -1,4 +1,4 @@
-import { Channel, Client, DiscordAPIError, TextChannel } from 'discord.js';
+import { Channel, Client, DiscordAPIError, TextChannel } from 'discord.js-light';
 
 export class DiscordService {
     constructor(private client: Client) {}

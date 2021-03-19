@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, Role, TextChannel } from 'discord.js-light';
 
 import { ColorUtils } from '../utils/color-utils';
 import { Command } from './command';

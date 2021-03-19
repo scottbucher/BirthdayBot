@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js-light';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,

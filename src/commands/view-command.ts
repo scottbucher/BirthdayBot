@@ -1,4 +1,4 @@
-import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
+import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js-light';
 import { GuildUtils, MessageUtils } from '../utils';
 
 import { Command } from './command';

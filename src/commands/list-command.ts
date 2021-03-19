@@ -1,7 +1,7 @@
 import * as Chrono from 'chrono-node';
 
 import { FormatUtils, MessageUtils, ParseUtils } from '../utils';
-import { Message, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js-light';
 
 import { Command } from './command';
 import { UserDataResults } from '../models/database';

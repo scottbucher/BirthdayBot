@@ -30,7 +30,7 @@ import {
     ViewCommand,
 } from './commands';
 import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
-import { ClientOptions, DiscordAPIError } from 'discord.js';
+import { ClientOptions, DiscordAPIError } from 'discord.js-light';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
     MessageAddSubCommand,

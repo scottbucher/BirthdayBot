@@ -1,5 +1,5 @@
 import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
-import { Message, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js-light';
 
 import { BlacklistRepo } from '../../services/database/repos';
 

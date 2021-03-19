@@ -1,5 +1,5 @@
 import { FormatUtils, MessageUtils } from '../../utils';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js-light';
 
 import { GuildRepo } from '../../services/database/repos';
 

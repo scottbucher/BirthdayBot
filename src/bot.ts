@@ -1,4 +1,4 @@
-import { Client, Guild, Message, MessageReaction, RateLimitData, User } from 'discord.js';
+import { Client, Guild, Message, MessageReaction, RateLimitData, User } from 'discord.js-light';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 
 import { Job } from './jobs';

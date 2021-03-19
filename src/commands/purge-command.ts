@@ -5,7 +5,14 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { DMChannel, Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
+import {
+    DMChannel,
+    Message,
+    MessageEmbed,
+    MessageReaction,
+    TextChannel,
+    User,
+} from 'discord.js-light';
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';

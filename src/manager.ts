@@ -1,7 +1,7 @@
-import { Shard, ShardingManager } from 'discord.js';
+import { Shard, ShardingManager } from 'discord.js-light';
 
-import { Logger } from './services';
 import { Job } from './jobs';
+import { Logger } from './services';
 
 let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');

@@ -1,8 +1,8 @@
-import { MessageUtils } from '../../utils';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js-light';
 
 import { CustomMessage } from '../../models/database';
 import { CustomMessageRepo } from '../../services/database/repos';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 

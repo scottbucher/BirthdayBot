@@ -15,7 +15,7 @@ import {
     Permissions,
     TextChannel,
     User,
-} from 'discord.js';
+} from 'discord.js-light';
 import { GuildRepo, UserRepo } from '../services/database/repos';
 
 import { Command } from './command';

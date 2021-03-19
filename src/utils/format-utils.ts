@@ -1,7 +1,7 @@
 import * as Chrono from 'chrono-node';
 
 import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
-import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
+import { Guild, Message, MessageEmbed, User, Util } from 'discord.js-light';
 
 import { GuildUtils } from '.';
 import moment from 'moment-timezone';

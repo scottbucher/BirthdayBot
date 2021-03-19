@@ -5,7 +5,7 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
+import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js-light';
 
 import { CustomMessageRepo } from '../../services/database/repos';
 

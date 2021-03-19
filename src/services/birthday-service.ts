@@ -1,5 +1,5 @@
 import { ActionUtils, BdayUtils, FormatUtils, MessageUtils, PermissionUtils } from '../utils';
-import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js-light';
 import { GuildData, UserData } from '../models/database';
 
 import { ColorUtils } from '../utils/color-utils';

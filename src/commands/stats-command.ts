@@ -1,5 +1,5 @@
 import { MessageUtils, ShardUtils } from '../utils';
-import djs, { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import djs, { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js-light';
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';

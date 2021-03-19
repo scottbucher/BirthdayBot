@@ -1,4 +1,4 @@
-import { DMChannel, Message, TextChannel } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js-light';
 
 export interface Command {
     name: string;

@@ -1,4 +1,4 @@
-import { DMChannel, GuildMember, Permissions, TextChannel } from 'discord.js';
+import { DMChannel, GuildMember, Permissions, TextChannel } from 'discord.js-light';
 
 import { Command } from '../commands';
 import { GuildData } from '../models/database';

@@ -1,4 +1,3 @@
-import { ShardingManager } from 'discord.js';
 import { HttpService, Logger } from './services';
 import { RootController, SubscriptionEventsController, VotesController } from './controllers';
 
@@ -6,8 +5,9 @@ import { Api } from './api';
 import { DataAccess } from './services/database/data-access';
 import { Manager } from './manager';
 import { ShardUtils } from './utils';
-import { UserRepo } from './services/database/repos';
+import { ShardingManager } from 'discord.js-light';
 import { UpdateServerCountJob } from './jobs';
+import { UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');

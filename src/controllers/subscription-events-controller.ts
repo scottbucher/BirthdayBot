@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 
 import { Controller } from './controller';
-import { ShardingManager } from 'discord.js';
+import { ShardingManager } from 'discord.js-light';
 import { SubscriptionStatusName } from '../models/subscription-models';
 import router from 'express-promise-router';
 

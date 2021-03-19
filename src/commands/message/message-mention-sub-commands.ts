@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, Role, TextChannel } from 'discord.js-light';
 
 import { GuildRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';

@@ -1,4 +1,4 @@
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js-light';
 import { Logger, SubscriptionService } from '../services';
 import { MessageUtils, TimeUtils } from '../utils';
 

@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js-light';
 
 import { BlacklistAddSubCommand } from './blacklist/blacklist-add-sub-command';
 import { BlacklistClearSubCommand } from './blacklist/blacklist-clear-sub-command';

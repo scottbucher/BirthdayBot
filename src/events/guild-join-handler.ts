@@ -1,4 +1,4 @@
-import { Guild, MessageEmbed, Permissions } from 'discord.js';
+import { Guild, MessageEmbed, Permissions } from 'discord.js-light';
 
 import { EventHandler } from './event-handler';
 import { Logger } from '../services';

@@ -1,6 +1,6 @@
 import { BlacklistRepo, GuildRepo } from '../services/database/repos';
 import { GuildUtils, MessageUtils } from '../utils';
-import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
+import { Message, MessageEmbed, TextChannel, User } from 'discord.js-light';
 
 import { BirthdayService } from '../services';
 import { Command } from './command';

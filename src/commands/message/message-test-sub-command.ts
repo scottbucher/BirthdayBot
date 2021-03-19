@@ -1,6 +1,6 @@
 import { CustomMessageRepo, GuildRepo } from '../../services/database/repos';
 import { FormatUtils, MessageUtils } from '../../utils';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js-light';
 
 let Config = require('../../../config/config.json');
 

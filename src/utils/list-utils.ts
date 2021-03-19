@@ -1,5 +1,5 @@
 import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
-import { Guild, Message } from 'discord.js';
+import { Guild, Message } from 'discord.js-light';
 
 import { FormatUtils } from '.';
 import { MessageUtils } from './message-utils';

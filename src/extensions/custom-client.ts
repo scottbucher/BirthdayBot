@@ -1,4 +1,4 @@
-import { Client, ClientOptions, MessageEmbed } from 'discord.js';
+import { Client, ClientOptions, MessageEmbed } from 'discord.js-light';
 import { DiscordService, Logger } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 import { PlanName, SubscriptionStatusName } from '../models/subscription-models';

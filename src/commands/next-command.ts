@@ -1,5 +1,5 @@
 import { BdayUtils, FormatUtils, MessageUtils } from '../utils';
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js-light';
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
