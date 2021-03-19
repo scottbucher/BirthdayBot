@@ -38,7 +38,7 @@ export class BlacklistRemoveSubCommand {
             return;
         }
 
-        let blacklist = await this.blacklistRepo.getBlacklist(target.id);
+        let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
         if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(target.id)) {
             await MessageUtils.send(
