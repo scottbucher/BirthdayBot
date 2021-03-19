@@ -5,7 +5,7 @@ import {
     MessageFilter,
 } from 'discord.js-collector-utils';
 import { InvalidUtils, MessageUtils, PermissionUtils } from '../../utils';
-import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import { Message, MessageReaction, Role, TextChannel, User } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';

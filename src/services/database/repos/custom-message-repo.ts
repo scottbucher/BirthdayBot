@@ -1,7 +1,7 @@
 import { CustomMessages } from '../../../models/database';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
-import { SQLUtils } from '../../../utils';
+import { SqlUtils } from '../../../utils';
 
 export class CustomMessageRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -58,7 +58,7 @@ export class CustomMessageRepo {
             type,
         ]);
 
-        let customMessages = SQLUtils.getTable(results, 0);
+        let customMessages = SqlUtils.getTable(results, 0);
         return new CustomMessages(customMessages, null);
     }
 
@@ -68,7 +68,7 @@ export class CustomMessageRepo {
             type,
         ]);
 
-        let customMessages = SQLUtils.getTable(results, 0);
+        let customMessages = SqlUtils.getTable(results, 0);
         return new CustomMessages(customMessages, null);
     }
 
@@ -85,8 +85,8 @@ export class CustomMessageRepo {
             type,
         ]);
 
-        let customMessageData = SQLUtils.getTable(results, 0);
-        let stats = SQLUtils.getRow(results, 1, 0);
+        let customMessageData = SqlUtils.getTable(results, 0);
+        let stats = SqlUtils.getRow(results, 1, 0);
         return new CustomMessages(customMessageData, stats);
     }
 
@@ -103,8 +103,8 @@ export class CustomMessageRepo {
             type,
         ]);
 
-        let customMessageData = SQLUtils.getTable(results, 0);
-        let stats = SQLUtils.getRow(results, 1, 0);
+        let customMessageData = SqlUtils.getTable(results, 0);
+        let stats = SqlUtils.getRow(results, 1, 0);
         return new CustomMessages(customMessageData, stats);
     }
 }

@@ -1,14 +1,12 @@
 import { ShardClientUtil, ShardingManager, Util } from 'discord.js';
+import { MathUtils } from '.';
 
 export class ShardUtils {
-    public static async getRecommendedShards(
-        token: string,
-        serversPerShard: number
-    ): Promise<number> {
+    public static async recommendedShards(token: string, serversPerShard: number): Promise<number> {
         return Math.ceil(await Util.fetchRecommendedShards(token, serversPerShard));
     }
 
-    public static getMyShardIds(
+    public static myShardIds(
         totalShards: number,
         machineId: number,
         totalMachines: number
@@ -22,19 +20,19 @@ export class ShardUtils {
         return myShardIds;
     }
 
-    public static async retrieveServerCount(
+    public static async serverCount(
         shardInterface: ShardingManager | ShardClientUtil
     ): Promise<number> {
         let shardGuildCounts: number[] = await shardInterface.fetchClientValues(
             'guilds.cache.size'
         );
-        return shardGuildCounts.reduce((prev, val) => prev + val, 0);
+        return MathUtils.sum(shardGuildCounts);
     }
 
-    public static async retrieveUserCount(
+    public static async userCount(
         shardInterface: ShardingManager | ShardClientUtil
     ): Promise<number> {
         let shardUserCounts: number[] = await shardInterface.fetchClientValues('users.cache.size');
-        return shardUserCounts.reduce((prev, val) => prev + val, 0);
+        return MathUtils.sum(shardUserCounts);
     }
 }

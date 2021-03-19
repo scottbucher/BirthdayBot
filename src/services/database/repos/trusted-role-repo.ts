@@ -1,6 +1,6 @@
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
-import { SQLUtils } from '../../../utils';
+import { SqlUtils } from '../../../utils';
 import { TrustedRoles } from '../../../models/database/trusted-role-models';
 
 export class TrustedRoleRepo {
@@ -23,7 +23,7 @@ export class TrustedRoleRepo {
             discordId,
         ]);
 
-        let trustedRoles = SQLUtils.getTable(results, 0);
+        let trustedRoles = SqlUtils.getTable(results, 0);
         return new TrustedRoles(trustedRoles, null);
     }
 
@@ -38,8 +38,8 @@ export class TrustedRoleRepo {
             page,
         ]);
 
-        let trustedRoleData = SQLUtils.getTable(results, 0);
-        let stats = SQLUtils.getRow(results, 1, 0);
+        let trustedRoleData = SqlUtils.getTable(results, 0);
+        let stats = SqlUtils.getRow(results, 1, 0);
         return new TrustedRoles(trustedRoleData, stats);
     }
 }
