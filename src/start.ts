@@ -73,6 +73,15 @@ async function start(): Promise<void> {
         messageCacheMaxSize: Config.client.caches.messages.size,
         messageCacheLifetime: Config.client.caches.messages.lifetime,
         messageSweepInterval: Config.client.caches.messages.sweepInterval,
+
+        // discord.js-light Options
+        cacheGuilds: Config.client.caches.guilds,
+        cacheRoles: Config.client.caches.roles,
+        cacheEmojis: Config.client.caches.emojis,
+        cacheChannels: Config.client.caches.channels,
+        cacheOverwrites: Config.client.caches.overwrites,
+        cachePresences: Config.client.caches.presences,
+        disabledEvents: Config.client.disabledEvents,
     };
 
     let client = new CustomClient(clientOptions, guildRepo);

@@ -1,10 +1,20 @@
-import { Client, Guild, Message, MessageReaction, RateLimitData, User } from 'discord.js-light';
+import {
+    Client,
+    Constants,
+    Guild,
+    Message,
+    MessageReaction,
+    RateLimitData,
+    User,
+} from 'discord.js-light';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 
 import { Job } from './jobs';
 import { Logger } from './services';
+import { PartialUtils } from './utils';
 
 let Config = require('../config/config.json');
+let Debug = require('../config/debug.json');
 let Logs = require('../lang/logs.json');
 
 export class Bot {
@@ -26,15 +36,18 @@ export class Bot {
     }
 
     private registerListeners(): void {
-        this.client.on('ready', () => this.onReady());
-        this.client.on('shardReady', (shardId: number) => this.onShardReady(shardId));
-        this.client.on('guildCreate', (guild: Guild) => this.onGuildJoin(guild));
-        this.client.on('guildDelete', (guild: Guild) => this.onGuildLeave(guild));
-        this.client.on('message', (msg: Message) => this.onMessage(msg));
-        this.client.on('messageReactionAdd', (msgReaction: MessageReaction, reactor: User) =>
-            this.onReactionAdd(msgReaction, reactor)
+        this.client.on(Constants.Events.CLIENT_READY, () => this.onReady());
+        this.client.on(Constants.Events.SHARD_READY, (shardId: number) =>
+            this.onShardReady(shardId)
         );
-        this.client.on('rateLimit', (rateLimitData: RateLimitData) =>
+        this.client.on(Constants.Events.GUILD_CREATE, (guild: Guild) => this.onGuildJoin(guild));
+        this.client.on(Constants.Events.GUILD_DELETE, (guild: Guild) => this.onGuildLeave(guild));
+        this.client.on(Constants.Events.MESSAGE_CREATE, (msg: Message) => this.onMessage(msg));
+        this.client.on(
+            Constants.Events.MESSAGE_REACTION_ADD,
+            (messageReaction: MessageReaction, user: User) => this.onReaction(messageReaction, user)
+        );
+        this.client.on(Constants.Events.RATE_LIMIT, (rateLimitData: RateLimitData) =>
             this.onRateLimit(rateLimitData)
         );
     }
@@ -59,7 +72,6 @@ export class Bot {
         Logger.info(Logs.info.login.replace('{USER_TAG}', userTag));
 
         this.startJobs();
-        Logger.info(Logs.info.startedJobs);
 
         this.ready = true;
     }
@@ -92,13 +104,13 @@ export class Bot {
         }
     }
 
-    private async onReactionAdd(msgReaction: any, reactor: User): Promise<void> {
-        if (!this.ready) return;
-        this.reactionAddHandler.process(msgReaction, reactor);
-    }
-
     private async onMessage(msg: Message): Promise<void> {
         if (!this.ready) {
+            return;
+        }
+
+        msg = await PartialUtils.fillMessage(msg);
+        if (!msg) {
             return;
         }
 
@@ -106,6 +118,23 @@ export class Bot {
             await this.messageHandler.process(msg);
         } catch (error) {
             Logger.error(Logs.error.message, error);
+        }
+    }
+
+    private async onReaction(msgReaction: MessageReaction, reactor: User): Promise<void> {
+        if (!this.ready) {
+            return;
+        }
+
+        msgReaction = await PartialUtils.fillReaction(msgReaction);
+        if (!msgReaction) {
+            return;
+        }
+
+        try {
+            await this.reactionAddHandler.process(msgReaction, reactor);
+        } catch (error) {
+            Logger.error(Logs.error.reaction, error);
         }
     }
 

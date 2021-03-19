@@ -10,3 +10,6 @@ export { ArrayUtils } from './array-utils';
 export { BdayUtils } from './bday-utils';
 export { GuildUtils } from './guild-utils';
 export { TimeUtils } from './time-utils';
+export { ClientUtils } from './client-utils';
+export { RegexUtils } from './regex-utils';
+export { PartialUtils } from './partial-utils';
