@@ -49,7 +49,7 @@ export class BlacklistRemoveSubCommand {
             return;
         }
 
-        let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
+        let blacklist = await this.blacklistRepo.getBlacklist(target.id);
 
         if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(msg.author.id)) {
             let embed = new MessageEmbed()
