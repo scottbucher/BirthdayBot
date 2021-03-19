@@ -4,11 +4,8 @@ import { Command } from '../commands';
 import { GuildData } from '../models/database';
 
 export class PermissionUtils {
-    public static canSend(channel: DMChannel | TextChannel | NewsChannel): boolean {
-        // Bot always has permission in direct message
-        if (channel instanceof DMChannel) {
-            return true;
-        }
+    public static canSend(channel: TextChannel | DMChannel | NewsChannel): boolean {
+        if (channel instanceof DMChannel) return true;
 
         let channelPerms = channel.permissionsFor(channel.client.user);
         if (!channelPerms) {
