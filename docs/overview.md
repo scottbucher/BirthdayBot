@@ -1,6 +1,6 @@
 # Overview
 
-**If you haven't already, invite Birthday Bot to your discord** [**here**](https://discordapp.com/api/oauth2/authorize?client_id=656621136808902656&permissions=269053008&scope=bot)**.**
+**If you haven't already, invite Birthday Bot to your discord** [**here**](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=2416405584&scope=bot)**.**
 
 In your Discord server Birthday Bot will track your users' birthdays and using their time zone celebrate their birthday through its customizable birthday role and message. Even large servers can join in the celebration using Birthday Bot's custom Trusted Role system which only celebrates the birthdays of those with the required role!
 
