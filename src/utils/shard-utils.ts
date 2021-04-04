@@ -23,20 +23,6 @@ export abstract class ShardUtils {
         return MathUtils.sum(shardGuildCounts);
     }
 
-    public static getMyShardIds(
-        totalShards: number,
-        machineId: number,
-        totalMachines: number
-    ): number[] {
-        let myShardIds: number[] = [];
-        for (let shardId = 0; shardId < totalShards; shardId++) {
-            if (shardId % totalMachines === machineId) {
-                myShardIds.push(shardId);
-            }
-        }
-        return myShardIds;
-    }
-
     public static async retrieveServerCount(
         shardInterface: ShardingManager | ShardClientUtil
     ): Promise<number> {

@@ -9,4 +9,8 @@ export abstract class MathUtils {
     public static isLeap(year: number): boolean {
         return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
     }
+
+    public static range(start: number, size: number): number[] {
+        return [...Array(size).keys()].map(i => i + start);
+    }
 }
