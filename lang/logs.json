@@ -2,8 +2,11 @@
     "info": {
         "apiStarted": "API started on port {PORT}.",
         "started": "Application started.",
+        "spawningShards": "Spawning {SHARD_COUNT} shards: [{SHARD_LIST}].",
         "launchedShard": "Launched Shard {SHARD_ID}.",
-        "startedJobs": "Started job schedules.",
+        "jobScheduled": "Scheduled job '{JOB}' for '{SCHEDULE}'.",
+        "jobRun": "Running job '{JOB}'.",
+        "jobCompleted": "Job '{JOB}' completed.",
         "startedVotingApi": "Started the voting api.",
         "login": "Logged in as '{USER_TAG}'!",
         "updatedServerCount": "Updated server count. Connected to {SERVER_COUNT} total servers.",

@@ -1,17 +1,26 @@
 import { Shard, ShardingManager } from 'discord.js';
 
-import { Logger } from './services';
+import { JobService, Logger } from './services';
 import { Job } from './jobs';
 
 let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');
 
 export class Manager {
-    constructor(private shardManager: ShardingManager, private jobs: Job[]) {}
+    constructor(private shardManager: ShardingManager, private jobsService: JobService) { }
 
     public async start(): Promise<void> {
         this.registerListeners();
+
+        // TODO: Refactor this once DJS fixes their typings
+        // tslint:disable-next-line:no-string-literal
+        let shardList: number[] = this.shardManager['shardList'];
         try {
+            Logger.info(
+                Logs.info.spawningShards
+                    .replace('{SHARD_COUNT}', shardList.length.toLocaleString())
+                    .replace('{SHARD_LIST}', shardList.join(', '))
+            );
             await this.shardManager.spawn(
                 this.shardManager.totalShards,
                 Config.sharding.spawnDelay * 1000,
@@ -22,17 +31,11 @@ export class Manager {
             return;
         }
 
-        this.startJobs();
+        this.jobsService.start();
     }
 
     private registerListeners(): void {
         this.shardManager.on('shardCreate', shard => this.onShardCreate(shard));
-    }
-
-    private startJobs(): void {
-        for (let job of this.jobs) {
-            job.start();
-        }
     }
 
     private onShardCreate(shard: Shard): void {
