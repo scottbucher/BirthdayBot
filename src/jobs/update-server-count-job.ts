@@ -23,15 +23,11 @@ export class UpdateServerCountJob implements Job {
 
     public async run(): Promise<void> {
         let serverCount = await ShardUtils.retrieveServerCount(this.shardManager);
+
         await this.shardManager.broadcastEval(`
-            this.user.setPresence({
-                activity: {
-                    name: 'bdays to ${serverCount.toLocaleString()} servers',
-                    type: "STREAMING",
-                    url: "${Config.links.stream}"
-                }
-            });
-        `);
+        (async () => {
+            return await this.setPresence('STREAMING', 'bdays to ${serverCount.toLocaleString()} servers', '${Config.links.stream}');
+        })();`);
 
         Logger.info(
             Logs.info.updatedServerCount.replace('{SERVER_COUNT}', serverCount.toLocaleString())
