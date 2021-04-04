@@ -1,11 +1,11 @@
 import { ShardingManager } from 'discord.js';
-import { HttpService, Logger } from './services';
-import { RootController, SubscriptionEventsController, VotesController } from './controllers';
+import { HttpService, JobService, Logger, MasterApiService } from './services';
+import { GuildsController, RootController, ShardsController, SubscriptionEventsController, VotesController } from './controllers';
 
 import { Api } from './api';
 import { DataAccess } from './services/database/data-access';
 import { Manager } from './manager';
-import { ShardUtils } from './utils';
+import { MathUtils, ShardUtils } from './utils';
 import { UserRepo } from './services/database/repos';
 import { UpdateServerCountJob } from './jobs';
 
@@ -15,29 +15,34 @@ let Debug = require('../config/debug.json');
 
 async function start(): Promise<void> {
     Logger.info(Logs.info.started);
+
+    //Dependencies 
     let httpService = new HttpService();
+    let masterApiService = new MasterApiService(httpService);
+    if (Config.clustering.enabled) await masterApiService.register();
 
     // Sharding
-    let totalShards = 0;
+    let shardList: number[];
+    let totalShards: number;
     try {
-        totalShards = Debug.override.shardCount.enabled
-            ? Debug.override.shardCount.value
-            : await ShardUtils.getRecommendedShards(
-                  Config.client.token,
-                  Config.sharding.serversPerShard
-              );
+        if (Config.clustering.enabled) {
+            let resBody = await masterApiService.login();
+            shardList = resBody.shardList;
+            totalShards = resBody.totalShards;
+        } else {
+            let recommendedShards = await ShardUtils.recommendedShards(
+                Config.client.token,
+                Config.sharding.serversPerShard
+            );
+            shardList = MathUtils.range(0, recommendedShards);
+            totalShards = recommendedShards;
+        }
     } catch (error) {
-        Logger.error(Logs.error.retrieveShardCount, error);
+        Logger.error(Logs.error.retrieveShards, error);
         return;
     }
 
-    let myShardIds = ShardUtils.getMyShardIds(
-        totalShards,
-        Config.sharding.machineId,
-        Config.sharding.machineCount
-    );
-
-    if (myShardIds.length === 0) {
+    if (shardList.length === 0) {
         Logger.warn(Logs.warn.noShards);
         return;
     }
@@ -47,7 +52,7 @@ async function start(): Promise<void> {
         mode: Debug.override.shardMode.enabled ? Debug.override.shardMode.value : 'worker',
         respawn: true,
         totalShards,
-        shardList: myShardIds,
+        shardList,
     });
 
     // Data Access for repos
@@ -56,23 +61,28 @@ async function start(): Promise<void> {
     // Repos
     let userRepo = new UserRepo(dataAccess);
 
-    let updateServerCountJob = new UpdateServerCountJob(
-        Config.jobs.updateServerCount.schedule,
-        shardManager,
-        httpService
-    );
+    //Jobs
+    let jobs = [
+        Config.clustering.enabled ? undefined : new UpdateServerCountJob(shardManager, httpService),
+    ].filter(Boolean);
+    let jobService = new JobService(jobs);
 
-    let manager = new Manager(shardManager, [updateServerCountJob]);
+    let manager = new Manager(shardManager, jobService);
 
     // API
+    let guildsController = new GuildsController(shardManager);
+    let shardsController = new ShardsController(shardManager);
     let rootController = new RootController();
     let votesController = new VotesController(userRepo);
     let subscriptionEventsController = new SubscriptionEventsController(shardManager);
-    let api = new Api([rootController, votesController, subscriptionEventsController]);
+    let api = new Api([guildsController, shardsController, rootController, votesController, subscriptionEventsController]);
 
     // Start
-    await api.start();
     await manager.start();
+    await api.start();
+    if (Config.clustering.enabled) {
+        await masterApiService.ready();
+    }
 }
 
 start();
