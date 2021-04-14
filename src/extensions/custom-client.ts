@@ -1,4 +1,4 @@
-import { Client, ClientOptions, MessageEmbed } from 'discord.js';
+import { ActivityType, Client, ClientOptions, MessageEmbed, Presence } from 'discord.js';
 import { DiscordService, Logger } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 import { PlanName, SubscriptionStatusName } from '../models/subscription-models';
@@ -14,6 +14,16 @@ export class CustomClient extends Client {
     constructor(clientOptions: ClientOptions, private guildRepo: GuildRepo) {
         super(clientOptions);
         this.discordService = new DiscordService(this);
+    }
+
+    public async setPresence(type: ActivityType, name: string, url: string): Promise<Presence> {
+        return await this.user?.setPresence({
+            activity: {
+                type,
+                name,
+                url,
+            },
+        });
     }
 
     public async notifySubscription(guildId: string, plan: string, status: string): Promise<void> {
@@ -40,76 +50,76 @@ export class CustomClient extends Client {
                 PlanName.premium3 ||
                 PlanName.premium6 ||
                 PlanName.premium12: {
-                switch (status) {
-                    case SubscriptionStatusName.ACTIVE: {
-                        let embed = new MessageEmbed()
-                            .setAuthor(guild.name, guild.iconURL())
-                            .setTitle('Birthday Bot Premium')
-                            .setDescription(
-                                `${Config.emotes.party} ${guild.name}'s premium has been successfully activated! Enjoy the new features! ${Config.emotes.party}`
-                            )
-                            .addField(
-                                'bday premium',
-                                `View details about your subscription.\n\n[Join Support Server](${Config.links.support})`
-                            )
-                            .setFooter(
-                                'Thanks for supporting Birthday Bot!',
-                                guild.client.user.avatarURL()
-                            )
-                            .setTimestamp()
-                            .setColor(Config.colors.default);
-                        MessageUtils.send(channel, embed);
-                        break;
+                    switch (status) {
+                        case SubscriptionStatusName.ACTIVE: {
+                            let embed = new MessageEmbed()
+                                .setAuthor(guild.name, guild.iconURL())
+                                .setTitle('Birthday Bot Premium')
+                                .setDescription(
+                                    `${Config.emotes.party} ${guild.name}'s premium has been successfully activated! Enjoy the new features! ${Config.emotes.party}`
+                                )
+                                .addField(
+                                    'bday premium',
+                                    `View details about your subscription.\n\n[Join Support Server](${Config.links.support})`
+                                )
+                                .setFooter(
+                                    'Thanks for supporting Birthday Bot!',
+                                    guild.client.user.avatarURL()
+                                )
+                                .setTimestamp()
+                                .setColor(Config.colors.default);
+                            MessageUtils.send(channel, embed);
+                            break;
+                        }
+                        case SubscriptionStatusName.CANCELLED: {
+                            let embed = new MessageEmbed()
+                                .setAuthor(guild.name, guild.iconURL())
+                                .setTitle('Birthday Bot Premium')
+                                .setDescription(`${guild.name}'s premium has been canceled! :(`)
+                                .addField(
+                                    'bday premium',
+                                    `View details about your subscription.\n\n[Join Support Server](${Config.links.support})`
+                                )
+                                .setFooter(
+                                    'Consider letting us know how to improve premium!',
+                                    guild.client.user.avatarURL()
+                                )
+                                .setTimestamp()
+                                .setColor(Config.colors.default);
+                            MessageUtils.send(channel, embed);
+                            break;
+                        }
+                        case SubscriptionStatusName.EXPIRED: {
+                            let embed = new MessageEmbed()
+                                .setAuthor(guild.name, guild.iconURL())
+                                .setTitle('Birthday Bot Premium')
+                                .setDescription(`${guild.name}'s premium has expired! :(`)
+                                .addField(
+                                    'bday premium',
+                                    `Resubscribe to premium!\n\n[Join Support Server](${Config.links.support})`
+                                )
+                                .setFooter(
+                                    'Consider letting us know how to improve premium!',
+                                    guild.client.user.avatarURL()
+                                )
+                                .setTimestamp()
+                                .setColor(Config.colors.default);
+                            MessageUtils.send(channel, embed);
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
                     }
-                    case SubscriptionStatusName.CANCELLED: {
-                        let embed = new MessageEmbed()
-                            .setAuthor(guild.name, guild.iconURL())
-                            .setTitle('Birthday Bot Premium')
-                            .setDescription(`${guild.name}'s premium has been canceled! :(`)
-                            .addField(
-                                'bday premium',
-                                `View details about your subscription.\n\n[Join Support Server](${Config.links.support})`
-                            )
-                            .setFooter(
-                                'Consider letting us know how to improve premium!',
-                                guild.client.user.avatarURL()
-                            )
-                            .setTimestamp()
-                            .setColor(Config.colors.default);
-                        MessageUtils.send(channel, embed);
-                        break;
-                    }
-                    case SubscriptionStatusName.EXPIRED: {
-                        let embed = new MessageEmbed()
-                            .setAuthor(guild.name, guild.iconURL())
-                            .setTitle('Birthday Bot Premium')
-                            .setDescription(`${guild.name}'s premium has expired! :(`)
-                            .addField(
-                                'bday premium',
-                                `Resubscribe to premium!\n\n[Join Support Server](${Config.links.support})`
-                            )
-                            .setFooter(
-                                'Consider letting us know how to improve premium!',
-                                guild.client.user.avatarURL()
-                            )
-                            .setTimestamp()
-                            .setColor(Config.colors.default);
-                        MessageUtils.send(channel, embed);
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                }
 
-                Logger.info(
-                    Logs.info.guildSubStatus
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{GUILD_ID}', guild.id)
-                        .replace('{PLAN_NAME}', plan)
-                        .replace('{SUBSCRIPTION_STATUS}', status)
-                );
-            }
+                    Logger.info(
+                        Logs.info.guildSubStatus
+                            .replace('{GUILD_NAME}', guild.name)
+                            .replace('{GUILD_ID}', guild.id)
+                            .replace('{PLAN_NAME}', plan)
+                            .replace('{SUBSCRIPTION_STATUS}', status)
+                    );
+                }
         }
     }
 }

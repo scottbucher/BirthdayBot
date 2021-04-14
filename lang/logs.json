@@ -1,8 +1,12 @@
 {
     "info": {
+        "apiStarted": "API started on port {PORT}.",
         "started": "Application started.",
+        "spawningShards": "Spawning {SHARD_COUNT} shards: [{SHARD_LIST}].",
         "launchedShard": "Launched Shard {SHARD_ID}.",
-        "startedJobs": "Started job schedules.",
+        "jobScheduled": "Scheduled job '{JOB}' for '{SCHEDULE}'.",
+        "jobRun": "Running job '{JOB}'.",
+        "jobCompleted": "Job '{JOB}' completed.",
         "startedVotingApi": "Started the voting api.",
         "login": "Logged in as '{USER_TAG}'!",
         "updatedServerCount": "Updated server count. Connected to {SERVER_COUNT} total servers.",
@@ -21,7 +25,8 @@
         "noShards": "No shards to spawn."
     },
     "error": {
-        "retrieveShardCount": "An error occurred while retrieving the recommended shard count.",
+        "retrieveShards": "An error occurred while retrieving which shards to spawn.",
+        "shardInfo": "An error occurred while retrieving shard info.",
         "spawnShard": "An error occurred while spawning shards.",
         "updateServerCount": "An error occurred while updating the server count.",
         "updateServerCountSite": "An error occurred while updating the server count on '{BOT_SITE}'.",
@@ -32,13 +37,13 @@
         "message": "An error occurred while processing a message.",
         "rateLimit": "A rate limit was hit while making a request.",
         "commandDm": "[{MESSAGE_ID}] An error occurred while executing the '{COMMAND_NAME}' command for user '{SENDER_TAG}' ({SENDER_ID}) in direct message.",
-        "commandGuild": "[{MESSAGE_ID}] An error occurred while executing the '{COMMAND_NAME}' command for user '{SENDER_TAG}' ({SENDER_ID}) in channel '{CHANNEL_NAME}' ({CHANNEL_ID}) in guild '{GUILD_NAME}' ({GUILD_ID}).",
         "birthdayJob": "An error occurred while running the birthday job.",
         "celebrateBirthday": "An error occurred while trying to celebrate birthdays for guild '{GUILD_NAME}' ({GUILD_ID}).",
         "messagePartial": "An error occurred while trying to fetch a message partial.",
         "userFetch": "An error occurred while trying to fetch the users of a reaction.",
         "fetchMembers": "An error occurred while trying to fetch the members for the guild '{GUILD_NAME}' ({GUILD_ID}).",
         "birthdayService": "An error occurred while trying run the birthday service for '{GUILD_NAME}' ({GUILD_ID}) with {MEMBER_COUNT} members and {MEMBER_CACHE_BEFORE_COUNT} in the cache before and {MEMBER_CACHE_AFTER_COUNT} after the fetch.",
+        "commandGuild": "[{MESSAGE_ID}] An error occurred while executing the '{COMMAND_KEYWORD}' command for user '{SENDER_TAG}' ({SENDER_ID}) in channel '{CHANNEL_NAME}' ({CHANNEL_ID}) in guild '{GUILD_NAME}' ({GUILD_ID}).",
         "apiRequest": "An error occurred while processing a '{HTTP_METHOD}' request to '{URL}'."
     }
 }
