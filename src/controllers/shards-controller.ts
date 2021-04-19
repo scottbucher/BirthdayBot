@@ -1,15 +1,16 @@
-import { ShardingManager } from 'discord.js';
-import { Request, Response, Router } from 'express';
-import router from 'express-promise-router';
-
 import {
     GetShardsResponse,
     SetShardPresencesRequest,
     ShardInfo,
     ShardStats,
 } from '../models/cluster-api';
-import { Logger } from '../services';
+import { Request, Response, Router } from 'express';
+
 import { Controller } from './controller';
+import { Logger } from '../services';
+import { ShardingManager } from 'discord.js';
+import router from 'express-promise-router';
+import { mapClass } from '../middleware';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -20,7 +21,9 @@ export class ShardsController implements Controller {
 
     constructor(private shardManager: ShardingManager) {
         this.router.get(this.path, (req, res) => this.getShards(req, res));
-        this.router.put(`${this.path}/presence`, (req, res) => this.setShardPresences(req, res));
+        this.router.put(`${this.path}/presence`, mapClass(SetShardPresencesRequest), (req, res) =>
+            this.setShardPresences(req, res)
+        );
     }
 
     private async getShards(req: Request, res: Response): Promise<void> {
