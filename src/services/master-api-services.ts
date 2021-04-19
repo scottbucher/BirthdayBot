@@ -1,18 +1,18 @@
-import { URL } from 'url';
-
-import { HttpService } from '.';
 import {
     LoginClusterResponse,
     RegisterClusterRequest,
     RegisterClusterResponse,
 } from '../models/master-api';
 
+import { HttpService } from '.';
+import { URL } from 'url';
+
 let Config = require('../../config/config.json');
 
 export class MasterApiService {
     private clusterId: string;
 
-    constructor(private httpService: HttpService) { }
+    constructor(private httpService: HttpService) {}
 
     public async register(): Promise<void> {
         let reqBody: RegisterClusterRequest = {
