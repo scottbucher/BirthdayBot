@@ -5,12 +5,12 @@ import {
     ShardStats,
 } from '../models/cluster-api';
 import { Request, Response, Router } from 'express';
+import { checkAuth, mapClass } from '../middleware';
 
 import { Controller } from './controller';
 import { Logger } from '../services';
 import { ShardingManager } from 'discord.js';
 import router from 'express-promise-router';
-import { mapClass } from '../middleware';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -20,6 +20,7 @@ export class ShardsController implements Controller {
     public router: Router = router();
 
     constructor(private shardManager: ShardingManager) {
+        this.router.use(checkAuth(Config.api.secret));
         this.router.get(this.path, (req, res) => this.getShards(req, res));
         this.router.put(`${this.path}/presence`, mapClass(SetShardPresencesRequest), (req, res) =>
             this.setShardPresences(req, res)

@@ -3,6 +3,7 @@ import { Request, Response, Router } from 'express';
 import { Controller } from './controller';
 import { UserRepo } from '../services/database/repos';
 import { VoteData } from '../models/database';
+import { checkAuth } from '../middleware';
 import router from 'express-promise-router';
 
 let Config = require('../../config/config.json');
@@ -12,6 +13,7 @@ export class VotesController implements Controller {
     public router: Router = router();
 
     constructor(private userRepo: UserRepo) {
+        this.router.use(checkAuth(Config.voting.secret));
         this.router.post(this.path, (req, res) => this.post(req, res));
     }
 
@@ -20,12 +22,6 @@ export class VotesController implements Controller {
 
         switch (siteName) {
             case 'top-gg':
-                // Check the token of the request
-                if (req.headers.authorization !== Config.voting.token) {
-                    res.sendStatus(401);
-                    return;
-                }
-
                 // Validate data
                 if (!req.body.user) {
                     res.sendStatus(400);

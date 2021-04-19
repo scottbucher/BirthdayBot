@@ -14,7 +14,6 @@ export class Api {
     constructor(public controllers: Controller[]) {
         this.app = express();
         this.app.use(express.json());
-        this.app.use(checkAuth(Config.api.secret));
         this.app.use(handleError());
         this.setupControllers();
     }
