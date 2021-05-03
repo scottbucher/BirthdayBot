@@ -1,9 +1,10 @@
 import { Request, Response, Router } from 'express';
 import { SubscriptionStatus, SubscriptionStatusName } from '../models/subscription-models';
+import { checkAuth, mapClass } from '../middleware';
 
 import { Controller } from './controller';
 import { ShardingManager } from 'discord.js';
-import { checkAuth } from '../middleware';
+import { SubscriptionEventRequest } from '../models/cluster-api';
 import router from 'express-promise-router';
 
 let Config = require('../../config/config.json');
@@ -14,24 +15,20 @@ export class SubscriptionEventsController implements Controller {
 
     constructor(private shardManager: ShardingManager) {
         this.router.use(checkAuth(Config.api.secret));
-        this.router.post(this.path, (req, res) => this.post(req, res));
+        this.router.post(this.path, mapClass(SubscriptionEventRequest), (req, res) =>
+            this.post(req, res)
+        );
     }
 
     private async post(req: Request, res: Response): Promise<void> {
-        let resBody: SubscriptionStatus = res.locals.input;
+        let subscriptionEventReq: SubscriptionEventRequest = res.locals.input;
 
-        let subscriber = resBody.subscriber;
-        let plan = resBody.plan;
-        let status = resBody.subscription?.status;
-
-        if (!(subscriber && plan && status)) res.sendStatus(400);
-
-        switch (resBody.subscription?.status) {
+        switch (subscriptionEventReq.status) {
             case SubscriptionStatusName.ACTIVE:
             case SubscriptionStatusName.CANCELLED:
             case SubscriptionStatusName.EXPIRED: {
                 await this.shardManager.broadcastEval(
-                    `this.notifySubscription('${subscriber}', '${plan}', '${status}')`
+                    `this.notifySubscription('${subscriptionEventReq.subscriber}', '${subscriptionEventReq.plan}', '${subscriptionEventReq.status}')`
                 );
                 res.sendStatus(201);
                 return;
