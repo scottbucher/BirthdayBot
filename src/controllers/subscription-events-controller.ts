@@ -17,7 +17,7 @@ export class SubscriptionEventsController implements Controller {
     constructor(private shardManager: ShardingManager) {}
 
     public register(): void {
-        this.router.post(this.path, mapClass(SubscriptionEventRequest), (req, res) =>
+        this.router.post('/', mapClass(SubscriptionEventRequest), (req, res) =>
             this.post(req, res)
         );
     }

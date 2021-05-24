@@ -10,7 +10,7 @@ export class RootController implements Controller {
     public authToken: string = Config.api.secret;
 
     public register(): void {
-        this.router.get(this.path, (req, res) => this.get(req, res));
+        this.router.get('/', (req, res) => this.get(req, res));
     }
 
     private async get(req: Request, res: Response): Promise<void> {

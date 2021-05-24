@@ -15,7 +15,7 @@ export class VotesController implements Controller {
     constructor(private userRepo: UserRepo) {}
 
     public register(): void {
-        this.router.post(this.path, (req, res) => this.post(req, res));
+        this.router.post('/', (req, res) => this.post(req, res));
     }
 
     private async post(req: Request, res: Response): Promise<void> {
