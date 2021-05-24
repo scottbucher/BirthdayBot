@@ -8,14 +8,14 @@ import { Controller } from './controller';
 let Config = require('../../config/config.json');
 
 export class VotesController implements Controller {
-    public path = '/site/:site/votes';
+    public path = '/site';
     public router: Router = router();
     public authToken: string = Config.voting.secret;
 
     constructor(private userRepo: UserRepo) {}
 
     public register(): void {
-        this.router.post('/', (req, res) => this.post(req, res));
+        this.router.post('/:site/votes', (req, res) => this.post(req, res));
     }
 
     private async post(req: Request, res: Response): Promise<void> {
