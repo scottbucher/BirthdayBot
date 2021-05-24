@@ -1,11 +1,11 @@
-import { Request, Response, Router } from 'express';
-import { SubscriptionStatus, SubscriptionStatusName } from '../models/subscription-models';
-import { checkAuth, mapClass } from '../middleware';
-
-import { Controller } from './controller';
 import { ShardingManager } from 'discord.js';
-import { SubscriptionEventRequest } from '../models/cluster-api';
+import { Request, Response, Router } from 'express';
 import router from 'express-promise-router';
+
+import { mapClass } from '../middleware';
+import { SubscriptionEventRequest } from '../models/cluster-api';
+import { SubscriptionStatusName } from '../models/subscription-models';
+import { Controller } from './controller';
 
 let Config = require('../../config/config.json');
 

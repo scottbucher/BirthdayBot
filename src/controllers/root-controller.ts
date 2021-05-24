@@ -1,8 +1,7 @@
 import { Request, Response, Router } from 'express';
+import router from 'express-promise-router';
 
 import { Controller } from './controller';
-import { checkAuth } from '../middleware';
-import router from 'express-promise-router';
 
 let Config = require('../../config/config.json');
 export class RootController implements Controller {

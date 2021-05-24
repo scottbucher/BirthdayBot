@@ -1,5 +1,4 @@
 import { RequestHandler } from 'express';
-import { rescheduleJob } from 'node-schedule';
 
 export function checkAuth(token: string): RequestHandler {
     return (req, res, next) => {

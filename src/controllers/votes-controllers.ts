@@ -1,10 +1,9 @@
 import { Request, Response, Router } from 'express';
-
-import { Controller } from './controller';
-import { UserRepo } from '../services/database/repos';
-import { VoteData } from '../models/database';
-import { checkAuth } from '../middleware';
 import router from 'express-promise-router';
+
+import { VoteData } from '../models/database';
+import { UserRepo } from '../services/database/repos';
+import { Controller } from './controller';
 
 let Config = require('../../config/config.json');
 

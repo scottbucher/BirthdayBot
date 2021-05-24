@@ -1,13 +1,19 @@
 import { ShardingManager } from 'discord.js';
-import { HttpService, JobService, Logger, MasterApiService } from './services';
-import { GuildsController, RootController, ShardsController, SubscriptionEventsController, VotesController } from './controllers';
 
 import { Api } from './api';
-import { DataAccess } from './services/database/data-access';
-import { Manager } from './manager';
-import { MathUtils, ShardUtils } from './utils';
-import { UserRepo } from './services/database/repos';
+import {
+    GuildsController,
+    RootController,
+    ShardsController,
+    SubscriptionEventsController,
+    VotesController,
+} from './controllers';
 import { UpdateServerCountJob } from './jobs';
+import { Manager } from './manager';
+import { HttpService, JobService, Logger, MasterApiService } from './services';
+import { DataAccess } from './services/database/data-access';
+import { UserRepo } from './services/database/repos';
+import { MathUtils, ShardUtils } from './utils';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -16,7 +22,7 @@ let Debug = require('../config/debug.json');
 async function start(): Promise<void> {
     Logger.info(Logs.info.started);
 
-    //Dependencies 
+    // Dependencies
     let httpService = new HttpService();
     let masterApiService = new MasterApiService(httpService);
     if (Config.clustering.enabled) await masterApiService.register();
@@ -61,7 +67,7 @@ async function start(): Promise<void> {
     // Repos
     let userRepo = new UserRepo(dataAccess);
 
-    //Jobs
+    // Jobs
     let jobs = [
         Config.clustering.enabled ? undefined : new UpdateServerCountJob(shardManager, httpService),
     ].filter(Boolean);
@@ -75,7 +81,13 @@ async function start(): Promise<void> {
     let rootController = new RootController();
     let votesController = new VotesController(userRepo);
     let subscriptionEventsController = new SubscriptionEventsController(shardManager);
-    let api = new Api([guildsController, shardsController, rootController, votesController, subscriptionEventsController]);
+    let api = new Api([
+        guildsController,
+        shardsController,
+        rootController,
+        votesController,
+        subscriptionEventsController,
+    ]);
 
     // Start
     await manager.start();

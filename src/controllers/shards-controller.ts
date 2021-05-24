@@ -1,16 +1,16 @@
+import { ShardingManager } from 'discord.js';
+import { Request, Response, Router } from 'express';
+import router from 'express-promise-router';
+
+import { mapClass } from '../middleware';
 import {
     GetShardsResponse,
     SetShardPresencesRequest,
     ShardInfo,
     ShardStats,
 } from '../models/cluster-api';
-import { Request, Response, Router } from 'express';
-import { checkAuth, mapClass } from '../middleware';
-
-import { Controller } from './controller';
 import { Logger } from '../services';
-import { ShardingManager } from 'discord.js';
-import router from 'express-promise-router';
+import { Controller } from './controller';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
