@@ -26,6 +26,9 @@ export class Api {
 
     private setupControllers(): void {
         for (let controller of this.controllers) {
+            if (controller.authToken) {
+                controller.router.use(controller.path, checkAuth(controller.authToken));
+            }
             this.app.use('/', controller.router);
         }
     }

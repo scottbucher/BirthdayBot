@@ -11,9 +11,9 @@ let Config = require('../../config/config.json');
 export class VotesController implements Controller {
     public path = '/site/:site/votes';
     public router: Router = router();
+    public authToken: string = Config.voting.secret;
 
     constructor(private userRepo: UserRepo) {
-        this.router.use(checkAuth(Config.voting.secret));
         this.router.post(this.path, (req, res) => this.post(req, res));
     }
 

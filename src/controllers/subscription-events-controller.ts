@@ -12,9 +12,9 @@ let Config = require('../../config/config.json');
 export class SubscriptionEventsController implements Controller {
     public path = '/subscription-events';
     public router: Router = router();
+    public authToken: string = Config.api.secret;
 
     constructor(private shardManager: ShardingManager) {
-        this.router.use(checkAuth(Config.api.secret));
         this.router.post(this.path, mapClass(SubscriptionEventRequest), (req, res) =>
             this.post(req, res)
         );

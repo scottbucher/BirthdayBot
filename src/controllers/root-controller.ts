@@ -8,9 +8,9 @@ let Config = require('../../config/config.json');
 export class RootController implements Controller {
     public path = '/';
     public router: Router = router();
+    public authToken: string = Config.api.secret;
 
     constructor() {
-        this.router.use(checkAuth(Config.api.secret));
         this.router.get(this.path, (req, res) => this.get(req, res));
     }
 
