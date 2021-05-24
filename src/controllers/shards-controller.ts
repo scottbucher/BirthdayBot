@@ -57,7 +57,6 @@ export class ShardsController implements Controller {
         };
 
         let resBody: GetShardsResponse = {
-            id: Config.clustering.clusterId,
             shards: shardDatas,
             stats,
         };
@@ -65,7 +64,7 @@ export class ShardsController implements Controller {
     }
 
     private async setShardPresences(req: Request, res: Response): Promise<void> {
-        let reqBody = req.body as SetShardPresencesRequest;
+        let reqBody: SetShardPresencesRequest = res.locals.input;
 
         await this.shardManager.broadcastEval(`
             (async () => {

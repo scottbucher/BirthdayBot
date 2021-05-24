@@ -6,6 +6,7 @@ import { GetGuildsResponse } from '../models/cluster-api';
 import { Controller } from './controller';
 
 let Config = require('../../config/config.json');
+
 export class GuildsController implements Controller {
     public path = '/guilds';
     public router: Router = router();

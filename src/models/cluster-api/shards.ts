@@ -1,7 +1,7 @@
 import { IsDefined, IsEnum, IsString, IsUrl, Length } from 'class-validator';
 import { Constants } from 'discord.js';
+
 export interface GetShardsResponse {
-    id: number;
     shards: ShardInfo[];
     stats: ShardStats;
 }
