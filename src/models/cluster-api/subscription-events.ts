@@ -1,7 +1,7 @@
 import { IsDefined, IsNumberString, Length } from 'class-validator';
 import { PlanName, SubscriptionStatusName } from '../subscription-models';
 
-export class SubscriptionEventRequest {
+export class SendSubscriptionEventRequest {
     @IsDefined()
     @IsNumberString()
     @Length(18, 20)
