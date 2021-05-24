@@ -1,4 +1,5 @@
 import { ShardingManager } from 'discord.js';
+import 'reflect-metadata';
 
 import { Api } from './api';
 import {
