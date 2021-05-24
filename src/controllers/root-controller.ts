@@ -9,7 +9,7 @@ export class RootController implements Controller {
     public router: Router = router();
     public authToken: string = Config.api.secret;
 
-    constructor() {
+    public register(): void {
         this.router.get(this.path, (req, res) => this.get(req, res));
     }
 

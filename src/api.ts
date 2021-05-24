@@ -1,8 +1,8 @@
 import express, { Express } from 'express';
 import util from 'util';
-import { checkAuth, handleError } from './middleware';
 
 import { Controller } from './controllers';
+import { checkAuth, handleError } from './middleware';
 import { Logger } from './services';
 
 let Config = require('../config/config.json');
@@ -14,8 +14,8 @@ export class Api {
     constructor(public controllers: Controller[]) {
         this.app = express();
         this.app.use(express.json());
-        this.app.use(handleError());
         this.setupControllers();
+        this.app.use(handleError());
     }
 
     public async start(): Promise<void> {
@@ -29,6 +29,7 @@ export class Api {
             if (controller.authToken) {
                 controller.router.use(controller.path, checkAuth(controller.authToken));
             }
+            controller.register();
             this.app.use('/', controller.router);
         }
     }

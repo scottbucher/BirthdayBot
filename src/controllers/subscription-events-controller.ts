@@ -14,7 +14,9 @@ export class SubscriptionEventsController implements Controller {
     public router: Router = router();
     public authToken: string = Config.api.secret;
 
-    constructor(private shardManager: ShardingManager) {
+    constructor(private shardManager: ShardingManager) {}
+
+    public register(): void {
         this.router.post(this.path, mapClass(SubscriptionEventRequest), (req, res) =>
             this.post(req, res)
         );

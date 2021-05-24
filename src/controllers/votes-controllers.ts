@@ -12,7 +12,9 @@ export class VotesController implements Controller {
     public router: Router = router();
     public authToken: string = Config.voting.secret;
 
-    constructor(private userRepo: UserRepo) {
+    constructor(private userRepo: UserRepo) {}
+
+    public register(): void {
         this.router.post(this.path, (req, res) => this.post(req, res));
     }
 

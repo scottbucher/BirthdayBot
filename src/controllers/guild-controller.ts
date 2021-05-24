@@ -11,7 +11,9 @@ export class GuildsController implements Controller {
     public router: Router = router();
     public authToken: string = Config.api.secret;
 
-    constructor(private shardManager: ShardingManager) {
+    constructor(private shardManager: ShardingManager) {}
+
+    public register(): void {
         this.router.get(this.path, (req, res) => this.getGuilds(req, res));
     }
 
