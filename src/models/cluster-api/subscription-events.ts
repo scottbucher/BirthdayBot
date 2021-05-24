@@ -1,5 +1,12 @@
-import { IsDefined, IsNumberString, Length } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDefined, IsEnum, IsNumberString, Length, ValidateNested } from 'class-validator';
 import { PlanName, SubscriptionStatusName } from '../subscription-models';
+
+export class Subscription {
+    @IsDefined()
+    @IsEnum(SubscriptionStatusName)
+    status: string;
+}
 
 export class SendSubscriptionEventRequest {
     @IsDefined()
@@ -8,10 +15,11 @@ export class SendSubscriptionEventRequest {
     subscriber: string;
 
     @IsDefined()
-    plan: PlanName;
+    @IsEnum(PlanName)
+    plan: string;
 
     @IsDefined()
-    subscription: {
-        status: SubscriptionStatusName;
-    };
+    @ValidateNested()
+    @Type(() => Subscription)
+    subscription: Subscription;
 }
