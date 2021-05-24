@@ -21,14 +21,16 @@ export class SubscriptionEventsController implements Controller {
     }
 
     private async post(req: Request, res: Response): Promise<void> {
-        let subscriptionEventReq: SubscriptionEventRequest = res.locals.input;
+        let body: SubscriptionEventRequest = res.locals.input;
 
-        switch (subscriptionEventReq.status) {
+        let status = body.subscription.status;
+
+        switch (status) {
             case SubscriptionStatusName.ACTIVE:
             case SubscriptionStatusName.CANCELLED:
             case SubscriptionStatusName.EXPIRED: {
                 await this.shardManager.broadcastEval(
-                    `this.notifySubscription('${subscriptionEventReq.subscriber}', '${subscriptionEventReq.plan}', '${subscriptionEventReq.status}')`
+                    `this.notifySubscription('${body.subscriber}', '${body.plan}', '${status}')`
                 );
                 res.sendStatus(201);
                 return;
