@@ -13,4 +13,8 @@ export abstract class MathUtils {
     public static range(start: number, size: number): number[] {
         return [...Array(size).keys()].map(i => i + start);
     }
+
+    public static ceilToMultiple(input: number, multiple: number): number {
+        return Math.ceil(input / multiple) * multiple;
+    }
 }
