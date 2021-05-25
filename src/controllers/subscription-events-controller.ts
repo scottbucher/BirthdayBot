@@ -1,11 +1,11 @@
-import { ShardingManager } from 'discord.js';
 import { Request, Response, Router } from 'express';
-import router from 'express-promise-router';
 
-import { mapClass } from '../middleware';
-import { SendSubscriptionEventRequest } from '../models/cluster-api';
-import { SubscriptionStatusName } from '../models/subscription-models';
 import { Controller } from './controller';
+import { SendSubscriptionEventRequest } from '../models/cluster-api';
+import { ShardingManager } from 'discord.js';
+import { SubscriptionStatusName } from '../models/subscription-models';
+import { mapClass } from '../middleware';
+import router from 'express-promise-router';
 
 let Config = require('../../config/config.json');
 
@@ -34,6 +34,7 @@ export class SubscriptionEventsController implements Controller {
                 await this.shardManager.broadcastEval(
                     `this.notifySubscription('${reqBody.subscriber}', '${reqBody.plan}', '${status}')`
                 );
+
                 res.sendStatus(201);
                 return;
             }
