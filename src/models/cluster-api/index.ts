@@ -1,3 +1,4 @@
-export { GetGuildsResponse } from './guild';
+export { GetGuildsResponse } from './guilds';
 export { GetShardsResponse, ShardInfo, ShardStats, SetShardPresencesRequest } from './shards';
-export { SubscriptionEventRequest } from './subscription-events';
+export { SendSubscriptionEventRequest } from './subscription-events';
+export { SendVoteRequest } from './votes';

@@ -28,9 +28,7 @@ export class CustomClient extends Client {
 
     public async notifySubscription(guildId: string, plan: string, status: string): Promise<void> {
         // Get the guild and ensure the bot is still in it
-        Logger.info('Yeet');
         let guild = this.guilds.cache.get(guildId);
-        Logger.info('Guild: ' + guild?.name);
         if (!guild) return;
 
         // Get the guild data

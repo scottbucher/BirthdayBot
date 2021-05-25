@@ -1,9 +1,9 @@
-import { checkAuth, handleError } from './middleware';
-import express, { ErrorRequestHandler, Express, RequestHandler } from 'express';
+import express, { Express } from 'express';
+import util from 'util';
 
 import { Controller } from './controllers';
+import { checkAuth, handleError } from './middleware';
 import { Logger } from './services';
-import util from 'util';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -14,8 +14,8 @@ export class Api {
     constructor(public controllers: Controller[]) {
         this.app = express();
         this.app.use(express.json());
-        this.app.use(handleError());
         this.setupControllers();
+        this.app.use(handleError());
     }
 
     public async start(): Promise<void> {
@@ -29,7 +29,8 @@ export class Api {
             if (controller.authToken) {
                 controller.router.use(controller.path, checkAuth(controller.authToken));
             }
-            this.app.use('/', controller.router);
+            controller.register();
+            this.app.use(controller.path, controller.router);
         }
     }
 }

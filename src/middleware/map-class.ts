@@ -1,6 +1,6 @@
 import { ClassConstructor, plainToClass } from 'class-transformer';
+import { validate, ValidationError } from 'class-validator';
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { ValidationError, validate } from 'class-validator';
 
 export function mapClass(cls: ClassConstructor<object>): RequestHandler {
     return async (req: Request, res: Response, next: NextFunction) => {
