@@ -33,6 +33,7 @@
         "login": "An error occurred while the client attempted to login.",
         "guildJoin": "An error occurred while processing a guild join.",
         "guildLeave": "An error occurred while processing a guild leave.",
+        "job": "An error occurred while running the '{JOB}' job.",
         "resolveGuild": "Guild '{GUILD_NAME}' ({GUILD_ID}) could not be resolved even though it is in the cache.",
         "message": "An error occurred while processing a message.",
         "rateLimit": "A rate limit was hit while making a request.",

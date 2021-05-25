@@ -18,7 +18,7 @@ export class Bot {
         private reactionAddHandler: ReactionAddHandler,
         private messageHandler: MessageHandler,
         private jobService: JobService
-    ) { }
+    ) {}
 
     public async start(): Promise<void> {
         this.registerListeners();
@@ -53,7 +53,6 @@ export class Bot {
         Logger.info(Logs.info.login.replace('{USER_TAG}', userTag));
 
         this.jobService.start();
-        Logger.info(Logs.info.startedJobs);
 
         this.ready = true;
     }

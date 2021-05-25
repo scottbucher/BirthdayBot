@@ -2,6 +2,7 @@ import { ShardingManager } from 'discord.js';
 import { Request, Response, Router } from 'express';
 import router from 'express-promise-router';
 
+import { mapClass } from '../middleware';
 import {
     GetShardsResponse,
     SetShardPresencesRequest,
@@ -17,10 +18,15 @@ let Logs = require('../../lang/logs.json');
 export class ShardsController implements Controller {
     public path = '/shards';
     public router: Router = router();
+    public authToken: string = Config.api.secret;
 
-    constructor(private shardManager: ShardingManager) {
-        this.router.get(this.path, (req, res) => this.getShards(req, res));
-        this.router.put(`${this.path}/presence`, (req, res) => this.setShardPresences(req, res));
+    constructor(private shardManager: ShardingManager) {}
+
+    public register(): void {
+        this.router.get('/', (req, res) => this.getShards(req, res));
+        this.router.put('/presence', mapClass(SetShardPresencesRequest), (req, res) =>
+            this.setShardPresences(req, res)
+        );
     }
 
     private async getShards(req: Request, res: Response): Promise<void> {
@@ -51,7 +57,6 @@ export class ShardsController implements Controller {
         };
 
         let resBody: GetShardsResponse = {
-            id: Config.clustering.clusterId,
             shards: shardDatas,
             stats,
         };
@@ -59,7 +64,7 @@ export class ShardsController implements Controller {
     }
 
     private async setShardPresences(req: Request, res: Response): Promise<void> {
-        let reqBody = req.body as SetShardPresencesRequest;
+        let reqBody: SetShardPresencesRequest = res.locals.input;
 
         await this.shardManager.broadcastEval(`
             (async () => {

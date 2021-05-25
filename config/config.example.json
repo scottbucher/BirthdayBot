@@ -11,10 +11,7 @@
             "DIRECT_MESSAGES",
             "DIRECT_MESSAGE_REACTIONS"
         ],
-        "partials": [
-            "MESSAGE",
-            "REACTION"
-        ],
+        "partials": ["MESSAGE", "REACTION"],
         "caches": {
             "messages": {
                 "size": 0,
@@ -36,10 +33,7 @@
         "secret": "00000000-0000-0000-0000-000000000000"
     },
     "support": {
-        "owners": [
-            "478288246858711040",
-            "212772875793334272"
-        ],
+        "owners": ["478288246858711040", "212772875793334272"],
         "server": "660711235766976553",
         "role": "660746189419053057"
     },
@@ -99,13 +93,7 @@
         },
         "custom": "✏"
     },
-    "stopCommands": [
-        "stop",
-        "cancel",
-        "exit",
-        "close",
-        "quit"
-    ],
+    "stopCommands": ["stop", "cancel", "exit", "close", "quit"],
     "validation": {
         "message": {
             "maxLength": 500,
@@ -161,7 +149,7 @@
     },
     "voting": {
         "enabled": false,
-        "token": "<TOKEN>",
+        "secret": "<TOKEN>",
         "hours": 24
     },
     "payments": {

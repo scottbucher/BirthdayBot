@@ -1,17 +1,17 @@
 import { Request, Response, Router } from 'express';
+import router from 'express-promise-router';
 
 import { Controller } from './controller';
-import router from 'express-promise-router';
 
 export class RootController implements Controller {
     public path = '/';
     public router: Router = router();
 
-    constructor() {
-        this.router.get(this.path, (req, res) => this.get(req, res));
+    public register(): void {
+        this.router.get('/', (req, res) => this.get(req, res));
     }
 
     private async get(req: Request, res: Response): Promise<void> {
-        res.status(200).json({ message: 'Birthday Bot API' });
+        res.status(200).json({ name: 'Birthday Bot API', author: 'Scott Bucher' });
     }
 }
