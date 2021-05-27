@@ -1,4 +1,4 @@
-import { Client, ClientOptions, MessageEmbed } from 'discord.js';
+import { ActivityType, Client, ClientOptions, MessageEmbed, Presence } from 'discord.js';
 import { DiscordService, Logger } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 import { PlanName, SubscriptionStatusName } from '../models/subscription-models';
@@ -14,6 +14,16 @@ export class CustomClient extends Client {
     constructor(clientOptions: ClientOptions, private guildRepo: GuildRepo) {
         super(clientOptions);
         this.discordService = new DiscordService(this);
+    }
+
+    public async setPresence(type: ActivityType, name: string, url: string): Promise<Presence> {
+        return await this.user?.setPresence({
+            activity: {
+                type,
+                name,
+                url,
+            },
+        });
     }
 
     public async notifySubscription(guildId: string, plan: string, status: string): Promise<void> {

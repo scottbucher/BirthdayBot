@@ -7,10 +7,6 @@
         "shardMode": {
             "enabled": false,
             "value": "process"
-        },
-        "shardCount": {
-            "enabled": false,
-            "value": 2
         }
     },
     "dummyMode": {

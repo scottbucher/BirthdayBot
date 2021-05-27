@@ -1,19 +1,22 @@
-import { TimeUtils } from '../utils';
-import { BirthdayService, Logger } from '../services';
-import { BlacklistRepo, GuildRepo, UserRepo } from '../services/database/repos';
 import { Client } from 'discord.js';
-
-import { Job } from './job';
-import { UserData } from '../models/database';
 import moment from 'moment';
 import schedule from 'node-schedule';
 
+import { UserData } from '../models/database';
+import { BirthdayService, Logger } from '../services';
+import { BlacklistRepo, GuildRepo, UserRepo } from '../services/database/repos';
+import { TimeUtils } from '../utils';
+import { Job } from './job';
+
+let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 
 export class CelebrationJob implements Job {
+    public name = 'Celebration';
+    public schedule: string = Config.jobs.celebration.schedule;
+    public log: boolean = Config.jobs.celebration.log;
+
     constructor(
-        public schedule: string,
-        public interval: number,
         private client: Client,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo,

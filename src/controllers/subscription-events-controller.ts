@@ -1,8 +1,10 @@
 import { Request, Response, Router } from 'express';
 
 import { Controller } from './controller';
+import { SendSubscriptionEventRequest } from '../models/cluster-api';
 import { ShardingManager } from 'discord.js';
 import { SubscriptionStatusName } from '../models/subscription-models';
+import { mapClass } from '../middleware';
 import router from 'express-promise-router';
 
 let Config = require('../../config/config.json');
@@ -10,30 +12,29 @@ let Config = require('../../config/config.json');
 export class SubscriptionEventsController implements Controller {
     public path = '/subscription-events';
     public router: Router = router();
+    public authToken: string = Config.api.secret;
 
-    constructor(private shardManager: ShardingManager) {
-        this.router.post(this.path, (req, res) => this.post(req, res));
+    constructor(private shardManager: ShardingManager) {}
+
+    public register(): void {
+        this.router.post('/', mapClass(SendSubscriptionEventRequest), (req, res) =>
+            this.post(req, res)
+        );
     }
 
     private async post(req: Request, res: Response): Promise<void> {
-        if (req.headers.authorization !== Config.payments.token) {
-            res.send(401);
-            return;
-        }
+        let reqBody: SendSubscriptionEventRequest = res.locals.input;
 
-        let subscriber = req.body.subscriber;
-        let plan = req.body.plan;
-        let status = req.body.subscription?.status;
-
-        if (!(subscriber && plan && status)) res.sendStatus(400);
+        let status = reqBody.subscription.status;
 
         switch (status) {
             case SubscriptionStatusName.ACTIVE:
             case SubscriptionStatusName.CANCELLED:
             case SubscriptionStatusName.EXPIRED: {
                 await this.shardManager.broadcastEval(
-                    `this.notifySubscription('${subscriber}', '${plan}', '${status}')`
+                    `this.notifySubscription('${reqBody.subscriber}', '${reqBody.plan}', '${status}')`
                 );
+
                 res.sendStatus(201);
                 return;
             }

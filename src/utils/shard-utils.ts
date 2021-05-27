@@ -1,23 +1,34 @@
 import { ShardClientUtil, ShardingManager, Util } from 'discord.js';
 import { MathUtils } from '.';
 
+const MAX_SERVERS_PER_SHARD = 2500;
+const LARGE_BOT_SHARDING_MULTIPLE = 16;
+
 export class ShardUtils {
-    public static async recommendedShards(token: string, serversPerShard: number): Promise<number> {
-        return Math.ceil(await Util.fetchRecommendedShards(token, serversPerShard));
+    public static async requiredShardCount(
+        token: string,
+        largeBotSharding: boolean = false
+    ): Promise<number> {
+        return await this.recommendedShardCount(token, MAX_SERVERS_PER_SHARD, largeBotSharding);
     }
 
-    public static myShardIds(
-        totalShards: number,
-        machineId: number,
-        totalMachines: number
-    ): number[] {
-        let myShardIds: number[] = [];
-        for (let shardId = 0; shardId < totalShards; shardId++) {
-            if (shardId % totalMachines === machineId) {
-                myShardIds.push(shardId);
-            }
+    public static async recommendedShardCount(
+        token: string,
+        serversPerShard: number,
+        largeBotSharding: boolean = false
+    ): Promise<number> {
+        return MathUtils.ceilToMultiple(
+            await Util.fetchRecommendedShards(token, serversPerShard),
+            largeBotSharding ? LARGE_BOT_SHARDING_MULTIPLE : 1
+        );
+    }
+
+    public static shardIds(shardInterface: ShardingManager | ShardClientUtil): number[] {
+        if (shardInterface instanceof ShardingManager) {
+            return shardInterface.shards.map(shard => shard.id);
+        } else if (shardInterface instanceof ShardClientUtil) {
+            return shardInterface.ids;
         }
-        return myShardIds;
     }
 
     public static async serverCount(
@@ -27,12 +38,5 @@ export class ShardUtils {
             'guilds.cache.size'
         );
         return MathUtils.sum(shardGuildCounts);
-    }
-
-    public static async userCount(
-        shardInterface: ShardingManager | ShardClientUtil
-    ): Promise<number> {
-        let shardUserCounts: number[] = await shardInterface.fetchClientValues('users.cache.size');
-        return MathUtils.sum(shardUserCounts);
     }
 }

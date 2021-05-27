@@ -8,18 +8,22 @@ import { UserData } from '../models/database';
 import moment from 'moment';
 import schedule from 'node-schedule';
 
+let Config = require('../../config/config.json')
 let Logs = require('../../lang/logs.json');
 
 export class PostBirthdaysJob implements Job {
+    public name = 'Post Birthday';
+    public schedule: string = Config.jobs.postBirthdays.schedule;
+    public log: boolean = Config.jobs.postBirthdays.log;
+    public interval: number = Config.jobs.postBirthdays.interval;
+
     constructor(
-        public schedule: string,
-        public interval: number,
         private client: Client,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo,
         private blacklistRepo: BlacklistRepo,
         private birthdayService: BirthdayService
-    ) {}
+    ) { }
 
     public async run(): Promise<void> {
         let now = moment();

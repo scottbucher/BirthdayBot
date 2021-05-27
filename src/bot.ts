@@ -10,7 +10,7 @@ import {
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 
 import { Job } from './jobs';
-import { Logger } from './services';
+import { JobService, Logger } from './services';
 
 let Config = require('../config/config.json');
 let Debug = require('../config/debug.json');
@@ -26,7 +26,7 @@ export class Bot {
         private guildLeaveHandler: GuildLeaveHandler,
         private reactionAddHandler: ReactionAddHandler,
         private messageHandler: MessageHandler,
-        private jobs: Job[]
+        private jobService: JobService
     ) {}
 
     public async start(): Promise<void> {
@@ -52,12 +52,6 @@ export class Bot {
         );
     }
 
-    private startJobs(): void {
-        for (let job of this.jobs) {
-            job.start();
-        }
-    }
-
     private async login(token: string): Promise<void> {
         try {
             await this.client.login(token);
@@ -72,7 +66,7 @@ export class Bot {
         Logger.info(Logs.info.login.replace('{USER_TAG}', userTag));
 
         if (!Debug.dummyMode.enabled) {
-            this.startJobs();
+            this.jobService.start();
             Logger.info(Logs.info.startedJobs);
         }
 

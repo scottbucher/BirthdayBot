@@ -32,11 +32,9 @@ export class StatsCommand implements Command {
         let birthdaysThisMonth = await this.userRepo.getUserBirthdaysThisMonthCount(month);
 
         let serverCount: number;
-        let userCount: number;
 
         try {
             serverCount = await ShardUtils.serverCount(msg.client.shard);
-            userCount = await ShardUtils.userCount(msg.client.shard);
         } catch (error) {
             // Ignore case where stats command is run while shards are still being spawned
             if (error.name.includes('SHARDING_IN_PROCESS')) {
@@ -52,7 +50,6 @@ export class StatsCommand implements Command {
             .setColor(Config.colors.default)
             .setThumbnail(msg.client.user.displayAvatarURL({ dynamic: true }))
             .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
-            .addField('Total Users', userCount.toLocaleString(), true)
             .addField('Total Birthdays', totalBirthdays.toLocaleString(), true)
             .addField('Total Servers', serverCount.toLocaleString(), true)
             .addField('Shard ID', `${shardId + 1}/${msg.client.shard.count}`, true)
