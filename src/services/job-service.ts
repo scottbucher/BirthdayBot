@@ -1,11 +1,11 @@
 import schedule from 'node-schedule';
 import { Logger } from '.';
-import { Job } from "../jobs";
+import { Job } from '../jobs';
 
 let Logs = require('../../lang/logs.json');
 
 export class JobService {
-    constructor(private jobs: Job[]) { }
+    constructor(private jobs: Job[]) {}
 
     public start(): void {
         for (let job of this.jobs) {

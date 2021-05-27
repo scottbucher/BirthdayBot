@@ -286,14 +286,8 @@ async function start(): Promise<void> {
     let guildLeaveHandler = new GuildLeaveHandler();
 
     let jobService = new JobService([
-        new PostBirthdaysJob(
-            client,
-            guildRepo,
-            userRepo,
-            blacklistRepo,
-            birthdayService
-        )
-    ])
+        new PostBirthdaysJob(client, guildRepo, userRepo, blacklistRepo, birthdayService),
+    ]);
 
     let bot = new Bot(
         Config.client.token,
