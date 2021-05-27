@@ -1,4 +1,4 @@
-import { BirthdayService, HttpService, Logger, SubscriptionService } from './services';
+import { BirthdayService, HttpService, JobService, Logger, SubscriptionService } from './services';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
@@ -285,15 +285,15 @@ async function start(): Promise<void> {
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 
-    let postBirthdaysJob = new PostBirthdaysJob(
-        Config.jobs.postBirthdays.schedule,
-        Config.jobs.postBirthdays.interval * 1000,
-        client,
-        guildRepo,
-        userRepo,
-        blacklistRepo,
-        birthdayService
-    );
+    let jobService = new JobService([
+        new PostBirthdaysJob(
+            client,
+            guildRepo,
+            userRepo,
+            blacklistRepo,
+            birthdayService
+        )
+    ])
 
     let bot = new Bot(
         Config.client.token,
@@ -302,7 +302,7 @@ async function start(): Promise<void> {
         guildLeaveHandler,
         reactionAddHandler,
         messageHandler,
-        [postBirthdaysJob]
+        jobService
     );
 
     await bot.start();

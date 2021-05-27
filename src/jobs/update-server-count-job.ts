@@ -11,27 +11,24 @@ let BotSites: BotSite[] = require('../../config/bot-sites.json');
 let Logs = require('../../lang/logs.json');
 
 export class UpdateServerCountJob implements Job {
+    public name = 'Update Server Count';
+    public schedule: string = Config.jobs.updateServerCount.schedule;
+    public log: boolean = Config.jobs.updateServerCount.log;
     private botSites: BotSite[];
 
-    constructor(
-        public schedule: string,
-        private shardManager: ShardingManager,
-        private httpService: HttpService
-    ) {
+    constructor(private shardManager: ShardingManager, private httpService: HttpService) {
         this.botSites = BotSites.filter(botSite => botSite.enabled);
     }
 
     public async run(): Promise<void> {
         let serverCount = await ShardUtils.serverCount(this.shardManager);
         await this.shardManager.broadcastEval(`
-            this.user.setPresence({
-                activity: {
-                    name: 'bdays to ${serverCount.toLocaleString()} servers',
-                    type: "STREAMING",
-                    url: "${Config.links.stream}"
-                }
-            });
-        `);
+        (async () => {
+            return await this.setPresence('STREAMING', 'bdays to ${serverCount.toLocaleString()} servers', '${
+            Config.links.stream
+        }');
+        })();
+`);
 
         Logger.info(
             Logs.info.updatedServerCount.replace('{SERVER_COUNT}', serverCount.toLocaleString())

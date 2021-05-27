@@ -228,7 +228,7 @@ export class MessageHandler {
                 Logger.error(
                     Logs.error.commandDm
                         .replace('{MESSAGE_ID}', msg.id)
-                        .replace('{COMMAND_NAME}', command.name)
+                        .replace('{COMMAND_KEYWORD}', command.name)
                         .replace('{SENDER_TAG}', msg.author.tag)
                         .replace('{SENDER_ID}', msg.author.id),
                     error
@@ -237,7 +237,7 @@ export class MessageHandler {
                 Logger.error(
                     Logs.error.commandGuild
                         .replace('{MESSAGE_ID}', msg.id)
-                        .replace('{COMMAND_NAME}', command.name)
+                        .replace('{COMMAND_KEYWORD}', command.name)
                         .replace('{SENDER_TAG}', msg.author.tag)
                         .replace('{SENDER_ID}', msg.author.id)
                         .replace('{CHANNEL_NAME}', msg.channel.name)

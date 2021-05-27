@@ -29,7 +29,8 @@
         "connectionLimit": 25
     },
     "api": {
-        "port": 8080
+        "port": 8080,
+        "secret": "00000000-0000-0000-0000-000000000000"
     },
     "support": {
         "owners": ["478288246858711040", "212772875793334272"],
@@ -48,10 +49,12 @@
     },
     "jobs": {
         "updateServerCount": {
-            "schedule": "0 */5 * * * *"
+            "schedule": "0 */5 * * * *",
+            "log": false
         },
         "postBirthdays": {
             "schedule": "0 0 * * * *",
+            "log": false,
             "interval": 0.6
         }
     },
@@ -141,11 +144,19 @@
         ]
     },
     "sharding": {
-        "machineId": 0,
-        "machineCount": 1,
-        "serversPerShard": 1000,
         "spawnDelay": 5,
-        "spawnTimeout": 300
+        "spawnTimeout": 300,
+        "serversPerShard": 1000,
+        "largeBotSharding": true
+    },
+    "clustering": {
+        "enabled": false,
+        "shardCount": 16,
+        "callbackUrl": "http://localhost:8080/",
+        "masterApi": {
+            "url": "http://localhost:5000/",
+            "token": "00000000-0000-0000-0000-000000000000"
+        }
     },
     "logging": {
         "rateLimit": {
@@ -165,7 +176,7 @@
     },
     "voting": {
         "enabled": false,
-        "token": "<TOKEN>",
+        "secret": "<TOKEN>",
         "hours": 24
     },
     "payments": {
