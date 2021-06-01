@@ -27,9 +27,9 @@ export class PostBirthdaysJob implements Job {
 
     public async run(): Promise<void> {
         let now = moment();
-        let today = moment().format('MM-DD');
-        let tomorrow = moment().add(1, 'day').format('MM-DD');
-        let yesterday = moment().subtract(1, 'day').format('MM-DD');
+        let today = now.clone().format('MM-DD');
+        let tomorrow = now.clone().add(1, 'day').format('MM-DD');
+        let yesterday = now.clone().subtract(1, 'day').format('MM-DD');
 
         // Get a user data list of all POSSIBLE birthday events, this includes birthday role, message AND role take.
         // Do to timezones and custom message time this can range by a day, thus we get 3 days worth of birthdays for each check
@@ -39,10 +39,7 @@ export class PostBirthdaysJob implements Job {
             ...(await this.userRepo.getUsersWithBirthday(yesterday)),
         ];
 
-        if (
-            !TimeUtils.isLeap(now.year()) &&
-            (today === '02-28' || tomorrow === '02-28' || yesterday === '02-28')
-        ) {
+        if (!TimeUtils.isLeap(now.year()) && [today, tomorrow, yesterday].includes('02-28')) {
             // Add leap year birthdays to list
             userDatas.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
         }
@@ -52,10 +49,10 @@ export class PostBirthdaysJob implements Job {
         userDatas = userDatas.filter(userData => BdayUtils.isBirthday(userData, undefined));
 
         // Get list of guilds the client is connected to
-        let discordIds = this.client.guilds.cache.map(guild => guild.id);
+        let guildIds = this.client.guilds.cache.map(guild => guild.id);
 
         // Get guild data from the database
-        let guildDatas = await this.guildRepo.getGuilds(discordIds);
+        let guildDatas = await this.guildRepo.getGuilds(guildIds);
         Logger.info(
             Logs.info.birthdayJobGuildCount.replace(
                 '{GUILD_COUNT}',
@@ -111,21 +108,24 @@ export class PostBirthdaysJob implements Job {
                 // Get a list of memberIds
                 let memberIds = members.map(member => member.id);
 
-                // Get the blacklist data for this guild
-                let blacklistData = await this.blacklistRepo.getBlacklist(guild.id);
+                // Get the blacklisted members for this guild
+                let blacklistedMemberIds = (
+                    await this.blacklistRepo.getBlacklist(guild.id)
+                ).blacklist.map(data => data.UserDiscordId);
 
-                // Remove members who are not apart of this guild and who are in the birthday blacklist
-                let memberUserDatas = userDatas.filter(
-                    userData =>
-                        memberIds.includes(userData.UserDiscordId) &&
-                        !blacklistData.blacklist
-                            .map(data => data.UserDiscordId)
-                            .includes(userData.UserDiscordId)
+                // Find members who aren't blacklisted
+                let unblacklistedMemberIds = memberIds.filter(
+                    memberId => !blacklistedMemberIds.includes(memberId)
+                );
+
+                // Filter the user datas to guild members who aren't blacklisted
+                let unblacklistedUserDatas = userDatas.filter(userData =>
+                    unblacklistedMemberIds.includes(userData.UserDiscordId)
                 );
 
                 promises.push(
                     this.birthdayService
-                        .celebrateBirthdays(guild, guildData, memberUserDatas, members)
+                        .celebrateBirthdays(guild, guildData, unblacklistedUserDatas, members)
                         .catch(error => {
                             // send userRoleList and messageList
                             Logger.error(

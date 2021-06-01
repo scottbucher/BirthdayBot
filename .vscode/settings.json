@@ -27,6 +27,7 @@
         "parens",
         "regexes",
         "repos",
-        "respawn"
+        "respawn",
+        "unblacklisted"
     ]
 }
