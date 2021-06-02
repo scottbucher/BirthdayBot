@@ -58,4 +58,5 @@ export enum Procedure {
     User_GetTotalCount = 'User_GetTotalCount',
     User_GetBirthdaysTodayCount = 'User_GetBirthdaysTodayCount',
     User_GetBirthdaysThisMonthCount = 'User_GetBirthdaysThisMonthCount',
+    Combined_GetRawCelebrationData = 'Combined_GetRawCelebrationData',
 }
