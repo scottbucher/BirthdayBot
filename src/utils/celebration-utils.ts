@@ -89,8 +89,15 @@ export class CelebrationUtils {
             return true;
         }
 
+        // If the server doesn't have a default timezone, use the user's timezone
+        // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
+        // Else, use the server's default timezone
         let currentDate = moment().tz(
-            guildData.DefaultTimezone === '0' ? userData.TimeZone : guildData.DefaultTimezone
+            guildData.DefaultTimezone === '0'
+                ? userData.TimeZone
+                : guildData.UseTimezone !== 'server'
+                ? userData.TimeZone
+                : guildData.DefaultTimezone
         );
         let birthday = moment(userData.Birthday);
 
