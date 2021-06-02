@@ -1,5 +1,13 @@
 import { ArrayUtils, TimeUtils } from '.';
-import { CustomMessage, CustomMessages, GuildData, SplitUsers, UserData } from '../models/database';
+import {
+    CustomMessage,
+    CustomMessages,
+    GuildCelebrationData,
+    GuildData,
+    RawGuildCelebrationData,
+    SplitUsers,
+    UserData,
+} from '../models/database';
 
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
@@ -112,5 +120,31 @@ export class CelebrationUtils {
             // Return null
             return null;
         }
+    }
+
+    public static convertCelebrationData(
+        rawGuildCelebrationData: RawGuildCelebrationData
+    ): GuildCelebrationData[] {
+        let dataSet: GuildCelebrationData[];
+
+        for (let rawData of rawGuildCelebrationData.guildDatas) {
+            let celebrationData = new GuildCelebrationData();
+            celebrationData.guildData = rawData;
+            celebrationData.customMessages = rawGuildCelebrationData.customMessages.filter(
+                guild => (guild.GuildId = rawData.GuildId)
+            );
+            celebrationData.blacklistedMembers = rawGuildCelebrationData.blacklistedMembers.filter(
+                guild => (guild.GuildId = rawData.GuildId)
+            );
+            celebrationData.trustedRoles = rawGuildCelebrationData.trustedRoles.filter(
+                guild => (guild.GuildId = rawData.GuildId)
+            );
+            celebrationData.anniversaryRoles = rawGuildCelebrationData.anniversaryRoles.filter(
+                guild => (guild.GuildId = rawData.GuildId)
+            );
+            dataSet.push(celebrationData);
+        }
+
+        return dataSet;
     }
 }

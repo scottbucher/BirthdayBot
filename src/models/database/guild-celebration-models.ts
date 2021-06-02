@@ -4,8 +4,8 @@ import { Blacklist } from './blacklisted-models';
 import { GuildData } from './guild-models';
 import { MemberAnniversaryRole } from './member-anniversary-role-models';
 
-export interface GuildCelebrationData {
-    guildDatas: GuildData[];
+export class GuildCelebrationData {
+    guildData: GuildData;
     customMessages: CustomMessage[];
     blacklistedMembers: Blacklist[];
     trustedRoles: TrustedRole[];
