@@ -1,6 +1,6 @@
 export { ActionUtils } from './action-utils';
 export { ArrayUtils } from './array-utils';
-export { BdayUtils } from './bday-utils';
+export { CelebrationUtils } from './celebration-utils';
 export { ClientUtils } from './client-utils';
 export { ColorUtils } from './color-utils';
 export { FormatUtils } from './format-utils';

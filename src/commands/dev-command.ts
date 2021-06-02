@@ -1,11 +1,11 @@
+import { MessageUtils, ShardUtils } from '../utils';
 import djs, { DMChannel, Message, TextChannel } from 'discord.js';
+
+import { Command } from './command';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import fileSize from 'filesize';
 import typescript from 'typescript';
-
-import { LangCode } from '../models/enums';
-import { Lang } from '../services';
-import { MessageUtils, ShardUtils } from '../utils';
-import { Command } from './command';
 
 let TsConfig = require('../../tsconfig.json');
 

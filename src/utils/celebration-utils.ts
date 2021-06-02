@@ -8,7 +8,7 @@ let Debug = require('../../config/debug.json');
 
 let Config = require('../../config/config.json');
 
-export class BdayUtils {
+export class CelebrationUtils {
     public static getNextUsers(userDatas: UserData[], timeZone: string): UserData[] {
         let userTime = timeZone ? moment.tz(timeZone) : moment.tz();
 

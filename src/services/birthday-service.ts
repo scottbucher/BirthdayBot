@@ -1,6 +1,6 @@
 import {
     ActionUtils,
-    BdayUtils,
+    CelebrationUtils,
     ColorUtils,
     FormatUtils,
     MessageUtils,
@@ -112,7 +112,10 @@ export class BirthdayService {
 
             if (
                 (isTest ||
-                    BdayUtils.isTimeForBirthdayMessage(guildData.BirthdayMessageTime, user)) &&
+                    CelebrationUtils.isTimeForBirthdayMessage(
+                        guildData.BirthdayMessageTime,
+                        user
+                    )) &&
                 birthdayChannel
             ) {
                 if (!(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))) {
@@ -208,7 +211,7 @@ export class BirthdayService {
                         )
                     );
 
-                let chosenMessage = BdayUtils.randomMessage(globalMessages, hasPremium);
+                let chosenMessage = CelebrationUtils.randomMessage(globalMessages, hasPremium);
                 let color = Config.colors.default;
                 let useEmbed = true;
                 let message = 'Happy Birthday <Users>!';

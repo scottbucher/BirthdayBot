@@ -1,6 +1,6 @@
-import { BdayUtils, TimeUtils } from '../utils';
 import { BirthdayService, Logger } from '../services';
 import { BlacklistRepo, GuildRepo, UserRepo } from '../services/database/repos';
+import { CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 
 import { Job } from './job';
@@ -49,7 +49,7 @@ export class PostBirthdaysJob implements Job {
 
         // Remove people whose birthday isn't today (isBirthday() considers timezones)
         // TODO: Pass in guildData instead of "undefined"
-        userDatas = userDatas.filter(userData => BdayUtils.isBirthday(userData, undefined));
+        userDatas = userDatas.filter(userData => CelebrationUtils.isBirthday(userData, undefined));
 
         // Get list of guilds the client is connected to
         let discordIds = this.client.guilds.cache.map(guild => guild.id);

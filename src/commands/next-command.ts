@@ -1,4 +1,4 @@
-import { BdayUtils, FormatUtils, MessageUtils } from '../utils';
+import { CelebrationUtils, FormatUtils, MessageUtils } from '../utils';
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
@@ -39,7 +39,7 @@ export class NextCommand implements Command {
 
         let commandUser = userDatas.find(user => user.UserDiscordId === msg.author.id);
 
-        let nextBirthdayUsers = BdayUtils.getNextUsers(userDatas, commandUser?.TimeZone);
+        let nextBirthdayUsers = CelebrationUtils.getNextUsers(userDatas, commandUser?.TimeZone);
 
         if (!nextBirthdayUsers) {
             let embed = new MessageEmbed()
