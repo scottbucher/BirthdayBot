@@ -11,6 +11,7 @@ export class TrustedRoles {
 }
 
 export class TrustedRole {
+    GuildId: number;
     TrustedRoleDiscordId: string;
     Position: number;
 }

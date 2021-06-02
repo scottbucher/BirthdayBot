@@ -11,6 +11,7 @@ export class MemberAnniversaryRoles {
 }
 
 export class MemberAnniversaryRole {
+    GuildId: number;
     MemberAnniversaryRoleDiscordId: string;
     Year: number;
     Position: number;

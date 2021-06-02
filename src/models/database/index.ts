@@ -8,3 +8,4 @@ export { Vote } from './vote-models';
 export { Blacklisted } from './blacklisted-models';
 export { TrustedRole } from './trusted-role-models';
 export { MemberAnniversaryRole } from './member-anniversary-role-models';
+export { GuildCelebrationData } from './guild-celebration-models';

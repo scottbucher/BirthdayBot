@@ -1,4 +1,5 @@
 export interface GuildData {
+    GuildId: number;
     GuildDiscordId: string;
     BirthdayChannelDiscordId: string;
     BirthdayRoleDiscordId: string;
