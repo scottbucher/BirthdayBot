@@ -5,23 +5,11 @@ import { GuildData } from './guild-models';
 import { MemberAnniversaryRole } from './member-anniversary-role-models';
 
 export class RawGuildCelebrationData {
-    guildDatas: GuildData[];
-    customMessages: CustomMessage[];
-    blacklistedMembers: Blacklist[];
-    trustedRoles: TrustedRole[];
-    anniversaryRoles: MemberAnniversaryRole[];
-
     constructor(
-        guildData: GuildData[],
-        customMessages: CustomMessage[],
-        blacklistedMembers: Blacklist[],
-        trustedRoles: TrustedRole[],
-        anniversaryRoles: MemberAnniversaryRole[]
-    ) {
-        this.guildDatas = guildData;
-        this.customMessages = customMessages;
-        this.blacklistedMembers = blacklistedMembers;
-        this.trustedRoles = trustedRoles;
-        this.anniversaryRoles = anniversaryRoles;
-    }
+        public guildDatas: GuildData[],
+        public customMessages: CustomMessage[],
+        public blacklistedMembers: Blacklist[],
+        public trustedRoles: TrustedRole[],
+        public anniversaryRoles: MemberAnniversaryRole[]
+    ) {}
 }
