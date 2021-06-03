@@ -49,7 +49,9 @@ export class PostBirthdaysJob implements Job {
 
         // Remove people whose birthday isn't today (isBirthday() considers timezones)
         // TODO: Pass in guildData instead of "undefined"
-        userDatas = userDatas.filter(userData => CelebrationUtils.isBirthday(userData, undefined));
+        userDatas = userDatas.filter(userData =>
+            CelebrationUtils.needsBirthdayMessage(userData, undefined)
+        );
 
         // Get list of guilds the client is connected to
         let discordIds = this.client.guilds.cache.map(guild => guild.id);
