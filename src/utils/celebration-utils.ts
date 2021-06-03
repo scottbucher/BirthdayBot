@@ -64,6 +64,9 @@ export class CelebrationUtils {
         return 0;
     }
 
+    /**
+     * @deprecated This method should not be used
+     */
     public static isTimeForBirthdayMessage(messageHour: number, userData: UserData): boolean {
         if (Debug.alwaysSendBirthdayMessage) {
             return true;
@@ -74,22 +77,7 @@ export class CelebrationUtils {
         return currentHour === messageHour;
     }
 
-    public static isTimeForBirthdayRole(userData: UserData): boolean {
-        if (Debug.alwaysGiveBirthdayRole) {
-            return true;
-        }
-
-        let currentDate = moment().tz(userData.TimeZone);
-
-        let currentHour = currentDate.hour();
-        return currentHour === 0;
-    }
-
-    public static isBirthday(userData: UserData, guildData: GuildData): boolean {
-        if (Debug.alwaysGiveBirthdayRole) {
-            return true;
-        }
-
+    public static isBirthdayToday(userData: UserData, guildData: GuildData): boolean {
         if (!userData || !guildData) return false;
 
         // If the server doesn't have a default timezone, use the user's timezone
@@ -111,11 +99,45 @@ export class CelebrationUtils {
             birthdayFormatted = '03-01';
 
         // The date is correct, now check the time
-        return currentDateFormatted !== birthdayFormatted
-            ? false
-            : currentDate.hour() !== guildData.BirthdayMessageTime
-            ? false
-            : true;
+        return currentDateFormatted !== birthdayFormatted;
+    }
+
+    public static needsBirthdayRole(userData: UserData, guildData: GuildData): boolean {
+        if (Debug.alwaysGiveBirthdayRole) {
+            return true;
+        }
+
+        // If the server doesn't have a default timezone, use the user's timezone
+        // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
+        // Else, use the server's default timezone
+        let currentDate = moment().tz(
+            guildData.DefaultTimezone === '0'
+                ? userData.TimeZone
+                : guildData.UseTimezone !== 'server'
+                ? userData.TimeZone
+                : guildData.DefaultTimezone
+        );
+        let currentHour = currentDate.hour();
+        return currentHour === 0;
+    }
+
+    public static needsBirthdayMessage(userData: UserData, guildData: GuildData): boolean {
+        if (Debug.alwaysSendBirthdayMessage) {
+            return true;
+        }
+
+        // If the server doesn't have a default timezone, use the user's timezone
+        // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
+        // Else, use the server's default timezone
+        let currentDate = moment().tz(
+            guildData.DefaultTimezone === '0'
+                ? userData.TimeZone
+                : guildData.UseTimezone !== 'server'
+                ? userData.TimeZone
+                : guildData.DefaultTimezone
+        );
+        let currentHour = currentDate.hour();
+        return currentHour === guildData.BirthdayMessageTime;
     }
 
     public static isMemberAnniversaryMessage(

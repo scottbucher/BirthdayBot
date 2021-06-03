@@ -111,11 +111,7 @@ export class BirthdayService {
             }
 
             if (
-                (isTest ||
-                    CelebrationUtils.isTimeForBirthdayMessage(
-                        guildData.BirthdayMessageTime,
-                        user
-                    )) &&
+                (isTest || CelebrationUtils.needsBirthdayMessage(user, guildData)) &&
                 birthdayChannel
             ) {
                 if (!(trustedRole && preventMessage && !member.roles.cache.has(trustedRole.id))) {
