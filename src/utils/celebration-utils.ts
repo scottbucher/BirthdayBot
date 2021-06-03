@@ -108,7 +108,7 @@ export class CelebrationUtils {
         let birthdayFormatted = birthday.format('MM-DD');
 
         if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            birthdayFormatted = '02-28';
+            birthdayFormatted = '03-01';
 
         // The date is correct, now check the time
         return currentDateFormatted !== birthdayFormatted
@@ -135,7 +135,7 @@ export class CelebrationUtils {
         let anniversaryFormatted = memberAnniversary.format('MM-DD');
 
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            anniversaryFormatted = '02-28';
+            anniversaryFormatted = '03-01';
 
         // The date is correct, now check the time
         return currentDateFormatted !== anniversaryFormatted
@@ -159,7 +159,7 @@ export class CelebrationUtils {
         let anniversaryFormatted = serverAnniversary.format('MM-DD');
 
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            anniversaryFormatted = '02-28';
+            anniversaryFormatted = '03-01';
 
         // The date is correct, now check the time
         return currentDateFormatted !== anniversaryFormatted

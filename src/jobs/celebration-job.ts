@@ -41,7 +41,7 @@ export class CelebrationJob implements Job {
 
         if (
             !TimeUtils.isLeap(now.year()) &&
-            (today === '02-28' || tomorrow === '02-28' || yesterday === '02-28')
+            (today === '03-01' || tomorrow === '03-01' || yesterday === '03-01')
         ) {
             // Add leap year birthdays to list
             birthdayUserData.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
