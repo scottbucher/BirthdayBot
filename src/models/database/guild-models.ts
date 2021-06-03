@@ -17,4 +17,5 @@ export interface GuildData {
     NameFormat: string;
     DefaultTimezone: string;
     UseTimezone: string;
+    RequireAllTrustedRoles: number;
 }
