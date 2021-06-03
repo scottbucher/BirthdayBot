@@ -1,9 +1,9 @@
 import { CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import { CombinedRepo, UserRepo } from '../services/database/repos';
+import { Logger, SubscriptionService } from '../services';
 
 import { Job } from './job';
-import { Logger } from '../services';
 import { UserData } from '../models/database';
 import moment from 'moment';
 import schedule from 'node-schedule';
@@ -19,7 +19,8 @@ export class CelebrationJob implements Job {
     constructor(
         private client: Client,
         private userRepo: UserRepo,
-        private combinedRepo: CombinedRepo
+        private combinedRepo: CombinedRepo,
+        private subscriptionService: SubscriptionService
     ) {}
 
     public async run(): Promise<void> {
