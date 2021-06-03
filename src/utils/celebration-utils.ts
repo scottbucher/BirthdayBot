@@ -8,6 +8,7 @@ import {
     SplitUsers,
     UserData,
 } from '../models/database';
+import { Guild, GuildMember } from 'discord.js';
 
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
@@ -89,6 +90,8 @@ export class CelebrationUtils {
             return true;
         }
 
+        if (!userData || !guildData) return false;
+
         // If the server doesn't have a default timezone, use the user's timezone
         // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
         // Else, use the server's default timezone
@@ -106,7 +109,64 @@ export class CelebrationUtils {
 
         if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
             birthdayFormatted = '02-28';
-        return currentDateFormatted === birthdayFormatted;
+
+        // The date is correct, now check the time
+        return currentDateFormatted !== birthdayFormatted
+            ? false
+            : currentDate.hour() !== guildData.BirthdayMessageTime
+            ? false
+            : true;
+    }
+
+    public static isMemberAnniversaryMessage(
+        guildMember: GuildMember,
+        guildData: GuildData
+    ): boolean {
+        // TODO: add debug mode for member anniversary
+        // if (Debug.alwaysGiveBirthdayRole) {
+        //     return true;
+        // }
+
+        if (!guildMember || !guildData || !guildData.DefaultTimezone) return false;
+        let currentDate = moment().tz(guildData.DefaultTimezone);
+        let memberAnniversary = moment(guildMember.joinedAt);
+
+        let currentDateFormatted = currentDate.format('MM-DD');
+        let anniversaryFormatted = memberAnniversary.format('MM-DD');
+
+        if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
+            anniversaryFormatted = '02-28';
+
+        // The date is correct, now check the time
+        return currentDateFormatted !== anniversaryFormatted
+            ? false
+            : currentDate.hour() !== guildData.MemberAnniversaryMessageTime
+            ? false
+            : true;
+    }
+
+    public static isServerAnniversaryMessage(guild: Guild, guildData: GuildData): boolean {
+        // TODO: add debug mode for server anniversary
+        // if (Debug.alwaysGiveBirthdayRole) {
+        //     return true;
+        // }
+
+        if (!guild || !guildData || !guildData.DefaultTimezone) return false;
+        let currentDate = moment().tz(guildData.DefaultTimezone);
+        let serverAnniversary = moment(guild.createdAt);
+
+        let currentDateFormatted = currentDate.format('MM-DD');
+        let anniversaryFormatted = serverAnniversary.format('MM-DD');
+
+        if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
+            anniversaryFormatted = '02-28';
+
+        // The date is correct, now check the time
+        return currentDateFormatted !== anniversaryFormatted
+            ? false
+            : currentDate.hour() !== guildData.ServerAnniversaryMessageTime
+            ? false
+            : true;
     }
 
     public static randomMessage(messages: CustomMessages, hasPremium: boolean): CustomMessage {
