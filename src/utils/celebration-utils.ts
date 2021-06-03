@@ -199,6 +199,13 @@ export class CelebrationUtils {
             : true;
     }
 
+    public static getMemberYears(guildMember: GuildMember, guildData: GuildData): number {
+        if (!guildMember || !guildData || !guildData.DefaultTimezone) return 0;
+        let currentYear = moment().tz(guildData.DefaultTimezone).year();
+        let memberAnniversaryYear = moment(guildMember.joinedAt).year();
+        return currentYear - memberAnniversaryYear;
+    }
+
     public static randomMessage(messages: CustomMessages, hasPremium: boolean): CustomMessage {
         if (messages.customMessages.length > 0) {
             if (hasPremium) {
