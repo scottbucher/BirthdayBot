@@ -64,19 +64,6 @@ export class CelebrationUtils {
         return 0;
     }
 
-    /**
-     * @deprecated This method should not be used
-     */
-    public static isTimeForBirthdayMessage(messageHour: number, userData: UserData): boolean {
-        if (Debug.alwaysSendBirthdayMessage) {
-            return true;
-        }
-
-        let currentDate = moment().tz(userData.TimeZone);
-        let currentHour = currentDate.hour();
-        return currentHour === messageHour;
-    }
-
     public static isBirthdayToday(userData: UserData, guildData: GuildData): boolean {
         if (!userData || !guildData) return false;
 
@@ -102,7 +89,7 @@ export class CelebrationUtils {
         return currentDateFormatted !== birthdayFormatted;
     }
 
-    public static needsBirthdayRole(userData: UserData, guildData: GuildData): boolean {
+    public static needsBirthdayRoleAdded(userData: UserData, guildData: GuildData): boolean {
         if (Debug.alwaysGiveBirthdayRole) {
             return true;
         }
@@ -117,6 +104,27 @@ export class CelebrationUtils {
                 ? userData.TimeZone
                 : guildData.DefaultTimezone
         );
+        let currentHour = currentDate.hour();
+        return currentHour === 0;
+    }
+
+    public static needsBirthdayRoleRemoved(userData: UserData, guildData: GuildData): boolean {
+        if (Debug.alwaysGiveBirthdayRole) {
+            return true;
+        }
+
+        // If the server doesn't have a default timezone, use the user's timezone
+        // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
+        // Else, use the server's default timezone
+        let currentDate = moment()
+            .tz(
+                guildData.DefaultTimezone === '0'
+                    ? userData.TimeZone
+                    : guildData.UseTimezone !== 'server'
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
+            )
+            .subtract(1, 'days');
         let currentHour = currentDate.hour();
         return currentHour === 0;
     }
