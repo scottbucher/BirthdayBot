@@ -47,6 +47,10 @@ export class CelebrationJob implements Job {
             birthdayUserData.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
         }
 
+        // String of guild ids who have an active subscription to birthday bot premium
+        // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
+        let premiumGuildIds: string[];
+
         // Collection of guilds
         let guildCache = this.client.guilds.cache;
 
@@ -59,13 +63,13 @@ export class CelebrationJob implements Job {
         );
 
         // List of members with a birthday today
-        let birthdayGuildMembers: GuildMember[];
+        let birthdayMessageGuildMembers: GuildMember[];
 
         // This will be the array of GuildMembers who have an anniversary this hour
-        let memberAnniversaryGuildMembers: GuildMember[];
+        let memberAnniversaryMessageGuildMembers: GuildMember[];
 
         // This will be the array of guilds with server anniversaries today
-        let guildsWithAnniversary: Guild[];
+        let guildsWithAnniversaryMessage: Guild[];
 
         // Message service will take in a list of birthdayGuildMembers objects, a list of guild members with an anniversary today, and a list of guilds with an anniversary today
         // To get these we will:
@@ -82,7 +86,17 @@ export class CelebrationJob implements Job {
         // ----Simply check if this guild has a server anniversary today, tomorrow, or yesterday
         // ----Then check for the hour based on the timezone of the server
 
+        // This will be the array of GuildMembers who are able to get the birthday role
+        let addBirthdayRoleGuildMembers: GuildMember[];
+
+        // This will be the array of GuildMembers who are able to have the birthday role removed
+        let removeBirthdayRoleGuildMembers: GuildMember[];
+
+        // This will be the array of GuildMembers who are able to get anniversary roles
+        let anniversaryRoleGuildMembers: GuildMember[];
+
         for (let guild of guildCache.array()) {
+            let hasPremium = premiumGuildIds.includes(guild.id);
             let guildMembers: Collection<string, GuildMember> = guild.members.cache;
             let beforeCacheSize = guild.members.cache.size;
 
@@ -122,44 +136,82 @@ export class CelebrationJob implements Job {
 
             // We now have our list of guildMembers
 
-            // Now we filter the birthdayGuildMembers by only taking those with a birthday this hours
-            // and those not in the blacklist
-            // Note: we don't have to check if the guildMember is in the userData array because
-            // CelebrationUtils.IsBirthday() effectively does this
-            // TODO: Make isBirthday account for the hour?
-            birthdayGuildMembers = birthdayGuildMembers.concat(
-                guildMembers
-                    .filter(
-                        member =>
-                            CelebrationUtils.isBirthday(
-                                birthdayUserData.find(data => data.UserDiscordId == member.id),
-                                guildData
-                            ) && !blacklist.map(data => data.UserDiscordId).includes(member.id)
+            // Get a list of members with a birthday today (by using either the user or server timezone)
+            let membersWithBirthdayToday = guildMembers
+                .filter(
+                    member =>
+                        CelebrationUtils.isBirthdayToday(
+                            birthdayUserData.find(data => data.UserDiscordId == member.id),
+                            guildData
+                        ) && !blacklist.map(data => data.UserDiscordId).includes(member.id)
+                )
+                .array();
+
+            // Only put those who need the birthday message (based on the timezone and hour) into birthdayMessageGuildMembers
+            birthdayMessageGuildMembers = birthdayMessageGuildMembers.concat(
+                membersWithBirthdayToday.filter(member =>
+                    CelebrationUtils.needsBirthdayMessage(
+                        birthdayUserData.find(data => data.UserDiscordId == member.id),
+                        guildData
                     )
-                    .array()
+                )
             );
 
-            // We now have the full, filtered, list of birthdayGuildMembers
+            // We now have the full, filtered, list of birthdayMessageGuildMembers
 
-            // Next lets find the list of memberAnniversaryGuildMembers
-            memberAnniversaryGuildMembers = memberAnniversaryGuildMembers.concat(
-                guildMembers
-                    .filter(member =>
-                        CelebrationUtils.isMemberAnniversaryMessage(member, guildData)
+            // Only put those who need the birthday role (based on the timezone and hour) into addBirthdayRoleGuildMembers
+            addBirthdayRoleGuildMembers = addBirthdayRoleGuildMembers.concat(
+                membersWithBirthdayToday.filter(member =>
+                    CelebrationUtils.needsBirthdayRoleAdded(
+                        birthdayUserData.find(data => data.UserDiscordId == member.id),
+                        guildData
                     )
-                    .array()
+                )
             );
 
-            // We now have the full, filtered, list of memberAnniversaryGuildMembers
+            // We now have the full, filtered, list of addBirthdayRoleGuildMembers
 
-            // Next lets find the list of guildsWithAnniversary
+            // Only put those who need the birthday role removed (based on the timezone and hour) into removeBirthdayRoleGuildMembers
+            removeBirthdayRoleGuildMembers = removeBirthdayRoleGuildMembers.concat(
+                membersWithBirthdayToday.filter(member =>
+                    CelebrationUtils.needsBirthdayRoleRemoved(
+                        birthdayUserData.find(data => data.UserDiscordId == member.id),
+                        guildData
+                    )
+                )
+            );
+
+            // We now have the full, filtered, list of removeBirthdayRoleGuildMembers
+
+            // Next lets get the list of guild members who are eligible for the birthday role
+
+            // Next lets find the list of members with anniversaries today
+            let anniversaryMembers = guildMembers
+                .filter(member => CelebrationUtils.isMemberAnniversaryMessage(member, guildData))
+                .array();
+
+            // Only add these members to the anniversaryRolesGuildMembers array if the server has premium
+            if (hasPremium) {
+                anniversaryRoleGuildMembers = anniversaryRoleGuildMembers.concat(
+                    anniversaryMembers
+                );
+            }
+
+            // All servers get member anniversary messages so add them regardless of if they have premium
+            memberAnniversaryMessageGuildMembers = memberAnniversaryMessageGuildMembers.concat(
+                anniversaryMembers
+            );
+
+            // We now have the full, filtered, list of memberAnniversaryMessageGuildMembers
+
+            // Next lets find the list of guildsWithAnniversaryMessage
             if (CelebrationUtils.isServerAnniversaryMessage(guild, guildData))
-                guildsWithAnniversary.push(guild);
+                guildsWithAnniversaryMessage.push(guild);
 
-            // We now have the full, filtered, list of guildsWithAnniversary
+            // We now have the full, filtered, list of guildsWithAnniversaryMessage
         }
 
-        // We should now have the filtered lists of birthdayGuildMembers, memberAnniversaryGuildMembers, and guildsWithAnniversary
+        // We should now have the filtered lists of birthdayMessageGuildMembers, memberAnniversaryMessageGuildMembers, and guildsWithAnniversaryMessage
         // This means we should be able to call the Message Service
     }
 
