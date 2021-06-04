@@ -10,6 +10,8 @@ import {
 } from 'discord.js';
 
 import { GuildCelebrationData } from '../models/database';
+import { Lang } from './lang';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 export class MessageService {
@@ -151,29 +153,35 @@ export class MessageService {
                     // Send our user specific messages for this guild
                     for (let birthdayMember of birthdayMembersUserSpecific) {
                         let message: string;
+                        // Get our custom message
                         let customMessage = birthdayUserSpecificMessages.find(
                             message => message.UserDiscordId
                         );
+                        // Get the mention string
                         let mentionString =
                             filteredGuild.guildData.BirthdayMentionSetting !== 'none'
                                 ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild)
                                 : '';
 
+                        // Compile our user list to put in the message
                         let userList = CelebrationUtils.getUserListString(filteredGuild.guildData, [
                             birthdayMember,
                         ]);
 
+                        // Add the compiled user list
+                        message = customMessage.Message.split('@Users')
+                            .join(userList)
+                            .split('<Users>')
+                            .join(userList);
+
+                        // Find the color of the embed
                         color = customMessage.Color === '0' ? Config.colors.default : null;
 
                         color = !color
                             ? '#' + ColorUtils.findHex(customMessage.Color) ?? Config.colors.default
                             : Config.colors.default;
 
-                        message = customMessage.Message.split('@Users')
-                            .join(userList)
-                            .split('<Users>')
-                            .join(userList);
-
+                        // Send our message(s)
                         if (mentionString !== '')
                             await MessageUtils.send(birthdayChannel, mentionString);
 
@@ -185,36 +193,164 @@ export class MessageService {
                     }
                 }
 
-                // Send our generic birthday messages
-
-                let message: string;
+                // Get our generic birthday messages
+                let message = Lang.getRef('defaults.birthdayMessage', LangCode.EN_US);
                 let color = Config.colors.default;
-                let customMessage = CelebrationUtils.randomMessage(birthdayMessages, hasPremium);
+                let useEmbed = true;
+
+                // Get the mention string
                 let mentionString =
                     filteredGuild.guildData.BirthdayMentionSetting !== 'none'
                         ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild)
                         : '';
 
+                // Compile our user list to put in the message
                 let userList = CelebrationUtils.getUserListString(
                     filteredGuild.guildData,
                     birthdaysInThisGuild
                 );
 
-                color = customMessage.Color === '0' ? Config.colors.default : null;
+                // Add the compiled user list
+                if (birthdayMessages.length > 0) {
+                    // Get our custom message
+                    let customMessage = CelebrationUtils.randomMessage(
+                        birthdayMessages,
+                        hasPremium
+                    );
+                    message = customMessage.Message.split('@Users')
+                        .join(userList)
+                        .split('<Users>')
+                        .join(userList);
+                    // Find the color of the embed
+                    color = customMessage?.Color === '0' ? Config.colors.default : null;
 
-                color = !color
-                    ? '#' + ColorUtils.findHex(customMessage.Color) ?? Config.colors.default
-                    : Config.colors.default;
+                    color = !color
+                        ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
+                        : Config.colors.default;
+                    useEmbed = customMessage.Embed ? true : false;
+                }
 
-                message = customMessage.Message.split('@Users')
-                    .join(userList)
-                    .split('<Users>')
-                    .join(userList);
-
+                // Send our message(s)
                 if (mentionString !== '') await MessageUtils.send(birthdayChannel, mentionString);
 
                 let embed = new MessageEmbed().setDescription(message).setColor(color);
-                await MessageUtils.send(birthdayChannel, customMessage.Embed ? embed : message);
+                await MessageUtils.send(birthdayChannel, useEmbed ? embed : message);
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // The member anniversary channel must exists and we need to have members who need the message
+
+            /**
+             * MEMBER ANNIVERSARIES NEEDS TO BE FIXED TO ONLY PUT SIMILAR YEAR MEMBERS TOGETHER, IT DOESN'T CURRENTLY!
+             */
+            if (memberAnniversaryChannel && anniversariesInThisGuild.length > 0) {
+                // Get our generic member anniversary message
+                let message = Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US);
+                let color = Config.colors.default;
+                let useEmbed = true;
+
+                // Get all member anniversary messages
+                let memberAnniversaryMessages = filteredGuild.customMessages.filter(
+                    message => message.Type === 'memberanniversary' && message.UserDiscordId === '0'
+                );
+
+                // Get the mention string
+                let mentionString =
+                    filteredGuild.guildData.MemberAnniversaryMentionSetting !== 'none'
+                        ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild)
+                        : '';
+
+                // Compile our user list to put in the message
+                let userList = CelebrationUtils.getUserListString(
+                    filteredGuild.guildData,
+                    birthdaysInThisGuild
+                );
+
+                // Add the compiled user list
+                if (memberAnniversaryMessages.length > 0) {
+                    // Get our custom message
+                    let customMessage = CelebrationUtils.randomMessage(
+                        memberAnniversaryMessages,
+                        hasPremium
+                    );
+                    message = customMessage.Message.split('@Users')
+                        .join(userList)
+                        .split('<Users>')
+                        .join(userList)
+                        .split('<ServerName>')
+                        .join(guild.name)
+                        .split('<Year>')
+                        .join('temp');
+                    // TEMP UNTIL THE YEAR PROBLEM IS ADDRESSED
+                    // Find the color of the embed
+                    color = customMessage?.Color === '0' ? Config.colors.default : null;
+
+                    color = !color
+                        ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
+                        : Config.colors.default;
+
+                    useEmbed = customMessage.Embed ? true : false;
+                }
+
+                // Send our message(s)
+                if (mentionString !== '') await MessageUtils.send(birthdayChannel, mentionString);
+
+                let embed = new MessageEmbed().setDescription(message).setColor(color);
+                await MessageUtils.send(memberAnniversaryChannel, useEmbed ? embed : message);
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // The member anniversary channel must exists and we need to have members who need the message
+            if (serverAnniversaryChannel && thisGuildCelebrationData) {
+                // Get our generic server anniversary message
+                let message = Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US);
+                let color = Config.colors.default;
+                let useEmbed = true;
+
+                // Get all server anniversary messages
+                let serverAnniversaryMessages = filteredGuild.customMessages.filter(
+                    message => message.Type === 'serveranniversary' && message.UserDiscordId === '0'
+                );
+
+                // Get the mention string
+                let mentionString =
+                    filteredGuild.guildData.ServerAnniversaryMentionSetting !== 'none'
+                        ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild)
+                        : '';
+
+                // Add the compiled user list
+                if (serverAnniversaryMessages.length > 0) {
+                    // Get our custom message
+                    let customMessage = CelebrationUtils.randomMessage(
+                        serverAnniversaryMessages,
+                        hasPremium
+                    );
+
+                    let serverYears = CelebrationUtils.getServerYears(
+                        guild,
+                        filteredGuild.guildData
+                    ).toString();
+
+                    message = customMessage.Message.split('<ServerName>')
+                        .join(guild.name)
+                        .split('<Year>')
+                        .join(serverYears);
+                    // Find the color of the embed
+                    color = customMessage?.Color === '0' ? Config.colors.default : null;
+
+                    color = !color
+                        ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
+                        : Config.colors.default;
+
+                    useEmbed = customMessage.Embed ? true : false;
+                }
+
+                // Send our message(s)
+                if (mentionString !== '')
+                    await MessageUtils.send(serverAnniversaryChannel, mentionString);
+
+                let embed = new MessageEmbed().setDescription(message).setColor(color);
+                await MessageUtils.send(birthdayChannel, useEmbed ? embed : message);
             }
         }
     }
