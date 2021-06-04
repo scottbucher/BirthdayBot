@@ -206,6 +206,13 @@ export class CelebrationUtils {
         return currentYear - memberAnniversaryYear;
     }
 
+    public static getServerYears(guild: Guild, guildData: GuildData): number {
+        if (!guild || !guildData || !guildData.DefaultTimezone) return 0;
+        let currentYear = moment().tz(guildData.DefaultTimezone).year();
+        let memberAnniversaryYear = moment(guild.createdAt).year();
+        return currentYear - memberAnniversaryYear;
+    }
+
     // Change input to just take an array of CustomMessage
     public static randomMessage(messages: CustomMessage[], hasPremium: boolean): CustomMessage {
         if (messages.length > 0) {
