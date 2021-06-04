@@ -1,9 +1,10 @@
 import { CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import { CombinedRepo, UserRepo } from '../services/database/repos';
-import { Logger, SubscriptionService } from '../services';
+import { Logger, RoleService, SubscriptionService } from '../services';
 
 import { Job } from './job';
+import { MessageService } from '../services/message-service';
 import { UserData } from '../models/database';
 import moment from 'moment';
 import schedule from 'node-schedule';
@@ -20,7 +21,9 @@ export class CelebrationJob implements Job {
         private client: Client,
         private userRepo: UserRepo,
         private combinedRepo: CombinedRepo,
-        private subscriptionService: SubscriptionService
+        private subscriptionService: SubscriptionService,
+        private messageService: MessageService,
+        private roleService: RoleService
     ) {}
 
     public async run(): Promise<void> {
@@ -210,7 +213,26 @@ export class CelebrationJob implements Job {
         }
 
         // We should now have the filtered lists of birthdayMessageGuildMembers, memberAnniversaryMessageGuildMembers, and guildsWithAnniversaryMessage
-        // This means we should be able to call the Message Service
+        // as well as the filtered lists of addBirthdayRoleGuildMembers, removeBirthdayRoleGuildMembers, and anniversaryRoleGuildMembers
+        // This means we should be able to call the MessageService & the RoleService
+
+        this.messageService.run(
+            this.client,
+            guildCelebrationDatas,
+            birthdayMessageGuildMembers,
+            memberAnniversaryMessageGuildMembers,
+            guildsWithAnniversaryMessage,
+            premiumGuildIds
+        );
+
+        this.roleService.run(
+            this.client,
+            guildCelebrationDatas,
+            addBirthdayRoleGuildMembers,
+            removeBirthdayRoleGuildMembers,
+            anniversaryRoleGuildMembers,
+            premiumGuildIds
+        );
     }
 
     public start(): void {
