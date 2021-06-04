@@ -1,6 +1,7 @@
 import { DiscordAPIError, GuildMember, Role } from 'discord.js';
 
 export class ActionUtils {
+    // TODO: Have giveRole and removeRole take in an interval to sleep for to prevent rate limits
     public static async giveRole(member: GuildMember, role: Role): Promise<void> {
         try {
             await member.roles.add(role);

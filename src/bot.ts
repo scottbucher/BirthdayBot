@@ -8,9 +8,9 @@ import {
     User,
 } from 'discord.js';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+import { JobService, Logger } from './services';
 
 import { Job } from './jobs';
-import { JobService, Logger } from './services';
 
 let Config = require('../config/config.json');
 let Debug = require('../config/debug.json');

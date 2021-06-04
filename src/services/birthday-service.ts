@@ -207,7 +207,10 @@ export class BirthdayService {
                         )
                     );
 
-                let chosenMessage = CelebrationUtils.randomMessage(globalMessages, hasPremium);
+                let chosenMessage = CelebrationUtils.randomMessage(
+                    globalMessages.customMessages,
+                    hasPremium
+                );
                 let color = Config.colors.default;
                 let useEmbed = true;
                 let message = 'Happy Birthday <Users>!';
