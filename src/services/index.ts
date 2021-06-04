@@ -6,3 +6,4 @@ export { SubscriptionService } from './subscription-service';
 export { Lang } from './lang';
 export { JobService } from './job-service';
 export { DiscordService } from './discord-service';
+export { RoleService } from './role-service';
