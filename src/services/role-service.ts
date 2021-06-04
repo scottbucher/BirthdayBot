@@ -1,36 +1,8 @@
-import {
-    ActionUtils,
-    CelebrationUtils,
-    ColorUtils,
-    FormatUtils,
-    MessageUtils,
-    PermissionUtils,
-    TimeUtils,
-} from '../utils';
-import {
-    Client,
-    Collection,
-    Guild,
-    GuildMember,
-    MessageEmbed,
-    Role,
-    TextChannel,
-} from 'discord.js';
-import {
-    GuildCelebrationData,
-    GuildData,
-    MemberAnniversaryRole,
-    TrustedRole,
-    UserData,
-} from '../models/database';
-
-import { CustomMessageRepo } from './database/repos';
-import { PlanName } from '../models/subscription-models';
-import { SubscriptionService } from './subscription-service';
-import moment from 'moment';
+import { ActionUtils, CelebrationUtils, TimeUtils } from '../utils';
+import { Client, Guild, GuildMember, Role } from 'discord.js';
+import { GuildCelebrationData, MemberAnniversaryRole } from '../models/database';
 
 let Config = require('../../config/config.json');
-
 export class RoleService {
     // TODO: add to config
     public interval: number = 0.5;
@@ -43,8 +15,6 @@ export class RoleService {
         anniversaryRoleGuildMembers: GuildMember[],
         guildsWithPremium: string[]
     ): Promise<void> {
-        let rolePromises = [];
-
         // Only get the guilds which actually might need a role given
         let filteredGuilds = guildCelebrationDatas.filter(
             data =>
@@ -124,7 +94,7 @@ export class RoleService {
 
             // The birthday role must exist in order to add/remove it
             if (birthdayRole) {
-                for (let addBirthdayMember of addBirthdayRoleGuildMembers) {
+                for (let addBirthdayMember of addBirthdayGuildMembers) {
                     // If it passed the trusted role(s) check
                     // Default this to true if there are no trusted roles
                     let passTrustedCheck =
@@ -160,7 +130,7 @@ export class RoleService {
                 }
 
                 // Take birthday role regardless of trusted role?
-                for (let removeBirthdayMember of removeBirthdayRoleGuildMembers) {
+                for (let removeBirthdayMember of removeBirthdayGuildMembers) {
                     await ActionUtils.removeRole(removeBirthdayMember, birthdayRole);
                 }
             }
@@ -184,6 +154,7 @@ export class RoleService {
                 }
             }
 
+            // Wait between guilds
             await TimeUtils.sleep(this.interval);
         }
     }
