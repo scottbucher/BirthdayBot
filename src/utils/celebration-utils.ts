@@ -1,4 +1,4 @@
-import { ArrayUtils, TimeUtils } from '.';
+import { ArrayUtils, FormatUtils, TimeUtils } from '.';
 import {
     CustomMessage,
     CustomMessages,
@@ -8,7 +8,7 @@ import {
     SplitUsers,
     UserData,
 } from '../models/database';
-import { Guild, GuildMember } from 'discord.js';
+import { Guild, GuildMember, Role } from 'discord.js';
 
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
@@ -206,24 +206,100 @@ export class CelebrationUtils {
         return currentYear - memberAnniversaryYear;
     }
 
-    public static randomMessage(messages: CustomMessages, hasPremium: boolean): CustomMessage {
-        if (messages.customMessages.length > 0) {
+    // Change input to just take an array of CustomMessage
+    public static randomMessage(messages: CustomMessage[], hasPremium: boolean): CustomMessage {
+        if (messages.length > 0) {
             if (hasPremium) {
                 // Choose a random one
-                return ArrayUtils.chooseRandom(messages.customMessages);
+                return ArrayUtils.chooseRandom(messages);
             } else {
                 // Only choose from the first 10
                 return ArrayUtils.chooseRandom(
-                    messages.customMessages.slice(
-                        0,
-                        Config.validation.message.maxCount.birthday.free
-                    )
+                    messages.slice(0, Config.validation.message.maxCount.birthday.free)
                 ).Message;
             }
         } else {
             // Return null
             return null;
         }
+    }
+
+    public static async getMentionString(guildData: GuildData, guild: Guild): Promise<string> {
+        // Find mentioned role
+        let mentionString: string = '';
+
+        if (
+            guildData.BirthdayMentionSetting.toLowerCase() === 'everyone' ||
+            guildData.BirthdayMentionSetting.toLowerCase() === 'here'
+        ) {
+            mentionString = '@' + guildData.BirthdayMentionSetting;
+        }
+
+        let roleInput: Role;
+
+        // `
+        if (mentionString === '') {
+            try {
+                roleInput = await guild.roles.fetch(guildData.BirthdayMentionSetting);
+            } catch (error) {
+                // No mention role
+            }
+            if (roleInput.guild.id !== guild.id) mentionString = '';
+            else mentionString = roleInput.toString();
+        }
+
+        return mentionString;
+    }
+
+    public static getUserListString(guildData: GuildData, guildMember: GuildMember[]): string {
+        // Find mentioned role
+        let userList: string;
+        // Format the user list based off the servers name format
+        if (guildData.NameFormat === 'mention')
+            userList = FormatUtils.joinWithAnd(guildMember.map(member => member.toString()));
+        else if (guildData.NameFormat === 'username')
+            userList = FormatUtils.joinWithAnd(guildMember.map(member => member.user.username));
+        else if (guildData.NameFormat === 'nickname')
+            userList = FormatUtils.joinWithAnd(guildMember.map(member => member.nickname));
+        else if (guildData.NameFormat === 'tag')
+            userList = FormatUtils.joinWithAnd(
+                guildMember.map(member => `${member.user.username}#${member.user.discriminator}`)
+            );
+        return userList;
+    }
+
+    public static passesTrustedCheck(
+        guildCelebrationData: GuildCelebrationData,
+        trustedRoles: Role[],
+        birthdayMember: GuildMember,
+        trustedSetting: number
+    ): boolean {
+        // If it passed the trusted role(s) check
+        // Default this to true if there are no trusted roles
+        // If there are trusted roles and trusted DOESN'T prevent Role/Message (the trusted setting passed in) then set it to true
+        let passTrustedCheck = trustedRoles.length == 0 ? true : trustedSetting ? false : true;
+
+        //if passTrustedCheck is already true we don't have to check for trusted role(s)
+        if (!passTrustedCheck) {
+            if (guildCelebrationData.guildData.RequireAllTrustedRoles) {
+                let hasAllTrusted = true;
+                for (let role of trustedRoles) {
+                    if (!birthdayMember.roles.cache.has(role.id)) {
+                        hasAllTrusted = false;
+                        break;
+                    }
+                }
+                passTrustedCheck = hasAllTrusted;
+            } else {
+                for (let role of trustedRoles) {
+                    if (birthdayMember.roles.cache.has(role.id)) {
+                        passTrustedCheck = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return passTrustedCheck;
     }
 
     public static convertCelebrationData(
