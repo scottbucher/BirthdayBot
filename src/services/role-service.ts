@@ -61,15 +61,6 @@ export class RoleService {
             } catch (error) {
                 // No birthday role
             }
-            // Get our list of trusted roles
-            for (let role of filteredGuild.trustedRoles) {
-                try {
-                    let tRole: Role = await guild.roles.fetch(role.TrustedRoleDiscordId);
-                    if (tRole) trustedRoles.push(tRole);
-                } catch (error) {
-                    // Trusted role is invalid
-                }
-            }
 
             let anniversaryRoleData: MemberAnniversaryRole[];
 
@@ -93,7 +84,17 @@ export class RoleService {
             }
 
             // The birthday role must exist in order to add/remove it
-            if (birthdayRole) {
+            if (birthdayRole && addBirthdayGuildMembers.length > 0) {
+                // Get our list of trusted roles
+                for (let role of filteredGuild.trustedRoles) {
+                    try {
+                        let tRole: Role = await guild.roles.fetch(role.TrustedRoleDiscordId);
+                        if (tRole) trustedRoles.push(tRole);
+                    } catch (error) {
+                        // Trusted role is invalid
+                    }
+                }
+
                 for (let addBirthdayMember of addBirthdayGuildMembers) {
                     // If it passed the trusted role(s) check
                     // Default this to true if there are no trusted roles
@@ -136,7 +137,11 @@ export class RoleService {
             }
 
             // There has to be anniversary roles in order to give them (extra premium check is prob redundant)
-            if (anniversaryRoles.length > 0 && hasPremium) {
+            if (
+                addAnniversaryGuildMembers.length > 0 &&
+                anniversaryRoles.length > 0 &&
+                hasPremium
+            ) {
                 for (let addAnniversaryRoleMember of addAnniversaryGuildMembers) {
                     let memberYears = CelebrationUtils.getMemberYears(
                         addAnniversaryRoleMember,
