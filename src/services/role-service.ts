@@ -40,13 +40,13 @@ export class RoleService {
 
             // We need to filter the GuildMember lists given by the parameters to only those in this guild
             let addBirthdayGuildMembers = addBirthdayRoleGuildMembers.filter(
-                member => (member.guild.id = guild.id)
+                member => member.guild.id === guild.id
             );
             let removeBirthdayGuildMembers = removeBirthdayRoleGuildMembers.filter(
-                member => (member.guild.id = guild.id)
+                member => member.guild.id === guild.id
             );
             let addAnniversaryGuildMembers = anniversaryRoleGuildMembers.filter(
-                member => (member.guild.id = guild.id)
+                member => member.guild.id === guild.id
             );
 
             let hasPremium = guildsWithPremium.includes(guild.id);
@@ -83,7 +83,7 @@ export class RoleService {
                 );
             }
 
-            // The birthday role must exist in order to add/remove it
+            // The birthday role must exist in order to add/remove it and we need at least one member who need the role
             if (birthdayRole && addBirthdayGuildMembers.length > 0) {
                 // Get our list of trusted roles
                 for (let role of filteredGuild.trustedRoles) {
@@ -96,37 +96,14 @@ export class RoleService {
                 }
 
                 for (let addBirthdayMember of addBirthdayGuildMembers) {
-                    // If it passed the trusted role(s) check
-                    // Default this to true if there are no trusted roles
-                    let passTrustedCheck =
-                        trustedRoles.length == 0
-                            ? true
-                            : filteredGuild.guildData.TrustedPreventsRole
-                            ? false
-                            : true;
-
-                    //if passTrustedCheck is already true we don't have to check for trusted role(s)
-                    if (!passTrustedCheck) {
-                        if (filteredGuild.guildData.RequireAllTrustedRoles) {
-                            let hasAllTrusted = true;
-                            for (let role of trustedRoles) {
-                                if (!addBirthdayMember.roles.cache.has(role.id)) {
-                                    hasAllTrusted = false;
-                                    break;
-                                }
-                            }
-                            passTrustedCheck = hasAllTrusted;
-                        } else {
-                            for (let role of trustedRoles) {
-                                if (addBirthdayMember.roles.cache.has(role.id)) {
-                                    passTrustedCheck = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if (passTrustedCheck)
+                    if (
+                        CelebrationUtils.passesTrustedCheck(
+                            filteredGuild,
+                            trustedRoles,
+                            addBirthdayMember,
+                            filteredGuild.guildData.TrustedPreventsRole
+                        )
+                    )
                         await ActionUtils.giveRole(addBirthdayMember, birthdayRole);
                 }
 
