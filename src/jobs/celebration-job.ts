@@ -127,12 +127,12 @@ export class CelebrationJob implements Job {
             // Get the guildData for this guild
             let guildData = guildCelebrationDatas.find(
                 data => data.guildData.GuildDiscordId === guild.id
-            ).guildData;
+            )?.guildData;
 
             // Get the blacklist for this guild
             let blacklist = guildCelebrationDatas.find(
                 data => data.guildData.GuildDiscordId === guild.id
-            ).blacklistedMembers;
+            )?.blacklistedMembers;
 
             // We now have our list of guildMembers
 

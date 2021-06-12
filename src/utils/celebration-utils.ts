@@ -181,7 +181,7 @@ export class CelebrationUtils {
         //     return true;
         // }
 
-        if (!guild || !guildData || !guildData.DefaultTimezone) return false;
+        if (!guild || !guildData || guildData.DefaultTimezone === '0') return false;
         let currentDate = moment().tz(guildData.DefaultTimezone);
         let serverAnniversary = moment(guild.createdAt);
 
