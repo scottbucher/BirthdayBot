@@ -2,7 +2,6 @@ import { BlacklistRepo, GuildRepo } from '../services/database/repos';
 import { GuildUtils, MessageUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 
-import { BirthdayService } from '../services';
 import { Command } from './command';
 import { UserData } from '../models/database';
 import moment from 'moment';
@@ -22,11 +21,7 @@ export class TestCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(
-        private birthdayService: BirthdayService,
-        private guildRepo: GuildRepo,
-        private blacklistRepo: BlacklistRepo
-    ) {}
+    constructor(private guildRepo: GuildRepo, private blacklistRepo: BlacklistRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let guild = msg.guild;
@@ -92,13 +87,13 @@ export class TestCommand implements Command {
             UserDiscordId: target.id,
         };
 
-        this.birthdayService.celebrateBirthdays(
-            guild,
-            guildData,
-            [userData],
-            guild.members.cache,
-            true,
-            channel
-        );
+        // this.birthdayService.celebrateBirthdays(
+        //     guild,
+        //     guildData,
+        //     [userData],
+        //     guild.members.cache,
+        //     true,
+        //     channel
+        // );
     }
 }

@@ -1,4 +1,3 @@
-import { BirthdayService, HttpService, JobService, Logger, SubscriptionService } from './services';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
@@ -35,6 +34,7 @@ import {
 } from './commands';
 import {
     BlacklistRepo,
+    CombinedRepo,
     CustomMessageRepo,
     GuildRepo,
     MemberAnniversaryRoleRepo,
@@ -54,6 +54,14 @@ import {
     ConfigUseTimezoneSubCommand,
 } from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+import {
+    HttpService,
+    JobService,
+    Logger,
+    MessageService,
+    RoleService,
+    SubscriptionService,
+} from './services';
 import {
     MemberAnniversaryRoleAddSubCommand,
     MemberAnniversaryRoleClearSubCommand,
@@ -79,9 +87,9 @@ import {
 } from './commands/trusted';
 
 import { Bot } from './bot';
+import { CelebrationJob } from './jobs';
 import { CustomClient } from './extensions/custom-client';
 import { DataAccess } from './services/database/data-access';
-import { PostBirthdaysJob } from './jobs';
 
 let Config = require('../config/config.json');
 
@@ -97,6 +105,7 @@ async function start(): Promise<void> {
     let blacklistRepo = new BlacklistRepo(dataAccess);
     let trustedRoleRepo = new TrustedRoleRepo(dataAccess);
     let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
+    let combinedRepo = new CombinedRepo(dataAccess);
 
     let clientOptions: ClientOptions = {
         ws: { intents: Config.client.intents },
@@ -112,7 +121,8 @@ async function start(): Promise<void> {
 
     // Services
     let subscriptionService = new SubscriptionService(httpService);
-    let birthdayService = new BirthdayService(customMessageRepo, subscriptionService);
+    let messageService = new MessageService();
+    let roleService = new RoleService();
 
     // Commands
     let devCommand = new DevCommand();
@@ -132,7 +142,7 @@ async function start(): Promise<void> {
     let statsCommand = new StatsCommand(userRepo);
     let subscribeCommand = new SubscribeCommand(subscriptionService);
     let supportCommand = new SupportCommand();
-    let testCommand = new TestCommand(birthdayService, guildRepo, blacklistRepo);
+    // let testCommand = new TestCommand(birthdayService, guildRepo, blacklistRepo);
     let viewCommand = new ViewCommand(userRepo);
 
     // Setup Sub Commands
@@ -267,7 +277,7 @@ async function start(): Promise<void> {
             statsCommand,
             subscribeCommand,
             supportCommand,
-            testCommand,
+            null,
             trustedRoleCommand,
             viewCommand,
         ],
@@ -286,7 +296,14 @@ async function start(): Promise<void> {
     let guildLeaveHandler = new GuildLeaveHandler();
 
     let jobService = new JobService([
-        new PostBirthdaysJob(client, guildRepo, userRepo, blacklistRepo, birthdayService),
+        new CelebrationJob(
+            client,
+            userRepo,
+            combinedRepo,
+            subscriptionService,
+            messageService,
+            roleService
+        ),
     ]);
 
     let bot = new Bot(

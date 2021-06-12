@@ -1,10 +1,9 @@
 import { CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import { CombinedRepo, UserRepo } from '../services/database/repos';
-import { Logger, RoleService, SubscriptionService } from '../services';
+import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
 
 import { Job } from './job';
-import { MessageService } from '../services/message-service';
 import { UserData } from '../models/database';
 import moment from 'moment';
 import schedule from 'node-schedule';
