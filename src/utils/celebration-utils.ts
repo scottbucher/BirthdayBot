@@ -157,7 +157,7 @@ export class CelebrationUtils {
         //     return true;
         // }
 
-        if (!guildMember || !guildData || !guildData.DefaultTimezone) return false;
+        if (!guildMember || !guildData || guildData.DefaultTimezone === '0') return false;
         let currentDate = moment().tz(guildData.DefaultTimezone);
         let memberAnniversary = moment(guildMember.joinedAt);
 
@@ -312,7 +312,7 @@ export class CelebrationUtils {
     public static convertCelebrationData(
         rawGuildCelebrationData: RawGuildCelebrationData
     ): GuildCelebrationData[] {
-        let dataSet: GuildCelebrationData[];
+        let dataSet: GuildCelebrationData[] = [];
 
         for (let rawData of rawGuildCelebrationData.guildDatas) {
             let celebrationData = new GuildCelebrationData();
