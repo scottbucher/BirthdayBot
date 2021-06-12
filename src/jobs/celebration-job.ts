@@ -49,7 +49,7 @@ export class CelebrationJob implements Job {
 
         // String of guild ids who have an active subscription to birthday bot premium
         // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
-        let premiumGuildIds: string[];
+        let premiumGuildIds: string[] = [];
 
         // Collection of guilds
         let guildCache = this.client.guilds.cache;
@@ -63,13 +63,13 @@ export class CelebrationJob implements Job {
         );
 
         // List of members with a birthday today
-        let birthdayMessageGuildMembers: GuildMember[];
+        let birthdayMessageGuildMembers: GuildMember[] = [];
 
         // This will be the array of GuildMembers who have an anniversary this hour
-        let memberAnniversaryMessageGuildMembers: GuildMember[];
+        let memberAnniversaryMessageGuildMembers: GuildMember[] = [];
 
         // This will be the array of guilds with server anniversaries today
-        let guildsWithAnniversaryMessage: Guild[];
+        let guildsWithAnniversaryMessage: Guild[] = [];
 
         // Message service will take in a list of birthdayGuildMembers objects, a list of guild members with an anniversary today, and a list of guilds with an anniversary today
         // To get these we will:
@@ -87,13 +87,13 @@ export class CelebrationJob implements Job {
         // ----Then check for the hour based on the timezone of the server
 
         // This will be the array of GuildMembers who are able to get the birthday role
-        let addBirthdayRoleGuildMembers: GuildMember[];
+        let addBirthdayRoleGuildMembers: GuildMember[] = [];
 
         // This will be the array of GuildMembers who are able to have the birthday role removed
-        let removeBirthdayRoleGuildMembers: GuildMember[];
+        let removeBirthdayRoleGuildMembers: GuildMember[] = [];
 
         // This will be the array of GuildMembers who are able to get anniversary roles
-        let anniversaryRoleGuildMembers: GuildMember[];
+        let anniversaryRoleGuildMembers: GuildMember[] = [];
 
         for (let guild of guildCache.array()) {
             let hasPremium = premiumGuildIds.includes(guild.id);
