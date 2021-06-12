@@ -13,8 +13,8 @@ let Logs = require('../../lang/logs.json');
 
 export class CelebrationJob implements Job {
     public name = 'Celebration';
-    public schedule: string = Config.jobs.celebration.schedule;
-    public log: boolean = Config.jobs.celebration.log;
+    public schedule: string = Config.jobs.postCelebrationJob.schedule;
+    public log: boolean = Config.jobs.postCelebrationJob.log;
 
     constructor(
         private client: Client,
