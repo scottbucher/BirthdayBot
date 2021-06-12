@@ -52,7 +52,7 @@
             "schedule": "0 */5 * * * *",
             "log": false
         },
-        "postBirthdays": {
+        "postCelebrationJob": {
             "schedule": "0 0 * * * *",
             "log": false,
             "interval": 0.6
