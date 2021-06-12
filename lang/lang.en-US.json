@@ -1130,6 +1130,15 @@
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
+            },
+            "anniversaryRoles": {
+                "title": "{{REF:terms.premiumRequired}}",
+                "description": "Member Anniversary Roles are a premium only feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
+                "footer": {
+                    "text": "{{REF:footers.whyPremium}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
             }
         },
         "errors": {
@@ -1563,8 +1572,8 @@
         "placeHolders": {
             "users": "<Users>",
             "usersRegex": "/@users?|<users?>|{users?}/gi",
-            "years": "<Years>",
-            "yearsRegex": "/@years?|<years?>|{years?}/gi",
+            "year": "<Year>",
+            "yearsRegex": "/@year?|<year?>|{year?}/gi",
             "server": "<Server>",
             "serverRegex": "/@server?|<server?>|{server?}/gi"
         },

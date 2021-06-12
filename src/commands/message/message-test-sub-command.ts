@@ -93,7 +93,7 @@ export class MessageTestSubCommand {
                             Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US)
                                 .replace(/<Users>/g, userList)
                                 .replace(
-                                    /<Years>/g,
+                                    /<Year>/g,
                                     Math.floor(
                                         moment().diff(msg.guild.createdAt, 'years')
                                     ).toString()
@@ -109,7 +109,7 @@ export class MessageTestSubCommand {
                         .setDescription(
                             Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US)
                                 .replace(
-                                    /<Years>/g,
+                                    /<Year>/g,
                                     Math.floor(moment().diff(target.joinedAt, 'years')).toString()
                                 )
                                 .replace(/<Server>/g, msg.guild.name)
@@ -140,7 +140,7 @@ export class MessageTestSubCommand {
                 customMessage = chosenMessage?.Message.replace(/@Users/g, userList)
                     .replace(/<Users>/g, userList)
                     .replace(
-                        /<Years>/g,
+                        /<Year>/g,
                         Math.floor(moment().diff(msg.guild.createdAt, 'years')).toString()
                     )
                     .replace(/<Server>/g, msg.guild.name);
@@ -148,7 +148,7 @@ export class MessageTestSubCommand {
             }
             case 'serveranniversary': {
                 customMessage = chosenMessage?.Message.replace(
-                    /<Years>/g,
+                    /<Year>/g,
                     Math.floor(moment().diff(target.joinedAt, 'years')).toString()
                 ).replace(/<Server>/g, msg.guild.name);
                 break;

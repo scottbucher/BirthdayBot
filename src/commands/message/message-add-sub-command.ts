@@ -235,7 +235,7 @@ export class MessageAddSubCommand {
             message = msg.content
                 .substring(msg.content.toLowerCase().indexOf(type) + type.length + 1)
                 .replace(/@users?|<users?>|{users?}/gi, '<Users>')
-                .replace(/@years?|<years?>|{years?}/gi, '<Years>');
+                .replace(/@years?|<years?>|{years?}/gi, '<Year>');
 
             if (message.length > Config.validation.message.maxLength) {
                 let embed = new MessageEmbed()
@@ -247,15 +247,15 @@ export class MessageAddSubCommand {
                 return;
             }
 
-            if (!message.includes('<Users>') || !message.includes('<Years>')) {
+            if (!message.includes('<Users>') || !message.includes('<Year>')) {
                 let embed = new MessageEmbed()
                     .setTitle('Invalid Message')
                     .setDescription(
                         '' +
-                            'Please include the `<Users>` and `<Years>` placeholder somewhere in the message. This indicates where anniversary usernames and the year will appear.' +
+                            'Please include the `<Users>` and `<Year>` placeholder somewhere in the message. This indicates where anniversary usernames and the year will appear.' +
                             '\n' +
-                            '\nEx: `bday message memberAnniversary <Users> is celebrating <Years> year(s) in the discord!`' +
-                            '\n\nNote: The `<Years>` placeholder is just a number!'
+                            '\nEx: `bday message memberAnniversary <Users> is celebrating <Year> year(s) in the discord!`' +
+                            '\n\nNote: The `<Year>` placeholder is just a number!'
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())
                     .setColor(Config.colors.error);
@@ -322,7 +322,7 @@ export class MessageAddSubCommand {
             message = msg.content
                 .substring(msg.content.toLowerCase().indexOf(type) + type.length + 1)
                 .replace(/@users?|<users?>|{users?}/gi, '<ServerName>')
-                .replace(/@years?|<years?>|{years?}/gi, '<Years>');
+                .replace(/@years?|<years?>|{years?}/gi, '<Year>');
 
             if (message.length > Config.validation.message.maxLength) {
                 let embed = new MessageEmbed()
@@ -334,15 +334,15 @@ export class MessageAddSubCommand {
                 return;
             }
 
-            if (!message.includes('<Years>')) {
+            if (!message.includes('<Year>')) {
                 let embed = new MessageEmbed()
                     .setTitle('Invalid Message')
                     .setDescription(
                         '' +
-                            'Please include the `<Years>` placeholder somewhere in the message. This indicates where anniversary year will appear.' +
+                            'Please include the `<Year>` placeholder somewhere in the message. This indicates where anniversary year will appear.' +
                             '\n' +
-                            '\nEx: `bday message add serverAnniversary <Server> is now <Years> years old!`' +
-                            '\n\nNote: The `<Years>` placeholder is just a number!' +
+                            '\nEx: `bday message add serverAnniversary <Server> is now <Year> years old!`' +
+                            '\n\nNote: The `<Year>` placeholder is just a number!' +
                             `\n\nNote: The \`<Server>\` placeholder is not required and displays the server's name!`
                     )
                     .setFooter(`${Config.emotes.deny} Action Failed.`, msg.client.user.avatarURL())

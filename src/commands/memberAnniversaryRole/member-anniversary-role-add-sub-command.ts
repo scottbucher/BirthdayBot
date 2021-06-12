@@ -18,6 +18,13 @@ export class MemberAnniversaryRoleAddSubCommand {
         channel: TextChannel,
         hasPremium: boolean
     ): Promise<void> {
+        if (!hasPremium) {
+            MessageUtils.send(
+                channel,
+                Lang.getEmbed('premiumRequired.anniversaryRoles', LangCode.EN_US)
+            );
+            return;
+        }
         if (args.length === 3) {
             await MessageUtils.send(channel, errorEmbed);
             return;
