@@ -167,6 +167,31 @@
                     "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
+            },
+            "customMessageColorSelection": {
+                "title": "Custom Message Color Selection",
+                "description": [
+                    "Please input the color you would like your message. [(?)](${Config.links.docs}/faq#what-is-a-message-embed-color)",
+                    "Both color names and hex values are accepted."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "customMessageEmbedSelection": {
+                "title": "Custom Message - Embedded",
+                "description": [
+                    "Should this message be embedded? [(?)](${Config.links.docs}/faq#what-is-an-embed)",
+                    "Hint: This message is embed! Non-embedded messages are just plain text.",
+                    "",
+                    "True {{REF:emotes.confirm}}",
+                    "False {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
             }
         },
         "userPrompts": {
@@ -346,7 +371,7 @@
             },
             "addMessageExpired": {
                 "title": "Add Custom Message - Expired",
-                "description": "Type `{{REF:bot.prefix}} message add <Type> <Message>` to add a custom message.",
+                "description": "Type `{{REF:bot.prefix}} message add {{TYPE}} <Message>` to add a custom message.",
                 "color": "{{REF:colors.error}}"
             },
             "removeMessage": {
@@ -560,6 +585,54 @@
             },
             "setServerAnniversaryMessageTime": {
                 "description": "Successfully set the server anniversary message to send at **{{TIME}}**",
+                "color": "{{REF:colors.success}}"
+            },
+            "addCustomMessage": {
+                "title": "Add Custom Message",
+                "description": [
+                    "Successfully added the {{DISPLAY_TYPE}} message:",
+                    "",
+                    "{{MESSAGE}}",
+                    "",
+                    "{{HAS_PREMIUM}}",
+                    "Embedded: `{{IS_EMBED}}`"
+                ],
+                "fields": [
+                    {
+                        "name": "Actions",
+                        "value": [
+                            "`bday message list {{TYPE}} [page]` - List all custom {{DISPLAY_TYPE}} messages.",
+                            "`bday message test {{TYPE}} <position>` - Test a {{DISPLAY_TYPE}} message."
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:emotes.confirm}} Message added."
+                },
+                "color": "{{REF:colors.success}}"
+            },
+            "addCustomUserMessage": {
+                "title": "Add Custom Message",
+                "description": [
+                    "Successfully added the user {{DISPLAY_TYPE}} message for {{USER}}:",
+                    "",
+                    "{{MESSAGE}}",
+                    "",
+                    "{{HAS_PREMIUM}}",
+                    "Embedded: `{{IS_EMBED}}`"
+                ],
+                "fields": [
+                    {
+                        "name": "Actions",
+                        "value": [
+                            "`bday message list {{TYPE}} [page]` - List all custom user specific {{DISPLAY_TYPE}} messages.",
+                            "`bday message test {{TYPE}} <position>` - Test a user specific {{DISPLAY_TYPE}} message."
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:emotes.confirm}} Message added."
+                },
                 "color": "{{REF:colors.success}}"
             },
             "actionCanceled": {
@@ -900,14 +973,34 @@
                 "description": "Your server has reached the maximum member anniversary roles! (**{{PAID_MAX}}**)",
                 "color": "{{REF:colors.error}}"
             },
+            "maxFreeCustomMessages": {
+                "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{FREE_MAX}}**)",
+                "footer": {
+                    "text": "To have up to {{PAID_MAX}} custom {{TYPE}} messages try Birthday Bot Premium!"
+                },
+                "color": "{{REF:colors.error}}"
+            },
+            "maxPaidCustomMessages": {
+                "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{PAID_MAX}}**)",
+                "color": "{{REF:colors.error}}"
+            },
             "maxCustomMessageSize": {
                 "description": "Custom Messages are maxed at {{MAX_SIZE}} characters!",
                 "color": "{{REF:colors.error}}"
             },
             "noUserPlaceholder": {
                 "description": [
-                    "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where birthday usernames will appear.",
-                    "Ex: `{{REF:bot.prefix}} message add birthday {{REF:defaults.birthdayMessage}}`"
+                    "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where the member names will appear.",
+                    "Ex: `{{REF:bot.prefix}} message add {{TYPE}} {{EXAMPLE_MESSAGE}}`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noServerPlaceholder": {
+                "description": [
+                    "Please include the `{{REF:placeHolders.server}}` placeholder somewhere in the message. This indicates where the server name will appear.",
+                    "Ex: `{{REF:bot.prefix}} message add serverAnniversary {{REF:defaults.serverAnniversaryMessage}}`",
+                    "",
+                    "Tip: You can also use the `{{REF:placeHolders.year}}` placeholder for the anniversary year."
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -971,6 +1064,24 @@
             "duplicateYear": {
                 "description": "There is already a member anniversary role reward for year {{YEAR}}!",
                 "color": "{{REF:colors.error}}"
+            },
+            "duplicateMessage": {
+                "description": "Duplicate message found for this server!",
+                "color": "{{REF:colors.error}}"
+            },
+            "duplicateUserCustomMessage": {
+                "title": "Caution",
+                "description": [
+                    "There is already a {{TYPE}} custom message set for this user, would you like to overwrite it?",
+                    "",
+                    "**Current Message**: {{CURRENT_MESSAGE}}",
+                    "",
+                    "**New Message**: {{NEW_MESSAGE}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.irreversible}}"
+                },
+                "color": "{{REF:colors.warn}}"
             },
             "noTrueFalse": {
                 "description": "Please provide a value! (True/False)",
@@ -1093,6 +1204,16 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
+            "invalidColor": {
+                "title": "Invalid Color",
+                "description": [
+                    "Please provide a valid hex color! Find hex colors [here](${Config.links.colors}).",
+                    "",
+                    "Example: `Orange` or `Crimson`",
+                    "Example: `#4EEFFF` or `4EEFFF`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
             "cantSetForBot": {
                 "description": "You can't set a birthday for a bot!",
                 "color": "{{REF:colors.error}}"
@@ -1124,7 +1245,7 @@
         "premiumRequired": {
             "userSpecificMessages": {
                 "title": "{{REF:terms.premiumRequired}}",
-                "description": "User-specific birthday messages are a premium feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
+                "description": "User-specific messages are a premium feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
                 "footer": {
                     "text": "{{REF:footers.whyPremium}}"
                 },
@@ -1493,8 +1614,8 @@
         },
         "defaults": {
             "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
-            "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.years}} years in the server {{REF:placeholders.users}}!",
-            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeholders.years}} year(s) old!",
+            "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.year}} year(s) in the server {{REF:placeHolders.users}}!",
+            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeHolders.year}} year(s) old!",
             "birthdayChannelName": "{{REF:emotes.birthdayEmote}} birthdays",
             "birthdayChannelTopic": "Birthdays Announcements!",
             "memberAnniversaryChannelName": "{{REF:emotes.party}} member anniversaries",
@@ -1530,6 +1651,10 @@
             "trustedRoleFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** trusted roles. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
             "memberAnniversaryRoleFieldTitle": "Member Anniversary Roles Unavailable",
             "memberAnniversaryRoleFieldText": "Member anniversary roles are a premium feature **only**. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!"
+        },
+        "conditionals": {
+            "needColorForPremium": "Customize the message color with `bday premium`!",
+            "colorForPremium": "Color Hex: `{{COLOR_HEX}}`!"
         },
         "terms": {
             "timeZone": "Time Zone",
@@ -1569,11 +1694,16 @@
             "noOne": "no one",
             "na": "N/A"
         },
+        "types": {
+            "birthday": "birthday",
+            "memberAnniversary": "memberanniversary",
+            "serverAnniversary": "serveranniversary"
+        },
         "placeHolders": {
             "users": "<Users>",
             "usersRegex": "/@users?|<users?>|{users?}/gi",
             "year": "<Year>",
-            "yearsRegex": "/@year?|<year?>|{year?}/gi",
+            "yearRegex": "/@year?|<year?>|{year?}/gi",
             "server": "<Server>",
             "serverRegex": "/@server?|<server?>|{server?}/gi"
         },

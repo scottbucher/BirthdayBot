@@ -1,13 +1,20 @@
+import { LangCode } from '../models/enums';
 import { MessageEmbed } from 'discord.js';
 import { MultilingualService } from 'discord.js-multilingual-utils';
 import path from 'path';
-
-import { LangCode } from '../models/enums';
 
 export class Lang {
     private static multilingualService: MultilingualService = new MultilingualService(
         path.resolve(__dirname, '../../lang')
     );
+
+    public static getNotImplementedEmbed(): MessageEmbed {
+        return new MessageEmbed().setDescription("This lang embed hasn't been implemented.");
+    }
+
+    public static getNotImplementedRef(): string {
+        return "This lang embed hasn't been implemented.";
+    }
 
     public static getEmbed(
         embedName: string,
