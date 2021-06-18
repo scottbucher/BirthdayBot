@@ -7,7 +7,6 @@ import {
     MessageRemoveSubCommand,
     MessageTestSubCommand,
     MessageTimeSubCommand,
-    MessageUserListSubCommand,
 } from './message';
 
 import { Command } from './command';
@@ -33,8 +32,7 @@ export class MessageCommand implements Command {
         private messageRemoveSubCommand: MessageRemoveSubCommand,
         private messageTimeSubCommand: MessageTimeSubCommand,
         private messageMentionSubCommand: MessageMentionSubCommand,
-        private messageTestSubCommand: MessageTestSubCommand,
-        private messageUserListSubCommand: MessageUserListSubCommand
+        private messageTestSubCommand: MessageTestSubCommand
     ) {}
 
     public async execute(
@@ -54,10 +52,8 @@ export class MessageCommand implements Command {
             await MessageUtils.send(channel, embed);
             return;
         }
-        if (args[2].toLowerCase() === 'list' && args[3]?.toLowerCase() !== 'user') {
+        if (args[2].toLowerCase() === 'list') {
             this.messageListSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (args[2].toLowerCase() === 'list' && args[3]?.toLowerCase() === 'user') {
-            this.messageUserListSubCommand.execute(args, msg, channel, hasPremium);
         } else if (args[2].toLowerCase() === 'clear') {
             this.messageClearSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'add' || args[2].toLowerCase() === 'create') {
