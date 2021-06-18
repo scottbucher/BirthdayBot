@@ -1,7 +1,7 @@
 import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
+import { FormatUtils, MessageUtils } from '.';
 import { Guild, Message, MessageEmbed } from 'discord.js';
 
-import { FormatUtils, MessageUtils } from '.';
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
 import { TrustedRoles } from '../models/database/trusted-role-models';
 
@@ -51,7 +51,8 @@ export class ListUtils {
                 customMessageResults,
                 page,
                 pageSize,
-                hasPremium
+                hasPremium,
+                type
             );
         } else {
             embed = await FormatUtils.getCustomMessageListEmbed(
