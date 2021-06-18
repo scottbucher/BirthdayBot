@@ -1367,7 +1367,7 @@
                 },
                 "timestamp": true
             },
-            "birthdayMessageFree": {
+            "birthdayMessageUnLocked": {
                 "title": "{{REF:list.birthdayMessagesTitle}}",
                 "description": [
                     "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
@@ -1379,7 +1379,7 @@
                 },
                 "timestamp": true
             },
-            "birthdayMessagePaid": {
+            "birthdayMessageLocked": {
                 "title": "{{REF:list.birthdayMessagesTitle}}",
                 "description": [
                     "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
@@ -1392,12 +1392,12 @@
                 "fields": [
                     {
                         "name": "{{REF:list.messagePaidFieldTitle}}",
-                        "value": "{{REF:list.birthdayMessagePaidFieldText}}"
+                        "value": "{{REF:list.birthdayMessageFieldText}}"
                     }
                 ],
                 "timestamp": true
             },
-            "memberAnniversaryMessageFree": {
+            "memberAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
                 "description": [
                     "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
@@ -1409,7 +1409,7 @@
                 },
                 "timestamp": true
             },
-            "memberAnniversaryMessagePaid": {
+            "memberAnniversaryMessageLocked": {
                 "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
                 "description": [
                     "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
@@ -1422,12 +1422,12 @@
                 "fields": [
                     {
                         "name": "{{REF:list.messagePaidFieldTitle}}",
-                        "value": "{{REF:list.memberAnniversaryMessagePaidFieldText}}"
+                        "value": "{{REF:list.memberAnniversaryMessageFieldText}}"
                     }
                 ],
                 "timestamp": true
             },
-            "serverAnniversaryMessageFree": {
+            "serverAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
                 "description": [
                     "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
@@ -1439,7 +1439,7 @@
                 },
                 "timestamp": true
             },
-            "serverAnniversaryMessagePaid": {
+            "serverAnniversaryMessageLocked": {
                 "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
                 "description": [
                     "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
@@ -1452,13 +1452,13 @@
                 "fields": [
                     {
                         "name": "{{REF:list.messagePaidFieldTitle}}",
-                        "value": "{{REF:list.serverAnniversaryMessagePaidFieldText}}"
+                        "value": "{{REF:list.serverAnniversaryMessageFieldText}}"
                     }
                 ],
                 "timestamp": true
             },
-            "customUserMessageFree": {
-                "title": "{{REF:list.userMessagesTitle}}",
+            "userSpecificBirthdayMessageUnLocked": {
+                "title": "{{REF:list.userBirthdayMessagesTitle}}",
                 "description": [
                     "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*",
                     "",
@@ -1469,8 +1469,8 @@
                 },
                 "timestamp": true
             },
-            "customUserMessagePaid": {
-                "title": "{{REF:list.userMessagesTitle}}",
+            "userSpecificBirthdayMessageLocked": {
+                "title": "{{REF:list.userBirthdayMessagesTitle}}",
                 "description": [
                     "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*",
                     "",
@@ -1481,8 +1481,38 @@
                 },
                 "fields": [
                     {
-                        "name": "{{REF:list.userBirthdayMessageFieldTitle}}",
-                        "value": "{{REF:list.userBirthdayMessageFieldText}}"
+                        "name": "{{REF:list.userSpecificMessageFieldTitle}}",
+                        "value": "{{REF:list.userSpecificMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "userSpecificMemberAnniversaryMessageUnLocked": {
+                "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}"
+                },
+                "timestamp": true
+            },
+            "userSpecificMemberAnniversaryMessageLocked": {
+                "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.userSpecificMessageFieldTitle}}",
+                        "value": "{{REF:list.userSpecificMessageFieldText}}"
                     }
                 ],
                 "timestamp": true
@@ -1625,7 +1655,8 @@
         },
         "list": {
             "birthdayMessagesTitle": "{{REF:terms.birthdayMessages}} | {{REF:list.pageTitle}}",
-            "userMessagesTitle": "{{REF:terms.userMessages}} | {{REF:list.pageTitle}}",
+            "userBirthdayMessagesTitle": "{{REF:terms.userBirthdayMessages}} | {{REF:list.pageTitle}}",
+            "userMemberAnniversaryMessagesTitle": "{{REF:terms.userMemberAnniversaryMessages}} | {{REF:list.pageTitle}}",
             "memberAnniversaryMessagesTitle": "{{REF:terms.memberAnniversaryMessages}} | {{REF:list.pageTitle}}",
             "serverAnniversaryMessagesTitle": "{{REF:terms.serverAnniversaryMessages}} {{REF:terms.messages}} | {{REF:list.pageTitle}}",
             "trustedRolesTitle": "{{REF:terms.memberAnniversaryRoles}} | {{REF:list.pageTitle}}",
@@ -1639,14 +1670,15 @@
             "emptyBlacklist": "**The Birthday Blacklist is empty!**",
             "noCustomBirthdayMessages": "**No Custom Birthday Messages!**",
             "noCustomUserSpecificBirthdayMessages": "**No User-Specific Birthday Messages!**",
+            "noCustomUserSpecificMemberAnnivesaryMessages": "**No User-Specific Member Anniversary Messages!**",
             "noCustomMemberAnniversaryMessages": "**No Custom Member Anniversary Messages!**",
             "noCustomServerAnniversaryMessages": "**No Custom Server Anniversary Messages!**",
             "messagePaidFieldTitle": "Message Limit",
-            "birthdayMessagePaidFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom birthday messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
-            "memberAnniversaryMessagePaidFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom member anniversary messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
-            "serverAnniversaryMessagePaidFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom server anniversary messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
-            "userBirthdayMessageFieldTitle": "Locked Feature",
-            "userBirthdayMessageFieldText": "User-specific messages are a premium only feature. Unlock them with `{{REF:bot.prefix}} premium`!",
+            "birthdayMessageFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom birthday messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
+            "memberAnniversaryMessageFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom member anniversary messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
+            "serverAnniversaryMessageFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom server anniversary messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
+            "userSpecificMessageFieldTitle": "Locked Feature",
+            "userSpecificMessageFieldText": "User-specific messages are a premium only feature. Unlock them with `{{REF:bot.prefix}} premium`!",
             "trustedRoleFieldTitle": "Trusted Role Limit",
             "trustedRoleFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** trusted roles. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
             "memberAnniversaryRoleFieldTitle": "Member Anniversary Roles Unavailable",
@@ -1676,7 +1708,8 @@
             "deletedRole": "Deleted Role",
             "birthdayList": "Birthday List",
             "birthdayMessages": "Birthday Messages",
-            "userMessages": "User Messages",
+            "userBirthdayMessages": "User-Specific Birthday Messages",
+            "userMemberAnniversaryMessages": "User-Specific Member Anniversary Messages",
             "serverAnniversaryMessages": "Server Anniversary Messages",
             "memberAnniversaryMessages": "Member Anniversary Messages",
             "trustedRoles": "Trusted Roles",
