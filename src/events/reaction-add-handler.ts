@@ -192,8 +192,8 @@ export class ReactionAddHandler implements EventHandler {
 
                 let type = 'birthday';
 
-                if (titleArgs[0] === 'Member') type = 'memberanniversary';
-                else if (titleArgs[0] === 'Server') type = 'serveranniversary';
+                if (msg.embeds[0]?.title?.includes('Member')) type = 'memberanniversary';
+                else if (msg.embeds[0]?.title?.includes('Server')) type = 'serveranniversary';
 
                 if (msg.embeds[0]?.title?.includes(Lang.getRef('terms.user', LangCode.EN_US))) {
                     user = true;
@@ -337,7 +337,7 @@ export class ReactionAddHandler implements EventHandler {
             // Check if user is rate limited
 
             if (msg.embeds[0]?.title?.includes(Lang.getRef('terms.messages', LangCode.EN_US))) {
-                user = titleArgs[0] === Lang.getRef('terms.user', LangCode.EN_US);
+                user = msg.embeds[0]?.title?.includes(Lang.getRef('terms.user', LangCode.EN_US));
                 pageSize = Config.experience.birthdayMessageListSize;
                 if (user) {
                     let limited = this.userMessagesLimiter.take(reactor.id);
@@ -384,7 +384,7 @@ export class ReactionAddHandler implements EventHandler {
 
             let prompt = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.inputPage', LangCode.EN_US)
+                Lang.getEmbed('userPrompts.inputPage', LangCode.EN_US)
             );
 
             page = await CollectorUtils.collectByMessage(
@@ -429,14 +429,14 @@ export class ReactionAddHandler implements EventHandler {
 
                 let type = 'birthday';
 
-                if (titleArgs[0] === 'Member') type = 'memberanniversary';
-                else if (titleArgs[0] === 'Server') type = 'serveranniversary';
+                if (msg.embeds[0]?.title?.includes('Member')) type = 'memberanniversary';
+                else if (msg.embeds[0]?.title?.includes('Server')) type = 'serveranniversary';
                 if (user) {
                     customMessageResults = await this.customMessageRepo.getCustomMessageUserList(
                         msg.guild.id,
                         pageSize,
                         page,
-                        'birthday'
+                        type
                     );
                 } else {
                     customMessageResults = await this.customMessageRepo.getCustomMessageList(
