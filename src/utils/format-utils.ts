@@ -161,11 +161,14 @@ export class FormatUtils {
             embed = new MessageEmbed()
                 .setColor(Config.colors.default)
                 .setDescription(
-                    type === 'birthday'
-                        ? Lang.getRef('list.noCustomBirthdayMessages', LangCode.EN_US)
-                        : type === 'memberanniversary'
-                        ? Lang.getRef('list.noCustomMemberAnniversaryMessages', LangCode.EN_US)
-                        : Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN_US)
+                    Lang.getRef(
+                        type === 'birthday'
+                            ? 'list.noCustomBirthdayMessages'
+                            : type === 'memberanniversary'
+                            ? 'list.noCustomMemberAnniversaryMessages'
+                            : 'list.noCustomServerAnniversaryMessages',
+                        LangCode.EN_US
+                    )
                 );
             return embed;
         }
@@ -194,24 +197,16 @@ export class FormatUtils {
             i++;
         }
 
-        let langType =
-            type === 'memberanniversary'
-                ? 'memberAnniversary'
-                : type === 'serveranniversary'
-                ? 'serverAnniversary'
-                : type;
-
         let listEmbed = 'list.';
 
         if (!hasPremium && customMessageResults.stats.TotalItems > maxMessagesFree) {
             listEmbed +=
                 type === 'memberanniversary'
-                    ? 'memberAnniversaryMessagePaid'
+                    ? 'memberAnniversaryMessageLocked'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessagePaid'
-                    : 'birthdayMessagePaid';
+                    ? 'serverAnniversaryMessageLocked'
+                    : 'birthdayMessageLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
-                TYPE: langType,
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
@@ -223,12 +218,11 @@ export class FormatUtils {
         } else {
             listEmbed +=
                 type === 'memberanniversary'
-                    ? 'memberAnniversaryMessageFree'
+                    ? 'memberAnniversaryMessageUnLocked'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessageFree'
-                    : 'birthdayMessageFree';
+                    ? 'serverAnniversaryMessageUnLocked'
+                    : 'birthdayMessageUnLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
-                TYPE: langType,
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
@@ -245,14 +239,20 @@ export class FormatUtils {
         customMessageResults: CustomMessages,
         page: number,
         pageSize: number,
-        hasPremium: boolean
+        hasPremium: boolean,
+        type: string
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
 
         if (customMessageResults.customMessages.length === 0) {
             embed = new MessageEmbed()
                 .setDescription(
-                    Lang.getRef('list.noCustomUserSpecificBirthdayMessages', LangCode.EN_US)
+                    Lang.getRef(
+                        type === 'birthday'
+                            ? 'list.noCustomUserSpecificBirthdayMessages'
+                            : 'list.noCustomUserSpecificMemberAnnivesaryMessages',
+                        LangCode.EN_US
+                    )
                 )
                 .setColor(Config.colors.default);
             return embed;
@@ -276,15 +276,33 @@ export class FormatUtils {
             }
         }
 
-        let embedType = hasPremium ? 'list.customUserMessageFree' : 'list.customUserMessagePaid';
+        let listEmbed = 'list.';
 
-        embed = Lang.getEmbed(embedType, LangCode.EN_US, {
-            PAGE: page.toString(),
-            LIST_DATA: description,
-            TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
-            TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
-            PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
-        });
+        if (!hasPremium) {
+            listEmbed +=
+                type === 'memberanniversary'
+                    ? 'userSpecificMemberAnniversaryMessageLocked'
+                    : 'userSpecificBirthdayMessageLocked';
+            embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+            });
+        } else {
+            listEmbed +=
+                type === 'memberanniversary'
+                    ? 'userSpecificMemberAnniversaryMessageUnLocked'
+                    : 'userSpecificBirthdayMessageUnLocked';
+            embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+            });
+        }
 
         return embed;
     }

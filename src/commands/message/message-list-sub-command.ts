@@ -32,7 +32,13 @@ export class MessageListSubCommand {
                 ? 'serveranniversary'
                 : type;
 
-        if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary') {
+        if (
+            type !== 'birthday' &&
+            type !== 'memberanniversary' &&
+            type !== 'serveranniversary' &&
+            type !== 'userspecificbirthday' &&
+            type !== 'userspecificmemberanniversary'
+        ) {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.invalidMessageType', LangCode.EN_US)
@@ -42,24 +48,43 @@ export class MessageListSubCommand {
 
         let pageSize = Config.experience.birthdayMessageListSize;
 
-        let customMessageResults = await this.customMessageRepo.getCustomMessageList(
-            msg.guild.id,
-            pageSize,
-            page,
-            type
-        );
+        // Get the correct message list using logic based on the given type
+        let customMessageResults =
+            type === 'userspecificbirthday' || type === 'userspecificmemberanniversary'
+                ? await this.customMessageRepo.getCustomMessageUserList(
+                      msg.guild.id,
+                      pageSize,
+                      page,
+                      type === 'userspecificbirthday' ? 'birthday' : 'memberanniversary'
+                  )
+                : await this.customMessageRepo.getCustomMessageList(
+                      msg.guild.id,
+                      pageSize,
+                      page,
+                      type
+                  );
 
         if (page > customMessageResults.stats.TotalPages)
             page = customMessageResults.stats.TotalPages;
 
-        let embed = await FormatUtils.getCustomMessageListEmbed(
-            msg.guild,
-            customMessageResults,
-            page,
-            pageSize,
-            hasPremium,
-            type
-        );
+        let embed =
+            type === 'userspecificbirthday' || type === 'userspecificmemberanniversary'
+                ? await FormatUtils.getCustomUserMessageListEmbed(
+                      msg.guild,
+                      customMessageResults,
+                      page,
+                      pageSize,
+                      hasPremium,
+                      type === 'userspecificbirthday' ? 'birthday' : 'memberanniversary'
+                  )
+                : await FormatUtils.getCustomMessageListEmbed(
+                      msg.guild,
+                      customMessageResults,
+                      page,
+                      pageSize,
+                      hasPremium,
+                      type
+                  );
 
         let message = await MessageUtils.send(channel, embed);
 
@@ -68,7 +93,11 @@ export class MessageListSubCommand {
             embed.description ===
                 Lang.getRef('list.noCustomMemberAnniversaryMessages', LangCode.EN_US) ||
             embed.description ===
-                Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN_US)
+                Lang.getRef('list.noCustomServerAnniversaryMessages', LangCode.EN_US) ||
+            embed.description ===
+                Lang.getRef('list.noCustomUserSpecificBirthdayMessages', LangCode.EN_US) ||
+            embed.description ===
+                Lang.getRef('list.noCustomUserSpecificMemberAnnivesaryMessages', LangCode.EN_US)
         )
             return;
 
