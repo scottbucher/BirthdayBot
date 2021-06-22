@@ -4,6 +4,8 @@ import { GuildUtils, MessageUtils } from '../utils';
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -18,7 +20,7 @@ export class ViewCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) {}
+    constructor(private userRepo: UserRepo) { }
 
     public async execute(
         args: string[],
@@ -30,10 +32,7 @@ export class ViewCommand implements Command {
         if (args.length === 3) {
             // Check if the user is trying to set another person's birthday
             if (channel instanceof DMChannel) {
-                let embed = new MessageEmbed()
-                    .setDescription(`You cannot request another user's information in a DM!`)
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(channel, Lang.getEmbed('validation.viewUserInDm', LangCode.EN_US));
                 return;
             }
 
@@ -44,10 +43,7 @@ export class ViewCommand implements Command {
 
             // Did we find a user?
             if (!target) {
-                let embed = new MessageEmbed()
-                    .setDescription('Could not find that user!')
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(channel, Lang.getEmbed('validation.noUserFound', LangCode.EN_US));
                 return;
             }
         } else {
@@ -58,41 +54,22 @@ export class ViewCommand implements Command {
         let userData = await this.userRepo.getUser(target.id);
 
         if (!userData || !userData.Birthday || !userData.TimeZone) {
-            let embed = new MessageEmbed().setColor(Config.colors.error);
-            if (target !== msg.author) {
-                embed.setDescription('That user has not set their birthday!');
-            } else {
-                embed.setDescription('You have not set your birthday!');
-            }
-            await MessageUtils.send(channel, embed);
+            target === msg.author
+                ? await MessageUtils.send(channel, Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US))
+                : await MessageUtils.send(channel, Lang.getEmbed('validation.userBirthdayNotSet', LangCode.EN_US, { USER: target.toString() }))
             return;
         }
 
-        let embed = new MessageEmbed();
-
-        if (msg.author === target) {
-            embed
-                .setDescription(
-                    `Your birthday is on **${moment(userData.Birthday).format('MMMM Do')}, ${
-                        userData.TimeZone
-                    }**!`
-                )
-                .setColor(Config.colors.default)
-                .setFooter(
-                    `You currently have ${userData.ChangesLeft} birthday attempt${
-                        userData.ChangesLeft > 1 ? 's' : ''
-                    } left.`
-                );
-        } else {
-            embed
-                .setDescription(
-                    `${target.toString()}'s birthday is on **${moment(userData.Birthday).format(
-                        'MMMM Do'
-                    )}, ${userData.TimeZone}**!`
-                )
-                .setColor(Config.colors.default);
-        }
-        await MessageUtils.send(channel, embed);
+        msg.author === target
+            ? await MessageUtils.send(channel, Lang.getEmbed('results.viewBirthday', LangCode.EN_US, {
+                BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
+                TIMEZONE: userData.TimeZone
+            }))
+            : await MessageUtils.send(channel, Lang.getEmbed('results.viewUserBirthday', LangCode.EN_US, {
+                USER: target.toString(),
+                BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
+                TIMEZONE: userData.TimeZone
+            }))
         return;
     }
 }

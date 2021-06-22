@@ -9,6 +9,8 @@ import { DMChannel, Message, MessageEmbed, MessageReaction, TextChannel, User } 
 
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -28,7 +30,7 @@ export class PurgeCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) {}
+    constructor(private userRepo: UserRepo) { }
 
     async execute(args: string[], msg: Message, channel: TextChannel | DMChannel): Promise<void> {
         let target = msg.author;
@@ -41,48 +43,24 @@ export class PurgeCommand implements Command {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.send(
                 channel,
-                new MessageEmbed()
-                    .setTitle('Birthday Purge - Expired')
-                    .setDescription('Type `bday purge` to rerun the purge.')
-                    .setColor(Config.colors.error)
+                Lang.getEmbed('validation.purgeExpired', LangCode.EN_US)
             );
         };
 
         if (!userData || !(userData.Birthday && userData.TimeZone)) {
             // Are they in the database?
-            let embed = new MessageEmbed()
-                .setDescription('You do not have data in the database.')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US));
             return;
         } else {
             changesLeft = userData.ChangesLeft;
-            confirmEmbed
-                .setTitle('Clear User Data')
-                .addField(
-                    'Actions',
-                    `${Config.emotes.confirm} Confirm\n${Config.emotes.deny} Cancel`
-                )
-                .setFooter(`This message expires in 2 minutes!`, msg.client.user.avatarURL())
-                .setColor(Config.colors.default)
-                .setTimestamp()
-                .setAuthor(target.tag, target.avatarURL());
-
-            let description =
-                'This command will remove both your time zone and your birthday from the database. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)' +
-                `\n\nThis will not reset your birthday attempts. (You have ${changesLeft} left) [(?)](${Config.links.docs}/faq#how-many-times-can-i-set-my-birthday)`;
-
-            if (changesLeft === 0) {
-                // Out of changes?
-                description +=
-                    '\n\n**NOTE**: You do not have any birthday attempts left! Clearing your birthday will mean you can no longer set it!';
-            }
-            confirmEmbed.setDescription(description);
         }
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let confirmationMessage = await MessageUtils.send(channel, confirmEmbed); // Send confirmation and emotes
+        let confirmationMessage = await MessageUtils.send(channel, Lang.getEmbed('userPrompts.birthdayConfirmPurge', LangCode.EN_US, {
+            CHANGES_LEFT: changesLeft.toString(),
+            APPEND: changesLeft === 0 ? Lang.getRef('prompts.outOfAttemtps', LangCode.EN_US) : ''
+        })); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await MessageUtils.react(confirmationMessage, option);
         }
@@ -109,16 +87,10 @@ export class PurgeCommand implements Command {
             // Confirm
             await this.userRepo.addOrUpdateUser(target.id, null, null, changesLeft); // Add or update user
 
-            let embed = new MessageEmbed()
-                .setDescription('Successfully purged your data from the database.')
-                .setColor(Config.colors.success);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('results.purgeSuccessful', LangCode.EN_US));
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
-            let embed = new MessageEmbed()
-                .setDescription('Request Canceled.')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN_US));
         }
     }
 }

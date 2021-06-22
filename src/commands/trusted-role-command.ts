@@ -8,6 +8,8 @@ import {
     TrustedRoleClearSubCommand,
     TrustedRoleListSubCommand,
 } from './trusted';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -27,7 +29,7 @@ export class TrustedRoleCommand implements Command {
         private trustedRoleRemoveSubCommand: TrustedRoleRemoveSubCommand,
         private trustedRoleClearSubCommand: TrustedRoleClearSubCommand,
         private trustedRoleListSubCommand: TrustedRoleListSubCommand
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -36,14 +38,7 @@ export class TrustedRoleCommand implements Command {
         hasPremium: boolean
     ): Promise<void> {
         if (args.length === 2) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a sub command!\n` +
-                        `Accepted Values: \`add\`, \`remove\`, \`clear\`, \`list\``
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noTrustedRoleArgs', LangCode.EN_US));
             return;
         }
         if (args[2].toLowerCase() === 'add') {
@@ -55,14 +50,7 @@ export class TrustedRoleCommand implements Command {
         } else if (args[2].toLowerCase() === 'list') {
             this.trustedRoleListSubCommand.execute(args, msg, channel, hasPremium);
         } else {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a sub command!\n` +
-                        `Accepted Values: \`add\`, \`remove\`, \`clear\`, \`list\``
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noTrustedRoleArgs', LangCode.EN_US));
             return;
         }
     }

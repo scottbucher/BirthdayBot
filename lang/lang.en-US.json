@@ -278,6 +278,30 @@
                 },
                 "timestamp": true
             },
+            "birthdayConfirmPurge": {
+                "title": "Clear User Data",
+                "description": [
+                    "This command will remove both your time zone and your birthday from the database. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "",
+                    "This will **NOT** reset your birthday attempts. (You have {{CHANGES_LEFT}} left) [(?)](${Config.links.docs}/faq#how-many-times-can-i-set-my-birthday)",
+                    "",
+                    "{{APPEND}}"
+                ],
+                "fields": [
+                    {
+                        "name": "Actions",
+                        "value": [
+                            "{{REF:emotes.confirm}} Confirm",
+                            "{{REF:emotes.deny}} Deny"
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "color": "{{REF:colors.warn}}",
+                "timestamp": true
+            },
             "defaultTimeZoneAvailable": {
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": "This server has a default timezone of **{{TIMEZONE}}**, do you want to use this timezone?",
@@ -386,6 +410,10 @@
                 "color": "{{REF:colors.success}}",
                 "timestamp": true
             },
+            "purgeSuccessful": {
+                "description": "Successfully purged your data from the database.",
+                "color": "{{REF:colors.success}}"
+            },
             "nextBirthday": {
                 "description": "{{USERS}}'s birthday is next on **{{BIRTHDAY_}}**!",
                 "color": "{{REF:colors.deafult}}",
@@ -407,6 +435,11 @@
             "birthdayExpired": {
                 "title": "Birthday Set - Expired",
                 "description": "Type `{{REF:bot.prefix}} set` set your birthday.",
+                "color": "{{REF:colors.error}}"
+            },
+            "purgeExpire": {
+                "title": "Birthday Purge - Expired",
+                "description": "Type `{{REF:bot.prefix}} purge` to purge your birthday.",
                 "color": "{{REF:colors.error}}"
             },
             "requireSetupExpired": {
@@ -597,6 +630,21 @@
                 "description": "Successfully set the {{DISPLAY_TYPE}} to send at **{{TIME}}**",
                 "color": "{{REF:colors.success}}"
             },
+            "viewBirthday": {
+                "description": [
+                    "Your brthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!"
+                ],
+                "footer": {
+                    "text": "You currently have {{CHANGES_LEFT}} birthday attempt(s) left."
+                },
+                "color": "{{REF:colors.default}}"
+            },
+            "viewUserBirthday": {
+                "description": [
+                    "{{USER}}'s brthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!"
+                ],
+                "color": "{{REF:colors.default}}"
+            },
             "addCustomMessage": {
                 "title": "Add Custom Message",
                 "description": [
@@ -656,6 +704,60 @@
             }
         },
         "validation": {
+            "voteRequired": {
+                "title": "Vote Required!",
+                "thumbnail": "{{REF:links.voteImage}}",
+                "description": [
+                    "This command requires you to have voted in the past 24 hours!"
+                ],
+                "fields": [
+                    {
+                        "name": "Last Vote",
+                        "value": [
+                            "{{LAST_VOTE}}"
+                        ],
+                        "inline": true
+                    },
+                    {
+                        "name": "Vote Here",
+                        "value": [
+                            "[Top.gg]({{REF:links.vote}})"
+                        ],
+                        "inline": true
+                    }
+                ],
+                "footer": {
+                    "text": "Don't want to vote? Disable voting for the whole server with Birthday Bot Premium!"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "setupRequired": {
+                "title": "Setup Required!",
+                "description": [
+                    "You must run `bday setup` before using this command!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noPermission": {
+                "title": "Permission Required!",
+                "description": [
+                    "You don't have permission to run that command!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "onlyStaff": {
+                "description": [
+                    "This command can only be run by Birthday Bot Staff!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "guildOnlyCommand": {
+                "description": [
+                    "This command can only be used in a discord server!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
             "noArgs": {
                 "title": "Invalid Usage!",
                 "description": [
@@ -664,11 +766,43 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
+            "invalidSetupArgs": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please specify which setup you'd like to run!",
+                    "Setup options: `message` or `trusted"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "viewUserInDm": {
+                "description": [
+                    "You cannot request another user's information in a DM!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "birthdayNotSet": {
+                "description": "Your birthday isn't set!",
+                "color": "{{REF:colors.error}}"
+            },
+            "userBirthdayNotSet": {
+                "description": [
+                    "{{USER}} hasn't set their birthday!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
             "noBlacklistArgs": {
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command for the blacklist! [(?)](${Config.links.docs}/faq#what-is-the-birthday-blacklist)",
                     "Accepted Values: `list`, `add <User>`, `remove <User>`, `clear`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noTrustedRoleArgs": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please specify a sub command! [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)",
+                    "Accepted Values: `list`, `add`, `remove`, `clear`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -706,6 +840,21 @@
             },
             "outOfAttempts": {
                 "description": "You are out of birthday attempts!",
+                "color": "{{REF:colors.error}}"
+            },
+            "needReactAndMessageHistoryPerms": {
+                "title": "Missing Permissions!",
+                "description": "I need permission to **Add Reactions** and **Read Message History** in this channel!",
+                "color": "{{REF:colors.error}}"
+            },
+            "needManageChannelsAndRolesPerm": {
+                "title": "Missing Permissions!",
+                "description": "I need permission to **Manage Channels** and **Manage Roles**!",
+                "color": "{{REF:colors.error}}"
+            },
+            "needManageRolesPerm": {
+                "title": "Missing Permissions!",
+                "description": "I need permission to **Manage Roles**!",
                 "color": "{{REF:colors.error}}"
             },
             "memberNeedsMessageHistory": {
@@ -944,7 +1093,7 @@
                 "color": "{{REF:colors.error}}"
             },
             "invalidTrueFalseRequireAllTrustedMessage": {
-                "title": "RequireAllTrustedRoles",
+                "title": "Require All Trusted Roles",
                 "description": "Please provide a value! (True/False)",
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
@@ -1292,6 +1441,25 @@
         },
         "premiumPrompts": {},
         "premiumRequired": {
+            "command": {
+                "title": "Premium Required!",
+                "description": [
+                    "This command requires this server to have premium!"
+                ],
+                "fields": [
+                    {
+                        "name": "Premium Commands",
+                        "value": [
+                            "Subscribe to **Birthday Bot Premium** for access to our premium features!",
+                            "See `bday premium` for more information."
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.whyPremium}}"
+                },
+                "timestamp": true
+            },
             "userSpecificMessages": {
                 "title": "{{REF:terms.premiumRequired}}",
                 "description": "User-specific messages are a premium feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
@@ -1376,6 +1544,21 @@
                     }
                 ]
             },
+            "error": {
+                "description": "Something went wrong!",
+                "fields": [
+                    {
+                        "name": "Error Code",
+                        "value": "{{ERROR_CODE}}"
+                    },
+                    {
+                        "name": "Contact Support",
+                        "value": [
+                            "[Join Support Server]({{REF:links.support}})"
+                        ]
+                    }
+                ]
+            },
             "documentation": {
                 "description": "View our documentation for {{BOT}} [here]({{REF:links.docs}})!",
                 "color": "{{REF:colors.default}}"
@@ -1390,6 +1573,10 @@
             },
             "invite": {
                 "description": "Invite {{BOT}} to your server [here]({{REF:links.invite}})!",
+                "color": "{{REF:colors.default}}"
+            },
+            "support": {
+                "description": "Fpr support join our discord server [here]({{REF:links.support}})!",
                 "color": "{{REF:colors.default}}"
             },
             "map": {
@@ -1483,27 +1670,33 @@
                 "fields": [
                     {
                         "name": "{{REF:terms.birthdayRole}}",
-                        "value": "{{BIRTHDAY_ROLE}}"
+                        "value": "{{BIRTHDAY_ROLE}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.nameFormat}}",
-                        "value": "{{NAME_FORMAT}}"
+                        "value": "{{NAME_FORMAT}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.defaultTimezone}}",
-                        "value": "{{DEFAULT_TIMEZONE}}"
+                        "value": "{{DEFAULT_TIMEZONE}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.serverLanguage}}",
-                        "value": "{{SERVER_LANGUAGE}}"
+                        "value": "{{SERVER_LANGUAGE}}",
+                        "inline": true
                     },
                     {
                         "name": "Guild Id",
-                        "value": "{{GUILD_ID}}"
+                        "value": "{{GUILD_ID}}",
+                        "inline": true
                     },
                     {
                         "name": "Premium",
-                        "value": "{{HAS_PREMIUM}}"
+                        "value": "{{HAS_PREMIUM}}",
+                        "inline": true
                     }
                 ],
                 "footer": {
@@ -1516,31 +1709,38 @@
                 "fields": [
                     {
                         "name": "{{REF:terms.birthdayMasterRole}}",
-                        "value": "{{BIRTHDAY_MASTER_ROLE}}"
+                        "value": "{{BIRTHDAY_MASTER_ROLE}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.trustedPreventsRole}}",
-                        "value": "{{TRUSTED_PREVENTS_ROLE}}"
+                        "value": "{{TRUSTED_PREVENTS_ROLE}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.trustedPreventsMessage}}",
-                        "value": "{{TRUSTED_PREVENTS_MESSAGE}}"
+                        "value": "{{TRUSTED_PREVENTS_MESSAGE}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.requireAllTrustedRoles}}",
-                        "value": "{{REQUIRE_ALL_TRIUSTED_ROLES}}"
+                        "value": "{{REQUIRE_ALL_TRIUSTED_ROLES}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.useTimezone}}",
-                        "value": "{{USE_TIMEZONE}}"
+                        "value": "{{USE_TIMEZONE}}",
+                        "inline": true
                     },
                     {
                         "name": "Guild Id",
-                        "value": "{{GUILD_ID}}"
+                        "value": "{{GUILD_ID}}",
+                        "inline": true
                     },
                     {
                         "name": "Premium",
-                        "value": "{{HAS_PREMIUM}}"
+                        "value": "{{HAS_PREMIUM}}",
+                        "inline": true
                     }
                 ],
                 "footer": {
@@ -1553,47 +1753,58 @@
                 "fields": [
                     {
                         "name": "{{REF:terms.birthdayChannel}}",
-                        "value": "{{BIRTHDAY_CHANNEL}}"
+                        "value": "{{BIRTHDAY_CHANNEL}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.memberAnniversaryChannel}}",
-                        "value": "{{MEMBER_ANNIVERSAR_CHANNEL}}"
+                        "value": "{{MEMBER_ANNIVERSAR_CHANNEL}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.serverAnniversaryChannel}}",
-                        "value": "{{SERVER_ANNIVERSAR_CHANNEL}}"
+                        "value": "{{SERVER_ANNIVERSAR_CHANNEL}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.birthdayMessageTime}}",
-                        "value": "{{BIRTHDAY_MESSAGE_TIME}}"
+                        "value": "{{BIRTHDAY_MESSAGE_TIME}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.memberAnniversaryMessageTime}}",
-                        "value": "{{MEMBER_ANNIVERSAR_MESSAGE_TIME}}"
+                        "value": "{{MEMBER_ANNIVERSAR_MESSAGE_TIME}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.serverAnniversaryMessageTime}}",
-                        "value": "{{SERVER_ANNIVERSAR_MESSAGE_TIME}}"
+                        "value": "{{SERVER_ANNIVERSAR_MESSAGE_TIME}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.birthdayMentionSetting}}",
-                        "value": "{{BIRTHDAY_MENTION}}"
+                        "value": "{{BIRTHDAY_MENTION}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.memberAnniversaryMentionSetting}}",
-                        "value": "{{MEMBER_ANNIVERSAR_MENTION}}"
+                        "value": "{{MEMBER_ANNIVERSAR_MENTION}}",
+                        "inline": true
                     },
                     {
                         "name": "{{REF:terms.serverAnniversaryMentionSetting}}",
-                        "value": "{{SERVER_ANNIVERSAR_MENTION}}"
+                        "value": "{{SERVER_ANNIVERSAR_MENTION}}",
+                        "inline": true
                     },
                     {
                         "name": "Guild Id",
-                        "value": "{{GUILD_ID}}"
+                        "value": "{{GUILD_ID}}",
+                        "inline": true
                     },
                     {
                         "name": "Premium",
-                        "value": "{{HAS_PREMIUM}}"
+                        "value": "{{HAS_PREMIUM}}",
+                        "inline": true
                     }
                 ],
                 "footer": {
@@ -1923,7 +2134,8 @@
             "authorEmbed": "[Scott Bucher]({{REF:links.author}})",
             "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
             "templateEmbed": "[Discord Bot TypeScript Template]({{REF:links.template}})",
-            "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/"
+            "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
+            "voteImage": "https://i.imgur.com/wak8g4V.png"
         },
         "footers": {
             "expire": "This message expires in 2 minutes!",
@@ -1934,7 +2146,8 @@
         },
         "prompts": {
             "setupForUser": "Setup For {{TARGET}} - {{VALUE}}",
-            "userSetup": "User Setup - {{VALUE}}"
+            "userSetup": "User Setup - {{VALUE}}",
+            "outOfAttempts": "**NOTE**: You do not have any birthday attempts left! Clearing your birthday will mean you can no longer set it!"
         },
         "defaults": {
             "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
