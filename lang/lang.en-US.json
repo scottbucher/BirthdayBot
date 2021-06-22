@@ -1435,6 +1435,60 @@
             }
         },
         "premiumPrompts": {
+            "subscriptionAdded": {
+                "title": "Birthday Bot Premium",
+                "description": "{{REF:emotes.party}} {[SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{REF:emotes.party}}",
+                "fields": [
+                    {
+                        "name": "bday premium",
+                        "value": [
+                            "View details about your subscription.",
+                            "",
+                            "[Join Support Server]({{REF:links.support}})"
+                        ]
+                    }
+                ],
+                "footer":{
+                    "text": "Thanks for support Birthday Bot!"
+                },
+                "timestamp": true
+            },
+            "subscriptionCanceled": {
+                "title": "Birthday Bot Premium",
+                "description": "{[SERVER_NAME}}'s premium has been canceled! :(",
+                "fields": [
+                    {
+                        "name": "bday premium",
+                        "value": [
+                            "View details about your subscription.",
+                            "",
+                            "[Join Support Server]({{REF:links.support}})"
+                        ]
+                    }
+                ],
+                "footer":{
+                    "text": "Cosider letting us know how to improve premium!"
+                },
+                "timestamp": true
+            },
+            "subscriptionExpired": {
+                "title": "Birthday Bot Premium",
+                "description": "{[SERVER_NAME}}'s premium has expired! :(",
+                "fields": [
+                    {
+                        "name": "bday premium",
+                        "value": [
+                            "Resubscribe to premium!",
+                            "",
+                            "[Join Support Server]({{REF:links.support}})"
+                        ]
+                    }
+                ],
+                "footer":{
+                    "text": "Cosider letting us know how to improve premium!"
+                },
+                "timestamp": true
+            },
             "premiumDisabled": {
                 "title": "Birthday Bot Premium",
                 "description": "Premium subscriptions are currently disabled. Enjoy premium features for free! Woohoo!",
