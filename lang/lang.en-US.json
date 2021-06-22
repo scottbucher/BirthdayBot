@@ -819,6 +819,25 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
+            "roleHierarchyError": {
+                "title": "Role Hierarchy Error!",
+                "description": [
+                    "The birthday role must be below {{BOT}}'s role.",
+                    "Additional Note: {{BOT}}'s role must be higher than the users it is assigning the birthday role to.",
+                    "",
+                    "Example Role Hierarchy:",
+                    "`Birthday Bot's Role`",
+                    "`Birthday Role`",
+                    "`Birthday User's Highest Role`",
+                    "",
+                    "Essentially the bot is unable to give a role to someone with a higher role than them or give a role that is higher than the bot's."
+                ],
+                "footer": {
+                    "text": "Please join our support server if you have any questions."
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
             "noBirthdaysInServer": {
                 "description": "No one has set their birthday in this server! :(",
                 "color": "{{REF:colors.error}}"
@@ -2332,6 +2351,7 @@
             "unknownMember": "Unknown Member",
             "unknownChannel": "Unknown Channel",
             "unknownRole": "Unknown Role",
+            "none": "None",
             "deletedRole": "Deleted Role",
             "deletedChannel": "Deleted Channel",
             "birthdayList": "Birthday List",

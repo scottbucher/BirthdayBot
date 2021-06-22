@@ -10,7 +10,7 @@ let Config = require('../../../config/config.json');
 const errorEmbed = Lang.getEmbed('validation.invalidBirthdayRoleAction', LangCode.EN_US);
 
 export class ConfigRoleSubCommand {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
@@ -87,7 +87,7 @@ export class ConfigRoleSubCommand {
                 birthdayRole.position >
                 msg.guild.members.resolve(msg.client.user).roles.highest.position
             ) {
-                await InvalidUtils.roleHierarchyError(msg.channel as TextChannel, birthdayRole);
+                await MessageUtils.send(msg.channel as TextChannel, Lang.getEmbed('validation.roleHierarchyError', LangCode.EN_US, { BOT: msg.client.user.toString() }));
                 return;
             }
 
