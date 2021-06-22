@@ -1439,7 +1439,87 @@
                 "color": "{{REF:colors.error}}"
             }
         },
-        "premiumPrompts": {},
+        "premiumPrompts": {
+            
+            "noSubscription": {
+                "title": "Birthday Bot Premium",
+                "description": "Subscribe to **Birthday Bot Premium** to give this server extra features!",
+                "fields": [
+                    {
+                        "name": "Premium Features",
+                        "value": [
+                            "- No voting needed for **any** commands",
+                            "- Up to **{{BIRTHDAY_MESSAGE_MAX_FREE}}** custom birthday messages *(vs **{{BIRTHDAY_MESSAGE_MAX_PAID}}** free)*",
+                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** custom member anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MAX_PAID}}** free)*",
+                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** custom server anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID}}** free)*",
+                            "- Access to Member Anniversary Roles! (Up to {{MAX_ANNIVERSARY_ROLES}}!)",
+                            "- Access to multiple Trusted Roles! (Up to {{MAX_TRUSTED_ROLES}}!)",
+                            "- Access to user-specific custom birthday messages",
+                            "- Customize the color **each** birthday message embed",
+                            "- Premium support",
+                            "Features apply **server-wide** (this server only)."
+                        ]
+                    },
+                    {
+                        "name": "Price",
+                        "value": [
+                            "2.99 USD / Month"
+                        ]
+                    },
+                    {
+                        "name": "Purchase Details",
+                        "value": [
+                            "Type `bday subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
+                            "",
+                            "[Join Support Server]({{REF:links.support}})"
+                        ]
+                    }
+                ]
+            },
+            "subscription": {
+                "title": "Birthday Bot Premium",
+                "description": "This servers subscription information.",
+                "fields": [
+                    {
+                        "name": "Active",
+                        "value": [
+                            "{{IS_ACTIVE}}"
+                        ]
+                    },
+                    {
+                        "name": "Subscription ID",
+                        "value": [
+                            "{{SUBSCRIPTION_ID}}"
+                        ]
+                    },
+                    {
+                        "name": "Status",
+                        "value": [
+                            "{{STATUS}}"
+                        ]
+                    },
+                    {
+                        "name": "Last Payment",
+                        "value": [
+                            "{{LAST_PAYMENT}}"
+                        ]
+                    },
+                    {
+                        "name": "Paid Until",
+                        "value": [
+                            "{{PAID_UNTIL}}"
+                        ]
+                    },
+                    {
+                        "name": "Purchase Details",
+                        "value": [
+                            "Type `bday subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
+                            "[Join Support Server]({{REF:links.support}})"
+                        ]
+                    }
+                ]
+            }
+        },
         "premiumRequired": {
             "command": {
                 "title": "Premium Required!",
@@ -1586,84 +1666,6 @@
                     "Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command."
                 ],
                 "color": "{{REF:colors.default}}"
-            },
-            "noSubscription": {
-                "title": "Birthday Bot Premium",
-                "description": "Subscribe to **Birthday Bot Premium** to give this server extra features!",
-                "fields": [
-                    {
-                        "name": "Premium Features",
-                        "value": [
-                            "- No voting needed for **any** commands",
-                            "- Up to **{{BIRTHDAY_MESSAGE_MAX_FREE}}** custom birthday messages *(vs **{{BIRTHDAY_MESSAGE_MAX_PAID}}** free)*",
-                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** custom member anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MAX_PAID}}** free)*",
-                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** custom server anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID}}** free)*",
-                            "- Access to Member Anniversary Roles! (Up to {{MAX_ANNIVERSARY_ROLES}}!)",
-                            "- Access to multiple Trusted Roles! (Up to {{MAX_TRUSTED_ROLES}}!)",
-                            "- Access to user-specific custom birthday messages",
-                            "- Customize the color **each** birthday message embed",
-                            "- Premium support",
-                            "Features apply **server-wide** (this server only)."
-                        ]
-                    },
-                    {
-                        "name": "Price",
-                        "value": [
-                            "2.99 USD / Month"
-                        ]
-                    },
-                    {
-                        "name": "Purchase Details",
-                        "value": [
-                            "Type `bday subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
-                            "",
-                            "[Join Support Server]({{REF:links.support}})"
-                        ]
-                    }
-                ]
-            },
-            "subscription": {
-                "title": "Birthday Bot Premium",
-                "description": "This servers subscription information.",
-                "fields": [
-                    {
-                        "name": "Active",
-                        "value": [
-                            "{{IS_ACTIVE}}"
-                        ]
-                    },
-                    {
-                        "name": "Subscription ID",
-                        "value": [
-                            "{{SUBSCRIPTION_ID}}"
-                        ]
-                    },
-                    {
-                        "name": "Status",
-                        "value": [
-                            "{{STATUS}}"
-                        ]
-                    },
-                    {
-                        "name": "Last Payment",
-                        "value": [
-                            "{{LAST_PAYMENT}}"
-                        ]
-                    },
-                    {
-                        "name": "Paid Until",
-                        "value": [
-                            "{{PAID_UNTIL}}"
-                        ]
-                    },
-                    {
-                        "name": "Purchase Details",
-                        "value": [
-                            "Type `bday subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
-                            "[Join Support Server]({{REF:links.support}})"
-                        ]
-                    }
-                ]
             },
             "settingsGeneral": {
                 "title": "{{SERVER_NAME}}'s General Settings",

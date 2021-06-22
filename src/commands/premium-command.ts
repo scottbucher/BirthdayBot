@@ -38,7 +38,7 @@ export class PremiumCommand implements Command {
         );
 
         if (!subStatus || !subStatus.service) {
-            await MessageUtils.send(channel, Lang.getEmbed('info.noSubscription', LangCode.EN_US,
+            await MessageUtils.send(channel, Lang.getEmbed('premiumPrompts.noSubscription', LangCode.EN_US,
                 {
                     BIRTHDAY_MESSAGE_MAX_FREE: Config.validation.message.maxCount.birthday.free.toLocaleString(),
                     BIRTHDAY_MESSAGE_MAX_PAID: Config.validation.message.maxCount.birthday.paid.free.toLocaleString(),
@@ -65,7 +65,7 @@ export class PremiumCommand implements Command {
         let paidUntil = TimeUtils.getMoment(subStatus.subscription.times.paidUntil);
 
         let na = Lang.getRef('terms.na', LangCode.EN_US);
-        await MessageUtils.send(channel, Lang.getEmbed('info.subscription', LangCode.EN_US,
+        await MessageUtils.send(channel, Lang.getEmbed('premiumPrompts.subscription', LangCode.EN_US,
             {
                 IS_ACTIVE: Lang.getRef('boolean.' + subStatus.service ? 'yes' : 'no', LangCode.EN_US),
                 SUBSCRIPTION_ID: subStatus.subscription.id
