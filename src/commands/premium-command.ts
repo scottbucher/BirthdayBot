@@ -28,7 +28,7 @@ export class PremiumCommand implements Command {
         channel: TextChannel | DMChannel
     ): Promise<void> {
         if (!Config.payments.enabled) {
-            await MessageUtils.send(channel, Lang.getEmbed('results.premiumDisabled', LangCode.EN_US));
+            await MessageUtils.send(channel, Lang.getEmbed('premiumPromps.premiumDisabled', LangCode.EN_US));
             return;
         }
 
