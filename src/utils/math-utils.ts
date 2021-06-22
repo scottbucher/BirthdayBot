@@ -14,4 +14,8 @@ export class MathUtils {
     public static ceilToMultiple(input: number, multiple: number): number {
         return Math.ceil(input / multiple) * multiple;
     }
+
+    public static getPercent(decimal: number): string {
+        return Math.floor(decimal * 100) + '%';
+    }
 }

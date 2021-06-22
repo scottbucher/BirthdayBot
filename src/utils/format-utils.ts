@@ -1,7 +1,7 @@
 import * as Chrono from 'chrono-node';
 
-import { Blacklisted, CustomMessages, UserDataResults, GuildData } from '../models/database';
-import { Guild, Message, MessageEmbed, User, Util, Role } from 'discord.js';
+import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
+import { Guild, Message, MessageEmbed, User, Role } from 'discord.js';
 import { GuildUtils, ParseUtils } from '.';
 
 import { Lang } from '../services';
@@ -18,31 +18,9 @@ let zoneNames = moment.tz
     .filter(name => Config.validation.regions.some((region: any) => name.startsWith(`${region}/`)));
 
 export class FormatUtils {
-    public static getRoleName(guild: Guild, roleDiscordId: string): string {
-        return roleDiscordId
-            ? guild.roles.resolve(roleDiscordId)?.toString() || '**Unknown**'
-            : '**None**';
-    }
-
-    public static getMemberDisplayName(memberDiscordId: string, guild: Guild): string {
-        let displayName = guild.members.resolve(memberDiscordId)?.displayName;
-        return displayName ? Util.escapeMarkdown(displayName) : 'Unknown Member';
-    }
-
-    public static getMemberMention(memberDiscordId: string, guild: Guild): string {
-        return guild.members.resolve(memberDiscordId)?.toString() || 'Unknown Member';
-    }
-
-    public static getPercent(decimal: number): string {
-        return Math.floor(decimal * 100) + '%';
-    }
-
-    public static isHour(input: number): boolean {
-        return Number.isInteger(input) && input >= 0 && input <= 23;
-    }
-
+    // TODO: fix so there isn't a comma where there are only two users
     public static joinWithAnd(values: string[]): string {
-        return [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
+        return values.length == 2 ? values[0] + " " + values[1] : [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
             values.length < 2 ? '' : ', and '
         );
     }

@@ -1,4 +1,6 @@
-import { Guild, GuildMember } from 'discord.js';
+import { Guild, GuildMember, Util } from 'discord.js';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 export class GuildUtils {
     public static findMember(guild: Guild, input: string): GuildMember {
@@ -13,7 +15,16 @@ export class GuildUtils {
 
     public static getRoleName(roleDiscordId: string, guild: Guild): string {
         return roleDiscordId
-            ? guild.roles.resolve(roleDiscordId)?.toString() || '**Unknown**'
-            : '**None**';
+            ? guild.roles.resolve(roleDiscordId)?.toString() || `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`
+            : `**${Lang.getRef('terms.none', LangCode.EN_US)}**`;
+    }
+
+    public static getMemberDisplayName(memberDiscordId: string, guild: Guild): string {
+        let displayName = guild.members.resolve(memberDiscordId)?.displayName;
+        return displayName ? Util.escapeMarkdown(displayName) : 'Unknown Member';
+    }
+
+    public static getMemberMention(memberDiscordId: string, guild: Guild): string {
+        return guild.members.resolve(memberDiscordId)?.toString() || 'Unknown Member';
     }
 }

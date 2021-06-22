@@ -10,6 +10,8 @@ import {
     TextChannel,
     User,
 } from 'discord.js';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -67,9 +69,7 @@ export class MessageUtils {
                 if ([50001].includes(error.code)) {
                     await this.send(
                         msg.channel,
-                        new MessageEmbed()
-                            .setColor(Config.colors.error)
-                            .setDescription('I do not have permission to edit that message!')
+                        Lang.getEmbed('validation.noPermToEdit', LangCode.EN_US)
                     );
                     return;
                 }

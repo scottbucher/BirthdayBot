@@ -25,4 +25,8 @@ export class TimeUtils {
     public static isLeap(year: number): boolean {
         return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
     }
+
+    public static isHour(input: number): boolean {
+        return Number.isInteger(input) && input >= 0 && input <= 23;
+    }
 }

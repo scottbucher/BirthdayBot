@@ -727,30 +727,26 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "noPermToEdit": {
+                "description": "I do not have permission to edit that message!",
+                "color": "{{REF:colors.error}}"
+            },
             "setupRequired": {
                 "title": "Setup Required!",
-                "description": [
-                    "You must run `bday setup` before using this command!"
-                ],
+                "description": "You must run `bday setup` before using this command!",
                 "color": "{{REF:colors.error}}"
             },
             "noPermission": {
                 "title": "Permission Required!",
-                "description": [
-                    "You don't have permission to run that command!"
-                ],
+                "description": "You don't have permission to run that command!",
                 "color": "{{REF:colors.error}}"
             },
             "onlyStaff": {
-                "description": [
-                    "This command can only be run by Birthday Bot Staff!"
-                ],
+                "description": "This command can only be run by Birthday Bot Staff!",
                 "color": "{{REF:colors.error}}"
             },
             "guildOnlyCommand": {
-                "description": [
-                    "This command can only be used in a discord server!"
-                ],
+                "description": "This command can only be used in a discord server!",
                 "color": "{{REF:colors.error}}"
             },
             "noArgs": {
@@ -770,9 +766,7 @@
                 "color": "{{REF:colors.error}}"
             },
             "viewUserInDm": {
-                "description": [
-                    "You cannot request another user's information in a DM!"
-                ],
+                "description": "You cannot request another user's information in a DM!",
                 "color": "{{REF:colors.error}}"
             },
             "birthdayNotSet": {
