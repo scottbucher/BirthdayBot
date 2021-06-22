@@ -192,6 +192,13 @@
                     "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
+            },
+            "confirmClearMessages": {
+                "description": "Are you sure you want to clear __**{{MESSAGE_COUNT}}**__ {{DISPLAY_TYPE}}?",
+                "footer": {
+                    "text": "This action is irreversible!"
+                },
+                "color": "{{REF:colors.warn}}"
             }
         },
         "userPrompts": {
@@ -309,6 +316,11 @@
             }
         },
         "results": {
+            "premiumDisabled": {
+                "title": "Birthday Bot Premium",
+                "description": "Premium subscriptions are currently disabled. Enjoy premium features for free! Woohoo!",
+                "timestamp": true
+            },
             "requiredSetup": {
                 "title": "Server Setup - Completed",
                 "description": [
@@ -320,6 +332,7 @@
                 "footer": {
                     "text": "All server commands unlocked!"
                 },
+                "color": "{{REF:colors.success}}",
                 "timestamp": true
             },
             "trustedSetup": {
@@ -333,6 +346,7 @@
                 "footer": {
                     "text": "Trusted Setup Complete!"
                 },
+                "color": "{{REF:colors.success}}",
                 "timestamp": true
             },
             "trustedSetupPremium": {
@@ -347,6 +361,7 @@
                 "footer": {
                     "text": "Trusted Setup Complete!"
                 },
+                "color": "{{REF:colors.success}}",
                 "timestamp": true
             },
             "anniversarySetup": {
@@ -360,6 +375,7 @@
                 "footer": {
                     "text": "Anniversary Setup Complete!"
                 },
+                "color": "{{REF:colors.success}}",
                 "timestamp": true
             },
             "setBirthday": {
@@ -367,6 +383,12 @@
                 "footer": {
                     "text": "You now have {{AMOUNT}} birthday attempts left."
                 },
+                "color": "{{REF:colors.success}}",
+                "timestamp": true
+            },
+            "nextBirthday": {
+                "description": "{{USERS}}'s birthday is next on **{{BIRTHDAY_}}**!",
+                "color": "{{REF:colors.deafult}}",
                 "timestamp": true
             },
             "addMessageExpired": {
@@ -448,6 +470,10 @@
                 "footer": {
                     "text": "This role is actively removed from those whose birthday it isn't."
                 },
+                "color": "{{REF:colors.success}}"
+            },
+            "customMessagesCleared": {
+                "description": "Successfully cleared all {{DISPLAY_TYPE}} from the database!",
                 "color": "{{REF:colors.success}}"
             },
             "birthdayRoleCleared": {
@@ -563,28 +589,12 @@
                 "description": "To have their birthday celebrated users now require only one of the trusted roles!",
                 "color": "{{REF:colors.success}}"
             },
-            "setBirthdayMessageMention": {
-                "description": "{{BOT}} will now mention {{MENTION}} with the birthday message!",
+            "setMessageMention": {
+                "description": "{{BOT}} will now mention {{MENTION}} with the {{DISPLAY_TYPE}}!",
                 "color": "{{REF:colors.success}}"
             },
-            "setMemberAnniversaryMessageMention": {
-                "description": "{{BOT}} will now mention {{MENTION}} with the member anniversary message!",
-                "color": "{{REF:colors.success}}"
-            },
-            "setServerAnniversaryMessageMention": {
-                "description": "{{BOT}} will now mention {{MENTION}} with the server anniversary message!",
-                "color": "{{REF:colors.success}}"
-            },
-            "setBirthdayMessageTime": {
-                "description": "Successfully set the birthday message to send at **{{TIME}}**",
-                "color": "{{REF:colors.success}}"
-            },
-            "setMemberAnniversaryMessageTime": {
-                "description": "Successfully set the member anniversary message to send at **{{TIME}}**",
-                "color": "{{REF:colors.success}}"
-            },
-            "setServerAnniversaryMessageTime": {
-                "description": "Successfully set the server anniversary message to send at **{{TIME}}**",
+            "setMessageTime": {
+                "description": "Successfully set the {{DISPLAY_TYPE}} to send at **{{TIME}}**",
                 "color": "{{REF:colors.success}}"
             },
             "addCustomMessage": {
@@ -648,7 +658,50 @@
         "validation": {
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": ["Please specify an option!", "{{OPTIONS}}"],
+                "description": [
+                    "Please specify an option!",
+                    "{{OPTIONS}}"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noBlacklistArgs": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please specify a sub command for the blacklist! [(?)](${Config.links.docs}/faq#what-is-the-birthday-blacklist)",
+                    "Accepted Values: `list`, `add <User>`, `remove <User>`, `clear`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noConfigArgs": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please specify a config value to change!",
+                    "Accepted Values: `channel`, `role`, `birthdayMasterRole`, `nameFormat`, `timezone`, `useTimezone`, `trustedRole`, `trustedPreventsMsg`, `trustedPreventsRole`, `requireAllTrustedRoles`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noMemberAnnviersaryRoleArgs": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please specify a sub command!",
+                    "Accepted Values: `add`, `remove`, `clear`, `list`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noCustomMessageArgs": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please specify a sub command!",
+                    "Accepted Values: `list <value>`, `add <Value>`, `remove <#>`, `clear`, `time <0-23>`, `mention <Value>`, `useEmbed <T/F>`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noBirthdaysInServer": {
+                "description": "No one has set their birthday in this server! :(",
+                "color": "{{REF:colors.error}}"
+            },
+            "noUpcomingBirthdays": {
+                "description": "There are no upcoming birthdays!",
                 "color": "{{REF:colors.error}}"
             },
             "outOfAttempts": {
@@ -670,7 +723,7 @@
                 "description": "You do not have permission to suggest birthdays for other users!",
                 "color": "{{REF:colors.error}}"
             },
-            "cantSetTimeZoneForBot": {
+            "cantSetBirthdayForBot": {
                 "description": "You can't set a birthday for a bot!",
                 "color": "{{REF:colors.error}}"
             },
@@ -714,7 +767,7 @@
             },
             "removeMessageInvalidType": {
                 "title": "Remove Custom Message",
-                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -723,7 +776,7 @@
             },
             "clearMessageInvalidType": {
                 "title": "Clear Custom Message",
-                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `user`",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -732,7 +785,7 @@
             },
             "invalidMessageType": {
                 "title": "Custom Message List",
-                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `user`",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -1111,10 +1164,6 @@
                 "description": "You server has not set any member anniversary roles set!",
                 "color": "{{REF:colors.error}}"
             },
-            "noUserSpecificBirthdayMessages": {
-                "description": "This server doesn't have any user specific custom birthday messages!",
-                "color": "{{REF:colors.error}}"
-            },
             "noUserSpecified": {
                 "description": "Please specify a user!",
                 "color": "{{REF:colors.error}}"
@@ -1123,16 +1172,16 @@
                 "description": "Could not find that user!",
                 "color": "{{REF:colors.error}}"
             },
-            "noBirthdayMessagesSet": {
-                "description": "Your server has not set any custom birthday messages.",
+            "noCustomMessagesGeneric": {
+                "description": "The {{DISPLAY_TYPE}} list is already empty!",
                 "color": "{{REF:colors.error}}"
             },
-            "noMemberAnniversaryMessagesSet": {
-                "description": "Your server has not set any custom member anniversary messages.",
+            "noUserSpecificBirthdayMessages": {
+                "description": "This server doesn't have any user specific custom birthday messages!",
                 "color": "{{REF:colors.error}}"
             },
-            "noServerAnniversaryMessagesSet": {
-                "description": "Your server has not set any custom server anniversary messages.",
+            "noUserSpecificMemberAnniversaryMessages": {
+                "description": "This server doesn't have any user specific custom birthday messages!",
                 "color": "{{REF:colors.error}}"
             },
             "cantBlacklistBot": {
@@ -1296,7 +1345,10 @@
                     },
                     {
                         "name": "Links",
-                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
+                        "value": [
+                            "{{REF:link.supportEmbed}}",
+                            "{{REF:link.inviteEmbed}}"
+                        ]
                     }
                 ]
             }
@@ -1305,16 +1357,212 @@
             "general": {
                 "title": "{{REF:bot.name}} - Info",
                 "fields": [
-                    { "name": "Author", "value": "{{REF:links.authorEmbed}}" },
+                    {
+                        "name": "Author",
+                        "value": "{{REF:links.authorEmbed}}"
+                    },
                     {
                         "name": "Links",
-                        "value": ["{{REF:links.supportEmbed}}", "{{REF:links.inviteEmbed}}"]
+                        "value": [
+                            "{{REF:links.supportEmbed}}",
+                            "{{REF:links.inviteEmbed}}"
+                        ]
                     },
                     {
                         "name": "Created With",
-                        "value": ["{{REF:links.templateEmbed}}"]
+                        "value": [
+                            "{{REF:links.templateEmbed}}"
+                        ]
                     }
                 ]
+            },
+            "documentation": {
+                "description": "View our documentation for {{BOT}} [here]({{REF:links.docs}})!",
+                "color": "{{REF:colors.default}}"
+            },
+            "donate": {
+                "description": "You can support {{BOT}} by donating [here]({{REF:links.donate}})!",
+                "color": "{{REF:colors.default}}"
+            },
+            "faq": {
+                "description": "View our FAQ for {{BOT}} [here]({{REF:links.docs}}/faq)!",
+                "color": "{{REF:colors.default}}"
+            },
+            "invite": {
+                "description": "Invite {{BOT}} to your server [here]({{REF:links.invite}})!",
+                "color": "{{REF:colors.default}}"
+            },
+            "map": {
+                "description": [
+                    "[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker]({{REF:links.map}})!",
+                    "",
+                    "Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command."
+                ],
+                "color": "{{REF:colors.default}}"
+            },
+            "noSubscription": {
+                "title": "Birthday Bot Premium",
+                "description": "Subscribe to **Birthday Bot Premium** to give this server extra features!",
+                "fields": [
+                    {
+                        "name": "Premium Features",
+                        "value": [
+                            "- No voting needed for **any** commands",
+                            "- Up to **{{BIRTHDAY_MESSAGE_MAX_FREE}}** custom birthday messages *(vs **{{BIRTHDAY_MESSAGE_MAX_PAID}}** free)*",
+                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** custom member anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MAX_PAID}}** free)*",
+                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** custom server anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID}}** free)*",
+                            "- Access to Member Anniversary Roles! (Up to {{MAX_ANNIVERSARY_ROLES}}!)",
+                            "- Access to multiple Trusted Roles! (Up to {{MAX_TRUSTED_ROLES}}!)",
+                            "- Access to user-specific custom birthday messages",
+                            "- Customize the color **each** birthday message embed",
+                            "- Premium support",
+                            "Features apply **server-wide** (this server only)."
+                        ]
+                    },
+                    {
+                        "name": "Price",
+                        "value": [
+                            "2.99 USD / Month"
+                        ]
+                    },
+                    {
+                        "name": "Purchase Details",
+                        "value": [
+                            "Type `bday subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
+                            "",
+                            "[Join Support Server]({{REF:links.support}})"
+                        ]
+                    }
+                ]
+            },
+            "subscription": {
+                "title": "Birthday Bot Premium",
+                "description": "This servers subscription information.",
+                "fields": [
+                    {
+                        "name": "Active",
+                        "value": [
+                            "{{IS_ACTIVE}}"
+                        ]
+                    },
+                    {
+                        "name": "Subscription ID",
+                        "value": [
+                            "{{SUBSCRIPTION_ID}}"
+                        ]
+                    },
+                    {
+                        "name": "Status",
+                        "value": [
+                            "{{STATUS}}"
+                        ]
+                    },
+                    {
+                        "name": "Last Payment",
+                        "value": [
+                            "{{LAST_PAYMENT}}"
+                        ]
+                    },
+                    {
+                        "name": "Paid Until",
+                        "value": [
+                            "{{PAID_UNTIL}}"
+                        ]
+                    },
+                    {
+                        "name": "Purchase Details",
+                        "value": [
+                            "Type `bday subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
+                            "[Join Support Server]({{REF:links.support}})"
+                        ]
+                    }
+                ]
+            },
+            "settingsGeneral": {
+                "title": "{{SERVER_NAME}}'s General Settings",
+                "fields": [
+                    {
+                        "name": "{{REF:terms.birthdayRole}}",
+                        "value": "{{BIRTHDAY_ROLE}}"
+                    },
+                    {
+                        "name": "{{REF:terms.nameFormat}}",
+                        "value": "{{NAME_FORMAT}}"
+                    },
+                    {
+                        "name": "{{REF:terms.defaultTimezone}}",
+                        "value": "{{DEFAULT_TIMEZONE}}"
+                    },
+                    {
+                        "name": "{{REF:terms.serverLanguage}}",
+                        "value": "{{SERVER_LANGUAGE}}"
+                    },
+                    {
+                        "name": "Guild Id",
+                        "value": "{{GUILD_ID}}"
+                    },
+                    {
+                        "name": "Premium",
+                        "value": "{{HAS_PREMIUM}}"
+                    }
+                ],
+                "footer": {
+                    "text": "© {{DATE}} Birthday Bot"
+                },
+                "timestamp": true
+            },
+            "settingsMessage": {
+                "title": "{{SERVER_NAME}}'s Message Settings",
+                "fields": [
+                    {
+                        "name": "{{REF:terms.birthdayChannel}}",
+                        "value": "{{BIRTHDAY_CHANNEL}}"
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryChannel}}",
+                        "value": "{{MEMBER_ANNIVERSAR_CHANNEL}}"
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryChannel}}",
+                        "value": "{{SERVER_ANNIVERSAR_CHANNEL}}"
+                    },
+                    {
+                        "name": "{{REF:terms.birthdayMessageTime}}",
+                        "value": "{{BIRTHDAY_MESSAGE_TIME}}"
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryMessageTime}}",
+                        "value": "{{MEMBER_ANNIVERSAR_MESSAGE_TIME}}"
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryMessageTime}}",
+                        "value": "{{SERVER_ANNIVERSAR_MESSAGE_TIME}}"
+                    },
+                    {
+                        "name": "{{REF:terms.birthdayMentionSetting}}",
+                        "value": "{{BIRTHDAY_MENTION}}"
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryMentionSetting}}",
+                        "value": "{{MEMBER_ANNIVERSAR_MENTION}}"
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryMentionSetting}}",
+                        "value": "{{SERVER_ANNIVERSAR_MENTION}}"
+                    },
+                    {
+                        "name": "Guild Id",
+                        "value": "{{GUILD_ID}}"
+                    },
+                    {
+                        "name": "Premium",
+                        "value": "{{HAS_PREMIUM}}"
+                    }
+                ],
+                "footer": {
+                    "text": "© {{DATE}} Birthday Bot"
+                },
+                "timestamp": true
             }
         },
         "dev": {
@@ -1332,7 +1580,10 @@
                     },
                     {
                         "name": "Stats",
-                        "value": ["**Shards**: {{SHARD_COUNT}}", "**Servers**: {{SERVER_COUNT}}"]
+                        "value": [
+                            "**Shards**: {{SHARD_COUNT}}",
+                            "**Servers**: {{SERVER_COUNT}}"
+                        ]
                     },
                     {
                         "name": "Memory",
@@ -1620,11 +1871,17 @@
             "party": "🎉"
         },
         "links": {
-            "invite": "https://discord.com/oauth2/authorize?client_id=656621136808902656&permissions=268659792&scope=bot",
-            "inviteEmbed": "[Invite {{REF:bot.name}} to a Server!]({{REF:links.invite}})",
+            "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268921936&scope=bot%20applications.commands",
             "support": "https://discord.gg/9gUQFtz",
-            "supportEmbed": "[Join Support Server]({{REF:links.support}})",
+            "docs": "https://birthdaybot.scottbucher.dev",
+            "vote": "https://top.gg/bot/656621136808902656/vote",
+            "donate": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url",
+            "map": "https://kevinnovak.github.io/Time-Zone-Picker/",
+            "colors": "https://codepen.io/meodai/full/pXNpXe",
             "stream": "https://www.twitch.tv/stqlth",
+            "autopay": "https://www.sandbox.paypal.com/myaccount/autopay",
+            "inviteEmbed": "[Invite {{REF:bot.name}} to a Server!]({{REF:links.invite}})",
+            "supportEmbed": "[Join Support Server]({{REF:links.support}})",
             "author": "https://github.com/scottbucher",
             "authorEmbed": "[Scott Bucher]({{REF:links.author}})",
             "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
@@ -1697,6 +1954,9 @@
             "list": "List",
             "total": "Total",
             "messages": "Messages",
+            "message": "Message",
+            "general": "General",
+            "advanced": "Advanced",
             "memberAnniversary": "Member Anniversary",
             "serverAnniversary": "Server Anniversary",
             "blacklist": "Blacklist",
@@ -1706,12 +1966,18 @@
             "unknownChannel": "Unknown Channel",
             "unknownRole": "Unknown Role",
             "deletedRole": "Deleted Role",
+            "deletedChannel": "Deleted Channel",
             "birthdayList": "Birthday List",
             "birthdayMessages": "Birthday Messages",
             "userBirthdayMessages": "User-Specific Birthday Messages",
             "userMemberAnniversaryMessages": "User-Specific Member Anniversary Messages",
             "serverAnniversaryMessages": "Server Anniversary Messages",
             "memberAnniversaryMessages": "Member Anniversary Messages",
+            "birthdayMessage": "Birthday Message",
+            "userBirthdayMessage": "User-Specific Birthday Message",
+            "userMemberAnniversaryMessage": "User-Specific Member Anniversary Message",
+            "serverAnniversaryMessage": "Server Anniversary Message",
+            "memberAnniversaryMessage": "Member Anniversary Message",
             "trustedRoles": "Trusted Roles",
             "memberAnniversaryRoles": "Member Anniversary Roles",
             "blacklistList": "Blacklist List",
@@ -1722,15 +1988,59 @@
             "serverAnniversaryChannelTitle": "{{REF:emotes.party}} server anniversaries",
             "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
             "premiumRequired": "Premium Required!",
+            "active": "Active",
+            "notActive": "Not Active",
             "amTime": "AM",
             "pmTime": "PM",
             "noOne": "no one",
-            "na": "N/A"
+            "na": "N/A",
+            "change": "Change",
+            "suggest": "Suggest",
+            "server": "Server",
+            "birthdayChannel": "Birthday Channel",
+            "birthdayRole": "Birthday Role",
+            "birthdayMasterRole": "Birthday Master Role",
+            "trustedPreventsRole": "Trusted Prevents Role",
+            "trustedPreventsMessage": "Trusted Prevents Message",
+            "requireAllTrustedRoles": "Require All Trusted Roles",
+            "defaultTimezone": "Default Timezone",
+            "useTimezone": "Use Timezone",
+            "nameFormat": "Name Format",
+            "memberAnniversaryChannel": "Member Anniversary Channel",
+            "serverAnniversaryChannel": "Server Anniversary Channel",
+            "birthdayMessageTime": "Birthday Message Time",
+            "memberAnniversaryMessageTime": "Member Anniversary Time",
+            "serverAnniversaryMessageTime": "Server Anniversary Time",
+            "birthdayMention": "Birthday  Mention Setting",
+            "memberAnniversaryMention": "Member Anniversary Mention Setting",
+            "serverAnniversaryMention": "Server Anniversary Mention Setting",
+            "serverLanguage": "Server Language"
         },
         "types": {
             "birthday": "birthday",
             "memberAnniversary": "memberanniversary",
-            "serverAnniversary": "serveranniversary"
+            "serverAnniversary": "serveranniversary",
+            "userSpecificBirthday": "userspecificbirthday",
+            "userSpecificMemberAnniversary": "userspecificmemberanniversary",
+            "alternatives": {
+                "birthday": [
+                    "bday"
+                ],
+                "memberAnniversary": [
+                    "member"
+                ],
+                "serverAnniversary": [
+                    "server"
+                ],
+                "userSpecificBirthday": [
+                    "specificbirthday",
+                    "userbirthday"
+                ],
+                "userSpecificMemberAnniversary": [
+                    "specificanniversary",
+                    "useranniversary"
+                ]
+            }
         },
         "placeHolders": {
             "users": "<Users>",
