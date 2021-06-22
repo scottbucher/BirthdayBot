@@ -1511,6 +1511,43 @@
                 },
                 "timestamp": true
             },
+            "settingsAdvanced": {
+                "title": "{{SERVER_NAME}}'s Advanced Settings",
+                "fields": [
+                    {
+                        "name": "{{REF:terms.birthdayMasterRole}}",
+                        "value": "{{BIRTHDAY_MASTER_ROLE}}"
+                    },
+                    {
+                        "name": "{{REF:terms.trustedPreventsRole}}",
+                        "value": "{{TRUSTED_PREVENTS_ROLE}}"
+                    },
+                    {
+                        "name": "{{REF:terms.trustedPreventsMessage}}",
+                        "value": "{{TRUSTED_PREVENTS_MESSAGE}}"
+                    },
+                    {
+                        "name": "{{REF:terms.requireAllTrustedRoles}}",
+                        "value": "{{REQUIRE_ALL_TRIUSTED_ROLES}}"
+                    },
+                    {
+                        "name": "{{REF:terms.useTimezone}}",
+                        "value": "{{USE_TIMEZONE}}"
+                    },
+                    {
+                        "name": "Guild Id",
+                        "value": "{{GUILD_ID}}"
+                    },
+                    {
+                        "name": "Premium",
+                        "value": "{{HAS_PREMIUM}}"
+                    }
+                ],
+                "footer": {
+                    "text": "© {{DATE}} Birthday Bot"
+                },
+                "timestamp": true
+            },
             "settingsMessage": {
                 "title": "{{SERVER_NAME}}'s Message Settings",
                 "fields": [
