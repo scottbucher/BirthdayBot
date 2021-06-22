@@ -1,7 +1,9 @@
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { MessageUtils } from '../utils';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -21,12 +23,6 @@ export class FaqCommand implements Command {
         msg: Message,
         channel: TextChannel | DMChannel
     ): Promise<void> {
-        let embed = new MessageEmbed()
-            .setDescription(
-                `View our FAQ for ${msg.client.user.toString()} [here](${Config.links.docs}/faq)!`
-            )
-            .setColor(Config.colors.default);
-
-        await MessageUtils.send(channel, embed);
+        await MessageUtils.send(channel, Lang.getEmbed('info.faq', LangCode.EN_US, { BOT: msg.client.user.toString() }));
     }
 }
