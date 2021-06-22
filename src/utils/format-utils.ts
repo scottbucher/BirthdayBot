@@ -1,7 +1,7 @@
 import * as Chrono from 'chrono-node';
 
-import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
-import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
+import { Blacklisted, CustomMessages, UserDataResults, GuildData } from '../models/database';
+import { Guild, Message, MessageEmbed, User, Util, Role } from 'discord.js';
 import { GuildUtils, ParseUtils } from '.';
 
 import { Lang } from '../services';
@@ -165,8 +165,8 @@ export class FormatUtils {
                         type === 'birthday'
                             ? 'list.noCustomBirthdayMessages'
                             : type === 'memberanniversary'
-                            ? 'list.noCustomMemberAnniversaryMessages'
-                            : 'list.noCustomServerAnniversaryMessages',
+                                ? 'list.noCustomMemberAnniversaryMessages'
+                                : 'list.noCustomServerAnniversaryMessages',
                         LangCode.EN_US
                     )
                 );
@@ -178,14 +178,14 @@ export class FormatUtils {
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.free
                 : type === 'serveranniversary'
-                ? Config.validation.message.maxCount.serverAnniversary.free
-                : Config.validation.message.maxCount.birthday.free;
+                    ? Config.validation.message.maxCount.serverAnniversary.free
+                    : Config.validation.message.maxCount.birthday.free;
         let maxMessagesPaid: number =
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.paid
                 : type === 'serveranniversary'
-                ? Config.validation.message.maxCount.serverAnniversary.paid
-                : Config.validation.message.maxCount.birthday.paid;
+                    ? Config.validation.message.maxCount.serverAnniversary.paid
+                    : Config.validation.message.maxCount.birthday.paid;
 
         for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
@@ -204,8 +204,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessageLocked'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessageLocked'
-                    : 'birthdayMessageLocked';
+                        ? 'serverAnniversaryMessageLocked'
+                        : 'birthdayMessageLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -220,8 +220,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessageUnLocked'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessageUnLocked'
-                    : 'birthdayMessageUnLocked';
+                        ? 'serverAnniversaryMessageUnLocked'
+                        : 'birthdayMessageUnLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -266,13 +266,13 @@ export class FormatUtils {
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
+                    } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
+                    } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
             }
         }
 
@@ -335,13 +335,13 @@ export class FormatUtils {
             ) {
                 description += `**${i.toLocaleString()}.** ${
                     role ? `${role.toString()} ` : `**** `
-                }\n\n`;
+                    }\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ${
                     role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
-                }\n\n`;
+                    }\n\n`;
             }
             i++;
         }
@@ -401,7 +401,7 @@ export class FormatUtils {
             for (let user of users) {
                 userNames.push(
                     `${guild.members.resolve(user.UserDiscordId)?.displayName}` ||
-                        `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
+                    `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
                 );
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
@@ -440,7 +440,7 @@ export class FormatUtils {
             description += `**${
                 guild.members.resolve(user)?.displayName ||
                 `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
-            }**: (ID: ${user})\n`; // Append the description
+                }**: (ID: ${user})\n`; // Append the description
         }
 
         embed = Lang.getEmbed('list.blacklist', LangCode.EN_US, {
@@ -477,24 +477,24 @@ export class FormatUtils {
             if (
                 hasPremium ||
                 memberAnniversaryRole.Position <=
-                    Config.validation.memberAnniversaryRoles.maxCount.free
+                Config.validation.memberAnniversaryRoles.maxCount.free
             ) {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role ? `${role.toString()} ` : `**** `
-                }\n\n`;
+                    }\n\n`;
             } else {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
-                }\n\n`;
+                    }\n\n`;
             }
         }
 
         if (
             !hasPremium &&
             memberAnniversaryRoleResults.stats.TotalItems >
-                Config.validation.memberAnniversaryRoles.maxCount.free
+            Config.validation.memberAnniversaryRoles.maxCount.free
         ) {
             embed = Lang.getEmbed('list.memberAnniversaryRolePaid', LangCode.EN_US, {
                 PAGE: page.toString(),
@@ -520,5 +520,74 @@ export class FormatUtils {
     public static extractPageNumber(input: string): number {
         let match = PAGE_REGEX.exec(input);
         return match ? ParseUtils.parseInt(match[1]) : null;
+    }
+
+    // THIS IS WRONG
+    // ALTERNATIVES ARE SUPPOSED TO BE ARRAYS BUT LANG SYSTEM DOESN'T SUPPORT IT
+    public static extractCelebrationType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.birthday', LangCode.EN_US):
+            case Lang.getRef('types.alternatives.birthday', LangCode.EN_US):
+                return 'birthday';
+
+            case Lang.getRef('types.memberAnniversary', LangCode.EN_US):
+            case Lang.getRef('types.alternatives.memberAnniversary', LangCode.EN_US):
+                return 'memberanniversary';
+
+            case Lang.getRef('types.serverAnniversary', LangCode.EN_US):
+            case Lang.getRef('types.alternatives.serverAnniversary', LangCode.EN_US):
+                return 'serveranniversary';
+
+            case Lang.getRef('types.userSpecificBirthday', LangCode.EN_US):
+            case Lang.getRef('types.alternatives.userSpecificBirthday', LangCode.EN_US):
+                return 'userspecificbirthday';
+
+            case Lang.getRef('types.userSpecificMemberAnniversary', LangCode.EN_US):
+            case Lang.getRef('types.alternatives.userSpecificMemberAnniversary', LangCode.EN_US):
+                return 'userspecificmemberanniversary';
+
+        }
+    }
+
+    public static getCelebrationDisplayType(type: string, plural: boolean): string {
+        switch (type) {
+            case 'birthday':
+                return Lang.getRef('terms.birthdayMessage' + plural ? 's' : '', LangCode.EN_US);
+            case 'memberanniversary':
+                return Lang.getRef('terms.memberAnniversaryMessage' + plural ? 's' : '', LangCode.EN_US);
+            case 'serveranniversary':
+                return Lang.getRef('terms.serverAnniversaryMessage' + plural ? 's' : '', LangCode.EN_US);
+            case 'userspecificbirthday':
+                return Lang.getRef('terms.userBirthdayMessage' + plural ? 's' : '', LangCode.EN_US);
+            case 'userspecificmemberanniversary':
+                return Lang.getRef('terms.userMemberAnniversaryMessage' + plural ? 's' : '', LangCode.EN_US);
+        }
+    }
+
+    public static getMentionSetting(mentionSetting: string, guild: Guild): string {
+        // Find mentioned role
+        let roleInput: Role = guild.roles.resolve(mentionSetting);
+
+        if (!roleInput || roleInput.guild.id !== guild.id) {
+            if (
+                mentionSetting.toLowerCase() === 'everyone' ||
+                mentionSetting.toLowerCase() === 'here'
+            ) {
+                return '@' + mentionSetting;
+            }
+        } else {
+            return roleInput.toString();
+        }
+        return 'none';
+    }
+
+    public static getMessageTime(time: number): string {
+        let am = Lang.getRef('terms.amTime', LangCode.EN_US);
+        let pm = Lang.getRef('terms.pmTime', LangCode.EN_US);
+        if (time === 0) return '12:00 ' + am;
+        else if (time === 12) return '12:00 ' + pm;
+        else if (time < 12)
+            return time + ':00 ' + am;
+        else return time - 12 + ':00 ' + pm;
     }
 }
