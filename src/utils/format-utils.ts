@@ -266,13 +266,13 @@ export class FormatUtils {
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ${customMessage.Message}\n\n`;
+                } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ~~${customMessage.Message}~~\n\n`;
+                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
             }
         }
 

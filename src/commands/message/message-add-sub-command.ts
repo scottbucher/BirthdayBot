@@ -357,7 +357,7 @@ export class MessageAddSubCommand {
             userId === '0'
                 ? Lang.getEmbed('results.addCustomMessage', LangCode.EN_US, {
                       DISPLAY_TYPE: typeDisplayName,
-                      MESSAGE: message,
+                      MESSAGE: message.replace('<Users>', target.toString()),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
                       HAS_PREMIUM: !hasPremium
                           ? Lang.getRef('conditionals.needColorForPremium', LangCode.EN_US)
@@ -368,7 +368,7 @@ export class MessageAddSubCommand {
                   })
                 : Lang.getEmbed('results.addCustomUserMessage', LangCode.EN_US, {
                       DISPLAY_TYPE: typeDisplayName,
-                      MESSAGE: message,
+                      MESSAGE: message.replace('<Users>', target.toString()),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
                       HAS_PREMIUM: !hasPremium
                           ? Lang.getRef('conditionals.colorForPremium', LangCode.EN_US)
