@@ -4,7 +4,7 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { ColorUtils, MessageUtils } from '../../utils';
+import { ColorUtils, MessageUtils, FormatUtils } from '../../utils';
 import { GuildMember, Message, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
@@ -21,7 +21,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
 export class MessageAddSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) {}
+    constructor(private customMessageRepo: CustomMessageRepo) { }
 
     public async execute(
         args: string[],
@@ -42,19 +42,8 @@ export class MessageAddSubCommand {
                 })
             );
         };
-
-        let type = args[3]?.toLowerCase();
-
         // get the english types based on their inputted types, if it equals none set to nothing so it fails on the next check
-        type =
-            type === Lang.getRef('types.birthday', LangCode.EN_US)
-                ? 'birthday'
-                : type === Lang.getRef('types.memberAnniversary', LangCode.EN_US)
-                ? 'memberanniversary'
-                : type === Lang.getRef('types.serverAnniversary', LangCode.EN_US)
-                ? 'serveranniversary'
-                : '';
-
+        let type = FormatUtils.extractCelebrationType(args[3]?.toLowerCase());
         if (
             !type ||
             (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
@@ -138,8 +127,8 @@ export class MessageAddSubCommand {
             type === 'birthday'
                 ? Lang.getRef('terms.birthday', LangCode.EN_US).toLowerCase()
                 : type === 'memberanniversary'
-                ? Lang.getRef('terms.memberAnniversary', LangCode.EN_US).toLowerCase()
-                : Lang.getRef('terms.serverAnniversary', LangCode.EN_US).toLowerCase();
+                    ? Lang.getRef('terms.memberAnniversary', LangCode.EN_US).toLowerCase()
+                    : Lang.getRef('terms.serverAnniversary', LangCode.EN_US).toLowerCase();
 
         if (type === 'birthday' || type === 'memberanniversary') {
             // Can also use year and server name placeholder
@@ -181,14 +170,14 @@ export class MessageAddSubCommand {
             type === 'birthday'
                 ? Config.validation.message.maxCount.birthday.free
                 : type === 'memberanniversary'
-                ? Config.validation.message.maxCount.memberAnniversary.free
-                : Config.validation.message.maxCount.serverAnniversary.free;
+                    ? Config.validation.message.maxCount.memberAnniversary.free
+                    : Config.validation.message.maxCount.serverAnniversary.free;
         let maxMessageCountPaid =
             type === 'birthday'
                 ? Config.validation.message.maxCount.birthday.paid
                 : type === 'memberanniversary'
-                ? Config.validation.message.maxCount.memberAnniversary.paid
-                : Config.validation.message.maxCount.serverAnniversary.paid;
+                    ? Config.validation.message.maxCount.memberAnniversary.paid
+                    : Config.validation.message.maxCount.serverAnniversary.paid;
 
         if (customMessages) {
             if (globalMessageCount >= maxMessageCountFree && !hasPremium) {
@@ -356,31 +345,31 @@ export class MessageAddSubCommand {
             channel,
             userId === '0'
                 ? Lang.getEmbed('results.addCustomMessage', LangCode.EN_US, {
-                      DISPLAY_TYPE: typeDisplayName,
-                      MESSAGE: message.replace('<Users>', target.toString()),
-                      IS_EMBED: embedChoice === 1 ? 'True' : 'False',
-                      HAS_PREMIUM: !hasPremium
-                          ? Lang.getRef('conditionals.needColorForPremium', LangCode.EN_US)
-                          : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
-                                COLOR_HEX: colorHex,
-                            }),
-                      TYPE: type,
-                  })
+                    DISPLAY_TYPE: typeDisplayName,
+                    MESSAGE: message.replace('<Users>', target.toString()),
+                    IS_EMBED: embedChoice === 1 ? 'True' : 'False',
+                    HAS_PREMIUM: !hasPremium
+                        ? Lang.getRef('conditionals.needColorForPremium', LangCode.EN_US)
+                        : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
+                            COLOR_HEX: colorHex,
+                        }),
+                    TYPE: type,
+                })
                 : Lang.getEmbed('results.addCustomUserMessage', LangCode.EN_US, {
-                      DISPLAY_TYPE: typeDisplayName,
-                      MESSAGE: message.replace('<Users>', target.toString()),
-                      IS_EMBED: embedChoice === 1 ? 'True' : 'False',
-                      HAS_PREMIUM: !hasPremium
-                          ? Lang.getRef('conditionals.colorForPremium', LangCode.EN_US)
-                          : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
-                                COLOR_HEX: colorHex,
-                            }),
-                      TYPE:
-                          type === 'birthday'
-                              ? 'userSpecificBirthday'
-                              : 'userSpecificMemberAnniversary',
-                      USER: target.toString(),
-                  })
+                    DISPLAY_TYPE: typeDisplayName,
+                    MESSAGE: message.replace('<Users>', target.toString()),
+                    IS_EMBED: embedChoice === 1 ? 'True' : 'False',
+                    HAS_PREMIUM: !hasPremium
+                        ? Lang.getRef('conditionals.colorForPremium', LangCode.EN_US)
+                        : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
+                            COLOR_HEX: colorHex,
+                        }),
+                    TYPE:
+                        type === 'birthday'
+                            ? 'userSpecificBirthday'
+                            : 'userSpecificMemberAnniversary',
+                    USER: target.toString(),
+                })
         );
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
