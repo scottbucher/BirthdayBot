@@ -82,7 +82,7 @@ export class PermissionUtils {
         command?: Command
     ): boolean {
         if (!command || command.adminOnly) {
-            if (member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) return true;
+            if (member.hasPermission(Permissions.FLAGS.MANAGE_GUILD)) return true;
 
             if (guildData) {
                 // Check if member has a required role
