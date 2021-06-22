@@ -43,7 +43,7 @@ export class SetCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private guildRepo: GuildRepo, private userRepo: UserRepo) {}
+    constructor(private guildRepo: GuildRepo, private userRepo: UserRepo) { }
 
     public async execute(
         args: string[],
@@ -90,14 +90,14 @@ export class SetCommand implements Command {
             // Get who they are mentioning
             let member =
                 msg.mentions.members?.first() ||
-                GuildUtils.findMember(msg.guild, args[2]) ||
-                GuildUtils.findMember(msg.guild, args[3]) ||
-                GuildUtils.findMember(msg.guild, args[4]);
+                (args.length > 2 && GuildUtils.findMember(msg.guild, args[2])) ||
+                (args.length > 3 && GuildUtils.findMember(msg.guild, args[3])) ||
+                (args.length > 4 && GuildUtils.findMember(msg.guild, args[4]));
 
             if (member.user.bot) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.cantSetTimeZoneForBot', LangCode.EN_US)
+                    Lang.getEmbed('validation.cantSetBirthdayForBot', LangCode.EN_US)
                 );
                 return;
             }
