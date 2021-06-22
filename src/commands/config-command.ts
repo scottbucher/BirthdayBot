@@ -13,6 +13,8 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { MessageUtils } from '../utils';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -37,7 +39,7 @@ export class ConfigCommand implements Command {
         private configTimezoneSubCommand: ConfigTimezoneSubCommand,
         private configUseTimezoneSubCommand: ConfigUseTimezoneSubCommand,
         private configRequireAllTrustedRolesSubCommand: ConfigRequireAllTrustedRolesSubCommand
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -46,14 +48,7 @@ export class ConfigCommand implements Command {
         hasPremium: boolean
     ): Promise<void> {
         if (args.length === 2) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a config value to change!\n` +
-                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\`, \`requireAllTrustedRoles\``
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noConfigArgs', LangCode.EN_US));
             return;
         }
         let subCommand = args[2].toLowerCase();
@@ -91,14 +86,7 @@ export class ConfigCommand implements Command {
         ) {
             this.configRequireAllTrustedRolesSubCommand.execute(args, msg, channel);
         } else {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a config value to change!\n` +
-                        `Accepted Values: \`channel\`, \`role\`, \`birthdayMasterRole\`, \`nameFormat\`, \`timezone\`, \`useTimezone\`, \`trustedRole\`, \`trustedPreventsMsg\`, \`trustedPreventsRole\`, \`requireAllTrustedRoles\``
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noConfigArgs', LangCode.EN_US));
             return;
         }
     }

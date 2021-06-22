@@ -1,12 +1,12 @@
 import { Message, TextChannel } from 'discord.js';
-import { MessageUtils, ParseUtils } from '../../utils';
+import { MessageUtils, ParseUtils, FormatUtils } from '../../utils';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
 export class MessageTimeSubCommand {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // bday message time <type> <0-23>
@@ -47,28 +47,18 @@ export class MessageTimeSubCommand {
             timeOutput = messageTime + ':00 ' + Lang.getRef('terms.amTime', LangCode.EN_US);
         else timeOutput = messageTime - 12 + ':00 ' + Lang.getRef('terms.pmTime', LangCode.EN_US);
 
-        if (type === 'birthday') {
-            await this.guildRepo.updateBirthdayMessageTime(msg.guild.id, messageTime);
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('result.setBirthdayMessageTime', LangCode.EN_US, { TIME: timeOutput })
-            );
-        } else if (type === 'memberanniversary') {
-            await this.guildRepo.updateMemberAnniversaryMessageTime(msg.guild.id, messageTime);
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('result.setMemberAnniversaryMessageTime', LangCode.EN_US, {
-                    TIME: timeOutput,
-                })
-            );
-        } else if (type === 'serveranniversary') {
-            await this.guildRepo.updateServerAnniversaryMessageTime(msg.guild.id, messageTime);
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('result.setServerAnniversaryMessageTime', LangCode.EN_US, {
-                    TIME: timeOutput,
-                })
-            );
-        }
+
+        let displayType = FormatUtils.getCelebrationDisplayType(type, false).toLowerCase();
+
+        type === 'birthday'
+            ? await this.guildRepo.updateBirthdayMessageTime(msg.guild.id, messageTime)
+            : type === 'memberanniversary'
+                ? await this.guildRepo.updateMemberAnniversaryMessageTime(msg.guild.id, messageTime)
+                : await this.guildRepo.updateServerAnniversaryMessageTime(msg.guild.id, messageTime);
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('result.setMessageTime', LangCode.EN_US,
+                { DISPLAY_TYPE: displayType, TIME: timeOutput })
+        );
     }
 }

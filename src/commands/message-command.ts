@@ -11,6 +11,8 @@ import {
 
 import { Command } from './command';
 import { MessageUtils } from '../utils';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -33,7 +35,7 @@ export class MessageCommand implements Command {
         private messageTimeSubCommand: MessageTimeSubCommand,
         private messageMentionSubCommand: MessageMentionSubCommand,
         private messageTestSubCommand: MessageTestSubCommand
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -42,14 +44,7 @@ export class MessageCommand implements Command {
         hasPremium: boolean
     ): Promise<void> {
         if (args.length === 2) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a sub command for the custom birthday message! [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)\n` +
-                        `Accepted Values: \`list <value>\`, \`add <Value>\`, \`remove <#>\`, \`clear\`, \`time <0-23>\`, \`mention <Value>\`, \`useEmbed <T/F>\``
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US));
             return;
         }
         if (args[2].toLowerCase() === 'list') {
@@ -66,6 +61,9 @@ export class MessageCommand implements Command {
             this.messageMentionSubCommand.execute(args, msg, channel);
         } else if (args[2].toLowerCase() === 'test') {
             this.messageTestSubCommand.execute(args, msg, channel);
+        } else {
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US));
+            return;
         }
     }
 }

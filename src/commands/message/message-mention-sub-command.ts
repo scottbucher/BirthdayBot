@@ -3,10 +3,10 @@ import { Message, Role, TextChannel } from 'discord.js';
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-import { MessageUtils } from '../../utils';
+import { MessageUtils, FormatUtils } from '../../utils';
 
 export class MessageMentionSubCommand {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // bday message mention <type> <role>
@@ -79,36 +79,23 @@ export class MessageMentionSubCommand {
             mentionOutput = roleInput.toString();
         }
 
-        if (type === 'birthday') {
-            if (mention === 'none') mention = '0';
+        let displayType = FormatUtils.getCelebrationDisplayType(type, false);
 
-            await this.guildRepo.updateBirthdayMentionSetting(msg.guild.id, mention);
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.setBirthdayMessageMention', LangCode.EN_US, {
-                    MENTION: mentionOutput,
-                })
-            );
-        } else if (type === 'memberanniversary') {
-            if (mention === 'none') mention = '0';
+        if (mention === 'none') mention = '0';
 
-            await this.guildRepo.updateMemberAnniversaryMentionSetting(msg.guild.id, mention);
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.setMemberAnniversaryMessageMention', LangCode.EN_US, {
-                    MENTION: mentionOutput,
-                })
-            );
-        } else if (type === 'serveranniversary') {
-            if (mention === 'none') mention = '0';
+        type === 'birthday'
+            ? await this.guildRepo.updateBirthdayMentionSetting(msg.guild.id, mention)
+            : type === 'memberanniversary'
+                ? await this.guildRepo.updateMemberAnniversaryMentionSetting(msg.guild.id, mention)
+                : await this.guildRepo.updateServerAnniversaryMentionSetting(msg.guild.id, mention);
 
-            await this.guildRepo.updateServerAnniversaryMentionSetting(msg.guild.id, mention);
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.setServerAnniversaryMessageMention', LangCode.EN_US, {
-                    MENTION: mentionOutput,
-                })
-            );
-        }
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.setMessageMention', LangCode.EN_US, {
+                BOT: msg.client.user.toString(),
+                MENTION: mentionOutput,
+                DISPLAY_TYPE: displayType
+            })
+        );
     }
 }

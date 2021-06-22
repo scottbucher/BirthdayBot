@@ -8,6 +8,8 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { MessageUtils } from '../utils';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -27,7 +29,7 @@ export class MemberAnniversaryRoleCommand implements Command {
         private memberAnniversaryRoleRemoveSubCommand: MemberAnniversaryRoleRemoveSubCommand,
         private memberAnniversaryRoleClearSubCommand: MemberAnniversaryRoleClearSubCommand,
         private memberAnniversaryRoleListSubCommand: MemberAnniversaryRoleListSubCommand
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -36,14 +38,7 @@ export class MemberAnniversaryRoleCommand implements Command {
         hasPremium: boolean
     ): Promise<void> {
         if (args.length === 2) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a sub command!\n` +
-                        `Accepted Values: \`add\`, \`remove\`, \`clear\`, \`list\``
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noMemberAnnviersaryRoleArgs', LangCode.EN_US));
             return;
         }
         if (args[2].toLowerCase() === 'add') {
@@ -55,14 +50,7 @@ export class MemberAnniversaryRoleCommand implements Command {
         } else if (args[2].toLowerCase() === 'list') {
             this.memberAnniversaryRoleListSubCommand.execute(args, msg, channel, hasPremium);
         } else {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a sub command!\n` +
-                        `Accepted Values: \`add\`, \`remove\`, \`clear\`, \`list\``
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noMemberAnnviersaryRoleArgs', LangCode.EN_US));
             return;
         }
     }
