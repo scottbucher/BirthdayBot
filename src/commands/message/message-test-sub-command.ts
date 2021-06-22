@@ -9,7 +9,7 @@ import moment from 'moment';
 let Config = require('../../../config/config.json');
 
 export class MessageTestSubCommand {
-    constructor(private guildRepo: GuildRepo, private customMessageRepo: CustomMessageRepo) {}
+    constructor(private guildRepo: GuildRepo, private customMessageRepo: CustomMessageRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // bday message test <type> <position> [user count]
@@ -95,7 +95,7 @@ export class MessageTestSubCommand {
                                 .replace(
                                     /<Year>/g,
                                     Math.floor(
-                                        moment().diff(msg.guild.createdAt, 'years')
+                                        moment().diff((target ? target : msg.guild.members.cache.get(msg.client.user.id)).joinedAt, 'years')
                                     ).toString()
                                 )
                                 .replace(/<Server>/g, msg.guild.name)

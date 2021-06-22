@@ -1,20 +1,23 @@
 import { CustomMessage, CustomMessages } from '../../models/database';
 import { Message, TextChannel } from 'discord.js';
-import { MessageUtils, ParseUtils } from '../../utils';
+import { MessageUtils, ParseUtils, FormatUtils } from '../../utils';
 
 import { CustomMessageRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
 export class MessageRemoveSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) {}
+    constructor(private customMessageRepo: CustomMessageRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
-        let type = args[3]?.toLowerCase();
+        let type = FormatUtils.extractCelebrationType(args[3]?.toLowerCase());
 
         if (
-            !type ||
-            (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
+            type !== 'birthday' &&
+            type !== 'memberanniversary' &&
+            type !== 'serveranniversary' &&
+            type !== 'userspecificbirthday' &&
+            type !== 'userspecificmemberanniversary'
         ) {
             await MessageUtils.send(
                 channel,
@@ -41,8 +44,9 @@ export class MessageRemoveSubCommand {
         let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
         let userMessages: CustomMessages;
 
-        if (type === 'birthday') {
+        if (type === 'userspecificbirthday' || type === 'userspecificmemberanniversary') {
             if (target) {
+                type = type === 'userspecificbirthday' ? 'birthday' : 'memberanniversary'
                 userMessages = await this.customMessageRepo.getCustomUserMessages(
                     msg.guild.id,
                     type
@@ -51,7 +55,7 @@ export class MessageRemoveSubCommand {
                 if (!userMessages) {
                     await MessageUtils.send(
                         channel,
-                        Lang.getEmbed('validation.noUserSpecificBirthdayMessages', LangCode.EN_US)
+                        Lang.getEmbed('validation.' + type === 'birthday' ? 'noUserSpecificBirthdayMessages' : 'noUserSpecificMemberAnniversaryMessages', LangCode.EN_US)
                     );
                     return;
                 }
@@ -81,11 +85,11 @@ export class MessageRemoveSubCommand {
         // find the position based on if it is a user or global message
         target
             ? (message = userMessages.customMessages.find(
-                  question => question.Position === position
-              ))
+                question => question.Position === position
+            ))
             : (message = customMessages.customMessages.find(
-                  question => question.Position === position
-              ));
+                question => question.Position === position
+            ));
 
         if (!message) {
             await MessageUtils.send(
@@ -102,7 +106,7 @@ export class MessageRemoveSubCommand {
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.removeMessage', LangCode.EN_US, { MESSAGE: message.Message })
+            Lang.getEmbed('results.removeMessage', LangCode.EN_US, { MESSAGE: target ? message.Message.replace('<Users>', target.toString()) : message.Message })
         );
     }
 }
