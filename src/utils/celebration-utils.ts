@@ -9,10 +9,11 @@ import {
     UserData,
     TrustedRole,
 } from '../models/database';
-import { Guild, GuildMember, Role } from 'discord.js';
+import { Guild, GuildMember, Role, User } from 'discord.js';
 
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
+import { MemberAnniversaryRoles, MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 
 let Debug = require('../../config/debug.json');
 
@@ -266,6 +267,16 @@ export class CelebrationUtils {
         return mentionString;
     }
 
+    public static replacePlaceHolders(message: string, guild: Guild, type: string, userList: string, year: number): string {
+        message = message.split('<Server>')
+            .join(guild.name);
+
+        if (type !== 'serveranniversary') message = message.split('<Users>').join(userList);
+        if (type !== 'birthday') message = message.split('Year').join(year.toString());
+
+        return message
+    }
+
     public static getUserListString(guildData: GuildData, guildMember: GuildMember[]): string {
         // Find mentioned role
         let userList: string;
@@ -331,6 +342,30 @@ export class CelebrationUtils {
             }
         }
         return trustedRoles;
+    }
+
+    public static async getMemberAnniversaryRoleList(guild: Guild, roles: MemberAnniversaryRole[]): Promise<Role[]> {
+        let memberAnniversaryRoles: Role[];
+        for (let role of roles) {
+            try {
+                let tRole: Role = await guild.roles.fetch(role.MemberAnniversaryRoleDiscordId);
+                if (tRole) memberAnniversaryRoles.push(tRole);
+            } catch (error) {
+                // Member Anniversary role is invalid
+            }
+        }
+        return memberAnniversaryRoles;
+    }
+
+    public static canGiveAllRoles(guild: Guild, roles: Role[], guildMember: GuildMember): boolean {
+        let check = true;
+        for (let role of roles) {
+            // See if the bot can give the roles
+            let highestBotRole = guild.members.resolve(guild.client.user).roles.highest.position;
+            check = role && role.position < highestBotRole && (guildMember.roles.highest.position < highestBotRole);
+            if (!check) return false;
+        }
+        return true;
     }
 
     public static convertCelebrationData(
