@@ -108,7 +108,8 @@ export class MessageService {
                         filteredGuild,
                         trustedRoles,
                         member,
-                        filteredGuild.guildData.TrustedPreventsMessage
+                        filteredGuild.guildData.TrustedPreventsMessage,
+                        hasPremium
                     )
                 );
 
@@ -289,7 +290,7 @@ export class MessageService {
 
                         color = !color
                             ? '#' + ColorUtils.findHex(customMessage?.Color) ??
-                              Config.colors.default
+                            Config.colors.default
                             : Config.colors.default;
 
                         useEmbed = customMessage.Embed ? true : false;

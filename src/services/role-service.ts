@@ -101,7 +101,8 @@ export class RoleService {
                             filteredGuild,
                             trustedRoles,
                             addBirthdayMember,
-                            filteredGuild.guildData.TrustedPreventsRole
+                            filteredGuild.guildData.TrustedPreventsRole,
+                            hasPremium
                         )
                     )
                         await ActionUtils.giveRole(addBirthdayMember, birthdayRole);

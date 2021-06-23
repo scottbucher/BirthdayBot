@@ -74,8 +74,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
         );
         let birthday = moment(userData.Birthday);
 
@@ -101,8 +101,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
         );
         let currentHour = currentDate.hour();
         return currentHour === 0;
@@ -121,8 +121,8 @@ export class CelebrationUtils {
                 guildData.DefaultTimezone === '0'
                     ? userData.TimeZone
                     : guildData.UseTimezone !== 'server'
-                    ? userData.TimeZone
-                    : guildData.DefaultTimezone
+                        ? userData.TimeZone
+                        : guildData.DefaultTimezone
             )
             .subtract(1, 'days');
         let currentHour = currentDate.hour();
@@ -141,8 +141,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
         );
         let currentHour = currentDate.hour();
         return currentHour === guildData.BirthdayMessageTime;
@@ -171,8 +171,8 @@ export class CelebrationUtils {
         return currentDateFormatted !== anniversaryFormatted
             ? false
             : currentDate.hour() !== guildData.MemberAnniversaryMessageTime
-            ? false
-            : true;
+                ? false
+                : true;
     }
 
     public static isServerAnniversaryMessage(guild: Guild, guildData: GuildData): boolean {
@@ -195,8 +195,8 @@ export class CelebrationUtils {
         return currentDateFormatted !== anniversaryFormatted
             ? false
             : currentDate.hour() !== guildData.ServerAnniversaryMessageTime
-            ? false
-            : true;
+                ? false
+                : true;
     }
 
     public static getMemberYears(guildMember: GuildMember, guildData: GuildData): number {
@@ -279,12 +279,15 @@ export class CelebrationUtils {
         guildCelebrationData: GuildCelebrationData,
         trustedRoles: Role[],
         birthdayMember: GuildMember,
-        trustedSetting: number
+        trustedSetting: number,
+        hasPremium: boolean
     ): boolean {
         // If it passed the trusted role(s) check
         // Default this to true if there are no trusted roles
         // If there are trusted roles and trusted DOESN'T prevent Role/Message (the trusted setting passed in) then set it to true
         let passTrustedCheck = trustedRoles.length == 0 ? true : trustedSetting ? false : true;
+
+        trustedRoles = hasPremium ? trustedRoles : [trustedRoles[0]];
 
         //if passTrustedCheck is already true we don't have to check for trusted role(s)
         if (!passTrustedCheck) {
