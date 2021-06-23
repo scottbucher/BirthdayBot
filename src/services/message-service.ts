@@ -155,11 +155,8 @@ export class MessageService {
                             birthdayMember,
                         ]);
 
-                        // Add the compiled user list
-                        message = customMessage.Message.split('@Users')
-                            .join(userList)
-                            .split('<Users>')
-                            .join(userList);
+                        // Replace the placeholders
+                        message = CelebrationUtils.replacePlaceHolders(customMessage.Message, guild, customMessage.Type, userList, null);
 
                         // Find the color of the embed
                         color = customMessage.Color === '0' ? Config.colors.default : null;
@@ -204,10 +201,10 @@ export class MessageService {
                         birthdayMessages,
                         hasPremium
                     );
-                    message = customMessage.Message.split('@Users')
-                        .join(userList)
-                        .split('<Users>')
-                        .join(userList);
+
+                    // Replace the placeholders
+                    message = CelebrationUtils.replacePlaceHolders(customMessage.Message, guild, customMessage.Type, userList, null);
+
                     // Find the color of the embed
                     color = customMessage?.Color === '0' ? Config.colors.default : null;
 
@@ -269,14 +266,10 @@ export class MessageService {
                             memberAnniversaryMessages,
                             hasPremium
                         );
-                        message = customMessage.Message.split('@Users')
-                            .join(userList)
-                            .split('<Users>')
-                            .join(userList)
-                            .split('<ServerName>')
-                            .join(guild.name)
-                            .split('<Year>')
-                            .join('temp');
+
+                        // Replace the placeholders
+                        message = CelebrationUtils.replacePlaceHolders(customMessage.Message, guild, customMessage.Type, userList, year);
+
                         // TEMP UNTIL THE YEAR PROBLEM IS ADDRESSED
                         // Find the color of the embed
                         color = customMessage?.Color === '0' ? Config.colors.default : null;
@@ -328,12 +321,11 @@ export class MessageService {
                     let serverYears = CelebrationUtils.getServerYears(
                         guild,
                         filteredGuild.guildData
-                    ).toString();
+                    );
 
-                    message = customMessage.Message.split('<ServerName>')
-                        .join(guild.name)
-                        .split('<Year>')
-                        .join(serverYears);
+                    // Replace the placeholders
+                    message = CelebrationUtils.replacePlaceHolders(customMessage.Message, guild, customMessage.Type, null, serverYears);
+
                     // Find the color of the embed
                     color = customMessage?.Color === '0' ? Config.colors.default : null;
 
