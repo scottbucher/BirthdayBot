@@ -4,12 +4,12 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
+import { FormatUtils, MessageUtils } from '../../utils';
 import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-import { MessageUtils, FormatUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class MessageClearSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) { }
+    constructor(private customMessageRepo: CustomMessageRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -50,27 +50,42 @@ export class MessageClearSubCommand {
             return;
         }
 
-        let customMessages =
-            type.includes('user')
-                ? await this.customMessageRepo.getCustomUserMessages(msg.guild.id, type.includes('birthday') ? 'birthday' : 'memberanniversary')
-                : await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
+        let customMessages = type.includes('user')
+            ? await this.customMessageRepo.getCustomUserMessages(
+                  msg.guild.id,
+                  type.includes('birthday') ? 'birthday' : 'memberanniversary'
+              )
+            : await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
         let totalMessages = customMessages.customMessages.length;
         // If it is a 0 the custom message technically needs a plural
-        let displayType: string = FormatUtils.getCelebrationDisplayType(type, totalMessages !== 1).toLowerCase()
+        let displayType: string = FormatUtils.getCelebrationDisplayType(
+            type,
+            totalMessages !== 1
+        ).toLowerCase();
 
         if (totalMessages === 0) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noCustomMessagesGeneric', LangCode.EN_US, { DISPLAY_TYPE: displayType }));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noCustomMessagesGeneric', LangCode.EN_US, {
+                    DISPLAY_TYPE: displayType,
+                })
+            );
             return;
         }
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-
-        let confirmationMessage = await MessageUtils.send(channel, Lang.getEmbed('serverPrompts.confirmClearMessages', LangCode.EN_US, {
-            MESSAGE_COUNT: totalMessages.toString(),
-            DISPLAY_TYPE: FormatUtils.getCelebrationDisplayType(type, totalMessages > 1).toLowerCase()
-        }));
+        let confirmationMessage = await MessageUtils.send(
+            channel,
+            Lang.getEmbed('serverPrompts.confirmClearMessages', LangCode.EN_US, {
+                MESSAGE_COUNT: totalMessages.toString(),
+                DISPLAY_TYPE: FormatUtils.getCelebrationDisplayType(
+                    type,
+                    totalMessages > 1
+                ).toLowerCase(),
+            })
+        );
 
         // Send confirmation and emotes
         for (let option of trueFalseOptions) {
@@ -99,10 +114,18 @@ export class MessageClearSubCommand {
             // Confirm
 
             type.includes('user')
-                ? await this.customMessageRepo.clearCustomUserMessages(msg.guild.id, type.includes('birthday') ? 'birthday' : 'memberanniversary')
+                ? await this.customMessageRepo.clearCustomUserMessages(
+                      msg.guild.id,
+                      type.includes('birthday') ? 'birthday' : 'memberanniversary'
+                  )
                 : await this.customMessageRepo.clearCustomMessages(msg.guild.id, type);
 
-            await MessageUtils.send(channel, Lang.getEmbed('results.customMessagesCleared', LangCode.EN_US, { DISPLAY_TYPE: displayType }));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.customMessagesCleared', LangCode.EN_US, {
+                    DISPLAY_TYPE: displayType,
+                })
+            );
         } else {
             let embed = new MessageEmbed()
                 .setDescription(`Action canceled.`)

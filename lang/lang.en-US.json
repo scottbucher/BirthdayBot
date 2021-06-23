@@ -290,10 +290,7 @@
                 "fields": [
                     {
                         "name": "Actions",
-                        "value": [
-                            "{{REF:emotes.confirm}} Confirm",
-                            "{{REF:emotes.deny}} Deny"
-                        ]
+                        "value": ["{{REF:emotes.confirm}} Confirm", "{{REF:emotes.deny}} Deny"]
                     }
                 ],
                 "footer": {
@@ -402,17 +399,15 @@
                 "footer": {
                     "text": "You now have {{AMOUNT}} birthday attempts left."
                 },
-                "color": "{{REF:colors.success}}",
-                "timestamp": true
+                "color": "{{REF:colors.success}}"
             },
             "purgeSuccessful": {
                 "description": "Successfully purged your data from the database.",
                 "color": "{{REF:colors.success}}"
             },
             "nextBirthday": {
-                "description": "{{USERS}}'s birthday is next on **{{BIRTHDAY_}}**!",
-                "color": "{{REF:colors.deafult}}",
-                "timestamp": true
+                "description": "{{USERS}}'s birthday is next on **{{BIRTHDAY}}**!",
+                "color": "{{REF:colors.default}}"
             },
             "addMessageExpired": {
                 "title": "Add Custom Message - Expired",
@@ -626,18 +621,14 @@
                 "color": "{{REF:colors.success}}"
             },
             "viewBirthday": {
-                "description": [
-                    "Your brthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!"
-                ],
+                "description": "Your birthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!",
                 "footer": {
                     "text": "You currently have {{CHANGES_LEFT}} birthday attempt(s) left."
                 },
                 "color": "{{REF:colors.default}}"
             },
             "viewUserBirthday": {
-                "description": [
-                    "{{USER}}'s brthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!"
-                ],
+                "description": "{{USER}}'s birthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!",
                 "color": "{{REF:colors.default}}"
             },
             "addCustomMessage": {
@@ -702,22 +693,16 @@
             "voteRequired": {
                 "title": "Vote Required!",
                 "thumbnail": "{{REF:links.voteImage}}",
-                "description": [
-                    "This command requires you to have voted in the past 24 hours!"
-                ],
+                "description": ["This command requires you to have voted in the past 24 hours!"],
                 "fields": [
                     {
                         "name": "Last Vote",
-                        "value": [
-                            "{{LAST_VOTE}}"
-                        ],
+                        "value": ["{{LAST_VOTE}}"],
                         "inline": true
                     },
                     {
                         "name": "Vote Here",
-                        "value": [
-                            "[Top.gg]({{REF:links.vote}})"
-                        ],
+                        "value": ["[Top.gg]({{REF:links.vote}})"],
                         "inline": true
                     }
                 ],
@@ -751,17 +736,14 @@
             },
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": [
-                    "Please specify an option!",
-                    "{{OPTIONS}}"
-                ],
+                "description": ["Please specify an option!", "{{OPTIONS}}"],
                 "color": "{{REF:colors.error}}"
             },
             "invalidSetupArgs": {
                 "title": "Invalid Usage!",
                 "description": [
-                    "Please specify which setup you'd like to run!",
-                    "Setup options: `message` or `trusted"
+                    "Please specify which setup you want to run!",
+                    "Setup options: `message` or `trusted`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -774,9 +756,7 @@
                 "color": "{{REF:colors.error}}"
             },
             "userBirthdayNotSet": {
-                "description": [
-                    "{{USER}} hasn't set their birthday!"
-                ],
+                "description": ["{{USER}} hasn't set their birthday!"],
                 "color": "{{REF:colors.error}}"
             },
             "noBlacklistArgs": {
@@ -1461,7 +1441,7 @@
                         ]
                     }
                 ],
-                "footer":{
+                "footer": {
                     "text": "Thanks for support Birthday Bot!"
                 },
                 "timestamp": true
@@ -1479,7 +1459,7 @@
                         ]
                     }
                 ],
-                "footer":{
+                "footer": {
                     "text": "Cosider letting us know how to improve premium!"
                 },
                 "timestamp": true
@@ -1497,8 +1477,8 @@
                         ]
                     }
                 ],
-                "footer":{
-                    "text": "Cosider letting us know how to improve premium!"
+                "footer": {
+                    "text": "Consider letting us know how to improve premium!"
                 },
                 "timestamp": true
             },
@@ -1540,9 +1520,7 @@
                 "fields": [
                     {
                         "name": "Purchase Premium",
-                        "value": [
-                            "[Checkout with PayPal Here!]({{SUB_LINK}})"
-                        ]
+                        "value": ["[Checkout with PayPal Here!]({{SUB_LINK}})"]
                     },
                     {
                         "name": "Premium Features",
@@ -1561,9 +1539,7 @@
                     },
                     {
                         "name": "Price",
-                        "value": [
-                            "2.99 USD / Month"
-                        ]
+                        "value": ["2.99 USD / Month"]
                     },
                     {
                         "name": "Purchase Details",
@@ -1596,9 +1572,7 @@
                     },
                     {
                         "name": "Price",
-                        "value": [
-                            "2.99 USD / Month"
-                        ]
+                        "value": ["2.99 USD / Month"]
                     },
                     {
                         "name": "Purchase Details",
@@ -1616,33 +1590,23 @@
                 "fields": [
                     {
                         "name": "Active",
-                        "value": [
-                            "{{IS_ACTIVE}}"
-                        ]
+                        "value": ["{{IS_ACTIVE}}"]
                     },
                     {
                         "name": "Subscription ID",
-                        "value": [
-                            "{{SUBSCRIPTION_ID}}"
-                        ]
+                        "value": ["{{SUBSCRIPTION_ID}}"]
                     },
                     {
                         "name": "Status",
-                        "value": [
-                            "{{STATUS}}"
-                        ]
+                        "value": ["{{STATUS}}"]
                     },
                     {
                         "name": "Last Payment",
-                        "value": [
-                            "{{LAST_PAYMENT}}"
-                        ]
+                        "value": ["{{LAST_PAYMENT}}"]
                     },
                     {
                         "name": "Paid Until",
-                        "value": [
-                            "{{PAID_UNTIL}}"
-                        ]
+                        "value": ["{{PAID_UNTIL}}"]
                     },
                     {
                         "name": "Purchase Details",
@@ -1657,9 +1621,7 @@
         "premiumRequired": {
             "command": {
                 "title": "Premium Required!",
-                "description": [
-                    "This command requires this server to have premium!"
-                ],
+                "description": ["This command requires this server to have premium!"],
                 "fields": [
                     {
                         "name": "Premium Commands",
@@ -1727,10 +1689,7 @@
                     },
                     {
                         "name": "Links",
-                        "value": [
-                            "{{REF:link.supportEmbed}}",
-                            "{{REF:link.inviteEmbed}}"
-                        ]
+                        "value": ["{{REF:link.supportEmbed}}", "{{REF:link.inviteEmbed}}"]
                     }
                 ]
             }
@@ -1745,16 +1704,11 @@
                     },
                     {
                         "name": "Links",
-                        "value": [
-                            "{{REF:links.supportEmbed}}",
-                            "{{REF:links.inviteEmbed}}"
-                        ]
+                        "value": ["{{REF:links.supportEmbed}}", "{{REF:links.inviteEmbed}}"]
                     },
                     {
                         "name": "Created With",
-                        "value": [
-                            "{{REF:links.templateEmbed}}"
-                        ]
+                        "value": ["{{REF:links.templateEmbed}}"]
                     }
                 ]
             },
@@ -1767,9 +1721,7 @@
                     },
                     {
                         "name": "Contact Support",
-                        "value": [
-                            "[Join Support Server]({{REF:links.support}})"
-                        ]
+                        "value": ["[Join Support Server]({{REF:links.support}})"]
                     }
                 ]
             },
@@ -1790,7 +1742,7 @@
                 "color": "{{REF:colors.default}}"
             },
             "support": {
-                "description": "Fpr support join our discord server [here]({{REF:links.support}})!",
+                "description": "For support join our discord server [here]({{REF:links.support}})!",
                 "color": "{{REF:colors.default}}"
             },
             "map": {
@@ -1860,7 +1812,7 @@
                     },
                     {
                         "name": "{{REF:terms.requireAllTrustedRoles}}",
-                        "value": "{{REQUIRE_ALL_TRIUSTED_ROLES}}",
+                        "value": "{{REQUIRE_ALL_TRUSTED_ROLES}}",
                         "inline": true
                     },
                     {
@@ -1894,12 +1846,12 @@
                     },
                     {
                         "name": "{{REF:terms.memberAnniversaryChannel}}",
-                        "value": "{{MEMBER_ANNIVERSAR_CHANNEL}}",
+                        "value": "{{MEMBER_ANNIVERSARY_CHANNEL}}",
                         "inline": true
                     },
                     {
                         "name": "{{REF:terms.serverAnniversaryChannel}}",
-                        "value": "{{SERVER_ANNIVERSAR_CHANNEL}}",
+                        "value": "{{SERVER_ANNIVERSARY_CHANNEL}}",
                         "inline": true
                     },
                     {
@@ -1909,27 +1861,27 @@
                     },
                     {
                         "name": "{{REF:terms.memberAnniversaryMessageTime}}",
-                        "value": "{{MEMBER_ANNIVERSAR_MESSAGE_TIME}}",
+                        "value": "{{MEMBER_ANNIVERSARY_MESSAGE_TIME}}",
                         "inline": true
                     },
                     {
                         "name": "{{REF:terms.serverAnniversaryMessageTime}}",
-                        "value": "{{SERVER_ANNIVERSAR_MESSAGE_TIME}}",
+                        "value": "{{SERVER_ANNIVERSARY_MESSAGE_TIME}}",
                         "inline": true
                     },
                     {
-                        "name": "{{REF:terms.birthdayMentionSetting}}",
+                        "name": "{{REF:terms.birthdayMention}}",
                         "value": "{{BIRTHDAY_MENTION}}",
                         "inline": true
                     },
                     {
-                        "name": "{{REF:terms.memberAnniversaryMentionSetting}}",
-                        "value": "{{MEMBER_ANNIVERSAR_MENTION}}",
+                        "name": "{{REF:terms.memberAnniversaryMention}}",
+                        "value": "{{MEMBER_ANNIVERSARY_MENTION}}",
                         "inline": true
                     },
                     {
-                        "name": "{{REF:terms.serverAnniversaryMentionSetting}}",
-                        "value": "{{SERVER_ANNIVERSAR_MENTION}}",
+                        "name": "{{REF:terms.serverAnniversaryMention}}",
+                        "value": "{{SERVER_ANNIVERSARY_MENTION}}",
                         "inline": true
                     },
                     {
@@ -1964,10 +1916,7 @@
                     },
                     {
                         "name": "Stats",
-                        "value": [
-                            "**Shards**: {{SHARD_COUNT}}",
-                            "**Servers**: {{SERVER_COUNT}}"
-                        ]
+                        "value": ["**Shards**: {{SHARD_COUNT}}", "**Servers**: {{SERVER_COUNT}}"]
                     },
                     {
                         "name": "Memory",
@@ -2242,9 +2191,11 @@
             "prefix": "bday"
         },
         "colors": {
+            "default": "#4eefff",
             "success": "#1cfe86",
             "warn": "#ffa255",
-            "error": "#ff0000"
+            "error": "#ff0000",
+            "role": "#ac1cfe"
         },
         "emotes": {
             "confirm": "✅",
@@ -2410,23 +2361,11 @@
             "userSpecificBirthday": "userspecificbirthday",
             "userSpecificMemberAnniversary": "userspecificmemberanniversary",
             "alternatives": {
-                "birthday": [
-                    "bday"
-                ],
-                "memberAnniversary": [
-                    "member"
-                ],
-                "serverAnniversary": [
-                    "server"
-                ],
-                "userSpecificBirthday": [
-                    "specificbirthday",
-                    "userbirthday"
-                ],
-                "userSpecificMemberAnniversary": [
-                    "specificanniversary",
-                    "useranniversary"
-                ]
+                "birthday": ["bday"],
+                "memberAnniversary": ["member"],
+                "serverAnniversary": ["server"],
+                "userSpecificBirthday": ["specificbirthday", "userbirthday"],
+                "userSpecificMemberAnniversary": ["specificanniversary", "useranniversary"]
             }
         },
         "placeHolders": {

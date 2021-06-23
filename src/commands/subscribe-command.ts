@@ -1,10 +1,10 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
-import { Logger, SubscriptionService, Lang } from '../services';
+import { Lang, Logger, SubscriptionService } from '../services';
 
 import { Command } from './command';
+import { LangCode } from '../models/enums';
 import { MessageUtils } from '../utils';
 import { PlanName } from '../models/subscription-models';
-import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -20,7 +20,7 @@ export class SubscribeCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private subscriptionService: SubscriptionService) { }
+    constructor(private subscriptionService: SubscriptionService) {}
 
     public async execute(
         args: string[],
@@ -28,12 +28,18 @@ export class SubscribeCommand implements Command {
         channel: TextChannel | DMChannel
     ): Promise<void> {
         if (!Config.payments.enabled) {
-            await MessageUtils.send(channel, Lang.getEmbed('premiumPromps.premiumDisabled', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('premiumPrompts.premiumDisabled', LangCode.EN_US)
+            );
             return;
         }
 
         if (!Config.payments.allowNewTransactions) {
-            await MessageUtils.send(channel, Lang.getEmbed('premiumPromps.refuseNewTransactions', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('premiumPrompts.refuseNewTransactions', LangCode.EN_US)
+            );
             return;
         }
 
@@ -42,12 +48,16 @@ export class SubscribeCommand implements Command {
             msg.guild.id
         );
         if (!subLink) {
-            await MessageUtils.send(channel, Lang.getEmbed('premiumPromps.premiumAlreadyActive', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('premiumPrompts.premiumAlreadyActive', LangCode.EN_US)
+            );
             return;
         }
 
-        await MessageUtils.send(msg.author, Lang.getEmbed('premiumPrompts.subscriptionPM', LangCode.EN_US,
-            {
+        await MessageUtils.send(
+            msg.author,
+            Lang.getEmbed('premiumPrompts.subscriptionPM', LangCode.EN_US, {
                 SUB_LINK: subLink.link,
                 BIRTHDAY_MESSAGE_MAX_FREE: Config.validation.message.maxCount.birthday.free.toLocaleString(),
                 BIRTHDAY_MESSAGE_MAX_PAID: Config.validation.message.maxCount.birthday.paid.free.toLocaleString(),
@@ -56,11 +66,14 @@ export class SubscribeCommand implements Command {
                 SERVER_ANNIVERSARY_MESSAGE_MAX_FREE: Config.validation.message.maxCount.serverAnniversary.paid.free.toLocaleString(),
                 SERVER_ANNIVERSARY_MESSAGE_MAX_PAID: Config.validation.message.maxCount.serverAnniversary.paid.free.toLocaleString(),
                 MAX_ANNIVERSARY_ROLES: Config.validation.trustedRoles.maxCount.paid.free.toLocaleString(),
-                MAX_TRUSTED_ROLES: Config.validation.maxCount.paid.free.toLocaleString()
+                MAX_TRUSTED_ROLES: Config.validation.maxCount.paid.free.toLocaleString(),
+            })
+        );
 
-            }));
-
-        await MessageUtils.send(channel, Lang.getEmbed('premiumPrompts.subscriptionDMPrompt', LangCode.EN_US));
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('premiumPrompts.subscriptionDMPrompt', LangCode.EN_US)
+        );
 
         Logger.info(
             Logs.info.unsubRanSubCmd
