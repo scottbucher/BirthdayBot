@@ -23,7 +23,7 @@ export class FormatUtils {
         return values.length == 2
             ? values[0] + ' ' + values[1]
             : [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
-                values.length < 2 ? '' : ', and '
+                values.length < 2 ? '' : `, ${Lang.getRef('terms.and', LangCode.EN_US)} `
             );
     }
 
@@ -99,6 +99,7 @@ export class FormatUtils {
         }
     }
 
+    // TODO: add usage of arrays in lang system
     public static findBoolean(input: string): boolean {
         switch (input.toLowerCase()) {
             case 'enabled':
