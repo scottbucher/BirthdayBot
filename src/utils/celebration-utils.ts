@@ -316,7 +316,8 @@ export class CelebrationUtils {
         // If it passed the trusted role(s) check
         // Default this to true if there are no trusted roles
         // If there are trusted roles and trusted DOESN'T prevent Role/Message (the trusted setting passed in) then set it to true
-        let passTrustedCheck = trustedRoles.length == 0 ? true : trustedSetting ? false : true;
+        let passTrustedCheck =
+            !trustedRoles || trustedRoles.length == 0 ? true : trustedSetting ? false : true;
 
         trustedRoles = hasPremium ? trustedRoles : [trustedRoles[0]];
 
@@ -376,11 +377,12 @@ export class CelebrationUtils {
         let check = true;
         for (let role of roles) {
             // See if the bot can give the roles
+            // Higher roles have lower positions (highest role is has a position of 1)
             let highestBotRole = guild.members.resolve(guild.client.user).roles.highest.position;
             check =
                 role &&
-                role.position < highestBotRole &&
-                guildMember.roles.highest.position < highestBotRole;
+                role.position > highestBotRole &&
+                guildMember.roles.highest.position > highestBotRole;
             if (!check) return false;
         }
         return true;

@@ -60,15 +60,21 @@ export class TestCommand implements Command {
         //bday test <type> [user] [year]
         let guild = msg.guild;
 
-        if (args.length <= 2) {
-            Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US);
+        if (args.length < 3) {
+            MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US)
+            );
             return;
         }
 
         let type = FormatUtils.extractCelebrationType(args[2].toLowerCase());
 
         if (!type) {
-            Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US);
+            MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US)
+            );
             return;
         }
 
@@ -208,12 +214,14 @@ export class TestCommand implements Command {
                     // Get our custom message
                     let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
 
+                    let userList = CelebrationUtils.getUserListString(guildData, [guildMember]);
+
                     // Replace the placeholders
                     message = CelebrationUtils.replacePlaceHolders(
                         message,
                         guild,
                         type,
-                        target.toString(),
+                        userList,
                         null
                     );
 
@@ -366,12 +374,14 @@ export class TestCommand implements Command {
                 // Get our custom message
                 let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
 
+                let userList = CelebrationUtils.getUserListString(guildData, [guildMember]);
+
                 // Replace the placeholders
                 message = CelebrationUtils.replacePlaceHolders(
                     message,
                     guild,
                     type,
-                    target.toString(),
+                    userList,
                     year === 0 ? 1 : year
                 );
 

@@ -1,6 +1,6 @@
+import { CelebrationUtils, FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { CustomMessageRepo, GuildRepo } from '../../services/database/repos';
-import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { GuildMember, Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
@@ -58,13 +58,17 @@ export class MessageTestSubCommand {
             userCount = 1;
         }
 
-        let users: string[] = [];
+        let botMember = msg.guild.members.resolve(msg.client.user);
+
+        let memberList: GuildMember[] = [];
 
         for (let i = 0; i < userCount; i++) {
-            target ? users.push(target.toString()) : users.push(msg.author.toString());
+            memberList.push(target ? target : botMember);
         }
 
-        let userList = userCount > 1 ? FormatUtils.joinWithAnd(users) : msg.author.toString();
+        let guildData = await this.guildRepo.getGuild(msg.guild.id);
+
+        let userList = CelebrationUtils.getUserListString(guildData, memberList);
 
         // Get guild data
         // let guildData = await this.guildRepo.getGuild(msg.guild.id);
