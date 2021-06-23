@@ -1768,28 +1768,6 @@
                 "color": "{{REF:colors.warn}}"
             }
         },
-        "help": {
-            "general": {
-                "title": "{{REF:bot.name}} - Help",
-                "description": "{{REF:bot.description}}",
-                "fields": [
-                    {
-                        "name": "Commands",
-                        "value": [
-                            "**bot test** - Run the test command.",
-                            "**bot info** - More information about {{REF:bot.name}}."
-                        ]
-                    },
-                    {
-                        "name": "Links",
-                        "value": [
-                            "{{REF:link.supportEmbed}}",
-                            "{{REF:link.inviteEmbed}}"
-                        ]
-                    }
-                ]
-            }
-        },
         "info": {
             "general": {
                 "title": "{{REF:bot.name}} - Info",
@@ -2006,6 +1984,126 @@
                     "text": "© {{DATE}} Birthday Bot"
                 },
                 "timestamp": true
+            }
+        },
+        "help": {
+            "general": {
+                "title": "Birthday Bot General Help",
+                "description": [
+                    "Birthday Bot helps your server celebrate birthdays with automatic birthday roles and announcements.",
+                    "",
+                    "**bday premium** - See information about Birthday Bot Premium.",
+                    "**bday subscribe** - Subscribe to Birthday Bot Premium!",
+                    "**bday help premium** - Help for Birthday Bot Premium.",
+                    "",
+                    "**bday set** - Set your birthday.",
+                    "**bday view [user]** - View your birthday or a users birthday.",
+                    "**bday next**** - View next birthday(s) in the server.",
+                    "**bday list [page/date]**** - View the server birthday list.",
+                    "**bday map** - View the time zone map.",
+                    "**bday invite** - Invite Birthday Bot to a server.",
+                    "**bday support** - Join the support server.",
+                    "**bday docs** - View the documentation.",
+                    "**bday faq** - View the frequently asked questions.",
+                    "**bday vote** - Vote for Birthday Bot!",
+                    "**bday purge** - Remove your birthday data.",
+                    "**bday help setup** - Help for server setup.",
+                    "**bday help message** - Help for the birthday message settings.",
+                    "**bday help trusted** - Help for the trusted system.",
+                    "**bday help blacklist** - Help for permissions.",
+                    "**bday settings [message/advanced]**** - View server's settings.",
+                    "**bday test [user]**** - Test the birthday event.",
+                    "",
+                    "**bday donate** - Support developments by donating!",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{REF:links.support}})."
+                ],
+                "fields": [
+                    {
+                        "name": "Legend",
+                        "value": "** = Server Only Command"
+                    }
+                ]
+            },
+            "setup": {
+                "title": "Birthday Bot Setup Help - Guild Only",
+                "description": [
+                    "**bday setup** - Interactive guide for server setup.",
+                    "**bday setup trusted** - Interactive guide for trusted system settings setup.",
+                    "**bday setup anniversary** - Interactive guide annviversary settings setup.",
+                    "",
+                    "**bday config channel <create/clear/#channel> <type>** - Set a channel type.",
+                    "**bday config role <create/clear/@role>** - Set the birthday role.",
+                    "**bday config birthdayMaster <create/clear/@role>** - Set the birthday channel.",
+                    "**bday config timezone <timezone> - Set the default server timezone.",
+                    "**bday config useTimezone <user/server> - Set which timezone to use for celebrations.",
+                    "**bday config nameFormat <default/username/nickname/mention/tag>** - Decide how member's names will appear.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{REF:links.support}})."
+                ]
+            },
+            "message": {
+                "title": "Birthday Bot Message Help - Guild Only",
+                "description": [
+                    "**bday message list <type> [page]** - List all messages for that type.",
+                    "**bday message add <type> <message>** - Add a message for that type.",
+                    " - Example Usage: `bday message add memberAnnivesary <Users> have been in <Server> for <Year>(s)!`",
+                    " - Placeholder for users: `{{REF:placeHolders.users}}`",
+                    " - Placeholder for year: `{{REF:placeHolders.year}}`",
+                    " - Placeholder for server name: `{{REF:placeHolders.server}}`",
+                    "**bday message remove <type> <position>** - Remove a certain message for that type.",
+                    "**bday message clear <type>** - Clear all messages for that type.",
+                    "**bday message time <type> <0-23>** - Set the message time for that type",
+                    "**bday message mention <type> <role/group>** - Set the message mention setting for that type.",
+                    "**bday message test <position> [user count]** - Test a custom message.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{REF:links.support}})."
+                ]
+            },
+            "trusted": {
+                "title": "Birthday Bot Trusted System Help - Guild Only",
+                "description": [
+                    "**bday setup trusted** - Interactive guide for trusted system settings setup.",
+                    "",
+                    "**bday config trustedRole add <role>** - Add a trusted role.",
+                    "**bday config trustedRole remove <position/role>** - Remove a trusted role",
+                    "**bday config trustedRole clear** - Clear all trusted roles.",
+                    "**bday config trustedRole list [page]** - List all trusted roles",
+                    "**bday config requireAllTrustedRoles <T/F>** - If a user should need all the trusted roles.",
+                    "**bday config trustedPreventsMsg <T/F>** - If trusted role is required for a birthday message.",
+                    "**bday config trustedPreventsRole <T/F>** - If trusted role is required to get the birthday role.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{REF:links.support}})."
+                ]
+            },
+            "blacklist": {
+                "title": "Birthday Bot Blacklist Help - Guild Only",
+                "description": [
+                    "**bday blacklist add <user>** - Add user to the blacklist.",
+                    "**bday blacklist remove <user>** - Remove user from the blacklist.",
+                    "**bday blacklist clear** - Clear the birthday blacklist.",
+                    "**bday blacklist list** - View all blacklisted users in your server.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{REF:links.support}})."
+                ]
+            },
+            "premium": {
+                "title": "Birthday Bot Premium Help - Guild Only",
+                "description": [
+                    "**bday premium** - View information about your server's premium.",
+                    "**bday message add <type> <Message>** - Add a user-specific message of that type.",
+                    " - Example Usage: `bday message add birthday Happy Birthday @Stqlth!`",
+                    " - Placeholder for year: `{{REF:placeHolders.year}}`",
+                    " - Placeholder for server name: `{{REF:placeHolders.server}}`",
+                    "**bday message remove <user>** - Remove a certain birthday message.",
+                    "**bday message list user [page]** - List all user-specific birthday messages.",
+                    "**bday message memberAnniversaryRole add <role> <year>** - Add a member anniversary role.",
+                    "**bday message memberAnniversaryRole remove <position/role>** - Remove a member anniversary role",
+                    "**bday message memberAnniversaryRole clear** - Clear all member anniversary roles.",
+                    "**bday message memberAnniversaryRole list [page]** - List all member anniversary roles.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{REF:links.support}})."
+                ]
             }
         },
         "dev": {
