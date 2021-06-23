@@ -142,7 +142,14 @@ async function start(): Promise<void> {
     let statsCommand = new StatsCommand(userRepo);
     let subscribeCommand = new SubscribeCommand(subscriptionService);
     let supportCommand = new SupportCommand();
-    // let testCommand = new TestCommand(birthdayService, guildRepo, blacklistRepo);
+    let testCommand = new TestCommand(
+        guildRepo,
+        userRepo,
+        customMessageRepo,
+        trustedRoleRepo,
+        blacklistRepo,
+        memberAnniversaryRoleRepo
+    );
     let viewCommand = new ViewCommand(userRepo);
     let voteCommand = new VoteCommand();
 
@@ -279,6 +286,7 @@ async function start(): Promise<void> {
             trustedRoleCommand,
             viewCommand,
             voteCommand,
+            testCommand,
         ],
         subscriptionService,
         guildRepo,
