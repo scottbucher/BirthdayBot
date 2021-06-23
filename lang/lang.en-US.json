@@ -404,6 +404,10 @@
                 },
                 "color": "{{REF:colors.success}}"
             },
+            "setAttempts": {
+                "description": "Successfully set {{USER}}'s birthday attempts tp {{AMOUNT}}!",
+                "color": "{{REF:colors.success}}"
+            },
             "purgeSuccessful": {
                 "description": "Successfully purged your data from the database.",
                 "color": "{{REF:colors.success}}"
@@ -1362,6 +1366,22 @@
             },
             "noUserFound": {
                 "description": "Could not find that user!",
+                "color": "{{REF:colors.error}}"
+            },
+            "noAmountGiven": {
+                "description": "Please specify an amount!",
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidNumber": {
+                "description": "Invalid Number!",
+                "color": "{{REF:colors.error}}"
+            },
+            "amountTooLarge": {
+                "description": "Amount too large!",
+                "color": "{{REF:colors.error}}"
+            },
+            "attemptsLeft": {
+                "description": "That user has not used any attempts!",
                 "color": "{{REF:colors.error}}"
             },
             "noCustomMessagesGeneric": {
@@ -2476,15 +2496,28 @@
         },
         "permissions": {
             "manageRoles": "Manage Roles",
-            "manageChannels": "Manage Channels",
-            "": "",
-            "": ""
+            "manageChannels": "Manage Channels"
         },
         "boolean": {
             "yes": "Yes",
             "no": "No",
             "true": "True",
             "false": "False"
+        },
+        "months": {
+            "jan": "January",
+            "deb": "Februrary",
+            "mar": "March",
+            "apr": "April",
+            "may": "May",
+            "jun": "June",
+            "july": "July",
+            "aug": "August",
+            "sep": "September",
+            "oct": "October",
+            "nov": "November",
+            "dec": "December",
+            "invalid": "Invalid Month"
         },
         "messages": {
             "missingEmbedPerms": [

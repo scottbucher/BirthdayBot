@@ -23,8 +23,8 @@ export class FormatUtils {
         return values.length == 2
             ? values[0] + ' ' + values[1]
             : [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
-                  values.length < 2 ? '' : ', and '
-              );
+                values.length < 2 ? '' : ', and '
+            );
     }
 
     public static checkAbbreviation(input: string): boolean {
@@ -70,31 +70,31 @@ export class FormatUtils {
     public static getMonth(month: number): string {
         switch (month) {
             case 1:
-                return 'January';
+                return Lang.getRef('months.jan', LangCode.EN_US);
             case 2:
-                return 'February';
+                return Lang.getRef('months.feb', LangCode.EN_US);
             case 3:
-                return 'March';
+                return Lang.getRef('months.mar', LangCode.EN_US);
             case 4:
-                return 'April';
+                return Lang.getRef('months.apr', LangCode.EN_US);
             case 5:
-                return 'May';
+                return Lang.getRef('months.may', LangCode.EN_US);
             case 6:
-                return 'June';
+                return Lang.getRef('months.jun', LangCode.EN_US);
             case 7:
-                return 'July';
+                return Lang.getRef('months.jul', LangCode.EN_US);
             case 8:
-                return 'August';
+                return Lang.getRef('months.aug', LangCode.EN_US);
             case 9:
-                return 'September';
+                return Lang.getRef('months.sep', LangCode.EN_US);
             case 10:
-                return 'October';
+                return Lang.getRef('months.oct', LangCode.EN_US);
             case 11:
-                return 'November';
+                return Lang.getRef('months.nov', LangCode.EN_US);
             case 12:
-                return 'December';
+                return Lang.getRef('months.dec', LangCode.EN_US);
             default:
-                return 'Invalid month';
+                return Lang.getRef('months.invalid', LangCode.EN_US);
         }
     }
 
@@ -145,8 +145,8 @@ export class FormatUtils {
                         type === 'birthday'
                             ? 'list.noCustomBirthdayMessages'
                             : type === 'memberanniversary'
-                            ? 'list.noCustomMemberAnniversaryMessages'
-                            : 'list.noCustomServerAnniversaryMessages',
+                                ? 'list.noCustomMemberAnniversaryMessages'
+                                : 'list.noCustomServerAnniversaryMessages',
                         LangCode.EN_US
                     )
                 );
@@ -158,14 +158,14 @@ export class FormatUtils {
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.free
                 : type === 'serveranniversary'
-                ? Config.validation.message.maxCount.serverAnniversary.free
-                : Config.validation.message.maxCount.birthday.free;
+                    ? Config.validation.message.maxCount.serverAnniversary.free
+                    : Config.validation.message.maxCount.birthday.free;
         let maxMessagesPaid: number =
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.paid
                 : type === 'serveranniversary'
-                ? Config.validation.message.maxCount.serverAnniversary.paid
-                : Config.validation.message.maxCount.birthday.paid;
+                    ? Config.validation.message.maxCount.serverAnniversary.paid
+                    : Config.validation.message.maxCount.birthday.paid;
 
         for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
@@ -184,8 +184,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessageLocked'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessageLocked'
-                    : 'birthdayMessageLocked';
+                        ? 'serverAnniversaryMessageLocked'
+                        : 'birthdayMessageLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -200,8 +200,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessageUnLocked'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessageUnLocked'
-                    : 'birthdayMessageUnLocked';
+                        ? 'serverAnniversaryMessageUnLocked'
+                        : 'birthdayMessageUnLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -246,13 +246,13 @@ export class FormatUtils {
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
+                    } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
+                    } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
             }
         }
 
@@ -315,13 +315,13 @@ export class FormatUtils {
             ) {
                 description += `**${i.toLocaleString()}.** ${
                     role ? `${role.toString()} ` : `**** `
-                }\n\n`;
+                    }\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ${
                     role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
-                }\n\n`;
+                    }\n\n`;
             }
             i++;
         }
@@ -381,7 +381,7 @@ export class FormatUtils {
             for (let user of users) {
                 userNames.push(
                     `${guild.members.resolve(user.UserDiscordId)?.displayName}` ||
-                        `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
+                    `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
                 );
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
@@ -420,7 +420,7 @@ export class FormatUtils {
             description += `**${
                 guild.members.resolve(user)?.displayName ||
                 `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
-            }**: (ID: ${user})\n`; // Append the description
+                }**: (ID: ${user})\n`; // Append the description
         }
 
         embed = Lang.getEmbed('list.blacklist', LangCode.EN_US, {
@@ -457,24 +457,24 @@ export class FormatUtils {
             if (
                 hasPremium ||
                 memberAnniversaryRole.Position <=
-                    Config.validation.memberAnniversaryRoles.maxCount.free
+                Config.validation.memberAnniversaryRoles.maxCount.free
             ) {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role ? `${role.toString()} ` : `**** `
-                }\n\n`;
+                    }\n\n`;
             } else {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
-                }\n\n`;
+                    }\n\n`;
             }
         }
 
         if (
             !hasPremium &&
             memberAnniversaryRoleResults.stats.TotalItems >
-                Config.validation.memberAnniversaryRoles.maxCount.free
+            Config.validation.memberAnniversaryRoles.maxCount.free
         ) {
             embed = Lang.getEmbed('list.memberAnniversaryRolePaid', LangCode.EN_US, {
                 PAGE: page.toString(),
