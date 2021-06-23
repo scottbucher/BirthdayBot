@@ -1832,6 +1832,10 @@
                 "description": "View our documentation for {{BOT}} [here]({{REF:links.docs}})!",
                 "color": "{{REF:colors.default}}"
             },
+            "vote": {
+                "description": "Support {{BOT}} by voting [here]({{REF:links.vote}})!",
+                "color": "{{REF:colors.default}}"
+            },
             "donate": {
                 "description": "You can support {{BOT}} by donating [here]({{REF:links.donate}})!",
                 "color": "{{REF:colors.default}}"

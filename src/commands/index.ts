@@ -25,3 +25,4 @@ export { SupportCommand } from './support-command';
 export { TestCommand } from './test-command';
 export { TrustedRoleCommand } from './trusted-role-command';
 export { ViewCommand } from './view-command';
+export { VoteCommand } from './vote-command';
