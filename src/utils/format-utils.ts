@@ -36,15 +36,16 @@ export class FormatUtils {
         return zoneNames.find(zone => zone.toLowerCase().includes(zoneSearch));
     }
 
+    // TODO: take another look at this
     public static getBirthday(input: string): string {
         // Try and get a date from the 3rd args
         if (
             input.includes('02/29') ||
             input.includes('2/29') ||
-            input.toLowerCase().includes('february 29') ||
-            input.toLowerCase().includes('feb 29') ||
-            input.toLowerCase().includes('february 29th') ||
-            input.toLowerCase().includes('feb 29th')
+            input.toLowerCase().includes(Lang.getRef('months.feb', LangCode.EN_US).toLowerCase() + ' 29') ||
+            input.toLowerCase().includes(Lang.getRef('months.feb', LangCode.EN_US).toLowerCase().slice(0, 2) + ' 29') ||
+            input.toLowerCase().includes(Lang.getRef('months.feb', LangCode.EN_US).toLowerCase() + ' 29th') ||
+            input.toLowerCase().includes(Lang.getRef('months.feb', LangCode.EN_US).toLowerCase().slice(0, 2) + ' 29th')
         )
             input = '2000-02-29';
         let results = Chrono.parseDate(input); // Try an parse a date
