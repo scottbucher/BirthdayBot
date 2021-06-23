@@ -988,6 +988,15 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "invalidCelebrationType": {
+                "title": "Celebration Test",
+                "description": "Please specify a celebration type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
             "invalidChannelType": {
                 "title": "Channel Selection",
                 "description": "Please specify a channel type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
