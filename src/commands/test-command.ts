@@ -183,7 +183,51 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            let testingEmbed = new MessageEmbed()
+                .setThumbnail(guild.iconURL())
+                .setTitle('Birthday Event Test - [BETA]')
+                .setDescription(
+                    'Below are the checks to ensure your settings are correct for the birthday event.'
+                )
+                .setFooter(
+                    'This is the info from your birthday event test.',
+                    guild.client.user.avatarURL()
+                )
+                .setTimestamp()
+                .setColor(Config.colors.default)
+                .addField(
+                    'Birthday Channel',
+                    messageCheck ? `${Config.emotes.confirm} Correctly set.` : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
+                    true
+                )
+                .addField(
+                    'Birthday Role',
+                    roleCheck ? `${Config.emotes.confirm} Correctly set.` : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
+                    true
+                );
 
+            if (blacklistData.blacklist.length > 0) {
+                testingEmbed.addField(
+                    'Member In Birthday Blacklist',
+                    trustedCheckMessage ? `${Config.emotes.confirm} Not in blacklist.` : `${Config.emotes.deny} In blacklist.`,
+                    true
+                );
+            }
+
+            if (trustedRoles.trustedRoles.length > 0) {
+                testingEmbed.addField(
+                    'Trusted Prevented Message',
+                    trustedCheckMessage ? `${Config.emotes.confirm} Didn't Prevent Message.` : `${Config.emotes.deny} Prevented Message.`,
+                    true
+                );
+                testingEmbed.addField(
+                    'Trusted Prevented Role',
+                    trustedCheckRole ? `${Config.emotes.confirm} Didn't Prevent Role.` : `${Config.emotes.deny} Prevented Role.`,
+                    true
+                );
+            }
+            await MessageUtils.send(channel, testingEmbed);
+            return;
         } else if (type === 'memberanniversary') {
             // run the member anniversary test
 
@@ -265,7 +309,33 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            let testingEmbed = new MessageEmbed()
+                .setThumbnail(guild.iconURL())
+                .setTitle('Member Anniversary Event Test - [BETA]')
+                .setDescription(
+                    'Below are the checks to ensure your settings are correct for the member anniversary event.'
+                )
+                .setFooter(
+                    'This is the info from your latest member anniversary event test.',
+                    guild.client.user.avatarURL()
+                )
+                .setTimestamp()
+                .setColor(Config.colors.default)
+                .addField(
+                    'Member Anniversary Channel',
+                    messageCheck ? `${Config.emotes.confirm} Correctly set.` : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
+                    true
+                );
 
+            if (hasPremium && memberAnniversaryRoles.length > 0) {
+                testingEmbed.addField(
+                    'Member Anniversary Roles',
+                    memberAnniversaryRolesCheck ? `${Config.emotes.confirm} Can be given.` : `${Config.emotes.deny} Cannot be given. (Permission Issue)`,
+                    true
+                )
+            }
+            await MessageUtils.send(channel, testingEmbed);
+            return;
         } else {
             // run the server anniversary test
 
@@ -310,46 +380,26 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+            let testingEmbed = new MessageEmbed()
+                .setThumbnail(guild.iconURL())
+                .setTitle('Server Anniversary Event Test - [BETA]')
+                .setDescription(
+                    'Below are the checks to ensure your settings are correct for the server anniversary event.'
+                )
+                .setFooter(
+                    'This is the info from your latest server anniversary event test.',
+                    guild.client.user.avatarURL()
+                )
+                .setTimestamp()
+                .setColor(Config.colors.default)
+                .addField(
+                    'Server Anniversary Channel',
+                    messageCheck ? `${Config.emotes.confirm} Correctly set.` : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
+                    true
+                );
+            await MessageUtils.send(channel, testingEmbed);
+            return;
         }
 
-
-
-
-
-        // if (blacklistData.blacklist.map(data => data.UserDiscordId).includes(target.id)) {
-        //     let testingEmbed = new MessageEmbed()
-        //         .setThumbnail(guild.iconURL())
-        //         .setTitle('Birthday Event Test - [BETA]')
-        //         .setDescription(
-        //             'Below are the checks to ensure your settings are correct for the birthday event.\n\nIf the checks are passed and either the birthday message and/or birthday role were not given ' +
-        //             `when they should have then ${guild.client.user.toString()} most likely did not have the correct permissions. [(?)](${
-        //             Config.links.docs
-        //             }/faq)\n\nFor more help: [Join Support Server](${Config.links.support})`
-        //         )
-        //         .setFooter(
-        //             'This is the info from your latest birthday event test.',
-        //             guild.client.user.avatarURL()
-        //         )
-        //         .setTimestamp()
-        //         .setColor(Config.colors.default)
-        //         .addField(
-        //             'Birthday Blacklist',
-        //             `${Config.emotes.deny} Member is in the blacklist.`,
-        //             true
-        //         );
-        //     await MessageUtils.send(channel, testingEmbed);
-        //     return;
-        // }
-
-
-        // this.birthdayService.celebrateBirthdays(
-        //     guild,
-        //     guildData,
-        //     [userData],
-        //     guild.members.cache,
-        //     true,
-        //     channel
-        // );
     }
 }
