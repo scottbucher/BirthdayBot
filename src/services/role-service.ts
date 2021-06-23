@@ -67,16 +67,8 @@ export class RoleService {
             // Only premium guilds get anniversary roles
             if (hasPremium) {
                 // Get our list of anniversary roles
-                for (let role of filteredGuild.anniversaryRoles) {
-                    try {
-                        let aRole: Role = await guild.roles.fetch(
-                            role.MemberAnniversaryRoleDiscordId
-                        );
-                        if (aRole) anniversaryRoles.push(aRole);
-                    } catch (error) {
-                        // Anniversary role is invalid
-                    }
-                }
+                anniversaryRoles = await CelebrationUtils.getMemberAnniversaryRoleList(guild, filteredGuild.anniversaryRoles);
+
                 // Get the data of the roles we could resolve (we need the data so we can check years later!)
                 anniversaryRoleData = filteredGuild.anniversaryRoles.filter(data =>
                     anniversaryRoles.map(r => r.id).includes(data.MemberAnniversaryRoleDiscordId)
