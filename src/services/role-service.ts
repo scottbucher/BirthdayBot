@@ -86,19 +86,12 @@ export class RoleService {
             // The birthday role must exist in order to add/remove it and we need at least one member who need the role
             if (birthdayRole && addBirthdayGuildMembers.length > 0) {
                 // Get our list of trusted roles
-                for (let role of filteredGuild.trustedRoles) {
-                    try {
-                        let tRole: Role = await guild.roles.fetch(role.TrustedRoleDiscordId);
-                        if (tRole) trustedRoles.push(tRole);
-                    } catch (error) {
-                        // Trusted role is invalid
-                    }
-                }
+                trustedRoles = await CelebrationUtils.getTrustedRoleList(guild, filteredGuild.trustedRoles);
 
                 for (let addBirthdayMember of addBirthdayGuildMembers) {
                     if (
                         CelebrationUtils.passesTrustedCheck(
-                            filteredGuild,
+                            filteredGuild.guildData.RequireAllTrustedRoles,
                             trustedRoles,
                             addBirthdayMember,
                             filteredGuild.guildData.TrustedPreventsRole,

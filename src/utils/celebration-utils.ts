@@ -7,6 +7,7 @@ import {
     RawGuildCelebrationData,
     SplitUsers,
     UserData,
+    TrustedRole,
 } from '../models/database';
 import { Guild, GuildMember, Role } from 'discord.js';
 
@@ -231,15 +232,22 @@ export class CelebrationUtils {
         }
     }
 
-    public static async getMentionString(guildData: GuildData, guild: Guild): Promise<string> {
+    public static async getMentionString(guildData: GuildData, guild: Guild, type: string): Promise<string> {
         // Find mentioned role
         let mentionString: string = '';
 
+        let messageSetting =
+            type === 'birthday'
+                ? guildData.BirthdayMentionSetting
+                : type === 'memberanniversary'
+                    ? guildData.MemberAnniversaryMentionSetting
+                    : guildData.ServerAnniversaryMentionSetting;
+
         if (
-            guildData.BirthdayMentionSetting.toLowerCase() === 'everyone' ||
-            guildData.BirthdayMentionSetting.toLowerCase() === 'here'
+            messageSetting.toLowerCase() === 'everyone' ||
+            messageSetting.toLowerCase() === 'here'
         ) {
-            mentionString = '@' + guildData.BirthdayMentionSetting;
+            mentionString = '@' + messageSetting;
         }
 
         let roleInput: Role;
@@ -247,7 +255,7 @@ export class CelebrationUtils {
         // `
         if (mentionString === '') {
             try {
-                roleInput = await guild.roles.fetch(guildData.BirthdayMentionSetting);
+                roleInput = await guild.roles.fetch(messageSetting);
             } catch (error) {
                 // No mention role
             }
@@ -276,7 +284,7 @@ export class CelebrationUtils {
     }
 
     public static passesTrustedCheck(
-        guildCelebrationData: GuildCelebrationData,
+        requireAllTrustedRoles: number,
         trustedRoles: Role[],
         birthdayMember: GuildMember,
         trustedSetting: number,
@@ -291,7 +299,7 @@ export class CelebrationUtils {
 
         //if passTrustedCheck is already true we don't have to check for trusted role(s)
         if (!passTrustedCheck) {
-            if (guildCelebrationData.guildData.RequireAllTrustedRoles) {
+            if (requireAllTrustedRoles) {
                 let hasAllTrusted = true;
                 for (let role of trustedRoles) {
                     if (!birthdayMember.roles.cache.has(role.id)) {
@@ -310,6 +318,19 @@ export class CelebrationUtils {
             }
         }
         return passTrustedCheck;
+    }
+
+    public static async getTrustedRoleList(guild: Guild, roles: TrustedRole[]): Promise<Role[]> {
+        let trustedRoles: Role[];
+        for (let role of roles) {
+            try {
+                let tRole: Role = await guild.roles.fetch(role.TrustedRoleDiscordId);
+                if (tRole) trustedRoles.push(tRole);
+            } catch (error) {
+                // Trusted role is invalid
+            }
+        }
+        return trustedRoles;
     }
 
     public static convertCelebrationData(

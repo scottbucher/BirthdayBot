@@ -93,19 +93,12 @@ export class MessageService {
             // The birthday channel must exists and we need to have members who need the message
             if (birthdayChannel && birthdaysInThisGuild.length > 0) {
                 // Get our list of trusted roles
-                for (let role of filteredGuild.trustedRoles) {
-                    try {
-                        let tRole: Role = await guild.roles.fetch(role.TrustedRoleDiscordId);
-                        if (tRole) trustedRoles.push(tRole);
-                    } catch (error) {
-                        // Trusted role is invalid
-                    }
-                }
+                trustedRoles = await CelebrationUtils.getTrustedRoleList(guild, filteredGuild.trustedRoles);
 
                 // Remove the GuildMembers who don't pass the trusted check
                 birthdaysInThisGuild = birthdaysInThisGuild.filter(member =>
                     CelebrationUtils.passesTrustedCheck(
-                        filteredGuild,
+                        filteredGuild.guildData.RequireAllTrustedRoles,
                         trustedRoles,
                         member,
                         filteredGuild.guildData.TrustedPreventsMessage,
@@ -154,7 +147,7 @@ export class MessageService {
                         // Get the mention string
                         let mentionString =
                             filteredGuild.guildData.BirthdayMentionSetting !== 'none'
-                                ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild)
+                                ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild, 'birthday')
                                 : '';
 
                         // Compile our user list to put in the message
@@ -195,7 +188,7 @@ export class MessageService {
                 // Get the mention string
                 let mentionString =
                     filteredGuild.guildData.BirthdayMentionSetting !== 'none'
-                        ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild)
+                        ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild, 'birthday')
                         : '';
 
                 // Compile our user list to put in the message
@@ -256,7 +249,7 @@ export class MessageService {
                     // Get the mention string
                     let mentionString =
                         filteredGuild.guildData.MemberAnniversaryMentionSetting !== 'none'
-                            ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild)
+                            ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild, 'memberanniversary')
                             : '';
 
                     // Compile our user list to put in the message
@@ -321,7 +314,7 @@ export class MessageService {
                 // Get the mention string
                 let mentionString =
                     filteredGuild.guildData.ServerAnniversaryMentionSetting !== 'none'
-                        ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild)
+                        ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild, 'serveranniversary')
                         : '';
 
                 // Add the compiled user list
