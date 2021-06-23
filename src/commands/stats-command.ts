@@ -4,6 +4,8 @@ import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Command } from './command';
 import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 
@@ -18,7 +20,7 @@ export class StatsCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) {}
+    constructor(private userRepo: UserRepo) { }
 
     public async execute(
         args: string[],
@@ -46,16 +48,15 @@ export class StatsCommand implements Command {
 
         let shardId = msg.guild?.shardID || 0;
 
-        let embed = new MessageEmbed()
-            .setColor(Config.colors.default)
+        await MessageUtils.send(channel, Lang.getEmbed('info.stats', LangCode.EN_US, {
+            TOTAL_BIRTHDAYS: totalBirthdays.toLocaleString(),
+            TOTAL_SERVERS: serverCount.toLocaleString(),
+            SHARD_ID: `${shardId + 1}/${msg.client.shard.count}`,
+            BIRTHDAYS_TODAY: birthdaysToday.toLocaleString(),
+            BIRTHDAYS_THIS_MONTH: birthdaysThisMonth.toLocaleString(),
+        })
             .setThumbnail(msg.client.user.displayAvatarURL({ dynamic: true }))
             .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
-            .addField('Total Birthdays', totalBirthdays.toLocaleString(), true)
-            .addField('Total Servers', serverCount.toLocaleString(), true)
-            .addField('Shard ID', `${shardId + 1}/${msg.client.shard.count}`, true)
-            .addField('Birthdays Today', birthdaysToday.toLocaleString(), true)
-            .addField('Birthdays This Month', birthdaysThisMonth.toLocaleString(), true);
-
-        await MessageUtils.send(channel, embed);
+        );
     }
 }

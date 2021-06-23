@@ -1791,6 +1791,35 @@
                     }
                 ]
             },
+            "stats": {
+                "fields": [
+                    {
+                        "name": "Total Birthdays",
+                        "value": "{{TOTAL_BIRTHDAYS}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Total Servers",
+                        "value": "{{TOTAL_SERVERS}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Shard ID",
+                        "value": "{{SHARD_ID}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Birthdays Today",
+                        "value": "{{BIRTHDAYS_TODAY}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Birthdays This Month",
+                        "value": "{{BIRTHDAYS_THIS_MONTH}}",
+                        "inline": true
+                    }
+                ]
+            },
             "error": {
                 "description": "Something went wrong!",
                 "fields": [
