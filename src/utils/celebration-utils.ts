@@ -6,14 +6,17 @@ import {
     GuildData,
     RawGuildCelebrationData,
     SplitUsers,
-    UserData,
     TrustedRole,
+    UserData,
 } from '../models/database';
 import { Guild, GuildMember, Role, User } from 'discord.js';
+import {
+    MemberAnniversaryRole,
+    MemberAnniversaryRoles,
+} from '../models/database/member-anniversary-role-models';
 
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
-import { MemberAnniversaryRoles, MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 
 let Debug = require('../../config/debug.json');
 
@@ -76,8 +79,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                    ? userData.TimeZone
-                    : guildData.DefaultTimezone
+                ? userData.TimeZone
+                : guildData.DefaultTimezone
         );
         let birthday = moment(userData.Birthday);
 
@@ -103,8 +106,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                    ? userData.TimeZone
-                    : guildData.DefaultTimezone
+                ? userData.TimeZone
+                : guildData.DefaultTimezone
         );
         let currentHour = currentDate.hour();
         return currentHour === 0;
@@ -123,8 +126,8 @@ export class CelebrationUtils {
                 guildData.DefaultTimezone === '0'
                     ? userData.TimeZone
                     : guildData.UseTimezone !== 'server'
-                        ? userData.TimeZone
-                        : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
             )
             .subtract(1, 'days');
         let currentHour = currentDate.hour();
@@ -143,8 +146,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                    ? userData.TimeZone
-                    : guildData.DefaultTimezone
+                ? userData.TimeZone
+                : guildData.DefaultTimezone
         );
         let currentHour = currentDate.hour();
         return currentHour === guildData.BirthdayMessageTime;
@@ -173,8 +176,8 @@ export class CelebrationUtils {
         return currentDateFormatted !== anniversaryFormatted
             ? false
             : currentDate.hour() !== guildData.MemberAnniversaryMessageTime
-                ? false
-                : true;
+            ? false
+            : true;
     }
 
     public static isServerAnniversaryMessage(guild: Guild, guildData: GuildData): boolean {
@@ -197,8 +200,8 @@ export class CelebrationUtils {
         return currentDateFormatted !== anniversaryFormatted
             ? false
             : currentDate.hour() !== guildData.ServerAnniversaryMessageTime
-                ? false
-                : true;
+            ? false
+            : true;
     }
 
     public static getMemberYears(guildMember: GuildMember, guildData: GuildData): number {
@@ -233,7 +236,11 @@ export class CelebrationUtils {
         }
     }
 
-    public static async getMentionString(guildData: GuildData, guild: Guild, type: string): Promise<string> {
+    public static async getMentionString(
+        guildData: GuildData,
+        guild: Guild,
+        type: string
+    ): Promise<string> {
         // Find mentioned role
         let mentionString: string = '';
 
@@ -241,8 +248,8 @@ export class CelebrationUtils {
             type === 'birthday'
                 ? guildData.BirthdayMentionSetting
                 : type === 'memberanniversary'
-                    ? guildData.MemberAnniversaryMentionSetting
-                    : guildData.ServerAnniversaryMentionSetting;
+                ? guildData.MemberAnniversaryMentionSetting
+                : guildData.ServerAnniversaryMentionSetting;
 
         if (
             messageSetting.toLowerCase() === 'everyone' ||
@@ -267,14 +274,19 @@ export class CelebrationUtils {
         return mentionString;
     }
 
-    public static replacePlaceHolders(message: string, guild: Guild, type: string, userList: string, year: number): string {
-        message = message.split('<Server>')
-            .join(guild.name);
+    public static replacePlaceHolders(
+        message: string,
+        guild: Guild,
+        type: string,
+        userList: string,
+        year: number
+    ): string {
+        message = message.split('<Server>').join(guild.name);
 
         if (type !== 'serveranniversary') message = message.split('<Users>').join(userList);
         if (type !== 'birthday') message = message.split('Year').join(year.toString());
 
-        return message
+        return message;
     }
 
     public static getUserListString(guildData: GuildData, guildMember: GuildMember[]): string {
@@ -344,7 +356,10 @@ export class CelebrationUtils {
         return trustedRoles;
     }
 
-    public static async getMemberAnniversaryRoleList(guild: Guild, roles: MemberAnniversaryRole[]): Promise<Role[]> {
+    public static async getMemberAnniversaryRoleList(
+        guild: Guild,
+        roles: MemberAnniversaryRole[]
+    ): Promise<Role[]> {
         let memberAnniversaryRoles: Role[];
         for (let role of roles) {
             try {
@@ -362,7 +377,10 @@ export class CelebrationUtils {
         for (let role of roles) {
             // See if the bot can give the roles
             let highestBotRole = guild.members.resolve(guild.client.user).roles.highest.position;
-            check = role && role.position < highestBotRole && (guildMember.roles.highest.position < highestBotRole);
+            check =
+                role &&
+                role.position < highestBotRole &&
+                guildMember.roles.highest.position < highestBotRole;
             if (!check) return false;
         }
         return true;

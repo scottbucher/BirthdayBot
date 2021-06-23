@@ -1,13 +1,13 @@
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
-import { Logger, SubscriptionService, Lang } from '../services';
+import { Lang, Logger, SubscriptionService } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
+import { LangCode } from '../models/enums';
 import { PlanName } from '../models/subscription-models';
 import { RateLimiter } from 'discord.js-rate-limiter';
 import moment from 'moment';
-import { LangCode } from '../models/enums';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -24,7 +24,7 @@ export class MessageHandler {
         private subscriptionService: SubscriptionService,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo
-    ) { }
+    ) {}
 
     public async process(msg: Message): Promise<void> {
         // Don't respond to partial messages, system messages, or bots
@@ -46,7 +46,10 @@ export class MessageHandler {
                 return;
             }
             if (!PermissionUtils.canReact(channel)) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.needReactAndMessageHistoryPerms', LangCode.EN_US));
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.needReactAndMessageHistoryPerms', LangCode.EN_US)
+                );
                 return;
             }
         }
@@ -101,7 +104,10 @@ export class MessageHandler {
                         msg.member.roles.cache.has(Config.support.role);
 
                     if (!sentByStaff) {
-                        await MessageUtils.send(channel, Lang.getEmbed('validation.onlyStaff', LangCode.EN_US));
+                        await MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('validation.onlyStaff', LangCode.EN_US)
+                        );
                         return;
                     }
                 }
@@ -110,7 +116,10 @@ export class MessageHandler {
 
         // Check if the command is a server only command
         if (command.guildOnly && channel instanceof DMChannel) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.guildOnlyCommand', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.guildOnlyCommand', LangCode.EN_US)
+            );
             return;
         }
 
@@ -127,7 +136,10 @@ export class MessageHandler {
                 : false);
 
         if (checkPremium && !hasPremium) {
-            await MessageUtils.send(channel, Lang.getEmbed('premiumRequired.command', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('premiumRequired.command', LangCode.EN_US)
+            );
             return;
         }
 
@@ -138,9 +150,12 @@ export class MessageHandler {
             let voteTimeAgo = userVote ? voteTime.fromNow() : 'Never';
 
             if (!userVote || voteTime.clone().add(Config.voting.hours, 'hours') < moment()) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.voteRequired', LangCode.EN_US, {
-                    LAST_VOTE: voteTimeAgo,
-                }));
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.voteRequired', LangCode.EN_US, {
+                        LAST_VOTE: voteTimeAgo,
+                    })
+                );
                 return;
             }
         }
@@ -150,13 +165,19 @@ export class MessageHandler {
             if (channel instanceof TextChannel) {
                 let guildData = await this.guildRepo.getGuild(msg.guild.id);
                 if (command.requireSetup && !guildData) {
-                    await MessageUtils.send(channel, Lang.getEmbed('validation.setupRequired', LangCode.EN_US));
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.setupRequired', LangCode.EN_US)
+                    );
                     return;
                 }
 
                 // Check if user has permission
                 if (!PermissionUtils.hasPermission(msg.member, guildData, command)) {
-                    await MessageUtils.send(channel, Lang.getEmbed('validation.noPermission', LangCode.EN_US));
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.noPermission', LangCode.EN_US)
+                    );
                     return;
                 }
             }

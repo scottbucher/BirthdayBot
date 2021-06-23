@@ -1,5 +1,5 @@
-import { MessageUtils, ParseUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
+import { MessageUtils, ParseUtils } from '../../utils';
 
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';

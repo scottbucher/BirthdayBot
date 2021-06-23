@@ -1,14 +1,33 @@
-import { BlacklistRepo, GuildRepo, UserRepo, TrustedRoleRepo, MemberAnniversaryRoleRepo, CustomMessageRepo } from '../services/database/repos';
-import { GuildUtils, MessageUtils, FormatUtils, PermissionUtils, ActionUtils, CelebrationUtils, ColorUtils, ParseUtils } from '../utils';
-import { Message, MessageEmbed, TextChannel, User, Role } from 'discord.js';
+import {
+    ActionUtils,
+    CelebrationUtils,
+    ColorUtils,
+    FormatUtils,
+    GuildUtils,
+    MessageUtils,
+    ParseUtils,
+    PermissionUtils,
+} from '../utils';
+import {
+    BlacklistRepo,
+    CustomMessageRepo,
+    GuildRepo,
+    MemberAnniversaryRoleRepo,
+    TrustedRoleRepo,
+    UserRepo,
+} from '../services/database/repos';
+import { CustomMessage, CustomMessages, UserData } from '../models/database';
+import {
+    MemberAnniversaryRole,
+    MemberAnniversaryRoles,
+} from '../models/database/member-anniversary-role-models';
+import { Message, MessageEmbed, Role, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
-import { UserData, CustomMessages, CustomMessage } from '../models/database';
-import moment from 'moment';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MemberAnniversaryRoles, MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 import { isNumber } from 'class-validator';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -23,9 +42,21 @@ export class TestCommand implements Command {
     public requirePremium = false;
     public getPremium = true;
 
-    constructor(private guildRepo: GuildRepo, private userRepo: UserRepo, private customMessageReop: CustomMessageRepo, private trustedRoleRepo: TrustedRoleRepo, private blacklistRepo: BlacklistRepo, private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) { }
+    constructor(
+        private guildRepo: GuildRepo,
+        private userRepo: UserRepo,
+        private customMessageReop: CustomMessageRepo,
+        private trustedRoleRepo: TrustedRoleRepo,
+        private blacklistRepo: BlacklistRepo,
+        private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo
+    ) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean): Promise<void> {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         //bday test <type> [user] [year]
         let guild = msg.guild;
 
@@ -55,11 +86,11 @@ export class TestCommand implements Command {
             // Did we find a user?
             if (!target) {
                 try {
-                    year = ParseUtils.parseInt(args[3])
+                    year = ParseUtils.parseInt(args[3]);
                 } catch (error) {
                     if (args.length >= 5) {
                         try {
-                            year = ParseUtils.parseInt(args[4])
+                            year = ParseUtils.parseInt(args[4]);
                         } catch (error) {
                             // no year
                         }
@@ -72,19 +103,17 @@ export class TestCommand implements Command {
             target = msg.client.user;
         }
 
-
         let guildData = await this.guildRepo.getGuild(msg.guild.id);
 
         let messageChannel: TextChannel;
-
 
         try {
             messageChannel = guild.channels.resolve(
                 type === 'birthday'
                     ? guildData.BirthdayChannelDiscordId
                     : type === 'memberanniversary'
-                        ? guildData.MemberAnniversaryChannelDiscordId
-                        : guildData.ServerAnniversaryChannelDiscordId
+                    ? guildData.MemberAnniversaryChannelDiscordId
+                    : guildData.ServerAnniversaryChannelDiscordId
             ) as TextChannel;
         } catch (error) {
             // No birthday channel
@@ -113,11 +142,12 @@ export class TestCommand implements Command {
             let color = Config.colors.default;
             let useEmbed = true;
 
-
             // Get the blacklist data for this guild
             let blacklistData = await this.blacklistRepo.getBlacklist(guild.id);
 
-            blacklistCheck = !blacklistData.blacklist.map(data => data.UserDiscordId).includes(target.id);
+            blacklistCheck = !blacklistData.blacklist
+                .map(data => data.UserDiscordId)
+                .includes(target.id);
 
             // Get the birthday role for this guild
             let birthdayRole: Role;
@@ -133,19 +163,39 @@ export class TestCommand implements Command {
 
             // Get the trusted roles for this guild using our celebration utils
             let trustedRoles = await this.trustedRoleRepo.getTrustedRoles(guild.id);
-            let trustedRoleList: Role[] = await CelebrationUtils.getTrustedRoleList(guild, trustedRoles.trustedRoles);
+            let trustedRoleList: Role[] = await CelebrationUtils.getTrustedRoleList(
+                guild,
+                trustedRoles.trustedRoles
+            );
 
             // Get our trusted checks for each using celebration utils
-            trustedCheckRole = CelebrationUtils.passesTrustedCheck(guildData.RequireAllTrustedRoles, trustedRoleList, guildMember, trustedPreventsRole, hasPremium);
-            trustedCheckMessage = CelebrationUtils.passesTrustedCheck(guildData.RequireAllTrustedRoles, trustedRoleList, guildMember, trustedPreventsMessage, hasPremium);
+            trustedCheckRole = CelebrationUtils.passesTrustedCheck(
+                guildData.RequireAllTrustedRoles,
+                trustedRoleList,
+                guildMember,
+                trustedPreventsRole,
+                hasPremium
+            );
+            trustedCheckMessage = CelebrationUtils.passesTrustedCheck(
+                guildData.RequireAllTrustedRoles,
+                trustedRoleList,
+                guildMember,
+                trustedPreventsMessage,
+                hasPremium
+            );
 
             // Check for user specific messages
             if (target.bot) {
-                customMessages = (await this.customMessageReop.getCustomUserMessages(guild.id, 'birthday')).customMessages.filter(message => message.UserDiscordId === target.id);
+                customMessages = (
+                    await this.customMessageReop.getCustomUserMessages(guild.id, 'birthday')
+                ).customMessages.filter(message => message.UserDiscordId === target.id);
             }
 
             // if we never looked for them or there were none to match this user then lets get regular custom birthday messages
-            if (!customMessages || customMessages.length === 0) customMessages = (await this.customMessageReop.getCustomMessages(guild.id, 'birthday')).customMessages;
+            if (!customMessages || customMessages.length === 0)
+                customMessages = (
+                    await this.customMessageReop.getCustomMessages(guild.id, 'birthday')
+                ).customMessages;
 
             messageCheck = customMessages.length > 0;
 
@@ -156,13 +206,16 @@ export class TestCommand implements Command {
 
                 if (messageCheck && trustedCheckRole) {
                     // Get our custom message
-                    let customMessage = CelebrationUtils.randomMessage(
-                        customMessages,
-                        hasPremium
-                    );
+                    let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
 
                     // Replace the placeholders
-                    message = CelebrationUtils.replacePlaceHolders(message, guild, type, target.toString(), null);
+                    message = CelebrationUtils.replacePlaceHolders(
+                        message,
+                        guild,
+                        type,
+                        target.toString(),
+                        null
+                    );
 
                     // Find the color of the embed
                     color = customMessage?.Color === '0' ? Config.colors.default : null;
@@ -173,7 +226,8 @@ export class TestCommand implements Command {
                     useEmbed = customMessage.Embed ? true : false;
 
                     // Send our message(s)
-                    if (mentionString !== '') await MessageUtils.send(messageChannel, mentionString);
+                    if (mentionString !== '')
+                        await MessageUtils.send(messageChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
                     await MessageUtils.send(messageChannel, useEmbed ? embed : message);
@@ -197,19 +251,25 @@ export class TestCommand implements Command {
                 .setColor(Config.colors.default)
                 .addField(
                     'Birthday Channel',
-                    messageCheck ? `${Config.emotes.confirm} Correctly set.` : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
+                    messageCheck
+                        ? `${Config.emotes.confirm} Correctly set.`
+                        : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
                     true
                 )
                 .addField(
                     'Birthday Role',
-                    roleCheck ? `${Config.emotes.confirm} Correctly set.` : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
+                    roleCheck
+                        ? `${Config.emotes.confirm} Correctly set.`
+                        : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
                     true
                 );
 
             if (blacklistData.blacklist.length > 0) {
                 testingEmbed.addField(
                     'Member In Birthday Blacklist',
-                    trustedCheckMessage ? `${Config.emotes.confirm} Not in blacklist.` : `${Config.emotes.deny} In blacklist.`,
+                    trustedCheckMessage
+                        ? `${Config.emotes.confirm} Not in blacklist.`
+                        : `${Config.emotes.deny} In blacklist.`,
                     true
                 );
             }
@@ -217,12 +277,16 @@ export class TestCommand implements Command {
             if (trustedRoles.trustedRoles.length > 0) {
                 testingEmbed.addField(
                     'Trusted Prevented Message',
-                    trustedCheckMessage ? `${Config.emotes.confirm} Didn't Prevent Message.` : `${Config.emotes.deny} Prevented Message.`,
+                    trustedCheckMessage
+                        ? `${Config.emotes.confirm} Didn't Prevent Message.`
+                        : `${Config.emotes.deny} Prevented Message.`,
                     true
                 );
                 testingEmbed.addField(
                     'Trusted Prevented Role',
-                    trustedCheckRole ? `${Config.emotes.confirm} Didn't Prevent Role.` : `${Config.emotes.deny} Prevented Role.`,
+                    trustedCheckRole
+                        ? `${Config.emotes.confirm} Didn't Prevent Role.`
+                        : `${Config.emotes.deny} Prevented Role.`,
                     true
                 );
             }
@@ -246,31 +310,48 @@ export class TestCommand implements Command {
 
             // Only premium guilds get anniversary roles
             if (hasPremium) {
-                memberAnniversaryRoles = (await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(guild.id)).memberAnniversaryRoles;
+                memberAnniversaryRoles = (
+                    await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(guild.id)
+                ).memberAnniversaryRoles;
                 // Get our list of anniversary roles
-                anniversaryResolvedRoles = await CelebrationUtils.getMemberAnniversaryRoleList(guild, memberAnniversaryRoles);
+                anniversaryResolvedRoles = await CelebrationUtils.getMemberAnniversaryRoleList(
+                    guild,
+                    memberAnniversaryRoles
+                );
 
                 // Get the data of the roles we could resolve (we need the data so we can check years later!)
                 memberAnniversaryRoles = memberAnniversaryRoles.filter(data =>
-                    anniversaryResolvedRoles.map(r => r.id).includes(data.MemberAnniversaryRoleDiscordId)
+                    anniversaryResolvedRoles
+                        .map(r => r.id)
+                        .includes(data.MemberAnniversaryRoleDiscordId)
                 );
 
-
                 // See if the bot can give the roles
-                memberAnniversaryRolesCheck = CelebrationUtils.canGiveAllRoles(guild, anniversaryResolvedRoles, guildMember) && year !== 0;
+                memberAnniversaryRolesCheck =
+                    CelebrationUtils.canGiveAllRoles(
+                        guild,
+                        anniversaryResolvedRoles,
+                        guildMember
+                    ) && year !== 0;
             }
-
 
             // Check for user specific messages
             if (target.bot) {
-                customMessages = (await this.customMessageReop.getCustomUserMessages(guild.id, 'memberanniversary')).customMessages.filter(message => message.UserDiscordId === target.id);
+                customMessages = (
+                    await this.customMessageReop.getCustomUserMessages(
+                        guild.id,
+                        'memberanniversary'
+                    )
+                ).customMessages.filter(message => message.UserDiscordId === target.id);
             }
 
             // if we never looked for them or there were none to match this user then lets get regular custom birthday messages
-            if (!customMessages || customMessages.length === 0) customMessages = (await this.customMessageReop.getCustomMessages(guild.id, 'memberanniversary')).customMessages;
+            if (!customMessages || customMessages.length === 0)
+                customMessages = (
+                    await this.customMessageReop.getCustomMessages(guild.id, 'memberanniversary')
+                ).customMessages;
 
             messageCheck = customMessages.length > 0;
-
 
             for (let role of anniversaryResolvedRoles) {
                 let roleData = memberAnniversaryRoles.find(
@@ -283,13 +364,16 @@ export class TestCommand implements Command {
             }
             if (messageCheck) {
                 // Get our custom message
-                let customMessage = CelebrationUtils.randomMessage(
-                    customMessages,
-                    hasPremium
-                );
+                let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
 
                 // Replace the placeholders
-                message = CelebrationUtils.replacePlaceHolders(message, guild, type, target.toString(), year === 0 ? 1 : year);
+                message = CelebrationUtils.replacePlaceHolders(
+                    message,
+                    guild,
+                    type,
+                    target.toString(),
+                    year === 0 ? 1 : year
+                );
 
                 // Find the color of the embed
                 color = customMessage?.Color === '0' ? Config.colors.default : null;
@@ -323,16 +407,20 @@ export class TestCommand implements Command {
                 .setColor(Config.colors.default)
                 .addField(
                     'Member Anniversary Channel',
-                    messageCheck ? `${Config.emotes.confirm} Correctly set.` : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
+                    messageCheck
+                        ? `${Config.emotes.confirm} Correctly set.`
+                        : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
                     true
                 );
 
             if (hasPremium && memberAnniversaryRoles.length > 0) {
                 testingEmbed.addField(
                     'Member Anniversary Roles',
-                    memberAnniversaryRolesCheck ? `${Config.emotes.confirm} Can be given.` : `${Config.emotes.deny} Cannot be given. (Permission Issue)`,
+                    memberAnniversaryRolesCheck
+                        ? `${Config.emotes.confirm} Can be given.`
+                        : `${Config.emotes.deny} Cannot be given. (Permission Issue)`,
                     true
-                )
+                );
             }
             await MessageUtils.send(channel, testingEmbed);
             return;
@@ -347,20 +435,24 @@ export class TestCommand implements Command {
             let color = Config.colors.default;
             let useEmbed = true;
 
-
-            customMessages = (await this.customMessageReop.getCustomMessages(guild.id, 'serveranniversary')).customMessages;
+            customMessages = (
+                await this.customMessageReop.getCustomMessages(guild.id, 'serveranniversary')
+            ).customMessages;
 
             messageCheck = customMessages.length > 0;
 
             if (messageCheck) {
                 // Get our custom message
-                let customMessage = CelebrationUtils.randomMessage(
-                    customMessages,
-                    hasPremium
-                );
+                let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
 
                 // Replace the placeholders
-                message = CelebrationUtils.replacePlaceHolders(message, guild, type, target.toString(), year === 0 ? 1 : year);
+                message = CelebrationUtils.replacePlaceHolders(
+                    message,
+                    guild,
+                    type,
+                    target.toString(),
+                    year === 0 ? 1 : year
+                );
 
                 // Find the color of the embed
                 color = customMessage?.Color === '0' ? Config.colors.default : null;
@@ -394,12 +486,13 @@ export class TestCommand implements Command {
                 .setColor(Config.colors.default)
                 .addField(
                     'Server Anniversary Channel',
-                    messageCheck ? `${Config.emotes.confirm} Correctly set.` : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
+                    messageCheck
+                        ? `${Config.emotes.confirm} Correctly set.`
+                        : `${Config.emotes.deny} Not Set (or Incorrectly Set).`,
                     true
                 );
             await MessageUtils.send(channel, testingEmbed);
             return;
         }
-
     }
 }

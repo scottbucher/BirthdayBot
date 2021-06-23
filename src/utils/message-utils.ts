@@ -1,6 +1,6 @@
 import {
-    DiscordAPIError,
     DMChannel,
+    DiscordAPIError,
     EmojiResolvable,
     Message,
     MessageEmbed,
@@ -10,6 +10,7 @@ import {
     TextChannel,
     User,
 } from 'discord.js';
+
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 

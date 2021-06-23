@@ -2,10 +2,10 @@ import { CelebrationUtils, FormatUtils, MessageUtils } from '../utils';
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
-import { UserRepo } from '../services/database/repos';
-import moment from 'moment';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { UserRepo } from '../services/database/repos';
+import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -20,7 +20,7 @@ export class NextCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) { }
+    constructor(private userRepo: UserRepo) {}
 
     public async execute(
         args: string[],
@@ -32,7 +32,10 @@ export class NextCommand implements Command {
         let userDatas = await this.userRepo.getAllUsers(users);
 
         if (!userDatas) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noBirthdaysInServer', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noBirthdaysInServer', LangCode.EN_US)
+            );
             return;
         }
 
@@ -41,7 +44,10 @@ export class NextCommand implements Command {
         let nextBirthdayUsers = CelebrationUtils.getNextUsers(userDatas, commandUser?.TimeZone);
 
         if (!nextBirthdayUsers) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noUpcomingBirthdays', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noUpcomingBirthdays', LangCode.EN_US)
+            );
             return;
         }
 
@@ -50,6 +56,12 @@ export class NextCommand implements Command {
         let userStringList = FormatUtils.joinWithAnd(userList.map(user => user.toString()));
         let nextBirthday = moment(nextBirthdayUsers[0].Birthday).format('MMMM Do');
 
-        await MessageUtils.send(channel, Lang.getEmbed('results.nextBirthday', LangCode.EN_US, { USERS: userStringList, BIRTHDAY: nextBirthday }));
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.nextBirthday', LangCode.EN_US, {
+                USERS: userStringList,
+                BIRTHDAY: nextBirthday,
+            })
+        );
     }
 }

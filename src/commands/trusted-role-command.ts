@@ -1,15 +1,15 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-
-import { Command } from './command';
-import { MessageUtils } from '../utils';
 import {
     TrustedRoleAddSubCommand,
-    TrustedRoleRemoveSubCommand,
     TrustedRoleClearSubCommand,
     TrustedRoleListSubCommand,
+    TrustedRoleRemoveSubCommand,
 } from './trusted';
+
+import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -29,7 +29,7 @@ export class TrustedRoleCommand implements Command {
         private trustedRoleRemoveSubCommand: TrustedRoleRemoveSubCommand,
         private trustedRoleClearSubCommand: TrustedRoleClearSubCommand,
         private trustedRoleListSubCommand: TrustedRoleListSubCommand
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],
@@ -38,7 +38,10 @@ export class TrustedRoleCommand implements Command {
         hasPremium: boolean
     ): Promise<void> {
         if (args.length === 2) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noTrustedRoleArgs', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noTrustedRoleArgs', LangCode.EN_US)
+            );
             return;
         }
         if (args[2].toLowerCase() === 'add') {
@@ -50,7 +53,10 @@ export class TrustedRoleCommand implements Command {
         } else if (args[2].toLowerCase() === 'list') {
             this.trustedRoleListSubCommand.execute(args, msg, channel, hasPremium);
         } else {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noTrustedRoleArgs', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noTrustedRoleArgs', LangCode.EN_US)
+            );
             return;
         }
     }

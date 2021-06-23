@@ -1,12 +1,12 @@
+import { FormatUtils, MessageUtils } from '../../utils';
 import { Message, Role, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-import { MessageUtils, FormatUtils } from '../../utils';
 
 export class MessageMentionSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // bday message mention <type> <role>
@@ -86,15 +86,15 @@ export class MessageMentionSubCommand {
         type === 'birthday'
             ? await this.guildRepo.updateBirthdayMentionSetting(msg.guild.id, mention)
             : type === 'memberanniversary'
-                ? await this.guildRepo.updateMemberAnniversaryMentionSetting(msg.guild.id, mention)
-                : await this.guildRepo.updateServerAnniversaryMentionSetting(msg.guild.id, mention);
+            ? await this.guildRepo.updateMemberAnniversaryMentionSetting(msg.guild.id, mention)
+            : await this.guildRepo.updateServerAnniversaryMentionSetting(msg.guild.id, mention);
 
         await MessageUtils.send(
             channel,
             Lang.getEmbed('results.setMessageMention', LangCode.EN_US, {
                 BOT: msg.client.user.toString(),
                 MENTION: mentionOutput,
-                DISPLAY_TYPE: displayType
+                DISPLAY_TYPE: displayType,
             })
         );
     }

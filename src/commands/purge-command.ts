@@ -1,4 +1,3 @@
-import { MessageUtils } from '../utils';
 import {
     CollectOptions,
     CollectorUtils,
@@ -8,9 +7,10 @@ import {
 import { DMChannel, Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
-import { UserRepo } from '../services/database/repos';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { MessageUtils } from '../utils';
+import { UserRepo } from '../services/database/repos';
 
 let Config = require('../../config/config.json');
 
@@ -30,7 +30,7 @@ export class PurgeCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) { }
+    constructor(private userRepo: UserRepo) {}
 
     async execute(args: string[], msg: Message, channel: TextChannel | DMChannel): Promise<void> {
         let target = msg.author;
@@ -48,7 +48,10 @@ export class PurgeCommand implements Command {
 
         if (!userData || !(userData.Birthday && userData.TimeZone)) {
             // Are they in the database?
-            await MessageUtils.send(channel, Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US)
+            );
             return;
         } else {
             changesLeft = userData.ChangesLeft;
@@ -56,10 +59,14 @@ export class PurgeCommand implements Command {
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        let confirmationMessage = await MessageUtils.send(channel, Lang.getEmbed('userPrompts.birthdayConfirmPurge', LangCode.EN_US, {
-            CHANGES_LEFT: changesLeft.toString(),
-            APPEND: changesLeft === 0 ? Lang.getRef('prompts.outOfAttemtps', LangCode.EN_US) : ''
-        })); // Send confirmation and emotes
+        let confirmationMessage = await MessageUtils.send(
+            channel,
+            Lang.getEmbed('userPrompts.birthdayConfirmPurge', LangCode.EN_US, {
+                CHANGES_LEFT: changesLeft.toString(),
+                APPEND:
+                    changesLeft === 0 ? Lang.getRef('prompts.outOfAttemtps', LangCode.EN_US) : '',
+            })
+        ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await MessageUtils.react(confirmationMessage, option);
         }
@@ -86,10 +93,16 @@ export class PurgeCommand implements Command {
             // Confirm
             await this.userRepo.addOrUpdateUser(target.id, null, null, changesLeft); // Add or update user
 
-            await MessageUtils.send(channel, Lang.getEmbed('results.purgeSuccessful', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.purgeSuccessful', LangCode.EN_US)
+            );
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
-            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.actionCanceled', LangCode.EN_US)
+            );
         }
     }
 }

@@ -10,9 +10,9 @@ import {
 } from './message';
 
 import { Command } from './command';
-import { MessageUtils } from '../utils';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -35,7 +35,7 @@ export class MessageCommand implements Command {
         private messageTimeSubCommand: MessageTimeSubCommand,
         private messageMentionSubCommand: MessageMentionSubCommand,
         private messageTestSubCommand: MessageTestSubCommand
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],
@@ -44,7 +44,10 @@ export class MessageCommand implements Command {
         hasPremium: boolean
     ): Promise<void> {
         if (args.length === 2) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US)
+            );
             return;
         }
         if (args[2].toLowerCase() === 'list') {
@@ -62,7 +65,10 @@ export class MessageCommand implements Command {
         } else if (args[2].toLowerCase() === 'test') {
             this.messageTestSubCommand.execute(args, msg, channel);
         } else {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US)
+            );
             return;
         }
     }

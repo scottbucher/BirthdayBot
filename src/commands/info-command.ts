@@ -1,9 +1,9 @@
 import { DMChannel, Message, TextChannel } from 'discord.js';
 
-import { LangCode } from '../models/enums';
-import { Lang } from '../services';
-import { MessageUtils } from '../utils';
 import { Command } from './command';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
+import { MessageUtils } from '../utils';
 
 export class InfoCommand implements Command {
     public name: string = 'info';

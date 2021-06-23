@@ -1,16 +1,16 @@
-import { MessageUtils } from '../../utils';
 import { Message, Role, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
+import { MessageUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
 const errorEmbed = Lang.getEmbed('validation.invalidBirthdayRoleAction', LangCode.EN_US);
 
 export class ConfigRoleSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
@@ -21,7 +21,10 @@ export class ConfigRoleSubCommand {
         if (args[3].toLowerCase() === 'create') {
             // User wants to create the default birthday role
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US))
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US)
+                );
                 return;
             }
 
@@ -54,7 +57,10 @@ export class ConfigRoleSubCommand {
         } else {
             // See if a role was specified
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US))
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US)
+                );
                 return;
             }
 
@@ -83,7 +89,12 @@ export class ConfigRoleSubCommand {
                 birthdayRole.position >
                 msg.guild.members.resolve(msg.client.user).roles.highest.position
             ) {
-                await MessageUtils.send(msg.channel as TextChannel, Lang.getEmbed('validation.roleHierarchyError', LangCode.EN_US, { BOT: msg.client.user.toString() }));
+                await MessageUtils.send(
+                    msg.channel as TextChannel,
+                    Lang.getEmbed('validation.roleHierarchyError', LangCode.EN_US, {
+                        BOT: msg.client.user.toString(),
+                    })
+                );
                 return;
             }
 

@@ -1,14 +1,14 @@
-import { MessageUtils } from '../../utils';
 import { Message, Role, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
+import { MessageUtils } from '../../utils';
 
 const errorEmbed = Lang.getEmbed('validation.invalidMasterAction', LangCode.EN_US);
 
 export class ConfigBirthdayMasterRoleSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
@@ -19,7 +19,10 @@ export class ConfigBirthdayMasterRoleSubCommand {
         if (args[3].toLowerCase() === 'create') {
             // User wants to create the default birthday master role
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.needsManageRoles', LangCode.EN_US))
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.needsManageRoles', LangCode.EN_US)
+                );
                 return;
             }
 

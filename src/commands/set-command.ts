@@ -43,7 +43,7 @@ export class SetCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private guildRepo: GuildRepo, private userRepo: UserRepo) { }
+    constructor(private guildRepo: GuildRepo, private userRepo: UserRepo) {}
 
     public async execute(
         args: string[],

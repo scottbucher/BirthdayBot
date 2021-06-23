@@ -1,4 +1,4 @@
-import { MessageUtils, PermissionUtils, FormatUtils } from '../../utils';
+import { FormatUtils, MessageUtils, PermissionUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
@@ -8,7 +8,7 @@ import { LangCode } from '../../models/enums';
 const errorEmbed = Lang.getEmbed('validation.invalidChannelAction', LangCode.EN_US);
 
 export class ConfigChannelSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let type = FormatUtils.extractCelebrationType(args[3]?.toLowerCase());
@@ -35,13 +35,16 @@ export class ConfigChannelSubCommand {
             (type === 'memberanniversary'
                 ? 'memberAnniversary'
                 : type === 'serveranniversary'
-                    ? 'serverAnniversary'
-                    : 'birthday') + 'Channel';
+                ? 'serverAnniversary'
+                : 'birthday') + 'Channel';
 
         if (args[4].toLowerCase() === 'create') {
             // User wants to create the default birthday channel
             if (!msg.guild.me.hasPermission('MANAGE_CHANNELS')) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US))
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US)
+                );
                 return;
             }
 
@@ -105,7 +108,12 @@ export class ConfigChannelSubCommand {
 
             // Bot needs to be able to message in the desired channel
             if (!PermissionUtils.canSend(channel)) {
-                await MessageUtils.send(msg.channel as TextChannel, Lang.getEmbed('validation.notEnoughChannelPerms', LangCode.EN_US, { CHANNEL: channel.toString() }))
+                await MessageUtils.send(
+                    msg.channel as TextChannel,
+                    Lang.getEmbed('validation.notEnoughChannelPerms', LangCode.EN_US, {
+                        CHANNEL: channel.toString(),
+                    })
+                );
                 return;
             }
 
@@ -120,10 +128,10 @@ export class ConfigChannelSubCommand {
         }
 
         // Update the database with the channel
-        type === 'birthday' ?
-            await this.guildRepo.updateBirthdayChannel(msg.guild.id, channelId)
+        type === 'birthday'
+            ? await this.guildRepo.updateBirthdayChannel(msg.guild.id, channelId)
             : type === 'memberanniversary'
-                ? await this.guildRepo.updateMemberAnniversaryChannel(msg.guild.id, channelId)
-                : await this.guildRepo.updateServerAnniversaryChannel(msg.guild.id, channelId);
+            ? await this.guildRepo.updateMemberAnniversaryChannel(msg.guild.id, channelId)
+            : await this.guildRepo.updateServerAnniversaryChannel(msg.guild.id, channelId);
     }
 }

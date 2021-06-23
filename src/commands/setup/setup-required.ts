@@ -4,8 +4,8 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { MessageUtils, PermissionUtils } from '../../utils';
 import { Message, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import { MessageUtils, PermissionUtils } from '../../utils';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class SetupRequired {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let guild = channel.guild;
@@ -242,7 +242,12 @@ export class SetupRequired {
                             roleInput.position >
                             guild.members.resolve(botUser).roles.highest.position
                         ) {
-                            await MessageUtils.send(msg.channel as TextChannel, Lang.getEmbed('validation.roleHierarchyError', LangCode.EN_US, { BOT: msg.client.user.toString() }));
+                            await MessageUtils.send(
+                                msg.channel as TextChannel,
+                                Lang.getEmbed('validation.roleHierarchyError', LangCode.EN_US, {
+                                    BOT: msg.client.user.toString(),
+                                })
+                            );
                             return;
                         }
 
@@ -302,12 +307,12 @@ export class SetupRequired {
             birthdayChannel === '0'
                 ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
                 : guild.channels.resolve(birthdayChannel)?.toString() ||
-                `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
+                  `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
         let roleOutput =
             birthdayRole === '0'
                 ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
                 : guild.roles.resolve(birthdayRole)?.toString() ||
-                `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`;
+                  `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`;
 
         await MessageUtils.send(
             channel,

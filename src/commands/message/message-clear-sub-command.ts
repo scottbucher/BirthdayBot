@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class MessageClearSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) { }
+    constructor(private customMessageRepo: CustomMessageRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -52,9 +52,9 @@ export class MessageClearSubCommand {
 
         let customMessages = type.includes('user')
             ? await this.customMessageRepo.getCustomUserMessages(
-                msg.guild.id,
-                type.includes('birthday') ? 'birthday' : 'memberanniversary'
-            )
+                  msg.guild.id,
+                  type.includes('birthday') ? 'birthday' : 'memberanniversary'
+              )
             : await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
         let totalMessages = customMessages.customMessages.length;
@@ -115,9 +115,9 @@ export class MessageClearSubCommand {
 
             type.includes('user')
                 ? await this.customMessageRepo.clearCustomUserMessages(
-                    msg.guild.id,
-                    type.includes('birthday') ? 'birthday' : 'memberanniversary'
-                )
+                      msg.guild.id,
+                      type.includes('birthday') ? 'birthday' : 'memberanniversary'
+                  )
                 : await this.customMessageRepo.clearCustomMessages(msg.guild.id, type);
 
             await MessageUtils.send(
@@ -127,7 +127,10 @@ export class MessageClearSubCommand {
                 })
             );
         } else {
-            await MessageUtils.send(channel, Lang.getEmbed('results.actionCanceled', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.actionCanceled', LangCode.EN_US)
+            );
         }
     }
 }

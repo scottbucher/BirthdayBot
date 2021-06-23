@@ -7,9 +7,9 @@ import {
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
-import { MessageUtils } from '../utils';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -29,7 +29,7 @@ export class MemberAnniversaryRoleCommand implements Command {
         private memberAnniversaryRoleRemoveSubCommand: MemberAnniversaryRoleRemoveSubCommand,
         private memberAnniversaryRoleClearSubCommand: MemberAnniversaryRoleClearSubCommand,
         private memberAnniversaryRoleListSubCommand: MemberAnniversaryRoleListSubCommand
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],
@@ -38,7 +38,10 @@ export class MemberAnniversaryRoleCommand implements Command {
         hasPremium: boolean
     ): Promise<void> {
         if (args.length === 2) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noMemberAnnviersaryRoleArgs', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noMemberAnniversaryRoleArgs', LangCode.EN_US)
+            );
             return;
         }
         if (args[2].toLowerCase() === 'add') {
@@ -50,7 +53,10 @@ export class MemberAnniversaryRoleCommand implements Command {
         } else if (args[2].toLowerCase() === 'list') {
             this.memberAnniversaryRoleListSubCommand.execute(args, msg, channel, hasPremium);
         } else {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noMemberAnnviersaryRoleArgs', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noMemberAnnviersaryRoleArgs', LangCode.EN_US)
+            );
             return;
         }
     }

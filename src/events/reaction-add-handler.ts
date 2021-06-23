@@ -64,7 +64,7 @@ export class ReactionAddHandler implements EventHandler {
         private blacklistRepo: BlacklistRepo,
         private trustedRoleRepo: TrustedRoleRepo,
         private subscriptionService: SubscriptionService
-    ) { }
+    ) {}
 
     public async process(msgReaction: MessageReaction, reactor: User): Promise<void> {
         // Don't respond to bots, and only text channels
@@ -216,8 +216,8 @@ export class ReactionAddHandler implements EventHandler {
 
                 if (
                     oldPage >=
-                    customMessageResults.stats.TotalPages -
-                    Config.experience.fastRewindAmount &&
+                        customMessageResults.stats.TotalPages -
+                            Config.experience.fastRewindAmount &&
                     checkFastForward
                 )
                     page = customMessageResults.stats.TotalPages;
@@ -239,8 +239,8 @@ export class ReactionAddHandler implements EventHandler {
             } else if (
                 msg.embeds[0]?.title?.includes(
                     Lang.getRef('terms.birthday', LangCode.EN_US) +
-                    ' ' +
-                    Lang.getRef('terms.list', LangCode.EN_US)
+                        ' ' +
+                        Lang.getRef('terms.list', LangCode.EN_US)
                 )
             ) {
                 pageSize = Config.experience.birthdayListSize;
@@ -254,7 +254,7 @@ export class ReactionAddHandler implements EventHandler {
 
                 if (
                     oldPage >=
-                    userDataResults.stats.TotalPages - Config.experience.fastRewindAmount &&
+                        userDataResults.stats.TotalPages - Config.experience.fastRewindAmount &&
                     checkFastForward
                 )
                     page = userDataResults.stats.TotalPages;
@@ -280,7 +280,7 @@ export class ReactionAddHandler implements EventHandler {
 
                 if (
                     oldPage >=
-                    trustedRoleResults.stats.TotalPages - Config.experience.fastRewindAmount &&
+                        trustedRoleResults.stats.TotalPages - Config.experience.fastRewindAmount &&
                     checkFastForward
                 )
                     page = trustedRoleResults.stats.TotalPages;
@@ -310,7 +310,7 @@ export class ReactionAddHandler implements EventHandler {
 
                 if (
                     oldPage >=
-                    blacklistResults.stats.TotalPages - Config.experience.fastRewindAmount &&
+                        blacklistResults.stats.TotalPages - Config.experience.fastRewindAmount &&
                     checkFastForward
                 )
                     page = blacklistResults.stats.TotalPages;
@@ -355,8 +355,8 @@ export class ReactionAddHandler implements EventHandler {
             } else if (
                 msg.embeds[0]?.title?.includes(
                     Lang.getRef('terms.birthday', LangCode.EN_US) +
-                    ' ' +
-                    Lang.getRef('terms.list', LangCode.EN_US)
+                        ' ' +
+                        Lang.getRef('terms.list', LangCode.EN_US)
                 )
             ) {
                 pageSize = Config.experience.birthdayListSize;
@@ -461,8 +461,8 @@ export class ReactionAddHandler implements EventHandler {
             } else if (
                 msg.embeds[0]?.title?.includes(
                     Lang.getRef('terms.birthday', LangCode.EN_US) +
-                    ' ' +
-                    Lang.getRef('terms.list', LangCode.EN_US)
+                        ' ' +
+                        Lang.getRef('terms.list', LangCode.EN_US)
                 )
             ) {
                 let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();

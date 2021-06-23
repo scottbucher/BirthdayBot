@@ -1,4 +1,5 @@
 import { Guild, GuildMember, Util } from 'discord.js';
+
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 
@@ -15,7 +16,8 @@ export class GuildUtils {
 
     public static getRoleName(roleDiscordId: string, guild: Guild): string {
         return roleDiscordId
-            ? guild.roles.resolve(roleDiscordId)?.toString() || `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`
+            ? guild.roles.resolve(roleDiscordId)?.toString() ||
+                  `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`
             : `**${Lang.getRef('terms.none', LangCode.EN_US)}**`;
     }
 

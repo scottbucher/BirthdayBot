@@ -4,9 +4,9 @@ import { SetupRequired, SetupTrusted } from './setup';
 
 import { Command } from '.';
 import { GuildRepo } from '../services/database/repos';
-import { SetupAnniversary } from './setup/setup-anniversary';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { SetupAnniversary } from './setup/setup-anniversary';
 
 let Config = require('../../config/config.json');
 
@@ -26,7 +26,7 @@ export class SetupCommand implements Command {
         private setupRequired: SetupRequired,
         private setupTrusted: SetupTrusted,
         private setupAnniversary: SetupAnniversary
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],
@@ -36,7 +36,10 @@ export class SetupCommand implements Command {
     ): Promise<void> {
         // Check for permissions
         if (!PermissionUtils.canReact(channel)) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.needReactAndMessageHistoryPerms', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.needReactAndMessageHistoryPerms', LangCode.EN_US)
+            );
             return;
         }
 
@@ -46,7 +49,10 @@ export class SetupCommand implements Command {
                 !msg.guild.me.hasPermission('MANAGE_CHANNELS') ||
                 !msg.guild.me.hasPermission('MANAGE_ROLES')
             ) {
-                await MessageUtils.send(channel, Lang.getEmbed('validation.needManageChannelsAndRolesPerm', LangCode.EN_US));
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.needManageChannelsAndRolesPerm', LangCode.EN_US)
+                );
                 return;
             }
 
@@ -57,7 +63,10 @@ export class SetupCommand implements Command {
         // Required setup is needed to run any specific setup
         let guildData = await this.guildRepo.getGuild(msg.guild.id);
         if (!guildData) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.setupRequired', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.setupRequired', LangCode.EN_US)
+            );
             return;
         }
 
@@ -68,13 +77,19 @@ export class SetupCommand implements Command {
                 return;
             case 'trusted':
                 if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
-                    await MessageUtils.send(channel, Lang.getEmbed('validation.needManageRolesPerm', LangCode.EN_US));
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.needManageRolesPerm', LangCode.EN_US)
+                    );
                     return;
                 }
                 await this.setupTrusted.execute(args, msg, channel, hasPremium);
                 return;
             default:
-                await MessageUtils.send(channel, Lang.getEmbed('validation.invalidSetupArgs', LangCode.EN_US));
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.invalidSetupArgs', LangCode.EN_US)
+                );
                 return;
         }
     }

@@ -93,7 +93,10 @@ export class MessageService {
             // The birthday channel must exists and we need to have members who need the message
             if (birthdayChannel && birthdaysInThisGuild.length > 0) {
                 // Get our list of trusted roles
-                trustedRoles = await CelebrationUtils.getTrustedRoleList(guild, filteredGuild.trustedRoles);
+                trustedRoles = await CelebrationUtils.getTrustedRoleList(
+                    guild,
+                    filteredGuild.trustedRoles
+                );
 
                 // Remove the GuildMembers who don't pass the trusted check
                 birthdaysInThisGuild = birthdaysInThisGuild.filter(member =>
@@ -147,7 +150,11 @@ export class MessageService {
                         // Get the mention string
                         let mentionString =
                             filteredGuild.guildData.BirthdayMentionSetting !== 'none'
-                                ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild, 'birthday')
+                                ? CelebrationUtils.getMentionString(
+                                      filteredGuild.guildData,
+                                      guild,
+                                      'birthday'
+                                  )
                                 : '';
 
                         // Compile our user list to put in the message
@@ -156,7 +163,13 @@ export class MessageService {
                         ]);
 
                         // Replace the placeholders
-                        message = CelebrationUtils.replacePlaceHolders(customMessage.Message, guild, customMessage.Type, userList, null);
+                        message = CelebrationUtils.replacePlaceHolders(
+                            customMessage.Message,
+                            guild,
+                            customMessage.Type,
+                            userList,
+                            null
+                        );
 
                         // Find the color of the embed
                         color = customMessage.Color === '0' ? Config.colors.default : null;
@@ -185,7 +198,11 @@ export class MessageService {
                 // Get the mention string
                 let mentionString =
                     filteredGuild.guildData.BirthdayMentionSetting !== 'none'
-                        ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild, 'birthday')
+                        ? CelebrationUtils.getMentionString(
+                              filteredGuild.guildData,
+                              guild,
+                              'birthday'
+                          )
                         : '';
 
                 // Compile our user list to put in the message
@@ -203,7 +220,13 @@ export class MessageService {
                     );
 
                     // Replace the placeholders
-                    message = CelebrationUtils.replacePlaceHolders(customMessage.Message, guild, customMessage.Type, userList, null);
+                    message = CelebrationUtils.replacePlaceHolders(
+                        customMessage.Message,
+                        guild,
+                        customMessage.Type,
+                        userList,
+                        null
+                    );
 
                     // Find the color of the embed
                     color = customMessage?.Color === '0' ? Config.colors.default : null;
@@ -246,7 +269,11 @@ export class MessageService {
                     // Get the mention string
                     let mentionString =
                         filteredGuild.guildData.MemberAnniversaryMentionSetting !== 'none'
-                            ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild, 'memberanniversary')
+                            ? CelebrationUtils.getMentionString(
+                                  filteredGuild.guildData,
+                                  guild,
+                                  'memberanniversary'
+                              )
                             : '';
 
                     // Compile our user list to put in the message
@@ -268,7 +295,13 @@ export class MessageService {
                         );
 
                         // Replace the placeholders
-                        message = CelebrationUtils.replacePlaceHolders(customMessage.Message, guild, customMessage.Type, userList, year);
+                        message = CelebrationUtils.replacePlaceHolders(
+                            customMessage.Message,
+                            guild,
+                            customMessage.Type,
+                            userList,
+                            year
+                        );
 
                         // TEMP UNTIL THE YEAR PROBLEM IS ADDRESSED
                         // Find the color of the embed
@@ -276,7 +309,7 @@ export class MessageService {
 
                         color = !color
                             ? '#' + ColorUtils.findHex(customMessage?.Color) ??
-                            Config.colors.default
+                              Config.colors.default
                             : Config.colors.default;
 
                         useEmbed = customMessage.Embed ? true : false;
@@ -307,7 +340,11 @@ export class MessageService {
                 // Get the mention string
                 let mentionString =
                     filteredGuild.guildData.ServerAnniversaryMentionSetting !== 'none'
-                        ? CelebrationUtils.getMentionString(filteredGuild.guildData, guild, 'serveranniversary')
+                        ? CelebrationUtils.getMentionString(
+                              filteredGuild.guildData,
+                              guild,
+                              'serveranniversary'
+                          )
                         : '';
 
                 // Add the compiled user list
@@ -324,7 +361,13 @@ export class MessageService {
                     );
 
                     // Replace the placeholders
-                    message = CelebrationUtils.replacePlaceHolders(customMessage.Message, guild, customMessage.Type, null, serverYears);
+                    message = CelebrationUtils.replacePlaceHolders(
+                        customMessage.Message,
+                        guild,
+                        customMessage.Type,
+                        null,
+                        serverYears
+                    );
 
                     // Find the color of the embed
                     color = customMessage?.Color === '0' ? Config.colors.default : null;

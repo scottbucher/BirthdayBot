@@ -67,7 +67,10 @@ export class RoleService {
             // Only premium guilds get anniversary roles
             if (hasPremium) {
                 // Get our list of anniversary roles
-                anniversaryRoles = await CelebrationUtils.getMemberAnniversaryRoleList(guild, filteredGuild.anniversaryRoles);
+                anniversaryRoles = await CelebrationUtils.getMemberAnniversaryRoleList(
+                    guild,
+                    filteredGuild.anniversaryRoles
+                );
 
                 // Get the data of the roles we could resolve (we need the data so we can check years later!)
                 anniversaryRoleData = filteredGuild.anniversaryRoles.filter(data =>
@@ -78,7 +81,10 @@ export class RoleService {
             // The birthday role must exist in order to add/remove it and we need at least one member who need the role
             if (birthdayRole && addBirthdayGuildMembers.length > 0) {
                 // Get our list of trusted roles
-                trustedRoles = await CelebrationUtils.getTrustedRoleList(guild, filteredGuild.trustedRoles);
+                trustedRoles = await CelebrationUtils.getTrustedRoleList(
+                    guild,
+                    filteredGuild.trustedRoles
+                );
 
                 for (let addBirthdayMember of addBirthdayGuildMembers) {
                     if (

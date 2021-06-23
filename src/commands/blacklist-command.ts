@@ -1,15 +1,15 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
-
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
     BlacklistListSubCommand,
     BlacklistRemoveSubCommand,
 } from './blacklist';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
+
 import { Command } from './command';
-import { MessageUtils } from '../utils';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { MessageUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -29,11 +29,14 @@ export class BlacklistCommand implements Command {
         private blacklistRemoveSubCommand: BlacklistRemoveSubCommand,
         private blacklistClearSubCommand: BlacklistClearSubCommand,
         private blacklistListSubCommand: BlacklistListSubCommand
-    ) { }
+    ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 2) {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noBlacklistArgs', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noBlacklistArgs', LangCode.EN_US)
+            );
             return;
         }
 
@@ -46,7 +49,10 @@ export class BlacklistCommand implements Command {
         } else if (args[2].toLowerCase() === 'clear') {
             this.blacklistClearSubCommand.execute(args, msg, channel);
         } else {
-            await MessageUtils.send(channel, Lang.getEmbed('validation.noBlacklistArgs', LangCode.EN_US));
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noBlacklistArgs', LangCode.EN_US)
+            );
             return;
         }
     }
