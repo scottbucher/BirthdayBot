@@ -34,9 +34,9 @@
             "requiredSetupBirthdayChannel": {
                 "title": "Server Setup - Birthday Channel",
                 "description": [
-                    "For help, view the required setup guide [here](${Config.links.docs}/server-setup/required-setup)!",
+                    "For help, view the required setup guide [here]({{REF:docLinks.setupRequiredGuide}})!",
                     "",
-                    "To begin you must set up the birthday channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "To begin you must set up the birthday channel [(?)]({{REF:docLinks.whatIsBirthdayChannel}})",
                     "",
                     "Please select an option"
                 ],
@@ -58,9 +58,9 @@
             "requiredSetupBirthdayRole": {
                 "title": "Server Setup - Birthday Role",
                 "description": [
-                    "Now, set up the birthday role [(?)](${Config.links.docs}/faq#what-is-the-birthday-role)",
+                    "Now, set up the birthday role [(?)]({{REF:docLinks.whatIsBirthdayRole}})",
                     "",
-                    "Note: The Birthday Role is actively removed from those whose birthday it isn't. [(?)](${Config.links.docs}/faq#what-does-it-mean-by-the-birthday-role-is-actively-removed)",
+                    "Note: The Birthday Role is actively removed from those whose birthday it isn't.",
                     "",
                     "Please select an option"
                 ],
@@ -82,7 +82,7 @@
             "trustedSetupPreventsMessage": {
                 "title": "Trusted Setup - Trusted Prevents Message",
                 "description": [
-                    "Should the trusted role prevent the birthday message? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)",
+                    "Should the trusted role prevent the birthday message? [(?)]({{REF:docLinks.trustedPreventsMessage)",
                     "",
                     "True: {{REF:emotes.confirm}}",
                     "False: {{REF:emotes.deny}}"
@@ -95,7 +95,7 @@
             "trustedSetupPreventsRole": {
                 "title": "Trusted Setup - Trusted Prevents Role",
                 "description": [
-                    "Should the trusted role prevent the birthday role? [(?)](${Config.links.docs}/faq#what-is-the-trusted-prevents-message-role)",
+                    "Should the trusted role prevent the birthday role? [(?)]({{REF:docLinks.trustedPreventsRole}})",
                     "",
                     "True: {{REF:emotes.confirm}}",
                     "False: {{REF:emotes.deny}}"
@@ -110,7 +110,7 @@
                 "description": [
                     "With premium you can set multiple trusted roles. Because of this, you can choose if a user needs one or all of the trusted roles to have their birthday celebrated.",
                     "",
-                    "Should birthdays require all trusted roles? [(?)](${Config.links.docs}/faq#)",
+                    "Should birthdays require all trusted roles? [(?)]({{REF:docLinks.requireAllTrustedRoles}})",
                     "",
                     "True: {{REF:emotes.confirm}}",
                     "False: {{REF:emotes.deny}}"
@@ -123,9 +123,9 @@
             "anniversarySetupMemberChannel": {
                 "title": "Anniversary Setup - Member Anniversary Channel",
                 "description": [
-                    "For help, view the anniversary setup guide [here](${Config.links.docs}/)!",
+                    "For help, view the anniversary setup guide [here]({{REF:dockLinks.setupAnniversaryGuide}})!",
                     "",
-                    "To begin you must set up the member anniversary channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "To begin you must set up the member anniversary channel [(?)]({{REF:dockLinks.whatIsMemberAnniversaryChannel}})",
                     "",
                     "Please select an option"
                 ],
@@ -147,9 +147,9 @@
             "anniversarySetupServerChannel": {
                 "title": "Anniversary Setup - Server Anniversary Channel",
                 "description": [
-                    "For help, view the anniversary setup guide [here](${Config.links.docs}/)!",
+                    "For help, view the anniversary setup guide [here]({{REF:dockLinks.setupAnniversaryGuide}})!",
                     "",
-                    "To begin you must set up the server anniversary channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "To begin you must set up the server anniversary channel [(?)]({{REF:dockLinks.whatIsServerAnniversaryChannel}})",
                     "",
                     "Please select an option"
                 ],
@@ -171,7 +171,7 @@
             "customMessageColorSelection": {
                 "title": "Custom Message Color Selection",
                 "description": [
-                    "Please input the color you would like your message. [(?)](${Config.links.docs}/faq#what-is-a-message-embed-color)",
+                    "Please input the color you would like your message. [(?)]({{REF:docLinks.whatIsMessageEmbedColor}})",
                     "Both color names and hex values are accepted."
                 ],
                 "footer": {
@@ -182,7 +182,7 @@
             "customMessageEmbedSelection": {
                 "title": "Custom Message - Embedded",
                 "description": [
-                    "Should this message be embedded? [(?)](${Config.links.docs}/faq#what-is-an-embed)",
+                    "Should this message be embedded? [(?)]({{REF:docLinks.whatIsAnEmbed}})",
                     "Hint: This message is embed! Non-embedded messages are just plain text.",
                     "",
                     "True {{REF:emotes.confirm}}",
@@ -207,7 +207,7 @@
                 "description": [
                     "**Important**: By submitting this information you agree it can be shown to anyone.",
                     "",
-                    "First, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "First, please enter your time zone. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
                     "",
                     "To find your time zone please use the [map time zone picker](${Config.links.map})!",
                     "",
@@ -229,7 +229,7 @@
                     "",
                     "**Important**: By submitting this information you agree it can be shown to anyone.",
                     "",
-                    "First, please enter your time zone. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "First, please enter your time zone. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
                     "",
                     "To find your time zone please use the [map time zone picker](${Config.links.map})!",
                     "",
@@ -249,7 +249,7 @@
                 "description": [
                     "**Important**: By submitting this information you agree it can be shown to anyone.",
                     "",
-                    "Please enter your birth month and day. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)",
+                    "Please enter your birth month and day. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
                     "",
                     "**Example Usage:** `08/28` (MM/DD)",
                     "",
@@ -267,7 +267,7 @@
                     "",
                     "**Important**: By submitting this information you agree it can be shown to anyone.",
                     "",
-                    "Please enter your birth month and day. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-only-need-my-birth-month-and-date)",
+                    "Please enter your birth month and day. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
                     "",
                     "**Example Usage:** `08/28` (MM/DD)",
                     "",
@@ -281,9 +281,9 @@
             "birthdayConfirmPurge": {
                 "title": "Clear User Data",
                 "description": [
-                    "This command will remove both your time zone and your birthday from the database. [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)",
+                    "This command will remove both your time zone and your birthday from the database. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
                     "",
-                    "This will **NOT** reset your birthday attempts. (You have {{CHANGES_LEFT}} left) [(?)](${Config.links.docs}/faq#how-many-times-can-i-set-my-birthday)",
+                    "This will **NOT** reset your birthday attempts. (You have {{CHANGES_LEFT}} left) [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
                     "",
                     "{{APPEND}}"
                 ],
@@ -821,7 +821,7 @@
             "noBlacklistArgs": {
                 "title": "Invalid Usage!",
                 "description": [
-                    "Please specify a sub command for the blacklist! [(?)](${Config.links.docs}/faq#what-is-the-birthday-blacklist)",
+                    "Please specify a sub command for the blacklist! [(?)]({{REF:docLinks.whatIsBirthdayBlacklist}})",
                     "Accepted Values: `list`, `add <User>`, `remove <User>`, `clear`"
                 ],
                 "color": "{{REF:colors.error}}"
@@ -829,7 +829,7 @@
             "noTrustedRoleArgs": {
                 "title": "Invalid Usage!",
                 "description": [
-                    "Please specify a sub command! [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)",
+                    "Please specify a sub command! [(?)]({{REF:docLinks.whatIsTrustedRole}})",
                     "Accepted Values: `list`, `add`, `remove`, `clear`"
                 ],
                 "color": "{{REF:colors.error}}"
@@ -2060,7 +2060,7 @@
             "birthdayMessageUnLocked": {
                 "title": "{{REF:list.birthdayMessagesTitle}}",
                 "description": [
-                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2072,7 +2072,7 @@
             "birthdayMessageLocked": {
                 "title": "{{REF:list.birthdayMessagesTitle}}",
                 "description": [
-                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2090,7 +2090,7 @@
             "memberAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2102,7 +2102,7 @@
             "memberAnniversaryMessageLocked": {
                 "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2120,7 +2120,7 @@
             "serverAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2132,7 +2132,7 @@
             "serverAnniversaryMessageLocked": {
                 "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-message)*",
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2150,7 +2150,7 @@
             "userSpecificBirthdayMessageUnLocked": {
                 "title": "{{REF:list.userBirthdayMessagesTitle}}",
                 "description": [
-                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*",
+                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2162,7 +2162,7 @@
             "userSpecificBirthdayMessageLocked": {
                 "title": "{{REF:list.userBirthdayMessagesTitle}}",
                 "description": [
-                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*",
+                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2180,7 +2180,7 @@
             "userSpecificMemberAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*",
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2192,7 +2192,7 @@
             "userSpecificMemberAnniversaryMessageLocked": {
                 "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*",
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2210,7 +2210,7 @@
             "trustedRoleFree": {
                 "title": "{{REF:list.trustedRolesTitle}}",
                 "description": [
-                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `{{REF:bot.prefix}} config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `{{REF:bot.prefix}} config` [(?)]({{REF:docLinks.whatIsTrustedRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2222,7 +2222,7 @@
             "trustedRolePaid": {
                 "title": "{{REF:list.trustedRolesTitle}}",
                 "description": [
-                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `{{REF:bot.prefix}} config` [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `{{REF:bot.prefix}} config` [(?)]({{REF:docLinks.whatIsTrustedRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2240,7 +2240,7 @@
             "memberAnniversaryRoleFree": {
                 "title": "{{REF:list.memberAnniversaryRolesTitle}}",
                 "description": [
-                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)](${{REF:docLinks.whatIsAnniversaryRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2252,7 +2252,7 @@
             "memberAnniversaryRolePaid": {
                 "title": "{{REF:list.memberAnniversaryRolesTitle}}",
                 "description": [
-                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)](${Config.links.docs}/faq#what-is-a-trusted-role)*",
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)](${{REF:docLinks.whatIsAnniversaryRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2329,6 +2329,27 @@
             "templateEmbed": "[Discord Bot TypeScript Template]({{REF:links.template}})",
             "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
             "voteImage": "https://i.imgur.com/wak8g4V.png"
+        },
+        "docLinks": {
+            "setupRequiredGuide": "{{REF:links.doc}}/",
+            "setupAnniversaryGuide": "{{REF:links.doc}}/",
+            "setupTrustedGuide": "{{REF:links.doc}}/",
+            "whyDoesItNeedMyTimezone": "{{REF:links.doc}}/",
+            "whyDoesItNeedOnlyMonthAndDate": "{{REF:links.doc}}/",
+            "whatIsBirthdayRole": "{{REF:links.doc}}/",
+            "whatIsBirthdayChannel": "{{REF:links.doc}}/",
+            "whatIsMemberAnniversaryChannel": "{{REF:links.doc}}/",
+            "whatIsServerAnniversaryChannel": "{{REF:links.doc}}/",
+            "whatIsMessageEmbedColor": "{{REF:links.doc}}/",
+            "whatIsAnEmbed": "{{REF:links.doc}}/",
+            "whatIsTrustedRole": "{{REF:links.doc}}/",
+            "whatIsCutomMessage": "{{REF:links.doc}}/",
+            "whatIsUserSpecificCustomMessage": "{{REF:links.doc}}/",
+            "whatIsAnniversaryRole": "{{REF:links.doc}}/",
+            "trustedPreventsMessage": "{{REF:links.doc}}/",
+            "trustedPreventsRole": "{{REF:links.doc}}/",
+            "requireAllTrustedRoles": "{{REF:links.doc}}/",
+            "whatIsBirthdayBlacklist": "{{REF:links.doc}}/"
         },
         "footers": {
             "expire": "This message expires in 2 minutes!",
@@ -2409,6 +2430,7 @@
             "unknownChannel": "Unknown Channel",
             "unknownRole": "Unknown Role",
             "none": "None",
+            "and": "and",
             "deletedRole": "Deleted Role",
             "deletedChannel": "Deleted Channel",
             "birthdayList": "Birthday List",
