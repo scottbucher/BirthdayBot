@@ -5,7 +5,6 @@ export { ClientUtils } from './client-utils';
 export { ColorUtils } from './color-utils';
 export { FormatUtils } from './format-utils';
 export { GuildUtils } from './guild-utils';
-export { InvalidUtils } from './invalid-utils';
 export { ListUtils } from './list-utils';
 export { MathUtils } from './math-utils';
 export { MessageUtils } from './message-utils';

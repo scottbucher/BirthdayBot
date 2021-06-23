@@ -4,7 +4,7 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { InvalidUtils, MessageUtils, PermissionUtils } from '../../utils';
+import { MessageUtils, PermissionUtils } from '../../utils';
 import { Message, MessageReaction, Role, TextChannel, User } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';

@@ -1,4 +1,4 @@
-import { InvalidUtils, MessageUtils, PermissionUtils, FormatUtils } from '../../utils';
+import { MessageUtils, PermissionUtils, FormatUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
@@ -41,7 +41,7 @@ export class ConfigChannelSubCommand {
         if (args[4].toLowerCase() === 'create') {
             // User wants to create the default birthday channel
             if (!msg.guild.me.hasPermission('MANAGE_CHANNELS')) {
-                await InvalidUtils.notEnoughPermissions(channel, ['MANAGE_CHANNELS']);
+                await MessageUtils.send(channel, Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US))
                 return;
             }
 
@@ -105,12 +105,7 @@ export class ConfigChannelSubCommand {
 
             // Bot needs to be able to message in the desired channel
             if (!PermissionUtils.canSend(channel)) {
-                await InvalidUtils.cantSendInChannel(msg.channel as TextChannel, channel, [
-                    'VIEW_CHANNEL',
-                    'SEND_MESSAGES',
-                    'EMBED_LINKS',
-                    'ADD_REACTIONS',
-                ]);
+                await MessageUtils.send(msg.channel as TextChannel, Lang.getEmbed('validation.notEnoughChannelPerms', LangCode.EN_US, { CHANNEL: channel.toString() }))
                 return;
             }
 
