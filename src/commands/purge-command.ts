@@ -35,7 +35,6 @@ export class PurgeCommand implements Command {
     async execute(args: string[], msg: Message, channel: TextChannel | DMChannel): Promise<void> {
         let target = msg.author;
         let userData = await this.userRepo.getUser(target.id); // Try and get their data
-        let confirmEmbed = new MessageEmbed();
         let changesLeft = 0;
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
