@@ -14,7 +14,7 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
+import { MessageUtils, FormatUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -39,7 +39,7 @@ export class ConfigCommand implements Command {
         private configTimezoneSubCommand: ConfigTimezoneSubCommand,
         private configUseTimezoneSubCommand: ConfigUseTimezoneSubCommand,
         private configRequireAllTrustedRolesSubCommand: ConfigRequireAllTrustedRolesSubCommand
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -54,13 +54,18 @@ export class ConfigCommand implements Command {
             );
             return;
         }
-        let subCommand = args[2].toLowerCase();
+        let subCommand = FormatUtils.extractConfigType(args[2].toLowerCase())?.toLowerCase();
+
+        if (!subCommand) {
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noConfigArgs', LangCode.EN_US)
+            );
+            return;
+        }
 
         if (
-            subCommand === 'birthdaymaster' ||
-            subCommand === 'birthdaymasterrole' ||
-            subCommand === 'master' ||
-            subCommand === 'masterrole'
+            subCommand === 'birthdaymasterrole'
         ) {
             this.configBirthdayMasterRole.execute(args, msg, channel);
         } else if (subCommand === 'channel') {
@@ -74,18 +79,13 @@ export class ConfigCommand implements Command {
         } else if (subCommand === 'usetimezone') {
             this.configUseTimezoneSubCommand.execute(args, msg, channel);
         } else if (
-            subCommand === 'trustedpreventsmsg' ||
-            subCommand === 'trustedpreventsmessage' ||
-            subCommand === 'trustedpreventmsg' ||
-            subCommand === 'trustedpreventmessage'
+            subCommand === 'trustedpreventsmessage'
         ) {
             this.configTrustedPreventsMsgSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'trustedpreventsrole' || subCommand === 'trustedpreventrole') {
+        } else if (subCommand === 'trustedpreventsrole') {
             this.configTrustedPreventsRoleSubCommand.execute(args, msg, channel);
         } else if (
-            subCommand === 'requirealltrustedroles' ||
-            subCommand === 'requirealltrusted' ||
-            subCommand === 'requireallroles'
+            subCommand === 'requirealltrustedroles'
         ) {
             this.configRequireAllTrustedRolesSubCommand.execute(args, msg, channel);
         } else {

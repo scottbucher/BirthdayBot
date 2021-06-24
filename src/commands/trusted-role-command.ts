@@ -9,7 +9,7 @@ import {
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
+import { MessageUtils, FormatUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -29,7 +29,7 @@ export class TrustedRoleCommand implements Command {
         private trustedRoleRemoveSubCommand: TrustedRoleRemoveSubCommand,
         private trustedRoleClearSubCommand: TrustedRoleClearSubCommand,
         private trustedRoleListSubCommand: TrustedRoleListSubCommand
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -44,13 +44,16 @@ export class TrustedRoleCommand implements Command {
             );
             return;
         }
-        if (args[2].toLowerCase() === 'add') {
+
+        let action = FormatUtils.extractMiscActionType(args[3].toLowerCase())?.toLowerCase() ?? '';
+
+        if (action === 'add') {
             this.trustedRoleAddSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (args[2].toLowerCase() === 'remove') {
+        } else if (action === 'remove') {
             this.trustedRoleRemoveSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'clear') {
+        } else if (action === 'clear') {
             this.trustedRoleClearSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'list') {
+        } else if (action === 'list') {
             this.trustedRoleListSubCommand.execute(args, msg, channel, hasPremium);
         } else {
             await MessageUtils.send(

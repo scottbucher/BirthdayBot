@@ -3,7 +3,7 @@ import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
+import { MessageUtils, FormatUtils } from '../utils';
 
 let Config = require('../../config/config.json'); // Possible support for server-specific prefixes?
 
@@ -25,7 +25,7 @@ export class HelpCommand implements Command {
     ): Promise<void> {
         let clientAvatarUrl = msg.client.user.avatarURL();
 
-        let option = args[2]?.toLowerCase();
+        let option = FormatUtils.extractMiscActionType(args[2]?.toLowerCase())?.toLowerCase();
         if (!option) {
             await MessageUtils.send(
                 channel,

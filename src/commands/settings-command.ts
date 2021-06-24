@@ -20,7 +20,7 @@ export class SettingsCommand implements Command {
     public requirePremium = false;
     public getPremium = true;
 
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     async execute(
         args: string[],
@@ -31,16 +31,7 @@ export class SettingsCommand implements Command {
         let guild = msg.guild;
         let guildData = await this.guildRepo.getGuild(guild.id);
 
-        let type = args.length > 2 ? args[2].toLowerCase() : 'general';
-
-        // get type based on language
-        type === Lang.getRef('terms.message', LangCode.EN_US).toLowerCase()
-            ? 'message'
-            : Lang.getRef('terms.advanced', LangCode.EN_US).toLowerCase()
-            ? 'advanced'
-            : 'general';
-
-        let titleType = Lang.getRef('terms.' + type, LangCode.EN_US);
+        let type = args.length > 2 ? FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ?? 'general' : 'general';
 
         // split settings into general settings, message settings, advanced settings
         // bday settings [option]
@@ -59,21 +50,21 @@ export class SettingsCommand implements Command {
                 guildData.BirthdayChannelDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.channels.resolve(guildData.BirthdayChannelDiscordId)?.toString() ||
-                      `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
+                    `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
             memberAnniversaryChannel =
                 guildData.MemberAnniversaryChannelDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.channels
-                          .resolve(guildData.MemberAnniversaryChannelDiscordId)
-                          ?.toString() ||
-                      `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
+                        .resolve(guildData.MemberAnniversaryChannelDiscordId)
+                        ?.toString() ||
+                    `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
             serverAnniversaryChannel =
                 guildData.ServerAnniversaryChannelDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.channels
-                          .resolve(guildData.ServerAnniversaryChannelDiscordId)
-                          ?.toString() ||
-                      `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
+                        .resolve(guildData.ServerAnniversaryChannelDiscordId)
+                        ?.toString() ||
+                    `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
 
             // Get our mention settings
             birthdayMentionSetting = FormatUtils.getMentionSetting(
@@ -145,7 +136,7 @@ export class SettingsCommand implements Command {
                 guildData.BirthdayMasterRoleDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
-                      `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
+                    `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
 
             await MessageUtils.send(
                 channel,
@@ -171,7 +162,7 @@ export class SettingsCommand implements Command {
                 guildData.BirthdayRoleDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.roles.resolve(guildData.BirthdayRoleDiscordId)?.toString() ||
-                      `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
+                    `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
 
             let nameFormat =
                 guildData.NameFormat.charAt(0).toUpperCase() + guildData.NameFormat.slice(1);

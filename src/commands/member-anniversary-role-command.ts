@@ -9,7 +9,7 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
+import { MessageUtils, FormatUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -29,7 +29,7 @@ export class MemberAnniversaryRoleCommand implements Command {
         private memberAnniversaryRoleRemoveSubCommand: MemberAnniversaryRoleRemoveSubCommand,
         private memberAnniversaryRoleClearSubCommand: MemberAnniversaryRoleClearSubCommand,
         private memberAnniversaryRoleListSubCommand: MemberAnniversaryRoleListSubCommand
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -44,13 +44,16 @@ export class MemberAnniversaryRoleCommand implements Command {
             );
             return;
         }
-        if (args[2].toLowerCase() === 'add') {
+
+        let type = FormatUtils.extractMiscActionType(args[2]?.toLowerCase())?.toLowerCase() ?? '';
+
+        if (type === 'add') {
             this.memberAnniversaryRoleAddSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (args[2].toLowerCase() === 'remove') {
+        } else if (type === 'remove') {
             this.memberAnniversaryRoleRemoveSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'clear') {
+        } else if (type === 'clear') {
             this.memberAnniversaryRoleClearSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'list') {
+        } else if (type === 'list') {
             this.memberAnniversaryRoleListSubCommand.execute(args, msg, channel, hasPremium);
         } else {
             await MessageUtils.send(

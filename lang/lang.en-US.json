@@ -290,7 +290,10 @@
                 "fields": [
                     {
                         "name": "Actions",
-                        "value": ["{{REF:emotes.confirm}} Confirm", "{{REF:emotes.deny}} Deny"]
+                        "value": [
+                            "{{REF:emotes.confirm}} Confirm",
+                            "{{REF:emotes.deny}} Deny"
+                        ]
                     }
                 ],
                 "footer": {
@@ -415,7 +418,7 @@
             },
             "addMessageExpired": {
                 "title": "Add Custom Message - Expired",
-                "description": "Type `{{REF:bot.prefix}} message add {{TYPE}} <Message>` to add a custom message.",
+                "description": "Type `{{REF:bot.prefix}} message {{REF:types.add}} {{TYPE}} <Message>` to add a custom message.",
                 "color": "{{REF:colors.error}}"
             },
             "removeMessage": {
@@ -443,12 +446,12 @@
             },
             "trustedSetupExpired": {
                 "title": "Trusted Setup - Expired",
-                "description": "Type `{{REF:bot.prefix}} setup trusted` to rerun the setup.",
+                "description": "Type `{{REF:bot.prefix}} setup {{REF:types.trusted}}` to rerun the setup.",
                 "color": "{{REF:colors.error}}"
             },
             "anniversarySetupExpired": {
                 "title": "Anniversary Setup - Expired",
-                "description": "Type `{{REF:bot.prefix}} setup anniversary` to rerun the setup.",
+                "description": "Type `{{REF:bot.prefix}} setup {{REF:types.anniversary}}` to rerun the setup.",
                 "color": "{{REF:colors.error}}"
             },
             "customMessageClearExpired": {
@@ -462,7 +465,7 @@
             },
             "blacklistClearExpired": {
                 "title": "Blacklist Clear - Expired",
-                "description": "Type `{{REF:bot.prefix}} blacklist clear` to clear the birthday blacklist.",
+                "description": "Type `{{REF:bot.prefix}} blacklist {{REF:types.clear}}` to clear the birthday blacklist.",
                 "color": "{{REF:colors.error}}"
             },
             "blacklistAddSuccess": {
@@ -560,12 +563,12 @@
             },
             "trustedRoleClearExpired": {
                 "title": "Trusted Role Clear - Expired",
-                "description": "Type `{{REF:bot.prefix}} trustedRole clear` to clear the trusted roles.",
+                "description": "Type `{{REF:bot.prefix}} trustedRole {{REF:types.clear}}` to clear the trusted roles.",
                 "color": "{{REF:colors.error}}"
             },
             "memberAnniversaryRoleClearExpired": {
                 "title": "Member Anniversary Role Clear - Expired",
-                "description": "Type `{{REF:bot.prefix}} memberAnniversaryRole clear` to clear the member anniversary roles.",
+                "description": "Type `{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.clear}}` to clear the member anniversary roles.",
                 "color": "{{REF:colors.error}}"
             },
             "addedTrustedRole": {
@@ -649,8 +652,8 @@
                     {
                         "name": "Actions",
                         "value": [
-                            "`{{REF:bot.prefix}} message list {{TYPE}} [page]` - List all custom {{DISPLAY_TYPE}} messages.",
-                            "`{{REF:bot.prefix}} message test {{TYPE}} <position>` - Test a {{DISPLAY_TYPE}} message."
+                            "`{{REF:bot.prefix}} message {{REF:types.list}} {{TYPE}} [page]` - List all custom {{DISPLAY_TYPE}} messages.",
+                            "`{{REF:bot.prefix}} message {{REF:types.test}} {{TYPE}} <position>` - Test a {{DISPLAY_TYPE}} message."
                         ]
                     }
                 ],
@@ -673,8 +676,8 @@
                     {
                         "name": "Actions",
                         "value": [
-                            "`{{REF:bot.prefix}} message list {{TYPE}} [page]` - List all custom user specific {{DISPLAY_TYPE}} messages.",
-                            "`{{REF:bot.prefix}} message test {{TYPE}} <position>` - Test a user specific {{DISPLAY_TYPE}} message."
+                            "`{{REF:bot.prefix}} message {{REF:types.list}} {{TYPE}} [page]` - List all custom user specific {{DISPLAY_TYPE}} messages.",
+                            "`{{REF:bot.prefix}} message {{REF:types.test}} {{TYPE}} <position>` - Test a user specific {{DISPLAY_TYPE}} message."
                         ]
                     }
                 ],
@@ -697,16 +700,22 @@
             "voteRequired": {
                 "title": "Vote Required!",
                 "thumbnail": "{{REF:links.voteImage}}",
-                "description": ["This command requires you to have voted in the past 24 hours!"],
+                "description": [
+                    "This command requires you to have voted in the past 24 hours!"
+                ],
                 "fields": [
                     {
                         "name": "Last Vote",
-                        "value": ["{{LAST_VOTE}}"],
+                        "value": [
+                            "{{LAST_VOTE}}"
+                        ],
                         "inline": true
                     },
                     {
                         "name": "Vote Here",
-                        "value": ["[Top.gg]({{REF:links.vote}})"],
+                        "value": [
+                            "[Top.gg]({{REF:links.vote}})"
+                        ],
                         "inline": true
                     }
                 ],
@@ -718,7 +727,9 @@
             },
             "needManageRoles": {
                 "title": "Not Enough Permissions!",
-                "description": ["{{REF:bot.name}} needs permission to Manage Roles!"],
+                "description": [
+                    "{{REF:bot.name}} needs permission to Manage Roles!"
+                ],
                 "footer": {
                     "text": "{{REF:footers.joinSupport}}"
                 },
@@ -727,7 +738,9 @@
             },
             "needManageChannels": {
                 "title": "Not Enough Permissions!",
-                "description": ["{{REF:bot.name}} needs permission to Manage Channels!"],
+                "description": [
+                    "{{REF:bot.name}} needs permission to Manage Channels!"
+                ],
                 "footer": {
                     "text": "{{REF:footers.joinSupport}}"
                 },
@@ -777,7 +790,10 @@
             },
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": ["Please specify an option!", "{{OPTIONS}}"],
+                "description": [
+                    "Please specify an option!",
+                    "{{OPTIONS}}"
+                ],
                 "color": "{{REF:colors.error}}"
             },
             "invalidSetupArgs": {
@@ -797,14 +813,16 @@
                 "color": "{{REF:colors.error}}"
             },
             "userBirthdayNotSet": {
-                "description": ["{{USER}} hasn't set their birthday!"],
+                "description": [
+                    "{{USER}} hasn't set their birthday!"
+                ],
                 "color": "{{REF:colors.error}}"
             },
             "noBlacklistArgs": {
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command for the blacklist! [(?)]({{REF:docLinks.whatIsBirthdayBlacklist}})",
-                    "Accepted Values: `list`, `add <User>`, `remove <User>`, `clear`"
+                    "Accepted Values: `{{REF:types.list}}`, `{{REF:types.add}} <User>`, `{{REF:types.remove}} <User>`, `{{REF:types.clear}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -812,7 +830,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command! [(?)]({{REF:docLinks.whatIsTrustedRole}})",
-                    "Accepted Values: `list`, `add`, `remove`, `clear`"
+                    "Accepted Values: `{{REF:types.add}}`, ` {{REF:types.remove}}`, ` {{REF:types.clear}}`, ` {{REF:types.list}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -820,7 +838,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a config value to change!",
-                    "Accepted Values: `channel`, `role`, `birthdayMasterRole`, `nameFormat`, `timezone`, `useTimezone`, `trustedRole`, `trustedPreventsMsg`, `trustedPreventsRole`, `requireAllTrustedRoles`"
+                    "Accepted Values: `{{REF:types.channel}}`, `{{REF:types.birthdayRole}}`, `{{REF:types.birthdayMasterRole}}`, `{{REF:types.nameFormat}}`, `{{REF:types.timezone}}`, `{{REF:types.useTimezone}}`, `{{REF:types.trustedRole}}`, `{{REF:types.trustedPreventsMessage}}`, `{{REF:types.trustedPreventsRole}}`, `{{REF:types.requireAllTrustedRoles}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -828,7 +846,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command!",
-                    "Accepted Values: `add`, `remove`, `clear`, `list`"
+                    "Accepted Values: `{{REF:types.add}}`, ` {{REF:types.remove}}`, ` {{REF:types.clear}}`, ` {{REF:types.list}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -836,7 +854,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command!",
-                    "Accepted Values: `list <value>`, `add <Value>`, `remove <#>`, `clear`, `time <0-23>`, `mention <Value>`, `useEmbed <T/F>`"
+                    "Accepted Values: `{{REF:types.list}} <value>`, `{{REF:types.add}} <Value>`, `{{REF:types.remove}} <#>`, `{{REF:types.clear}}`, `{{REF:types.time}} <0-23>`, `{{REF:types.mention}} <Value>`, `{{REF:types.useEmbed}} <T/F>`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -1020,9 +1038,9 @@
                 "description": [
                     "Please specify an option!",
                     "",
-                    "`{{REF:bot.prefix}} config channel <type> create` - Creates the default channel of that type.",
-                    "`{{REF:bot.prefix}} config channel <type> clear` - Clears the channel of that type.",
-                    "`{{REF:bot.prefix}} config channel <type> #channel` - Set the channel of that type."
+                    "`{{REF:bot.prefix}} config {{REF:types.channel}} <type> {{REF:types.create}}` - Creates the default channel of that type.",
+                    "`{{REF:bot.prefix}} config {{REF:types.channel}} <type> {{REF:types.clear}}` - Clears the channel of that type.",
+                    "`{{REF:bot.prefix}} config {{REF:types.channel}} <type> #channel` - Set the channel of that type."
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -1050,9 +1068,9 @@
                 "description": [
                     "Please specify an option!",
                     "",
-                    "`{{REF:bot.prefix}} config birthdayMasterRole create` - Creates the birthday master role.",
-                    "`{{REF:bot.prefix}} config birthdayMasterRole clear` - Clears the birthday master role.",
-                    "`{{REF:bot.prefix}} config birthdayMasterRole @role` - Set the birthday master role."
+                    "`{{REF:bot.prefix}} config {{REF:types.birthdayMasterRole}} {{REF:types.create}}` - Creates the birthday master role.",
+                    "`{{REF:bot.prefix}} config {{REF:types.birthdayMasterRole}} {{REF:types.clear}}` - Clears the birthday master role.",
+                    "`{{REF:bot.prefix}} config {{REF:types.birthdayMasterRole}} @role` - Set the birthday master role."
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -1065,9 +1083,9 @@
                 "description": [
                     "Please specify an option!",
                     "",
-                    "`{{REF:bot.prefix}} config role create` - Creates the default birthday role.",
-                    "`{{REF:bot.prefix}} config role clear` - Clears the birthday role.",
-                    "`{{REF:bot.prefix}} config role @role` - Set the birthday role."
+                    "`{{REF:bot.prefix}} config {{REF:types.birthdayRole}} {{REF:types.create}}` - Creates the default birthday role.",
+                    "`{{REF:bot.prefix}} config {{REF:types.birthdayRole}} {{REF:types.clear}}` - Clears the birthday role.",
+                    "`{{REF:bot.prefix}} config {{REF:types.birthdayRole}} @role` - Set the birthday role."
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -1167,7 +1185,7 @@
             },
             "trustedRoleInvalidRoleOrPosition": {
                 "title": "Trusted Role Remove - Invalid Role/Position",
-                "description": "Use `{{REF:bot.prefix}} trustedRole list <type>` to view your server's trusted roles!",
+                "description": "Use `{{REF:bot.prefix}} trustedRole {{REF:types.list}} <type>` to view your server's trusted roles!",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -1178,7 +1196,7 @@
                 "title": "Trusted Role Remove - Not Found",
                 "description": [
                     "Trusted Role does not exist!",
-                    "View your server's trusted roles with `{{REF:bot.prefix}} trustedRole list`!"
+                    "View your server's trusted roles with `{{REF:bot.prefix}} trustedRole {{REF:types.list}}`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -1188,7 +1206,7 @@
             },
             "customMessageInvalidPosition": {
                 "title": "Remove Custom Message",
-                "description": "Use `{{REF:bot.prefix}} message list <type>' to view your server's custom messages!",
+                "description": "Use `{{REF:bot.prefix}} message {{REF:types.list}} <type>' to view your server's custom messages!",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
                 },
@@ -1198,7 +1216,7 @@
                 "title": "Remove Custom Message",
                 "description": [
                     "Message number does not exist!",
-                    "View your server's custom messages with `{{REF:bot.prefix}} message list <type>`!"
+                    "View your server's custom messages with `{{REF:bot.prefix}} message {{REF:types.list}} <type>`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -1231,14 +1249,14 @@
             "noUserPlaceholder": {
                 "description": [
                     "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where the member names will appear.",
-                    "Ex: `{{REF:bot.prefix}} message add {{TYPE}} {{EXAMPLE_MESSAGE}}`"
+                    "Ex: `{{REF:bot.prefix}} message {{REF:types.add}} {{TYPE}} {{EXAMPLE_MESSAGE}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
             "noServerPlaceholder": {
                 "description": [
                     "Please include the `{{REF:placeHolders.server}}` placeholder somewhere in the message. This indicates where the server name will appear.",
-                    "Ex: `{{REF:bot.prefix}} message add serverAnniversary {{REF:defaults.serverAnniversaryMessage}}`",
+                    "Ex: `{{REF:bot.prefix}} message {{REF:types.add}} {{REF:types.serverAnniversary}} {{REF:defaults.serverAnniversaryMessage}}`",
                     "",
                     "Tip: You can also use the `{{REF:placeHolders.year}}` placeholder for the anniversary year."
                 ],
@@ -1279,7 +1297,7 @@
                 "title": "Test Custom Message",
                 "description": [
                     "Message number does not exist!",
-                    "View your server's custom messages with `{{REF:bot.prefix}} message list <type>`!"
+                    "View your server's custom messages with `{{REF:bot.prefix}} message {{REF:types.list}} <type>`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -1290,7 +1308,7 @@
                 "title": "Test Custom Message",
                 "description": [
                     "Message does not exist!",
-                    "View your server's custom messages with `{{REF:bot.prefix}} message list <type>`!"
+                    "View your server's custom messages with `{{REF:bot.prefix}} message {{REF:types.list}} <type>`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}"
@@ -1402,7 +1420,7 @@
             "noMessageNumber": {
                 "description": [
                     "Please provide a message number or user!",
-                    "Find this using `{{REF:bot.prefix}} message list <type>`!"
+                    "Find this using `{{REF:bot.prefix}} message {{REF:types.list}} <type>`!"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -1433,7 +1451,7 @@
             "invalidMessageNumber": {
                 "description": [
                     "Invalid message number!",
-                    "Find this using `{{REF:bot.prefix}} message list <type>`!"
+                    "Find this using `{{REF:bot.prefix}} message {{REF:types.list}} <type>`!"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -1586,7 +1604,9 @@
                 "fields": [
                     {
                         "name": "Purchase Premium",
-                        "value": ["[Checkout with PayPal Here!]({{SUB_LINK}})"]
+                        "value": [
+                            "[Checkout with PayPal Here!]({{SUB_LINK}})"
+                        ]
                     },
                     {
                         "name": "Premium Features",
@@ -1605,7 +1625,9 @@
                     },
                     {
                         "name": "Price",
-                        "value": ["2.99 USD / Month"]
+                        "value": [
+                            "2.99 USD / Month"
+                        ]
                     },
                     {
                         "name": "Purchase Details",
@@ -1638,7 +1660,9 @@
                     },
                     {
                         "name": "Price",
-                        "value": ["2.99 USD / Month"]
+                        "value": [
+                            "2.99 USD / Month"
+                        ]
                     },
                     {
                         "name": "Purchase Details",
@@ -1687,7 +1711,9 @@
         "premiumRequired": {
             "command": {
                 "title": "Premium Required!",
-                "description": ["This command requires this server to have premium!"],
+                "description": [
+                    "This command requires this server to have premium!"
+                ],
                 "fields": [
                     {
                         "name": "Premium Commands",
@@ -1751,7 +1777,10 @@
                     },
                     {
                         "name": "Links",
-                        "value": ["{{REF:links.supportEmbed}}", "{{REF:links.inviteEmbed}}"]
+                        "value": [
+                            "{{REF:links.supportEmbed}}",
+                            "{{REF:links.inviteEmbed}}"
+                        ]
                     },
                     {
                         "name": "Created With",
@@ -2007,7 +2036,7 @@
                     "",
                     "**{{REF:bot.prefix}} premium** - See information about {{REF:bot.name}} Premium.",
                     "**{{REF:bot.prefix}} subscribe** - Subscribe to {{REF:bot.name}} Premium!",
-                    "**{{REF:bot.prefix}} help premium** - Help for {{REF:bot.name}} Premium.",
+                    "**{{REF:bot.prefix}} help {{REF:types.premium}}** - Help for {{REF:bot.name}} Premium.",
                     "",
                     "**{{REF:bot.prefix}} set** - Set your birthday.",
                     "**{{REF:bot.prefix}} view [user]** - View your birthday or a users birthday.",
@@ -2020,11 +2049,11 @@
                     "**{{REF:bot.prefix}} faq** - View the frequently asked questions.",
                     "**{{REF:bot.prefix}} vote** - Vote for {{REF:bot.name}}!",
                     "**{{REF:bot.prefix}} purge** - Remove your birthday data.",
-                    "**{{REF:bot.prefix}} help setup** - Help for server setup.",
-                    "**{{REF:bot.prefix}} help message** - Help for the birthday message settings.",
-                    "**{{REF:bot.prefix}} help trusted** - Help for the trusted system.",
-                    "**{{REF:bot.prefix}} help blacklist** - Help for permissions.",
-                    "**{{REF:bot.prefix}} settings [message/advanced]**** - View server's settings.",
+                    "**{{REF:bot.prefix}} help {{REF:types.anniversary}}** - Help for server setup.",
+                    "**{{REF:bot.prefix}} help {{REF:types.message}}** - Help for the birthday message settings.",
+                    "**{{REF:bot.prefix}} help {{REF:types.trusted}}** - Help for the trusted system.",
+                    "**{{REF:bot.prefix}} help {{REF:types.blacklist}}** - Help for permissions.",
+                    "**{{REF:bot.prefix}} settings [{{REF:types.message}}/{{REF:types.advanced}}]**** - View server's settings.",
                     "**{{REF:bot.prefix}} test [user]**** - Test the birthday event.",
                     "",
                     "**{{REF:bot.prefix}} donate** - Support developments by donating!",
@@ -2042,15 +2071,15 @@
                 "title": "{{REF:bot.name}} Setup Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} setup** - Interactive guide for server setup.",
-                    "**{{REF:bot.prefix}} setup trusted** - Interactive guide for trusted system settings setup.",
-                    "**{{REF:bot.prefix}} setup anniversary** - Interactive guide annviversary settings setup.",
+                    "**{{REF:bot.prefix}} setup {{REF:types.trusted}}** - Interactive guide for trusted system settings setup.",
+                    "**{{REF:bot.prefix}} setup {{REF:types.anniversary}}** - Interactive guide annviversary settings setup.",
                     "",
-                    "**{{REF:bot.prefix}} config channel <create/clear/#channel> <type>** - Set a channel type.",
-                    "**{{REF:bot.prefix}} config role <create/clear/@role>** - Set the birthday role.",
-                    "**{{REF:bot.prefix}} config birthdayMaster <create/clear/@role>** - Set the birthday channel.",
-                    "**{{REF:bot.prefix}} config timezone <timezone> - Set the default server timezone.",
-                    "**{{REF:bot.prefix}} config useTimezone <user/server> - Set which timezone to use for celebrations.",
-                    "**{{REF:bot.prefix}} config nameFormat <default/username/nickname/mention/tag>** - Decide how member's names will appear.",
+                    "**{{REF:bot.prefix}} config {{REF:types.channel}} <{{REF:types.create}}/{{REF:types.clear}}/#channel> <type>** - Set a channel type.",
+                    "**{{REF:bot.prefix}} config {{REF:types.birthdayRole}} <{{REF:types.create}}/{{REF:types.clear}}/#channel>** - Set the birthday role.",
+                    "**{{REF:bot.prefix}} config {{REF:types.birthdayMasterRole}} <{{REF:types.create}}/{{REF:types.clear}}/#channel>** - Set the birthday master role.",
+                    "**{{REF:bot.prefix}} config {{REF:types.timezone}} <timezone> - Set the default server timezone.",
+                    "**{{REF:bot.prefix}} config {{REF:types.useTimezone}} <{{REF:types.user}}/{{REF:types.server}}> - Set which timezone to use for celebrations.",
+                    "**{{REF:bot.prefix}} config {{REF:types.nameFormat}} <{{REF:types.mention}}/{{REF:types.nickname}}/{{REF:types.username}}/{{REF:types.tag}}/{{REF:types.default}}>** - Decide how member's names will appear.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2058,17 +2087,17 @@
             "message": {
                 "title": "{{REF:bot.name}} Message Help - Guild Only",
                 "description": [
-                    "**{{REF:bot.prefix}} message list <type> [page]** - List all messages for that type.",
-                    "**{{REF:bot.prefix}} message add <type> <message>** - Add a message for that type.",
-                    " - Example Usage: `{{REF:bot.prefix}} message add memberAnnivesary <Users> have been in <Server> for <Year>(s)!`",
+                    "**{{REF:bot.prefix}} message {{REF:types.list}} <type> [page]** - List all messages for that type.",
+                    "**{{REF:bot.prefix}} message {{REF:types.add}} <type> <message>** - Add a message for that type.",
+                    " - Example Usage: `{{REF:bot.prefix}} message {{REF:types.add}} {{REF:types.memberAnniversary}} <Users> have been in <Server> for <Year>(s)!`",
                     " - Placeholder for users: `{{REF:placeHolders.users}}`",
                     " - Placeholder for year: `{{REF:placeHolders.year}}`",
                     " - Placeholder for server name: `{{REF:placeHolders.server}}`",
-                    "**{{REF:bot.prefix}} message remove <type> <position>** - Remove a certain message for that type.",
-                    "**{{REF:bot.prefix}} message clear <type>** - Clear all messages for that type.",
-                    "**{{REF:bot.prefix}} message time <type> <0-23>** - Set the message time for that type",
-                    "**{{REF:bot.prefix}} message mention <type> <role/group>** - Set the message mention setting for that type.",
-                    "**{{REF:bot.prefix}} message test <position> [user count]** - Test a custom message.",
+                    "**{{REF:bot.prefix}} message {{REF:types.remove}} <type> <position>** - Remove a certain message for that type.",
+                    "**{{REF:bot.prefix}} message {{REF:types.clear}} <type>** - Clear all messages for that type.",
+                    "**{{REF:bot.prefix}} message {{REF:types.time}} <type> <0-23>** - Set the message time for that type",
+                    "**{{REF:bot.prefix}} message {{REF:types.mention}} <type> <role/group>** - Set the message mention setting for that type.",
+                    "**{{REF:bot.prefix}} message {{REF:types.test}} <position> [user count]** - Test a custom message.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2076,15 +2105,15 @@
             "trusted": {
                 "title": "{{REF:bot.name}} Trusted System Help - Guild Only",
                 "description": [
-                    "**{{REF:bot.prefix}} setup trusted** - Interactive guide for trusted system settings setup.",
+                    "**{{REF:bot.prefix}} setup {{REF:types.trusted}}** - Interactive guide for trusted system settings setup.",
                     "",
-                    "**{{REF:bot.prefix}} config trustedRole add <role>** - Add a trusted role.",
-                    "**{{REF:bot.prefix}} config trustedRole remove <position/role>** - Remove a trusted role",
-                    "**{{REF:bot.prefix}} config trustedRole clear** - Clear all trusted roles.",
-                    "**{{REF:bot.prefix}} config trustedRole list [page]** - List all trusted roles",
-                    "**{{REF:bot.prefix}} config requireAllTrustedRoles <T/F>** - If a user should need all the trusted roles.",
-                    "**{{REF:bot.prefix}} config trustedPreventsMsg <T/F>** - If trusted role is required for a birthday message.",
-                    "**{{REF:bot.prefix}} config trustedPreventsRole <T/F>** - If trusted role is required to get the birthday role.",
+                    "**{{REF:bot.prefix}} trustedRole {{REF:types.add}} <role>** - Add a trusted role.",
+                    "**{{REF:bot.prefix}} trustedRole {{REF:types.remove}} <position/role>** - Remove a trusted role",
+                    "**{{REF:bot.prefix}} trustedRole {{REF:types.clear}}** - Clear all trusted roles.",
+                    "**{{REF:bot.prefix}} trustedRole {{REF:types.list}} [page]** - List all trusted roles",
+                    "**{{REF:bot.prefix}} config {{REF:types.requireAllTrustedRoles}} <T/F>** - If a user should need all the trusted roles.",
+                    "**{{REF:bot.prefix}} config {{REF:types.trustedPreventsMessage}} <T/F>** - If trusted role is required for a birthday message.",
+                    "**{{REF:bot.prefix}} config {{REF:types.trustedPreventsRole}} <T/F>** - If trusted role is required to get the birthday role.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2092,10 +2121,10 @@
             "blacklist": {
                 "title": "{{REF:bot.name}} Blacklist Help - Guild Only",
                 "description": [
-                    "**{{REF:bot.prefix}} blacklist add <user>** - Add user to the blacklist.",
-                    "**{{REF:bot.prefix}} blacklist remove <user>** - Remove user from the blacklist.",
-                    "**{{REF:bot.prefix}} blacklist clear** - Clear the birthday blacklist.",
-                    "**{{REF:bot.prefix}} blacklist list** - View all blacklisted users in your server.",
+                    "**{{REF:bot.prefix}} blacklist {{REF:types.add}} <user>** - Add user to the blacklist.",
+                    "**{{REF:bot.prefix}} blacklist {{REF:types.remove}} <user>** - Remove user from the blacklist.",
+                    "**{{REF:bot.prefix}} blacklist {{REF:types.clear}}** - Clear the birthday blacklist.",
+                    "**{{REF:bot.prefix}} blacklist {{REF:types.list}}** - View all blacklisted users in your server.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2104,16 +2133,17 @@
                 "title": "{{REF:bot.name}} Premium Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} premium** - View information about your server's premium.",
-                    "**{{REF:bot.prefix}} message add <type> <Message>** - Add a user-specific message of that type.",
-                    " - Example Usage: `{{REF:bot.prefix}} message add birthday Happy Birthday @Stqlth!`",
+                    "**{{REF:bot.prefix}} message {{REF:types.add}} <type> <message>** - Add a message for that type.",
+                    " - Example Usage: `{{REF:bot.prefix}} message {{REF:types.add}} {{REF:types.birthday}} Happy Birthday @Stqlth!`",
                     " - Placeholder for year: `{{REF:placeHolders.year}}`",
                     " - Placeholder for server name: `{{REF:placeHolders.server}}`",
-                    "**{{REF:bot.prefix}} message remove <user>** - Remove a certain birthday message.",
-                    "**{{REF:bot.prefix}} message list user [page]** - List all user-specific birthday messages.",
-                    "**{{REF:bot.prefix}} message memberAnniversaryRole add <role> <year>** - Add a member anniversary role.",
-                    "**{{REF:bot.prefix}} message memberAnniversaryRole remove <position/role>** - Remove a member anniversary role",
-                    "**{{REF:bot.prefix}} message memberAnniversaryRole clear** - Clear all member anniversary roles.",
-                    "**{{REF:bot.prefix}} message memberAnniversaryRole list [page]** - List all member anniversary roles.",
+                    "**{{REF:bot.prefix}} message {{REF:types.remove}} <type> <@user>** - Remove a user specific custom message.",
+                    "**{{REF:bot.prefix}} message {{REF:types.list}} {{REF:types.userSpecificBirthday}} [page]** - List all user-specific birthday messages.",
+                    "**{{REF:bot.prefix}} message {{REF:types.list}} {{REF:types.userSpecificMemberAnniversary}} [page]** - List all user-specific member anniversary messages.",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.add}} <role> <year>** - Add a member anniversary role.",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.remove}} <position/role>** - Remove a member anniversary role",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.clear}}** - Clear all member anniversary roles.",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.list}} [page]** - List all member anniversary roles.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2134,7 +2164,10 @@
                     },
                     {
                         "name": "Stats",
-                        "value": ["**Shards**: {{SHARD_COUNT}}", "**Servers**: {{SERVER_COUNT}}"]
+                        "value": [
+                            "**Shards**: {{SHARD_COUNT}}",
+                            "**Servers**: {{SERVER_COUNT}}"
+                        ]
                     },
                     {
                         "name": "Memory",
@@ -2382,7 +2415,7 @@
             "blacklist": {
                 "title": "{{REF:terms.blacklistList}} | {{REF:list.pageTitle}}",
                 "description": [
-                    "*Users on this list will not have their birthdays celebrated no matter what. Edit this list with `{{REF:bot.prefix}} blacklist <add/remove> <User>`!*",
+                    "*Users on this list will not have their birthdays celebrated no matter what. Edit this list with `{{REF:bot.prefix}} blacklist <{{REF:types.add}}/{{REF:types.remove}}> <User>`!*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2601,13 +2634,57 @@
             "serverAnniversary": "serveranniversary",
             "userSpecificBirthday": "userspecificbirthday",
             "userSpecificMemberAnniversary": "userspecificmemberanniversary",
+            "channel": "channel",
+            "birthdayRole": "role",
+            "birthdayMasterRole": "birthdayMasterRole",
+            "nameFormat": "nameFormat",
+            "timezone": "timezone",
+            "useTimezone": "useTimezone",
+            "trustedPreventsRole": "trustedPreventsRole",
+            "trustedPreventsMessage": "trustedPreventsMessage",
+            "requireAllTrustedRoles": "requireAllTrustedRoles",
             "alternatives": {
-                "birthday": ["{{REF:bot.prefix}}"],
-                "memberAnniversary": ["member"],
-                "serverAnniversary": ["server"],
-                "userSpecificBirthday": ["specificbirthday", "userbirthday"],
-                "userSpecificMemberAnniversary": ["specificanniversary", "useranniversary"]
-            }
+                "birthday": [
+                    "birthdays"
+                ],
+                "memberAnniversary": [
+                    "member"
+                ],
+                "serverAnniversary": [
+                    "server"
+                ],
+                "userSpecificBirthday": [
+                    "specificbirthday",
+                    "userbirthday"
+                ],
+                "userSpecificMemberAnniversary": [
+                    "specificanniversary",
+                    "useranniversary"
+                ]
+            },
+            "mention": "mention",
+            "nickname": "nickname",
+            "username": "nickname",
+            "tag": "tag",
+            "default": "default",
+            "add": "add",
+            "remove": "remove",
+            "clear": "clear",
+            "list": "list",
+            "time": "time",
+            "useEmbed": "useEmbed",
+            "help": "help",
+            "setup": "setup",
+            "trusted": "trusted",
+            "anniversary": "anniversary",
+            "message": "message",
+            "blacklist": "blacklist",
+            "advanced": "advanced",
+            "premium": "premium",
+            "test": "test",
+            "create": "create",
+            "user": "user",
+            "server": "server"
         },
         "placeHolders": {
             "users": "<Users>",

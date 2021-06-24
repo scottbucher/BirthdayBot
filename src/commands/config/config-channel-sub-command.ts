@@ -8,7 +8,7 @@ import { LangCode } from '../../models/enums';
 const errorEmbed = Lang.getEmbed('validation.invalidChannelAction', LangCode.EN_US);
 
 export class ConfigChannelSubCommand {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let type = FormatUtils.extractCelebrationType(args[3]?.toLowerCase());
@@ -35,10 +35,13 @@ export class ConfigChannelSubCommand {
             (type === 'memberanniversary'
                 ? 'memberAnniversary'
                 : type === 'serveranniversary'
-                ? 'serverAnniversary'
-                : 'birthday') + 'Channel';
+                    ? 'serverAnniversary'
+                    : 'birthday') + 'Channel';
 
-        if (args[4].toLowerCase() === 'create') {
+
+        let action = FormatUtils.extractMiscActionType(args[4].toLowerCase())?.toLowerCase() ?? '';
+
+        if (action === 'create') {
             // User wants to create the default birthday channel
             if (!msg.guild.me.hasPermission('MANAGE_CHANNELS')) {
                 await MessageUtils.send(
@@ -81,7 +84,7 @@ export class ConfigChannelSubCommand {
                     CHANNEL: newChannel.toString(),
                 })
             );
-        } else if (args[4].toLowerCase() === 'clear') {
+        } else if (action === 'clear') {
             // User wants to clear the birthday channel
 
             await MessageUtils.send(
@@ -132,7 +135,7 @@ export class ConfigChannelSubCommand {
         type === 'birthday'
             ? await this.guildRepo.updateBirthdayChannel(msg.guild.id, channelId)
             : type === 'memberanniversary'
-            ? await this.guildRepo.updateMemberAnniversaryChannel(msg.guild.id, channelId)
-            : await this.guildRepo.updateServerAnniversaryChannel(msg.guild.id, channelId);
+                ? await this.guildRepo.updateMemberAnniversaryChannel(msg.guild.id, channelId)
+                : await this.guildRepo.updateServerAnniversaryChannel(msg.guild.id, channelId);
     }
 }

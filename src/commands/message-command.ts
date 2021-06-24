@@ -12,7 +12,7 @@ import {
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
+import { MessageUtils, FormatUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -35,7 +35,7 @@ export class MessageCommand implements Command {
         private messageTimeSubCommand: MessageTimeSubCommand,
         private messageMentionSubCommand: MessageMentionSubCommand,
         private messageTestSubCommand: MessageTestSubCommand
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -50,19 +50,22 @@ export class MessageCommand implements Command {
             );
             return;
         }
-        if (args[2].toLowerCase() === 'list') {
+
+        let type = FormatUtils.extractMiscActionType(args[2]?.toLowerCase())?.toLowerCase() ?? '';
+
+        if (type === 'list') {
             this.messageListSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (args[2].toLowerCase() === 'clear') {
+        } else if (type === 'clear') {
             this.messageClearSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'add' || args[2].toLowerCase() === 'create') {
+        } else if (type === 'add' || args[2].toLowerCase() === 'create') {
             this.messageAddSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (args[2].toLowerCase() === 'remove' || args[2].toLowerCase() === 'delete') {
+        } else if (type === 'remove' || args[2].toLowerCase() === 'delete') {
             this.messageRemoveSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'time') {
+        } else if (type === 'time') {
             this.messageTimeSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'mention' || args[2].toLowerCase() === 'role') {
+        } else if (type === 'mention' || args[2].toLowerCase() === 'role') {
             this.messageMentionSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'test') {
+        } else if (type === 'test') {
             this.messageTestSubCommand.execute(args, msg, channel);
         } else {
             await MessageUtils.send(

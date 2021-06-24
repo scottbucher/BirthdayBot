@@ -3,14 +3,14 @@ import { Message, Role, TextChannel } from 'discord.js';
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
-import { MessageUtils } from '../../utils';
+import { MessageUtils, FormatUtils } from '../../utils';
 
 let Config = require('../../../config/config.json');
 
 const errorEmbed = Lang.getEmbed('validation.invalidBirthdayRoleAction', LangCode.EN_US);
 
 export class ConfigRoleSubCommand {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
@@ -18,7 +18,9 @@ export class ConfigRoleSubCommand {
             return;
         }
 
-        if (args[3].toLowerCase() === 'create') {
+        let action = FormatUtils.extractMiscActionType(args[3].toLowerCase())?.toLowerCase() ?? '';
+
+        if (action === 'create') {
             // User wants to create the default birthday role
             if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
                 await MessageUtils.send(
@@ -46,7 +48,7 @@ export class ConfigRoleSubCommand {
                     ROLE: birthdayRole.toString(),
                 })
             );
-        } else if (args[3].toLowerCase() === 'clear') {
+        } else if (action === 'clear') {
             // User wants to clear the birthday role
             await this.guildRepo.updateBirthdayRole(msg.guild.id, '0');
 

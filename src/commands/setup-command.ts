@@ -1,5 +1,5 @@
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { MessageUtils, PermissionUtils } from '../utils';
+import { MessageUtils, PermissionUtils, FormatUtils } from '../utils';
 import { SetupRequired, SetupTrusted } from './setup';
 
 import { Command } from '.';
@@ -26,7 +26,7 @@ export class SetupCommand implements Command {
         private setupRequired: SetupRequired,
         private setupTrusted: SetupTrusted,
         private setupAnniversary: SetupAnniversary
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -70,8 +70,10 @@ export class SetupCommand implements Command {
             return;
         }
 
+        let type = FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ?? '';
+
         // Run the appropriate setup
-        switch (args[2].toLowerCase()) {
+        switch (type) {
             case 'anniversary':
                 await this.setupAnniversary.execute(args, msg, channel);
                 return;

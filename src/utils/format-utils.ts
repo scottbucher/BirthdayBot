@@ -23,8 +23,8 @@ export class FormatUtils {
         return values.length == 2
             ? values[0] + ' ' + values[1]
             : [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
-                  values.length < 2 ? '' : `, ${Lang.getRef('terms.and', LangCode.EN_US)} `
-              );
+                values.length < 2 ? '' : `, ${Lang.getRef('terms.and', LangCode.EN_US)} `
+            );
     }
 
     public static checkAbbreviation(input: string): boolean {
@@ -159,8 +159,8 @@ export class FormatUtils {
                         type === 'birthday'
                             ? 'list.noCustomBirthdayMessages'
                             : type === 'memberanniversary'
-                            ? 'list.noCustomMemberAnniversaryMessages'
-                            : 'list.noCustomServerAnniversaryMessages',
+                                ? 'list.noCustomMemberAnniversaryMessages'
+                                : 'list.noCustomServerAnniversaryMessages',
                         LangCode.EN_US
                     )
                 );
@@ -172,14 +172,14 @@ export class FormatUtils {
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.free
                 : type === 'serveranniversary'
-                ? Config.validation.message.maxCount.serverAnniversary.free
-                : Config.validation.message.maxCount.birthday.free;
+                    ? Config.validation.message.maxCount.serverAnniversary.free
+                    : Config.validation.message.maxCount.birthday.free;
         let maxMessagesPaid: number =
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.paid
                 : type === 'serveranniversary'
-                ? Config.validation.message.maxCount.serverAnniversary.paid
-                : Config.validation.message.maxCount.birthday.paid;
+                    ? Config.validation.message.maxCount.serverAnniversary.paid
+                    : Config.validation.message.maxCount.birthday.paid;
 
         for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
@@ -198,8 +198,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessageLocked'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessageLocked'
-                    : 'birthdayMessageLocked';
+                        ? 'serverAnniversaryMessageLocked'
+                        : 'birthdayMessageLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -214,8 +214,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessageUnLocked'
                     : type === 'serveranniversary'
-                    ? 'serverAnniversaryMessageUnLocked'
-                    : 'birthdayMessageUnLocked';
+                        ? 'serverAnniversaryMessageUnLocked'
+                        : 'birthdayMessageUnLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -260,13 +260,13 @@ export class FormatUtils {
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
+                    } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
+                    } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
             }
         }
 
@@ -329,13 +329,13 @@ export class FormatUtils {
             ) {
                 description += `**${i.toLocaleString()}.** ${
                     role ? `${role.toString()} ` : `**** `
-                }\n\n`;
+                    }\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ${
                     role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
-                }\n\n`;
+                    }\n\n`;
             }
             i++;
         }
@@ -395,7 +395,7 @@ export class FormatUtils {
             for (let user of users) {
                 userNames.push(
                     `${guild.members.resolve(user.UserDiscordId)?.displayName}` ||
-                        `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
+                    `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
                 );
             }
             let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
@@ -434,7 +434,7 @@ export class FormatUtils {
             description += `**${
                 guild.members.resolve(user)?.displayName ||
                 `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
-            }**: (ID: ${user})\n`; // Append the description
+                }**: (ID: ${user})\n`; // Append the description
         }
 
         embed = Lang.getEmbed('list.blacklist', LangCode.EN_US, {
@@ -471,24 +471,24 @@ export class FormatUtils {
             if (
                 hasPremium ||
                 memberAnniversaryRole.Position <=
-                    Config.validation.memberAnniversaryRoles.maxCount.free
+                Config.validation.memberAnniversaryRoles.maxCount.free
             ) {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role ? `${role.toString()} ` : `**** `
-                }\n\n`;
+                    }\n\n`;
             } else {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
-                }\n\n`;
+                    }\n\n`;
             }
         }
 
         if (
             !hasPremium &&
             memberAnniversaryRoleResults.stats.TotalItems >
-                Config.validation.memberAnniversaryRoles.maxCount.free
+            Config.validation.memberAnniversaryRoles.maxCount.free
         ) {
             embed = Lang.getEmbed('list.memberAnniversaryRolePaid', LangCode.EN_US, {
                 PAGE: page.toString(),
@@ -538,6 +538,90 @@ export class FormatUtils {
             case Lang.getRef('types.userSpecificMemberAnniversary', LangCode.EN_US) ||
                 Lang.getRef('types.alternatives.userSpecificMemberAnniversary', LangCode.EN_US):
                 return 'userspecificmemberanniversary';
+            default:
+                return null;
+        }
+    }
+    public static extractConfigType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.channel', LangCode.EN_US):
+                return 'channel';
+            case Lang.getRef('types.birthdayRole', LangCode.EN_US):
+                return 'role';
+            case Lang.getRef('types.birthdayMasterRole', LangCode.EN_US):
+                return 'birthdayMasterRole';
+            case Lang.getRef('types.nameFormat', LangCode.EN_US):
+                return 'nameFormat';
+            case Lang.getRef('types.timezone', LangCode.EN_US):
+                return 'timezone';
+            case Lang.getRef('types.useTimezone', LangCode.EN_US):
+                return 'useTimezone';
+            case Lang.getRef('types.trustedPreventsRole', LangCode.EN_US):
+                return 'trustedPreventsRole';
+            case Lang.getRef('types.trustedPreventsMessage', LangCode.EN_US):
+                return 'trustedPreventsMessage';
+            case Lang.getRef('types.requireAllTrustedRoles', LangCode.EN_US):
+                return 'requireAllTrustedRoles';
+            default:
+                return null;
+        }
+    }
+
+    public static extractNameFormatType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.mention', LangCode.EN_US):
+                return 'mention';
+            case Lang.getRef('types.nickname', LangCode.EN_US):
+                return 'nickname';
+            case Lang.getRef('types.username', LangCode.EN_US):
+                return 'username';
+            case Lang.getRef('types.tag', LangCode.EN_US):
+                return 'tag';
+            case Lang.getRef('types.default', LangCode.EN_US):
+                return 'default';
+            default:
+                return null;
+        }
+    }
+
+    public static extractMiscActionType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.add', LangCode.EN_US):
+                return 'add';
+            case Lang.getRef('types.remove', LangCode.EN_US):
+                return 'remove';
+            case Lang.getRef('types.clear', LangCode.EN_US):
+                return 'clear';
+            case Lang.getRef('types.list', LangCode.EN_US):
+                return 'list';
+            case Lang.getRef('types.mention', LangCode.EN_US):
+                return 'mention';
+            case Lang.getRef('types.time', LangCode.EN_US):
+                return 'time';
+            case Lang.getRef('types.useEmbed', LangCode.EN_US):
+                return 'useEmbed';
+            case Lang.getRef('types.help', LangCode.EN_US):
+                return 'help';
+            case Lang.getRef('types.setup', LangCode.EN_US):
+                return 'setup';
+            case Lang.getRef('types.anniversary', LangCode.EN_US):
+                return 'anniversary';
+            case Lang.getRef('types.message', LangCode.EN_US):
+                return 'message';
+            case Lang.getRef('types.blacklist', LangCode.EN_US):
+                return 'blacklist';
+            case Lang.getRef('types.advanced', LangCode.EN_US):
+                return 'advanced';
+            case Lang.getRef('types.premium', LangCode.EN_US):
+                return 'premium';
+            case Lang.getRef('types.test', LangCode.EN_US):
+                return 'test';
+            case Lang.getRef('types.create', LangCode.EN_US):
+                return 'create';
+            case Lang.getRef('types.user', LangCode.EN_US):
+                return 'user';
+            case Lang.getRef('types.server', LangCode.EN_US):
+                return 'server';
             default:
                 return null;
         }
