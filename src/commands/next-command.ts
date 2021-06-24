@@ -135,8 +135,8 @@ export class NextCommand implements Command {
                 let now = timezone ? moment.tz(timezone) : moment.tz();
                 let yearsOldRoundedUp = now.year() - serverCreatedAt.year();
 
-                // If it is already passed we need to increase the years old variable (this is how we round up)
-                if (moment(now.format('MM-DD')) > moment(serverCreatedAt.format('MM-DD'))) yearsOldRoundedUp++;
+                // If the diff is negative that date has already passed so we need to increase the year (this is how we round up)
+                if (moment(now.format('MM-DD')).diff(moment(serverCreatedAt.format('MM-DD')), 'days') < 0) yearsOldRoundedUp++;
 
 
                 await MessageUtils.send(
