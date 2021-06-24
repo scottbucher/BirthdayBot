@@ -134,7 +134,7 @@ async function start(): Promise<void> {
     let inviteCommand = new InviteCommand();
     let listCommand = new ListCommand(userRepo);
     let mapCommand = new MapCommand();
-    let nextCommand = new NextCommand(userRepo);
+    let nextCommand = new NextCommand(userRepo, guildRepo);
     let premiumCommand = new PremiumCommand(subscriptionService);
     let purgeCommand = new PurgeCommand(userRepo);
     let setAttemptsCommand = new SetAttemptsCommand(userRepo);
