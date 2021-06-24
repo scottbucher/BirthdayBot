@@ -15,12 +15,8 @@
                         "header": [],
                         "url": {
                             "raw": "{{BASE_URL}}/shards",
-                            "host": [
-                                "{{BASE_URL}}"
-                            ],
-                            "path": [
-                                "shards"
-                            ]
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["shards"]
                         }
                     },
                     "response": []
@@ -41,13 +37,8 @@
                         },
                         "url": {
                             "raw": "{{BASE_URL}}/shards/presence",
-                            "host": [
-                                "{{BASE_URL}}"
-                            ],
-                            "path": [
-                                "shards",
-                                "presence"
-                            ]
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["shards", "presence"]
                         }
                     },
                     "response": []
@@ -64,12 +55,8 @@
                         "header": [],
                         "url": {
                             "raw": "{{BASE_URL}}/guilds",
-                            "host": [
-                                "{{BASE_URL}}"
-                            ],
-                            "path": [
-                                "guilds"
-                            ]
+                            "host": ["{{BASE_URL}}"],
+                            "path": ["guilds"]
                         }
                     },
                     "response": []
@@ -83,9 +70,7 @@
                 "header": [],
                 "url": {
                     "raw": "{{BASE_URL}}",
-                    "host": [
-                        "{{BASE_URL}}"
-                    ]
+                    "host": ["{{BASE_URL}}"]
                 }
             },
             "response": []
@@ -111,18 +96,14 @@
             "listen": "prerequest",
             "script": {
                 "type": "text/javascript",
-                "exec": [
-                    ""
-                ]
+                "exec": [""]
             }
         },
         {
             "listen": "test",
             "script": {
                 "type": "text/javascript",
-                "exec": [
-                    ""
-                ]
+                "exec": [""]
             }
         }
     ],
