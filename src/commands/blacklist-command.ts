@@ -9,7 +9,7 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
+import { MessageUtils, FormatUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -29,7 +29,7 @@ export class BlacklistCommand implements Command {
         private blacklistRemoveSubCommand: BlacklistRemoveSubCommand,
         private blacklistClearSubCommand: BlacklistClearSubCommand,
         private blacklistListSubCommand: BlacklistListSubCommand
-    ) {}
+    ) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 2) {
@@ -40,13 +40,15 @@ export class BlacklistCommand implements Command {
             return;
         }
 
-        if (args[2].toLowerCase() === 'add') {
+        let action = FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ?? '';
+
+        if (action === 'add') {
             this.blacklistAddSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'remove') {
+        } else if (action === 'remove') {
             this.blacklistRemoveSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'list') {
+        } else if (action === 'list') {
             this.blacklistListSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'clear') {
+        } else if (action === 'clear') {
             this.blacklistClearSubCommand.execute(args, msg, channel);
         } else {
             await MessageUtils.send(
