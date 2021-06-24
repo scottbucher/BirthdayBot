@@ -1866,6 +1866,10 @@
                         "value": [
                             "If you have any other suggestions join our support server [here]({{REF:links.support}}) to suggest them!",
                             "",
+                            "Slash Command Support",
+                            " - Slash commands will completely replace the current command system in the near future.",
+                            "Button Support",
+                            " - Like slash commands button will soon be added to commands where reactions were previously used as buttons.",
                             "Multi-Lingual Support",
                             " - This update adds the system which supports this feature but it is in testing.",
                             " - Once testing is complete I will open up translator applications in our [Discord Support Server]({{REF:links.support}}).",
@@ -2714,7 +2718,8 @@
             "birthdayMention": "Birthday  Mention Setting",
             "memberAnniversaryMention": "Member Anniversary Mention Setting",
             "serverAnniversaryMention": "Server Anniversary Mention Setting",
-            "serverLanguage": "Server Language"
+            "serverLanguage": "Server Language",
+            "never": "Never"
         },
         "types": {
             "birthday": "birthday",

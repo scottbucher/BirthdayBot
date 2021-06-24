@@ -24,7 +24,7 @@ export class MessageHandler {
         private subscriptionService: SubscriptionService,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo
-    ) {}
+    ) { }
 
     public async process(msg: Message): Promise<void> {
         // Don't respond to partial messages, system messages, or bots
@@ -147,7 +147,7 @@ export class MessageHandler {
             // Get the user's last vote and check if the command requires a vote
             let userVote = await this.userRepo.getUserVote(msg.author.id);
             let voteTime = moment(userVote?.VoteTime);
-            let voteTimeAgo = userVote ? voteTime.fromNow() : 'Never';
+            let voteTimeAgo = userVote ? voteTime.fromNow() : Lang.getRef('terms.never', LangCode.EN_US);
 
             if (!userVote || voteTime.clone().add(Config.voting.hours, 'hours') < moment()) {
                 await MessageUtils.send(
