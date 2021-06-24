@@ -1788,6 +1788,94 @@
                     }
                 ]
             },
+            "update": {
+                "title": "{{REF:bot.name}} 3.0 Update Notes",
+                "description": [
+                    "When I started this Birthday Bot update I had no plans for it to be this large.",
+                    "Fastforward almost **8 months** and it is finally ready to go!",
+                    "",
+                    "Thank you to everyone for all the support and for 180,000 servers! I never dreamed Birthday Bot would become this big.",
+                    "I hope you enjoy the update!",
+                    "",
+                    "If you have any questions **find any bugs**, or have any suggestions **please** [Join Our Support Server]({{REF:links.support}})!"
+                ],
+                "fields": [
+                    {
+                        "name": "Introducing Anniversaries!",
+                        "value": [
+                            "There are two types of anniversaries: Member and Server.",
+                            "",
+                            "A Member Anniversary is a yearly celebration of when a user first joined a server.",
+                            "A Server Anniversary is a yearly celebration of when the discord server was created.",
+                            "",
+                            "Features:",
+                            "Added Member Anniversary Roles (premium, see below)",
+                            "Added two new message types (there are now three total) which are sent on an anniversary",
+                            " - All three message types can have their own seperate channel, message time, and mention setting",
+                            " - Like birthday messages, premium servers can set user specific member anniversary messages."
+                        ]
+                    },
+                    {
+                        "name": "Changes",
+                        "value": [
+                            "This update brings a ton of changes to command syntax, bug fixes, and overall design changes",
+                            "",
+                            "Previously, servers could set the message color (premium) and useEmbed setting. Now, these are specific to each message!",
+                            " - This means some messages can be embedded while others are not and each message can have a different color (premium).",
+                            " - Removed commands for setting these globally.",
+                            "Added `bday help {{REF:terms.anniversary}}` command for help with the anniversary settings.",
+                            "Updated commands which delt with birthday channels, messages, etc. to require a \"type\". (birthday, memberAnniversary, etc.)",
+                            "Hate seeing members' names show up like a bunch of numbers? Set the nameFormat setting to fix this!",
+                            " - This setting decides how members name will appear in birthday & anniversary messages.",
+                            " - `${{REF:bot.prefix}} config {{REF:terms.nameFormat}} <option>`",
+                            "Set the new DefaultTimezone setting for your server to have all your celebrations happen at once!",
+                            " - This timezone will be suggested to users when they set their birthday in your server.",
+                            " - `${{REF:bot.prefix}} config {{REF:terms.timezone}} <timezone>`",
+                            "Decide which timezone to prioritze in celebration messages with the new UseTimezone setting!",
+                            " - This will decide which timezone to celebrate brithdays in. (Member and Server Anniversaries always celebrate in the server's timezone)",
+                            " - `${{REF:bot.prefix}} config {{REF:terms.useTimezone}} <timezone>`",
+                            "The maximum birthday messages you can have has been decreased to 5.",
+                            " - This is to keep it inline with the max member anniversary and server anniversary messages.",
+                            " - Premium servers can have up to 500 of **each**!",
+                            "Added test commands for all 3 celebration types.",
+                            "",
+                            "Oh... and a cool new icon :)"
+                        ]
+                    },
+                    {
+                        "name": "Premium Changes & Additions",
+                        "value": [
+                            "Thank you to all the Birthday Bot Premium Subscribers for your support! Birthday Bot wouldn't be possible without you!",
+                            "",
+                            "",
+                            "Added Member Anniversary Roles",
+                            " - These are roles that are **permanently** given to the user on whatever year the anniversary role is set to!",
+                            " - Max of 250. (I doubt you will hit the limit)",
+                            " - Example: The member anniversary role `5-Year Veteran` can be set to be given on a member's 5th year in the server.",
+                            "Moved the message color option to be message specific!",
+                            " - This mean you can now have a different color for all your custom messages!",
+                            "Have up to 500 custom member anniversary and server anniversary messages!",
+                            "",
+                            "Added support for multiple Trusted Roles! You asked and I complied.",
+                            " - Up to 250",
+                            " - Added the RequireAllTrustedRoles setting. If false a user only needs one of the trusted roles to have their birthday celebrated."
+                        ]
+                    },
+                    {
+                        "name": "Coming Soon!",
+                        "value": [
+                            "If you have any other suggestions join our support server [here]({{REF:links.support}}) to suggest them!",
+                            "",
+                            "Multi-Lingual Support",
+                            " - This update adds the system which supports this feature but it is in testing.",
+                            " - Once testing is complete I will open up translator applications in our [Discord Support Server]({{REF:links.support}}).",
+                            "Command to see next member anniversary",
+                            "Command to see when the server anniversary is",
+                            "Command (similar to `{{REF:bot.prefix}} {{REF:types.list}}`) to see all member anniversaries in a server."
+                        ]
+                    }
+                ]
+            },
             "guildJoin": {
                 "title": "Thank you for using {{REF:bot.name}}!",
                 "description": [
@@ -2664,7 +2752,7 @@
             },
             "mention": "mention",
             "nickname": "nickname",
-            "username": "nickname",
+            "username": "username",
             "tag": "tag",
             "default": "default",
             "add": "add",

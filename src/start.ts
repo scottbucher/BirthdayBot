@@ -32,6 +32,7 @@ import {
     TrustedRoleCommand,
     ViewCommand,
     VoteCommand,
+    UpdateCommand,
 } from './commands';
 import {
     BlacklistRepo,
@@ -152,6 +153,7 @@ async function start(): Promise<void> {
     );
     let viewCommand = new ViewCommand(userRepo);
     let voteCommand = new VoteCommand();
+    let updateCommand = new UpdateCommand();
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
@@ -287,6 +289,7 @@ async function start(): Promise<void> {
             viewCommand,
             voteCommand,
             testCommand,
+            updateCommand,
         ],
         subscriptionService,
         guildRepo,
