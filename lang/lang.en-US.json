@@ -742,7 +742,7 @@
                     "__Permissions Needed__",
                     "View Channel",
                     "Send Messages",
-                    "Emebed Links",
+                    "Embed Links",
                     "Add Reactions",
                     "",
                     "Note: These permissions are needed both in the server and in {{CHANNEL}}!"
@@ -1799,7 +1799,8 @@
                         "name": "Contact Support",
                         "value": "[Join Support Server]({{REF:links.support}})"
                     }
-                ]
+                ],
+                "color": "{{REF:colors.error}}"
             },
             "documentation": {
                 "description": "View our documentation for {{BOT}} [here]({{REF:links.docs}})!",
@@ -2477,7 +2478,7 @@
             "trustedRolesTitle": "{{REF:terms.memberAnniversaryRoles}} | {{REF:list.pageTitle}}",
             "memberAnniversaryRolesTitle": "{{REF:terms.trustedRoles}} | {{REF:list.pageTitle}}",
             "messagesFooter": "Total Message: {{TOTAL_MESSAGES}} • {{PER_PAGE}} per page",
-            "rolesFooter": "Total Roles: {{TOTAL__ROLES}} • {{PER_PAGE}} per page",
+            "rolesFooter": "Total Roles: {{TOTAL_ROLES}} • {{PER_PAGE}} per page",
             "pageTitle": "Page {{PAGE}}/{{TOTAL_PAGES}}",
             "noTrustedRoles": "**No Trusted Roles!**",
             "noMemberAnniversaryRoles": "**No MemberAnniversary Roles!**",
@@ -2610,7 +2611,7 @@
         },
         "months": {
             "jan": "January",
-            "deb": "Februrary",
+            "feb": "February",
             "mar": "March",
             "apr": "April",
             "may": "May",

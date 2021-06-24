@@ -45,7 +45,7 @@ export class TestCommand implements Command {
     constructor(
         private guildRepo: GuildRepo,
         private userRepo: UserRepo,
-        private customMessageReop: CustomMessageRepo,
+        private customMessageRepo: CustomMessageRepo,
         private trustedRoleRepo: TrustedRoleRepo,
         private blacklistRepo: BlacklistRepo,
         private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo
@@ -79,7 +79,7 @@ export class TestCommand implements Command {
         }
 
         let target: User;
-        let year: number;
+        let year = 0;
         let userData: UserData;
 
         if (args.length >= 4) {
@@ -104,10 +104,10 @@ export class TestCommand implements Command {
                 }
             }
             userData = await this.userRepo.getUser(target.id);
-        } else {
-            // They didn't mention anyone
-            target = msg.client.user;
         }
+
+        // Default target to bot for the test
+        if (!target) target = msg.client.user;
 
         let guildData = await this.guildRepo.getGuild(msg.guild.id);
 
@@ -136,7 +136,7 @@ export class TestCommand implements Command {
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
             let roleCheck = false;
-            let messageCheck = false;
+            let messageCheck = PermissionUtils.canSend(messageChannel);
             let trustedCheckMessage = false;
             let trustedCheckRole = false;
             let trustedPreventsMessage = guildData.TrustedPreventsMessage;
@@ -158,7 +158,7 @@ export class TestCommand implements Command {
             // Get the birthday role for this guild
             let birthdayRole: Role;
             try {
-                birthdayRole = guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId) as Role;
+                birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
             } catch (error) {
                 // No Birthday Role
             }
@@ -193,17 +193,15 @@ export class TestCommand implements Command {
             // Check for user specific messages
             if (target.bot) {
                 customMessages = (
-                    await this.customMessageReop.getCustomUserMessages(guild.id, 'birthday')
+                    await this.customMessageRepo.getCustomUserMessages(guild.id, 'birthday')
                 ).customMessages.filter(message => message.UserDiscordId === target.id);
             }
 
             // if we never looked for them or there were none to match this user then lets get regular custom birthday messages
             if (!customMessages || customMessages.length === 0)
                 customMessages = (
-                    await this.customMessageReop.getCustomMessages(guild.id, 'birthday')
+                    await this.customMessageRepo.getCustomMessages(guild.id, 'birthday')
                 ).customMessages;
-
-            messageCheck = customMessages.length > 0;
 
             if (blacklistCheck && birthdayCheck) {
                 if (roleCheck && trustedCheckRole) {
@@ -211,10 +209,25 @@ export class TestCommand implements Command {
                 }
 
                 if (messageCheck && trustedCheckRole) {
-                    // Get our custom message
-                    let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
-
                     let userList = CelebrationUtils.getUserListString(guildData, [guildMember]);
+
+                    if (customMessages.length > 0) {
+                        // Get our custom message
+                        let customMessage = CelebrationUtils.randomMessage(
+                            customMessages,
+                            hasPremium
+                        );
+                        // Find the color of the embed
+                        color = customMessage?.Color === '0' ? Config.colors.default : null;
+
+                        color = !color
+                            ? '#' + ColorUtils.findHex(customMessage?.Color) ??
+                              Config.colors.default
+                            : Config.colors.default;
+                        useEmbed = customMessage.Embed ? true : false;
+
+                        message = customMessage.Message;
+                    }
 
                     // Replace the placeholders
                     message = CelebrationUtils.replacePlaceHolders(
@@ -224,14 +237,6 @@ export class TestCommand implements Command {
                         userList,
                         null
                     );
-
-                    // Find the color of the embed
-                    color = customMessage?.Color === '0' ? Config.colors.default : null;
-
-                    color = !color
-                        ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
-                        : Config.colors.default;
-                    useEmbed = customMessage.Embed ? true : false;
 
                     // Send our message(s)
                     if (mentionString !== '')
@@ -305,7 +310,7 @@ export class TestCommand implements Command {
 
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
-            let messageCheck = false;
+            let messageCheck = PermissionUtils.canSend(messageChannel);
             let memberAnniversaryRolesCheck = false;
             let memberAnniversaryRoles: MemberAnniversaryRole[];
             let anniversaryResolvedRoles: Role[];
@@ -346,7 +351,7 @@ export class TestCommand implements Command {
             // Check for user specific messages
             if (target.bot) {
                 customMessages = (
-                    await this.customMessageReop.getCustomUserMessages(
+                    await this.customMessageRepo.getCustomUserMessages(
                         guild.id,
                         'memberanniversary'
                     )
@@ -356,25 +361,36 @@ export class TestCommand implements Command {
             // if we never looked for them or there were none to match this user then lets get regular custom birthday messages
             if (!customMessages || customMessages.length === 0)
                 customMessages = (
-                    await this.customMessageReop.getCustomMessages(guild.id, 'memberanniversary')
+                    await this.customMessageRepo.getCustomMessages(guild.id, 'memberanniversary')
                 ).customMessages;
 
-            messageCheck = customMessages.length > 0;
+            if (anniversaryResolvedRoles) {
+                for (let role of anniversaryResolvedRoles) {
+                    let roleData = memberAnniversaryRoles.find(
+                        data => data.MemberAnniversaryRoleDiscordId === role.id
+                    );
 
-            for (let role of anniversaryResolvedRoles) {
-                let roleData = memberAnniversaryRoles.find(
-                    data => data.MemberAnniversaryRoleDiscordId === role.id
-                );
-
-                if (roleData.Year === year) {
-                    await ActionUtils.giveRole(guildMember, role);
+                    if (roleData.Year === year) {
+                        await ActionUtils.giveRole(guildMember, role);
+                    }
                 }
             }
             if (messageCheck) {
-                // Get our custom message
-                let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
-
                 let userList = CelebrationUtils.getUserListString(guildData, [guildMember]);
+
+                if (customMessages.length > 0) {
+                    // Get our custom message
+                    let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
+                    // Find the color of the embed
+                    color = customMessage?.Color === '0' ? Config.colors.default : null;
+
+                    color = !color
+                        ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
+                        : Config.colors.default;
+                    useEmbed = customMessage.Embed ? true : false;
+
+                    message = customMessage.Message;
+                }
 
                 // Replace the placeholders
                 message = CelebrationUtils.replacePlaceHolders(
@@ -384,14 +400,6 @@ export class TestCommand implements Command {
                     userList,
                     year === 0 ? 1 : year
                 );
-
-                // Find the color of the embed
-                color = customMessage?.Color === '0' ? Config.colors.default : null;
-
-                color = !color
-                    ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
-                    : Config.colors.default;
-                useEmbed = customMessage.Embed ? true : false;
 
                 // Send our message(s)
                 if (mentionString !== '') await MessageUtils.send(messageChannel, mentionString);
@@ -439,21 +447,30 @@ export class TestCommand implements Command {
 
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
-            let messageCheck = false;
+            let messageCheck = PermissionUtils.canSend(messageChannel);
 
             let message = Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US);
             let color = Config.colors.default;
             let useEmbed = true;
 
             customMessages = (
-                await this.customMessageReop.getCustomMessages(guild.id, 'serveranniversary')
+                await this.customMessageRepo.getCustomMessages(guild.id, 'serveranniversary')
             ).customMessages;
 
-            messageCheck = customMessages.length > 0;
-
             if (messageCheck) {
-                // Get our custom message
-                let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
+                if (customMessages.length > 0) {
+                    // Get our custom message
+                    let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
+                    // Find the color of the embed
+                    color = customMessage?.Color === '0' ? Config.colors.default : null;
+
+                    color = !color
+                        ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
+                        : Config.colors.default;
+                    useEmbed = customMessage.Embed ? true : false;
+
+                    message = customMessage.Message;
+                }
 
                 // Replace the placeholders
                 message = CelebrationUtils.replacePlaceHolders(
@@ -463,14 +480,6 @@ export class TestCommand implements Command {
                     target.toString(),
                     year === 0 ? 1 : year
                 );
-
-                // Find the color of the embed
-                color = customMessage?.Color === '0' ? Config.colors.default : null;
-
-                color = !color
-                    ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
-                    : Config.colors.default;
-                useEmbed = customMessage.Embed ? true : false;
 
                 // Send our message(s)
                 if (mentionString !== '') await MessageUtils.send(messageChannel, mentionString);
