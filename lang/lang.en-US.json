@@ -416,6 +416,14 @@
                 "description": "{{USERS}}'s birthday is next on **{{BIRTHDAY}}**!",
                 "color": "{{REF:colors.default}}"
             },
+            "nextMemberAnniversary": {
+                "description": "{{USERS}}'s member anniversary is next on **{{DATE}}**!",
+                "color": "{{REF:colors.default}}"
+            },
+            "nextServerAnniversary": {
+                "description": "{{SERVER}}'s anniversary is on {{DATE}}. It will be turning {{YEARS}}!",
+                "color": "{{REF:colors.default}}"
+            },
             "addMessageExpired": {
                 "title": "Add Custom Message - Expired",
                 "description": "Type `{{REF:bot.prefix}} message {{REF:types.add}} {{TYPE}} <Message>` to add a custom message.",
@@ -793,6 +801,14 @@
                 "description": [
                     "Please specify an option!",
                     "{{OPTIONS}}"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidNextArgs": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please specify which you would like to view!",
+                    "Setup options: `{{REF:types.birthday}}`, `{{REF:types.memberAnniversary}}` or `{{REF:types.serverAnniversary}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
