@@ -67,6 +67,7 @@ export class ConfigChannelSubCommand {
                                 'SEND_MESSAGES',
                                 'EMBED_LINKS',
                                 'ADD_REACTIONS',
+                                'READ_MESSAGE_HISTORY',
                             ],
                         },
                     ],

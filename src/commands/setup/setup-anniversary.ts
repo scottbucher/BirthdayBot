@@ -94,7 +94,13 @@ export class SetupAnniversary {
                                 },
                                 {
                                     id: guild.me.roles.cache.filter(role => role.managed).first(),
-                                    allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
+                                    allow: [
+                                        'VIEW_CHANNEL',
+                                        'SEND_MESSAGES',
+                                        'EMBED_LINKS',
+                                        'ADD_REACTIONS',
+                                        'READ_MESSAGE_HISTORY',
+                                    ],
                                 },
                             ],
                         }
@@ -219,7 +225,13 @@ export class SetupAnniversary {
                                 },
                                 {
                                     id: guild.me.roles.cache.filter(role => role.managed).first(),
-                                    allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
+                                    allow: [
+                                        'VIEW_CHANNEL',
+                                        'SEND_MESSAGES',
+                                        'EMBED_LINKS',
+                                        'ADD_REACTIONS',
+                                        'READ_MESSAGE_HISTORY',
+                                    ],
                                 },
                             ],
                         }
