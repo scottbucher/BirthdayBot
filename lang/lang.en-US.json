@@ -209,7 +209,7 @@
                     "",
                     "First, please enter your time zone. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
                     "",
-                    "To find your time zone please use the [map time zone picker](${Config.links.map})!",
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!",
                     "",
                     "Simply click your location on the map and copy the name of the selected time zone. You can then enter it below.",
                     "",
@@ -231,7 +231,7 @@
                     "",
                     "First, please enter your time zone. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
                     "",
-                    "To find your time zone please use the [map time zone picker](${Config.links.map})!",
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!",
                     "",
                     "Simply click your location on the map and copy the name of the selected time zone. You can then enter it below.",
                     "",
@@ -290,10 +290,7 @@
                 "fields": [
                     {
                         "name": "Actions",
-                        "value": [
-                            "{{REF:emotes.confirm}} Confirm",
-                            "{{REF:emotes.deny}} Deny"
-                        ]
+                        "value": ["{{REF:emotes.confirm}} Confirm", "{{REF:emotes.deny}} Deny"]
                     }
                 ],
                 "footer": {
@@ -421,7 +418,7 @@
                 "color": "{{REF:colors.default}}"
             },
             "nextServerAnniversary": {
-                "description": "{{SERVER}}'s anniversary is on {{DATE}}. It will be turning {{YEARS}}!",
+                "description": "**{{SERVER}}**'s anniversary is on **{{DATE}}**. It will be turning **{{YEARS}}**!",
                 "color": "{{REF:colors.default}}"
             },
             "addMessageExpired": {
@@ -708,22 +705,16 @@
             "voteRequired": {
                 "title": "Vote Required!",
                 "thumbnail": "{{REF:links.voteImage}}",
-                "description": [
-                    "This command requires you to have voted in the past 24 hours!"
-                ],
+                "description": ["This command requires you to have voted in the past 24 hours!"],
                 "fields": [
                     {
                         "name": "Last Vote",
-                        "value": [
-                            "{{LAST_VOTE}}"
-                        ],
+                        "value": ["{{LAST_VOTE}}"],
                         "inline": true
                     },
                     {
                         "name": "Vote Here",
-                        "value": [
-                            "[Top.gg]({{REF:links.vote}})"
-                        ],
+                        "value": ["[Top.gg]({{REF:links.vote}})"],
                         "inline": true
                     }
                 ],
@@ -735,9 +726,7 @@
             },
             "needManageRoles": {
                 "title": "Not Enough Permissions!",
-                "description": [
-                    "{{REF:bot.name}} needs permission to Manage Roles!"
-                ],
+                "description": ["{{REF:bot.name}} needs permission to Manage Roles!"],
                 "footer": {
                     "text": "{{REF:footers.joinSupport}}"
                 },
@@ -746,9 +735,7 @@
             },
             "needManageChannels": {
                 "title": "Not Enough Permissions!",
-                "description": [
-                    "{{REF:bot.name}} needs permission to Manage Channels!"
-                ],
+                "description": ["{{REF:bot.name}} needs permission to Manage Channels!"],
                 "footer": {
                     "text": "{{REF:footers.joinSupport}}"
                 },
@@ -798,10 +785,7 @@
             },
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": [
-                    "Please specify an option!",
-                    "{{OPTIONS}}"
-                ],
+                "description": ["Please specify an option!", "{{OPTIONS}}"],
                 "color": "{{REF:colors.error}}"
             },
             "invalidNextArgs": {
@@ -829,9 +813,7 @@
                 "color": "{{REF:colors.error}}"
             },
             "userBirthdayNotSet": {
-                "description": [
-                    "{{USER}} hasn't set their birthday!"
-                ],
+                "description": ["{{USER}} hasn't set their birthday!"],
                 "color": "{{REF:colors.error}}"
             },
             "noBlacklistArgs": {
@@ -854,7 +836,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a config value to change!",
-                    "Accepted Values: `{{REF:types.channel}}`, `{{REF:types.birthdayRole}}`, `{{REF:types.birthdayMasterRole}}`, `{{REF:types.nameFormat}}`, `{{REF:types.timezone}}`, `{{REF:types.useTimezone}}`, `{{REF:types.trustedRole}}`, `{{REF:types.trustedPreventsMessage}}`, `{{REF:types.trustedPreventsRole}}`, `{{REF:types.requireAllTrustedRoles}}`"
+                    "Accepted Values: `{{REF:types.channel}}`, `{{REF:types.birthdayRole}}`, `{{REF:types.birthdayMasterRole}}`, `{{REF:types.nameFormat}}`, `{{REF:types.timezone}}`, `{{REF:types.useTimezone}}`, `{{REF:types.trustedPreventsMessage}}`, `{{REF:types.trustedPreventsRole}}`, `{{REF:types.requireAllTrustedRoles}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -948,7 +930,7 @@
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
                     "Invalid time zone!",
-                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
@@ -960,7 +942,7 @@
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
                     "Invalid time zone! Do not use timezone abbreviations!",
-                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
@@ -1126,7 +1108,7 @@
                 "title": "Default Server Timezone Selection",
                 "description": [
                     "Invalid time zone!",
-                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
@@ -1138,7 +1120,7 @@
                 "title": "Default Server Timezone Selection",
                 "description": [
                     "Invalid time zone! Do not use timezone abbreviations!",
-                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}"
@@ -1305,7 +1287,7 @@
             "noTimeZone": {
                 "description": [
                     "Please input a timezone!",
-                    "To find your time zone please use the [map time zone picker](${Config.links.map})!"
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -1493,7 +1475,7 @@
             "invalidColor": {
                 "title": "Invalid Color",
                 "description": [
-                    "Please provide a valid hex color! Find hex colors [here](${Config.links.colors}).",
+                    "Please provide a valid hex color! Find hex colors [here]({{REF:links.colors}}).",
                     "",
                     "Example: `Orange` or `Crimson`",
                     "Example: `#4EEFFF` or `4EEFFF`"
@@ -1620,9 +1602,7 @@
                 "fields": [
                     {
                         "name": "Purchase Premium",
-                        "value": [
-                            "[Checkout with PayPal Here!]({{SUB_LINK}})"
-                        ]
+                        "value": ["[Checkout with PayPal Here!]({{SUB_LINK}})"]
                     },
                     {
                         "name": "Premium Features",
@@ -1641,9 +1621,7 @@
                     },
                     {
                         "name": "Price",
-                        "value": [
-                            "2.99 USD / Month"
-                        ]
+                        "value": ["2.99 USD / Month"]
                     },
                     {
                         "name": "Purchase Details",
@@ -1676,9 +1654,7 @@
                     },
                     {
                         "name": "Price",
-                        "value": [
-                            "2.99 USD / Month"
-                        ]
+                        "value": ["2.99 USD / Month"]
                     },
                     {
                         "name": "Purchase Details",
@@ -1727,9 +1703,7 @@
         "premiumRequired": {
             "command": {
                 "title": "Premium Required!",
-                "description": [
-                    "This command requires this server to have premium!"
-                ],
+                "description": ["This command requires this server to have premium!"],
                 "fields": [
                     {
                         "name": "Premium Commands",
@@ -1793,10 +1767,7 @@
                     },
                     {
                         "name": "Links",
-                        "value": [
-                            "{{REF:links.supportEmbed}}",
-                            "{{REF:links.inviteEmbed}}"
-                        ]
+                        "value": ["{{REF:links.supportEmbed}}", "{{REF:links.inviteEmbed}}"]
                     },
                     {
                         "name": "Created With",
@@ -1808,7 +1779,7 @@
                 "title": "{{REF:bot.name}} 3.0 Update Notes",
                 "description": [
                     "When I started this Birthday Bot update I had no plans for it to be this large.",
-                    "Fastforward almost **8 months** and it is finally ready to go!",
+                    "Fast forward almost **8 months** and it is finally ready to go!",
                     "",
                     "Thank you to everyone for all the support and for 180,000 servers! I never dreamed Birthday Bot would become this big.",
                     "I hope you enjoy the update!",
@@ -1827,7 +1798,7 @@
                             "Features:",
                             "Added Member Anniversary Roles (premium, see below)",
                             "Added two new message types (there are now three total) which are sent on an anniversary",
-                            " - All three message types can have their own seperate channel, message time, and mention setting",
+                            " - All three message types can have their own separate channel, message time, and mention setting",
                             " - Like birthday messages, premium servers can set user specific member anniversary messages."
                         ]
                     },
@@ -1840,16 +1811,21 @@
                             " - This means some messages can be embedded while others are not and each message can have a different color (premium).",
                             " - Removed commands for setting these globally.",
                             "Added `bday help {{REF:terms.anniversary}}` command for help with the anniversary settings.",
-                            "Updated commands which delt with birthday channels, messages, etc. to require a \"type\". (birthday, memberAnniversary, etc.)",
+                            "Updated commands which dealt with birthday channels, messages, etc. to require a \"type\". (birthday, memberAnniversary, etc.)",
                             "Hate seeing members' names show up like a bunch of numbers? Set the nameFormat setting to fix this!",
                             " - This setting decides how members name will appear in birthday & anniversary messages.",
-                            " - `${{REF:bot.prefix}} config {{REF:terms.nameFormat}} <option>`",
+                            " - `{{REF:bot.prefix}} config {{REF:terms.nameFormat}} <option>`"
+                        ]
+                    },
+                    {
+                        "name": "More Changes!",
+                        "value": [
                             "Set the new DefaultTimezone setting for your server to have all your celebrations happen at once!",
                             " - This timezone will be suggested to users when they set their birthday in your server.",
-                            " - `${{REF:bot.prefix}} config {{REF:terms.timezone}} <timezone>`",
-                            "Decide which timezone to prioritze in celebration messages with the new UseTimezone setting!",
-                            " - This will decide which timezone to celebrate brithdays in. (Member and Server Anniversaries always celebrate in the server's timezone)",
-                            " - `${{REF:bot.prefix}} config {{REF:terms.useTimezone}} <timezone>`",
+                            " - `{{REF:bot.prefix}} config {{REF:terms.timezone}} <timezone>`",
+                            "Decide which timezone to prioritize in celebration messages with the new UseTimezone setting!",
+                            " - This will decide which timezone to celebrate birthdays in. (Member and Server Anniversaries always celebrate in the server's timezone)",
+                            " - `{{REF:bot.prefix}} config {{REF:terms.useTimezone}} <timezone>`",
                             "The maximum birthday messages you can have has been decreased to 5.",
                             " - This is to keep it inline with the max member anniversary and server anniversary messages.",
                             " - Premium servers can have up to 500 of **each**!",
@@ -2272,10 +2248,7 @@
                     },
                     {
                         "name": "Stats",
-                        "value": [
-                            "**Shards**: {{SHARD_COUNT}}",
-                            "**Servers**: {{SERVER_COUNT}}"
-                        ]
+                        "value": ["**Shards**: {{SHARD_COUNT}}", "**Servers**: {{SERVER_COUNT}}"]
                     },
                     {
                         "name": "Memory",
@@ -2493,7 +2466,7 @@
             "memberAnniversaryRoleFree": {
                 "title": "{{REF:list.memberAnniversaryRolesTitle}}",
                 "description": [
-                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)](${{REF:docLinks.whatIsAnniversaryRole}})*",
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{REF:docLinks.whatIsAnniversaryRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2505,7 +2478,7 @@
             "memberAnniversaryRolePaid": {
                 "title": "{{REF:list.memberAnniversaryRolesTitle}}",
                 "description": [
-                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)](${{REF:docLinks.whatIsAnniversaryRole}})*",
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{REF:docLinks.whatIsAnniversaryRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2545,9 +2518,9 @@
             "languageDisplay": "English"
         },
         "bot": {
-            "name": "{{REF:bot.name}}",
-            "description": "{{REF:links.templateEmbed}} helps your server track and celebrate birthdays by automatically celebrating them with numerous fun and extremely customizable features.",
-            "prefix": "{{REF:bot.prefix}}"
+            "name": "Birthday Bot",
+            "description": "{{REF:bots.name}} helps your server track and celebrate birthdays by automatically celebrating them with numerous fun and extremely customizable features.",
+            "prefix": "bday"
         },
         "colors": {
             "default": "#4eefff",
@@ -2739,10 +2712,10 @@
         },
         "types": {
             "birthday": "birthday",
-            "memberAnniversary": "memberanniversary",
-            "serverAnniversary": "serveranniversary",
-            "userSpecificBirthday": "userspecificbirthday",
-            "userSpecificMemberAnniversary": "userspecificmemberanniversary",
+            "memberAnniversary": "memberAnniversary",
+            "serverAnniversary": "serverAnniversary",
+            "userSpecificBirthday": "userSpecificBirthday",
+            "userSpecificMemberAnniversary": "userSpecificMemberAnniversary",
             "channel": "channel",
             "birthdayRole": "role",
             "birthdayMasterRole": "birthdayMasterRole",
@@ -2753,23 +2726,11 @@
             "trustedPreventsMessage": "trustedPreventsMessage",
             "requireAllTrustedRoles": "requireAllTrustedRoles",
             "alternatives": {
-                "birthday": [
-                    "birthdays"
-                ],
-                "memberAnniversary": [
-                    "member"
-                ],
-                "serverAnniversary": [
-                    "server"
-                ],
-                "userSpecificBirthday": [
-                    "specificbirthday",
-                    "userbirthday"
-                ],
-                "userSpecificMemberAnniversary": [
-                    "specificanniversary",
-                    "useranniversary"
-                ]
+                "birthday": ["birthdays"],
+                "memberAnniversary": ["member"],
+                "serverAnniversary": ["server"],
+                "userSpecificBirthday": ["specificBirthday", "userBirthday"],
+                "userSpecificMemberAnniversary": ["specificAnniversary", "userAnniversary"]
             },
             "mention": "mention",
             "nickname": "nickname",

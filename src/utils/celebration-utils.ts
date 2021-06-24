@@ -293,16 +293,21 @@ export class CelebrationUtils {
         // Find mentioned role
         let userList: string;
         // Format the user list based off the servers name format
-        if (guildData.NameFormat === 'mention')
-            userList = FormatUtils.joinWithAnd(guildMember.map(member => member.toString()));
-        else if (guildData.NameFormat === 'username')
-            userList = FormatUtils.joinWithAnd(guildMember.map(member => member.user.username));
-        else if (guildData.NameFormat === 'nickname')
-            userList = FormatUtils.joinWithAnd(guildMember.map(member => member.displayName));
-        else if (guildData.NameFormat === 'tag')
+        if (guildData?.NameFormat === 'username')
             userList = FormatUtils.joinWithAnd(
-                guildMember.map(member => `${member.user.username}#${member.user.discriminator}`)
+                guildMember.map(member => `**${member.user.username}**`)
             );
+        else if (guildData?.NameFormat === 'nickname')
+            userList = FormatUtils.joinWithAnd(
+                guildMember.map(member => `**${member.displayName}**`)
+            );
+        else if (guildData?.NameFormat === 'tag')
+            userList = FormatUtils.joinWithAnd(
+                guildMember.map(
+                    member => `**${member.user.username}#${member.user.discriminator}**`
+                )
+            );
+        else userList = FormatUtils.joinWithAnd(guildMember.map(member => member.toString()));
         return userList;
     }
 
