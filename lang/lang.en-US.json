@@ -720,7 +720,7 @@
                 "title": "Not Enough Permissions!",
                 "description": ["{{REF:bot.name}} needs permission to Manage Roles!"],
                 "footer": {
-                    "text": "Please join our support server if you have any questions."
+                    "text": "{{REF:footers.joinSupport}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -729,7 +729,7 @@
                 "title": "Not Enough Permissions!",
                 "description": ["{{REF:bot.name}} needs permission to Manage Channels!"],
                 "footer": {
-                    "text": "Please join our support server if you have any questions."
+                    "text": "{{REF:footers.joinSupport}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -748,7 +748,7 @@
                     "Note: These permissions are needed both in the server and in {{CHANNEL}}!"
                 ],
                 "footer": {
-                    "text": "Please join our support server if you have any questions."
+                    "text": "{{REF:footers.joinSupport}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -854,7 +854,7 @@
                     "Essentially the bot is unable to give a role to someone with a higher role than them or give a role that is higher than the bot's."
                 ],
                 "footer": {
-                    "text": "Please join our support server if you have any questions."
+                    "text": "{{REF:footers.joinSupport}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1759,6 +1759,23 @@
                     }
                 ]
             },
+            "guildJoin": {
+                "title": "Thank you for using {{REF:bot.name}}!",
+                "description": [
+                    "To support the bot and unlock special features use `{{REF:bot.prefix}} premium` in your server.",
+                    "",
+                    "To view the commands of this bow use `{{REF:bot.prefix}} help`.",
+                    "To setup the bot run `{{REF:bot.prefix}} setup` in your server.",
+                    "To set your birthday use `{{REF:bot.prefix}} set`.",
+                    "",
+                    "View the {{REF:bot.name}} [Documentation]({{REF:links.docs}}) or [FAQ]({{REF:docLinks.faq}}).",
+                    "For more suppot join the {{REF:bot.name}} support server [here]({{REF:links.support}})!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.joinSupport}}"
+                },
+                "timstamp": true
+            },
             "stats": {
                 "fields": [
                     {
@@ -2451,7 +2468,8 @@
             "tryAgain": "Please check above and try again!",
             "actionFailed": "{{REF:emotes.deny}} Action Failed.",
             "irreversible": "This action is irreversible!",
-            "whyPremium": "Premium helps us support and maintain the bot!"
+            "whyPremium": "Premium helps us support and maintain the bot!",
+            "joinSupport": "Please join our support server if you have any questions."
         },
         "prompts": {
             "setupForUser": "Setup For {{TARGET}} - {{VALUE}}",
