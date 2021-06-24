@@ -284,7 +284,7 @@ export class CelebrationUtils {
         message = message.split('<Server>').join(guild.name);
 
         if (type !== 'serveranniversary') message = message.split('<Users>').join(userList);
-        if (type !== 'birthday') message = message.split('Year').join(year.toString());
+        if (type !== 'birthday') message = message.split('<Year>').join(year.toString());
 
         return message;
     }
@@ -298,7 +298,7 @@ export class CelebrationUtils {
         else if (guildData.NameFormat === 'username')
             userList = FormatUtils.joinWithAnd(guildMember.map(member => member.user.username));
         else if (guildData.NameFormat === 'nickname')
-            userList = FormatUtils.joinWithAnd(guildMember.map(member => member.nickname));
+            userList = FormatUtils.joinWithAnd(guildMember.map(member => member.displayName));
         else if (guildData.NameFormat === 'tag')
             userList = FormatUtils.joinWithAnd(
                 guildMember.map(member => `${member.user.username}#${member.user.discriminator}`)
@@ -374,15 +374,16 @@ export class CelebrationUtils {
     }
 
     public static canGiveAllRoles(guild: Guild, roles: Role[], guildMember: GuildMember): boolean {
+        if (!roles) return true;
         let check = true;
         for (let role of roles) {
             // See if the bot can give the roles
-            // Higher roles have lower positions (highest role is has a position of 1)
             let highestBotRole = guild.members.resolve(guild.client.user).roles.highest.position;
+            // If a user isn't given and we test against the bot the last boolean will always be false
             check =
                 role &&
-                role.position > highestBotRole &&
-                guildMember.roles.highest.position > highestBotRole;
+                role.position < highestBotRole &&
+                (guildMember.user.bot || guildMember.roles.highest.position < highestBotRole);
             if (!check) return false;
         }
         return true;
