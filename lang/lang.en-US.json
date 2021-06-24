@@ -649,8 +649,8 @@
                     {
                         "name": "Actions",
                         "value": [
-                            "`bday message list {{TYPE}} [page]` - List all custom {{DISPLAY_TYPE}} messages.",
-                            "`bday message test {{TYPE}} <position>` - Test a {{DISPLAY_TYPE}} message."
+                            "`{{REF:bot.prefix}} message list {{TYPE}} [page]` - List all custom {{DISPLAY_TYPE}} messages.",
+                            "`{{REF:bot.prefix}} message test {{TYPE}} <position>` - Test a {{DISPLAY_TYPE}} message."
                         ]
                     }
                 ],
@@ -673,8 +673,8 @@
                     {
                         "name": "Actions",
                         "value": [
-                            "`bday message list {{TYPE}} [page]` - List all custom user specific {{DISPLAY_TYPE}} messages.",
-                            "`bday message test {{TYPE}} <position>` - Test a user specific {{DISPLAY_TYPE}} message."
+                            "`{{REF:bot.prefix}} message list {{TYPE}} [page]` - List all custom user specific {{DISPLAY_TYPE}} messages.",
+                            "`{{REF:bot.prefix}} message test {{TYPE}} <position>` - Test a user specific {{DISPLAY_TYPE}} message."
                         ]
                     }
                 ],
@@ -759,7 +759,7 @@
             },
             "setupRequired": {
                 "title": "Setup Required!",
-                "description": "You must run `bday setup` before using this command!",
+                "description": "You must run `{{REF:bot.prefix}} setup` before using this command!",
                 "color": "{{REF:colors.error}}"
             },
             "noPermission": {
@@ -1499,7 +1499,7 @@
                 "description": "{{REF:emotes.party}} {[SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{REF:emotes.party}}",
                 "fields": [
                     {
-                        "name": "bday premium",
+                        "name": "{{REF:bot.prefix}} premium",
                         "value": [
                             "View details about your subscription.",
                             "",
@@ -1517,7 +1517,7 @@
                 "description": "{[SERVER_NAME}}'s premium has been canceled! :(",
                 "fields": [
                     {
-                        "name": "bday premium",
+                        "name": "{{REF:bot.prefix}} premium",
                         "value": [
                             "View details about your subscription.",
                             "",
@@ -1535,7 +1535,7 @@
                 "description": "{[SERVER_NAME}}'s premium has expired! :(",
                 "fields": [
                     {
-                        "name": "bday premium",
+                        "name": "{{REF:bot.prefix}} premium",
                         "value": [
                             "Resubscribe to premium!",
                             "",
@@ -1643,7 +1643,7 @@
                     {
                         "name": "Purchase Details",
                         "value": [
-                            "Type `bday subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
+                            "Type `{{REF:bot.prefix}} subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
                             "",
                             "[Join Support Server]({{REF:links.support}})"
                         ]
@@ -1677,7 +1677,7 @@
                     {
                         "name": "Purchase Details",
                         "value": [
-                            "Type `bday subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
+                            "Type `{{REF:bot.prefix}} subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{REF:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
                             "[Join Support Server]({{REF:links.support}})"
                         ]
                     }
@@ -1693,7 +1693,7 @@
                         "name": "Premium Commands",
                         "value": [
                             "Subscribe to **Birthday Bot Premium** for access to our premium features!",
-                            "See `bday premium` for more information."
+                            "See `{{REF:bot.prefix}} premium` for more information."
                         ]
                     }
                 ],
@@ -1830,7 +1830,7 @@
                 "description": [
                     "[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker]({{REF:links.map}})!",
                     "",
-                    "Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command."
+                    "Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `{{REF:bot.prefix}} set` command."
                 ],
                 "color": "{{REF:colors.default}}"
             },
@@ -1988,29 +1988,29 @@
                 "description": [
                     "Birthday Bot helps your server celebrate birthdays with automatic birthday roles and announcements.",
                     "",
-                    "**bday premium** - See information about Birthday Bot Premium.",
-                    "**bday subscribe** - Subscribe to Birthday Bot Premium!",
-                    "**bday help premium** - Help for Birthday Bot Premium.",
+                    "**{{REF:bot.prefix}} premium** - See information about Birthday Bot Premium.",
+                    "**{{REF:bot.prefix}} subscribe** - Subscribe to Birthday Bot Premium!",
+                    "**{{REF:bot.prefix}} help premium** - Help for Birthday Bot Premium.",
                     "",
-                    "**bday set** - Set your birthday.",
-                    "**bday view [user]** - View your birthday or a users birthday.",
-                    "**bday next**** - View next birthday(s) in the server.",
-                    "**bday list [page/date]**** - View the server birthday list.",
-                    "**bday map** - View the time zone map.",
-                    "**bday invite** - Invite Birthday Bot to a server.",
-                    "**bday support** - Join the support server.",
-                    "**bday docs** - View the documentation.",
-                    "**bday faq** - View the frequently asked questions.",
-                    "**bday vote** - Vote for Birthday Bot!",
-                    "**bday purge** - Remove your birthday data.",
-                    "**bday help setup** - Help for server setup.",
-                    "**bday help message** - Help for the birthday message settings.",
-                    "**bday help trusted** - Help for the trusted system.",
-                    "**bday help blacklist** - Help for permissions.",
-                    "**bday settings [message/advanced]**** - View server's settings.",
-                    "**bday test [user]**** - Test the birthday event.",
+                    "**{{REF:bot.prefix}} set** - Set your birthday.",
+                    "**{{REF:bot.prefix}} view [user]** - View your birthday or a users birthday.",
+                    "**{{REF:bot.prefix}} next**** - View next birthday(s) in the server.",
+                    "**{{REF:bot.prefix}} list [page/date]**** - View the server birthday list.",
+                    "**{{REF:bot.prefix}} map** - View the time zone map.",
+                    "**{{REF:bot.prefix}} invite** - Invite Birthday Bot to a server.",
+                    "**{{REF:bot.prefix}} support** - Join the support server.",
+                    "**{{REF:bot.prefix}} docs** - View the documentation.",
+                    "**{{REF:bot.prefix}} faq** - View the frequently asked questions.",
+                    "**{{REF:bot.prefix}} vote** - Vote for Birthday Bot!",
+                    "**{{REF:bot.prefix}} purge** - Remove your birthday data.",
+                    "**{{REF:bot.prefix}} help setup** - Help for server setup.",
+                    "**{{REF:bot.prefix}} help message** - Help for the birthday message settings.",
+                    "**{{REF:bot.prefix}} help trusted** - Help for the trusted system.",
+                    "**{{REF:bot.prefix}} help blacklist** - Help for permissions.",
+                    "**{{REF:bot.prefix}} settings [message/advanced]**** - View server's settings.",
+                    "**{{REF:bot.prefix}} test [user]**** - Test the birthday event.",
                     "",
-                    "**bday donate** - Support developments by donating!",
+                    "**{{REF:bot.prefix}} donate** - Support developments by donating!",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ],
@@ -2024,16 +2024,16 @@
             "setup": {
                 "title": "Birthday Bot Setup Help - Guild Only",
                 "description": [
-                    "**bday setup** - Interactive guide for server setup.",
-                    "**bday setup trusted** - Interactive guide for trusted system settings setup.",
-                    "**bday setup anniversary** - Interactive guide annviversary settings setup.",
+                    "**{{REF:bot.prefix}} setup** - Interactive guide for server setup.",
+                    "**{{REF:bot.prefix}} setup trusted** - Interactive guide for trusted system settings setup.",
+                    "**{{REF:bot.prefix}} setup anniversary** - Interactive guide annviversary settings setup.",
                     "",
-                    "**bday config channel <create/clear/#channel> <type>** - Set a channel type.",
-                    "**bday config role <create/clear/@role>** - Set the birthday role.",
-                    "**bday config birthdayMaster <create/clear/@role>** - Set the birthday channel.",
-                    "**bday config timezone <timezone> - Set the default server timezone.",
-                    "**bday config useTimezone <user/server> - Set which timezone to use for celebrations.",
-                    "**bday config nameFormat <default/username/nickname/mention/tag>** - Decide how member's names will appear.",
+                    "**{{REF:bot.prefix}} config channel <create/clear/#channel> <type>** - Set a channel type.",
+                    "**{{REF:bot.prefix}} config role <create/clear/@role>** - Set the birthday role.",
+                    "**{{REF:bot.prefix}} config birthdayMaster <create/clear/@role>** - Set the birthday channel.",
+                    "**{{REF:bot.prefix}} config timezone <timezone> - Set the default server timezone.",
+                    "**{{REF:bot.prefix}} config useTimezone <user/server> - Set which timezone to use for celebrations.",
+                    "**{{REF:bot.prefix}} config nameFormat <default/username/nickname/mention/tag>** - Decide how member's names will appear.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2041,17 +2041,17 @@
             "message": {
                 "title": "Birthday Bot Message Help - Guild Only",
                 "description": [
-                    "**bday message list <type> [page]** - List all messages for that type.",
-                    "**bday message add <type> <message>** - Add a message for that type.",
-                    " - Example Usage: `bday message add memberAnnivesary <Users> have been in <Server> for <Year>(s)!`",
+                    "**{{REF:bot.prefix}} message list <type> [page]** - List all messages for that type.",
+                    "**{{REF:bot.prefix}} message add <type> <message>** - Add a message for that type.",
+                    " - Example Usage: `{{REF:bot.prefix}} message add memberAnnivesary <Users> have been in <Server> for <Year>(s)!`",
                     " - Placeholder for users: `{{REF:placeHolders.users}}`",
                     " - Placeholder for year: `{{REF:placeHolders.year}}`",
                     " - Placeholder for server name: `{{REF:placeHolders.server}}`",
-                    "**bday message remove <type> <position>** - Remove a certain message for that type.",
-                    "**bday message clear <type>** - Clear all messages for that type.",
-                    "**bday message time <type> <0-23>** - Set the message time for that type",
-                    "**bday message mention <type> <role/group>** - Set the message mention setting for that type.",
-                    "**bday message test <position> [user count]** - Test a custom message.",
+                    "**{{REF:bot.prefix}} message remove <type> <position>** - Remove a certain message for that type.",
+                    "**{{REF:bot.prefix}} message clear <type>** - Clear all messages for that type.",
+                    "**{{REF:bot.prefix}} message time <type> <0-23>** - Set the message time for that type",
+                    "**{{REF:bot.prefix}} message mention <type> <role/group>** - Set the message mention setting for that type.",
+                    "**{{REF:bot.prefix}} message test <position> [user count]** - Test a custom message.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2059,15 +2059,15 @@
             "trusted": {
                 "title": "Birthday Bot Trusted System Help - Guild Only",
                 "description": [
-                    "**bday setup trusted** - Interactive guide for trusted system settings setup.",
+                    "**{{REF:bot.prefix}} setup trusted** - Interactive guide for trusted system settings setup.",
                     "",
-                    "**bday config trustedRole add <role>** - Add a trusted role.",
-                    "**bday config trustedRole remove <position/role>** - Remove a trusted role",
-                    "**bday config trustedRole clear** - Clear all trusted roles.",
-                    "**bday config trustedRole list [page]** - List all trusted roles",
-                    "**bday config requireAllTrustedRoles <T/F>** - If a user should need all the trusted roles.",
-                    "**bday config trustedPreventsMsg <T/F>** - If trusted role is required for a birthday message.",
-                    "**bday config trustedPreventsRole <T/F>** - If trusted role is required to get the birthday role.",
+                    "**{{REF:bot.prefix}} config trustedRole add <role>** - Add a trusted role.",
+                    "**{{REF:bot.prefix}} config trustedRole remove <position/role>** - Remove a trusted role",
+                    "**{{REF:bot.prefix}} config trustedRole clear** - Clear all trusted roles.",
+                    "**{{REF:bot.prefix}} config trustedRole list [page]** - List all trusted roles",
+                    "**{{REF:bot.prefix}} config requireAllTrustedRoles <T/F>** - If a user should need all the trusted roles.",
+                    "**{{REF:bot.prefix}} config trustedPreventsMsg <T/F>** - If trusted role is required for a birthday message.",
+                    "**{{REF:bot.prefix}} config trustedPreventsRole <T/F>** - If trusted role is required to get the birthday role.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2075,10 +2075,10 @@
             "blacklist": {
                 "title": "Birthday Bot Blacklist Help - Guild Only",
                 "description": [
-                    "**bday blacklist add <user>** - Add user to the blacklist.",
-                    "**bday blacklist remove <user>** - Remove user from the blacklist.",
-                    "**bday blacklist clear** - Clear the birthday blacklist.",
-                    "**bday blacklist list** - View all blacklisted users in your server.",
+                    "**{{REF:bot.prefix}} blacklist add <user>** - Add user to the blacklist.",
+                    "**{{REF:bot.prefix}} blacklist remove <user>** - Remove user from the blacklist.",
+                    "**{{REF:bot.prefix}} blacklist clear** - Clear the birthday blacklist.",
+                    "**{{REF:bot.prefix}} blacklist list** - View all blacklisted users in your server.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2086,17 +2086,17 @@
             "premium": {
                 "title": "Birthday Bot Premium Help - Guild Only",
                 "description": [
-                    "**bday premium** - View information about your server's premium.",
-                    "**bday message add <type> <Message>** - Add a user-specific message of that type.",
-                    " - Example Usage: `bday message add birthday Happy Birthday @Stqlth!`",
+                    "**{{REF:bot.prefix}} premium** - View information about your server's premium.",
+                    "**{{REF:bot.prefix}} message add <type> <Message>** - Add a user-specific message of that type.",
+                    " - Example Usage: `{{REF:bot.prefix}} message add birthday Happy Birthday @Stqlth!`",
                     " - Placeholder for year: `{{REF:placeHolders.year}}`",
                     " - Placeholder for server name: `{{REF:placeHolders.server}}`",
-                    "**bday message remove <user>** - Remove a certain birthday message.",
-                    "**bday message list user [page]** - List all user-specific birthday messages.",
-                    "**bday message memberAnniversaryRole add <role> <year>** - Add a member anniversary role.",
-                    "**bday message memberAnniversaryRole remove <position/role>** - Remove a member anniversary role",
-                    "**bday message memberAnniversaryRole clear** - Clear all member anniversary roles.",
-                    "**bday message memberAnniversaryRole list [page]** - List all member anniversary roles.",
+                    "**{{REF:bot.prefix}} message remove <user>** - Remove a certain birthday message.",
+                    "**{{REF:bot.prefix}} message list user [page]** - List all user-specific birthday messages.",
+                    "**{{REF:bot.prefix}} message memberAnniversaryRole add <role> <year>** - Add a member anniversary role.",
+                    "**{{REF:bot.prefix}} message memberAnniversaryRole remove <position/role>** - Remove a member anniversary role",
+                    "**{{REF:bot.prefix}} message memberAnniversaryRole clear** - Clear all member anniversary roles.",
+                    "**{{REF:bot.prefix}} message memberAnniversaryRole list [page]** - List all member anniversary roles.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2389,7 +2389,7 @@
         "bot": {
             "name": "Birthday Bot",
             "description": "{{REF:links.templateEmbed}} helps your server track and celebrate birthdays by automatically celebrating them with numerous fun and extremely customizable features.",
-            "prefix": "bday"
+            "prefix": "{{REF:bot.prefix}}"
         },
         "colors": {
             "default": "#4eefff",
@@ -2501,7 +2501,7 @@
             "memberAnniversaryRoleFieldText": "Member anniversary roles are a premium feature **only**. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!"
         },
         "conditionals": {
-            "needColorForPremium": "Customize the message color with `bday premium`!",
+            "needColorForPremium": "Customize the message color with `{{REF:bot.prefix}} premium`!",
             "colorForPremium": "Color Hex: `{{COLOR_HEX}}`!"
         },
         "terms": {
@@ -2584,7 +2584,7 @@
             "userSpecificBirthday": "userspecificbirthday",
             "userSpecificMemberAnniversary": "userspecificmemberanniversary",
             "alternatives": {
-                "birthday": ["bday"],
+                "birthday": ["{{REF:bot.prefix}}"],
                 "memberAnniversary": ["member"],
                 "serverAnniversary": ["server"],
                 "userSpecificBirthday": ["specificbirthday", "userbirthday"],
