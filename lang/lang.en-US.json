@@ -711,14 +711,14 @@
                     }
                 ],
                 "footer": {
-                    "text": "Don't want to vote? Disable voting for the whole server with Birthday Bot Premium!"
+                    "text": "Don't want to vote? Disable voting for the whole server with {{REF:bot.name}} Premium!"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
             "needManageRoles": {
                 "title": "Not Enough Permissions!",
-                "description": ["Birthday Bot needs permission to Manage Roles!"],
+                "description": ["{{REF:bot.name}} needs permission to Manage Roles!"],
                 "footer": {
                     "text": "Please join our support server if you have any questions."
                 },
@@ -727,7 +727,7 @@
             },
             "needManageChannels": {
                 "title": "Not Enough Permissions!",
-                "description": ["Birthday Bot needs permission to Manage Channels!"],
+                "description": ["{{REF:bot.name}} needs permission to Manage Channels!"],
                 "footer": {
                     "text": "Please join our support server if you have any questions."
                 },
@@ -737,7 +737,7 @@
             "notEnoughChannelPerms": {
                 "title": "Not Enough Permissions!",
                 "description": [
-                    "Birthday Bot needs more permissions in {{CHANNEL}}!",
+                    "{{REF:bot.name}} needs more permissions in {{CHANNEL}}!",
                     "",
                     "__Permissions Needed__",
                     "View Channel",
@@ -768,7 +768,7 @@
                 "color": "{{REF:colors.error}}"
             },
             "onlyStaff": {
-                "description": "This command can only be run by Birthday Bot Staff!",
+                "description": "This command can only be run by {{REF:bot.name}} Staff!",
                 "color": "{{REF:colors.error}}"
             },
             "guildOnlyCommand": {
@@ -847,7 +847,7 @@
                     "Additional Note: {{BOT}}'s role must be higher than the users it is assigning the birthday role to.",
                     "",
                     "Example Role Hierarchy:",
-                    "`Birthday Bot's Role`",
+                    "`{{REF:bot.name}}'s Role`",
                     "`Birthday Role`",
                     "`Birthday User's Highest Role`",
                     "",
@@ -1151,7 +1151,7 @@
             "maxFreeTrustedRoles": {
                 "description": "Your server is limited to __**{{FREE_MAX}}**__ trusted role!",
                 "footer": {
-                    "text": "To have up to {{PAID_MAX}} trusted roles get Birthday Bot Premium!"
+                    "text": "To have up to {{PAID_MAX}} trusted roles get {{REF:bot.name}} Premium!"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1216,7 +1216,7 @@
             "maxFreeCustomMessages": {
                 "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{FREE_MAX}}**)",
                 "footer": {
-                    "text": "To have up to {{PAID_MAX}} custom {{TYPE}} messages try Birthday Bot Premium!"
+                    "text": "To have up to {{PAID_MAX}} custom {{TYPE}} messages try {{REF:bot.name}} Premium!"
                 },
                 "color": "{{REF:colors.error}}"
             },
@@ -1495,7 +1495,7 @@
         },
         "premiumPrompts": {
             "subscriptionAdded": {
-                "title": "Birthday Bot Premium",
+                "title": "{{REF:bot.name}} Premium",
                 "description": "{{REF:emotes.party}} {[SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{REF:emotes.party}}",
                 "fields": [
                     {
@@ -1508,12 +1508,12 @@
                     }
                 ],
                 "footer": {
-                    "text": "Thanks for support Birthday Bot!"
+                    "text": "Thanks for support {{REF:bot.name}}!"
                 },
                 "timestamp": true
             },
             "subscriptionCanceled": {
-                "title": "Birthday Bot Premium",
+                "title": "{{REF:bot.name}} Premium",
                 "description": "{[SERVER_NAME}}'s premium has been canceled! :(",
                 "fields": [
                     {
@@ -1531,7 +1531,7 @@
                 "timestamp": true
             },
             "subscriptionExpired": {
-                "title": "Birthday Bot Premium",
+                "title": "{{REF:bot.name}} Premium",
                 "description": "{[SERVER_NAME}}'s premium has expired! :(",
                 "fields": [
                     {
@@ -1549,12 +1549,12 @@
                 "timestamp": true
             },
             "premiumDisabled": {
-                "title": "Birthday Bot Premium",
+                "title": "{{REF:bot.name}} Premium",
                 "description": "Premium subscriptions are currently disabled. Enjoy premium features for free! Woohoo!",
                 "timestamp": true
             },
             "refuseNewTransactions": {
-                "title": "Birthday Bot Premium",
+                "title": "{{REF:bot.name}} Premium",
                 "description": [
                     "New subscriptions are not being accept at this time. Please try again later.",
                     "[Join Support Server]({{REF:links.support}})"
@@ -1562,7 +1562,7 @@
                 "timestamp": true
             },
             "premiumAlreadyActive": {
-                "title": "Birthday Bot Premium",
+                "title": "{{REF:bot.name}} Premium",
                 "description": [
                     "This server already has an active premium subscription or one that is currently processing.",
                     "",
@@ -1573,7 +1573,7 @@
                 "timestamp": true
             },
             "subscriptionDMPrompt": {
-                "title": "Birthday Bot Premium",
+                "title": "{{REF:bot.name}} Premium",
                 "description": [
                     "I have private messaged you with a PayPal subscription link!",
                     "If you did not receive a message, please make sure you have direct messages enabled for this server (under this servers Privacy Settings) and run this command again."
@@ -1581,7 +1581,7 @@
                 "timestamp": true
             },
             "subscriptionPM": {
-                "title": "Birthday Bot Premium",
+                "title": "{{REF:bot.name}} Premium",
                 "description": "Complete your servers subscription by checking out with PayPal at the link below.",
                 "fields": [
                     {
@@ -1618,8 +1618,8 @@
                 ]
             },
             "noSubscription": {
-                "title": "Birthday Bot Premium",
-                "description": "Subscribe to **Birthday Bot Premium** to give this server extra features!",
+                "title": "{{REF:bot.name}} Premium",
+                "description": "Subscribe to **{{REF:bot.name}} Premium** to give this server extra features!",
                 "fields": [
                     {
                         "name": "Premium Features",
@@ -1651,7 +1651,7 @@
                 ]
             },
             "subscription": {
-                "title": "Birthday Bot Premium",
+                "title": "{{REF:bot.name}} Premium",
                 "description": "This servers subscription information.",
                 "fields": [
                     {
@@ -1692,7 +1692,7 @@
                     {
                         "name": "Premium Commands",
                         "value": [
-                            "Subscribe to **Birthday Bot Premium** for access to our premium features!",
+                            "Subscribe to **{{REF:bot.name}} Premium** for access to our premium features!",
                             "See `{{REF:bot.prefix}} premium` for more information."
                         ]
                     }
@@ -1869,7 +1869,7 @@
                     }
                 ],
                 "footer": {
-                    "text": "© {{DATE}} Birthday Bot"
+                    "text": "© {{DATE}} {{REF:bot.name}}"
                 },
                 "timestamp": true
             },
@@ -1913,7 +1913,7 @@
                     }
                 ],
                 "footer": {
-                    "text": "© {{DATE}} Birthday Bot"
+                    "text": "© {{DATE}} {{REF:bot.name}}"
                 },
                 "timestamp": true
             },
@@ -1977,31 +1977,31 @@
                     }
                 ],
                 "footer": {
-                    "text": "© {{DATE}} Birthday Bot"
+                    "text": "© {{DATE}} {{REF:bot.name}}"
                 },
                 "timestamp": true
             }
         },
         "help": {
             "general": {
-                "title": "Birthday Bot General Help",
+                "title": "{{REF:bot.name}} General Help",
                 "description": [
-                    "Birthday Bot helps your server celebrate birthdays with automatic birthday roles and announcements.",
+                    "{{REF:bot.name}} helps your server celebrate birthdays with automatic birthday roles and announcements.",
                     "",
-                    "**{{REF:bot.prefix}} premium** - See information about Birthday Bot Premium.",
-                    "**{{REF:bot.prefix}} subscribe** - Subscribe to Birthday Bot Premium!",
-                    "**{{REF:bot.prefix}} help premium** - Help for Birthday Bot Premium.",
+                    "**{{REF:bot.prefix}} premium** - See information about {{REF:bot.name}} Premium.",
+                    "**{{REF:bot.prefix}} subscribe** - Subscribe to {{REF:bot.name}} Premium!",
+                    "**{{REF:bot.prefix}} help premium** - Help for {{REF:bot.name}} Premium.",
                     "",
                     "**{{REF:bot.prefix}} set** - Set your birthday.",
                     "**{{REF:bot.prefix}} view [user]** - View your birthday or a users birthday.",
                     "**{{REF:bot.prefix}} next**** - View next birthday(s) in the server.",
                     "**{{REF:bot.prefix}} list [page/date]**** - View the server birthday list.",
                     "**{{REF:bot.prefix}} map** - View the time zone map.",
-                    "**{{REF:bot.prefix}} invite** - Invite Birthday Bot to a server.",
+                    "**{{REF:bot.prefix}} invite** - Invite {{REF:bot.name}} to a server.",
                     "**{{REF:bot.prefix}} support** - Join the support server.",
                     "**{{REF:bot.prefix}} docs** - View the documentation.",
                     "**{{REF:bot.prefix}} faq** - View the frequently asked questions.",
-                    "**{{REF:bot.prefix}} vote** - Vote for Birthday Bot!",
+                    "**{{REF:bot.prefix}} vote** - Vote for {{REF:bot.name}}!",
                     "**{{REF:bot.prefix}} purge** - Remove your birthday data.",
                     "**{{REF:bot.prefix}} help setup** - Help for server setup.",
                     "**{{REF:bot.prefix}} help message** - Help for the birthday message settings.",
@@ -2022,7 +2022,7 @@
                 ]
             },
             "setup": {
-                "title": "Birthday Bot Setup Help - Guild Only",
+                "title": "{{REF:bot.name}} Setup Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} setup** - Interactive guide for server setup.",
                     "**{{REF:bot.prefix}} setup trusted** - Interactive guide for trusted system settings setup.",
@@ -2039,7 +2039,7 @@
                 ]
             },
             "message": {
-                "title": "Birthday Bot Message Help - Guild Only",
+                "title": "{{REF:bot.name}} Message Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} message list <type> [page]** - List all messages for that type.",
                     "**{{REF:bot.prefix}} message add <type> <message>** - Add a message for that type.",
@@ -2057,7 +2057,7 @@
                 ]
             },
             "trusted": {
-                "title": "Birthday Bot Trusted System Help - Guild Only",
+                "title": "{{REF:bot.name}} Trusted System Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} setup trusted** - Interactive guide for trusted system settings setup.",
                     "",
@@ -2073,7 +2073,7 @@
                 ]
             },
             "blacklist": {
-                "title": "Birthday Bot Blacklist Help - Guild Only",
+                "title": "{{REF:bot.name}} Blacklist Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} blacklist add <user>** - Add user to the blacklist.",
                     "**{{REF:bot.prefix}} blacklist remove <user>** - Remove user from the blacklist.",
@@ -2084,7 +2084,7 @@
                 ]
             },
             "premium": {
-                "title": "Birthday Bot Premium Help - Guild Only",
+                "title": "{{REF:bot.name}} Premium Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} premium** - View information about your server's premium.",
                     "**{{REF:bot.prefix}} message add <type> <Message>** - Add a user-specific message of that type.",
@@ -2387,7 +2387,7 @@
             "languageDisplay": "English"
         },
         "bot": {
-            "name": "Birthday Bot",
+            "name": "{{REF:bot.name}}",
             "description": "{{REF:links.templateEmbed}} helps your server track and celebrate birthdays by automatically celebrating them with numerous fun and extremely customizable features.",
             "prefix": "{{REF:bot.prefix}}"
         },
