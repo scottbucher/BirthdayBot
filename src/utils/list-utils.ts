@@ -1,6 +1,6 @@
-import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
+import { Blacklisted, CustomMessages, GuildData, UserDataResults } from '../models/database';
 import { FormatUtils, MessageUtils } from '.';
-import { Guild, Message, MessageEmbed } from 'discord.js';
+import { Guild, GuildMember, Message, MessageEmbed } from 'discord.js';
 
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
 import { TrustedRoles } from '../models/database/trusted-role-models';
@@ -9,6 +9,7 @@ export class ListUtils {
     public static async updateBdayList(
         userDataResults: UserDataResults,
         guild: Guild,
+        guildData: GuildData,
         message: Message,
         page: number,
         pageSize: number
@@ -18,8 +19,38 @@ export class ListUtils {
         let embed = await FormatUtils.getBirthdayListFullEmbed(
             guild,
             userDataResults,
+            guildData,
             page,
             pageSize
+        );
+
+        message = await MessageUtils.edit(message, embed);
+
+        if (!embed.title) {
+            await message.reactions.removeAll();
+            return;
+        }
+    }
+    public static async updateMemberAnniversaryList(
+        guildMembers: GuildMember[],
+        guild: Guild,
+        guildData: GuildData,
+        message: Message,
+        page: number,
+        pageSize: number,
+        totalPages: number,
+        totalMembers: number
+    ): Promise<void> {
+        if (page > totalPages) page = totalPages;
+
+        let embed = await FormatUtils.getMemberAnniversaryListFullEmbed(
+            guild,
+            guildMembers,
+            guildData,
+            page,
+            pageSize,
+            totalPages,
+            totalMembers
         );
 
         message = await MessageUtils.edit(message, embed);

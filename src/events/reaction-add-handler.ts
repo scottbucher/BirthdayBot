@@ -1,4 +1,4 @@
-import { BlacklistRepo, CustomMessageRepo, UserRepo } from '../services/database/repos';
+import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from '../services/database/repos';
 import {
     CollectOptions,
     CollectorUtils,
@@ -22,6 +22,7 @@ import { LangCode } from '../models/enums';
 import { PlanName } from '../models/subscription-models';
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { TrustedRoleRepo } from '../services/database/repos';
+import moment from 'moment';
 
 let Logs = require('../../lang/logs.json');
 let Config = require('../../config/config.json');
@@ -34,6 +35,11 @@ const COLLECT_OPTIONS: CollectOptions = {
 export class ReactionAddHandler implements EventHandler {
     // Bday list limiter
     private rateLimiter = new RateLimiter(
+        Config.rateLimiting.list.amount,
+        Config.rateLimiting.list.interval * 1000
+    );
+    // Bday list limiter
+    private memberAnniversaryListLimiter = new RateLimiter(
         Config.rateLimiting.list.amount,
         Config.rateLimiting.list.interval * 1000
     );
@@ -60,6 +66,7 @@ export class ReactionAddHandler implements EventHandler {
 
     constructor(
         private userRepo: UserRepo,
+        private guildRepo: GuildRepo,
         private customMessageRepo: CustomMessageRepo,
         private blacklistRepo: BlacklistRepo,
         private trustedRoleRepo: TrustedRoleRepo,
@@ -264,7 +271,61 @@ export class ReactionAddHandler implements EventHandler {
                     return;
                 }
 
-                await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
+                let guildData = await this.guildRepo.getGuild(msg.guild.id);
+
+                await ListUtils.updateBdayList(
+                    userDataResults,
+                    msg.guild,
+                    guildData,
+                    msg,
+                    page,
+                    pageSize
+                );
+            } else if (
+                msg.embeds[0]?.title?.includes(
+                    Lang.getRef('terms.memberAnniversary', LangCode.EN_US) +
+                        ' ' +
+                        Lang.getRef('terms.list', LangCode.EN_US)
+                )
+            ) {
+                pageSize = ParseUtils.parseInt(Config.experience.memberAnniversaryListSize);
+
+                // Member Anniversary List
+                let memberList = msg.guild.members.cache
+                    .filter(member => !member.user.bot)
+                    .map(member => member);
+
+                let totalMembers = memberList.length;
+
+                memberList = memberList.sort(
+                    (first, second) =>
+                        0 -
+                        (moment(first.joinedAt).format('MM-DD') >
+                        moment(second.joinedAt).format('MM-DD')
+                            ? -1
+                            : 1)
+                );
+
+                let totalPages = Math.ceil(memberList.length / pageSize);
+
+                let startMember = (page - 1) * pageSize;
+
+                if (!startMember) startMember = 0;
+
+                memberList = memberList.slice(startMember, startMember + pageSize);
+
+                let guildData = await this.guildRepo.getGuild(msg.guild.id);
+
+                await ListUtils.updateMemberAnniversaryList(
+                    memberList,
+                    msg.guild,
+                    guildData,
+                    msg,
+                    page,
+                    pageSize,
+                    totalPages,
+                    totalMembers
+                );
             } else if (
                 msg.embeds[0]?.title?.includes(Lang.getRef('terms.trustedRoles', LangCode.EN_US))
             ) {
@@ -361,6 +422,18 @@ export class ReactionAddHandler implements EventHandler {
             ) {
                 pageSize = Config.experience.birthdayListSize;
                 let limited = this.rateLimiter.take(reactor.id);
+                if (limited) {
+                    return;
+                }
+            } else if (
+                msg.embeds[0]?.title?.includes(
+                    Lang.getRef('terms.memberAnniversary', LangCode.EN_US) +
+                        ' ' +
+                        Lang.getRef('terms.list', LangCode.EN_US)
+                )
+            ) {
+                pageSize = ParseUtils.parseInt(Config.experience.memberAnniversaryListSize);
+                let limited = this.memberAnniversaryListLimiter.take(reactor.id);
                 if (limited) {
                     return;
                 }
@@ -473,7 +546,59 @@ export class ReactionAddHandler implements EventHandler {
                     page
                 );
 
-                await ListUtils.updateBdayList(userDataResults, msg.guild, msg, page, pageSize);
+                let guildData = await this.guildRepo.getGuild(msg.guild.id);
+
+                await ListUtils.updateBdayList(
+                    userDataResults,
+                    msg.guild,
+                    guildData,
+                    msg,
+                    page,
+                    pageSize
+                );
+            } else if (
+                msg.embeds[0]?.title?.includes(
+                    Lang.getRef('terms.memberAnniversary', LangCode.EN_US) +
+                        ' ' +
+                        Lang.getRef('terms.list', LangCode.EN_US)
+                )
+            ) {
+                // Member Anniversary List
+                let memberList = msg.guild.members.cache
+                    .filter(member => !member.user.bot)
+                    .map(member => member);
+
+                let totalMembers = memberList.length;
+
+                memberList = memberList.sort(
+                    (first, second) =>
+                        0 -
+                        (moment(first.joinedAt).format('MM-DD') >
+                        moment(second.joinedAt).format('MM-DD')
+                            ? -1
+                            : 1)
+                );
+
+                let totalPages = Math.ceil(memberList.length / pageSize);
+
+                let startMember = (page - 1) * pageSize;
+
+                if (!startMember) startMember = 0;
+
+                memberList = memberList.slice(startMember, startMember + pageSize);
+
+                let guildData = await this.guildRepo.getGuild(msg.guild.id);
+
+                await ListUtils.updateMemberAnniversaryList(
+                    memberList,
+                    msg.guild,
+                    guildData,
+                    msg,
+                    page,
+                    pageSize,
+                    totalPages,
+                    totalMembers
+                );
             } else if (
                 msg.embeds[0]?.title?.includes(Lang.getRef('terms.trustedRoles', LangCode.EN_US))
             ) {
