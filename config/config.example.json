@@ -63,6 +63,7 @@
         "fastForwardAmount": "5",
         "fastRewindAmount": "5",
         "birthdayListSize": "30",
+        "memberAnniversaryListSize": "30",
         "blacklistSize": "30",
         "birthdayMessageListSize": "3",
         "trustedRoleListSize": "10",
