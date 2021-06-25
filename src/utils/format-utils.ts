@@ -1,15 +1,15 @@
 import * as Chrono from 'chrono-node';
 
-import { Blacklisted, CustomMessages, UserDataResults, GuildData } from '../models/database';
-import { Guild, Message, MessageEmbed, Role, User, GuildMember } from 'discord.js';
+import { Blacklisted, CustomMessages, GuildData, UserDataResults } from '../models/database';
+import { Guild, GuildMember, Message, MessageEmbed, Role, User } from 'discord.js';
 import { GuildUtils, ParseUtils } from '.';
 
+import { CelebrationUtils } from './celebration-utils';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
 import { TrustedRoles } from '../models/database/trusted-role-models';
 import moment from 'moment-timezone';
-import { CelebrationUtils } from './celebration-utils';
 
 let Config = require('../../config/config.json');
 let Abbreviations = require('../../config/abbreviations.json');
@@ -24,8 +24,8 @@ export class FormatUtils {
         return values.length == 2
             ? values[0] + ' ' + values[1]
             : [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
-                values.length < 2 ? '' : `, ${Lang.getRef('terms.and', LangCode.EN_US)} `
-            );
+                  values.length < 2 ? '' : `, ${Lang.getRef('terms.and', LangCode.EN_US)} `
+              );
     }
 
     public static checkAbbreviation(input: string): boolean {
@@ -160,8 +160,8 @@ export class FormatUtils {
                         type === 'birthday'
                             ? 'list.noCustomBirthdayMessages'
                             : type === 'memberanniversary'
-                                ? 'list.noCustomMemberAnniversaryMessages'
-                                : 'list.noCustomServerAnniversaryMessages',
+                            ? 'list.noCustomMemberAnniversaryMessages'
+                            : 'list.noCustomServerAnniversaryMessages',
                         LangCode.EN_US
                     )
                 );
@@ -173,14 +173,14 @@ export class FormatUtils {
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.free
                 : type === 'serveranniversary'
-                    ? Config.validation.message.maxCount.serverAnniversary.free
-                    : Config.validation.message.maxCount.birthday.free;
+                ? Config.validation.message.maxCount.serverAnniversary.free
+                : Config.validation.message.maxCount.birthday.free;
         let maxMessagesPaid: number =
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.paid
                 : type === 'serveranniversary'
-                    ? Config.validation.message.maxCount.serverAnniversary.paid
-                    : Config.validation.message.maxCount.birthday.paid;
+                ? Config.validation.message.maxCount.serverAnniversary.paid
+                : Config.validation.message.maxCount.birthday.paid;
 
         for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
@@ -199,8 +199,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessageLocked'
                     : type === 'serveranniversary'
-                        ? 'serverAnniversaryMessageLocked'
-                        : 'birthdayMessageLocked';
+                    ? 'serverAnniversaryMessageLocked'
+                    : 'birthdayMessageLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -215,8 +215,8 @@ export class FormatUtils {
                 type === 'memberanniversary'
                     ? 'memberAnniversaryMessageUnLocked'
                     : type === 'serveranniversary'
-                        ? 'serverAnniversaryMessageUnLocked'
-                        : 'birthdayMessageUnLocked';
+                    ? 'serverAnniversaryMessageUnLocked'
+                    : 'birthdayMessageUnLocked';
             embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
                 PAGE: page.toString(),
                 LIST_DATA: description,
@@ -261,13 +261,13 @@ export class FormatUtils {
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                    } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
+                } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                    } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
+                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
             }
         }
 
@@ -330,13 +330,13 @@ export class FormatUtils {
             ) {
                 description += `**${i.toLocaleString()}.** ${
                     role ? `${role.toString()} ` : `**** `
-                    }\n\n`;
+                }\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ${
                     role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
-                    }\n\n`;
+                }\n\n`;
             }
             i++;
         }
@@ -394,10 +394,12 @@ export class FormatUtils {
                 data => moment(data.Birthday).format('MMMM Do') === birthday
             ); // Get all users with this birthday to create the sub list
 
-            let members = guild.members.cache.filter(m => users.map(u => u.UserDiscordId).includes(m.id)).map(member => member);
+            let members = guild.members.cache
+                .filter(m => users.map(u => u.UserDiscordId).includes(m.id))
+                .map(member => member);
 
             let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
-            description += `**${birthday}**: ${userList}\n`; // Append the description
+            description += `__**${birthday}**__: ${userList}\n`; // Append the description
         }
 
         embed = Lang.getEmbed('list.birthday', LangCode.EN_US, {
@@ -410,8 +412,6 @@ export class FormatUtils {
 
         return embed.setThumbnail(guild.iconURL());
     }
-
-
 
     public static async getMemberAnniversaryListFullEmbed(
         guild: Guild,
@@ -432,9 +432,7 @@ export class FormatUtils {
         }
         let description = '';
         let anniversaries = [
-            ...new Set(
-                guildMembers.map(m => moment(m.joinedAt).format('MMMM Do'))
-            ),
+            ...new Set(guildMembers.map(m => moment(m.joinedAt).format('MMMM Do'))),
         ]; // remove duplicates
 
         // Go through the list of birthdays
@@ -443,15 +441,15 @@ export class FormatUtils {
                 m => moment(m.joinedAt).format('MMMM Do') === anniversary
             ); // Get all users with this birthday to create the sub list
             let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
-            description += `**${anniversary}**: ${userList}\n`; // Append the description
+            description += `__**${anniversary}**__: ${userList}\n`; // Append the description
         }
 
         // Update config variables and add member anniversary list message
-        embed = Lang.getEmbed('list.birthday', LangCode.EN_US, {
+        embed = Lang.getEmbed('list.memberAnniversary', LangCode.EN_US, {
             PAGE: page.toString(),
             LIST_DATA: description,
             TOTAL_PAGES: totalPages.toString(),
-            TOTAL_BIRTHDAYS: totalMembers.toString(),
+            TOTAL_ANNIVERSARIES: totalMembers.toString(),
             PER_PAGE: pageSize.toString(),
         });
 
@@ -479,7 +477,7 @@ export class FormatUtils {
             description += `**${
                 guild.members.resolve(user)?.displayName ||
                 `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
-                }**: (ID: ${user})\n`; // Append the description
+            }**: (ID: ${user})\n`; // Append the description
         }
 
         embed = Lang.getEmbed('list.blacklist', LangCode.EN_US, {
@@ -516,24 +514,24 @@ export class FormatUtils {
             if (
                 hasPremium ||
                 memberAnniversaryRole.Position <=
-                Config.validation.memberAnniversaryRoles.maxCount.free
+                    Config.validation.memberAnniversaryRoles.maxCount.free
             ) {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role ? `${role.toString()} ` : `**** `
-                    }\n\n`;
+                }\n\n`;
             } else {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
-                    }\n\n`;
+                }\n\n`;
             }
         }
 
         if (
             !hasPremium &&
             memberAnniversaryRoleResults.stats.TotalItems >
-            Config.validation.memberAnniversaryRoles.maxCount.free
+                Config.validation.memberAnniversaryRoles.maxCount.free
         ) {
             embed = Lang.getEmbed('list.memberAnniversaryRolePaid', LangCode.EN_US, {
                 PAGE: page.toString(),

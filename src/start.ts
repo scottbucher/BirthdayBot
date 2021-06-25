@@ -30,9 +30,9 @@ import {
     SupportCommand,
     TestCommand,
     TrustedRoleCommand,
+    UpdateCommand,
     ViewCommand,
     VoteCommand,
-    UpdateCommand,
 } from './commands';
 import {
     BlacklistRepo,
@@ -132,7 +132,7 @@ async function start(): Promise<void> {
     let faqCommand = new FaqCommand();
     let infoCommand = new InfoCommand();
     let inviteCommand = new InviteCommand();
-    let listCommand = new ListCommand(userRepo);
+    let listCommand = new ListCommand(userRepo, guildRepo);
     let mapCommand = new MapCommand();
     let nextCommand = new NextCommand(userRepo, guildRepo);
     let premiumCommand = new PremiumCommand(subscriptionService);
@@ -297,6 +297,7 @@ async function start(): Promise<void> {
     );
     let reactionAddHandler = new ReactionAddHandler(
         userRepo,
+        guildRepo,
         customMessageRepo,
         blacklistRepo,
         trustedRoleRepo,

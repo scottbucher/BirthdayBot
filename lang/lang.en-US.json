@@ -643,6 +643,14 @@
                 "description": "{{USER}}'s birthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!",
                 "color": "{{REF:colors.default}}"
             },
+            "viewMemberAnniversary": {
+                "description": "Your member anniversary is on **{{DATE}}**!",
+                "color": "{{REF:colors.default}}"
+            },
+            "viewUserMemberAnniversary": {
+                "description": "{{USER}}'s member anniversary is on **{{DATE}}**!",
+                "color": "{{REF:colors.default}}"
+            },
             "addCustomMessage": {
                 "title": "Add Custom Message",
                 "description": [
@@ -792,7 +800,23 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify which you would like to view!",
-                    "Setup options: `{{REF:types.birthday}}`, `{{REF:types.memberAnniversary}}` or `{{REF:types.serverAnniversary}}`"
+                    "Next options: `{{REF:types.birthday}}`, `{{REF:types.memberAnniversary}}` or `{{REF:types.serverAnniversary}}`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidListArgs": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please specify which list you would like to view!",
+                    "List options: `{{REF:types.birthday}}` or `{{REF:types.memberAnniversary}}`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidViewArgs": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please specify which type you would like to view!",
+                    "View options: `{{REF:types.birthday}}` or `{{REF:types.memberAnniversary}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -1542,7 +1566,7 @@
                     }
                 ],
                 "footer": {
-                    "text": "Cosider letting us know how to improve premium!"
+                    "text": "Consider letting us know how to improve premium!"
                 },
                 "timestamp": true
             },
@@ -2124,8 +2148,8 @@
                     "",
                     "**{{REF:bot.prefix}} set** - Set your birthday.",
                     "**{{REF:bot.prefix}} view [user]** - View your birthday or a users birthday.",
-                    "**{{REF:bot.prefix}} next**** - View next birthday(s) in the server.",
-                    "**{{REF:bot.prefix}} list [page/date]**** - View the server birthday list.",
+                    "**{{REF:bot.prefix}} next [type]**** - View next birthday(s) in the server.",
+                    "**{{REF:bot.prefix}} list [type] [page/date]**** - View the server birthday list.",
                     "**{{REF:bot.prefix}} map** - View the time zone map.",
                     "**{{REF:bot.prefix}} invite** - Invite {{REF:bot.name}} to a server.",
                     "**{{REF:bot.prefix}} support** - Join the support server.",
@@ -2156,7 +2180,7 @@
                 "description": [
                     "**{{REF:bot.prefix}} setup** - Interactive guide for server setup.",
                     "**{{REF:bot.prefix}} setup {{REF:types.trusted}}** - Interactive guide for trusted system settings setup.",
-                    "**{{REF:bot.prefix}} setup {{REF:types.anniversary}}** - Interactive guide annviversary settings setup.",
+                    "**{{REF:bot.prefix}} setup {{REF:types.anniversary}}** - Interactive guide anniversary settings setup.",
                     "",
                     "**{{REF:bot.prefix}} config {{REF:types.channel}} <{{REF:types.create}}/{{REF:types.clear}}/#channel> <type>** - Set a channel type.",
                     "**{{REF:bot.prefix}} config {{REF:types.birthdayRole}} <{{REF:types.create}}/{{REF:types.clear}}/#channel>** - Set the birthday role.",
@@ -2283,10 +2307,22 @@
                 },
                 "timestamp": true
             },
+            "memberAnniversary": {
+                "title": "{{REF:terms.memberAnniversaryList}} | {{REF:list.pageTitle}}",
+                "description": [
+                    "*Member Anniversaries are celebrated on the day of the user's server join date (in the timezone of the __server__).*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "Total Member Anniversaries: {{TOTAL_ANNIVERSARIES}} • {{PER_PAGE}} per page"
+                },
+                "timestamp": true
+            },
             "birthdayMessageUnLocked": {
                 "title": "{{REF:list.birthdayMessagesTitle}}",
                 "description": [
-                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2298,7 +2334,7 @@
             "birthdayMessageLocked": {
                 "title": "{{REF:list.birthdayMessagesTitle}}",
                 "description": [
-                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2316,7 +2352,7 @@
             "memberAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2328,7 +2364,7 @@
             "memberAnniversaryMessageLocked": {
                 "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2346,7 +2382,7 @@
             "serverAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2358,7 +2394,7 @@
             "serverAnniversaryMessageLocked": {
                 "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCutomMessage}})*",
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -2569,7 +2605,7 @@
             "whatIsMessageEmbedColor": "{{REF:links.doc}}/",
             "whatIsAnEmbed": "{{REF:links.doc}}/",
             "whatIsTrustedRole": "{{REF:links.doc}}/",
-            "whatIsCutomMessage": "{{REF:links.doc}}/",
+            "whatIsCustomMessage": "{{REF:links.doc}}/",
             "whatIsUserSpecificCustomMessage": "{{REF:links.doc}}/",
             "whatIsAnniversaryRole": "{{REF:links.doc}}/",
             "trustedPreventsMessage": "{{REF:links.doc}}/",
@@ -2615,6 +2651,7 @@
             "noTrustedRoles": "**No Trusted Roles!**",
             "noMemberAnniversaryRoles": "**No MemberAnniversary Roles!**",
             "noBirthdays": "**No Birthdays in this server!**",
+            "noMemberAnniversaries": "**No Member Anniversaries in this server!**",
             "emptyBlacklist": "**The Birthday Blacklist is empty!**",
             "noCustomBirthdayMessages": "**No Custom Birthday Messages!**",
             "noCustomUserSpecificBirthdayMessages": "**No User-Specific Birthday Messages!**",
@@ -2661,6 +2698,7 @@
             "deletedRole": "Deleted Role",
             "deletedChannel": "Deleted Channel",
             "birthdayList": "Birthday List",
+            "memberAnniversaryList": "Member Anniversary List",
             "birthdayMessages": "Birthday Messages",
             "userBirthdayMessages": "User-Specific Birthday Messages",
             "userMemberAnniversaryMessages": "User-Specific Member Anniversary Messages",
