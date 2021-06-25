@@ -1,5 +1,5 @@
-import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
-import { GuildUtils, MessageUtils } from '../utils';
+import { DMChannel, Message, MessageEmbed, TextChannel, User, GuildMember } from 'discord.js';
+import { GuildUtils, MessageUtils, FormatUtils } from '../utils';
 
 import { Command } from './command';
 import { Lang } from '../services';
@@ -20,17 +20,42 @@ export class ViewCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) {}
+    constructor(private userRepo: UserRepo) { }
 
     public async execute(
         args: string[],
         msg: Message,
         channel: TextChannel | DMChannel
     ): Promise<void> {
-        let target: User;
 
-        if (args.length === 3) {
-            // Check if the user is trying to set another person's birthday
+
+        let type: string;
+        let foundType = false;
+
+        if (args.length > 2) {
+            type = FormatUtils.extractCelebrationType(args[2].toLowerCase())?.toLowerCase() ?? '';
+            if (type !== 'birthday' && type !== 'memberanniversary') {
+                // Lang part not implemented
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.invalidBirthdayListArgs', LangCode.EN_US)
+                );
+                return;
+            } else if (type === 'memberanniversary' && channel instanceof DMChannel) {
+                // Can't check an anniversary in a DM channel
+                return;
+            }
+            foundType = true;
+        } else {
+            type = 'birthday'
+        }
+
+        let checkArg = foundType ? 4 : 3;
+
+        let target: GuildMember;
+
+        if (args.length === checkArg) {
+            // Check if the user is trying to view another person's birthday
             if (channel instanceof DMChannel) {
                 await MessageUtils.send(
                     channel,
@@ -41,8 +66,8 @@ export class ViewCommand implements Command {
 
             // Get who they are mentioning
             target =
-                msg.mentions.members.first()?.user ||
-                GuildUtils.findMember(msg.guild, args[2])?.user;
+                msg.mentions.members.first() ||
+                GuildUtils.findMember(msg.guild, args[checkArg - 1])
 
             // Did we find a user?
             if (!target) {
@@ -54,43 +79,48 @@ export class ViewCommand implements Command {
             }
         } else {
             // They didn't mention anyone
-            target = msg.author;
+            target = msg.member;
         }
 
-        let userData = await this.userRepo.getUser(target.id);
+        if (type === 'birthday') {
+            let userData = await this.userRepo.getUser(target.id);
 
-        if (!userData || !userData.Birthday || !userData.TimeZone) {
-            target === msg.author
+            if (!userData || !userData.Birthday || !userData.TimeZone) {
+                target === msg.member
+                    ? await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US)
+                    )
+                    : await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.userBirthdayNotSet', LangCode.EN_US, {
+                            USER: target.toString(),
+                        })
+                    );
+                return;
+            }
+
+            msg.member === target
                 ? await MessageUtils.send(
-                      channel,
-                      Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US)
-                  )
+                    channel,
+                    Lang.getEmbed('results.viewBirthday', LangCode.EN_US, {
+                        BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
+                        TIMEZONE: userData.TimeZone,
+                        CHANGES_LEFT: userData.ChangesLeft.toString(),
+                    })
+                )
                 : await MessageUtils.send(
-                      channel,
-                      Lang.getEmbed('validation.userBirthdayNotSet', LangCode.EN_US, {
-                          USER: target.toString(),
-                      })
-                  );
-            return;
-        }
+                    channel,
+                    Lang.getEmbed('results.viewUserBirthday', LangCode.EN_US, {
+                        USER: target.toString(),
+                        BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
+                        TIMEZONE: userData.TimeZone,
+                    })
+                );
+        } else if (type === 'memberanniversary') {
+            let memberAnniversary = moment(target.joinedAt).format('MMMM Do');
 
-        msg.author === target
-            ? await MessageUtils.send(
-                  channel,
-                  Lang.getEmbed('results.viewBirthday', LangCode.EN_US, {
-                      BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
-                      TIMEZONE: userData.TimeZone,
-                      CHANGES_LEFT: userData.ChangesLeft.toString(),
-                  })
-              )
-            : await MessageUtils.send(
-                  channel,
-                  Lang.getEmbed('results.viewUserBirthday', LangCode.EN_US, {
-                      USER: target.toString(),
-                      BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
-                      TIMEZONE: userData.TimeZone,
-                  })
-              );
-        return;
+            // send the message
+        }
     }
 }
