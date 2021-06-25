@@ -1,7 +1,7 @@
 import * as Chrono from 'chrono-node';
 
-import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
-import { Guild, Message, MessageEmbed, Role, User } from 'discord.js';
+import { Blacklisted, CustomMessages, UserDataResults, GuildData } from '../models/database';
+import { Guild, Message, MessageEmbed, Role, User, GuildMember } from 'discord.js';
 import { GuildUtils, ParseUtils } from '.';
 
 import { Lang } from '../services';
@@ -9,6 +9,7 @@ import { LangCode } from '../models/enums';
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
 import { TrustedRoles } from '../models/database/trusted-role-models';
 import moment from 'moment-timezone';
+import { CelebrationUtils } from './celebration-utils';
 
 let Config = require('../../config/config.json');
 let Abbreviations = require('../../config/abbreviations.json');
@@ -369,6 +370,7 @@ export class FormatUtils {
     public static async getBirthdayListFullEmbed(
         guild: Guild,
         userDataResults: UserDataResults,
+        guildData: GuildData,
         page: number,
         pageSize: number
     ): Promise<MessageEmbed> {
@@ -391,14 +393,10 @@ export class FormatUtils {
             let users = userDataResults.userData.filter(
                 data => moment(data.Birthday).format('MMMM Do') === birthday
             ); // Get all users with this birthday to create the sub list
-            let userNames: string[] = [];
-            for (let user of users) {
-                userNames.push(
-                    `${guild.members.resolve(user.UserDiscordId)?.displayName}` ||
-                    `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
-                );
-            }
-            let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
+
+            let members = guild.members.cache.filter(m => users.map(u => u.UserDiscordId).includes(m.id)).map(member => member);
+
+            let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
             description += `**${birthday}**: ${userList}\n`; // Append the description
         }
 
@@ -407,7 +405,54 @@ export class FormatUtils {
             LIST_DATA: description,
             TOTAL_PAGES: userDataResults.stats.TotalPages.toString(),
             TOTAL_BIRTHDAYS: userDataResults.stats.TotalItems.toString(),
-            PER_PAGE: Config.experience.birthdayListSize.toString(),
+            PER_PAGE: pageSize.toString(),
+        });
+
+        return embed.setThumbnail(guild.iconURL());
+    }
+
+
+
+    public static async getMemberAnniversaryListFullEmbed(
+        guild: Guild,
+        guildMembers: GuildMember[],
+        guildData: GuildData,
+        page: number,
+        pageSize: number,
+        totalPages: number,
+        totalMembers: number
+    ): Promise<MessageEmbed> {
+        let embed: MessageEmbed;
+        if (guildMembers.length === 0) {
+            // Not implemented
+            let embed = new MessageEmbed()
+                .setDescription(Lang.getRef('list.noMemberAnniversaries', LangCode.EN_US))
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = '';
+        let anniversaries = [
+            ...new Set(
+                guildMembers.map(m => moment(m.joinedAt).format('MMMM Do'))
+            ),
+        ]; // remove duplicates
+
+        // Go through the list of birthdays
+        for (let anniversary of anniversaries) {
+            let members = guildMembers.filter(
+                m => moment(m.joinedAt).format('MMMM Do') === anniversary
+            ); // Get all users with this birthday to create the sub list
+            let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
+            description += `**${anniversary}**: ${userList}\n`; // Append the description
+        }
+
+        // Update config variables and add member anniversary list message
+        embed = Lang.getEmbed('list.birthday', LangCode.EN_US, {
+            PAGE: page.toString(),
+            LIST_DATA: description,
+            TOTAL_PAGES: totalPages.toString(),
+            TOTAL_BIRTHDAYS: totalMembers.toString(),
+            PER_PAGE: pageSize.toString(),
         });
 
         return embed.setThumbnail(guild.iconURL());
