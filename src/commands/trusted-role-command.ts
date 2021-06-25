@@ -1,3 +1,4 @@
+import { FormatUtils, MessageUtils } from '../utils';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import {
     TrustedRoleAddSubCommand,
@@ -9,7 +10,6 @@ import {
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MessageUtils, FormatUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 
@@ -29,7 +29,7 @@ export class TrustedRoleCommand implements Command {
         private trustedRoleRemoveSubCommand: TrustedRoleRemoveSubCommand,
         private trustedRoleClearSubCommand: TrustedRoleClearSubCommand,
         private trustedRoleListSubCommand: TrustedRoleListSubCommand
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],
@@ -45,7 +45,7 @@ export class TrustedRoleCommand implements Command {
             return;
         }
 
-        let action = FormatUtils.extractMiscActionType(args[3].toLowerCase())?.toLowerCase() ?? '';
+        let action = FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ?? '';
 
         if (action === 'add') {
             this.trustedRoleAddSubCommand.execute(args, msg, channel, hasPremium);

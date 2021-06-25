@@ -1,11 +1,11 @@
 import { CelebrationUtils, FormatUtils, MessageUtils, TimeUtils } from '../utils';
 import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import moment, { Moment } from 'moment';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { UserRepo, GuildRepo } from '../services/database/repos';
-import moment, { Moment } from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -20,7 +20,7 @@ export class NextCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo, private guildRepo: GuildRepo) { }
+    constructor(private userRepo: UserRepo, private guildRepo: GuildRepo) {}
 
     public async execute(
         args: string[],
@@ -34,7 +34,11 @@ export class NextCommand implements Command {
 
         if (args.length > 2) {
             type = FormatUtils.extractCelebrationType(args[2].toLowerCase())?.toLowerCase() ?? '';
-            if (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniersary') {
+            if (
+                type !== 'birthday' &&
+                type !== 'memberanniversary' &&
+                type !== 'serveranniversary'
+            ) {
                 await MessageUtils.send(
                     channel,
                     Lang.getEmbed('validation.invalidNextArgs', LangCode.EN_US)
@@ -57,10 +61,12 @@ export class NextCommand implements Command {
                 return;
             }
 
-
             let commandUser = userDatas.find(user => user.UserDiscordId === msg.author.id);
 
-            timezone = timezone && timezone !== '0' && guildData?.UseTimezone === 'server' ? timezone : commandUser?.TimeZone;
+            timezone =
+                timezone && timezone !== '0' && guildData?.UseTimezone === 'server'
+                    ? timezone
+                    : commandUser?.TimeZone;
 
             let nextBirthdayUsers = CelebrationUtils.getNextUsers(userDatas, timezone);
 
@@ -72,7 +78,9 @@ export class NextCommand implements Command {
                 return;
             }
 
-            let userList = nextBirthdayUsers.map(user => msg.guild.members.resolve(user.UserDiscordId));
+            let userList = nextBirthdayUsers.map(user =>
+                msg.guild.members.resolve(user.UserDiscordId)
+            );
 
             let userStringList = FormatUtils.joinWithAnd(userList.map(user => user.toString()));
             let nextBirthday = moment(nextBirthdayUsers[0].Birthday).format('MMMM Do');
@@ -88,7 +96,9 @@ export class NextCommand implements Command {
             if (type === 'memberanniversary') {
                 // TODO: fetch members?
                 // Next member anniversary
-                let guildMembers = msg.guild.members.cache.filter(member => !member.user.bot).map(member => member);
+                let guildMembers = msg.guild.members.cache
+                    .filter(member => !member.user.bot)
+                    .map(member => member);
                 let closestMonthDay: string;
                 let now = timezone ? moment.tz(timezone) : moment.tz();
                 let nowMonthDay = now.format('MM-DD');
@@ -102,32 +112,43 @@ export class NextCommand implements Command {
                         continue;
                     }
 
-                    let memberDiff = moment(nowMonthDay).diff(moment(memberMonthDay), 'days');
-                    let closestDiff = moment(nowMonthDay).diff(moment(closestMonthDay), 'days');
+                    let memberDiff = moment(memberMonthDay, 'MM-DD').diff(
+                        moment(nowMonthDay, 'MM-DD'),
+                        'days'
+                    );
+                    let closestDiff = moment(closestMonthDay, 'MM-DD').diff(
+                        moment(nowMonthDay, 'MM-DD'),
+                        'days'
+                    );
 
                     // Basically if the diff is negative then that date has passed this year
                     // So we need to subtract it from 365 to get days until (366 if next year is a leap year)
-                    memberDiff = memberDiff < 0 ? (TimeUtils.isLeap(now.year() + 1) ? 366 : 365) - memberDiff : memberDiff;
-                    closestDiff = closestDiff < 0 ? (TimeUtils.isLeap(now.year() + 1) ? 366 : 365) - closestDiff : closestDiff;
+                    memberDiff =
+                        memberDiff < 0
+                            ? (TimeUtils.isLeap(now.year() + 1) ? 366 : 365) + memberDiff
+                            : memberDiff;
+                    closestDiff =
+                        closestDiff < 0
+                            ? (TimeUtils.isLeap(now.year() + 1) ? 366 : 365) + closestDiff
+                            : closestDiff;
 
-                    if (memberDiff < closestDiff)
+                    if (memberDiff < closestDiff && memberDiff !== 0)
                         closestMonthDay = memberMonthDay;
                 }
 
-                guildMembers = guildMembers.filter(member => moment(member.joinedAt).format('MM-DD') === closestMonthDay);
+                guildMembers = guildMembers.filter(
+                    member => moment(member.joinedAt).format('MM-DD') === closestMonthDay
+                );
 
-                let userList = FormatUtils.joinWithAnd(guildMembers.map(member => member.toString()));
-
+                let userList = CelebrationUtils.getUserListString(guildData, guildMembers);
 
                 await MessageUtils.send(
                     channel,
                     Lang.getEmbed('results.nextMemberAnniversary', LangCode.EN_US, {
                         USERS: userList,
-                        DATE: moment(closestMonthDay).format('MMMM Do')
+                        DATE: moment(closestMonthDay, 'MM-DD').format('MMMM Do'),
                     })
                 );
-
-
             } else {
                 // Next server anniversary
                 let serverCreatedAt = moment(msg.guild.createdAt).tz(timezone);
@@ -136,18 +157,22 @@ export class NextCommand implements Command {
                 let yearsOldRoundedUp = now.year() - serverCreatedAt.year();
 
                 // If the diff is negative that date has already passed so we need to increase the year (this is how we round up)
-                if (moment(now.format('MM-DD')).diff(moment(serverCreatedAt.format('MM-DD')), 'days') < 0) yearsOldRoundedUp++;
-
+                if (
+                    moment(serverCreatedAt.format('MM-DD'), 'MM-DD').diff(
+                        moment(now.format('MM-DD'), 'MM-DD'),
+                        'days'
+                    ) < 0
+                )
+                    yearsOldRoundedUp++;
 
                 await MessageUtils.send(
                     channel,
                     Lang.getEmbed('results.nextServerAnniversary', LangCode.EN_US, {
                         SERVER: msg.guild.name,
                         DATE: anniversaryFormatted,
-                        YEAR: yearsOldRoundedUp.toString()
+                        YEARS: yearsOldRoundedUp.toString(),
                     })
                 );
-
             }
         }
     }

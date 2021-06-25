@@ -565,23 +565,29 @@ export class FormatUtils {
     // ALTERNATIVES ARE SUPPOSED TO BE ARRAYS BUT LANG SYSTEM DOESN'T SUPPORT IT
     public static extractCelebrationType(type: string): string {
         switch (type) {
-            case Lang.getRef('types.birthday', LangCode.EN_US) ||
-                Lang.getRef('types.alternatives.birthday', LangCode.EN_US):
+            case Lang.getRef('types.birthday', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef('types.alternatives.birthday', LangCode.EN_US).toLowerCase():
                 return 'birthday';
-            case Lang.getRef('types.memberAnniversary', LangCode.EN_US) ||
-                Lang.getRef('types.alternatives.memberAnniversary', LangCode.EN_US):
+            case Lang.getRef('types.memberAnniversary', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef('types.alternatives.memberAnniversary', LangCode.EN_US).toLowerCase():
                 return 'memberanniversary';
 
-            case Lang.getRef('types.serverAnniversary', LangCode.EN_US) ||
-                Lang.getRef('types.alternatives.serverAnniversary', LangCode.EN_US):
+            case Lang.getRef('types.serverAnniversary', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef('types.alternatives.serverAnniversary', LangCode.EN_US).toLowerCase():
                 return 'serveranniversary';
 
-            case Lang.getRef('types.userSpecificBirthday', LangCode.EN_US) ||
-                Lang.getRef('types.alternatives.userSpecificBirthday', LangCode.EN_US):
+            case Lang.getRef('types.userSpecificBirthday', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef(
+                    'types.alternatives.userSpecificBirthday',
+                    LangCode.EN_US
+                ).toLowerCase():
                 return 'userspecificbirthday';
 
-            case Lang.getRef('types.userSpecificMemberAnniversary', LangCode.EN_US) ||
-                Lang.getRef('types.alternatives.userSpecificMemberAnniversary', LangCode.EN_US):
+            case Lang.getRef('types.userSpecificMemberAnniversary', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef(
+                    'types.alternatives.userSpecificMemberAnniversary',
+                    LangCode.EN_US
+                ).toLowerCase():
                 return 'userspecificmemberanniversary';
             default:
                 return null;
@@ -589,23 +595,23 @@ export class FormatUtils {
     }
     public static extractConfigType(type: string): string {
         switch (type) {
-            case Lang.getRef('types.channel', LangCode.EN_US):
+            case Lang.getRef('types.channel', LangCode.EN_US).toLowerCase():
                 return 'channel';
-            case Lang.getRef('types.birthdayRole', LangCode.EN_US):
+            case Lang.getRef('types.birthdayRole', LangCode.EN_US).toLowerCase():
                 return 'role';
-            case Lang.getRef('types.birthdayMasterRole', LangCode.EN_US):
+            case Lang.getRef('types.birthdayMasterRole', LangCode.EN_US).toLowerCase():
                 return 'birthdayMasterRole';
-            case Lang.getRef('types.nameFormat', LangCode.EN_US):
+            case Lang.getRef('types.nameFormat', LangCode.EN_US).toLowerCase():
                 return 'nameFormat';
-            case Lang.getRef('types.timezone', LangCode.EN_US):
+            case Lang.getRef('types.timezone', LangCode.EN_US).toLowerCase():
                 return 'timezone';
-            case Lang.getRef('types.useTimezone', LangCode.EN_US):
+            case Lang.getRef('types.useTimezone', LangCode.EN_US).toLowerCase():
                 return 'useTimezone';
-            case Lang.getRef('types.trustedPreventsRole', LangCode.EN_US):
+            case Lang.getRef('types.trustedPreventsRole', LangCode.EN_US).toLowerCase():
                 return 'trustedPreventsRole';
-            case Lang.getRef('types.trustedPreventsMessage', LangCode.EN_US):
+            case Lang.getRef('types.trustedPreventsMessage', LangCode.EN_US).toLowerCase():
                 return 'trustedPreventsMessage';
-            case Lang.getRef('types.requireAllTrustedRoles', LangCode.EN_US):
+            case Lang.getRef('types.requireAllTrustedRoles', LangCode.EN_US).toLowerCase():
                 return 'requireAllTrustedRoles';
             default:
                 return null;
@@ -614,15 +620,15 @@ export class FormatUtils {
 
     public static extractNameFormatType(type: string): string {
         switch (type) {
-            case Lang.getRef('types.mention', LangCode.EN_US):
+            case Lang.getRef('types.mention', LangCode.EN_US).toLowerCase():
                 return 'mention';
-            case Lang.getRef('types.nickname', LangCode.EN_US):
+            case Lang.getRef('types.nickname', LangCode.EN_US).toLowerCase():
                 return 'nickname';
-            case Lang.getRef('types.username', LangCode.EN_US):
+            case Lang.getRef('types.username', LangCode.EN_US).toLowerCase():
                 return 'username';
-            case Lang.getRef('types.tag', LangCode.EN_US):
+            case Lang.getRef('types.tag', LangCode.EN_US).toLowerCase():
                 return 'tag';
-            case Lang.getRef('types.default', LangCode.EN_US):
+            case Lang.getRef('types.default', LangCode.EN_US).toLowerCase():
                 return 'default';
             default:
                 return null;
@@ -631,42 +637,44 @@ export class FormatUtils {
 
     public static extractMiscActionType(type: string): string {
         switch (type) {
-            case Lang.getRef('types.add', LangCode.EN_US):
+            case Lang.getRef('types.add', LangCode.EN_US).toLowerCase():
                 return 'add';
-            case Lang.getRef('types.remove', LangCode.EN_US):
+            case Lang.getRef('types.remove', LangCode.EN_US).toLowerCase():
                 return 'remove';
-            case Lang.getRef('types.clear', LangCode.EN_US):
+            case Lang.getRef('types.clear', LangCode.EN_US).toLowerCase():
                 return 'clear';
-            case Lang.getRef('types.list', LangCode.EN_US):
+            case Lang.getRef('types.list', LangCode.EN_US).toLowerCase():
                 return 'list';
-            case Lang.getRef('types.mention', LangCode.EN_US):
+            case Lang.getRef('types.mention', LangCode.EN_US).toLowerCase():
                 return 'mention';
-            case Lang.getRef('types.time', LangCode.EN_US):
+            case Lang.getRef('types.time', LangCode.EN_US).toLowerCase():
                 return 'time';
-            case Lang.getRef('types.useEmbed', LangCode.EN_US):
+            case Lang.getRef('types.useEmbed', LangCode.EN_US).toLowerCase():
                 return 'useEmbed';
-            case Lang.getRef('types.help', LangCode.EN_US):
+            case Lang.getRef('types.help', LangCode.EN_US).toLowerCase():
                 return 'help';
-            case Lang.getRef('types.setup', LangCode.EN_US):
+            case Lang.getRef('types.setup', LangCode.EN_US).toLowerCase():
                 return 'setup';
-            case Lang.getRef('types.anniversary', LangCode.EN_US):
+            case Lang.getRef('types.anniversary', LangCode.EN_US).toLowerCase():
                 return 'anniversary';
-            case Lang.getRef('types.message', LangCode.EN_US):
+            case Lang.getRef('types.message', LangCode.EN_US).toLowerCase():
                 return 'message';
-            case Lang.getRef('types.blacklist', LangCode.EN_US):
+            case Lang.getRef('types.blacklist', LangCode.EN_US).toLowerCase():
                 return 'blacklist';
-            case Lang.getRef('types.advanced', LangCode.EN_US):
+            case Lang.getRef('types.advanced', LangCode.EN_US).toLowerCase():
                 return 'advanced';
-            case Lang.getRef('types.premium', LangCode.EN_US):
+            case Lang.getRef('types.premium', LangCode.EN_US).toLowerCase():
                 return 'premium';
-            case Lang.getRef('types.test', LangCode.EN_US):
+            case Lang.getRef('types.test', LangCode.EN_US).toLowerCase():
                 return 'test';
-            case Lang.getRef('types.create', LangCode.EN_US):
+            case Lang.getRef('types.create', LangCode.EN_US).toLowerCase():
                 return 'create';
-            case Lang.getRef('types.user', LangCode.EN_US):
+            case Lang.getRef('types.user', LangCode.EN_US).toLowerCase():
                 return 'user';
-            case Lang.getRef('types.server', LangCode.EN_US):
+            case Lang.getRef('types.server', LangCode.EN_US).toLowerCase():
                 return 'server';
+            case Lang.getRef('types.trusted', LangCode.EN_US).toLowerCase():
+                return 'trusted';
             default:
                 return null;
         }
