@@ -98,4 +98,23 @@ export class PermissionUtils {
         }
         return true;
     }
+
+    public static hasSubCommandPermission(
+        member: GuildMember,
+        guildData: GuildData
+    ): boolean {
+        if (member.hasPermission(Permissions.FLAGS.MANAGE_GUILD)) return true;
+
+        if (guildData) {
+            // Check if member has a required role
+            let memberRoles = member.roles.cache.map(role => role.id);
+            if (
+                guildData.BirthdayMasterRoleDiscordId &&
+                memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
