@@ -351,6 +351,39 @@
                 "color": "{{REF:colors.success}}",
                 "timestamp": true
             },
+            "birthdayTest": {
+                "title": "Birthday Event Test",
+                "description": [
+                    "Below are the checks to ensure your settings are correct for the birthday event."
+                ],
+                "footer": {
+                    "text": "This is the info from your birthday event test."
+                },
+                "color": "{{REF:colors.success}}",
+                "timestamp": true
+            },
+            "memberAnniversaryTest": {
+                "title": "Member Anniversary Event Test",
+                "description": [
+                    "Below are the checks to ensure your settings are correct for the member anniversary event."
+                ],
+                "footer": {
+                    "text": "This is the info from your latest member anniversary event test."
+                },
+                "color": "{{REF:colors.success}}",
+                "timestamp": true
+            },
+            "serverAnniversaryTest": {
+                "title": "Birthday Event Test",
+                "description": [
+                    "Below are the checks to ensure your settings are correct for the server anniversary event."
+                ],
+                "footer": {
+                    "text": "This is the info from your latest server anniversary event test."
+                },
+                "color": "{{REF:colors.success}}",
+                "timestamp": true
+            },
             "trustedSetup": {
                 "title": "Trusted Setup - Completed",
                 "description": [
@@ -420,6 +453,13 @@
             "nextServerAnniversary": {
                 "description": "**{{SERVER}}**'s anniversary is on **{{DATE}}**. It will be turning **{{YEARS}}**!",
                 "color": "{{REF:colors.default}}"
+            },
+            "memberAnnversaryRolesClaimed": {
+                "description": "Successfully claimed all member anniversary roles avaliable to you/",
+                "footer": {
+                    "text": "If some roles were not given Birthday Bot may not have permission to give them."
+                },
+                "color": "{{REF:colors.success}}"
             },
             "addMessageExpired": {
                 "title": "Add Custom Message - Expired",
@@ -2689,7 +2729,20 @@
             "serverAnniversary": "Server Anniversary",
             "blacklist": "Blacklist",
             "blacklisted": "Blacklisted",
+            "correctlySet": "Correctly Set",
             "notSet": "Not Set",
+            "notSetOrIncorrect": "Not Set (or Incorrectly Set)",
+            "memberInBlacklist": "Member In Birthday Blacklist",
+            "inBlacklist": "In Blacklist",
+            "notInBlacklist": "Not In Blacklist",
+            "trustedPreventMsg": "Trusted Prevented Message",
+            "trustedPreventRole": "Trusted Prevented Role",
+            "didPreventMsg": "Didn't Prevent Message",
+            "didntPreventMsg": "Prevented Message",
+            "didPreventRole": "Didn't Prevent Role",
+            "didntPreventRole": "Prevented Role",
+            "canBeGiven": "Can be given",
+            "cantBeGivenPermIssue": "Can't be given (Permission Issue)",
             "unknownMember": "Unknown Member",
             "unknownChannel": "Unknown Channel",
             "unknownRole": "Unknown Role",
@@ -2792,7 +2845,8 @@
             "test": "test",
             "create": "create",
             "user": "user",
-            "server": "server"
+            "server": "server",
+            "claim": "claim"
         },
         "placeHolders": {
             "users": "<Users>",
