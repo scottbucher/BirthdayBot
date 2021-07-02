@@ -9,8 +9,8 @@ import {
     UserData,
 } from '../models/database';
 import { Guild, GuildMember, Role } from 'discord.js';
-import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 
+import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
 
@@ -242,41 +242,26 @@ export class CelebrationUtils {
         }
     }
 
-    public static async getMentionString(
-        guildData: GuildData,
-        guild: Guild,
-        type: string
-    ): Promise<string> {
+    public static getMentionString(guildData: GuildData, guild: Guild, type: string): string {
         // Find mentioned role
         let mentionString: string = '';
 
-        let messageSetting =
+        let mentionSetting =
             type === 'birthday'
                 ? guildData.BirthdayMentionSetting
                 : type === 'memberanniversary'
                 ? guildData.MemberAnniversaryMentionSetting
                 : guildData.ServerAnniversaryMentionSetting;
 
+        if (mentionSetting === '0') return null;
+
         if (
-            messageSetting.toLowerCase() === 'everyone' ||
-            messageSetting.toLowerCase() === 'here'
+            mentionSetting.toLowerCase() === 'everyone' ||
+            mentionSetting.toLowerCase() === 'here'
         ) {
-            mentionString = '@' + messageSetting;
-        }
-
-        let roleInput: Role;
-
-        // `
-        if (mentionString === '') {
-            try {
-                roleInput = await guild.roles.fetch(messageSetting);
-            } catch (error) {
-                // No mention role
-            }
-            if (roleInput) {
-                if (roleInput.guild.id !== guild.id) mentionString = '';
-                else mentionString = roleInput.toString();
-            }
+            mentionString = '@' + mentionSetting;
+        } else {
+            mentionString = `<@&${mentionSetting}>`;
         }
 
         return mentionString;

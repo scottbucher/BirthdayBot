@@ -16,12 +16,12 @@ import {
     UserRepo,
 } from '../services/database/repos';
 import { CustomMessage, UserData } from '../models/database';
-import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 import { Message, MessageEmbed, Role, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 
 let Config = require('../../config/config.json');
 
@@ -120,7 +120,7 @@ export class TestCommand implements Command {
         }
 
         let customMessages: CustomMessage[];
-        let mentionString = await CelebrationUtils.getMentionString(guildData, guild, type);
+        let mentionString = CelebrationUtils.getMentionString(guildData, guild, type);
 
         if (type === 'birthday') {
             // run the birthday test

@@ -153,7 +153,7 @@ export class MessageService {
                             // Get the mention string
                             let mentionString =
                                 filteredGuild.guildData.BirthdayMentionSetting !== 'none'
-                                    ? await CelebrationUtils.getMentionString(
+                                    ? CelebrationUtils.getMentionString(
                                           filteredGuild.guildData,
                                           guild,
                                           'birthday'
@@ -198,7 +198,7 @@ export class MessageService {
                     // Get the mention string
                     let mentionString =
                         filteredGuild.guildData.BirthdayMentionSetting !== 'none'
-                            ? await CelebrationUtils.getMentionString(
+                            ? CelebrationUtils.getMentionString(
                                   filteredGuild.guildData,
                                   guild,
                                   'birthday'
@@ -269,7 +269,7 @@ export class MessageService {
                         // Get the mention string
                         let mentionString =
                             filteredGuild.guildData.MemberAnniversaryMentionSetting !== 'none'
-                                ? await CelebrationUtils.getMentionString(
+                                ? CelebrationUtils.getMentionString(
                                       filteredGuild.guildData,
                                       guild,
                                       'memberanniversary'
@@ -349,7 +349,7 @@ export class MessageService {
                     // Get the mention string
                     let mentionString =
                         filteredGuild.guildData.ServerAnniversaryMentionSetting !== 'none'
-                            ? await CelebrationUtils.getMentionString(
+                            ? CelebrationUtils.getMentionString(
                                   filteredGuild.guildData,
                                   guild,
                                   'serveranniversary'
