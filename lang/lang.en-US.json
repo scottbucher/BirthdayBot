@@ -454,8 +454,8 @@
                 "description": "**{{SERVER}}**'s anniversary is on **{{DATE}}**. It will be turning **{{YEARS}}**!",
                 "color": "{{REF:colors.default}}"
             },
-            "memberAnnversaryRolesClaimed": {
-                "description": "Successfully claimed all member anniversary roles avaliable to you/",
+            "memberAnniversaryRolesClaimed": {
+                "description": "Successfully claimed all member anniversary roles available to you/",
                 "footer": {
                     "text": "If some roles were not given Birthday Bot may not have permission to give them."
                 },
@@ -951,6 +951,18 @@
                 "description": "You are out of birthday attempts!",
                 "color": "{{REF:colors.error}}"
             },
+            "noMemberAnniversaryRolesToClaim": {
+                "description": "You aren't eligible for any Member Anniversary Roles!",
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidUsageMemberAnniversaryRoleAdd": {
+                "title": "Invalid Usage!",
+                "description": [
+                    "Please provide a year and a role!",
+                    "Example Usage: `bday memberAnniversaryRole {{REF:types.add}} 5 @Role`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
             "needReactAndMessageHistoryPerms": {
                 "title": "Missing Permissions!",
                 "description": "I need permission to **Add Reactions** and **Read Message History** in this channel!",
@@ -1409,10 +1421,6 @@
             },
             "noTime": {
                 "description": "Please provide a time! (0-23)",
-                "color": "{{REF:colors.error}}"
-            },
-            "noYear": {
-                "description": "Please provide a year for the member anniversary role!",
                 "color": "{{REF:colors.error}}"
             },
             "invalidTime": {
@@ -1946,12 +1954,12 @@
                     "To set your birthday use `{{REF:bot.prefix}} set`.",
                     "",
                     "View the {{REF:bot.name}} [Documentation]({{REF:links.docs}}) or [FAQ]({{REF:docLinks.faq}}).",
-                    "For more suppot join the {{REF:bot.name}} support server [here]({{REF:links.support}})!"
+                    "For more support join the {{REF:bot.name}} support server [here]({{REF:links.support}})!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.joinSupport}}"
                 },
-                "timstamp": true
+                "timestamp": true
             },
             "stats": {
                 "fields": [
