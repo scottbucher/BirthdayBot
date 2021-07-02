@@ -5,16 +5,13 @@ import {
     MemberAnniversaryRoleRemoveSubCommand,
     MemberAnniversaryRoleClaimSubCommand,
 } from './memberAnniversaryRole';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MessageUtils, FormatUtils, PermissionUtils } from '../utils';
-import { GuildData } from '../models/database';
 import { GuildRepo } from '../services/database/repos';
-
-let Config = require('../../config/config.json');
 
 export class MemberAnniversaryRoleCommand implements Command {
     public name: string = 'memberanniversaryrole';
@@ -34,7 +31,7 @@ export class MemberAnniversaryRoleCommand implements Command {
         private memberAnniversaryRoleClearSubCommand: MemberAnniversaryRoleClearSubCommand,
         private memberAnniversaryRoleListSubCommand: MemberAnniversaryRoleListSubCommand,
         private memberAnniversaryRoleClaimSubCommand: MemberAnniversaryRoleClaimSubCommand
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],
@@ -55,7 +52,13 @@ export class MemberAnniversaryRoleCommand implements Command {
         let guildData = await this.guildRepo.getGuild(msg.guild.id);
 
         if (type === 'claim') {
-            this.memberAnniversaryRoleClaimSubCommand.execute(args, msg, channel, hasPremium, guildData);
+            this.memberAnniversaryRoleClaimSubCommand.execute(
+                args,
+                msg,
+                channel,
+                hasPremium,
+                guildData
+            );
             return;
         }
 

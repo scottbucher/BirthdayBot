@@ -1,4 +1,4 @@
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
 import { Lang, Logger, SubscriptionService } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
@@ -24,7 +24,7 @@ export class MessageHandler {
         private subscriptionService: SubscriptionService,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo
-    ) { }
+    ) {}
 
     public async process(msg: Message): Promise<void> {
         // Don't respond to partial messages, system messages, or bots
@@ -147,7 +147,9 @@ export class MessageHandler {
             // Get the user's last vote and check if the command requires a vote
             let userVote = await this.userRepo.getUserVote(msg.author.id);
             let voteTime = moment(userVote?.VoteTime);
-            let voteTimeAgo = userVote ? voteTime.fromNow() : Lang.getRef('terms.never', LangCode.EN_US);
+            let voteTimeAgo = userVote
+                ? voteTime.fromNow()
+                : Lang.getRef('terms.never', LangCode.EN_US);
 
             if (!userVote || voteTime.clone().add(Config.voting.hours, 'hours') < moment()) {
                 await MessageUtils.send(

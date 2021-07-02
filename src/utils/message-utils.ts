@@ -3,7 +3,6 @@ import {
     DiscordAPIError,
     EmojiResolvable,
     Message,
-    MessageEmbed,
     MessageReaction,
     NewsChannel,
     StringResolvable,
@@ -13,8 +12,6 @@ import {
 
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-
-let Config = require('../../config/config.json');
 
 export class MessageUtils {
     public static async send(

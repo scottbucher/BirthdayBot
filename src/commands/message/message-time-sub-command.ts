@@ -6,7 +6,7 @@ import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
 export class MessageTimeSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // bday message time <type> <0-23>
@@ -52,8 +52,8 @@ export class MessageTimeSubCommand {
         type === 'birthday'
             ? await this.guildRepo.updateBirthdayMessageTime(msg.guild.id, messageTime)
             : type === 'memberanniversary'
-                ? await this.guildRepo.updateMemberAnniversaryMessageTime(msg.guild.id, messageTime)
-                : await this.guildRepo.updateServerAnniversaryMessageTime(msg.guild.id, messageTime);
+            ? await this.guildRepo.updateMemberAnniversaryMessageTime(msg.guild.id, messageTime)
+            : await this.guildRepo.updateServerAnniversaryMessageTime(msg.guild.id, messageTime);
         await MessageUtils.send(
             channel,
             Lang.getEmbed('result.setMessageTime', LangCode.EN_US, {

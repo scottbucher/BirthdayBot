@@ -1,12 +1,10 @@
 import { GuildUtils, MathUtils, MessageUtils, ParseUtils } from '../utils';
-import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
+import { Message, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { UserRepo } from '../services/database/repos';
-
-let Config = require('../../config/config.json');
 
 export class SetAttemptsCommand implements Command {
     public name: string = 'setattempts';

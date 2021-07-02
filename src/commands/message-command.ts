@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -13,8 +13,6 @@ import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MessageUtils, FormatUtils } from '../utils';
-
-let Config = require('../../config/config.json');
 
 export class MessageCommand implements Command {
     public name: string = 'message';
@@ -35,7 +33,7 @@ export class MessageCommand implements Command {
         private messageTimeSubCommand: MessageTimeSubCommand,
         private messageMentionSubCommand: MessageMentionSubCommand,
         private messageTestSubCommand: MessageTestSubCommand
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],

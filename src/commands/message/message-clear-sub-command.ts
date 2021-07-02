@@ -5,7 +5,7 @@ import {
     MessageFilter,
 } from 'discord.js-collector-utils';
 import { FormatUtils, MessageUtils } from '../../utils';
-import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
+import { Message, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
 import { Lang } from '../../services';

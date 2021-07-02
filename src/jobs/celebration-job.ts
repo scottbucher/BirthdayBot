@@ -1,7 +1,7 @@
 import { CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import { CombinedRepo, UserRepo } from '../services/database/repos';
-import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
+import { Logger, MessageService, RoleService } from '../services';
 
 import { Job } from './job';
 import { UserData } from '../models/database';
@@ -20,7 +20,6 @@ export class CelebrationJob implements Job {
         private client: Client,
         private userRepo: UserRepo,
         private combinedRepo: CombinedRepo,
-        private subscriptionService: SubscriptionService,
         private messageService: MessageService,
         private roleService: RoleService
     ) {}
@@ -141,7 +140,7 @@ export class CelebrationJob implements Job {
                 .filter(
                     member =>
                         CelebrationUtils.isBirthdayToday(
-                            birthdayUserData.find(data => data.UserDiscordId == member.id),
+                            birthdayUserData.find(data => data.UserDiscordId === member.id),
                             guildData
                         ) && !blacklist.map(data => data.UserDiscordId).includes(member.id)
                 )
@@ -151,7 +150,7 @@ export class CelebrationJob implements Job {
             birthdayMessageGuildMembers = birthdayMessageGuildMembers.concat(
                 membersWithBirthdayToday.filter(member =>
                     CelebrationUtils.needsBirthdayMessage(
-                        birthdayUserData.find(data => data.UserDiscordId == member.id),
+                        birthdayUserData.find(data => data.UserDiscordId === member.id),
                         guildData
                     )
                 )
@@ -163,7 +162,7 @@ export class CelebrationJob implements Job {
             addBirthdayRoleGuildMembers = addBirthdayRoleGuildMembers.concat(
                 membersWithBirthdayToday.filter(member =>
                     CelebrationUtils.needsBirthdayRoleAdded(
-                        birthdayUserData.find(data => data.UserDiscordId == member.id),
+                        birthdayUserData.find(data => data.UserDiscordId === member.id),
                         guildData
                     )
                 )
@@ -175,7 +174,7 @@ export class CelebrationJob implements Job {
             removeBirthdayRoleGuildMembers = removeBirthdayRoleGuildMembers.concat(
                 membersWithBirthdayToday.filter(member =>
                     CelebrationUtils.needsBirthdayRoleRemoved(
-                        birthdayUserData.find(data => data.UserDiscordId == member.id),
+                        birthdayUserData.find(data => data.UserDiscordId === member.id),
                         guildData
                     )
                 )

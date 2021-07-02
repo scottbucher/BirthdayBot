@@ -4,7 +4,7 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { DMChannel, Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
+import { DMChannel, Message, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
 import { Lang } from '../services';

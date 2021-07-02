@@ -313,14 +313,7 @@ async function start(): Promise<void> {
     let guildLeaveHandler = new GuildLeaveHandler();
 
     let jobService = new JobService([
-        new CelebrationJob(
-            client,
-            userRepo,
-            combinedRepo,
-            subscriptionService,
-            messageService,
-            roleService
-        ),
+        new CelebrationJob(client, userRepo, combinedRepo, messageService, roleService),
     ]);
 
     let bot = new Bot(

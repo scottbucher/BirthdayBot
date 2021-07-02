@@ -1,7 +1,6 @@
 import { ArrayUtils, ColorUtils, FormatUtils, TimeUtils } from '.';
 import {
     CustomMessage,
-    CustomMessages,
     GuildCelebrationData,
     GuildData,
     RawGuildCelebrationData,
@@ -9,11 +8,8 @@ import {
     TrustedRole,
     UserData,
 } from '../models/database';
-import { Guild, GuildMember, Role, User } from 'discord.js';
-import {
-    MemberAnniversaryRole,
-    MemberAnniversaryRoles,
-} from '../models/database/member-anniversary-role-models';
+import { Guild, GuildMember, Role } from 'discord.js';
+import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
@@ -342,9 +338,9 @@ export class CelebrationUtils {
         // Default this to true if there are no trusted roles
         // If there are trusted roles and trusted DOESN'T prevent Role/Message (the trusted setting passed in) then set it to true
         let passTrustedCheck =
-            !trustedRoles || trustedRoles.length == 0 ? true : trustedSetting ? false : true;
+            !trustedRoles || trustedRoles.length === 0 ? true : trustedSetting ? false : true;
 
-        //if passTrustedCheck is already true we don't have to check for trusted role(s)
+        // if passTrustedCheck is already true we don't have to check for trusted role(s)
         if (!passTrustedCheck) {
             trustedRoles = hasPremium ? trustedRoles : [trustedRoles[0]];
             if (requireAllTrustedRoles) {

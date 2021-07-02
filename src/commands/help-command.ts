@@ -1,11 +1,9 @@
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MessageUtils, FormatUtils } from '../utils';
-
-let Config = require('../../config/config.json'); // Possible support for server-specific prefixes?
 
 export class HelpCommand implements Command {
     public name: string = 'help';

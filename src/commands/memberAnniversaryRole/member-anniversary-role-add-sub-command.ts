@@ -18,7 +18,7 @@ export class MemberAnniversaryRoleAddSubCommand {
         channel: TextChannel,
         hasPremium: boolean
     ): Promise<void> {
-        //bday mar add year role
+        // bday mar add year role
         if (!hasPremium) {
             MessageUtils.send(
                 channel,

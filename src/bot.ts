@@ -10,8 +10,6 @@ import {
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import { JobService, Logger } from './services';
 
-import { Job } from './jobs';
-
 let Config = require('../config/config.json');
 let Debug = require('../config/debug.json');
 let Logs = require('../lang/logs.json');

@@ -9,11 +9,11 @@ export class Lang {
     );
 
     public static getNotImplementedEmbed(): MessageEmbed {
-        return new MessageEmbed().setDescription("This lang embed hasn't been implemented.");
+        return new MessageEmbed().setDescription(`This lang embed hasn't been implemented.`);
     }
 
     public static getNotImplementedRef(): string {
-        return "This lang embed hasn't been implemented.";
+        return `This lang embed hasn't been implemented.`;
     }
 
     public static getEmbed(

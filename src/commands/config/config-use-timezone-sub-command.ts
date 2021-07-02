@@ -8,7 +8,7 @@ import { MessageUtils, FormatUtils } from '../../utils';
 const errorEmbed = Lang.getEmbed('validation.invalidUseTimezoneAction', LangCode.EN_US);
 
 export class ConfigUseTimezoneSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {

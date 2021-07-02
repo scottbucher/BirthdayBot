@@ -1,4 +1,4 @@
-import { ActivityType, Client, ClientOptions, MessageEmbed, Presence } from 'discord.js';
+import { ActivityType, Client, ClientOptions, Presence } from 'discord.js';
 import { DiscordService, Logger, Lang } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 import { PlanName, SubscriptionStatusName } from '../models/subscription-models';
@@ -6,7 +6,6 @@ import { PlanName, SubscriptionStatusName } from '../models/subscription-models'
 import { GuildRepo } from '../services/database/repos';
 import { LangCode } from '../models/enums';
 
-let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 
 export class CustomClient extends Client {

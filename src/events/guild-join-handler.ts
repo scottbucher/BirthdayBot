@@ -1,4 +1,4 @@
-import { Guild, MessageEmbed, Permissions } from 'discord.js';
+import { Guild, Permissions } from 'discord.js';
 
 import { EventHandler } from './event-handler';
 import { Logger, Lang } from '../services';
@@ -6,8 +6,6 @@ import { MessageUtils } from '../utils';
 import { LangCode } from '../models/enums';
 
 let Logs = require('../../lang/logs.json');
-let Config = require('../../config/config.json');
-
 export class GuildJoinHandler implements EventHandler {
     public async process(guild: Guild): Promise<void> {
         Logger.info(

@@ -1,7 +1,6 @@
 import {
     ActionUtils,
     CelebrationUtils,
-    ColorUtils,
     FormatUtils,
     GuildUtils,
     MessageUtils,
@@ -16,18 +15,13 @@ import {
     TrustedRoleRepo,
     UserRepo,
 } from '../services/database/repos';
-import { CustomMessage, CustomMessages, UserData } from '../models/database';
-import {
-    MemberAnniversaryRole,
-    MemberAnniversaryRoles,
-} from '../models/database/member-anniversary-role-models';
+import { CustomMessage, UserData } from '../models/database';
+import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 import { Message, MessageEmbed, Role, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { isNumber } from 'class-validator';
-import moment from 'moment';
 
 let Config = require('../../config/config.json');
 
@@ -57,7 +51,7 @@ export class TestCommand implements Command {
         channel: TextChannel,
         hasPremium: boolean
     ): Promise<void> {
-        //bday test <type> [user] [year]
+        // bday test <type> [user] [year]
         let guild = msg.guild;
 
         if (args.length < 3) {
@@ -124,8 +118,6 @@ export class TestCommand implements Command {
         } catch (error) {
             // No birthday channel
         }
-
-        let channelCheck: boolean = messageChannel && PermissionUtils.canSend(messageChannel);
 
         let customMessages: CustomMessage[];
         let mentionString = await CelebrationUtils.getMentionString(guildData, guild, type);
@@ -334,7 +326,6 @@ export class TestCommand implements Command {
             let message = Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US);
             let color = Config.colors.default;
             let useEmbed = true;
-            let giveRole: Role;
             let guildMember = guild.members.resolve(target);
 
             let timezoneCheck = guildData?.DefaultTimezone !== '0';

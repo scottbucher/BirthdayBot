@@ -99,10 +99,7 @@ export class PermissionUtils {
         return true;
     }
 
-    public static hasSubCommandPermission(
-        member: GuildMember,
-        guildData: GuildData
-    ): boolean {
+    public static hasSubCommandPermission(member: GuildMember, guildData: GuildData): boolean {
         if (member.hasPermission(Permissions.FLAGS.MANAGE_GUILD)) return true;
 
         if (guildData) {
