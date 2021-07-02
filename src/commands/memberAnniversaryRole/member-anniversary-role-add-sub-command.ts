@@ -7,7 +7,7 @@ import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = Lang.getEmbed('validation.noYear', LangCode.EN_US);
+const errorEmbed = Lang.getEmbed('validation.invalidUsageMemberAnniversaryRoleAdd', LangCode.EN_US);
 
 export class MemberAnniversaryRoleAddSubCommand {
     constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
@@ -18,6 +18,7 @@ export class MemberAnniversaryRoleAddSubCommand {
         channel: TextChannel,
         hasPremium: boolean
     ): Promise<void> {
+        //bday mar add year role
         if (!hasPremium) {
             MessageUtils.send(
                 channel,
@@ -25,7 +26,7 @@ export class MemberAnniversaryRoleAddSubCommand {
             );
             return;
         }
-        if (args.length === 3) {
+        if (args.length < 5) {
             await MessageUtils.send(channel, errorEmbed);
             return;
         }
