@@ -1791,11 +1791,11 @@
                     },
                     {
                         "name": "Links",
-                        "value": ["{{REF:links.supportEmbed}}", "{{REF:links.inviteEmbed}}"]
+                        "value": ["{{REF:links.support}}", "{{REF:links.invite}}"]
                     },
                     {
                         "name": "Created With",
-                        "value": "{{REF:links.templateEmbed}}"
+                        "value": "{{REF:links.template}}"
                     }
                 ]
             },
@@ -2157,10 +2157,12 @@
                     "**{{REF:bot.prefix}} faq** - View the frequently asked questions.",
                     "**{{REF:bot.prefix}} vote** - Vote for {{REF:bot.name}}!",
                     "**{{REF:bot.prefix}} purge** - Remove your birthday data.",
-                    "**{{REF:bot.prefix}} help {{REF:types.anniversary}}** - Help for server setup.",
+                    "**{{REF:bot.prefix}} help {{REF:types.setup}}** - Help for server setup.",
+                    "**{{REF:bot.prefix}} help {{REF:types.anniversary}}** - Help for the anniversary system.",
                     "**{{REF:bot.prefix}} help {{REF:types.message}}** - Help for the birthday message settings.",
                     "**{{REF:bot.prefix}} help {{REF:types.trusted}}** - Help for the trusted system.",
-                    "**{{REF:bot.prefix}} help {{REF:types.blacklist}}** - Help for permissions.",
+                    "**{{REF:bot.prefix}} help {{REF:types.blacklist}}** - Help for the birthday blacklist system.",
+                    "**{{REF:bot.prefix}} premium** - See information about {{REF:bot.name}} Premium.",
                     "**{{REF:bot.prefix}} settings [{{REF:types.message}}/{{REF:types.advanced}}]**** - View server's settings.",
                     "**{{REF:bot.prefix}} test [user]**** - Test the birthday event.",
                     "",
@@ -2182,7 +2184,7 @@
                     "**{{REF:bot.prefix}} setup {{REF:types.trusted}}** - Interactive guide for trusted system settings setup.",
                     "**{{REF:bot.prefix}} setup {{REF:types.anniversary}}** - Interactive guide anniversary settings setup.",
                     "",
-                    "**{{REF:bot.prefix}} config {{REF:types.channel}} <{{REF:types.create}}/{{REF:types.clear}}/#channel> <type>** - Set a channel type.",
+                    "**{{REF:bot.prefix}} config {{REF:types.channel}} <type> <{{REF:types.create}}/{{REF:types.clear}}/#channel> <type>** - Set a channel type.",
                     "**{{REF:bot.prefix}} config {{REF:types.birthdayRole}} <{{REF:types.create}}/{{REF:types.clear}}/#channel>** - Set the birthday role.",
                     "**{{REF:bot.prefix}} config {{REF:types.birthdayMasterRole}} <{{REF:types.create}}/{{REF:types.clear}}/#channel>** - Set the birthday master role.",
                     "**{{REF:bot.prefix}} config {{REF:types.timezone}} <timezone> - Set the default server timezone.",
