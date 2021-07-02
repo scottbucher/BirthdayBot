@@ -28,10 +28,6 @@ export class MemberAnniversaryRoleClaimSubCommand {
             );
             return;
         }
-        if (args.length === 3) {
-            await MessageUtils.send(channel, errorEmbed);
-            return;
-        }
 
         let memberAnniversaryRoleData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(msg.guild.id);
 
