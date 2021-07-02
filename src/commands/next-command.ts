@@ -20,7 +20,7 @@ export class NextCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo, private guildRepo: GuildRepo) {}
+    constructor(private userRepo: UserRepo, private guildRepo: GuildRepo) { }
 
     public async execute(
         args: string[],
@@ -157,6 +157,10 @@ export class NextCommand implements Command {
                 let yearsOldRoundedUp = now.year() - serverCreatedAt.year();
 
                 // If the diff is negative that date has already passed so we need to increase the year (this is how we round up)
+                // This is confusing but we are looking for the NEXT year, so if this isn't met we technically already have the next year
+                // For instance, if a server was created on August 28th 2001, and we are checking the next anniversary on June 28th 2021,
+                // Subtracting those years would give you 20 years, but the server is still only 19, so 20 is correct for the upcoming year
+                // Likewise if it was September 1st when checking, it would be 20 years old but we need to increase it since the server is TURNING 21 next
                 if (
                     moment(serverCreatedAt.format('MM-DD'), 'MM-DD').diff(
                         moment(now.format('MM-DD'), 'MM-DD'),

@@ -79,8 +79,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
         );
         let birthday = moment(userData.Birthday);
 
@@ -106,8 +106,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
         );
         let currentHour = currentDate.hour();
         return currentHour === 0;
@@ -126,8 +126,8 @@ export class CelebrationUtils {
                 guildData.DefaultTimezone === '0'
                     ? userData.TimeZone
                     : guildData.UseTimezone !== 'server'
-                    ? userData.TimeZone
-                    : guildData.DefaultTimezone
+                        ? userData.TimeZone
+                        : guildData.DefaultTimezone
             )
             .subtract(1, 'days');
         let currentHour = currentDate.hour();
@@ -146,8 +146,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
         );
         let currentHour = currentDate.hour();
         return currentHour === guildData.BirthdayMessageTime;
@@ -176,8 +176,8 @@ export class CelebrationUtils {
         return currentDateFormatted !== anniversaryFormatted
             ? false
             : currentDate.hour() !== guildData.MemberAnniversaryMessageTime
-            ? false
-            : true;
+                ? false
+                : true;
     }
 
     public static isServerAnniversaryMessage(guild: Guild, guildData: GuildData): boolean {
@@ -200,8 +200,8 @@ export class CelebrationUtils {
         return currentDateFormatted !== anniversaryFormatted
             ? false
             : currentDate.hour() !== guildData.ServerAnniversaryMessageTime
-            ? false
-            : true;
+                ? false
+                : true;
     }
 
     public static getMemberYears(guildMember: GuildMember, guildData: GuildData): number {
@@ -248,8 +248,8 @@ export class CelebrationUtils {
             type === 'birthday'
                 ? guildData.BirthdayMentionSetting
                 : type === 'memberanniversary'
-                ? guildData.MemberAnniversaryMentionSetting
-                : guildData.ServerAnniversaryMentionSetting;
+                    ? guildData.MemberAnniversaryMentionSetting
+                    : guildData.ServerAnniversaryMentionSetting;
 
         if (
             messageSetting.toLowerCase() === 'everyone' ||
@@ -267,8 +267,10 @@ export class CelebrationUtils {
             } catch (error) {
                 // No mention role
             }
-            if (roleInput.guild.id !== guild.id) mentionString = '';
-            else mentionString = roleInput.toString();
+            if (roleInput) {
+                if (roleInput.guild.id !== guild.id) mentionString = '';
+                else mentionString = roleInput.toString();
+            }
         }
 
         return mentionString;
@@ -281,10 +283,12 @@ export class CelebrationUtils {
         userList: string,
         year: number
     ): string {
-        message = message.split('<Server>').join(guild.name);
+        if (message) {
+            message = message.split('<Server>').join(guild.name);
 
-        if (type !== 'serveranniversary') message = message.split('<Users>').join(userList);
-        if (type !== 'birthday') message = message.split('<Year>').join(year.toString());
+            if (type !== 'serveranniversary') message = message.split('<Users>').join(userList);
+            if (type !== 'birthday') message = message.split('<Year>').join(year.toString());
+        }
 
         return message;
     }
@@ -324,10 +328,9 @@ export class CelebrationUtils {
         let passTrustedCheck =
             !trustedRoles || trustedRoles.length == 0 ? true : trustedSetting ? false : true;
 
-        trustedRoles = hasPremium ? trustedRoles : [trustedRoles[0]];
-
         //if passTrustedCheck is already true we don't have to check for trusted role(s)
         if (!passTrustedCheck) {
+            trustedRoles = hasPremium ? trustedRoles : [trustedRoles[0]];
             if (requireAllTrustedRoles) {
                 let hasAllTrusted = true;
                 for (let role of trustedRoles) {
