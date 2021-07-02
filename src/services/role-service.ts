@@ -95,13 +95,20 @@ export class RoleService {
                             filteredGuild.guildData.TrustedPreventsRole,
                             hasPremium
                         )
-                    )
-                        await ActionUtils.giveRole(addBirthdayMember, birthdayRole);
+                    ) {
+                        // Don't send an api request if they already have the role
+                        if (!addBirthdayMember.roles.cache.has(birthdayRole.id)) {
+                            await ActionUtils.giveRole(addBirthdayMember, birthdayRole, 100);
+                        }
+                    }
                 }
 
                 // Take birthday role regardless of trusted role?
                 for (let removeBirthdayMember of removeBirthdayGuildMembers) {
-                    await ActionUtils.removeRole(removeBirthdayMember, birthdayRole);
+                    // Don't send an api request if they don't have the role
+                    if (removeBirthdayMember.roles.cache.has(birthdayRole.id)) {
+                        await ActionUtils.removeRole(removeBirthdayMember, birthdayRole, 100);
+                    }
                 }
             }
 
@@ -122,7 +129,10 @@ export class RoleService {
                         );
 
                         if (roleData.Year === memberYears) {
-                            await ActionUtils.giveRole(addAnniversaryRoleMember, role);
+                            // Don't send an api request if they already have the role
+                            if (!addAnniversaryRoleMember.roles.cache.has(role.id)) {
+                                await ActionUtils.giveRole(addAnniversaryRoleMember, role);
+                            }
                         }
                     }
                 }
