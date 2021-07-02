@@ -9,7 +9,7 @@ import moment from 'moment';
 let Config = require('../../../config/config.json');
 
 export class MessageTestSubCommand {
-    constructor(private guildRepo: GuildRepo, private customMessageRepo: CustomMessageRepo) { }
+    constructor(private guildRepo: GuildRepo, private customMessageRepo: CustomMessageRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // bday message test <type> <position> [user count]

@@ -6,13 +6,11 @@ import { LangCode } from '../../models/enums';
 import { MessageUtils, FormatUtils } from '../../utils';
 
 export class ConfigNameFormatSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let setting = FormatUtils.extractNameFormatType(args[3]?.toLowerCase())?.toLowerCase();
-        if (
-            !setting
-        ) {
+        if (!setting) {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.invalidNameFormat', LangCode.EN_US, {
@@ -37,10 +35,10 @@ export class ConfigNameFormatSubCommand {
                     setting === 'mention'
                         ? msg.author.toString()
                         : setting === 'nickname'
-                            ? msg.member.displayName
-                            : setting === 'username'
-                                ? msg.author.username
-                                : `${msg.author.username}#${msg.author.discriminator}`,
+                        ? msg.member.displayName
+                        : setting === 'username'
+                        ? msg.author.username
+                        : `${msg.author.username}#${msg.author.discriminator}`,
             })
         );
     }
