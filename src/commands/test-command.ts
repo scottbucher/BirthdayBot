@@ -49,7 +49,7 @@ export class TestCommand implements Command {
         private trustedRoleRepo: TrustedRoleRepo,
         private blacklistRepo: BlacklistRepo,
         private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],
@@ -118,8 +118,8 @@ export class TestCommand implements Command {
                 type === 'birthday'
                     ? guildData.BirthdayChannelDiscordId
                     : type === 'memberanniversary'
-                        ? guildData.MemberAnniversaryChannelDiscordId
-                        : guildData.ServerAnniversaryChannelDiscordId
+                    ? guildData.MemberAnniversaryChannelDiscordId
+                    : guildData.ServerAnniversaryChannelDiscordId
             ) as TextChannel;
         } catch (error) {
             // No birthday channel
@@ -218,12 +218,8 @@ export class TestCommand implements Command {
                             hasPremium
                         );
                         // Find the color of the embed
-                        color = customMessage?.Color === '0' ? Config.colors.default : null;
+                        color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
 
-                        color = !color
-                            ? '#' + ColorUtils.findHex(customMessage?.Color) ??
-                            Config.colors.default
-                            : Config.colors.default;
                         useEmbed = customMessage.Embed ? true : false;
 
                         message = customMessage.Message;
@@ -255,15 +251,27 @@ export class TestCommand implements Command {
                 .addField(
                     Lang.getRef('terms.birthdayChannel', LangCode.EN_US),
                     messageCheck
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.correctlySet', LangCode.EN_US)}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.notSetOrIncorrect', LangCode.EN_US)}`,
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.correctlySet',
+                              LangCode.EN_US
+                          )}`
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'terms.notSetOrIncorrect',
+                              LangCode.EN_US
+                          )}`,
                     true
                 )
                 .addField(
                     Lang.getRef('terms.birthdayRole', LangCode.EN_US),
                     roleCheck
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.correctlySet', LangCode.EN_US)}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.notSetOrIncorrect', LangCode.EN_US)}`,
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.correctlySet',
+                              LangCode.EN_US
+                          )}`
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'terms.notSetOrIncorrect',
+                              LangCode.EN_US
+                          )}`,
                     true
                 );
 
@@ -271,8 +279,14 @@ export class TestCommand implements Command {
                 testingEmbed.addField(
                     Lang.getRef('terms.memberInBlacklist', LangCode.EN_US),
                     trustedCheckMessage
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.notInBlacklist', LangCode.EN_US)}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.inBlacklist', LangCode.EN_US)}`,
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.notInBlacklist',
+                              LangCode.EN_US
+                          )}`
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'terms.inBlacklist',
+                              LangCode.EN_US
+                          )}`,
                     true
                 );
             }
@@ -281,15 +295,27 @@ export class TestCommand implements Command {
                 testingEmbed.addField(
                     Lang.getRef('terms.trustedPreventMsg', LangCode.EN_US),
                     trustedCheckMessage
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.didntPreventMsg', LangCode.EN_US)}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.didPreventMsg', LangCode.EN_US)}`,
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.didntPreventMsg',
+                              LangCode.EN_US
+                          )}`
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'terms.didPreventMsg',
+                              LangCode.EN_US
+                          )}`,
                     true
                 );
                 testingEmbed.addField(
                     Lang.getRef('terms.trustedPreventRole', LangCode.EN_US),
                     trustedCheckRole
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.didntPreventRole', LangCode.EN_US)}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.didPreventRole', LangCode.EN_US)}`,
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.didntPreventRole',
+                              LangCode.EN_US
+                          )}`
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'terms.didPreventRole',
+                              LangCode.EN_US
+                          )}`,
                     true
                 );
             }
@@ -311,7 +337,7 @@ export class TestCommand implements Command {
             let giveRole: Role;
             let guildMember = guild.members.resolve(target);
 
-            let timezoneCheck = guildData?.DefaultTimezone;
+            let timezoneCheck = guildData?.DefaultTimezone !== '0';
 
             // Only premium guilds get anniversary roles
             if (hasPremium) {
@@ -374,11 +400,7 @@ export class TestCommand implements Command {
                     // Get our custom message
                     let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
                     // Find the color of the embed
-                    color = customMessage?.Color === '0' ? Config.colors.default : null;
-
-                    color = !color
-                        ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
-                        : Config.colors.default;
+                    color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
                     useEmbed = customMessage.Embed ? true : false;
 
                     message = customMessage.Message;
@@ -407,15 +429,24 @@ export class TestCommand implements Command {
                 .addField(
                     Lang.getRef('terms.defaultTimezone', LangCode.EN_US),
                     timezoneCheck
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.correctlySet', LangCode.EN_US)}`
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.correctlySet',
+                              LangCode.EN_US
+                          )}`
                         : `${Config.emotes.deny} ${Lang.getRef('terms.notSet', LangCode.EN_US)}`,
                     true
                 )
                 .addField(
                     Lang.getRef('terms.memberAnniversaryChannel', LangCode.EN_US),
                     messageCheck
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.correctlySet', LangCode.EN_US)}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.notSetOrIncorrect', LangCode.EN_US)}`,
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.correctlySet',
+                              LangCode.EN_US
+                          )}`
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'terms.notSetOrIncorrect',
+                              LangCode.EN_US
+                          )}`,
                     true
                 );
 
@@ -423,8 +454,14 @@ export class TestCommand implements Command {
                 testingEmbed.addField(
                     Lang.getRef('terms.memberAnniversaryRoles', LangCode.EN_US),
                     memberAnniversaryRolesCheck
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.canBeGiven', LangCode.EN_US)}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.cantBeGivenPermIssue', LangCode.EN_US)}`,
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.canBeGiven',
+                              LangCode.EN_US
+                          )}`
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'terms.cantBeGivenPermIssue',
+                              LangCode.EN_US
+                          )}`,
                     true
                 );
             }
@@ -441,7 +478,7 @@ export class TestCommand implements Command {
             let color = Config.colors.default;
             let useEmbed = true;
 
-            let timezoneCheck = guildData?.DefaultTimezone;
+            let timezoneCheck = guildData?.DefaultTimezone !== '0';
 
             customMessages = (
                 await this.customMessageRepo.getCustomMessages(guild.id, 'serveranniversary')
@@ -452,11 +489,7 @@ export class TestCommand implements Command {
                     // Get our custom message
                     let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
                     // Find the color of the embed
-                    color = customMessage?.Color === '0' ? Config.colors.default : null;
-
-                    color = !color
-                        ? '#' + ColorUtils.findHex(customMessage?.Color) ?? Config.colors.default
-                        : Config.colors.default;
+                    color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
                     useEmbed = customMessage.Embed ? true : false;
 
                     message = customMessage.Message;
@@ -485,15 +518,24 @@ export class TestCommand implements Command {
                 .addField(
                     Lang.getRef('terms.defaultTimezone', LangCode.EN_US),
                     timezoneCheck
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.correctlySet', LangCode.EN_US)}`
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.correctlySet',
+                              LangCode.EN_US
+                          )}`
                         : `${Config.emotes.deny} ${Lang.getRef('terms.notSet', LangCode.EN_US)}`,
                     true
                 )
                 .addField(
                     Lang.getRef('terms.serverAnniversaryChannel', LangCode.EN_US),
                     timezoneCheck
-                        ? `${Config.emotes.confirm} ${Lang.getRef('terms.correctlySet', LangCode.EN_US)}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.notSetOrIncorrect', LangCode.EN_US)}`,
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'terms.correctlySet',
+                              LangCode.EN_US
+                          )}`
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'terms.notSetOrIncorrect',
+                              LangCode.EN_US
+                          )}`,
                     true
                 );
             await MessageUtils.send(channel, testingEmbed);

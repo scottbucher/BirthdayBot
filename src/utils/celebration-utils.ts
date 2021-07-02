@@ -1,4 +1,4 @@
-import { ArrayUtils, FormatUtils, TimeUtils } from '.';
+import { ArrayUtils, ColorUtils, FormatUtils, TimeUtils } from '.';
 import {
     CustomMessage,
     CustomMessages,
@@ -23,6 +23,16 @@ let Debug = require('../../config/debug.json');
 let Config = require('../../config/config.json');
 
 export class CelebrationUtils {
+    public static getMessageColor(message: CustomMessage, hasPremium: boolean): any {
+        let color = message.Color === '0' || !hasPremium ? Config.colors.default : null;
+
+        color = !color
+            ? '#' + ColorUtils.findHex(message?.Color) ?? Config.colors.default
+            : Config.colors.default;
+
+        return color;
+    }
+
     public static getNextUsers(userDatas: UserData[], timeZone: string): UserData[] {
         let userTime = timeZone ? moment.tz(timeZone) : moment.tz();
 
@@ -228,7 +238,7 @@ export class CelebrationUtils {
                 // Only choose from the first 10
                 return ArrayUtils.chooseRandom(
                     messages.slice(0, Config.validation.message.maxCount.birthday.free)
-                ).Message;
+                );
             }
         } else {
             // Return null
@@ -284,10 +294,16 @@ export class CelebrationUtils {
         year: number
     ): string {
         if (message) {
-            message = message.split('<Server>').join(guild.name);
+            message = message.split('<Server>').join(guild.name).split('@Server').join(guild.name);
 
-            if (type !== 'serveranniversary') message = message.split('<Users>').join(userList);
-            if (type !== 'birthday') message = message.split('<Year>').join(year.toString());
+            if (type !== 'serveranniversary')
+                message = message.split('<Users>').join(userList).split('@Users').join(userList);
+            if (type !== 'birthday')
+                message = message
+                    .split('<Year>')
+                    .join(year.toString())
+                    .split('@Year')
+                    .join(year.toString());
         }
 
         return message;

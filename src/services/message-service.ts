@@ -153,7 +153,7 @@ export class MessageService {
                             // Get the mention string
                             let mentionString =
                                 filteredGuild.guildData.BirthdayMentionSetting !== 'none'
-                                    ? CelebrationUtils.getMentionString(
+                                    ? await CelebrationUtils.getMentionString(
                                           filteredGuild.guildData,
                                           guild,
                                           'birthday'
@@ -176,15 +176,10 @@ export class MessageService {
                             );
 
                             // Find the color of the embed
-                            color = customMessage.Color === '0' ? Config.colors.default : null;
-
-                            color = !color
-                                ? '#' + ColorUtils.findHex(customMessage.Color) ??
-                                  Config.colors.default
-                                : Config.colors.default;
+                            color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
 
                             // Send our message(s)
-                            if (mentionString !== '')
+                            if (mentionString && mentionString !== '')
                                 await MessageUtils.send(birthdayChannel, mentionString);
 
                             let embed = new MessageEmbed().setDescription(message).setColor(color);
@@ -203,7 +198,7 @@ export class MessageService {
                     // Get the mention string
                     let mentionString =
                         filteredGuild.guildData.BirthdayMentionSetting !== 'none'
-                            ? CelebrationUtils.getMentionString(
+                            ? await CelebrationUtils.getMentionString(
                                   filteredGuild.guildData,
                                   guild,
                                   'birthday'
@@ -234,17 +229,12 @@ export class MessageService {
                         );
 
                         // Find the color of the embed
-                        color = customMessage?.Color === '0' ? Config.colors.default : null;
-
-                        color = !color
-                            ? '#' + ColorUtils.findHex(customMessage?.Color) ??
-                              Config.colors.default
-                            : Config.colors.default;
+                        color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
                         useEmbed = customMessage.Embed ? true : false;
                     }
 
                     // Send our message(s)
-                    if (mentionString !== '')
+                    if (mentionString && mentionString !== '')
                         await MessageUtils.send(birthdayChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
@@ -277,7 +267,7 @@ export class MessageService {
                         // Get the mention string
                         let mentionString =
                             filteredGuild.guildData.MemberAnniversaryMentionSetting !== 'none'
-                                ? CelebrationUtils.getMentionString(
+                                ? await CelebrationUtils.getMentionString(
                                       filteredGuild.guildData,
                                       guild,
                                       'memberanniversary'
@@ -315,18 +305,13 @@ export class MessageService {
 
                             // TEMP UNTIL THE YEAR PROBLEM IS ADDRESSED
                             // Find the color of the embed
-                            color = customMessage?.Color === '0' ? Config.colors.default : null;
-
-                            color = !color
-                                ? '#' + ColorUtils.findHex(customMessage?.Color) ??
-                                  Config.colors.default
-                                : Config.colors.default;
+                            color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
 
                             useEmbed = customMessage.Embed ? true : false;
                         }
 
                         // Send our message(s)
-                        if (mentionString !== '')
+                        if (mentionString && mentionString !== '')
                             await MessageUtils.send(birthdayChannel, mentionString);
 
                         let embed = new MessageEmbed().setDescription(message).setColor(color);
@@ -339,7 +324,13 @@ export class MessageService {
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // The server anniversary channel must exists and this guild needs to have Celebration Data
-                if (serverAnniversaryChannel && thisGuildCelebrationData) {
+                if (
+                    guildsWithAnniversaryMessage
+                        .map(g => g.id)
+                        .includes(filteredGuild.guildData.GuildDiscordId) &&
+                    serverAnniversaryChannel &&
+                    thisGuildCelebrationData
+                ) {
                     // Get our generic server anniversary message
                     let message = Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US);
                     let color = Config.colors.default;
@@ -354,7 +345,7 @@ export class MessageService {
                     // Get the mention string
                     let mentionString =
                         filteredGuild.guildData.ServerAnniversaryMentionSetting !== 'none'
-                            ? CelebrationUtils.getMentionString(
+                            ? await CelebrationUtils.getMentionString(
                                   filteredGuild.guildData,
                                   guild,
                                   'serveranniversary'
@@ -384,18 +375,13 @@ export class MessageService {
                         );
 
                         // Find the color of the embed
-                        color = customMessage?.Color === '0' ? Config.colors.default : null;
-
-                        color = !color
-                            ? '#' + ColorUtils.findHex(customMessage?.Color) ??
-                              Config.colors.default
-                            : Config.colors.default;
+                        color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
 
                         useEmbed = customMessage.Embed ? true : false;
                     }
 
                     // Send our message(s)
-                    if (mentionString !== '')
+                    if (mentionString && mentionString !== '')
                         await MessageUtils.send(serverAnniversaryChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);

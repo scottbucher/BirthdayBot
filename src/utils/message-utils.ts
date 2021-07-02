@@ -29,9 +29,10 @@ export class MessageUtils {
             // 10013: "Unknown user"
             // 50001: "Missing access"
             // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+            // 50013: "Missing Permissions"
             if (
                 error instanceof DiscordAPIError &&
-                [10003, 10004, 10013, 50001, 50007].includes(error.code)
+                [10003, 10004, 10013, 50001, 50007, 50013].includes(error.code)
             ) {
                 return;
             } else {
@@ -62,7 +63,8 @@ export class MessageUtils {
                 // 10008: "Unknown Message" (Message was deleted)
                 // 10013: "Unknown User"
                 // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
-                if ([10008, 10013, 50007].includes(error.code)) {
+                // 50013: "Missing Permissions"
+                if ([10008, 10013, 50007, 50013].includes(error.code)) {
                     return;
                 }
 
