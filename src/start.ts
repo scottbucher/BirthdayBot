@@ -66,10 +66,10 @@ import {
 } from './services';
 import {
     MemberAnniversaryRoleAddSubCommand,
+    MemberAnniversaryRoleClaimSubCommand,
     MemberAnniversaryRoleClearSubCommand,
     MemberAnniversaryRoleListSubCommand,
     MemberAnniversaryRoleRemoveSubCommand,
-    MemberAnniversaryRoleClaimSubCommand,
 } from './commands/memberAnniversaryRole';
 import {
     MessageAddSubCommand,
@@ -251,7 +251,9 @@ async function start(): Promise<void> {
     let memberAnniversaryRoleListSubCommand = new MemberAnniversaryRoleListSubCommand(
         memberAnniversaryRoleRepo
     );
-    let memberAnniversaryRoleClaimSubCommand = new MemberAnniversaryRoleClaimSubCommand(memberAnniversaryRoleRepo);
+    let memberAnniversaryRoleClaimSubCommand = new MemberAnniversaryRoleClaimSubCommand(
+        memberAnniversaryRoleRepo
+    );
 
     // Member Anniversary Role Command
     let memberAnniversaryRoleCommand = new MemberAnniversaryRoleCommand(
