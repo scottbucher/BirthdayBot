@@ -4,14 +4,12 @@ import {
     BlacklistListSubCommand,
     BlacklistRemoveSubCommand,
 } from './blacklist';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MessageUtils, FormatUtils } from '../utils';
-
-let Config = require('../../config/config.json');
 
 export class BlacklistCommand implements Command {
     public name: string = 'blacklist';
@@ -29,7 +27,7 @@ export class BlacklistCommand implements Command {
         private blacklistRemoveSubCommand: BlacklistRemoveSubCommand,
         private blacklistClearSubCommand: BlacklistClearSubCommand,
         private blacklistListSubCommand: BlacklistListSubCommand
-    ) { }
+    ) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 2) {

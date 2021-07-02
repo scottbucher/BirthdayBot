@@ -1,4 +1,4 @@
-import { DMChannel, GuildMember, Message, MessageEmbed, TextChannel, User } from 'discord.js';
+import { DMChannel, GuildMember, Message, TextChannel } from 'discord.js';
 import { FormatUtils, GuildUtils, MessageUtils } from '../utils';
 
 import { Command } from './command';
@@ -6,8 +6,6 @@ import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
-
-let Config = require('../../config/config.json');
 
 export class ViewCommand implements Command {
     public name: string = 'view';

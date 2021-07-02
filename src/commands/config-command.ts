@@ -9,14 +9,12 @@ import {
     ConfigTrustedPreventsRoleSubCommand,
     ConfigUseTimezoneSubCommand,
 } from './config';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MessageUtils, FormatUtils } from '../utils';
-
-let Config = require('../../config/config.json');
 
 export class ConfigCommand implements Command {
     public name: string = 'config';
@@ -39,7 +37,7 @@ export class ConfigCommand implements Command {
         private configTimezoneSubCommand: ConfigTimezoneSubCommand,
         private configUseTimezoneSubCommand: ConfigUseTimezoneSubCommand,
         private configRequireAllTrustedRolesSubCommand: ConfigRequireAllTrustedRolesSubCommand
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],
@@ -64,9 +62,7 @@ export class ConfigCommand implements Command {
             return;
         }
 
-        if (
-            subCommand === 'birthdaymasterrole'
-        ) {
+        if (subCommand === 'birthdaymasterrole') {
             this.configBirthdayMasterRole.execute(args, msg, channel);
         } else if (subCommand === 'channel') {
             this.configChannelSubCommand.execute(args, msg, channel);
@@ -78,15 +74,11 @@ export class ConfigCommand implements Command {
             this.configTimezoneSubCommand.execute(args, msg, channel);
         } else if (subCommand === 'usetimezone') {
             this.configUseTimezoneSubCommand.execute(args, msg, channel);
-        } else if (
-            subCommand === 'trustedpreventsmessage'
-        ) {
+        } else if (subCommand === 'trustedpreventsmessage') {
             this.configTrustedPreventsMsgSubCommand.execute(args, msg, channel);
         } else if (subCommand === 'trustedpreventsrole') {
             this.configTrustedPreventsRoleSubCommand.execute(args, msg, channel);
-        } else if (
-            subCommand === 'requirealltrustedroles'
-        ) {
+        } else if (subCommand === 'requirealltrustedroles') {
             this.configRequireAllTrustedRolesSubCommand.execute(args, msg, channel);
         } else {
             await MessageUtils.send(

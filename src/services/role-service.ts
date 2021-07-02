@@ -4,7 +4,6 @@ import { GuildCelebrationData, MemberAnniversaryRole } from '../models/database'
 
 import { Logger } from '.';
 
-let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 export class RoleService {
     // TODO: add to config

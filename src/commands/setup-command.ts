@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 import { MessageUtils, PermissionUtils, FormatUtils } from '../utils';
 import { SetupRequired, SetupTrusted } from './setup';
 
@@ -7,8 +7,6 @@ import { GuildRepo } from '../services/database/repos';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { SetupAnniversary } from './setup/setup-anniversary';
-
-let Config = require('../../config/config.json');
 
 export class SetupCommand implements Command {
     public name: string = 'setup';
@@ -26,7 +24,7 @@ export class SetupCommand implements Command {
         private setupRequired: SetupRequired,
         private setupTrusted: SetupTrusted,
         private setupAnniversary: SetupAnniversary
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],

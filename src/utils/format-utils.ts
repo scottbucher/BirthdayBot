@@ -21,7 +21,7 @@ let zoneNames = moment.tz
 export class FormatUtils {
     // TODO: fix so there isn't a comma where there are only two users
     public static joinWithAnd(values: string[]): string {
-        return values.length == 2
+        return values.length === 2
             ? values[0] + ' ' + values[1]
             : [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
                   values.length < 2 ? '' : `, ${Lang.getRef('terms.and', LangCode.EN_US)} `

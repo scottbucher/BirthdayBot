@@ -1,13 +1,11 @@
 import { CelebrationUtils, FormatUtils, MessageUtils, TimeUtils } from '../utils';
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-
-let Config = require('../../config/config.json');
 
 export class NextCommand implements Command {
     public name: string = 'next';
@@ -20,7 +18,7 @@ export class NextCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo, private guildRepo: GuildRepo) { }
+    constructor(private userRepo: UserRepo, private guildRepo: GuildRepo) {}
 
     public async execute(
         args: string[],

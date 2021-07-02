@@ -1,5 +1,5 @@
 import { FormatUtils, MessageUtils } from '../utils';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 import {
     TrustedRoleAddSubCommand,
     TrustedRoleClearSubCommand,
@@ -10,8 +10,6 @@ import {
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-
-let Config = require('../../config/config.json');
 
 export class TrustedRoleCommand implements Command {
     public name: string = 'trustedrole';

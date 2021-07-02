@@ -1,13 +1,11 @@
-import { ActionUtils, CelebrationUtils, MessageUtils, ParseUtils } from '../../utils';
-import { GuildRepo, MemberAnniversaryRoleRepo } from '../../services/database/repos';
-import { Lang, Logger } from '../../services';
-import { Message, Role, TextChannel } from 'discord.js';
+import { ActionUtils, CelebrationUtils, MessageUtils } from '../../utils';
+import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { Message, TextChannel } from 'discord.js';
 
 import { GuildData } from '../../models/database';
 import { LangCode } from '../../models/enums';
 import moment from 'moment';
-
-let Config = require('../../../config/config.json');
 
 export class MemberAnniversaryRoleClaimSubCommand {
     constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}

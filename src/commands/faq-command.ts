@@ -5,8 +5,6 @@ import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MessageUtils } from '../utils';
 
-let Config = require('../../config/config.json');
-
 export class FaqCommand implements Command {
     public name: string = 'faq';
     public aliases = [];

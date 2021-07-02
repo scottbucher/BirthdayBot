@@ -1,4 +1,4 @@
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js';
 import { MessageUtils, ShardUtils } from '../utils';
 
 import { Command } from './command';
@@ -6,8 +6,6 @@ import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
-
-let Config = require('../../config/config.json');
 
 export class StatsCommand implements Command {
     public name: string = 'stats';
