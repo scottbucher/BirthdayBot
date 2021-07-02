@@ -1,18 +1,16 @@
+import { ActionUtils, CelebrationUtils, MessageUtils, ParseUtils } from '../../utils';
+import { GuildRepo, MemberAnniversaryRoleRepo } from '../../services/database/repos';
+import { Lang, Logger } from '../../services';
 import { Message, Role, TextChannel } from 'discord.js';
-import { MessageUtils, ParseUtils, CelebrationUtils, ActionUtils } from '../../utils';
 
-import { Lang } from '../../services';
-import { LangCode } from '../../models/enums';
-import { MemberAnniversaryRoleRepo, GuildRepo } from '../../services/database/repos';
-import moment from 'moment';
 import { GuildData } from '../../models/database';
+import { LangCode } from '../../models/enums';
+import moment from 'moment';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = Lang.getEmbed('validation.noYear', LangCode.EN_US);
-
 export class MemberAnniversaryRoleClaimSubCommand {
-    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) { }
+    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
 
     public async execute(
         args: string[],
@@ -29,10 +27,19 @@ export class MemberAnniversaryRoleClaimSubCommand {
             return;
         }
 
-        let memberAnniversaryRoleData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(msg.guild.id);
+        let memberAnniversaryRoleData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(
+            msg.guild.id
+        );
 
-        if (!memberAnniversaryRoleData || memberAnniversaryRoleData.stats.TotalItems === 0) {
+        if (
+            !memberAnniversaryRoleData ||
+            memberAnniversaryRoleData.memberAnniversaryRoles.length === 0
+        ) {
             // No roles to claim
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noMemberAnniversaryRoles', LangCode.EN_US)
+            );
             return;
         }
         let timezone = guildData?.DefaultTimezone;
@@ -51,16 +58,31 @@ export class MemberAnniversaryRoleClaimSubCommand {
         )
             yearsOldRoundedDown--;
 
-        let roleData = memberAnniversaryRoleData.memberAnniversaryRoles.filter(data => data.Year <= yearsOldRoundedDown);
+        let roleData = memberAnniversaryRoleData.memberAnniversaryRoles.filter(
+            data => data.Year <= yearsOldRoundedDown
+        );
+
+        if (roleData.length === 0) {
+            // No roles to claim
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noMemberAnniversaryRolesToClaim', LangCode.EN_US)
+            );
+            return;
+        }
 
         let roles = await CelebrationUtils.getMemberAnniversaryRoleList(msg.guild, roleData);
 
         // Give the roles they are owed
         for (let role of roles) {
-            // TODO: make sleep interval a config value
-            await ActionUtils.giveRole(msg.member, role, 250);
+            if (!msg.member.roles.cache.has(role.id)) {
+                await ActionUtils.giveRole(msg.member, role, 250);
+            }
         }
 
-        await MessageUtils.send(channel, Lang.getEmbed('results.memberAnnversaryRolesClaimed', LangCode.EN_US));
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.memberAnniversaryRolesClaimed', LangCode.EN_US)
+        );
     }
 }
