@@ -219,19 +219,21 @@ export class MessageService {
                             hasPremium
                         );
 
-                        // Replace the placeholders
-                        message = CelebrationUtils.replacePlaceHolders(
-                            customMessage.Message,
-                            guild,
-                            customMessage.Type,
-                            userList,
-                            null
-                        );
-
                         // Find the color of the embed
                         color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
                         useEmbed = customMessage.Embed ? true : false;
+
+                        message = customMessage.Message;
                     }
+
+                    // Replace the placeholders
+                    message = CelebrationUtils.replacePlaceHolders(
+                        message,
+                        guild,
+                        'birthday',
+                        userList,
+                        null
+                    );
 
                     // Send our message(s)
                     if (mentionString && mentionString !== '')
@@ -294,21 +296,23 @@ export class MessageService {
                                 hasPremium
                             );
 
-                            // Replace the placeholders
-                            message = CelebrationUtils.replacePlaceHolders(
-                                customMessage.Message,
-                                guild,
-                                customMessage.Type,
-                                userList,
-                                year
-                            );
-
                             // TEMP UNTIL THE YEAR PROBLEM IS ADDRESSED
                             // Find the color of the embed
                             color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
 
                             useEmbed = customMessage.Embed ? true : false;
+
+                            message = customMessage.Message;
                         }
+
+                        // Replace the placeholders
+                        message = CelebrationUtils.replacePlaceHolders(
+                            message,
+                            guild,
+                            'memberanniversary',
+                            userList,
+                            year
+                        );
 
                         // Send our message(s)
                         if (mentionString && mentionString !== '')
@@ -352,17 +356,16 @@ export class MessageService {
                               )
                             : '';
 
+                    let serverYears = CelebrationUtils.getServerYears(
+                        guild,
+                        filteredGuild.guildData
+                    );
                     // Add the compiled user list
                     if (serverAnniversaryMessages.length > 0) {
                         // Get our custom message
                         let customMessage = CelebrationUtils.randomMessage(
                             serverAnniversaryMessages,
                             hasPremium
-                        );
-
-                        let serverYears = CelebrationUtils.getServerYears(
-                            guild,
-                            filteredGuild.guildData
                         );
 
                         // Replace the placeholders
@@ -378,7 +381,18 @@ export class MessageService {
                         color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
 
                         useEmbed = customMessage.Embed ? true : false;
+
+                        message = customMessage.Message;
                     }
+
+                    // Replace the placeholders
+                    message = CelebrationUtils.replacePlaceHolders(
+                        message,
+                        guild,
+                        'serveranniversary',
+                        null,
+                        serverYears
+                    );
 
                     // Send our message(s)
                     if (mentionString && mentionString !== '')
