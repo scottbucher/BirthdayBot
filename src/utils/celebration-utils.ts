@@ -10,6 +10,8 @@ import {
 } from '../models/database';
 import { Guild, GuildMember, Role } from 'discord.js';
 
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 import { Moment } from 'moment-timezone';
 import moment from 'moment';
@@ -285,6 +287,41 @@ export class CelebrationUtils {
                     .join(year.toString())
                     .split('@Year')
                     .join(year.toString());
+        }
+
+        return message;
+    }
+
+    public static replaceLangPlaceHolders(
+        message: string,
+        guild: Guild,
+        type: string,
+        userString: string
+    ): string {
+        if (message) {
+            let serverPlaceholder = Lang.getRef('placeHolders.server', LangCode.EN_US);
+            message = message
+                .split('<Server>')
+                .join(serverPlaceholder)
+                .split('@Server')
+                .join(serverPlaceholder);
+
+            if (type !== 'serveranniversary') {
+                let userPlaceholder = Lang.getRef('placeHolders.users', LangCode.EN_US);
+                message = message
+                    .split('<Users>')
+                    .join(userString ?? userPlaceholder)
+                    .split('@Users')
+                    .join(userString ?? userPlaceholder);
+            }
+            if (type !== 'birthday') {
+                let yearPlaceholder = Lang.getRef('placeHolders.year', LangCode.EN_US);
+                message = message
+                    .split('<Year>')
+                    .join(yearPlaceholder)
+                    .split('@Year')
+                    .join(yearPlaceholder);
+            }
         }
 
         return message;

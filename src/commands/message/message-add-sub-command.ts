@@ -1,10 +1,10 @@
+import { CelebrationUtils, ColorUtils, FormatUtils, MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { ColorUtils, FormatUtils, MessageUtils } from '../../utils';
 import { GuildMember, Message, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
@@ -218,7 +218,12 @@ export class MessageAddSubCommand {
                                 '<Users>',
                                 target.toString()
                             ),
-                            NEW_MESSAGE: message.replace('<Users>', target.toString()),
+                            NEW_MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
+                                message,
+                                msg.guild,
+                                type,
+                                target?.toString()
+                            ),
                         })
                     ); // Send confirmation and emotes
                     for (let option of trueFalseOptions) {
@@ -346,7 +351,12 @@ export class MessageAddSubCommand {
             userId === '0'
                 ? Lang.getEmbed('results.addCustomMessage', LangCode.EN_US, {
                       DISPLAY_TYPE: typeDisplayName,
-                      MESSAGE: message.replace('<Users>', target.toString()),
+                      MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
+                          message,
+                          msg.guild,
+                          type,
+                          null
+                      ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
                       HAS_PREMIUM: !hasPremium
                           ? Lang.getRef('conditionals.needColorForPremium', LangCode.EN_US)
@@ -357,7 +367,12 @@ export class MessageAddSubCommand {
                   })
                 : Lang.getEmbed('results.addCustomUserMessage', LangCode.EN_US, {
                       DISPLAY_TYPE: typeDisplayName,
-                      MESSAGE: message.replace('<Users>', target.toString()),
+                      MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
+                          message,
+                          msg.guild,
+                          type,
+                          target?.toString()
+                      ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
                       HAS_PREMIUM: !hasPremium
                           ? Lang.getRef('conditionals.colorForPremium', LangCode.EN_US)

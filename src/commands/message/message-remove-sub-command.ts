@@ -1,5 +1,5 @@
+import { CelebrationUtils, FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { CustomMessage, CustomMessages } from '../../models/database';
-import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
@@ -113,8 +113,18 @@ export class MessageRemoveSubCommand {
             channel,
             Lang.getEmbed('results.removeMessage', LangCode.EN_US, {
                 MESSAGE: target
-                    ? message.Message.replace('<Users>', target.toString())
-                    : message.Message,
+                    ? CelebrationUtils.replaceLangPlaceHolders(
+                          message.Message,
+                          msg.guild,
+                          type,
+                          target.toString()
+                      )
+                    : CelebrationUtils.replaceLangPlaceHolders(
+                          message.Message,
+                          msg.guild,
+                          type,
+                          null
+                      ),
             })
         );
     }
