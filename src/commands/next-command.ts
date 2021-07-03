@@ -1,11 +1,11 @@
 import { CelebrationUtils, FormatUtils, MessageUtils, TimeUtils } from '../utils';
 import { DMChannel, Message, TextChannel } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
-import moment from 'moment';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import moment from 'moment';
 
 export class NextCommand implements Command {
     public name: string = 'next';
@@ -80,7 +80,7 @@ export class NextCommand implements Command {
                 msg.guild.members.resolve(user.UserDiscordId)
             );
 
-            let userStringList = FormatUtils.joinWithAnd(userList.map(user => user.toString()));
+            let userStringList = CelebrationUtils.getUserListString(guildData, userList);
             let nextBirthday = moment(nextBirthdayUsers[0].Birthday).format('MMMM Do');
 
             await MessageUtils.send(
