@@ -599,11 +599,11 @@
                 "color": "{{REF:colors.success}}"
             },
             "defaultTimeZoneSet": {
-                "description": "Successfully cleared your server's default timezone!",
+                "description": "Successfully set your server's default timezone to **{{TIMEZONE}}**!",
                 "color": "{{REF:colors.success}}"
             },
             "defaultTimeCleared": {
-                "description": "Successfully set your server's default timezone to **{{TIMEZONE}}**!",
+                "description": "Successfully cleared your server's default timezone!",
                 "color": "{{REF:colors.success}}"
             },
             "useTimeZoneSettingSet": {

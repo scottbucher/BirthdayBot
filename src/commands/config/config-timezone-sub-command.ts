@@ -22,6 +22,7 @@ export class ConfigTimezoneSubCommand {
                 channel,
                 Lang.getEmbed('results.defaultTimeCleared', LangCode.EN_US)
             );
+            return;
         }
 
         if (FormatUtils.checkAbbreviation(args[3])) {
