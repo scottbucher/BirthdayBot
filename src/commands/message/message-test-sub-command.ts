@@ -77,16 +77,14 @@ export class MessageTestSubCommand {
 
         let year =
             type === 'memberanniversary'
-                ? Math.floor(
-                      moment().diff(
-                          target
-                              ? target.joinedAt
-                              : msg.guild.members.resolve(msg.client.user).joinedAt,
-                          'years'
-                      )
-                  )
+                ? moment().diff(
+                      target
+                          ? target.joinedAt
+                          : msg.guild.members.resolve(msg.client.user).joinedAt,
+                      'years'
+                  ) + 1
                 : type === 'serveranniversary'
-                ? Math.floor(moment().diff(msg.guild.createdAt, 'years'))
+                ? moment().diff(msg.guild.createdAt, 'years') + 1
                 : null;
 
         if (!messages) {
