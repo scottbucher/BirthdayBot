@@ -56,7 +56,7 @@ export class MessageTimeSubCommand {
             : await this.guildRepo.updateServerAnniversaryMessageTime(msg.guild.id, messageTime);
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('result.setMessageTime', LangCode.EN_US, {
+            Lang.getEmbed('results.setMessageTime', LangCode.EN_US, {
                 DISPLAY_TYPE: displayType,
                 TIME: timeOutput,
             })
