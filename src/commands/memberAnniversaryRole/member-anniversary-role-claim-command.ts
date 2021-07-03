@@ -1,10 +1,10 @@
 import { ActionUtils, CelebrationUtils, MessageUtils } from '../../utils';
-import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
-import { Lang } from '../../services';
 import { Message, TextChannel } from 'discord.js';
 
 import { GuildData } from '../../models/database';
+import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
+import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
 import moment from 'moment';
 
 export class MemberAnniversaryRoleClaimSubCommand {
@@ -25,9 +25,8 @@ export class MemberAnniversaryRoleClaimSubCommand {
             return;
         }
 
-        let memberAnniversaryRoleData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(
-            msg.guild.id
-        );
+        let memberAnniversaryRoleData =
+            await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(msg.guild.id);
 
         if (
             !memberAnniversaryRoleData ||
@@ -43,7 +42,7 @@ export class MemberAnniversaryRoleClaimSubCommand {
         let timezone = guildData?.DefaultTimezone;
 
         let memberJoinedAt = moment(msg.member.joinedAt).tz(timezone);
-        let now = timezone ? moment.tz(timezone) : moment.tz();
+        let now = timezone && timezone !== '0' ? moment.tz(timezone) : moment.tz();
         let yearsOldRoundedDown = now.year() - memberJoinedAt.year();
 
         // If the date hasn't passed yet this year then we decrease the year

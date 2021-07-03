@@ -98,7 +98,7 @@ export class NextCommand implements Command {
                     .filter(member => !member.user.bot)
                     .map(member => member);
                 let closestMonthDay: string;
-                let now = timezone ? moment.tz(timezone) : moment.tz();
+                let now = timezone && timezone !== '0' ? moment.tz(timezone) : moment.tz();
                 let nowMonthDay = now.format('MM-DD');
 
                 for (let member of guildMembers) {
@@ -151,7 +151,7 @@ export class NextCommand implements Command {
                 // Next server anniversary
                 let serverCreatedAt = moment(msg.guild.createdAt).tz(timezone);
                 let anniversaryFormatted = serverCreatedAt.format('MMMM Do');
-                let now = timezone ? moment.tz(timezone) : moment.tz();
+                let now = timezone !== '0' ? moment.tz(timezone) : moment.tz();
                 let yearsOldRoundedUp = now.year() - serverCreatedAt.year();
 
                 // If the diff is negative that date has already passed so we need to increase the year (this is how we round up)

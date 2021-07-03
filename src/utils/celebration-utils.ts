@@ -32,7 +32,7 @@ export class CelebrationUtils {
     }
 
     public static getNextUsers(userDatas: UserData[], timeZone: string): UserData[] {
-        let userTime = timeZone ? moment.tz(timeZone) : moment.tz();
+        let userTime = timeZone && timeZone !== '0' ? moment.tz(timeZone) : moment.tz();
 
         let { before: usersBefore, after: usersAfter } = this.splitUserDatasByTime(
             userDatas,
