@@ -70,100 +70,60 @@ export class MessageTestSubCommand {
 
         let userList = CelebrationUtils.getUserListString(guildData, memberList);
 
-        // Get guild data
-        // let guildData = await this.guildRepo.getGuild(msg.guild.id);
-
         // Retrieve message to remove
         let messages = target
             ? await this.customMessageRepo.getCustomUserMessages(msg.guild.id, type)
             : await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
+        let year =
+            type === 'memberanniversary'
+                ? Math.floor(
+                      moment().diff(
+                          target
+                              ? target.joinedAt
+                              : msg.guild.members.resolve(msg.client.user).joinedAt,
+                          'years'
+                      )
+                  )
+                : type === 'serveranniversary'
+                ? Math.floor(moment().diff(msg.guild.createdAt, 'years'))
+                : null;
+
         if (!messages) {
-            switch (type) {
-                case 'birthday': {
-                    let embed = new MessageEmbed()
-                        .setDescription(
-                            Lang.getRef('defaults.birthdayMessage', LangCode.EN_US)
-                                .replace(/<Users>/g, userList)
-                                .replace(/<Server>/g, msg.guild.name)
+            let defaultMessage =
+                type === 'memberanniversary'
+                    ? Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US)
+                    : type === 'serveranniversary'
+                    ? Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US)
+                    : Lang.getRef('defaults.birthdayMessage', LangCode.EN_US);
+
+            await MessageUtils.send(
+                channel,
+                new MessageEmbed()
+                    .setDescription(
+                        CelebrationUtils.replacePlaceHolders(
+                            defaultMessage,
+                            msg.guild,
+                            type,
+                            userList,
+                            year
                         )
-                        .setColor(Config.colors.default);
-                    await MessageUtils.send(channel, embed);
-                    return;
-                }
-                case 'memberanniversary': {
-                    let embed = new MessageEmbed()
-                        .setDescription(
-                            Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US)
-                                .replace(/<Users>/g, userList)
-                                .replace(
-                                    /<Year>/g,
-                                    Math.floor(
-                                        moment().diff(
-                                            (target
-                                                ? target
-                                                : msg.guild.members.cache.get(msg.client.user.id)
-                                            ).joinedAt,
-                                            'years'
-                                        )
-                                    ).toString()
-                                )
-                                .replace(/<Server>/g, msg.guild.name)
-                        )
-                        .setColor(Config.colors.default);
-                    await MessageUtils.send(channel, embed);
-                    return;
-                }
-                case 'serveranniversary': {
-                    let embed = new MessageEmbed()
-                        .setDescription(
-                            Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US)
-                                .replace(
-                                    /<Year>/g,
-                                    Math.floor(moment().diff(target.joinedAt, 'years')).toString()
-                                )
-                                .replace(/<Server>/g, msg.guild.name)
-                        )
-                        .setColor(Config.colors.default);
-                    await MessageUtils.send(channel, embed);
-                    return;
-                }
-            }
+                    )
+                    .setColor(Config.colors.default)
+            );
         }
 
         let chosenMessage = target
             ? messages.customMessages.find(message => message.UserDiscordId === target.id)
             : messages.customMessages.find(message => message.Position === position);
 
-        if (!target) target = msg.member;
-
-        let customMessage: string;
-
-        switch (type) {
-            case 'birthday': {
-                customMessage = chosenMessage?.Message.replace(/@Users/g, userList)
-                    .replace(/<Users>/g, userList)
-                    .replace(/<Server>/g, msg.guild.name);
-                break;
-            }
-            case 'memberanniversary': {
-                customMessage = chosenMessage?.Message.replace(/@Users/g, userList)
-                    .replace(/<Users>/g, userList)
-                    .replace(
-                        /<Year>/g,
-                        Math.floor(moment().diff(msg.guild.createdAt, 'years')).toString()
-                    )
-                    .replace(/<Server>/g, msg.guild.name);
-                break;
-            }
-            case 'serveranniversary': {
-                customMessage = chosenMessage?.Message.replace(
-                    /<Year>/g,
-                    Math.floor(moment().diff(target.joinedAt, 'years')).toString()
-                ).replace(/<Server>/g, msg.guild.name);
-                break;
-            }
-        }
+        let customMessage = CelebrationUtils.replacePlaceHolders(
+            chosenMessage?.Message,
+            msg.guild,
+            type,
+            userList,
+            year
+        );
 
         if (!customMessage) {
             await MessageUtils.send(
