@@ -15,6 +15,15 @@ export class ConfigTimezoneSubCommand {
             return;
         }
 
+        if (FormatUtils.extractMiscActionType(args[3])) {
+            await this.guildRepo.updateDefaultTimezone(msg.guild.id, '0');
+
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('results.defaultTimeCleared', LangCode.EN_US)
+            );
+        }
+
         if (FormatUtils.checkAbbreviation(args[3])) {
             await MessageUtils.send(
                 channel,
