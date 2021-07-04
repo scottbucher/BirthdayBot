@@ -41,8 +41,16 @@ export class MemberAnniversaryRoleClaimSubCommand {
         }
         let timezone = guildData?.DefaultTimezone;
 
+        if (!timezone) {
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.serverTimezoneNotSet', LangCode.EN_US)
+            );
+            return;
+        }
+
         let memberJoinedAt = moment(msg.member.joinedAt).tz(timezone);
-        let now = timezone && timezone !== '0' ? moment.tz(timezone) : moment.tz();
+        let now = moment.tz(timezone);
         let yearsOldRoundedDown = now.year() - memberJoinedAt.year();
 
         // If the date hasn't passed yet this year then we decrease the year

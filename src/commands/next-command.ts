@@ -91,6 +91,13 @@ export class NextCommand implements Command {
                 })
             );
         } else {
+            if (!timezone) {
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.serverTimezoneNotSet', LangCode.EN_US)
+                );
+                return;
+            }
             if (type === 'memberanniversary') {
                 // TODO: fetch members?
                 // Next member anniversary
@@ -98,7 +105,7 @@ export class NextCommand implements Command {
                     .filter(member => !member.user.bot)
                     .map(member => member);
                 let closestMonthDay: string;
-                let now = timezone && timezone !== '0' ? moment.tz(timezone) : moment.tz();
+                let now = moment.tz(timezone);
                 let nowMonthDay = now.format('MM-DD');
 
                 for (let member of guildMembers) {
@@ -151,7 +158,7 @@ export class NextCommand implements Command {
                 // Next server anniversary
                 let serverCreatedAt = moment(msg.guild.createdAt).tz(timezone);
                 let anniversaryFormatted = serverCreatedAt.format('MMMM Do');
-                let now = timezone && timezone !== '0' ? moment.tz(timezone) : moment.tz();
+                let now = moment.tz(timezone);
                 let yearsOldRoundedUp = now.year() - serverCreatedAt.year();
 
                 // If the diff is negative that date has already passed so we need to increase the year (this is how we round up)

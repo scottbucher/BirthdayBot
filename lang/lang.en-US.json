@@ -872,6 +872,10 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
+            "serverTimezoneNotSet": {
+                "description": "This server doesn't have a default timezone set! The anniversary system requires one to be set!",
+                "color": "{{REF:colors.error}}"
+            },
             "viewUserInDm": {
                 "description": "You cannot request another user's information in a DM!",
                 "color": "{{REF:colors.error}}"
