@@ -868,7 +868,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify which setup you want to run!",
-                    "Setup options: `message` or `trusted`"
+                    "Setup options: `anniversary` or `trusted`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
