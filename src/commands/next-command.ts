@@ -91,7 +91,7 @@ export class NextCommand implements Command {
                 })
             );
         } else {
-            if (!timezone) {
+            if (!timezone || timezone === '0') {
                 await MessageUtils.send(
                     channel,
                     Lang.getEmbed('validation.serverTimezoneNotSet', LangCode.EN_US)
