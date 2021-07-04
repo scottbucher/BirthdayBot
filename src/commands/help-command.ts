@@ -1,9 +1,9 @@
 import { DMChannel, Message, TextChannel } from 'discord.js';
+import { FormatUtils, MessageUtils } from '../utils';
 
 import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MessageUtils, FormatUtils } from '../utils';
 
 export class HelpCommand implements Command {
     public name: string = 'help';
@@ -60,6 +60,14 @@ export class HelpCommand implements Command {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('help.blacklist', LangCode.EN_US).setAuthor(
+                    'ADD AUTHORS KEVIN >:(',
+                    clientAvatarUrl
+                )
+            );
+        } else if (option === 'anniversary') {
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('help.anniversary', LangCode.EN_US).setAuthor(
                     'ADD AUTHORS KEVIN >:(',
                     clientAvatarUrl
                 )

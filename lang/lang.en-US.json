@@ -2199,7 +2199,7 @@
                     "**{{REF:bot.prefix}} help {{REF:types.premium}}** - Help for {{REF:bot.name}} Premium.",
                     "",
                     "**{{REF:bot.prefix}} set** - Set your birthday.",
-                    "**{{REF:bot.prefix}} view [user]** - View your birthday or a users birthday.",
+                    "**{{REF:bot.prefix}} view [type] [user]** - View your information or a users' information.",
                     "**{{REF:bot.prefix}} next [type]**** - View next birthday(s) in the server.",
                     "**{{REF:bot.prefix}} list [type] [page/date]**** - View the server birthday list.",
                     "**{{REF:bot.prefix}} map** - View the time zone map.",
@@ -2287,6 +2287,17 @@
                     "**{{REF:bot.prefix}} blacklist {{REF:types.remove}} <user>** - Remove user from the blacklist.",
                     "**{{REF:bot.prefix}} blacklist {{REF:types.clear}}** - Clear the birthday blacklist.",
                     "**{{REF:bot.prefix}} blacklist {{REF:types.list}}** - View all blacklisted users in your server.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{REF:links.support}})."
+                ]
+            },
+            "anniversary": {
+                "title": "{{REF:bot.name}} Anniversary Help - Guild Only",
+                "description": [
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.add}} <role> <year>** - Add a member anniversary role.",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.remove}} <position/role>** - Remove a member anniversary role",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.clear}}** - Clear all member anniversary roles.",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.list}} [page]** - List all member anniversary roles.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
