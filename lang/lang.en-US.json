@@ -2203,7 +2203,7 @@
                     "**{{REF:bot.prefix}} help {{REF:types.premium}}** - Help for {{REF:bot.name}} Premium.",
                     "",
                     "**{{REF:bot.prefix}} set** - Set your birthday.",
-                    "**{{REF:bot.prefix}} view [type] [user]** - View your information or a users' information.",
+                    "**{{REF:bot.prefix}} view [type] [user]** - View your information or a user's information.",
                     "**{{REF:bot.prefix}} next [type]**** - View next birthday(s) in the server.",
                     "**{{REF:bot.prefix}} list [type] [page/date]**** - View the server birthday list.",
                     "**{{REF:bot.prefix}} map** - View the time zone map.",
