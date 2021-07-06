@@ -12,14 +12,20 @@ import {
 
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { TimeUtils } from '.';
+
+let Config = require('../../config/config.json')
 
 export class MessageUtils {
     public static async send(
         target: User | DMChannel | TextChannel | NewsChannel,
-        content: StringResolvable
+        content: StringResolvable,
+        delay?: number
     ): Promise<Message> {
+        delay = Config.delays.enabled ? delay : 0;
         try {
             return await target.send(content);
+            await TimeUtils.sleep(delay ?? 0);
         } catch (error) {
             // 10003: "Unknown channel"
             // 10004: "Unknown guild"
