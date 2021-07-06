@@ -7,8 +7,10 @@ import { LangCode } from '../../models/enums';
 import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
 import moment from 'moment';
 
+let Config = require('../../../config/config.json');
+
 export class MemberAnniversaryRoleClaimSubCommand {
-    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
+    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) { }
 
     public async execute(
         args: string[],
@@ -81,7 +83,7 @@ export class MemberAnniversaryRoleClaimSubCommand {
         // Give the roles they are owed
         for (let role of roles) {
             if (!msg.member.roles.cache.has(role.id)) {
-                await ActionUtils.giveRole(msg.member, role, 250);
+                await ActionUtils.giveRole(msg.member, role, Config.delays.roles);
             }
         }
 
