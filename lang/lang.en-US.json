@@ -900,7 +900,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command! [(?)]({{REF:docLinks.whatIsTrustedRole}})",
-                    "Accepted Values: `{{REF:types.add}}`, ` {{REF:types.remove}}`, ` {{REF:types.clear}}`, ` {{REF:types.list}}`, ` {{REF:types.claim}}`"
+                    "Accepted Values: `{{REF:types.add}}`, `{{REF:types.remove}}`, `{{REF:types.clear}}`, `{{REF:types.list}}`, `{{REF:types.claim}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -916,7 +916,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command!",
-                    "Accepted Values: `{{REF:types.add}}`, ` {{REF:types.remove}}`, ` {{REF:types.clear}}`, ` {{REF:types.list}}`"
+                    "Accepted Values: `{{REF:types.add}}`, `{{REF:types.remove}}`, `{{REF:types.clear}}`, `{{REF:types.list}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -1858,6 +1858,8 @@
             "update": {
                 "title": "{{REF:bot.name}} 3.0 Update Notes",
                 "description": [
+                    "For full break down of the update visit the [3.0 Update Guide]({{REF:recentUpdateDoc}}).",
+                    "",
                     "When I started this Birthday Bot update I had no plans for it to be this large.",
                     "Fast forward almost **8 months** and it is finally ready to go!",
                     "",
@@ -1880,74 +1882,6 @@
                             "Added two new message types (there are now three total) which are sent on an anniversary",
                             " - All three message types can have their own separate channel, message time, and mention setting",
                             " - Like birthday messages, premium servers can set user specific member anniversary messages."
-                        ]
-                    },
-                    {
-                        "name": "Changes",
-                        "value": [
-                            "This update brings a ton of changes to command syntax, bug fixes, and overall design changes",
-                            "",
-                            "Previously, servers could set the message color (premium) and useEmbed setting. Now, these are specific to each message!",
-                            " - This means some messages can be embedded while others are not and each message can have a different color (premium).",
-                            " - Removed commands for setting these globally.",
-                            "Added `bday help {{REF:terms.anniversary}}` command for help with the anniversary settings.",
-                            "Updated commands which dealt with birthday channels, messages, etc. to require a \"type\". (birthday, memberAnniversary, etc.)",
-                            "Hate seeing members' names show up like a bunch of numbers? Set the nameFormat setting to fix this!",
-                            " - This setting decides how members name will appear in birthday & anniversary messages.",
-                            " - `{{REF:bot.prefix}} config {{REF:terms.nameFormat}} <option>`"
-                        ]
-                    },
-                    {
-                        "name": "More Changes!",
-                        "value": [
-                            "Set the new DefaultTimezone setting for your server to have all your celebrations happen at once!",
-                            " - This timezone will be suggested to users when they set their birthday in your server.",
-                            " - `{{REF:bot.prefix}} config {{REF:terms.timezone}} <timezone>`",
-                            "Decide which timezone to prioritize in celebration messages with the new UseTimezone setting!",
-                            " - This will decide which timezone to celebrate birthdays in. (Member and Server Anniversaries always celebrate in the server's timezone)",
-                            " - `{{REF:bot.prefix}} config {{REF:terms.useTimezone}} <timezone>`",
-                            "The maximum birthday messages you can have has been decreased to 5.",
-                            " - This is to keep it inline with the max member anniversary and server anniversary messages.",
-                            " - Premium servers can have up to 500 of **each**!",
-                            "Added test commands for all 3 celebration types.",
-                            "",
-                            "Oh... and a cool new icon :)"
-                        ]
-                    },
-                    {
-                        "name": "Premium Changes & Additions",
-                        "value": [
-                            "Thank you to all the Birthday Bot Premium Subscribers for your support! Birthday Bot wouldn't be possible without you!",
-                            "",
-                            "",
-                            "Added Member Anniversary Roles",
-                            " - These are roles that are **permanently** given to the user on whatever year the anniversary role is set to!",
-                            " - Max of 250. (I doubt you will hit the limit)",
-                            " - Example: The member anniversary role `5-Year Veteran` can be set to be given on a member's 5th year in the server.",
-                            "Moved the message color option to be message specific!",
-                            " - This mean you can now have a different color for all your custom messages!",
-                            "Have up to 500 custom member anniversary and server anniversary messages!",
-                            "",
-                            "Added support for multiple Trusted Roles! You asked and I complied.",
-                            " - Up to 250",
-                            " - Added the RequireAllTrustedRoles setting. If false a user only needs one of the trusted roles to have their birthday celebrated."
-                        ]
-                    },
-                    {
-                        "name": "Coming Soon!",
-                        "value": [
-                            "If you have any other suggestions join our support server [here]({{REF:links.support}}) to suggest them!",
-                            "",
-                            "Slash Command Support",
-                            " - Slash commands will completely replace the current command system in the near future.",
-                            "Button Support",
-                            " - Like slash commands button will soon be added to commands where reactions were previously used as buttons.",
-                            "Multi-Lingual Support",
-                            " - This update adds the system which supports this feature but it is in testing.",
-                            " - Once testing is complete I will open up translator applications in our [Discord Support Server]({{REF:links.support}}).",
-                            "Command to see next member anniversary",
-                            "Command to see when the server anniversary is",
-                            "Command (similar to `{{REF:bot.prefix}} {{REF:types.list}}`) to see all member anniversaries in a server."
                         ]
                     }
                 ]
@@ -2104,6 +2038,11 @@
                     {
                         "name": "{{REF:terms.requireAllTrustedRoles}}",
                         "value": "{{REQUIRE_ALL_TRUSTED_ROLES}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.numberOfTrustedRoles}}",
+                        "value": "{{TRUSTED_ROLE_COUNT}}",
                         "inline": true
                     },
                     {
@@ -2680,7 +2619,8 @@
             "trustedPreventsMessage": "{{REF:links.doc}}/",
             "trustedPreventsRole": "{{REF:links.doc}}/",
             "requireAllTrustedRoles": "{{REF:links.doc}}/",
-            "whatIsBirthdayBlacklist": "{{REF:links.doc}}/"
+            "whatIsBirthdayBlacklist": "{{REF:links.doc}}/",
+            "recentUpdateDoc": "{{REF:links.doc}}/"
         },
         "footers": {
             "expire": "This message expires in 2 minutes!",
@@ -2817,6 +2757,7 @@
             "trustedPreventsMessage": "Trusted Prevents Message",
             "requireAllTrustedRoles": "Require All Trusted Roles",
             "defaultTimezone": "Default Timezone",
+            "numberOfTrustedRoles": "Number Of Trusted Roles",
             "useTimezone": "Use Timezone",
             "nameFormat": "Name Format",
             "memberAnniversaryChannel": "Member Anniversary Channel",
