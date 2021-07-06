@@ -7,7 +7,10 @@
 [![Discord Shield](https://discord.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discord.com/invite/9gUQFtz)
 [![Discord Bots](https://top.gg/api/widget/owner/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
 
-**Discord Bot** - Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and easy to use! Use `bday help` to get started!
+## Important Note
+**For the most detailed and up-to-date information and guide please visit the Official Birthday Bot Documentation [here!](https://birthdaybot.scottbucher.dev)**
+
+**Discord Bot** - Celebrate birthdays and anniversaries (**NEW**) with configurable roles, messages and more! Highly customizable and easy to use! Use `bday help` to get started!
 
 ## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268921936&scope=bot%20applications.commands)
 
@@ -17,7 +20,7 @@
 
 ![Example Birthday Announcement](https://i.imgur.com/BZcEJ5j.png)
 
-In your Discord server Birthday Bot will track your users' birthdays and using their time zone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord, use Birthday Bots trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone.
+In your Discord server Birthday Bot will track your users' birthdays and using their time zone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord, use Birthday Bots trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone. Similar messages can also be setup to celebrate the anniversary of members joining your discord server and the anniversary of the server itself!
 
 ## Setting your birthday
 
