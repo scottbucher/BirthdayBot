@@ -140,7 +140,7 @@ async function start(): Promise<void> {
     let purgeCommand = new PurgeCommand(userRepo);
     let setAttemptsCommand = new SetAttemptsCommand(userRepo);
     let setCommand = new SetCommand(guildRepo, userRepo);
-    let settingsCommand = new SettingsCommand(guildRepo);
+    let settingsCommand = new SettingsCommand(guildRepo, trustedRoleRepo);
     let statsCommand = new StatsCommand(userRepo);
     let subscribeCommand = new SubscribeCommand(subscriptionService);
     let supportCommand = new SupportCommand();

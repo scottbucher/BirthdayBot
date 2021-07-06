@@ -1,9 +1,9 @@
 import { FormatUtils, MessageUtils } from '../utils';
+import { GuildRepo, TrustedRoleRepo } from '../services/database/repos';
 import { LangCode, Language } from '../models/enums';
 import { Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
-import { GuildRepo } from '../services/database/repos';
 import { Lang } from '../services';
 
 export class SettingsCommand implements Command {
@@ -17,7 +17,7 @@ export class SettingsCommand implements Command {
     public requirePremium = false;
     public getPremium = true;
 
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo, private trustedRoleRepo: TrustedRoleRepo) {}
 
     async execute(
         args: string[],
@@ -139,6 +139,10 @@ export class SettingsCommand implements Command {
                     : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
                       `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
 
+            let trustedRoleCount =
+                (await this.trustedRoleRepo.getTrustedRoles(msg.guild.id))?.trustedRoles.length ??
+                0;
+
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('info.settingsAdvanced', LangCode.EN_US, {
@@ -147,6 +151,7 @@ export class SettingsCommand implements Command {
                     TRUSTED_PREVENTS_ROLE: preventsRole,
                     TRUSTED_PREVENTS_MESSAGE: preventsMessage,
                     REQUIRE_ALL_TRUSTED_ROLES: requireAllTrustedRoles,
+                    TRUSTED_ROLE_COUNT: trustedRoleCount.toString(),
                     USE_TIMEZONE: useTimezone,
                     GUILD_ID: guild.id,
                     HAS_PREMIUM: Lang.getRef(
