@@ -87,8 +87,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
         );
         let birthday = moment(userData.Birthday);
 
@@ -114,8 +114,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
         );
         let currentHour = currentDate.hour();
         return currentHour === 0;
@@ -134,8 +134,8 @@ export class CelebrationUtils {
                 guildData.DefaultTimezone === '0'
                     ? userData.TimeZone
                     : guildData.UseTimezone !== 'server'
-                    ? userData.TimeZone
-                    : guildData.DefaultTimezone
+                        ? userData.TimeZone
+                        : guildData.DefaultTimezone
             )
             .subtract(1, 'days');
         let currentHour = currentDate.hour();
@@ -154,8 +154,8 @@ export class CelebrationUtils {
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+                    ? userData.TimeZone
+                    : guildData.DefaultTimezone
         );
         let currentHour = currentDate.hour();
         return currentHour === guildData.BirthdayMessageTime;
@@ -180,12 +180,14 @@ export class CelebrationUtils {
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
             anniversaryFormatted = '03-01';
 
+        if (currentDate.diff(memberAnniversary, 'years') == 0) return false;
+
         // The date is correct, now check the time
         return currentDateFormatted !== anniversaryFormatted
             ? false
             : currentDate.hour() !== guildData.MemberAnniversaryMessageTime
-            ? false
-            : true;
+                ? false
+                : true;
     }
 
     public static isServerAnniversaryMessage(guild: Guild, guildData: GuildData): boolean {
@@ -208,8 +210,8 @@ export class CelebrationUtils {
         return currentDateFormatted !== anniversaryFormatted
             ? false
             : currentDate.hour() !== guildData.ServerAnniversaryMessageTime
-            ? false
-            : true;
+                ? false
+                : true;
     }
 
     public static getMemberYears(guildMember: GuildMember, guildData: GuildData): number {
@@ -252,8 +254,8 @@ export class CelebrationUtils {
             type === 'birthday'
                 ? guildData.BirthdayMentionSetting
                 : type === 'memberanniversary'
-                ? guildData.MemberAnniversaryMentionSetting
-                : guildData.ServerAnniversaryMentionSetting;
+                    ? guildData.MemberAnniversaryMentionSetting
+                    : guildData.ServerAnniversaryMentionSetting;
 
         if (mentionSetting === '0') return null;
 
