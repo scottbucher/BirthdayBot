@@ -4,7 +4,9 @@ import { GuildCelebrationData, MemberAnniversaryRole } from '../models/database'
 
 import { Logger } from '.';
 
+let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
+
 export class RoleService {
     // TODO: add to config
     public interval: number = 0.5;
@@ -102,7 +104,7 @@ export class RoleService {
                         ) {
                             // Don't send an api request if they already have the role
                             if (!addBirthdayMember.roles.cache.has(birthdayRole.id)) {
-                                await ActionUtils.giveRole(addBirthdayMember, birthdayRole, 100);
+                                await ActionUtils.giveRole(addBirthdayMember, birthdayRole, Config.delays.roles);
                             }
                         }
                     }
@@ -111,7 +113,7 @@ export class RoleService {
                     for (let removeBirthdayMember of removeBirthdayGuildMembers) {
                         // Don't send an api request if they don't have the role
                         if (removeBirthdayMember.roles.cache.has(birthdayRole.id)) {
-                            await ActionUtils.removeRole(removeBirthdayMember, birthdayRole, 100);
+                            await ActionUtils.removeRole(removeBirthdayMember, birthdayRole, Config.delays.roles);
                         }
                     }
                 }
@@ -135,7 +137,7 @@ export class RoleService {
                             if (roleData.Year === memberYears) {
                                 // Don't send an api request if they already have the role
                                 if (!addAnniversaryRoleMember.roles.cache.has(role.id)) {
-                                    await ActionUtils.giveRole(addAnniversaryRoleMember, role);
+                                    await ActionUtils.giveRole(addAnniversaryRoleMember, role, Config.delays.roles);
                                 }
                             }
                         }

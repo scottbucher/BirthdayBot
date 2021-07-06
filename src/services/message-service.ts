@@ -154,10 +154,10 @@ export class MessageService {
                             let mentionString =
                                 filteredGuild.guildData.BirthdayMentionSetting !== 'none'
                                     ? CelebrationUtils.getMentionString(
-                                          filteredGuild.guildData,
-                                          guild,
-                                          'birthday'
-                                      )
+                                        filteredGuild.guildData,
+                                        guild,
+                                        'birthday'
+                                    )
                                     : '';
 
                             // Compile our user list to put in the message
@@ -185,7 +185,8 @@ export class MessageService {
                             let embed = new MessageEmbed().setDescription(message).setColor(color);
                             await MessageUtils.send(
                                 birthdayChannel,
-                                customMessage.Embed ? embed : message
+                                customMessage.Embed ? embed : message,
+                                Config.delays.messages
                             );
                         }
                     }
@@ -199,10 +200,10 @@ export class MessageService {
                     let mentionString =
                         filteredGuild.guildData.BirthdayMentionSetting !== 'none'
                             ? CelebrationUtils.getMentionString(
-                                  filteredGuild.guildData,
-                                  guild,
-                                  'birthday'
-                              )
+                                filteredGuild.guildData,
+                                guild,
+                                'birthday'
+                            )
                             : '';
 
                     // Compile our user list to put in the message
@@ -240,7 +241,8 @@ export class MessageService {
                         await MessageUtils.send(birthdayChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
-                    await MessageUtils.send(birthdayChannel, useEmbed ? embed : message);
+                    await MessageUtils.send(birthdayChannel, useEmbed ? embed : message,
+                        Config.delays.messages);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // The member anniversary channel must exists and we need to have members who need the message
@@ -270,10 +272,10 @@ export class MessageService {
                         let mentionString =
                             filteredGuild.guildData.MemberAnniversaryMentionSetting !== 'none'
                                 ? CelebrationUtils.getMentionString(
-                                      filteredGuild.guildData,
-                                      guild,
-                                      'memberanniversary'
-                                  )
+                                    filteredGuild.guildData,
+                                    guild,
+                                    'memberanniversary'
+                                )
                                 : '';
 
                         // Compile our user list to put in the message
@@ -321,7 +323,8 @@ export class MessageService {
                         let embed = new MessageEmbed().setDescription(message).setColor(color);
                         await MessageUtils.send(
                             memberAnniversaryChannel,
-                            useEmbed ? embed : message
+                            useEmbed ? embed : message,
+                            Config.delays.messages
                         );
                     }
                 }
@@ -350,10 +353,10 @@ export class MessageService {
                     let mentionString =
                         filteredGuild.guildData.ServerAnniversaryMentionSetting !== 'none'
                             ? CelebrationUtils.getMentionString(
-                                  filteredGuild.guildData,
-                                  guild,
-                                  'serveranniversary'
-                              )
+                                filteredGuild.guildData,
+                                guild,
+                                'serveranniversary'
+                            )
                             : '';
 
                     let serverYears = CelebrationUtils.getServerYears(
@@ -399,7 +402,8 @@ export class MessageService {
                         await MessageUtils.send(serverAnniversaryChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
-                    await MessageUtils.send(birthdayChannel, useEmbed ? embed : message);
+                    await MessageUtils.send(birthdayChannel, useEmbed ? embed : message,
+                        Config.delays.messages);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             } catch (error) {
