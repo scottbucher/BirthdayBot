@@ -23,9 +23,10 @@ export class UpdateCommand implements Command {
     ): Promise<void> {
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('info.update', LangCode.EN_US)
-                .setAuthor('Birthday Bot', msg.client.user.avatarURL())
-                .setThumbnail(msg.client.user.avatarURL())
+            Lang.getEmbed('info.update', LangCode.EN_US).setAuthor(
+                'Birthday Bot',
+                msg.client.user.avatarURL()
+            )
         );
     }
 }
