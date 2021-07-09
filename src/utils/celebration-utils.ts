@@ -250,23 +250,21 @@ export class CelebrationUtils {
         // Find mentioned role
         let mentionString: string = '';
 
-        let mentionSetting =
+        let mentionSetting = (
             type === 'birthday'
                 ? guildData.BirthdayMentionSetting
                 : type === 'memberanniversary'
                 ? guildData.MemberAnniversaryMentionSetting
-                : guildData.ServerAnniversaryMentionSetting;
+                : guildData.ServerAnniversaryMentionSetting
+        ).toLowerCase();
 
         if (mentionSetting === '0') return null;
 
-        if (mentionSetting.toLowerCase() === 'here') {
+        if (mentionSetting === 'here') {
             return '@here';
         }
 
-        if (
-            mentionSetting.toLowerCase() === guild.id ||
-            mentionSetting.toLowerCase() === 'everyone'
-        ) {
+        if (mentionSetting === guild.id || mentionSetting === 'everyone') {
             return '@everyone';
         }
 
