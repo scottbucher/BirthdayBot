@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class SetupRequired {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let guild = channel.guild;
@@ -41,7 +41,10 @@ export class SetupRequired {
 
         let channelEmbed = Lang.getEmbed(
             'serverPrompts.requiredSetupBirthdayChannel',
-            LangCode.EN_US
+            LangCode.EN_US,
+            {
+                ICON: msg.client.user.avatarURL()
+            }
         ).setAuthor(`${guild.name}`, guild.iconURL());
         let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 
@@ -165,7 +168,9 @@ export class SetupRequired {
 
         let roleEmbed = Lang.getEmbed(
             'serverPrompts.requiredSetupBirthdayRole',
-            LangCode.EN_US
+            LangCode.EN_US, {
+            ICON: msg.client.user.avatarURL()
+        }
         ).setAuthor(`${guild.name}`, guild.iconURL());
 
         let roleMessage = await MessageUtils.send(channel, roleEmbed);
@@ -252,6 +257,7 @@ export class SetupRequired {
                                 msg.channel as TextChannel,
                                 Lang.getEmbed('validation.roleHierarchyError', LangCode.EN_US, {
                                     BOT: msg.client.user.toString(),
+                                    ICON: msg.client.user.avatarURL(),
                                 })
                             );
                             return;
@@ -277,6 +283,7 @@ export class SetupRequired {
                                     {
                                         AMOUNT: membersWithRole.toString(),
                                         S_Value: membersWithRole > 1 ? 's' : '',
+                                        ICON: msg.client.user.avatarURL(),
                                     }
                                 )
                             );
@@ -285,6 +292,7 @@ export class SetupRequired {
                                 channel,
                                 Lang.getEmbed('validation.birthdayRoleUsedError', LangCode.EN_US, {
                                     AMOUNT: membersWithRole.toString(),
+                                    ICON: msg.client.user.avatarURL(),
                                 })
                             );
                             return;
@@ -313,18 +321,19 @@ export class SetupRequired {
             birthdayChannel === '0'
                 ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
                 : guild.channels.resolve(birthdayChannel)?.toString() ||
-                  `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
+                `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
         let roleOutput =
             birthdayRole === '0'
                 ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
                 : guild.roles.resolve(birthdayRole)?.toString() ||
-                  `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`;
+                `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`;
 
         await MessageUtils.send(
             channel,
             Lang.getEmbed('results.requiredSetup', LangCode.EN_US, {
                 CHANNEL: channelOutput,
                 ROLE: roleOutput,
+                ICON: msg.client.user.avatarURL(),
             })
         );
 

@@ -10,7 +10,7 @@ let Config = require('../../../config/config.json');
 const errorEmbed = Lang.getEmbed('validation.noTrustedRoleSpecified', LangCode.EN_US);
 
 export class TrustedRoleAddSubCommand {
-    constructor(private trustedRoleRepo: TrustedRoleRepo) {}
+    constructor(private trustedRoleRepo: TrustedRoleRepo) { }
 
     public async execute(
         args: string[],
@@ -62,6 +62,7 @@ export class TrustedRoleAddSubCommand {
                 Lang.getEmbed('validation.maxFreeTrustedRoles', LangCode.EN_US, {
                     FREE_MAX: Config.validation.trustedRoles.maxCount.free.toString(),
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
+                    ICON: msg.client.user.avatarURL(),
                 })
             );
             return;

@@ -27,66 +27,58 @@ export class HelpCommand implements Command {
         if (!option) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('help.general', LangCode.EN_US).setAuthor(
-                    'ADD AUTHORS KEVIN >:(',
-                    clientAvatarUrl
-                )
+                Lang.getEmbed('help.general', LangCode.EN_US, {
+                    ICON_URL: clientAvatarUrl
+                })
             );
         } else if (option === 'setup') {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('help.setup', LangCode.EN_US).setAuthor(
-                    'ADD AUTHORS KEVIN >:(',
-                    clientAvatarUrl
-                )
+                Lang.getEmbed('help.setup', LangCode.EN_US, {
+                    ICON_URL: clientAvatarUrl
+                })
             );
         } else if (option === 'message') {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('help.message', LangCode.EN_US).setAuthor(
-                    'ADD AUTHORS KEVIN >:(',
-                    clientAvatarUrl
-                )
+                Lang.getEmbed('help.message', LangCode.EN_US, {
+                    ICON_URL: clientAvatarUrl
+                })
             );
         } else if (option === 'trusted') {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('help.trusted', LangCode.EN_US).setAuthor(
-                    'ADD AUTHORS KEVIN >:(',
-                    clientAvatarUrl
-                )
+                Lang.getEmbed('help.trusted', LangCode.EN_US, {
+                    ICON_URL: clientAvatarUrl
+                })
             );
         } else if (option === 'blacklist') {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('help.blacklist', LangCode.EN_US).setAuthor(
-                    'ADD AUTHORS KEVIN >:(',
-                    clientAvatarUrl
-                )
+                Lang.getEmbed('help.blacklist', LangCode.EN_US, {
+                    ICON_URL: clientAvatarUrl
+                })
             );
         } else if (option === 'anniversary') {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('help.anniversary', LangCode.EN_US).setAuthor(
-                    'ADD AUTHORS KEVIN >:(',
-                    clientAvatarUrl
-                )
+                Lang.getEmbed('help.anniversary', LangCode.EN_US, {
+                    ICON_URL: clientAvatarUrl
+                })
             );
         } else if (option === 'premium') {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('help.premium', LangCode.EN_US).setAuthor(
-                    'ADD AUTHORS KEVIN >:(',
-                    clientAvatarUrl
-                )
+                Lang.getEmbed('help.premium', LangCode.EN_US, {
+                    ICON_URL: clientAvatarUrl
+                })
             );
         } else {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('help.general', LangCode.EN_US).setAuthor(
-                    'ADD AUTHORS KEVIN >:(',
-                    clientAvatarUrl
-                )
+                Lang.getEmbed('help.general', LangCode.EN_US, {
+                    ICON_URL: clientAvatarUrl
+                })
             );
         }
     }

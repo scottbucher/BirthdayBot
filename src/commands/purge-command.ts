@@ -30,7 +30,7 @@ export class PurgeCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) {}
+    constructor(private userRepo: UserRepo) { }
 
     async execute(args: string[], msg: Message, channel: TextChannel | DMChannel): Promise<void> {
         let target = msg.author;
@@ -65,6 +65,7 @@ export class PurgeCommand implements Command {
                 CHANGES_LEFT: changesLeft.toString(),
                 APPEND:
                     changesLeft === 0 ? Lang.getRef('prompts.outOfAttemtps', LangCode.EN_US) : '',
+                ICON: msg.client.user.avatarURL(),
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

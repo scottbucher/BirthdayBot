@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class MemberAnniversaryRoleClearSubCommand {
-    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
+    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -52,6 +52,7 @@ export class MemberAnniversaryRoleClearSubCommand {
             channel,
             Lang.getEmbed('serverPrompts.memberAnniversaryRoleClearConfirmation', LangCode.EN_US, {
                 TOTAL: memberAnniversaryRoles.memberAnniversaryRoles.length.toString(),
+                ICON: msg.client.user.avatarURL()
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

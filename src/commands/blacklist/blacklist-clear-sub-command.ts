@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class BlacklistClearSubCommand {
-    constructor(private blacklistRepo: BlacklistRepo) {}
+    constructor(private blacklistRepo: BlacklistRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -50,6 +50,7 @@ export class BlacklistClearSubCommand {
             channel,
             Lang.getEmbed('serverPrompts.blacklistClearConfirmation', LangCode.EN_US, {
                 TOTAL: blacklisted.blacklist.length.toString(),
+                ICON: msg.client.user.avatarURL()
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

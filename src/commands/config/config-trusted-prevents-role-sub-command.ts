@@ -8,7 +8,7 @@ import { LangCode } from '../../models/enums';
 const errorEmbed = Lang.getEmbed('validation.noTrueFalse', LangCode.EN_US);
 
 export class ConfigTrustedPreventsRoleSubCommand {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
@@ -21,7 +21,9 @@ export class ConfigTrustedPreventsRoleSubCommand {
         if (preventRole === undefined || preventRole === null) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidTrueFalseTrustedPreventsRole', LangCode.EN_US)
+                Lang.getEmbed('validation.invalidTrueFalseTrustedPreventsRole', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }

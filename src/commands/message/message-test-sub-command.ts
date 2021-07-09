@@ -9,7 +9,7 @@ import moment from 'moment';
 let Config = require('../../../config/config.json');
 
 export class MessageTestSubCommand {
-    constructor(private guildRepo: GuildRepo, private customMessageRepo: CustomMessageRepo) {}
+    constructor(private guildRepo: GuildRepo, private customMessageRepo: CustomMessageRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // bday message test <type> <position> [user count]
@@ -21,7 +21,9 @@ export class MessageTestSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidMessageType', LangCode.EN_US)
+                Lang.getEmbed('validation.invalidMessageType', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -78,22 +80,22 @@ export class MessageTestSubCommand {
         let year =
             type === 'memberanniversary'
                 ? moment().diff(
-                      target
-                          ? target.joinedAt
-                          : msg.guild.members.resolve(msg.client.user).joinedAt,
-                      'years'
-                  ) + 1
+                    target
+                        ? target.joinedAt
+                        : msg.guild.members.resolve(msg.client.user).joinedAt,
+                    'years'
+                ) + 1
                 : type === 'serveranniversary'
-                ? moment().diff(msg.guild.createdAt, 'years') + 1
-                : null;
+                    ? moment().diff(msg.guild.createdAt, 'years') + 1
+                    : null;
 
         if (!messages) {
             let defaultMessage =
                 type === 'memberanniversary'
                     ? Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US)
                     : type === 'serveranniversary'
-                    ? Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US)
-                    : Lang.getRef('defaults.birthdayMessage', LangCode.EN_US);
+                        ? Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US)
+                        : Lang.getRef('defaults.birthdayMessage', LangCode.EN_US);
 
             await MessageUtils.send(
                 channel,
@@ -126,7 +128,9 @@ export class MessageTestSubCommand {
         if (!customMessage) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.messageDoesNotExist', LangCode.EN_US)
+                Lang.getEmbed('validation.messageDoesNotExist', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }

@@ -21,7 +21,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
 export class MessageAddSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) {}
+    constructor(private customMessageRepo: CustomMessageRepo) { }
 
     public async execute(
         args: string[],
@@ -50,7 +50,9 @@ export class MessageAddSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.addMessageInvalidType', LangCode.EN_US)
+                Lang.getEmbed('validation.addMessageInvalidType', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -82,7 +84,9 @@ export class MessageAddSubCommand {
             } else if (!hasPremium) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN_US)
+                    Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN_US, {
+                        ICON: msg.client.user.avatarURL(),
+                    })
                 );
                 return;
             }
@@ -127,8 +131,8 @@ export class MessageAddSubCommand {
             type === 'birthday'
                 ? Lang.getRef('terms.birthday', LangCode.EN_US).toLowerCase()
                 : type === 'memberanniversary'
-                ? Lang.getRef('terms.memberAnniversary', LangCode.EN_US).toLowerCase()
-                : Lang.getRef('terms.serverAnniversary', LangCode.EN_US).toLowerCase();
+                    ? Lang.getRef('terms.memberAnniversary', LangCode.EN_US).toLowerCase()
+                    : Lang.getRef('terms.serverAnniversary', LangCode.EN_US).toLowerCase();
 
         if (type === 'birthday' || type === 'memberanniversary') {
             // Can also use year and server name placeholder
@@ -170,14 +174,14 @@ export class MessageAddSubCommand {
             type === 'birthday'
                 ? Config.validation.message.maxCount.birthday.free
                 : type === 'memberanniversary'
-                ? Config.validation.message.maxCount.memberAnniversary.free
-                : Config.validation.message.maxCount.serverAnniversary.free;
+                    ? Config.validation.message.maxCount.memberAnniversary.free
+                    : Config.validation.message.maxCount.serverAnniversary.free;
         let maxMessageCountPaid =
             type === 'birthday'
                 ? Config.validation.message.maxCount.birthday.paid
                 : type === 'memberanniversary'
-                ? Config.validation.message.maxCount.memberAnniversary.paid
-                : Config.validation.message.maxCount.serverAnniversary.paid;
+                    ? Config.validation.message.maxCount.memberAnniversary.paid
+                    : Config.validation.message.maxCount.serverAnniversary.paid;
 
         if (customMessages) {
             if (globalMessageCount >= maxMessageCountFree && !hasPremium) {
@@ -187,6 +191,7 @@ export class MessageAddSubCommand {
                         TYPE: typeDisplayName,
                         FREE_MAX: maxMessageCountFree,
                         PAID_MAX: maxMessageCountPaid,
+                        ICON: msg.client.user.avatarURL(),
                     })
                 );
                 return;
@@ -224,6 +229,7 @@ export class MessageAddSubCommand {
                                 type,
                                 target?.toString()
                             ),
+                            ICON: msg.client.user.avatarURL(),
                         })
                     ); // Send confirmation and emotes
                     for (let option of trueFalseOptions) {
@@ -276,7 +282,9 @@ export class MessageAddSubCommand {
         if (hasPremium) {
             let selectMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('serverPrompts.customMessageColorSelection', LangCode.EN_US)
+                Lang.getEmbed('serverPrompts.customMessageColorSelection', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL()
+                })
             );
 
             colorHex = await CollectorUtils.collectByMessage(
@@ -311,7 +319,9 @@ export class MessageAddSubCommand {
 
         let settingRole = await MessageUtils.send(
             channel,
-            Lang.getEmbed('serverPrompts.customMessageEmbedSelection', LangCode.EN_US)
+            Lang.getEmbed('serverPrompts.customMessageEmbedSelection', LangCode.EN_US, {
+                ICON: msg.client.user.avatarURL()
+            })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await settingRole.react(option);
@@ -350,41 +360,43 @@ export class MessageAddSubCommand {
             channel,
             userId === '0'
                 ? Lang.getEmbed('results.addCustomMessage', LangCode.EN_US, {
-                      DISPLAY_TYPE: typeDisplayName,
-                      MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
-                          message,
-                          msg.guild,
-                          type,
-                          null
-                      ),
-                      IS_EMBED: embedChoice === 1 ? 'True' : 'False',
-                      HAS_PREMIUM: !hasPremium
-                          ? Lang.getRef('conditionals.needColorForPremium', LangCode.EN_US)
-                          : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
-                                COLOR_HEX: colorHex,
-                            }),
-                      TYPE: type,
-                  })
+                    DISPLAY_TYPE: typeDisplayName,
+                    MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
+                        message,
+                        msg.guild,
+                        type,
+                        null
+                    ),
+                    IS_EMBED: embedChoice === 1 ? 'True' : 'False',
+                    HAS_PREMIUM: !hasPremium
+                        ? Lang.getRef('conditionals.needColorForPremium', LangCode.EN_US)
+                        : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
+                            COLOR_HEX: colorHex,
+                        }),
+                    TYPE: type,
+                    ICON: msg.client.user.avatarURL(),
+                })
                 : Lang.getEmbed('results.addCustomUserMessage', LangCode.EN_US, {
-                      DISPLAY_TYPE: typeDisplayName,
-                      MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
-                          message,
-                          msg.guild,
-                          type,
-                          target?.toString()
-                      ),
-                      IS_EMBED: embedChoice === 1 ? 'True' : 'False',
-                      HAS_PREMIUM: !hasPremium
-                          ? Lang.getRef('conditionals.colorForPremium', LangCode.EN_US)
-                          : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
-                                COLOR_HEX: colorHex,
-                            }),
-                      TYPE:
-                          type === 'birthday'
-                              ? 'userSpecificBirthday'
-                              : 'userSpecificMemberAnniversary',
-                      USER: target.toString(),
-                  })
+                    DISPLAY_TYPE: typeDisplayName,
+                    MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
+                        message,
+                        msg.guild,
+                        type,
+                        target?.toString()
+                    ),
+                    IS_EMBED: embedChoice === 1 ? 'True' : 'False',
+                    HAS_PREMIUM: !hasPremium
+                        ? Lang.getRef('conditionals.colorForPremium', LangCode.EN_US)
+                        : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
+                            COLOR_HEX: colorHex,
+                        }),
+                    TYPE:
+                        type === 'birthday'
+                            ? 'userSpecificBirthday'
+                            : 'userSpecificMemberAnniversary',
+                    USER: target.toString(),
+                    ICON: msg.client.user.avatarURL(),
+                })
         );
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -7,7 +7,7 @@ import { LangCode } from '../../models/enums';
 
 const errorEmbed = Lang.getEmbed('validation.noTimeZone', LangCode.EN_US);
 export class ConfigTimezoneSubCommand {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
@@ -28,7 +28,9 @@ export class ConfigTimezoneSubCommand {
         if (FormatUtils.checkAbbreviation(args[3])) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidServerTimeZoneAbbreviation', LangCode.EN_US)
+                Lang.getEmbed('validation.invalidServerTimeZoneAbbreviation', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -37,7 +39,9 @@ export class ConfigTimezoneSubCommand {
         if (!timezone) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidServerTimeZone', LangCode.EN_US)
+                Lang.getEmbed('validation.invalidServerTimeZone', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }

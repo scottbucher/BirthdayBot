@@ -24,7 +24,7 @@ export class SetupCommand implements Command {
         private setupRequired: SetupRequired,
         private setupTrusted: SetupTrusted,
         private setupAnniversary: SetupAnniversary
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],

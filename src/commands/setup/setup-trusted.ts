@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class SetupTrusted {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(
         args: string[],
@@ -47,7 +47,9 @@ export class SetupTrusted {
 
         let trustedPreventsRoleEmbed = Lang.getEmbed(
             'serverPrompts.trustedSetupPreventsRole',
-            LangCode.EN_US
+            LangCode.EN_US, {
+            ICON: msg.client.user.avatarURL()
+        }
         );
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
@@ -77,7 +79,9 @@ export class SetupTrusted {
 
         let trustedPreventsMessageEmbed = Lang.getEmbed(
             'serverPrompts.trustedSetupPreventsMessage',
-            LangCode.EN_US
+            LangCode.EN_US, {
+            ICON: msg.client.user.avatarURL()
+        }
         );
 
         let trustedPreventsMessageMessage = await MessageUtils.send(
@@ -109,7 +113,9 @@ export class SetupTrusted {
         if (hasPremium) {
             let requireAllTrustedRolesEmbed = Lang.getEmbed(
                 'serverPrompts.trustedSetupRequireAll',
-                LangCode.EN_US
+                LangCode.EN_US, {
+                ICON: msg.client.user.avatarURL()
+            }
             );
 
             let requireAllTrustedRolesMessage = await MessageUtils.send(
@@ -148,14 +154,16 @@ export class SetupTrusted {
 
         let embed = hasPremium
             ? Lang.getEmbed('results.trustedSetupPremium', LangCode.EN_US, {
-                  PREVENTS_ROLE: preventRole === 1 ? 'True' : 'False',
-                  PREVENTS_MESSAGE: preventMessage === 1 ? 'True' : 'False',
-                  REQUIRE_ALL_ROLES: requireAllTrustedRoles === 1 ? 'True' : 'False',
-              })
+                PREVENTS_ROLE: preventRole === 1 ? 'True' : 'False',
+                PREVENTS_MESSAGE: preventMessage === 1 ? 'True' : 'False',
+                REQUIRE_ALL_ROLES: requireAllTrustedRoles === 1 ? 'True' : 'False',
+                ICON: msg.client.user.avatarURL(),
+            })
             : Lang.getEmbed('results.trustedSetup', LangCode.EN_US, {
-                  PREVENTS_ROLE: preventRole === 1 ? 'True' : 'False',
-                  PREVENTS_MESSAGE: preventMessage === 1 ? 'True' : 'False',
-              });
+                PREVENTS_ROLE: preventRole === 1 ? 'True' : 'False',
+                PREVENTS_MESSAGE: preventMessage === 1 ? 'True' : 'False',
+                ICON: msg.client.user.avatarURL(),
+            });
 
         await MessageUtils.send(channel, embed);
 

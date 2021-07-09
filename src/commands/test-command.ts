@@ -43,7 +43,7 @@ export class TestCommand implements Command {
         private trustedRoleRepo: TrustedRoleRepo,
         private blacklistRepo: BlacklistRepo,
         private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo
-    ) {}
+    ) { }
 
     public async execute(
         args: string[],
@@ -57,7 +57,9 @@ export class TestCommand implements Command {
         if (args.length < 3) {
             MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US)
+                Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -67,7 +69,9 @@ export class TestCommand implements Command {
         if (!type) {
             MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US)
+                Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -112,8 +116,8 @@ export class TestCommand implements Command {
                 type === 'birthday'
                     ? guildData.BirthdayChannelDiscordId
                     : type === 'memberanniversary'
-                    ? guildData.MemberAnniversaryChannelDiscordId
-                    : guildData.ServerAnniversaryChannelDiscordId
+                        ? guildData.MemberAnniversaryChannelDiscordId
+                        : guildData.ServerAnniversaryChannelDiscordId
             ) as TextChannel;
         } catch (error) {
             // No birthday channel
@@ -238,32 +242,34 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let testingEmbed = Lang.getEmbed('results.birthdayTest', LangCode.EN_US)
+            let testingEmbed = Lang.getEmbed('results.birthdayTest', LangCode.EN_US, {
+                ICON: msg.client.user.avatarURL(),
+            })
                 .setColor(Config.colors.default)
                 .addField(
                     Lang.getRef('terms.birthdayChannel', LangCode.EN_US),
                     messageCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.correctlySet',
-                              LangCode.EN_US
-                          )}`
+                            'terms.correctlySet',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
-                              'terms.notSetOrIncorrect',
-                              LangCode.EN_US
-                          )}`,
+                            'terms.notSetOrIncorrect',
+                            LangCode.EN_US
+                        )}`,
                     true
                 )
                 .addField(
                     Lang.getRef('terms.birthdayRole', LangCode.EN_US),
                     roleCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.correctlySet',
-                              LangCode.EN_US
-                          )}`
+                            'terms.correctlySet',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
-                              'terms.notSetOrIncorrect',
-                              LangCode.EN_US
-                          )}`,
+                            'terms.notSetOrIncorrect',
+                            LangCode.EN_US
+                        )}`,
                     true
                 );
 
@@ -272,13 +278,13 @@ export class TestCommand implements Command {
                     Lang.getRef('terms.memberInBlacklist', LangCode.EN_US),
                     trustedCheckMessage
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.notInBlacklist',
-                              LangCode.EN_US
-                          )}`
+                            'terms.notInBlacklist',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
-                              'terms.inBlacklist',
-                              LangCode.EN_US
-                          )}`,
+                            'terms.inBlacklist',
+                            LangCode.EN_US
+                        )}`,
                     true
                 );
             }
@@ -288,26 +294,26 @@ export class TestCommand implements Command {
                     Lang.getRef('terms.trustedPreventMsg', LangCode.EN_US),
                     trustedCheckMessage
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.didntPreventMsg',
-                              LangCode.EN_US
-                          )}`
+                            'terms.didntPreventMsg',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
-                              'terms.didPreventMsg',
-                              LangCode.EN_US
-                          )}`,
+                            'terms.didPreventMsg',
+                            LangCode.EN_US
+                        )}`,
                     true
                 );
                 testingEmbed.addField(
                     Lang.getRef('terms.trustedPreventRole', LangCode.EN_US),
                     trustedCheckRole
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.didntPreventRole',
-                              LangCode.EN_US
-                          )}`
+                            'terms.didntPreventRole',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
-                              'terms.didPreventRole',
-                              LangCode.EN_US
-                          )}`,
+                            'terms.didPreventRole',
+                            LangCode.EN_US
+                        )}`,
                     true
                 );
             }
@@ -416,14 +422,16 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let testingEmbed = Lang.getEmbed('results.memberAnniversaryTest', LangCode.EN_US)
+            let testingEmbed = Lang.getEmbed('results.memberAnniversaryTest', LangCode.EN_US, {
+                ICON: msg.client.user.avatarURL(),
+            })
                 .addField(
                     Lang.getRef('terms.defaultTimezone', LangCode.EN_US),
                     timezoneCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.correctlySet',
-                              LangCode.EN_US
-                          )}`
+                            'terms.correctlySet',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef('terms.notSet', LangCode.EN_US)}`,
                     true
                 )
@@ -431,13 +439,13 @@ export class TestCommand implements Command {
                     Lang.getRef('terms.memberAnniversaryChannel', LangCode.EN_US),
                     messageCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.correctlySet',
-                              LangCode.EN_US
-                          )}`
+                            'terms.correctlySet',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
-                              'terms.notSetOrIncorrect',
-                              LangCode.EN_US
-                          )}`,
+                            'terms.notSetOrIncorrect',
+                            LangCode.EN_US
+                        )}`,
                     true
                 );
 
@@ -446,13 +454,13 @@ export class TestCommand implements Command {
                     Lang.getRef('terms.memberAnniversaryRoles', LangCode.EN_US),
                     memberAnniversaryRolesCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.canBeGiven',
-                              LangCode.EN_US
-                          )}`
+                            'terms.canBeGiven',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
-                              'terms.cantBeGivenPermIssue',
-                              LangCode.EN_US
-                          )}`,
+                            'terms.cantBeGivenPermIssue',
+                            LangCode.EN_US
+                        )}`,
                     true
                 );
             }
@@ -505,14 +513,16 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let testingEmbed = Lang.getEmbed('results.serverAnniversaryTest', LangCode.EN_US)
+            let testingEmbed = Lang.getEmbed('results.serverAnniversaryTest', LangCode.EN_US, {
+                ICON: msg.client.user.avatarURL(),
+            })
                 .addField(
                     Lang.getRef('terms.defaultTimezone', LangCode.EN_US),
                     timezoneCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.correctlySet',
-                              LangCode.EN_US
-                          )}`
+                            'terms.correctlySet',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef('terms.notSet', LangCode.EN_US)}`,
                     true
                 )
@@ -520,13 +530,13 @@ export class TestCommand implements Command {
                     Lang.getRef('terms.serverAnniversaryChannel', LangCode.EN_US),
                     timezoneCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
-                              'terms.correctlySet',
-                              LangCode.EN_US
-                          )}`
+                            'terms.correctlySet',
+                            LangCode.EN_US
+                        )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
-                              'terms.notSetOrIncorrect',
-                              LangCode.EN_US
-                          )}`,
+                            'terms.notSetOrIncorrect',
+                            LangCode.EN_US
+                        )}`,
                     true
                 );
             await MessageUtils.send(channel, testingEmbed);

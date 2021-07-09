@@ -22,7 +22,9 @@ export class MemberAnniversaryRoleClaimSubCommand {
         if (!hasPremium) {
             MessageUtils.send(
                 channel,
-                Lang.getEmbed('premiumRequired.anniversaryRoles', LangCode.EN_US)
+                Lang.getEmbed('premiumRequired.anniversaryRoles', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -89,7 +91,9 @@ export class MemberAnniversaryRoleClaimSubCommand {
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.memberAnniversaryRolesClaimed', LangCode.EN_US)
+            Lang.getEmbed('results.memberAnniversaryRolesClaimed', LangCode.EN_US, {
+                ICON: msg.client.user.avatarURL(),
+            })
         );
     }
 }

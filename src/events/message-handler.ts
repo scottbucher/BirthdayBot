@@ -24,7 +24,7 @@ export class MessageHandler {
         private subscriptionService: SubscriptionService,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo
-    ) {}
+    ) { }
 
     public async process(msg: Message): Promise<void> {
         // Don't respond to partial messages, system messages, or bots
@@ -138,7 +138,9 @@ export class MessageHandler {
         if (checkPremium && !hasPremium) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('premiumRequired.command', LangCode.EN_US)
+                Lang.getEmbed('premiumRequired.command', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -156,6 +158,7 @@ export class MessageHandler {
                     channel,
                     Lang.getEmbed('validation.voteRequired', LangCode.EN_US, {
                         LAST_VOTE: voteTimeAgo,
+                        ICON: msg.client.user.avatarURL(),
                     })
                 );
                 return;

@@ -13,21 +13,24 @@
             "blacklistClearConfirmation": {
                 "description": "Are you sure you want to clear __**{{TOTAL}}**__ blacklisted user(s)?",
                 "footer": {
-                    "text": "{{REF:footers.irreversible}}"
+                    "text": "{{REF:footers.irreversible}}",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}"
             },
             "trustedRoleClearConfirmation": {
                 "description": "Are you sure you want to clear __**{{TOTAL}}**__ trusted role(s)?",
                 "footer": {
-                    "text": "{{REF:footers.irreversible}}"
+                    "text": "{{REF:footers.irreversible}}",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}"
             },
             "memberAnniversaryRoleClearConfirmation": {
                 "description": "Are you sure you want to clear __**{{TOTAL}}**__ member anniversary role(s)?",
                 "footer": {
-                    "text": "{{REF:footers.irreversible}}"
+                    "text": "{{REF:footers.irreversible}}",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}"
             },
@@ -51,7 +54,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -75,7 +79,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -88,7 +93,8 @@
                     "False: {{REF:emotes.deny}}"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -101,7 +107,8 @@
                     "False: {{REF:emotes.deny}}"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -116,7 +123,8 @@
                     "False: {{REF:emotes.deny}}"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -140,7 +148,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -164,7 +173,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -175,7 +185,8 @@
                     "Both color names and hex values are accepted."
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -189,44 +200,29 @@
                     "False {{REF:emotes.deny}}"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
             "confirmClearMessages": {
                 "description": "Are you sure you want to clear __**{{MESSAGE_COUNT}}**__ {{DISPLAY_TYPE}}?",
                 "footer": {
-                    "text": "This action is irreversible!"
+                    "text": "This action is irreversible!",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}"
             }
         },
         "userPrompts": {
             "birthdaySetupTimeZone": {
-                "title": "Time Zone Setup - {{TARGET}}",
-                "description": [
-                    "**Important**: By submitting this information you agree it can be shown to anyone.",
-                    "",
-                    "First, please enter your time zone. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
-                    "",
-                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!",
-                    "",
-                    "Simply click your location on the map and copy the name of the selected time zone. You can then enter it below.",
-                    "",
-                    "**Example Usage:** `America/New_York`",
-                    "",
-                    "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
-                ],
-                "footer": {
-                    "text": "{{REF:footers.expire}}"
+                "author": {
+                    "name": "{{TAG}}",
+                    "icon": "{{ICON}}",
+                    "url": "{{REF:docLinks:setupBirthday}}"
                 },
-                "timestamp": true
-            },
-            "birthdaySetupTimeZoneChange": {
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
-                    "__**Note**__: Your birthday is already set, continue to change it.",
-                    "",
                     "**Important**: By submitting this information you agree it can be shown to anyone.",
                     "",
                     "First, please enter your time zone. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
@@ -240,31 +236,19 @@
                     "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
             "birthdaySetupBirthday": {
-                "title": "Birthday Setup - {{TARGET}}",
-                "description": [
-                    "**Important**: By submitting this information you agree it can be shown to anyone.",
-                    "",
-                    "Please enter your birth month and day. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
-                    "",
-                    "**Example Usage:** `08/28` (MM/DD)",
-                    "",
-                    "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
-                ],
-                "footer": {
-                    "text": "{{REF:footers.expire}}"
+                "author": {
+                    "name": "{{TAG}}",
+                    "icon": "{{ICON}}",
+                    "url": "{{REF:docLinks:setupBirthday}}"
                 },
-                "timestamp": true
-            },
-            "birthdaySetupBirthdayChange": {
                 "title": "Birthday Setup - {{TARGET}}",
                 "description": [
-                    "__**Note**__: Your birthday is already set, continue to change it.",
-                    "",
                     "**Important**: By submitting this information you agree it can be shown to anyone.",
                     "",
                     "Please enter your birth month and day. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
@@ -274,7 +258,8 @@
                     "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -290,11 +275,15 @@
                 "fields": [
                     {
                         "name": "Actions",
-                        "value": ["{{REF:emotes.confirm}} Confirm", "{{REF:emotes.deny}} Deny"]
+                        "value": [
+                            "{{REF:emotes.confirm}} Confirm",
+                            "{{REF:emotes.deny}} Deny"
+                        ]
                     }
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}",
                 "timestamp": true
@@ -310,28 +299,24 @@
             "confirmFirstBirthday": {
                 "description": "{{TARGET}}, please confirm this information is correct: **{{BIRTHDAY}}, {{TIMEZONE}}**",
                 "footer": {
-                    "text": "You have {{CHANGES_LEFT}} attempts left. By clicking confirm you will use one of them."
+                    "text": "You have {{CHANGES_LEFT}} attempts left. By clicking confirm you will use one of them.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}"
             },
             "confirmFirstBirthdaySuggest": {
                 "description": "{{TARGET}}, please confirm this information is correct: **{{BIRTHDAY}}, {{TIMEZONE}}**",
                 "footer": {
-                    "text": "{{TARGET_FOOTER}} has {{CHANGES_LEFT}} attempts left. By clicking confirm they will use one of them."
+                    "text": "{{TARGET_FOOTER}} has {{CHANGES_LEFT}} attempts left. By clicking confirm they will use one of them.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}"
             },
             "confirmChangeBirthday": {
                 "description": "{{TARGET}}, your birthday is already set, please confirm this information is correct to change it: **{{BIRTHDAY}}, {{TIMEZONE}}**",
                 "footer": {
-                    "text": "You have {{CHANGES_LEFT}} attempts left. By clicking confirm you will use one of them."
-                },
-                "color": "{{REF:colors.warn}}"
-            },
-            "confirmChangeBirthdaySuggest": {
-                "description": "{{TARGET}}, your birthday is already set, please confirm this information is correct to change it: **{{BIRTHDAY}}, {{TIMEZONE}}**",
-                "footer": {
-                    "text": "{{TARGET_FOOTER}} has {{CHANGES_LEFT}} attempts left. By clicking confirm they will use one of them."
+                    "text": "You have {{CHANGES_LEFT}} attempts left. By clicking confirm you will use one of them.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}"
             }
@@ -346,7 +331,8 @@
                     "**Birthday Role**: {{ROLE}}"
                 ],
                 "footer": {
-                    "text": "All server commands unlocked!"
+                    "text": "All server commands unlocked!",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}",
                 "timestamp": true
@@ -357,7 +343,8 @@
                     "Below are the checks to ensure your settings are correct for the birthday event."
                 ],
                 "footer": {
-                    "text": "This is the info from your birthday event test."
+                    "text": "This is the info from your birthday event test.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}",
                 "timestamp": true
@@ -368,7 +355,8 @@
                     "Below are the checks to ensure your settings are correct for the member anniversary event."
                 ],
                 "footer": {
-                    "text": "This is the info from your latest member anniversary event test."
+                    "text": "This is the info from your latest member anniversary event test.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}",
                 "timestamp": true
@@ -379,7 +367,8 @@
                     "Below are the checks to ensure your settings are correct for the server anniversary event."
                 ],
                 "footer": {
-                    "text": "This is the info from your latest server anniversary event test."
+                    "text": "This is the info from your latest server anniversary event test.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}",
                 "timestamp": true
@@ -393,7 +382,8 @@
                     "**Trusted Prevents Role**: {{PREVENTS_MESSAGE}}"
                 ],
                 "footer": {
-                    "text": "Trusted Setup Complete!"
+                    "text": "Trusted Setup Complete!",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}",
                 "timestamp": true
@@ -408,7 +398,8 @@
                     "**Require All Trusted Roles**: {{REQUIRE_ALL_ROLES}}"
                 ],
                 "footer": {
-                    "text": "Trusted Setup Complete!"
+                    "text": "Trusted Setup Complete!",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}",
                 "timestamp": true
@@ -422,7 +413,8 @@
                     "**Server Anniversary Channel**: {{SERVER_CHANNEL}}"
                 ],
                 "footer": {
-                    "text": "Anniversary Setup Complete!"
+                    "text": "Anniversary Setup Complete!",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}",
                 "timestamp": true
@@ -430,7 +422,8 @@
             "setBirthday": {
                 "description": "Successfully set your birthday to **{{BIRTHDAY}}, {{TIMEZONE}}**",
                 "footer": {
-                    "text": "You now have {{AMOUNT}} birthday attempts left."
+                    "text": "You now have {{AMOUNT}} birthday attempts left.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}"
             },
@@ -457,7 +450,8 @@
             "memberAnniversaryRolesClaimed": {
                 "description": "Successfully claimed all member anniversary roles available to you/",
                 "footer": {
-                    "text": "If some roles were not given Birthday Bot may not have permission to give them."
+                    "text": "If some roles were not given Birthday Bot may not have permission to give them.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}"
             },
@@ -470,7 +464,8 @@
                 "title": "Remove Custom Message",
                 "description": "{{MESSAGE}}",
                 "footer": {
-                    "text": "{{REF:emotes.confirm}} Message Removed"
+                    "text": "{{REF:emotes.confirm}} Message Removed",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}"
             },
@@ -535,16 +530,10 @@
             },
             "birthdayRoleCreated": {
                 "description": "Successfully created the master role {{ROLE}}!",
-                "footer": {
-                    "text": "This role is actively removed from those whose birthday it isn't."
-                },
                 "color": "{{REF:colors.success}}"
             },
             "birthdayRoleSet": {
                 "description": "Successfully set the birthday role to {{ROLE}}!",
-                "footer": {
-                    "text": "This role is actively removed from those whose birthday it isn't."
-                },
                 "color": "{{REF:colors.success}}"
             },
             "customMessagesCleared": {
@@ -679,7 +668,8 @@
             "viewBirthday": {
                 "description": "Your birthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!",
                 "footer": {
-                    "text": "You currently have {{CHANGES_LEFT}} birthday attempt(s) left."
+                    "text": "You currently have {{CHANGES_LEFT}} birthday attempt(s) left.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.default}}"
             },
@@ -715,7 +705,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "{{REF:emotes.confirm}} Message added."
+                    "text": "{{REF:emotes.confirm}} Message added.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}"
             },
@@ -739,7 +730,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "{{REF:emotes.confirm}} Message added."
+                    "text": "{{REF:emotes.confirm}} Message added.",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.success}}"
             },
@@ -757,39 +749,28 @@
             "voteRequired": {
                 "title": "Vote Required!",
                 "thumbnail": "{{REF:links.voteImage}}",
-                "description": ["This command requires you to have voted in the past 24 hours!"],
+                "description": [
+                    "This command requires you to have voted in the past 24 hours!"
+                ],
                 "fields": [
                     {
                         "name": "Last Vote",
-                        "value": ["{{LAST_VOTE}}"],
+                        "value": [
+                            "{{LAST_VOTE}}"
+                        ],
                         "inline": true
                     },
                     {
                         "name": "Vote Here",
-                        "value": ["[Top.gg]({{REF:links.vote}})"],
+                        "value": [
+                            "[Top.gg]({{REF:links.vote}})"
+                        ],
                         "inline": true
                     }
                 ],
                 "footer": {
-                    "text": "Don't want to vote? Disable voting for the whole server with {{REF:bot.name}} Premium!"
-                },
-                "timestamp": true,
-                "color": "{{REF:colors.error}}"
-            },
-            "needManageRoles": {
-                "title": "Not Enough Permissions!",
-                "description": ["{{REF:bot.name}} needs permission to Manage Roles!"],
-                "footer": {
-                    "text": "{{REF:footers.joinSupport}}"
-                },
-                "timestamp": true,
-                "color": "{{REF:colors.error}}"
-            },
-            "needManageChannels": {
-                "title": "Not Enough Permissions!",
-                "description": ["{{REF:bot.name}} needs permission to Manage Channels!"],
-                "footer": {
-                    "text": "{{REF:footers.joinSupport}}"
+                    "text": "Don't want to vote? Disable voting for the whole server with {{REF:bot.name}} Premium!",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -808,7 +789,8 @@
                     "Note: These permissions are needed both in the server and in {{CHANNEL}}!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.joinSupport}}"
+                    "text": "{{REF:footers.joinSupport}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -837,7 +819,10 @@
             },
             "noArgs": {
                 "title": "Invalid Usage!",
-                "description": ["Please specify an option!", "{{OPTIONS}}"],
+                "description": [
+                    "Please specify an option!",
+                    "{{OPTIONS}}"
+                ],
                 "color": "{{REF:colors.error}}"
             },
             "invalidNextArgs": {
@@ -885,7 +870,9 @@
                 "color": "{{REF:colors.error}}"
             },
             "userBirthdayNotSet": {
-                "description": ["{{USER}} hasn't set their birthday!"],
+                "description": [
+                    "{{USER}} hasn't set their birthday!"
+                ],
                 "color": "{{REF:colors.error}}"
             },
             "noBlacklistArgs": {
@@ -942,7 +929,8 @@
                     "Essentially the bot is unable to give a role to someone with a higher role than them or give a role that is higher than the bot's."
                 ],
                 "footer": {
-                    "text": "{{REF:footers.joinSupport}}"
+                    "text": "{{REF:footers.joinSupport}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1017,7 +1005,8 @@
                     "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.tryAgain}}"
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1029,7 +1018,8 @@
                     "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.tryAgain}}"
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1038,7 +1028,8 @@
                 "title": "Add Custom Message",
                 "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1047,7 +1038,8 @@
                 "title": "Remove Custom Message",
                 "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1056,7 +1048,8 @@
                 "title": "Clear Custom Message",
                 "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1065,7 +1058,8 @@
                 "title": "Custom Message List",
                 "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1074,7 +1068,8 @@
                 "title": "Celebration Test",
                 "description": "Please specify a celebration type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1083,7 +1078,8 @@
                 "title": "Channel Selection",
                 "description": "Please specify a channel type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`",
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1092,7 +1088,8 @@
                 "title": "Invalid Group/Role",
                 "description": "Accepted Values: `everyone`, `here`, `@role/role-name`, `none`",
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1101,7 +1098,8 @@
                 "title": "Warning",
                 "description": "We have detected that __**{{AMOUNT}}**__ user{{S_VALUE}} already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
                 "footer": {
-                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!"
+                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.warn}}"
@@ -1110,7 +1108,8 @@
                 "title": "Error",
                 "description": "We have detected that __**{{AMOUNT}}**__ users already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
                 "footer": {
-                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!"
+                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1124,9 +1123,6 @@
                     "`{{REF:bot.prefix}} config {{REF:types.channel}} <type> {{REF:types.clear}}` - Clears the channel of that type.",
                     "`{{REF:bot.prefix}} config {{REF:types.channel}} <type> #channel` - Set the channel of that type."
                 ],
-                "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
-                },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
@@ -1140,7 +1136,8 @@
                     "`tag:` **{{TAG}}**"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1154,9 +1151,6 @@
                     "`{{REF:bot.prefix}} config {{REF:types.birthdayMasterRole}} {{REF:types.clear}}` - Clears the birthday master role.",
                     "`{{REF:bot.prefix}} config {{REF:types.birthdayMasterRole}} @role` - Set the birthday master role."
                 ],
-                "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
-                },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
@@ -1169,9 +1163,6 @@
                     "`{{REF:bot.prefix}} config {{REF:types.birthdayRole}} {{REF:types.clear}}` - Clears the birthday role.",
                     "`{{REF:bot.prefix}} config {{REF:types.birthdayRole}} @role` - Set the birthday role."
                 ],
-                "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
-                },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
@@ -1182,9 +1173,6 @@
                     "`server` - Celebrate birthdays based on the server's timezone.",
                     "`user` - Celebrate birthdays based on the user's timezone."
                 ],
-                "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
-                },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
@@ -1195,7 +1183,8 @@
                     "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.tryAgain}}"
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1207,7 +1196,8 @@
                     "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.tryAgain}}"
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1216,7 +1206,8 @@
                 "title": "Trusted Role Prevents Role",
                 "description": "Please provide a value! (True/False)",
                 "footer": {
-                    "text": "{{REF:footers.tryAgain}}"
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1225,7 +1216,8 @@
                 "title": "Trusted Role Prevents Message",
                 "description": "Please provide a value! (True/False)",
                 "footer": {
-                    "text": "{{REF:footers.tryAgain}}"
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1234,16 +1226,8 @@
                 "title": "Require All Trusted Roles",
                 "description": "Please provide a value! (True/False)",
                 "footer": {
-                    "text": "{{REF:footers.tryAgain}}"
-                },
-                "timestamp": true,
-                "color": "{{REF:colors.error}}"
-            },
-            "noTrustedRoleSpecified": {
-                "title": "Trusted Role",
-                "description": "Please specify a role!",
-                "footer": {
-                    "text": "{{REF:footers.tryAgain}}"
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1251,7 +1235,8 @@
             "maxFreeTrustedRoles": {
                 "description": "Your server is limited to __**{{FREE_MAX}}**__ trusted role!",
                 "footer": {
-                    "text": "To have up to {{PAID_MAX}} trusted roles get {{REF:bot.name}} Premium!"
+                    "text": "To have up to {{PAID_MAX}} trusted roles get {{REF:bot.name}} Premium!",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1259,18 +1244,6 @@
             "trustedRoleNoRoleOrPosition": {
                 "title": "Trusted Role Remove",
                 "description": "Please specify a position or role to remove!",
-                "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
-                },
-                "timestamp": true,
-                "color": "{{REF:colors.error}}"
-            },
-            "trustedRoleInvalidRoleOrPosition": {
-                "title": "Trusted Role Remove - Invalid Role/Position",
-                "description": "Use `{{REF:bot.prefix}} trustedRole {{REF:types.list}} <type>` to view your server's trusted roles!",
-                "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
-                },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
@@ -1281,17 +1254,10 @@
                     "View your server's trusted roles with `{{REF:bot.prefix}} trustedRole {{REF:types.list}}`!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
-                "color": "{{REF:colors.error}}"
-            },
-            "customMessageInvalidPosition": {
-                "title": "Remove Custom Message",
-                "description": "Use `{{REF:bot.prefix}} message {{REF:types.list}} <type>' to view your server's custom messages!",
-                "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
-                },
                 "color": "{{REF:colors.error}}"
             },
             "customMessageInvalidMessageNumber": {
@@ -1301,7 +1267,8 @@
                     "View your server's custom messages with `{{REF:bot.prefix}} message {{REF:types.list}} <type>`!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.error}}"
             },
@@ -1316,7 +1283,8 @@
             "maxFreeCustomMessages": {
                 "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{FREE_MAX}}**)",
                 "footer": {
-                    "text": "To have up to {{PAID_MAX}} custom {{TYPE}} messages try {{REF:bot.name}} Premium!"
+                    "text": "To have up to {{PAID_MAX}} custom {{TYPE}} messages try {{REF:bot.name}} Premium!",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.error}}"
             },
@@ -1351,7 +1319,8 @@
                     "The Birthday Role should ONLY be the role that users GET on their birthday!"
                 ],
                 "footer": {
-                    "text": "The Bot removes the Birthday Role from anyone whose birthday it isn't!"
+                    "text": "The Bot removes the Birthday Role from anyone whose birthday it isn't!",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.warn}}"
@@ -1363,7 +1332,8 @@
                     "The Birthday Role should ONLY be the role that users GET on their birthday!"
                 ],
                 "footer": {
-                    "text": "The Bot removes the Birthday Role from anyone whose birthday it isn't!"
+                    "text": "The Bot removes the Birthday Role from anyone whose birthday it isn't!",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1375,17 +1345,6 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
-            "messageNumberDoesNotExist": {
-                "title": "Test Custom Message",
-                "description": [
-                    "Message number does not exist!",
-                    "View your server's custom messages with `{{REF:bot.prefix}} message {{REF:types.list}} <type>`!"
-                ],
-                "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
-                },
-                "color": "{{REF:colors.error}}"
-            },
             "messageDoesNotExist": {
                 "title": "Test Custom Message",
                 "description": [
@@ -1393,7 +1352,8 @@
                     "View your server's custom messages with `{{REF:bot.prefix}} message {{REF:types.list}} <type>`!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.actionFailed}}"
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.error}}"
             },
@@ -1419,7 +1379,8 @@
                     "**New Message**: {{NEW_MESSAGE}}"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.irreversible}}"
+                    "text": "{{REF:footers.irreversible}}",
+                    "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}"
             },
@@ -1562,28 +1523,6 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
-            "cantSetForBot": {
-                "description": "You can't set a birthday for a bot!",
-                "color": "{{REF:colors.error}}"
-            },
-            "serverOnlyCommand": {
-                "title": "Server Only Command!",
-                "description": "This command can only be used in a server.",
-                "footer": {
-                    "text": "Please try again in a server!"
-                },
-                "timestamp": true,
-                "color": "{{REF:colors.error}}"
-            },
-            "invalidPage": {
-                "description": "Invalid page!",
-                "color": "{{REF:colors.error}}"
-            },
-            "permissionRequired": {
-                "title": "Permission Required!",
-                "description": "You don't have permission to run that command!",
-                "color": "{{REF:colors.error}}"
-            },
             "emptyBlacklist": {
                 "description": "Your server has not blacklisted any users!",
                 "color": "{{REF:colors.error}}"
@@ -1604,7 +1543,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "Thanks for support {{REF:bot.name}}!"
+                    "text": "Thanks for support {{REF:bot.name}}!",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -1622,7 +1562,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "Consider letting us know how to improve premium!"
+                    "text": "Consider letting us know how to improve premium!",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -1640,7 +1581,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "Consider letting us know how to improve premium!"
+                    "text": "Consider letting us know how to improve premium!",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -1682,7 +1624,9 @@
                 "fields": [
                     {
                         "name": "Purchase Premium",
-                        "value": ["[Checkout with PayPal Here!]({{SUB_LINK}})"]
+                        "value": [
+                            "[Checkout with PayPal Here!]({{SUB_LINK}})"
+                        ]
                     },
                     {
                         "name": "Premium Features",
@@ -1701,7 +1645,9 @@
                     },
                     {
                         "name": "Price",
-                        "value": ["2.99 USD / Month"]
+                        "value": [
+                            "2.99 USD / Month"
+                        ]
                     },
                     {
                         "name": "Purchase Details",
@@ -1734,7 +1680,9 @@
                     },
                     {
                         "name": "Price",
-                        "value": ["2.99 USD / Month"]
+                        "value": [
+                            "2.99 USD / Month"
+                        ]
                     },
                     {
                         "name": "Purchase Details",
@@ -1783,7 +1731,9 @@
         "premiumRequired": {
             "command": {
                 "title": "Premium Required!",
-                "description": ["This command requires this server to have premium!"],
+                "description": [
+                    "This command requires this server to have premium!"
+                ],
                 "fields": [
                     {
                         "name": "Premium Commands",
@@ -1794,7 +1744,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "{{REF:footers.whyPremium}}"
+                    "text": "{{REF:footers.whyPremium}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -1802,7 +1753,8 @@
                 "title": "{{REF:terms.premiumRequired}}",
                 "description": "User-specific messages are a premium feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
                 "footer": {
-                    "text": "{{REF:footers.whyPremium}}"
+                    "text": "{{REF:footers.whyPremium}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1811,7 +1763,8 @@
                 "title": "{{REF:terms.premiumRequired}}",
                 "description": "Member Anniversary Roles are a premium only feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
                 "footer": {
-                    "text": "{{REF:footers.whyPremium}}"
+                    "text": "{{REF:footers.whyPremium}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
@@ -1847,7 +1800,10 @@
                     },
                     {
                         "name": "Links",
-                        "value": ["{{REF:links.support}}", "{{REF:links.invite}}"]
+                        "value": [
+                            "{{REF:links.support}}",
+                            "{{REF:links.invite}}"
+                        ]
                     },
                     {
                         "name": "Created With",
@@ -1899,7 +1855,8 @@
                     "For more support join the {{REF:bot.name}} support server [here]({{REF:links.support}})!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.joinSupport}}"
+                    "text": "{{REF:footers.joinSupport}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2013,7 +1970,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "© {{DATE}} {{REF:bot.name}}"
+                    "text": "© {{DATE}} {{REF:bot.name}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2126,13 +2084,19 @@
                     }
                 ],
                 "footer": {
-                    "text": "© {{DATE}} {{REF:bot.name}}"
+                    "text": "© {{DATE}} {{REF:bot.name}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             }
         },
         "help": {
             "general": {
+                "author": {
+                    "name": "Birthday Bot General Help",
+                    "icon": "{{ICON_LINK}}",
+                    "url": "{{REF:docLinks:faq}}"
+                },
                 "title": "{{REF:bot.name}} General Help",
                 "description": [
                     "{{REF:bot.name}} helps your server celebrate birthdays with automatic birthday roles and announcements.",
@@ -2173,6 +2137,11 @@
                 ]
             },
             "setup": {
+                "author": {
+                    "name": "Birthday Bot Setup Help",
+                    "icon": "{{ICON_LINK}}",
+                    "url": "{{REF:docLinks:faq}}"
+                },
                 "title": "{{REF:bot.name}} Setup Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} setup** - Interactive guide for server setup.",
@@ -2190,6 +2159,11 @@
                 ]
             },
             "message": {
+                "author": {
+                    "name": "Birthday Bot Message Help",
+                    "icon": "{{ICON_LINK}}",
+                    "url": "{{REF:docLinks:faq}}"
+                },
                 "title": "{{REF:bot.name}} Message Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} message {{REF:types.list}} <type> [page]** - List all messages for that type.",
@@ -2208,6 +2182,11 @@
                 ]
             },
             "trusted": {
+                "author": {
+                    "name": "Birthday Bot Trusted Help",
+                    "icon": "{{ICON_LINK}}",
+                    "url": "{{REF:docLinks:faq}}"
+                },
                 "title": "{{REF:bot.name}} Trusted System Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} setup {{REF:types.trusted}}** - Interactive guide for trusted system settings setup.",
@@ -2224,6 +2203,11 @@
                 ]
             },
             "blacklist": {
+                "author": {
+                    "name": "Birthday Bot Blacklist Help",
+                    "icon": "{{ICON_LINK}}",
+                    "url": "{{REF:docLinks:faq}}"
+                },
                 "title": "{{REF:bot.name}} Blacklist Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} blacklist {{REF:types.add}} <user>** - Add user to the blacklist.",
@@ -2235,6 +2219,11 @@
                 ]
             },
             "anniversary": {
+                "author": {
+                    "name": "Birthday Bot Anniversary Help",
+                    "icon": "{{ICON_LINK}}",
+                    "url": "{{REF:docLinks:faq}}"
+                },
                 "title": "{{REF:bot.name}} Anniversary Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.add}} <role> <year>** - Add a member anniversary role.",
@@ -2246,6 +2235,11 @@
                 ]
             },
             "premium": {
+                "author": {
+                    "name": "Birthday Bot Premium Help",
+                    "icon": "{{ICON_LINK}}",
+                    "url": "{{REF:docLinks:faq}}"
+                },
                 "title": "{{REF:bot.name}} Premium Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} premium** - View information about your server's premium.",
@@ -2280,7 +2274,10 @@
                     },
                     {
                         "name": "Stats",
-                        "value": ["**Shards**: {{SHARD_COUNT}}", "**Servers**: {{SERVER_COUNT}}"]
+                        "value": [
+                            "**Shards**: {{SHARD_COUNT}}",
+                            "**Servers**: {{SERVER_COUNT}}"
+                        ]
                     },
                     {
                         "name": "Memory",
@@ -2311,7 +2308,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "Total Birthdays: {{TOTAL_BIRTHDAYS}} • {{PER_PAGE}} per page"
+                    "text": "Total Birthdays: {{TOTAL_BIRTHDAYS}} • {{PER_PAGE}} per page",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2323,7 +2321,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "Total Member Anniversaries: {{TOTAL_ANNIVERSARIES}} • {{PER_PAGE}} per page"
+                    "text": "Total Member Anniversaries: {{TOTAL_ANNIVERSARIES}} • {{PER_PAGE}} per page",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2335,7 +2334,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2347,7 +2347,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "fields": [
                     {
@@ -2365,7 +2366,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2377,7 +2379,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "fields": [
                     {
@@ -2395,7 +2398,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2407,7 +2411,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "fields": [
                     {
@@ -2425,7 +2430,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2437,7 +2443,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "fields": [
                     {
@@ -2455,7 +2462,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2467,7 +2475,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.messagesFooter}}"
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "fields": [
                     {
@@ -2485,7 +2494,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.rolesFooter}}"
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2497,7 +2507,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.rolesFooter}}"
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "fields": [
                     {
@@ -2515,7 +2526,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.rolesFooter}}"
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
@@ -2527,7 +2539,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "{{REF:list.rolesFooter}}"
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
                 },
                 "fields": [
                     {
@@ -2545,7 +2558,8 @@
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "Total Blacklisted Users: {{TOTAL_BLACKLIST}} • {{PER_PAGE}} per page"
+                    "text": "Total Blacklisted Users: {{TOTAL_BLACKLIST}} • {{PER_PAGE}} per page",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             }
@@ -2604,6 +2618,7 @@
             "setupRequiredGuide": "{{REF:links.doc}}/",
             "setupAnniversaryGuide": "{{REF:links.doc}}/",
             "setupTrustedGuide": "{{REF:links.doc}}/",
+            "setupBirthday": "{{REF:links.doc}}/",
             "whyDoesItNeedMyTimezone": "{{REF:links.doc}}/",
             "whyDoesItNeedOnlyMonthAndDate": "{{REF:links.doc}}/",
             "whatIsBirthdayRole": "{{REF:links.doc}}/",
@@ -2787,11 +2802,23 @@
             "trustedPreventsMessage": "trustedPreventsMessage",
             "requireAllTrustedRoles": "requireAllTrustedRoles",
             "alternatives": {
-                "birthday": ["birthdays"],
-                "memberAnniversary": ["member"],
-                "serverAnniversary": ["server"],
-                "userSpecificBirthday": ["specificBirthday", "userBirthday"],
-                "userSpecificMemberAnniversary": ["specificAnniversary", "userAnniversary"]
+                "birthday": [
+                    "birthdays"
+                ],
+                "memberAnniversary": [
+                    "member"
+                ],
+                "serverAnniversary": [
+                    "server"
+                ],
+                "userSpecificBirthday": [
+                    "specificBirthday",
+                    "userBirthday"
+                ],
+                "userSpecificMemberAnniversary": [
+                    "specificAnniversary",
+                    "userAnniversary"
+                ]
             },
             "mention": "mention",
             "nickname": "nickname",

@@ -24,6 +24,8 @@ export class GuildJoinHandler implements EventHandler {
         if (!user) return;
 
         let userChannel = await user.createDM();
-        await MessageUtils.send(userChannel, Lang.getEmbed('info.guildJoin', LangCode.EN_US));
+        await MessageUtils.send(userChannel, Lang.getEmbed('info.guildJoin', LangCode.EN_US, {
+            ICON: guild.client.user.avatarURL(),
+        }));
     }
 }

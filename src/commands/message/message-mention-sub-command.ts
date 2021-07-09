@@ -6,7 +6,7 @@ import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
 export class MessageMentionSubCommand {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // bday message mention <type> <role>
@@ -18,7 +18,9 @@ export class MessageMentionSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.invalidMessageType', LangCode.EN_US)
+                Lang.getEmbed('validation.invalidMessageType', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -52,7 +54,9 @@ export class MessageMentionSubCommand {
             ) {
                 await MessageUtils.send(
                     channel,
-                    Lang.getEmbed('validation.invalidMentionSetting', LangCode.EN_US)
+                    Lang.getEmbed('validation.invalidMentionSetting', LangCode.EN_US, {
+                        ICON: msg.client.user.avatarURL(),
+                    })
                 );
                 return;
             } else {
@@ -86,8 +90,8 @@ export class MessageMentionSubCommand {
         type === 'birthday'
             ? await this.guildRepo.updateBirthdayMentionSetting(msg.guild.id, mention)
             : type === 'memberanniversary'
-            ? await this.guildRepo.updateMemberAnniversaryMentionSetting(msg.guild.id, mention)
-            : await this.guildRepo.updateServerAnniversaryMentionSetting(msg.guild.id, mention);
+                ? await this.guildRepo.updateMemberAnniversaryMentionSetting(msg.guild.id, mention)
+                : await this.guildRepo.updateServerAnniversaryMentionSetting(msg.guild.id, mention);
 
         await MessageUtils.send(
             channel,

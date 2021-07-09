@@ -7,7 +7,7 @@ import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
 export class MessageRemoveSubCommand {
-    constructor(private customMessageRepo: CustomMessageRepo) {}
+    constructor(private customMessageRepo: CustomMessageRepo) { }
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let type = FormatUtils.extractCelebrationType(args[3]?.toLowerCase());
@@ -21,7 +21,9 @@ export class MessageRemoveSubCommand {
         ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.removeMessageInvalidType', LangCode.EN_US)
+                Lang.getEmbed('validation.removeMessageInvalidType', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -80,7 +82,9 @@ export class MessageRemoveSubCommand {
         if (!position) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.customMessageInvalidMessageNumber', LangCode.EN_US)
+                Lang.getEmbed('validation.customMessageInvalidMessageNumber', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -90,16 +94,18 @@ export class MessageRemoveSubCommand {
         // find the position based on if it is a user or global message
         target
             ? (message = userMessages.customMessages.find(
-                  question => question.Position === position
-              ))
+                question => question.Position === position
+            ))
             : (message = customMessages.customMessages.find(
-                  question => question.Position === position
-              ));
+                question => question.Position === position
+            ));
 
         if (!message) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN_US)
+                Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
             return;
         }
@@ -114,17 +120,18 @@ export class MessageRemoveSubCommand {
             Lang.getEmbed('results.removeMessage', LangCode.EN_US, {
                 MESSAGE: target
                     ? CelebrationUtils.replaceLangPlaceHolders(
-                          message.Message,
-                          msg.guild,
-                          type,
-                          target.toString()
-                      )
+                        message.Message,
+                        msg.guild,
+                        type,
+                        target.toString()
+                    )
                     : CelebrationUtils.replaceLangPlaceHolders(
-                          message.Message,
-                          msg.guild,
-                          type,
-                          null
-                      ),
+                        message.Message,
+                        msg.guild,
+                        type,
+                        null
+                    ),
+                ICON: msg.client.user.avatarURL(),
             })
         );
     }

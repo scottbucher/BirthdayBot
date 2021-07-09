@@ -50,47 +50,50 @@ export class CustomClient extends Client {
                 PlanName.premium3 ||
                 PlanName.premium6 ||
                 PlanName.premium12: {
-                switch (status) {
-                    case SubscriptionStatusName.ACTIVE: {
-                        MessageUtils.send(
-                            channel,
-                            Lang.getEmbed('premiumPrompts.subscriptionAdded', LangCode.EN_US, {
-                                SERVER_NAME: guild.name,
-                            })
-                        );
-                        break;
+                    switch (status) {
+                        case SubscriptionStatusName.ACTIVE: {
+                            MessageUtils.send(
+                                channel,
+                                Lang.getEmbed('premiumPrompts.subscriptionAdded', LangCode.EN_US, {
+                                    SERVER_NAME: guild.name,
+                                    ICON: guild.client.user.avatarURL(),
+                                })
+                            );
+                            break;
+                        }
+                        case SubscriptionStatusName.CANCELLED: {
+                            MessageUtils.send(
+                                channel,
+                                Lang.getEmbed('premiumPrompts.subscriptionCanceled', LangCode.EN_US, {
+                                    SERVER_NAME: guild.name,
+                                    ICON: guild.client.user.avatarURL(),
+                                })
+                            );
+                            break;
+                        }
+                        case SubscriptionStatusName.EXPIRED: {
+                            MessageUtils.send(
+                                channel,
+                                Lang.getEmbed('premiumPrompts.subscriptionExpired', LangCode.EN_US, {
+                                    SERVER_NAME: guild.name,
+                                    ICON: guild.client.user.avatarURL(),
+                                })
+                            );
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
                     }
-                    case SubscriptionStatusName.CANCELLED: {
-                        MessageUtils.send(
-                            channel,
-                            Lang.getEmbed('premiumPrompts.subscriptionCanceled', LangCode.EN_US, {
-                                SERVER_NAME: guild.name,
-                            })
-                        );
-                        break;
-                    }
-                    case SubscriptionStatusName.EXPIRED: {
-                        MessageUtils.send(
-                            channel,
-                            Lang.getEmbed('premiumPrompts.subscriptionExpired', LangCode.EN_US, {
-                                SERVER_NAME: guild.name,
-                            })
-                        );
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                }
 
-                Logger.info(
-                    Logs.info.guildSubStatus
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{GUILD_ID}', guild.id)
-                        .replace('{PLAN_NAME}', plan)
-                        .replace('{SUBSCRIPTION_STATUS}', status)
-                );
-            }
+                    Logger.info(
+                        Logs.info.guildSubStatus
+                            .replace('{GUILD_NAME}', guild.name)
+                            .replace('{GUILD_ID}', guild.id)
+                            .replace('{PLAN_NAME}', plan)
+                            .replace('{SUBSCRIPTION_STATUS}', status)
+                    );
+                }
         }
     }
 }
