@@ -46,17 +46,16 @@ export class CelebrationJob implements Job {
             // Add leap year birthdays to list
             birthdayUserData.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
         }
+        // Collection of guilds
+        let guildCache = this.client.guilds.cache;
 
         // String of guild ids who have an active subscription to birthday bot premium
         // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
-        let premiumGuildIds: string[] = (
-            await this.subscriptionService.getAllSubscription('premium-1')
-        )
-            .filter(g => g.service)
-            .map(g => g.subscriber);
-
-        // Collection of guilds
-        let guildCache = this.client.guilds.cache;
+        let premiumGuildIds: string[] = Config.payments.enabled
+            ? (await this.subscriptionService.getAllSubscription('premium-1'))
+                  .filter(g => g.service)
+                  .map(g => g.subscriber)
+            : guildCache.map(g => g.id);
 
         // Get list of guilds the client is connected to
         let discordIds = guildCache.map(guild => guild.id);
