@@ -223,45 +223,14 @@
                 },
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
-                    "**Important**: By submitting this information you agree it can be shown to anyone.",
-                    "",
-                    "First, please enter your time zone. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
-                    "",
+                    "First, please type/paste your time zone below. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
                     "To find your time zone please use the [map time zone picker]({{REF:links.map}})!",
                     "",
-                    "Simply click your location on the map and copy the name of the selected time zone. You can then enter it below.",
+                    "Simply click your location on the map and copy the name of the selected time zone.",
                     "",
                     "**Example Usage:** `America/New_York`",
                     "",
-                    "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
-                ],
-                "footer": {
-                    "text": "{{REF:footers.expire}}",
-                    "icon": "{{ICON}}"
-                },
-                "timestamp": true
-            },
-            "birthdaySetupTimeZoneChange": {
-                "author": {
-                    "name": "{{TAG}}",
-                    "icon": "{{AUTHOR_ICON}}",
-                    "url": "{{REF:docLinks.setupBirthday}}"
-                },
-                "title": "Time Zone Setup - {{TARGET}}",
-                "description": [
-                    "__**Note**__: Your birthday is already set, continue to change it.",
-                    "",
-                    "**Important**: By submitting this information you agree it can be shown to anyone.",
-                    "",
-                    "First, please enter your time zone. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
-                    "",
-                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!",
-                    "",
-                    "Simply click your location on the map and copy the name of the selected time zone. You can then enter it below.",
-                    "",
-                    "**Example Usage:** `America/New_York`",
-                    "",
-                    "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
+                    "**Important**: By submitting this information you agree it can be shown to anyone."
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}",
@@ -277,37 +246,11 @@
                 },
                 "title": "Birthday Setup - {{TARGET}}",
                 "description": [
-                    "**Important**: By submitting this information you agree it can be shown to anyone.",
-                    "",
-                    "Please enter your birth month and day. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
+                    "Please type your birth month and day below. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
                     "",
                     "**Example Usage:** `08/28` (MM/DD)",
                     "",
-                    "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
-                ],
-                "footer": {
-                    "text": "{{REF:footers.expire}}",
-                    "icon": "{{ICON}}"
-                },
-                "timestamp": true
-            },
-            "birthdaySetupBirthdayChange": {
-                "author": {
-                    "name": "{{TAG}}",
-                    "icon": "{{AUTHOR_ICON}}",
-                    "url": "{{REF:docLinks.setupBirthday}}"
-                },
-                "title": "Birthday Setup - {{TARGET}}",
-                "description": [
-                    "__**Note**__: Your birthday is already set, continue to change it.",
-                    "",
-                    "**Important**: By submitting this information you agree it can be shown to anyone.",
-                    "",
-                    "Please enter your birth month and day. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
-                    "",
-                    "**Example Usage:** `08/28` (MM/DD)",
-                    "",
-                    "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
+                    "**Important**: By submitting this information you agree it can be shown to anyone."
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}",

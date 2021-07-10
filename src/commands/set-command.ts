@@ -187,12 +187,10 @@ export class SetCommand implements Command {
             }
         }
 
-        let embedChoice = userData && userData.Birthday && userData.TimeZone ? 'Change' : '';
-
         if (!timeZone) {
             let timezoneMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('userPrompts.birthdaySetupTimeZone' + embedChoice, LangCode.EN_US, {
+                Lang.getEmbed('userPrompts.birthdaySetupTimeZone', LangCode.EN_US, {
                     TARGET: target.username,
                     AUTHOR_ICON: target.avatarURL(),
                     ICON: msg.client.user.avatarURL(),
@@ -250,7 +248,7 @@ export class SetCommand implements Command {
         if (!birthday) {
             let birthdayMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('userPrompts.birthdaySetupBirthday' + embedChoice, LangCode.EN_US, {
+                Lang.getEmbed('userPrompts.birthdaySetupBirthday', LangCode.EN_US, {
                     TARGET: target.username,
                     AUTHOR_ICON: target.avatarURL(),
                     ICON: msg.client.user.avatarURL(),
