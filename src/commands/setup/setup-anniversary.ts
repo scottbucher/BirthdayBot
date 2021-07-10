@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class SetupAnniversary {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let guild = channel.guild;
@@ -30,10 +30,7 @@ export class SetupAnniversary {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.anniversarySetupExpired', LangCode.EN_US)
-            );
+            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
         };
 
         let memberAnniversaryChannel: string;
@@ -43,9 +40,10 @@ export class SetupAnniversary {
 
         let memberAnniversaryChannelEmbed = Lang.getEmbed(
             'serverPrompts.anniversarySetupMemberChannel',
-            LangCode.EN_US, {
-            ICON: msg.client.user.avatarURL()
-        }
+            LangCode.EN_US,
+            {
+                ICON: msg.client.user.avatarURL(),
+            }
         );
 
         let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
@@ -178,9 +176,10 @@ export class SetupAnniversary {
 
         let serverAnniversaryChannelEmbed = Lang.getEmbed(
             'serverPrompts.anniversarySetupServerChannel',
-            LangCode.EN_US, {
-            ICON: msg.client.user.avatarURL()
-        }
+            LangCode.EN_US,
+            {
+                ICON: msg.client.user.avatarURL(),
+            }
         );
 
         let serverAnniversaryChannelMessage = await MessageUtils.send(
@@ -313,12 +312,12 @@ export class SetupAnniversary {
             memberAnniversaryChannel === '0'
                 ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
                 : guild.channels.resolve(memberAnniversaryChannel)?.toString() ||
-                `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
+                  `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
         let serverAnniversaryChannelOutput =
             serverAnniversaryChannel === '0'
                 ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
                 : guild.channels.resolve(serverAnniversaryChannel)?.toString() ||
-                `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
+                  `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
 
         await MessageUtils.send(
             channel,

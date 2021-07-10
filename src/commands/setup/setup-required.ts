@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class SetupRequired {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let guild = channel.guild;
@@ -30,10 +30,7 @@ export class SetupRequired {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.requireSetupExpired', LangCode.EN_US)
-            );
+            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
         };
 
         let birthdayChannel: string;
@@ -43,7 +40,7 @@ export class SetupRequired {
             'serverPrompts.requiredSetupBirthdayChannel',
             LangCode.EN_US,
             {
-                ICON: msg.client.user.avatarURL()
+                ICON: msg.client.user.avatarURL(),
             }
         ).setAuthor(`${guild.name}`, guild.iconURL());
         let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
@@ -166,12 +163,9 @@ export class SetupRequired {
             }
         }
 
-        let roleEmbed = Lang.getEmbed(
-            'serverPrompts.requiredSetupBirthdayRole',
-            LangCode.EN_US, {
-            ICON: msg.client.user.avatarURL()
-        }
-        ).setAuthor(`${guild.name}`, guild.iconURL());
+        let roleEmbed = Lang.getEmbed('serverPrompts.requiredSetupBirthdayRole', LangCode.EN_US, {
+            ICON: msg.client.user.avatarURL(),
+        }).setAuthor(`${guild.name}`, guild.iconURL());
 
         let roleMessage = await MessageUtils.send(channel, roleEmbed);
         for (let reactOption of reactOptions) {
@@ -321,12 +315,12 @@ export class SetupRequired {
             birthdayChannel === '0'
                 ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
                 : guild.channels.resolve(birthdayChannel)?.toString() ||
-                `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
+                  `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
         let roleOutput =
             birthdayRole === '0'
                 ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
                 : guild.roles.resolve(birthdayRole)?.toString() ||
-                `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`;
+                  `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`;
 
         await MessageUtils.send(
             channel,

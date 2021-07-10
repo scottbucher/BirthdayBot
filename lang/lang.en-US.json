@@ -264,13 +264,14 @@
                     "This command will remove both your time zone and your birthday from the database. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
                     "",
                     "This will **NOT** reset your birthday attempts. (You have {{CHANGES_LEFT}} left) [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
+                    "Birthdays are stored globally not by server! This will erase your birthday for all servers!",
                     "",
                     "{{APPEND}}"
                 ],
                 "fields": [
                     {
                         "name": "Actions",
-                        "value": ["{{REF:emotes.confirm}} Confirm", "{{REF:emotes.deny}} Deny"]
+                        "value": ["{{REF:emotes.confirm}} Confirm", "{{REF:emotes.deny}} Cancel"]
                     }
                 ],
                 "footer": {
@@ -471,11 +472,6 @@
                 },
                 "color": "{{REF:colors.success}}"
             },
-            "addMessageExpired": {
-                "title": "Add Custom Message - Expired",
-                "description": "Type `{{REF:bot.prefix}} message {{REF:types.add}} {{TYPE}} <Message>` to add a custom message.",
-                "color": "{{REF:colors.error}}"
-            },
             "removeMessage": {
                 "title": "Remove Custom Message",
                 "description": "{{MESSAGE}}",
@@ -485,44 +481,13 @@
                 },
                 "color": "{{REF:colors.success}}"
             },
-            "birthdayExpired": {
-                "title": "Birthday Set - Expired",
-                "description": "Type `{{REF:bot.prefix}} set` set your birthday.",
-                "color": "{{REF:colors.error}}"
-            },
-            "purgeExpire": {
-                "title": "Birthday Purge - Expired",
-                "description": "Type `{{REF:bot.prefix}} purge` to purge your birthday.",
-                "color": "{{REF:colors.error}}"
-            },
-            "requireSetupExpired": {
-                "title": "Required Setup - Expired",
-                "description": "Type `{{REF:bot.prefix}} setup` to rerun the setup.",
-                "color": "{{REF:colors.error}}"
-            },
-            "trustedSetupExpired": {
-                "title": "Trusted Setup - Expired",
-                "description": "Type `{{REF:bot.prefix}} setup {{REF:types.trusted}}` to rerun the setup.",
-                "color": "{{REF:colors.error}}"
-            },
-            "anniversarySetupExpired": {
-                "title": "Anniversary Setup - Expired",
-                "description": "Type `{{REF:bot.prefix}} setup {{REF:types.anniversary}}` to rerun the setup.",
-                "color": "{{REF:colors.error}}"
-            },
-            "customMessageClearExpired": {
-                "title": "Birthday Set - Expired",
-                "description": "Type `{{REF:bot.prefix}} set` to rerun the birthday setup.",
+            "promptExpired": {
+                "description": "This command has expired.",
                 "color": "{{REF:colors.error}}"
             },
             "blacklistClearSuccess": {
                 "description": "Successfully cleared the birthday blacklist!",
                 "color": "{{REF:colors.success}}"
-            },
-            "blacklistClearExpired": {
-                "title": "Blacklist Clear - Expired",
-                "description": "Type `{{REF:bot.prefix}} blacklist {{REF:types.clear}}` to clear the birthday blacklist.",
-                "color": "{{REF:colors.error}}"
             },
             "blacklistAddSuccess": {
                 "description": "Successfully removed {{TARGET}} from the birthday blacklist!",
@@ -614,16 +579,6 @@
             "useTimeZoneSettingSet": {
                 "description": "Birthdays will now be celebrated based on the {{OPTION}}'s timezone!",
                 "color": "{{REF:colors.success}}"
-            },
-            "trustedRoleClearExpired": {
-                "title": "Trusted Role Clear - Expired",
-                "description": "Type `{{REF:bot.prefix}} trustedRole {{REF:types.clear}}` to clear the trusted roles.",
-                "color": "{{REF:colors.error}}"
-            },
-            "memberAnniversaryRoleClearExpired": {
-                "title": "Member Anniversary Role Clear - Expired",
-                "description": "Type `{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.clear}}` to clear the member anniversary roles.",
-                "color": "{{REF:colors.error}}"
             },
             "addedTrustedRole": {
                 "description": "Successfully added {{ROLE}} as a trusted role!",

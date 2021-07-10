@@ -56,10 +56,7 @@ export class SetCommand implements Command {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.birthdayExpired', LangCode.EN_US)
-            );
+            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
         };
         let target: User;
         let birthday = FormatUtils.getBirthday(args.slice(2).join(' '));

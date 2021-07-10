@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class MemberAnniversaryRoleClearSubCommand {
-    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) { }
+    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -28,10 +28,7 @@ export class MemberAnniversaryRoleClearSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.memberAnniversaryRoleClearExpired', LangCode.EN_US)
-            );
+            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
         };
 
         let memberAnniversaryRoles = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(
@@ -52,7 +49,7 @@ export class MemberAnniversaryRoleClearSubCommand {
             channel,
             Lang.getEmbed('serverPrompts.memberAnniversaryRoleClearConfirmation', LangCode.EN_US, {
                 TOTAL: memberAnniversaryRoles.memberAnniversaryRoles.length.toString(),
-                ICON: msg.client.user.avatarURL()
+                ICON: msg.client.user.avatarURL(),
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

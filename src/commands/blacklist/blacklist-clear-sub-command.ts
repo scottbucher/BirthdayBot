@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class BlacklistClearSubCommand {
-    constructor(private blacklistRepo: BlacklistRepo) { }
+    constructor(private blacklistRepo: BlacklistRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -28,10 +28,7 @@ export class BlacklistClearSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.blacklistClearExpired', LangCode.EN_US)
-            );
+            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
         };
 
         let blacklisted = await this.blacklistRepo.getBlacklist(msg.guild.id);
@@ -50,7 +47,7 @@ export class BlacklistClearSubCommand {
             channel,
             Lang.getEmbed('serverPrompts.blacklistClearConfirmation', LangCode.EN_US, {
                 TOTAL: blacklisted.blacklist.length.toString(),
-                ICON: msg.client.user.avatarURL()
+                ICON: msg.client.user.avatarURL(),
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

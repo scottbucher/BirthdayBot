@@ -19,7 +19,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 };
 
 export class TrustedRoleClearSubCommand {
-    constructor(private trustedRoleRepo: TrustedRoleRepo) { }
+    constructor(private trustedRoleRepo: TrustedRoleRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -28,10 +28,7 @@ export class TrustedRoleClearSubCommand {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.trustedRoleClearExpired', LangCode.EN_US)
-            );
+            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
         };
 
         let trustedRoles = await this.trustedRoleRepo.getTrustedRoles(msg.guild.id);
@@ -50,7 +47,7 @@ export class TrustedRoleClearSubCommand {
             channel,
             Lang.getEmbed('serverPrompts.trustedRoleClearConfirmation', LangCode.EN_US, {
                 TOTAL: trustedRoles.trustedRoles.length.toString(),
-                ICON: msg.client.user.avatarURL()
+                ICON: msg.client.user.avatarURL(),
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

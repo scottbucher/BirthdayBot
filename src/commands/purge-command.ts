@@ -30,7 +30,7 @@ export class PurgeCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) { }
+    constructor(private userRepo: UserRepo) {}
 
     async execute(args: string[], msg: Message, channel: TextChannel | DMChannel): Promise<void> {
         let target = msg.author;
@@ -40,10 +40,7 @@ export class PurgeCommand implements Command {
             nextMsg.author.id === msg.author.id &&
             nextMsg.content.split(/\s+/)[0].toLowerCase() === Config.prefix;
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.purgeExpired', LangCode.EN_US)
-            );
+            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
         };
 
         if (!userData || !(userData.Birthday && userData.TimeZone)) {
