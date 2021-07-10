@@ -218,7 +218,7 @@
             "birthdaySetupTimeZone": {
                 "author": {
                     "name": "{{TAG}}",
-                    "icon": "{{ICON}}",
+                    "icon": "{{AUTHOR_ICON}}",
                     "url": "{{REF:docLink.setupBirthday}}"
                 },
                 "title": "Time Zone Setup - {{TARGET}}",
@@ -241,14 +241,66 @@
                 },
                 "timestamp": true
             },
+            "birthdaySetupTimeZoneChange": {
+                "author": {
+                    "name": "{{TAG}}",
+                    "icon": "{{AUTHOR_ICON}}",
+                    "url": "{{REF:docLink.setupBirthday}}"
+                },
+                "title": "Time Zone Setup - {{TARGET}}",
+                "description": [
+                    "__**Note**__: Your birthday is already set, continue to change it.",
+                    "",
+                    "**Important**: By submitting this information you agree it can be shown to anyone.",
+                    "",
+                    "First, please enter your time zone. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
+                    "",
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!",
+                    "",
+                    "Simply click your location on the map and copy the name of the selected time zone. You can then enter it below.",
+                    "",
+                    "**Example Usage:** `America/New_York`",
+                    "",
+                    "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
             "birthdaySetupBirthday": {
                 "author": {
                     "name": "{{TAG}}",
-                    "icon": "{{ICON}}",
+                    "icon": "{{AUTHOR_ICON}}",
                     "url": "{{REF:docLinks.setupBirthday}}"
                 },
                 "title": "Birthday Setup - {{TARGET}}",
                 "description": [
+                    "**Important**: By submitting this information you agree it can be shown to anyone.",
+                    "",
+                    "Please enter your birth month and day. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
+                    "",
+                    "**Example Usage:** `08/28` (MM/DD)",
+                    "",
+                    "**Info**: Birthdays are stored globally, meaning if you set your birthday in one server, it is set in all!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "birthdaySetupBirthdayChange": {
+                "author": {
+                    "name": "{{TAG}}",
+                    "icon": "{{AUTHOR_ICON}}",
+                    "url": "{{REF:docLinks.setupBirthday}}"
+                },
+                "title": "Birthday Setup - {{TARGET}}",
+                "description": [
+                    "__**Note**__: Your birthday is already set, continue to change it.",
+                    "",
                     "**Important**: By submitting this information you agree it can be shown to anyone.",
                     "",
                     "Please enter your birth month and day. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
@@ -313,6 +365,14 @@
                 "description": "{{TARGET}}, your birthday is already set, please confirm this information is correct to change it: **{{BIRTHDAY}}, {{TIMEZONE}}**",
                 "footer": {
                     "text": "You have {{CHANGES_LEFT}} attempts left. By clicking confirm you will use one of them.",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{REF:colors.warn}}"
+            },
+            "confirmChangeBirthdaySuggest": {
+                "description": "{{TARGET}}, your birthday is already set, please confirm this information is correct to change it: **{{BIRTHDAY}}, {{TIMEZONE}}**",
+                "footer": {
+                    "text": "{{TARGET_FOOTER}} has {{CHANGES_LEFT}} attempts left. By clicking confirm they will use one of them.",
                     "icon": "{{ICON}}"
                 },
                 "color": "{{REF:colors.warn}}"
