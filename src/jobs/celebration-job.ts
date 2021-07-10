@@ -1,7 +1,7 @@
 import { CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import { CombinedRepo, UserRepo } from '../services/database/repos';
-import { Logger, MessageService, RoleService } from '../services';
+import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
 
 import { Job } from './job';
 import { UserData } from '../models/database';
@@ -21,7 +21,8 @@ export class CelebrationJob implements Job {
         private userRepo: UserRepo,
         private combinedRepo: CombinedRepo,
         private messageService: MessageService,
-        private roleService: RoleService
+        private roleService: RoleService,
+        private subscriptionService: SubscriptionService
     ) {}
 
     public async run(): Promise<void> {
@@ -48,7 +49,11 @@ export class CelebrationJob implements Job {
 
         // String of guild ids who have an active subscription to birthday bot premium
         // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
-        let premiumGuildIds: string[] = [];
+        let premiumGuildIds: string[] = (
+            await this.subscriptionService.getAllSubscription('premium-1')
+        )
+            .filter(g => g.service)
+            .map(g => g.subscriber);
 
         // Collection of guilds
         let guildCache = this.client.guilds.cache;
@@ -191,15 +196,13 @@ export class CelebrationJob implements Job {
 
             // Only add these members to the anniversaryRolesGuildMembers array if the server has premium
             if (hasPremium) {
-                anniversaryRoleGuildMembers = anniversaryRoleGuildMembers.concat(
-                    anniversaryMembers
-                );
+                anniversaryRoleGuildMembers =
+                    anniversaryRoleGuildMembers.concat(anniversaryMembers);
             }
 
             // All servers get member anniversary messages so add them regardless of if they have premium
-            memberAnniversaryMessageGuildMembers = memberAnniversaryMessageGuildMembers.concat(
-                anniversaryMembers
-            );
+            memberAnniversaryMessageGuildMembers =
+                memberAnniversaryMessageGuildMembers.concat(anniversaryMembers);
 
             // We now have the full, filtered, list of memberAnniversaryMessageGuildMembers
 

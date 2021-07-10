@@ -280,7 +280,8 @@ export class MessageService {
                               )
                             : '';
 
-                    let messagesToSend = [];
+                    let embedMessagesToSend = [];
+                    let regularMessagesToSend = [];
 
                     for (let year of differentYears) {
                         // Compile our user list to put in the message
@@ -322,14 +323,35 @@ export class MessageService {
                         );
 
                         let embed = new MessageEmbed().setDescription(message).setColor(color);
-                        messagesToSend.push(useEmbed ? embed : message);
+                        if (useEmbed) {
+                            embedMessagesToSend.push(embed);
+                        } else {
+                            regularMessagesToSend.push(message);
+                        }
                     }
 
-                    if (messagesToSend.length > 0) {
+                    if (
+                        mentionString &&
+                        mentionString !== '' &&
+                        (embedMessagesToSend.length > 0 || regularMessagesToSend.length > 0)
+                    )
+                        await MessageUtils.send(memberAnniversaryChannel, mentionString);
+
+                    if (embedMessagesToSend.length > 0) {
                         // Send our message(s)
-                        if (mentionString && mentionString !== '')
-                            await MessageUtils.send(memberAnniversaryChannel, mentionString);
-                        for (let message of messagesToSend)
+
+                        for (let message of embedMessagesToSend)
+                            await MessageUtils.send(
+                                memberAnniversaryChannel,
+                                message,
+                                Config.delays.messages
+                            );
+                    }
+
+                    if (regularMessagesToSend.length > 0) {
+                        // Send our message(s)
+
+                        for (let message of regularMessagesToSend)
                             await MessageUtils.send(
                                 memberAnniversaryChannel,
                                 message,
