@@ -55,9 +55,10 @@ export class MessageService {
                 let birthdaysInThisGuild: GuildMember[] = birthdayMessageGuildMembers.filter(
                     member => member.guild.id === guild.id
                 );
-                let anniversariesInThisGuild: GuildMember[] = memberAnniversaryMessageGuildMembers.filter(
-                    member => member.guild.id === guild.id
-                );
+                let anniversariesInThisGuild: GuildMember[] =
+                    memberAnniversaryMessageGuildMembers.filter(
+                        member => member.guild.id === guild.id
+                    );
                 let thisGuildCelebrationData: GuildCelebrationData = guildCelebrationDatas.find(
                     data => data.guildData.GuildDiscordId === guild.id
                 );
@@ -131,12 +132,12 @@ export class MessageService {
                         );
 
                         // List of members with a user specific message
-                        let birthdayMembersUserSpecific: GuildMember[] = birthdaysInThisGuild.filter(
-                            member =>
+                        let birthdayMembersUserSpecific: GuildMember[] =
+                            birthdaysInThisGuild.filter(member =>
                                 birthdayUserSpecificMessages
                                     .map(message => message.UserDiscordId)
                                     .includes(member.id)
-                        );
+                            );
 
                         // Now update the original list by removing guildMembers in the user specific list
                         birthdaysInThisGuild = birthdaysInThisGuild.filter(
@@ -154,10 +155,10 @@ export class MessageService {
                             let mentionString =
                                 filteredGuild.guildData.BirthdayMentionSetting !== 'none'
                                     ? CelebrationUtils.getMentionString(
-                                        filteredGuild.guildData,
-                                        guild,
-                                        'birthday'
-                                    )
+                                          filteredGuild.guildData,
+                                          guild,
+                                          'birthday'
+                                      )
                                     : '';
 
                             // Compile our user list to put in the message
@@ -200,10 +201,10 @@ export class MessageService {
                     let mentionString =
                         filteredGuild.guildData.BirthdayMentionSetting !== 'none'
                             ? CelebrationUtils.getMentionString(
-                                filteredGuild.guildData,
-                                guild,
-                                'birthday'
-                            )
+                                  filteredGuild.guildData,
+                                  guild,
+                                  'birthday'
+                              )
                             : '';
 
                     // Compile our user list to put in the message
@@ -241,8 +242,11 @@ export class MessageService {
                         await MessageUtils.send(birthdayChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
-                    await MessageUtils.send(birthdayChannel, useEmbed ? embed : message,
-                        Config.delays.messages);
+                    await MessageUtils.send(
+                        birthdayChannel,
+                        useEmbed ? embed : message,
+                        Config.delays.messages
+                    );
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // The member anniversary channel must exists and we need to have members who need the message
@@ -266,18 +270,19 @@ export class MessageService {
                             )
                         ),
                     ];
+                    // Get the mention string
+                    let mentionString =
+                        filteredGuild.guildData.MemberAnniversaryMentionSetting !== 'none'
+                            ? CelebrationUtils.getMentionString(
+                                  filteredGuild.guildData,
+                                  guild,
+                                  'memberanniversary'
+                              )
+                            : '';
+
+                    let messagesToSend = [];
 
                     for (let year of differentYears) {
-                        // Get the mention string
-                        let mentionString =
-                            filteredGuild.guildData.MemberAnniversaryMentionSetting !== 'none'
-                                ? CelebrationUtils.getMentionString(
-                                    filteredGuild.guildData,
-                                    guild,
-                                    'memberanniversary'
-                                )
-                                : '';
-
                         // Compile our user list to put in the message
                         let userList = CelebrationUtils.getUserListString(
                             filteredGuild.guildData,
@@ -316,16 +321,20 @@ export class MessageService {
                             year
                         );
 
+                        let embed = new MessageEmbed().setDescription(message).setColor(color);
+                        messagesToSend.push(useEmbed ? embed : message);
+                    }
+
+                    if (messagesToSend.length > 0) {
                         // Send our message(s)
                         if (mentionString && mentionString !== '')
-                            await MessageUtils.send(birthdayChannel, mentionString);
-
-                        let embed = new MessageEmbed().setDescription(message).setColor(color);
-                        await MessageUtils.send(
-                            memberAnniversaryChannel,
-                            useEmbed ? embed : message,
-                            Config.delays.messages
-                        );
+                            await MessageUtils.send(memberAnniversaryChannel, mentionString);
+                        for (let message of messagesToSend)
+                            await MessageUtils.send(
+                                memberAnniversaryChannel,
+                                message,
+                                Config.delays.messages
+                            );
                     }
                 }
 
@@ -353,10 +362,10 @@ export class MessageService {
                     let mentionString =
                         filteredGuild.guildData.ServerAnniversaryMentionSetting !== 'none'
                             ? CelebrationUtils.getMentionString(
-                                filteredGuild.guildData,
-                                guild,
-                                'serveranniversary'
-                            )
+                                  filteredGuild.guildData,
+                                  guild,
+                                  'serveranniversary'
+                              )
                             : '';
 
                     let serverYears = CelebrationUtils.getServerYears(
@@ -402,8 +411,11 @@ export class MessageService {
                         await MessageUtils.send(serverAnniversaryChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
-                    await MessageUtils.send(birthdayChannel, useEmbed ? embed : message,
-                        Config.delays.messages);
+                    await MessageUtils.send(
+                        serverAnniversaryChannel,
+                        useEmbed ? embed : message,
+                        Config.delays.messages
+                    );
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             } catch (error) {
