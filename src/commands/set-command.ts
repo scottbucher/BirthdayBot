@@ -179,8 +179,11 @@ export class SetCommand implements Command {
             if (confirmation === undefined) return;
 
             if (confirmation === Config.emotes.deny) {
-                // Confirm
+                // deny
                 timeZone = timeZone ? guildData.DefaultTimezone : null;
+            } else {
+                // Confirm
+                timeZone = guildData.DefaultTimezone;
             }
         }
 
