@@ -342,8 +342,8 @@
                 "description": [
                     "This server has a default timezone of **{{SERVER_TIMEZONE}}**. Do you want to use **{{INPUTTED_TIMEZONE}}** instead?",
                     "",
-                    "Clicking {{REF:emotes.confirm will set your timezone to **{{INPUTTED_TIMEZONE}}**",
-                    "Clicking {{REF:emotes.deny will set your timezone **{{SERVER_TIMEZONE}}**"
+                    "Clicking {{REF:emotes.confirm}} will set your timezone to **{{INPUTTED_TIMEZONE}}**",
+                    "Clicking {{REF:emotes.deny}} will set your timezone **{{SERVER_TIMEZONE}}**"
                 ],
                 "color": "{{REF:colors.success}}"
             },
