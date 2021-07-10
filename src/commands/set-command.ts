@@ -146,7 +146,7 @@ export class SetCommand implements Command {
             let confirmationMessage = await MessageUtils.send(
                 channel,
                 Lang.getEmbed(
-                    'userPrompts.defaultTimeZoneAvailable' + timeZone ? 'Override' : '',
+                    'userPrompts.defaultTimeZoneAvailable' + (timeZone ? 'Override' : ''),
                     LangCode.EN_US,
                     {
                         SERVER_TIMEZONE: guildData.DefaultTimezone,
