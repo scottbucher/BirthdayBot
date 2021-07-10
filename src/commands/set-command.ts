@@ -43,7 +43,7 @@ export class SetCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private guildRepo: GuildRepo, private userRepo: UserRepo) { }
+    constructor(private guildRepo: GuildRepo, private userRepo: UserRepo) {}
 
     public async execute(
         args: string[],
@@ -146,10 +146,10 @@ export class SetCommand implements Command {
         ) {
             let confirmationMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('defaultTimeZoneAvailable', LangCode.EN_US, {
+                Lang.getEmbed('userPrompts.defaultTimeZoneAvailable', LangCode.EN_US, {
                     TIMEZONE: guildData.DefaultTimezone,
                     TARGET: target.username,
-                }).setAuthor(target.tag, target.avatarURL())
+                })
             ); // Send confirmation and emotes
             for (let option of trueFalseOptions) {
                 await MessageUtils.react(confirmationMessage, option);
@@ -189,7 +189,7 @@ export class SetCommand implements Command {
                     TARGET: target.username,
                     AUTHOR_ICON: target.avatarURL(),
                     ICON: msg.client.user.avatarURL(),
-                    TAG: target.tag
+                    TAG: target.tag,
                 })
             );
 
@@ -247,7 +247,7 @@ export class SetCommand implements Command {
                     TARGET: target.username,
                     AUTHOR_ICON: target.avatarURL(),
                     ICON: msg.client.user.avatarURL(),
-                    TAG: target.tag
+                    TAG: target.tag,
                 }).setAuthor(target.tag, target.avatarURL())
             );
 
