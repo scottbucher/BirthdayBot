@@ -482,7 +482,11 @@
                 "timestamp": true
             },
             "setBirthday": {
-                "description": "Successfully set your birthday to **{{BIRTHDAY}}, {{TIMEZONE}}**",
+                "description": [
+                    "Successfully set your birthday to **{{BIRTHDAY}}, {{TIMEZONE}}**",
+                    "",
+                    "**Important Note:** Birthdays are stored globally. This means your birthday is now set for all servers with Birthday Bot!"
+                ],
                 "footer": {
                     "text": "You now have {{AMOUNT}} birthday attempts left.",
                     "icon": "{{ICON}}"
