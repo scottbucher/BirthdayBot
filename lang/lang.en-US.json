@@ -219,7 +219,7 @@
                 "author": {
                     "name": "{{TAG}}",
                     "icon": "{{AUTHOR_ICON}}",
-                    "url": "{{REF:docLink.setupBirthday}}"
+                    "url": "{{REF:docLinks.setupBirthday}}"
                 },
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
@@ -245,7 +245,7 @@
                 "author": {
                     "name": "{{TAG}}",
                     "icon": "{{AUTHOR_ICON}}",
-                    "url": "{{REF:docLink.setupBirthday}}"
+                    "url": "{{REF:docLinks.setupBirthday}}"
                 },
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
