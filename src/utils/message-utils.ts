@@ -14,7 +14,7 @@ import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { TimeUtils } from '.';
 
-let Config = require('../../config/config.json')
+let Config = require('../../config/config.json');
 
 export class MessageUtils {
     public static async send(
@@ -24,8 +24,9 @@ export class MessageUtils {
     ): Promise<Message> {
         delay = Config.delays.enabled ? delay : 0;
         try {
-            return await target.send(content);
+            await target.send(content);
             await TimeUtils.sleep(delay ?? 0);
+            return;
         } catch (error) {
             // 10003: "Unknown channel"
             // 10004: "Unknown guild"
@@ -44,13 +45,27 @@ export class MessageUtils {
         }
     }
 
-    public static async reply(msg: Message, content: StringResolvable): Promise<Message> {
+    public static async reply(
+        msg: Message,
+        content: StringResolvable,
+        delay?: number
+    ): Promise<Message> {
+        delay = Config.delays.enabled ? delay : 0;
         try {
-            return await msg.reply(content);
+            await msg.reply(content);
+            await TimeUtils.sleep(delay ?? 0);
+            return;
         } catch (error) {
-            // 10008: "Unknown Message" (Message was deleted)
+            // 10003: "Unknown channel"
+            // 10004: "Unknown guild"
+            // 10013: "Unknown user"
+            // 50001: "Missing access"
             // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
-            if (error instanceof DiscordAPIError && [10008, 50007].includes(error.code)) {
+            // 50013: "Missing Permissions"
+            if (
+                error instanceof DiscordAPIError &&
+                [10003, 10004, 10013, 50001, 50007, 50013].includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;
