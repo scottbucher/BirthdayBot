@@ -141,8 +141,7 @@ export class SetCommand implements Command {
         // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
         if (
             guildData?.DefaultTimezone !== '0' &&
-            timeZone &&
-            timeZone !== guildData?.DefaultTimezone
+            (!timeZone || timeZone !== guildData?.DefaultTimezone)
         ) {
             let confirmationMessage = await MessageUtils.send(
                 channel,
