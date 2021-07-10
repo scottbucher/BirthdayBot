@@ -219,7 +219,7 @@
                 "author": {
                     "name": "{{TAG}}",
                     "icon": "{{ICON}}",
-                    "url": "{{REF:docLinks:setupBirthday}}"
+                    "url": "{{REF:docLink.setupBirthday}}"
                 },
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
@@ -245,7 +245,7 @@
                 "author": {
                     "name": "{{TAG}}",
                     "icon": "{{ICON}}",
-                    "url": "{{REF:docLinks:setupBirthday}}"
+                    "url": "{{REF:docLinks.setupBirthday}}"
                 },
                 "title": "Birthday Setup - {{TARGET}}",
                 "description": [
@@ -2069,8 +2069,8 @@
             "general": {
                 "author": {
                     "name": "Birthday Bot General Help",
-                    "icon": "{{ICON_LINK}}",
-                    "url": "{{REF:docLinks:faq}}"
+                    "icon": "{{ICON}}",
+                    "url": "{{REF:docLinks.faq}}"
                 },
                 "title": "{{REF:bot.name}} General Help",
                 "description": [
@@ -2114,8 +2114,8 @@
             "setup": {
                 "author": {
                     "name": "Birthday Bot Setup Help",
-                    "icon": "{{ICON_LINK}}",
-                    "url": "{{REF:docLinks:faq}}"
+                    "icon": "{{ICON}}",
+                    "url": "{{REF:docLinks.faq}}"
                 },
                 "title": "{{REF:bot.name}} Setup Help - Guild Only",
                 "description": [
@@ -2136,8 +2136,8 @@
             "message": {
                 "author": {
                     "name": "Birthday Bot Message Help",
-                    "icon": "{{ICON_LINK}}",
-                    "url": "{{REF:docLinks:faq}}"
+                    "icon": "{{ICON}}",
+                    "url": "{{REF:docLinks.faq}}"
                 },
                 "title": "{{REF:bot.name}} Message Help - Guild Only",
                 "description": [
@@ -2159,8 +2159,8 @@
             "trusted": {
                 "author": {
                     "name": "Birthday Bot Trusted Help",
-                    "icon": "{{ICON_LINK}}",
-                    "url": "{{REF:docLinks:faq}}"
+                    "icon": "{{ICON}}",
+                    "url": "{{REF:docLinks.faq}}"
                 },
                 "title": "{{REF:bot.name}} Trusted System Help - Guild Only",
                 "description": [
@@ -2180,8 +2180,8 @@
             "blacklist": {
                 "author": {
                     "name": "Birthday Bot Blacklist Help",
-                    "icon": "{{ICON_LINK}}",
-                    "url": "{{REF:docLinks:faq}}"
+                    "icon": "{{ICON}}",
+                    "url": "{{REF:docLinks.faq}}"
                 },
                 "title": "{{REF:bot.name}} Blacklist Help - Guild Only",
                 "description": [
@@ -2196,8 +2196,8 @@
             "anniversary": {
                 "author": {
                     "name": "Birthday Bot Anniversary Help",
-                    "icon": "{{ICON_LINK}}",
-                    "url": "{{REF:docLinks:faq}}"
+                    "icon": "{{ICON}}",
+                    "url": "{{REF:docLinks.faq}}"
                 },
                 "title": "{{REF:bot.name}} Anniversary Help - Guild Only",
                 "description": [
@@ -2212,8 +2212,8 @@
             "premium": {
                 "author": {
                     "name": "Birthday Bot Premium Help",
-                    "icon": "{{ICON_LINK}}",
-                    "url": "{{REF:docLinks:faq}}"
+                    "icon": "{{ICON}}",
+                    "url": "{{REF:docLinks.faq}}"
                 },
                 "title": "{{REF:bot.name}} Premium Help - Guild Only",
                 "description": [
@@ -2587,27 +2587,28 @@
             "voteImage": "https://i.imgur.com/wak8g4V.png"
         },
         "docLinks": {
-            "setupRequiredGuide": "{{REF:links.doc}}/",
-            "setupAnniversaryGuide": "{{REF:links.doc}}/",
-            "setupTrustedGuide": "{{REF:links.doc}}/",
-            "setupBirthday": "{{REF:links.doc}}/",
-            "whyDoesItNeedMyTimezone": "{{REF:links.doc}}/",
-            "whyDoesItNeedOnlyMonthAndDate": "{{REF:links.doc}}/",
-            "whatIsBirthdayRole": "{{REF:links.doc}}/",
-            "whatIsBirthdayChannel": "{{REF:links.doc}}/",
-            "whatIsMemberAnniversaryChannel": "{{REF:links.doc}}/",
-            "whatIsServerAnniversaryChannel": "{{REF:links.doc}}/",
-            "whatIsMessageEmbedColor": "{{REF:links.doc}}/",
-            "whatIsAnEmbed": "{{REF:links.doc}}/",
-            "whatIsTrustedRole": "{{REF:links.doc}}/",
-            "whatIsCustomMessage": "{{REF:links.doc}}/",
-            "whatIsUserSpecificCustomMessage": "{{REF:links.doc}}/",
-            "whatIsAnniversaryRole": "{{REF:links.doc}}/",
-            "trustedPreventsMessage": "{{REF:links.doc}}/",
-            "trustedPreventsRole": "{{REF:links.doc}}/",
-            "requireAllTrustedRoles": "{{REF:links.doc}}/",
-            "whatIsBirthdayBlacklist": "{{REF:links.doc}}/",
-            "recentUpdateDoc": "{{REF:links.doc}}/"
+            "faq": "{{REF:links.docs}}/faq",
+            "setupRequiredGuide": "{{REF:links.docs}}/",
+            "setupAnniversaryGuide": "{{REF:links.docs}}/",
+            "setupTrustedGuide": "{{REF:links.docs}}/",
+            "setupBirthday": "{{REF:links.docs}}/",
+            "whyDoesItNeedMyTimezone": "{{REF:links.docs}}/",
+            "whyDoesItNeedOnlyMonthAndDate": "{{REF:links.docs}}/",
+            "whatIsBirthdayRole": "{{REF:links.docs}}/",
+            "whatIsBirthdayChannel": "{{REF:links.docs}}/",
+            "whatIsMemberAnniversaryChannel": "{{REF:links.docs}}/",
+            "whatIsServerAnniversaryChannel": "{{REF:links.docs}}/",
+            "whatIsMessageEmbedColor": "{{REF:links.docs}}/",
+            "whatIsAnEmbed": "{{REF:links.docs}}/",
+            "whatIsTrustedRole": "{{REF:links.docs}}/",
+            "whatIsCustomMessage": "{{REF:links.docs}}/",
+            "whatIsUserSpecificCustomMessage": "{{REF:links.docs}}/",
+            "whatIsAnniversaryRole": "{{REF:links.docs}}/",
+            "trustedPreventsMessage": "{{REF:links.docs}}/",
+            "trustedPreventsRole": "{{REF:links.docs}}/",
+            "requireAllTrustedRoles": "{{REF:links.docs}}/",
+            "whatIsBirthdayBlacklist": "{{REF:links.docs}}/",
+            "recentUpdateDoc": "{{REF:links.docs}}/"
         },
         "footers": {
             "expire": "This message expires in 2 minutes!",
