@@ -184,7 +184,7 @@ export class MessageService {
                                 await MessageUtils.send(birthdayChannel, mentionString);
 
                             let embed = new MessageEmbed().setDescription(message).setColor(color);
-                            await MessageUtils.send(
+                            await MessageUtils.sendWithDelay(
                                 birthdayChannel,
                                 customMessage.Embed ? embed : message,
                                 Config.delays.messages
@@ -242,7 +242,7 @@ export class MessageService {
                         await MessageUtils.send(birthdayChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
-                    await MessageUtils.send(
+                    await MessageUtils.sendWithDelay(
                         birthdayChannel,
                         useEmbed ? embed : message,
                         Config.delays.messages
@@ -341,7 +341,7 @@ export class MessageService {
                         // Send our message(s)
 
                         for (let message of embedMessagesToSend)
-                            await MessageUtils.send(
+                            await MessageUtils.sendWithDelay(
                                 memberAnniversaryChannel,
                                 message,
                                 Config.delays.messages
@@ -352,7 +352,7 @@ export class MessageService {
                         // Send our message(s)
 
                         for (let message of regularMessagesToSend)
-                            await MessageUtils.send(
+                            await MessageUtils.sendWithDelay(
                                 memberAnniversaryChannel,
                                 message,
                                 Config.delays.messages
@@ -433,7 +433,7 @@ export class MessageService {
                         await MessageUtils.send(serverAnniversaryChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
-                    await MessageUtils.send(
+                    await MessageUtils.sendWithDelay(
                         serverAnniversaryChannel,
                         useEmbed ? embed : message,
                         Config.delays.messages

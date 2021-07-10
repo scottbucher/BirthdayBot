@@ -19,6 +19,29 @@ let Config = require('../../config/config.json');
 export class MessageUtils {
     public static async send(
         target: User | DMChannel | TextChannel | NewsChannel,
+        content: StringResolvable
+    ): Promise<Message> {
+        try {
+            return await target.send(content);
+        } catch (error) {
+            // 10003: "Unknown channel"
+            // 10004: "Unknown guild"
+            // 10013: "Unknown user"
+            // 50001: "Missing access"
+            // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+            // 50013: "Missing Permissions"
+            if (
+                error instanceof DiscordAPIError &&
+                [10003, 10004, 10013, 50001, 50007, 50013].includes(error.code)
+            ) {
+                return;
+            } else {
+                throw error;
+            }
+        }
+    }
+    public static async sendWithDelay(
+        target: User | DMChannel | TextChannel | NewsChannel,
         content: StringResolvable,
         delay?: number
     ): Promise<Message> {
@@ -52,9 +75,7 @@ export class MessageUtils {
     ): Promise<Message> {
         delay = Config.delays.enabled ? delay : 0;
         try {
-            await msg.reply(content);
-            await TimeUtils.sleep(delay ?? 0);
-            return;
+            return await msg.reply(content);
         } catch (error) {
             // 10003: "Unknown channel"
             // 10004: "Unknown guild"
