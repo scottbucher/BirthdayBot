@@ -340,6 +340,13 @@
             "defaultTimeZoneAvailable": {
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
+                    "This server has a default timezone of **{{SERVER_TIMEZONE}}**. Do you want to use the server's timezone?"
+                ],
+                "color": "{{REF:colors.success}}"
+            },
+            "defaultTimeZoneAvailableOverride": {
+                "title": "Time Zone Setup - {{TARGET}}",
+                "description": [
                     "This server has a default timezone of **{{SERVER_TIMEZONE}}**. Do you want to use **{{INPUTTED_TIMEZONE}}** instead?",
                     "",
                     "Clicking {{REF:emotes.confirm}} will set your timezone to **{{INPUTTED_TIMEZONE}}**",

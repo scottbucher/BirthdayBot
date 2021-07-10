@@ -145,11 +145,15 @@ export class SetCommand implements Command {
         ) {
             let confirmationMessage = await MessageUtils.send(
                 channel,
-                Lang.getEmbed('userPrompts.defaultTimeZoneAvailable', LangCode.EN_US, {
-                    SERVER_TIMEZONE: guildData.DefaultTimezone,
-                    INPUTTED_TIMEZONE: timeZone,
-                    TARGET: target.username,
-                })
+                Lang.getEmbed(
+                    'userPrompts.defaultTimeZoneAvailable' + timeZone ? 'Override' : '',
+                    LangCode.EN_US,
+                    {
+                        SERVER_TIMEZONE: guildData.DefaultTimezone,
+                        INPUTTED_TIMEZONE: timeZone,
+                        TARGET: target.username,
+                    }
+                )
             ); // Send confirmation and emotes
             for (let option of trueFalseOptions) {
                 await MessageUtils.react(confirmationMessage, option);
@@ -176,7 +180,7 @@ export class SetCommand implements Command {
 
             if (confirmation === Config.emotes.deny) {
                 // Confirm
-                timeZone = guildData.DefaultTimezone;
+                timeZone = timeZone ? guildData.DefaultTimezone : null;
             }
         }
 
