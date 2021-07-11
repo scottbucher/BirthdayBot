@@ -355,12 +355,11 @@ export class TestCommand implements Command {
                 );
 
                 // See if the bot can give the roles
-                memberAnniversaryRolesCheck =
-                    CelebrationUtils.canGiveAllRoles(
-                        guild,
-                        anniversaryResolvedRoles,
-                        guildMember
-                    ) && year !== 0;
+                memberAnniversaryRolesCheck = CelebrationUtils.canGiveAllRoles(
+                    guild,
+                    anniversaryResolvedRoles,
+                    guildMember
+                );
             }
 
             // Check for user specific messages
