@@ -2092,7 +2092,7 @@
                     "**{{REF:bot.prefix}} help {{REF:types.blacklist}}** - Help for the birthday blacklist system.",
                     "**{{REF:bot.prefix}} premium** - See information about {{REF:bot.name}} Premium.",
                     "**{{REF:bot.prefix}} settings [{{REF:types.message}}/{{REF:types.advanced}}]**** - View server's settings.",
-                    "**{{REF:bot.prefix}} test <type> [user]**** - Test the birthday event.",
+                    "**{{REF:bot.prefix}} test <type> [user] [anniversary year]**** - Test the birthday event.",
                     "",
                     "**{{REF:bot.prefix}} donate** - Support developments by donating!",
                     "",

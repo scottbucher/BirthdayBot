@@ -92,12 +92,14 @@ export class TestCommand implements Command {
                 try {
                     year = ParseUtils.parseInt(args[3]);
                 } catch (error) {
-                    if (args.length >= 5) {
-                        try {
-                            year = ParseUtils.parseInt(args[4]);
-                        } catch (error) {
-                            // no year
-                        }
+                    // no year
+                }
+            } else {
+                if (args.length >= 5) {
+                    try {
+                        year = ParseUtils.parseInt(args[4]);
+                    } catch (error) {
+                        // no year
                     }
                 }
             }
