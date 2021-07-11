@@ -337,6 +337,60 @@ export class MessageService {
                     )
                         await MessageUtils.send(memberAnniversaryChannel, mentionString);
 
+                    // Compile our list of regular messages to send based on the 4096 character limit
+                    let regularMessages: string[] = [];
+                    let counter = 0;
+                    if (regularMessagesToSend.length > 0) {
+                        for (let message of regularMessagesToSend) {
+                            if (regularMessages[counter].concat('\n\n' + message).length > 4096) {
+                                counter++;
+                                regularMessages.push(message);
+                            } else {
+                                regularMessages[counter] = regularMessages[counter].concat(
+                                    '\n\n' + message
+                                );
+                            }
+                        }
+                    }
+
+                    // Compile our list of embed messages to send based on the 4096 character limit
+
+                    // First we need to get a list of colors by mapping and removing duplicates
+                    // If they don't have premium use the default color otherwise use the colors of the custom messages
+                    let colors: string[] = hasPremium
+                        ? [...new Set(embedMessagesToSend.map(embed => embed.Color))]
+                        : [Config.colors.default];
+
+                    // Now we loop through the colors and create a list of messages to send
+                    let embedMessages: MessageEmbed[] = [];
+                    counter = 0;
+                    for (let color of colors) {
+                        // Only get the messages that have the specified color if they have premium
+                        let embedDescriptions: string[] = embedMessagesToSend
+                            .filter(embed => !hasPremium || embed.Color === color)
+                            .map(embed => embed.Description);
+                        for (let message of embedDescriptions) {
+                            if (embedMessages.length === 0) {
+                                embedMessages.push(
+                                    new MessageEmbed().setColor(color).setDescription(message)
+                                );
+                            } else if (
+                                embedMessages[counter].description.concat('\n\n' + message).length >
+                                4096
+                            ) {
+                                counter++;
+                                embedMessages.push(
+                                    new MessageEmbed().setDescription(message).setColor(color)
+                                );
+                            } else {
+                                embedMessages[counter].description = embedMessages[
+                                    counter
+                                ].description.concat('\n\n' + message);
+                            }
+                        }
+                        counter++;
+                    }
+
                     if (embedMessagesToSend.length > 0) {
                         // Send our message(s)
 
