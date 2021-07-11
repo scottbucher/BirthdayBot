@@ -8,6 +8,7 @@
 [![Discord Bots](https://top.gg/api/widget/owner/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
 
 ## Important Note
+
 **For the most detailed and up-to-date information and guide please visit the Official Birthday Bot Documentation [here!](https://birthdaybot.scottbucher.dev)**
 
 **Discord Bot** - Celebrate birthdays and anniversaries (**NEW**) with configurable roles, messages and more! Highly customizable and easy to use! Use `bday help` to get started!
@@ -19,44 +20,45 @@
 # Features:
 
 ## Free Features
-- Each user can [set their birthday & time zone](https://birthdaybot.scottbucher.dev) into the bot which stores that information into a database allowing the bot to know on what day and what time zone to celebrate the user's birthday
-- Use the Anniversary System to celebrate the anniversary of when members first joined the server and when the server was created.
-  - Requires the [Default Timezone](https://birthdaybot.scottbucher.dev) Setting to be set
-  - Server owners have heavy control over how, when, and what Birthday Bot does in their Discord
-   - Customization of the [Celebration Messages](https://birthdaybot.scottbucher.dev) (Message contents and design)
-     - There can be multiple custom messages, the bot will choose one random for each birthday/anniversary
-   - Customizable Birthday Role and/or Birthday/Anniversary Channels
-   - Custom Birthday/Anniversary Message Time
-   - Customizable [Trusted Role System](https://birthdaybot.scottbucher.dev) (Birthday System Only) - Using this system server owners decide whose birthdays are celebrated in their Discord. Additionally, server owners can toggle whether the Trusted Role is only required to receive the Birthday Role or Birthday Message, or both.
-   - Ban specific users from having their birthday celebrated using the birthday blacklist
-- All birthdays are stored Globally. This means if you have multiple Discord servers that you own or are in with Birthday Bot, your users will only have to input their birthday and time zone once.
-- View upcoming birthdays/anniversaries.
-- Clear your information from the database at any time.
-- Near 24/7 up-time!
 
-## [Premium Features](https://birthdaybot.scottbucher.dev/):
+-   Each user can [set their birthday & time zone](https://birthdaybot.scottbucher.dev/setting-your-birthday) into the bot which stores that information into a database allowing the bot to know on what day and what time zone to celebrate the user's birthday
+-   Use the Anniversary System to celebrate the anniversary of when members first joined the server and when the server was created.
+    -   Requires the [Default Timezone](https://birthdaybot.scottbucher.dev/faq-1/general#what-is-the-default-timezone-setting) Setting to be set
+    -   Server owners have heavy control over how, when, and what Birthday Bot does in their Discord
+    -   Customization of the [Celebration Messages](https://birthdaybot.scottbucher.dev/faq-1/custom-messages#what-are-the-different-types-of-custom-messages) (Message contents and design)
+        -   There can be multiple custom messages, the bot will choose one random for each birthday/anniversary
+    -   Customizable Birthday Role and/or Birthday/Anniversary Channels
+    -   Custom Birthday/Anniversary Message Time
+    -   Customizable [Trusted Role System](https://birthdaybot.scottbucher.dev/faq-1/birthday-system/trusted-system) (Birthday System Only) - Using this system server owners decide whose birthdays are celebrated in their Discord. Additionally, server owners can toggle whether the Trusted Role is only required to receive the Birthday Role or Birthday Message, or both.
+    -   Ban specific users from having their birthday celebrated using the birthday blacklist
+-   All birthdays are stored Globally. This means if you have multiple Discord servers that you own or are in with Birthday Bot, your users will only have to input their birthday and time zone once.
+-   View upcoming birthdays/anniversaries.
+-   Clear your information from the database at any time.
+-   Near 24/7 up-time!
+
+## [Premium Features](https://birthdaybot.scottbucher.dev/premium-features):
+
 -   Avoid having to vote to use some commands.
--   Setup [Member Anniversary Roles](https://birthdaybot.scottbucher.dev/) to celebrate how long members have been in your discord
+-   Setup [Member Anniversary Roles](https://birthdaybot.scottbucher.dev/faq-1/member-anniversaries#what-are-anniversary-roles) to celebrate how long members have been in your discord
     -   For example, the **5-Year Veteran** role can be set to be given on a member's 5 Year anniversary in your discord.
--   Setup Multiple [Trusted Roles](https://birthdaybot.scottbucher.dev/)
-    -   Use the [**RequireAllTrustedRoles**](https://birthdaybot.scottbucher.dev/) setting to decide if users need all trusted roles or just one to have their birthday celebrated.
+-   Setup Multiple [Trusted Roles](https://birthdaybot.scottbucher.dev/faq-1/birthday-system/trusted-system#do-i-need-to-set-up-the-trusted-role)
+    -   Use the [**RequireAllTrustedRoles**](https://birthdaybot.scottbucher.dev/faq-1/birthday-system/trusted-system#what-is-the-require-all-trusted-role-setting) setting to decide if users need all trusted roles or just one to have their birthday celebrated.
 -   More control over the Custom Message(s).
     -   Up to **500** custom birthday messages (_vs_ **_3_** _for free_).
     -   Up to **500** custom member anniversary messages (_vs_ **_3_** _for free_).
     -   Up to **500** custom server anniversary messages (_vs_ **_1_** _for free_).
-    -   Decide what [color each custom message](https://birthdaybot.scottbucher.dev/) is (You can have a different color for each!)
-        -   Decide which messages are [embedded](https://birthdaybot.scottbucher.dev/) (Color setting only applies to messages that are embedded)
-    -   Set [user-specific custom messages](https://birthdaybot.scottbucher.dev/)
+    -   Decide what [color each custom message](https://birthdaybot.scottbucher.dev/faq-1/custom-messages#what-is-a-message-embed-color) is (You can have a different color for each!)
+        -   Decide which messages are [embedded](https://birthdaybot.scottbucher.dev/faq-1/custom-messages#what-is-a-message-embed-setting) (Color setting only applies to messages that are embedded)
+    -   Set [user-specific custom messages](https://birthdaybot.scottbucher.dev/premium-features#user-specific-custom-messages)
         -   One custom message per user
         -   Unlimited user-specific messages per server
 -   Support Development!
     -   Since I started Birthday Bot I have maintained development and server cost completely out of my own expense, Birthday Bot Premium allows me to continue to maintain development as Birthday Bot continues to gain tens of thousands of servers each month.
     -   Subscriptions to Birthday Bot Premium go straight to server costs.
-        
+
 ### Support & Troubleshooting
 
-Birthday Bot is a part of the Arilyn Bot family and any support, questions or feedback are welcome in our support [Discord](https://discord.com/invite/9gUQFtz). Please visit our [FAQ](https://birthdaybot.scottbucher.dev/) and setup guide, as well as previous user questions before contacting staff, thanks!
-
+Birthday Bot is a part of the Arilyn Bot family and any support, questions or feedback are welcome in our support [Discord](https://discord.com/invite/9gUQFtz). Please visit our [FAQ](https://birthdaybot.scottbucher.dev/faq) and setup guide, as well as previous user questions before contacting staff, thanks!
 
 **Example Birthday Announcement (Fully customizable):**
 
@@ -95,7 +97,7 @@ Finally, the confirmation menu will appear.
 Ensure this is the correct information, then confirm by clicking the checkmark.
 
 Note: Each user only has a limited amount of Birthday Sets. These multiple sets are made to account for incorrect information input, time zone changes, etc.
-Learn more [here](https://birthdaybot.scottbucher.dev/faq#how-many-times-can-i-set-my-birthday).
+Learn more [here](https://birthdaybot.scottbucher.dev/faq-1/user#how-many-times-can-i-set-my-birthday).
 
 ![End](https://i.imgur.com/2F8u3Cw.png)
 
