@@ -1,11 +1,11 @@
+import { DMChannel, Message, TextChannel } from 'discord.js';
 import { MessageUtils, ShardUtils } from '../utils';
-import djs, { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
 import { Command } from './command';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
-
-let Config = require('../../config/config.json');
 
 export class StatsCommand implements Command {
     public name: string = 'stats';
@@ -20,7 +20,11 @@ export class StatsCommand implements Command {
 
     constructor(private userRepo: UserRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
         let today = moment().format('MM-DD');
         let month = moment().format('MM');
         let totalBirthdays = await this.userRepo.getUserCount();
@@ -42,18 +46,17 @@ export class StatsCommand implements Command {
 
         let shardId = msg.guild?.shardID || 0;
 
-        let embed = new MessageEmbed()
-            .setColor(Config.colors.default)
-            .setThumbnail(msg.client.user.displayAvatarURL({ dynamic: true }))
-            .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
-            .addField('Total Birthdays', totalBirthdays.toLocaleString(), true)
-            .addField('Total Servers', serverCount.toLocaleString(), true)
-            .addField('Shard ID', `${shardId + 1}/${msg.client.shard.count}`, true)
-            .addField('Birthdays Today', birthdaysToday.toLocaleString(), true)
-            .addField('Birthdays This Month', birthdaysThisMonth.toLocaleString(), true)
-            .addField('Node.js', process.version, true)
-            .addField('discord.js', `v${djs.version}`, true);
-
-        await MessageUtils.send(channel, embed);
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('info.stats', LangCode.EN_US, {
+                TOTAL_BIRTHDAYS: totalBirthdays.toLocaleString(),
+                TOTAL_SERVERS: serverCount.toLocaleString(),
+                SHARD_ID: `${shardId + 1}/${msg.client.shard.count}`,
+                BIRTHDAYS_TODAY: birthdaysToday.toLocaleString(),
+                BIRTHDAYS_THIS_MONTH: birthdaysThisMonth.toLocaleString(),
+            })
+                .setThumbnail(msg.client.user.displayAvatarURL({ dynamic: true }))
+                .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+        );
     }
 }

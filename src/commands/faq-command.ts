@@ -1,11 +1,11 @@
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import { MessageUtils } from '../utils';
 
-let Config = require('../../config/config.json');
-
-export class FAQCommand implements Command {
+export class FaqCommand implements Command {
     public name: string = 'faq';
     public aliases = [];
     public requireSetup = false;
@@ -16,13 +16,14 @@ export class FAQCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
-        let embed = new MessageEmbed()
-            .setDescription(
-                `View our FAQ for ${msg.client.user.toString()} [here](${Config.links.docs}/faq)!`
-            )
-            .setColor(Config.colors.default);
-
-        await MessageUtils.send(channel, embed);
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('info.faq', LangCode.EN_US, { BOT: msg.client.user.toString() })
+        );
     }
 }

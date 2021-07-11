@@ -1,5 +1,11 @@
-export abstract class ParseUtils {
+export class ParseUtils {
     public static parseInt(input: string): number {
-        return parseInt(input.replace(/,/g, ''));
+        let int: number;
+        try {
+            int = parseInt(input.replace(/,/g, ''));
+        } catch {
+            return;
+        }
+        return int;
     }
 }

@@ -1,11 +1,11 @@
-import { DMChannel, Message, MessageEmbed, TextChannel, User } from 'discord.js';
-import { GuildUtils, MessageUtils } from '../utils';
+import { DMChannel, GuildMember, Message, TextChannel } from 'discord.js';
+import { FormatUtils, GuildUtils, MessageUtils } from '../utils';
 
 import { Command } from './command';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import { UserRepo } from '../services/database/repos';
 import moment from 'moment';
-
-let Config = require('../../config/config.json');
 
 export class ViewCommand implements Command {
     public name: string = 'view';
@@ -18,60 +18,111 @@ export class ViewCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) {}
+    constructor(private userRepo: UserRepo) { }
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
-        let target: User;
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
+        let type: string;
+        let foundType = false;
+        let foundTarget = false;
 
-        if (args.length === 3) {
-            // Check if the user is trying to set another person's birthday
+        if (args.length > 2) {
+            type = FormatUtils.extractCelebrationType(args[2].toLowerCase())?.toLowerCase() ?? '';
+            if (type === 'birthday' || type === 'memberanniversary') foundType = true;
+        }
+
+        type = !type ? 'birthday' : type;
+
+        let checkArg = foundType ? 4 : 3;
+
+        let target: GuildMember;
+
+        if (args.length === checkArg) {
+            // Check if the user is trying to view another person's birthday
             if (channel instanceof DMChannel) {
-                let embed = new MessageEmbed()
-                    .setDescription(`You cannot request another user's information in a DM!`)
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.viewUserInDm', LangCode.EN_US)
+                );
                 return;
             }
 
             // Get who they are mentioning
             target =
-                msg.mentions.members.first()?.user ||
-                GuildUtils.findMember(msg.guild, args[2])?.user;
+                msg.mentions.members.first() ||
+                GuildUtils.findMember(msg.guild, args[checkArg - 1]);
 
             // Did we find a user?
-            if (!target) {
-                let embed = new MessageEmbed()
-                    .setDescription('Could not find that user!')
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
-                return;
-            }
+            if (target) foundTarget = true;
         } else {
             // They didn't mention anyone
-            target = msg.author;
+            target = msg.member;
         }
 
-        let userData = await this.userRepo.getUser(target.id);
-
-        if (!userData || !userData.Birthday || !userData.TimeZone) {
-            let embed = new MessageEmbed().setColor(Config.colors.error);
-            if (target !== msg.author) {
-                embed.setDescription('That user has not set their birthday!');
-            } else {
-                embed.setDescription('You have not set your birthday!');
-            }
-            await MessageUtils.send(channel, embed);
+        if (!foundTarget && !foundType && args.length > 2) {
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidViewArgs', LangCode.EN_US)
+            );
             return;
         }
 
-        let embed = new MessageEmbed()
-            .setDescription(
-                `${target.toString()}'s birthday is on **${moment(userData.Birthday).format(
-                    'MMMM Do'
-                )}, ${userData.TimeZone}**!`
-            )
-            .setColor(Config.colors.default);
-        await MessageUtils.send(channel, embed);
-        return;
+        if (type === 'birthday') {
+            let userData = await this.userRepo.getUser(target.id);
+
+            if (!userData || !userData.Birthday || !userData.TimeZone) {
+                target === msg.member
+                    ? await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US)
+                    )
+                    : await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.userBirthdayNotSet', LangCode.EN_US, {
+                            USER: target.toString(),
+                        })
+                    );
+                return;
+            }
+
+            msg.member === target
+                ? await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('results.viewBirthday', LangCode.EN_US, {
+                        BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
+                        TIMEZONE: userData.TimeZone,
+                        CHANGES_LEFT: userData.ChangesLeft.toString(),
+                        ICON: msg.client.user.avatarURL(),
+                    })
+                )
+                : await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('results.viewUserBirthday', LangCode.EN_US, {
+                        USER: target.toString(),
+                        BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
+                        TIMEZONE: userData.TimeZone,
+                    })
+                );
+        } else if (type === 'memberanniversary') {
+            let memberAnniversary = moment(target.joinedAt).format('MMMM Do');
+
+            msg.member === target
+                ? await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('results.viewMemberAnniversary', LangCode.EN_US, {
+                        DATE: memberAnniversary,
+                    })
+                )
+                : await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('results.viewUserMemberAnniversary', LangCode.EN_US, {
+                        USER: target.toString(),
+                        DATE: memberAnniversary,
+                    })
+                );
+        }
     }
 }

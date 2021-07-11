@@ -1,9 +1,14 @@
 import * as Chrono from 'chrono-node';
 
-import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
-import { Guild, Message, MessageEmbed, User, Util } from 'discord.js';
+import { Blacklisted, CustomMessages, GuildData, UserDataResults } from '../models/database';
+import { Guild, GuildMember, Message, MessageEmbed, Role, User } from 'discord.js';
+import { GuildUtils, ParseUtils } from '.';
 
-import { GuildUtils } from '.';
+import { CelebrationUtils } from './celebration-utils';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
+import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
+import { TrustedRoles } from '../models/database/trusted-role-models';
 import moment from 'moment-timezone';
 
 let Config = require('../../config/config.json');
@@ -13,34 +18,14 @@ let zoneNames = moment.tz
     .names()
     .filter(name => Config.validation.regions.some((region: any) => name.startsWith(`${region}/`)));
 
-export abstract class FormatUtils {
-    public static getRoleName(guild: Guild, roleDiscordId: string): string {
-        return roleDiscordId
-            ? guild.roles.resolve(roleDiscordId)?.toString() || '**Unknown**'
-            : '**None**';
-    }
-
-    public static getMemberDisplayName(memberDiscordId: string, guild: Guild): string {
-        let displayName = guild.members.resolve(memberDiscordId)?.displayName;
-        return displayName ? Util.escapeMarkdown(displayName) : 'Unknown Member';
-    }
-
-    public static getMemberMention(memberDiscordId: string, guild: Guild): string {
-        return guild.members.resolve(memberDiscordId)?.toString() || 'Unknown Member';
-    }
-
-    public static getPercent(decimal: number): string {
-        return Math.floor(decimal * 100) + '%';
-    }
-
-    public static isHour(input: number): boolean {
-        return Number.isInteger(input) && input >= 0 && input <= 23;
-    }
-
+export class FormatUtils {
+    // TODO: fix so there isn't a comma where there are only two users
     public static joinWithAnd(values: string[]): string {
-        return [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
-            values.length < 2 ? '' : ', and '
-        );
+        return values.length === 2
+            ? values[0] + ` ${Lang.getRef('terms.and', LangCode.EN_US)} ` + values[1]
+            : [values.slice(0, -1).join(', '), values.slice(-1)[0]].join(
+                  values.length < 2 ? '' : `, ${Lang.getRef('terms.and', LangCode.EN_US)} `
+              );
     }
 
     public static checkAbbreviation(input: string): boolean {
@@ -52,15 +37,28 @@ export abstract class FormatUtils {
         return zoneNames.find(zone => zone.toLowerCase().includes(zoneSearch));
     }
 
+    // TODO: take another look at this
     public static getBirthday(input: string): string {
         // Try and get a date from the 3rd args
         if (
-            input === '02/29' ||
-            input === '2/29' ||
-            input.toLowerCase() === 'february 29' ||
-            input.toLowerCase() === 'feb 29' ||
-            input.toLowerCase() === 'february 29th' ||
-            input.toLowerCase() === 'feb 29th'
+            input.includes('02/29') ||
+            input.includes('2/29') ||
+            input
+                .toLowerCase()
+                .includes(Lang.getRef('months.feb', LangCode.EN_US).toLowerCase() + ' 29') ||
+            input
+                .toLowerCase()
+                .includes(
+                    Lang.getRef('months.feb', LangCode.EN_US).toLowerCase().slice(0, 2) + ' 29'
+                ) ||
+            input
+                .toLowerCase()
+                .includes(Lang.getRef('months.feb', LangCode.EN_US).toLowerCase() + ' 29th') ||
+            input
+                .toLowerCase()
+                .includes(
+                    Lang.getRef('months.feb', LangCode.EN_US).toLowerCase().slice(0, 2) + ' 29th'
+                )
         )
             input = '2000-02-29';
         let results = Chrono.parseDate(input); // Try an parse a date
@@ -86,34 +84,35 @@ export abstract class FormatUtils {
     public static getMonth(month: number): string {
         switch (month) {
             case 1:
-                return 'January';
+                return Lang.getRef('months.jan', LangCode.EN_US);
             case 2:
-                return 'February';
+                return Lang.getRef('months.feb', LangCode.EN_US);
             case 3:
-                return 'March';
+                return Lang.getRef('months.mar', LangCode.EN_US);
             case 4:
-                return 'April';
+                return Lang.getRef('months.apr', LangCode.EN_US);
             case 5:
-                return 'May';
+                return Lang.getRef('months.may', LangCode.EN_US);
             case 6:
-                return 'June';
+                return Lang.getRef('months.jun', LangCode.EN_US);
             case 7:
-                return 'July';
+                return Lang.getRef('months.jul', LangCode.EN_US);
             case 8:
-                return 'August';
+                return Lang.getRef('months.aug', LangCode.EN_US);
             case 9:
-                return 'September';
+                return Lang.getRef('months.sep', LangCode.EN_US);
             case 10:
-                return 'October';
+                return Lang.getRef('months.oct', LangCode.EN_US);
             case 11:
-                return 'November';
+                return Lang.getRef('months.nov', LangCode.EN_US);
             case 12:
-                return 'December';
+                return Lang.getRef('months.dec', LangCode.EN_US);
             default:
-                return 'Invalid month';
+                return Lang.getRef('months.invalid', LangCode.EN_US);
         }
     }
 
+    // TODO: add usage of arrays in lang system
     public static findBoolean(input: string): boolean {
         switch (input.toLowerCase()) {
             case 'enabled':
@@ -146,30 +145,46 @@ export abstract class FormatUtils {
         customMessageResults: CustomMessages,
         page: number,
         pageSize: number,
-        hasPremium: boolean
+        hasPremium: boolean,
+        type: string
     ): Promise<MessageEmbed> {
-        let embed = new MessageEmbed()
-            .setTitle(`Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`)
-            .setThumbnail(guild.iconURL())
-            .setColor(Config.colors.default)
-            .setFooter(
-                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
-                guild.iconURL()
-            )
-            .setTimestamp();
+        let embed: MessageEmbed;
 
         let i = (page - 1) * pageSize + 1;
 
         if (customMessageResults.customMessages.length === 0) {
-            let embed = new MessageEmbed()
-                .setDescription('**No Custom Birthday Messages!**')
-                .setColor(Config.colors.default);
+            embed = new MessageEmbed()
+                .setColor(Config.colors.default)
+                .setDescription(
+                    Lang.getRef(
+                        type === 'birthday'
+                            ? 'list.noCustomBirthdayMessages'
+                            : type === 'memberanniversary'
+                            ? 'list.noCustomMemberAnniversaryMessages'
+                            : 'list.noCustomServerAnniversaryMessages',
+                        LangCode.EN_US
+                    )
+                );
             return embed;
         }
-        let description = `*A random birthday message is chosen for each birthday. If there are none, the default will be used. [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)*\n\n`;
+        let description = '';
+
+        let maxMessagesFree: number =
+            type === 'memberanniversary'
+                ? Config.validation.message.maxCount.memberAnniversary.free
+                : type === 'serveranniversary'
+                ? Config.validation.message.maxCount.serverAnniversary.free
+                : Config.validation.message.maxCount.birthday.free;
+        let maxMessagesPaid: number =
+            type === 'memberanniversary'
+                ? Config.validation.message.maxCount.memberAnniversary.paid
+                : type === 'serveranniversary'
+                ? Config.validation.message.maxCount.serverAnniversary.paid
+                : Config.validation.message.maxCount.birthday.paid;
 
         for (let customMessage of customMessageResults.customMessages) {
-            if (hasPremium || customMessage.Position <= 10) {
+            // dynamically check which ones to cross out due to the server not having premium anymore
+            if (hasPremium || customMessage.Position <= maxMessagesFree) {
                 description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n\n`;
@@ -177,15 +192,43 @@ export abstract class FormatUtils {
             i++;
         }
 
-        if (!hasPremium && customMessageResults.stats.TotalItems > 10)
-            embed.addField(
-                'Message Limit',
-                `The free version of Birthday Bot can only have up to **${Config.validation.message.maxCount.free}** custom birthday messages. Unlock up to **${Config.validation.message.maxCount.paid}** with \`bday premium\`!\n\n`
-            );
+        let listEmbed = 'list.';
 
-        embed.setDescription(description);
+        if (!hasPremium && customMessageResults.stats.TotalItems > maxMessagesFree) {
+            listEmbed +=
+                type === 'memberanniversary'
+                    ? 'memberAnniversaryMessageLocked'
+                    : type === 'serveranniversary'
+                    ? 'serverAnniversaryMessageLocked'
+                    : 'birthdayMessageLocked';
+            embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                MAX_FREE: maxMessagesFree.toString(),
+                MAX_PAID: maxMessagesPaid.toString(),
+                ICON: guild.client.user.avatarURL(),
+            });
+        } else {
+            listEmbed +=
+                type === 'memberanniversary'
+                    ? 'memberAnniversaryMessageUnLocked'
+                    : type === 'serveranniversary'
+                    ? 'serverAnniversaryMessageUnLocked'
+                    : 'birthdayMessageUnLocked';
+            embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                ICON: guild.client.user.avatarURL(),
+            });
+        }
 
-        return embed;
+        return embed.setThumbnail(guild.iconURL());
     }
 
     public static async getCustomUserMessageListEmbed(
@@ -193,75 +236,158 @@ export abstract class FormatUtils {
         customMessageResults: CustomMessages,
         page: number,
         pageSize: number,
-        hasPremium: boolean
+        hasPremium: boolean,
+        type: string
     ): Promise<MessageEmbed> {
-        let embed = new MessageEmbed()
-            .setTitle(
-                `User Birthday Messages | Page ${page}/${customMessageResults.stats.TotalPages}`
-            )
-            .setThumbnail(guild.iconURL())
-            .setColor(Config.colors.default)
-            .setFooter(
-                `Total Messages: ${customMessageResults.stats.TotalItems} • ${Config.experience.birthdayMessageListSize} per page`,
-                guild.iconURL()
-            )
-            .setTimestamp();
+        let embed: MessageEmbed;
 
         if (customMessageResults.customMessages.length === 0) {
-            let embed = new MessageEmbed()
-                .setDescription('**No User-Specific Birthday Messages!**')
+            embed = new MessageEmbed()
+                .setDescription(
+                    Lang.getRef(
+                        type === 'birthday'
+                            ? 'list.noCustomUserSpecificBirthdayMessages'
+                            : 'list.noCustomUserSpecificMemberAnnivesaryMessages',
+                        LangCode.EN_US
+                    )
+                )
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)](${Config.links.docs}/faq#what-is-a-user-specific-birthday-message)*\n\n`;
+        let description = '';
 
         for (let customMessage of customMessageResults.customMessages) {
             let member = guild.members.resolve(customMessage.UserDiscordId);
             if (hasPremium) {
-                description += `${member ? `**${member.displayName}**: ` : '**Unknown Member** '} ${
-                    customMessage.Message
-                }\n\n`;
+                description += `${
+                    member
+                        ? `**${member.displayName}**: `
+                        : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
+                } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
             } else {
                 description += `${
-                    member ? `**${member.displayName}**: ` : '**Unknown Member** '
-                } ~~${customMessage.Message}~~\n\n`;
+                    member
+                        ? `**${member.displayName}**: `
+                        : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
+                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
             }
         }
 
-        if (!hasPremium)
-            embed.addField(
-                'Locked Feature',
-                `User-specific messages are a premium only feature. Unlock them with \`bday premium\`!\n\n`
-            );
+        let listEmbed = 'list.';
 
-        embed.setDescription(description);
+        if (!hasPremium) {
+            listEmbed +=
+                type === 'memberanniversary'
+                    ? 'userSpecificMemberAnniversaryMessageLocked'
+                    : 'userSpecificBirthdayMessageLocked';
+            embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                ICON: guild.client.user.avatarURL(),
+            });
+        } else {
+            listEmbed +=
+                type === 'memberanniversary'
+                    ? 'userSpecificMemberAnniversaryMessageUnLocked'
+                    : 'userSpecificBirthdayMessageUnLocked';
+            embed = Lang.getEmbed(listEmbed, LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
+                TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                ICON: guild.client.user.avatarURL(),
+            });
+        }
 
         return embed;
+    }
+
+    public static async getTrustedRoleList(
+        guild: Guild,
+        trustedRoleResults: TrustedRoles,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean
+    ): Promise<MessageEmbed> {
+        let embed: MessageEmbed;
+
+        let i = (page - 1) * pageSize + 1;
+
+        if (trustedRoleResults.trustedRoles.length === 0) {
+            let embed = new MessageEmbed()
+                .setDescription(Lang.getRef('list.noTrustedRoles', LangCode.EN_US))
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = '';
+
+        for (let trustedRole of trustedRoleResults.trustedRoles) {
+            // dynamically check which ones to cross out due to the server not having premium anymore
+            let role = guild.roles.resolve(trustedRole.TrustedRoleDiscordId);
+            if (
+                hasPremium ||
+                trustedRole.Position <= Config.validation.trustedRoles.maxCount.free
+            ) {
+                description += `**${i.toLocaleString()}.** ${
+                    role ? `${role.toString()} ` : `**** `
+                }\n\n`;
+            } else {
+                description += `**${i.toLocaleString()}.** ${
+                    role
+                        ? `~~${role.toString()}~~ `
+                        : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
+                }\n\n`;
+            }
+            i++;
+        }
+
+        if (
+            !hasPremium &&
+            trustedRoleResults.stats.TotalItems > Config.validation.trustedRoles.maxCount.free
+        ) {
+            embed = Lang.getEmbed('list.trustedRolePaid', LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
+                TOTAL_ROLES: trustedRoleResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.trustedRoleListSize.toString(),
+                MAX_FREE: Config.validation.trustedRoles.maxCount.free.toString(),
+                MAX_PAID: Config.validation.trustedRoles.maxCount.paid.toString(),
+                ICON: guild.client.user.avatarURL(),
+            });
+        } else {
+            embed = Lang.getEmbed('list.trustedRoleFree', LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
+                TOTAL_ROLES: trustedRoleResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.trustedRoleListSize.toString(),
+                ICON: guild.client.user.avatarURL(),
+            });
+        }
+
+        return embed.setThumbnail(guild.iconURL());
     }
 
     public static async getBirthdayListFullEmbed(
         guild: Guild,
         userDataResults: UserDataResults,
+        guildData: GuildData,
         page: number,
         pageSize: number
     ): Promise<MessageEmbed> {
-        let embed = new MessageEmbed()
-            .setTitle(`Birthday List | Page ${page}/${userDataResults.stats.TotalPages}`)
-            .setThumbnail(guild.iconURL())
-            .setColor(Config.colors.default)
-            .setFooter(
-                `Total Birthdays: ${userDataResults.stats.TotalItems} • ${Config.experience.birthdayListSize} per page`,
-                guild.iconURL()
-            )
-            .setTimestamp();
-
+        let embed: MessageEmbed;
         if (userDataResults.userData.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription('**No Birthdays in this server!**')
+                .setDescription(Lang.getRef('list.noBirthdays', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use \`bday set\`!*\n\n`;
+        let description = '';
         let birthdays = [
             ...new Set(
                 userDataResults.userData.map(data => moment(data.Birthday).format('MMMM Do'))
@@ -273,19 +399,69 @@ export abstract class FormatUtils {
             let users = userDataResults.userData.filter(
                 data => moment(data.Birthday).format('MMMM Do') === birthday
             ); // Get all users with this birthday to create the sub list
-            let userNames: string[] = [];
-            for (let user of users) {
-                userNames.push(
-                    `${guild.members.resolve(user.UserDiscordId)?.displayName}` || '**Unknown**'
-                );
-            }
-            let userList = this.joinWithAnd(userNames); // Get the sub list of usernames for this date
-            description += `**${birthday}**: ${userList}\n`; // Append the description
+
+            let members = guild.members.cache
+                .filter(m => users.map(u => u.UserDiscordId).includes(m.id))
+                .map(member => member);
+
+            let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
+            description += `__**${birthday}**__: ${userList}\n`; // Append the description
         }
 
-        embed.setDescription(description);
+        embed = Lang.getEmbed('list.birthday', LangCode.EN_US, {
+            PAGE: page.toString(),
+            LIST_DATA: description,
+            TOTAL_PAGES: userDataResults.stats.TotalPages.toString(),
+            TOTAL_BIRTHDAYS: userDataResults.stats.TotalItems.toString(),
+            PER_PAGE: pageSize.toString(),
+            ICON: guild.client.user.avatarURL(),
+        });
 
-        return embed;
+        return embed.setThumbnail(guild.iconURL());
+    }
+
+    public static async getMemberAnniversaryListFullEmbed(
+        guild: Guild,
+        guildMembers: GuildMember[],
+        guildData: GuildData,
+        page: number,
+        pageSize: number,
+        totalPages: number,
+        totalMembers: number
+    ): Promise<MessageEmbed> {
+        let embed: MessageEmbed;
+        if (guildMembers.length === 0) {
+            // Not implemented
+            let embed = new MessageEmbed()
+                .setDescription(Lang.getRef('list.noMemberAnniversaries', LangCode.EN_US))
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = '';
+        let anniversaries = [
+            ...new Set(guildMembers.map(m => moment(m.joinedAt).format('MMMM Do'))),
+        ]; // remove duplicates
+
+        // Go through the list of birthdays
+        for (let anniversary of anniversaries) {
+            let members = guildMembers.filter(
+                m => moment(m.joinedAt).format('MMMM Do') === anniversary
+            ); // Get all users with this birthday to create the sub list
+            let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
+            description += `__**${anniversary}**__: ${userList}\n`; // Append the description
+        }
+
+        // Update config variables and add member anniversary list message
+        embed = Lang.getEmbed('list.memberAnniversary', LangCode.EN_US, {
+            PAGE: page.toString(),
+            LIST_DATA: description,
+            TOTAL_PAGES: totalPages.toString(),
+            TOTAL_ANNIVERSARIES: totalMembers.toString(),
+            PER_PAGE: pageSize.toString(),
+            ICON: guild.client.user.avatarURL(),
+        });
+
+        return embed.setThumbnail(guild.iconURL());
     }
 
     public static async getBlacklistFullEmbed(
@@ -294,38 +470,279 @@ export abstract class FormatUtils {
         page: number,
         pageSize: number
     ): Promise<MessageEmbed> {
-        let embed = new MessageEmbed()
-            .setTitle(`Birthday Blacklist List | Page ${page}/${blacklistResults.stats.TotalPages}`)
-            .setThumbnail(guild.iconURL())
-            .setColor(Config.colors.default)
-            .setFooter(
-                `Total Blacklisted Users: ${blacklistResults.stats.TotalItems} • ${Config.experience.blacklistSize} per page`,
-                guild.iconURL()
-            )
-            .setTimestamp();
+        let embed: MessageEmbed;
 
         if (blacklistResults.blacklist.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription('**The blacklist is empty!**')
+                .setDescription(Lang.getRef('list.emptyBlacklist', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
-        let description = `*Users on this list will not have their birthdays celebrated no matter what. Edit this list with \`bday blacklist <add/remove> <User>\`!*\n\n`;
+        let description = '';
         let users = blacklistResults.blacklist.map(data => data.UserDiscordId);
 
         for (let user of users) {
             description += `**${
-                guild.members.resolve(user)?.displayName || 'Unknown'
+                guild.members.resolve(user)?.displayName ||
+                `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
             }**: (ID: ${user})\n`; // Append the description
         }
 
-        embed.setDescription(description);
+        embed = Lang.getEmbed('list.blacklist', LangCode.EN_US, {
+            PAGE: page.toString(),
+            LIST_DATA: description,
+            TOTAL_PAGES: blacklistResults.stats.TotalPages.toString(),
+            TOTAL_BLACKLIST: blacklistResults.stats.TotalItems.toString(),
+            PER_PAGE: Config.experience.blacklistSize.toString(),
+            ICON: guild.client.user.avatarURL(),
+        });
 
-        return embed;
+        return embed.setThumbnail(guild.iconURL());
+    }
+
+    public static async getMemberAnniversaryRoleList(
+        guild: Guild,
+        memberAnniversaryRoleResults: MemberAnniversaryRoles,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean
+    ): Promise<MessageEmbed> {
+        let embed: MessageEmbed;
+
+        if (memberAnniversaryRoleResults.memberAnniversaryRoles.length === 0) {
+            let embed = new MessageEmbed()
+                .setDescription(Lang.getRef('list.noMemberAnniversaryRoles', LangCode.EN_US))
+                .setColor(Config.colors.default);
+            return embed;
+        }
+        let description = '';
+
+        for (let memberAnniversaryRole of memberAnniversaryRoleResults.memberAnniversaryRoles) {
+            // dynamically check which ones to cross out due to the server not having premium anymore
+            let role = guild.roles.resolve(memberAnniversaryRole.MemberAnniversaryRoleDiscordId);
+            if (
+                hasPremium ||
+                memberAnniversaryRole.Position <=
+                    Config.validation.memberAnniversaryRoles.maxCount.free
+            ) {
+                description += `**Year ${memberAnniversaryRole.Year}:** ${
+                    role ? `${role.toString()} ` : `**** `
+                }\n\n`;
+            } else {
+                description += `**Year ${memberAnniversaryRole.Year}:** ${
+                    role
+                        ? `~~${role.toString()}~~ `
+                        : `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}** `
+                }\n\n`;
+            }
+        }
+
+        if (
+            !hasPremium &&
+            memberAnniversaryRoleResults.stats.TotalItems >
+                Config.validation.memberAnniversaryRoles.maxCount.free
+        ) {
+            embed = Lang.getEmbed('list.memberAnniversaryRolePaid', LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: memberAnniversaryRoleResults.stats.TotalPages.toString(),
+                TOTAL_ROLES: memberAnniversaryRoleResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.memberAnniversaryRoleListSize.toString(),
+                MAX_PAID: Config.validation.memberAnniversaryRoles.maxCount.paid.toString(),
+                ICON: guild.client.user.avatarURL(),
+            });
+        } else {
+            embed = Lang.getEmbed('list.memberAnniversaryRoleFree', LangCode.EN_US, {
+                PAGE: page.toString(),
+                LIST_DATA: description,
+                TOTAL_PAGES: memberAnniversaryRoleResults.stats.TotalPages.toString(),
+                TOTAL_ROLES: memberAnniversaryRoleResults.stats.TotalItems.toString(),
+                PER_PAGE: Config.experience.memberAnniversaryRoleListSize.toString(),
+                ICON: guild.client.user.avatarURL(),
+            });
+        }
+
+        return embed.setThumbnail(guild.iconURL());
     }
 
     public static extractPageNumber(input: string): number {
         let match = PAGE_REGEX.exec(input);
-        return match ? parseInt(match[1]) : null;
+        return match ? ParseUtils.parseInt(match[1]) : null;
+    }
+
+    // THIS IS WRONG
+    // ALTERNATIVES ARE SUPPOSED TO BE ARRAYS BUT LANG SYSTEM DOESN'T SUPPORT IT
+    public static extractCelebrationType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.birthday', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef('types.alternatives.birthday', LangCode.EN_US).toLowerCase():
+                return 'birthday';
+            case Lang.getRef('types.memberAnniversary', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef('types.alternatives.memberAnniversary', LangCode.EN_US).toLowerCase():
+                return 'memberanniversary';
+
+            case Lang.getRef('types.serverAnniversary', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef('types.alternatives.serverAnniversary', LangCode.EN_US).toLowerCase():
+                return 'serveranniversary';
+
+            case Lang.getRef('types.userSpecificBirthday', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef(
+                    'types.alternatives.userSpecificBirthday',
+                    LangCode.EN_US
+                ).toLowerCase():
+                return 'userspecificbirthday';
+
+            case Lang.getRef('types.userSpecificMemberAnniversary', LangCode.EN_US).toLowerCase() ||
+                Lang.getRef(
+                    'types.alternatives.userSpecificMemberAnniversary',
+                    LangCode.EN_US
+                ).toLowerCase():
+                return 'userspecificmemberanniversary';
+            default:
+                return null;
+        }
+    }
+    public static extractConfigType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.channel', LangCode.EN_US).toLowerCase():
+                return 'channel';
+            case Lang.getRef('types.birthdayRole', LangCode.EN_US).toLowerCase():
+                return 'role';
+            case Lang.getRef('types.birthdayMasterRole', LangCode.EN_US).toLowerCase():
+                return 'birthdayMasterRole';
+            case Lang.getRef('types.nameFormat', LangCode.EN_US).toLowerCase():
+                return 'nameFormat';
+            case Lang.getRef('types.timezone', LangCode.EN_US).toLowerCase():
+                return 'timezone';
+            case Lang.getRef('types.useTimezone', LangCode.EN_US).toLowerCase():
+                return 'useTimezone';
+            case Lang.getRef('types.trustedPreventsRole', LangCode.EN_US).toLowerCase():
+                return 'trustedPreventsRole';
+            case Lang.getRef('types.trustedPreventsMessage', LangCode.EN_US).toLowerCase():
+                return 'trustedPreventsMessage';
+            case Lang.getRef('types.requireAllTrustedRoles', LangCode.EN_US).toLowerCase():
+                return 'requireAllTrustedRoles';
+            default:
+                return null;
+        }
+    }
+
+    public static extractNameFormatType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.mention', LangCode.EN_US).toLowerCase():
+                return 'mention';
+            case Lang.getRef('types.nickname', LangCode.EN_US).toLowerCase():
+                return 'nickname';
+            case Lang.getRef('types.username', LangCode.EN_US).toLowerCase():
+                return 'username';
+            case Lang.getRef('types.tag', LangCode.EN_US).toLowerCase():
+                return 'tag';
+            case Lang.getRef('types.default', LangCode.EN_US).toLowerCase():
+                return 'default';
+            default:
+                return null;
+        }
+    }
+
+    public static extractMiscActionType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.add', LangCode.EN_US).toLowerCase():
+                return 'add';
+            case Lang.getRef('types.remove', LangCode.EN_US).toLowerCase():
+                return 'remove';
+            case Lang.getRef('types.clear', LangCode.EN_US).toLowerCase():
+                return 'clear';
+            case Lang.getRef('types.list', LangCode.EN_US).toLowerCase():
+                return 'list';
+            case Lang.getRef('types.mention', LangCode.EN_US).toLowerCase():
+                return 'mention';
+            case Lang.getRef('types.time', LangCode.EN_US).toLowerCase():
+                return 'time';
+            case Lang.getRef('types.useEmbed', LangCode.EN_US).toLowerCase():
+                return 'useEmbed';
+            case Lang.getRef('types.help', LangCode.EN_US).toLowerCase():
+                return 'help';
+            case Lang.getRef('types.setup', LangCode.EN_US).toLowerCase():
+                return 'setup';
+            case Lang.getRef('types.anniversary', LangCode.EN_US).toLowerCase():
+                return 'anniversary';
+            case Lang.getRef('types.message', LangCode.EN_US).toLowerCase():
+                return 'message';
+            case Lang.getRef('types.blacklist', LangCode.EN_US).toLowerCase():
+                return 'blacklist';
+            case Lang.getRef('types.advanced', LangCode.EN_US).toLowerCase():
+                return 'advanced';
+            case Lang.getRef('types.premium', LangCode.EN_US).toLowerCase():
+                return 'premium';
+            case Lang.getRef('types.test', LangCode.EN_US).toLowerCase():
+                return 'test';
+            case Lang.getRef('types.create', LangCode.EN_US).toLowerCase():
+                return 'create';
+            case Lang.getRef('types.user', LangCode.EN_US).toLowerCase():
+                return 'user';
+            case Lang.getRef('types.server', LangCode.EN_US).toLowerCase():
+                return 'server';
+            case Lang.getRef('types.trusted', LangCode.EN_US).toLowerCase():
+                return 'trusted';
+            case Lang.getRef('types.claim', LangCode.EN_US).toLowerCase():
+                return 'claim';
+            default:
+                return null;
+        }
+    }
+
+    public static getCelebrationDisplayType(type: string, plural: boolean): string {
+        switch (type) {
+            case 'birthday':
+                return Lang.getRef('terms.birthdayMessage' + (plural ? 's' : ''), LangCode.EN_US);
+            case 'memberanniversary':
+                return Lang.getRef(
+                    'terms.memberAnniversaryMessage' + (plural ? 's' : ''),
+                    LangCode.EN_US
+                );
+            case 'serveranniversary':
+                return Lang.getRef(
+                    'terms.serverAnniversaryMessage' + (plural ? 's' : ''),
+                    LangCode.EN_US
+                );
+            case 'userspecificbirthday':
+                return Lang.getRef(
+                    'terms.userBirthdayMessage' + (plural ? 's' : ''),
+                    LangCode.EN_US
+                );
+            case 'userspecificmemberanniversary':
+                return Lang.getRef(
+                    'terms.userMemberAnniversaryMessage' + (plural ? 's' : ''),
+                    LangCode.EN_US
+                );
+            default:
+                return null;
+        }
+    }
+
+    public static getMentionSetting(mentionSetting: string, guild: Guild): string {
+        // Find mentioned role
+        let roleInput: Role = guild.roles.resolve(mentionSetting);
+
+        if (!roleInput || roleInput.guild.id !== guild.id) {
+            if (
+                mentionSetting.toLowerCase() === 'everyone' ||
+                mentionSetting.toLowerCase() === 'here'
+            ) {
+                return '@' + mentionSetting;
+            }
+        } else {
+            return roleInput.toString();
+        }
+        return 'none';
+    }
+
+    public static getMessageTime(time: number): string {
+        let am = Lang.getRef('terms.amTime', LangCode.EN_US);
+        let pm = Lang.getRef('terms.pmTime', LangCode.EN_US);
+        if (time === 0) return '12:00 ' + am;
+        else if (time === 12) return '12:00 ' + pm;
+        else if (time < 12) return time + ':00 ' + am;
+        else return time - 12 + ':00 ' + pm;
     }
 }

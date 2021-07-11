@@ -11,7 +11,11 @@ export class CustomMessages {
 }
 
 export class CustomMessage {
+    GuildId: number;
     Message: string;
     UserDiscordId: string;
+    Type: string;
     Position: number;
+    Color: string;
+    Embed: number;
 }

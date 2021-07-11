@@ -1,9 +1,10 @@
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
-import { Logger, SubscriptionService } from '../services';
+import { Lang, Logger, SubscriptionService } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 
 import { Command } from '../commands';
+import { LangCode } from '../models/enums';
 import { PlanName } from '../models/subscription-models';
 import { RateLimiter } from 'discord.js-rate-limiter';
 import moment from 'moment';
@@ -23,16 +24,20 @@ export class MessageHandler {
         private subscriptionService: SubscriptionService,
         private guildRepo: GuildRepo,
         private userRepo: UserRepo
-    ) {}
+    ) { }
 
     public async process(msg: Message): Promise<void> {
-        if (msg.partial) return;
-
-        // Ignore bots & System messages
-        if (msg.author.bot || msg.system) return;
+        // Don't respond to partial messages, system messages, or bots
+        if (msg.partial || msg.system || msg.author.bot) return;
 
         let channel = msg.channel;
 
+        // await MessageUtils.send(
+        //     channel,
+        //     `${msg.author.username}'s joinedAt is: \`${msg.member.joinedAt}\` and their joinedTimestamp is: \`${msg.member.joinedTimestamp}\``
+        // );
+
+        // Only handle messages from text or DM channels
         if (!(channel instanceof TextChannel || channel instanceof DMChannel)) return;
 
         if (channel instanceof TextChannel) {
@@ -41,13 +46,10 @@ export class MessageHandler {
                 return;
             }
             if (!PermissionUtils.canReact(channel)) {
-                let embed = new MessageEmbed()
-                    .setTitle('Missing Permissions!')
-                    .setDescription(
-                        'I need permission to **Add Reactions** & **Read Message History**!'
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.needReactAndMessageHistoryPerms', LangCode.EN_US)
+                );
                 return;
             }
         }
@@ -84,8 +86,7 @@ export class MessageHandler {
         }
 
         // Try to find the command the user wants
-        let userCommand = args[1];
-        let command = this.getCommand(userCommand);
+        let command = this.findCommand(args[1]);
 
         // If no command found, run the help command
         if (!command) {
@@ -103,11 +104,10 @@ export class MessageHandler {
                         msg.member.roles.cache.has(Config.support.role);
 
                     if (!sentByStaff) {
-                        let embed = new MessageEmbed()
-                            .setDescription('This command can only be used by Birthday Bot staff!')
-                            .setColor(Config.colors.error);
-
-                        await MessageUtils.send(channel, embed);
+                        await MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('validation.onlyStaff', LangCode.EN_US)
+                        );
                         return;
                     }
                 }
@@ -116,10 +116,10 @@ export class MessageHandler {
 
         // Check if the command is a server only command
         if (command.guildOnly && channel instanceof DMChannel) {
-            let embed = new MessageEmbed()
-                .setDescription('This command can only be used in a discord server!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.guildOnlyCommand', LangCode.EN_US)
+            );
             return;
         }
 
@@ -129,25 +129,19 @@ export class MessageHandler {
         // Get premium status if needed
         let retrievePremium =
             Config.payments.enabled && (checkVote || command.requirePremium || command.getPremium);
-        let hasPremium = retrievePremium
-            ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
-            : false;
+        let hasPremium =
+            !Config.payments.enabled ||
+            (retrievePremium
+                ? await this.subscriptionService.hasService(PlanName.premium1, msg.guild.id)
+                : false);
 
         if (checkPremium && !hasPremium) {
-            let embed = new MessageEmbed()
-                .setTitle('Premium Required!')
-                .setDescription('This command requires this server to have premium!')
-                .addField(
-                    `Premium Commands`,
-                    'Subscribe to **Birthday bot Premium** for access to our premium features.\nSee `bday premium` for more information.'
-                )
-                .setFooter(
-                    'Premium helps us support and maintain the bot!',
-                    msg.client.user.avatarURL()
-                )
-                .setTimestamp()
-                .setColor(Config.colors.default);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('premiumRequired.command', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
+            );
             return;
         }
 
@@ -155,22 +149,18 @@ export class MessageHandler {
             // Get the user's last vote and check if the command requires a vote
             let userVote = await this.userRepo.getUserVote(msg.author.id);
             let voteTime = moment(userVote?.VoteTime);
-            let voteTimeAgo = userVote ? voteTime.fromNow() : 'Never';
+            let voteTimeAgo = userVote
+                ? voteTime.fromNow()
+                : Lang.getRef('terms.never', LangCode.EN_US);
 
             if (!userVote || voteTime.clone().add(Config.voting.hours, 'hours') < moment()) {
-                let embed = new MessageEmbed()
-                    .setAuthor(msg.author.tag, msg.author.avatarURL())
-                    .setThumbnail('https://i.imgur.com/wak8g4V.png')
-                    .setTitle('Vote Required!')
-                    .setDescription('This command requires you to have voted in the past 24 hours!')
-                    .addField('Last Vote', `${voteTimeAgo}`, true)
-                    .addField('Vote Here', `[Top.gg](${Config.links.vote})`, true)
-                    .setFooter(
-                        `Don't want to vote? Try Birthday Bot Premium!`,
-                        msg.client.user.avatarURL()
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.voteRequired', LangCode.EN_US, {
+                        LAST_VOTE: voteTimeAgo,
+                        ICON: msg.client.user.avatarURL(),
+                    })
+                );
                 return;
             }
         }
@@ -180,23 +170,19 @@ export class MessageHandler {
             if (channel instanceof TextChannel) {
                 let guildData = await this.guildRepo.getGuild(msg.guild.id);
                 if (command.requireSetup && !guildData) {
-                    let embed = new MessageEmbed()
-                        .setTitle('Server Setup Required!')
-                        .setDescription(
-                            `Please run server setup with \`bday setup\` before using that command!`
-                        )
-                        .setColor(Config.colors.error);
-                    await MessageUtils.send(channel, embed);
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.setupRequired', LangCode.EN_US)
+                    );
                     return;
                 }
 
                 // Check if user has permission
                 if (!PermissionUtils.hasPermission(msg.member, guildData, command)) {
-                    let embed = new MessageEmbed()
-                        .setTitle('Permission Required!')
-                        .setDescription(`You don't have permission to run that command!`)
-                        .setColor(Config.colors.error);
-                    await MessageUtils.send(channel, embed);
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.noPermission', LangCode.EN_US)
+                    );
                     return;
                 }
             }
@@ -208,11 +194,7 @@ export class MessageHandler {
             try {
                 await MessageUtils.send(
                     channel,
-                    new MessageEmbed()
-                        .setDescription(`Something went wrong!`)
-                        .addField('Error code', msg.id)
-                        .addField('Contact support', Config.links.support)
-                        .setColor(Config.colors.error)
+                    Lang.getEmbed('info.error', LangCode.EN_US, { ERROR_CODE: msg.id })
                 );
             } catch {
                 // Ignore
@@ -245,16 +227,11 @@ export class MessageHandler {
         }
     }
 
-    private getCommand(userCommand: string): Command {
-        userCommand = userCommand.toLowerCase();
-        for (let cmd of this.commands) {
-            if (cmd.name === userCommand.toLowerCase()) {
-                return cmd;
-            }
-
-            if (cmd.aliases.includes(userCommand)) {
-                return cmd;
-            }
-        }
+    private findCommand(input: string): Command {
+        input = input.toLowerCase();
+        return (
+            this.commands.find(command => command.name === input) ??
+            this.commands.find(command => command.aliases.includes(input))
+        );
     }
 }

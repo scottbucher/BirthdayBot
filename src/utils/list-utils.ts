@@ -1,13 +1,15 @@
-import { Blacklisted, CustomMessages, UserDataResults } from '../models/database';
-import { Guild, Message } from 'discord.js';
+import { Blacklisted, CustomMessages, GuildData, UserDataResults } from '../models/database';
+import { FormatUtils, MessageUtils } from '.';
+import { Guild, GuildMember, Message, MessageEmbed } from 'discord.js';
 
-import { FormatUtils } from '.';
-import { MessageUtils } from './message-utils';
+import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
+import { TrustedRoles } from '../models/database/trusted-role-models';
 
-export abstract class ListUtils {
+export class ListUtils {
     public static async updateBdayList(
         userDataResults: UserDataResults,
         guild: Guild,
+        guildData: GuildData,
         message: Message,
         page: number,
         pageSize: number
@@ -17,13 +19,43 @@ export abstract class ListUtils {
         let embed = await FormatUtils.getBirthdayListFullEmbed(
             guild,
             userDataResults,
+            guildData,
             page,
             pageSize
         );
 
         message = await MessageUtils.edit(message, embed);
 
-        if (embed.description === '**No Birthdays in this server!**') {
+        if (!embed.title) {
+            await message.reactions.removeAll();
+            return;
+        }
+    }
+    public static async updateMemberAnniversaryList(
+        guildMembers: GuildMember[],
+        guild: Guild,
+        guildData: GuildData,
+        message: Message,
+        page: number,
+        pageSize: number,
+        totalPages: number,
+        totalMembers: number
+    ): Promise<void> {
+        if (page > totalPages) page = totalPages;
+
+        let embed = await FormatUtils.getMemberAnniversaryListFullEmbed(
+            guild,
+            guildMembers,
+            guildData,
+            page,
+            pageSize,
+            totalPages,
+            totalMembers
+        );
+
+        message = await MessageUtils.edit(message, embed);
+
+        if (!embed.title) {
             await message.reactions.removeAll();
             return;
         }
@@ -35,41 +67,56 @@ export abstract class ListUtils {
         message: Message,
         page: number,
         pageSize: number,
-        hasPremium: boolean
+        hasPremium: boolean,
+        type: string,
+        user: boolean
     ): Promise<void> {
         if (page > customMessageResults.stats.TotalPages)
             page = customMessageResults.stats.TotalPages;
 
-        let embed = await FormatUtils.getCustomMessageListEmbed(
-            guild,
-            customMessageResults,
-            page,
-            pageSize,
-            hasPremium
-        );
+        let embed: MessageEmbed;
+
+        if (user) {
+            embed = await FormatUtils.getCustomUserMessageListEmbed(
+                guild,
+                customMessageResults,
+                page,
+                pageSize,
+                hasPremium,
+                type
+            );
+        } else {
+            embed = await FormatUtils.getCustomMessageListEmbed(
+                guild,
+                customMessageResults,
+                page,
+                pageSize,
+                hasPremium,
+                type
+            );
+        }
 
         message = await MessageUtils.edit(message, embed);
 
-        if (embed.description === '**No Custom Birthday Messages!**') {
+        if (!embed.title) {
             await message.reactions.removeAll();
             return;
         }
     }
 
-    public static async updateMessageUserList(
-        customMessageResults: CustomMessages,
+    public static async updateTrustedRoleList(
+        trustedRoleResults: TrustedRoles,
         guild: Guild,
         message: Message,
         page: number,
         pageSize: number,
         hasPremium: boolean
     ): Promise<void> {
-        if (page > customMessageResults.stats.TotalPages)
-            page = customMessageResults.stats.TotalPages;
+        if (page > trustedRoleResults.stats.TotalPages) page = trustedRoleResults.stats.TotalPages;
 
-        let embed = await FormatUtils.getCustomUserMessageListEmbed(
+        let embed = await FormatUtils.getTrustedRoleList(
             guild,
-            customMessageResults,
+            trustedRoleResults,
             page,
             pageSize,
             hasPremium
@@ -77,7 +124,7 @@ export abstract class ListUtils {
 
         message = await MessageUtils.edit(message, embed);
 
-        if (embed.description === '**No User-Specific Birthday Messages!**') {
+        if (!embed.title) {
             await message.reactions.removeAll();
             return;
         }
@@ -101,7 +148,34 @@ export abstract class ListUtils {
 
         message = await MessageUtils.edit(message, embed);
 
-        if (embed.description === '**The blacklist is empty!**') {
+        if (!embed.title) {
+            await message.reactions.removeAll();
+            return;
+        }
+    }
+
+    public static async updateMemberAnniversaryRoleList(
+        memberAnniversaryRoleResults: MemberAnniversaryRoles,
+        guild: Guild,
+        message: Message,
+        page: number,
+        pageSize: number,
+        hasPremium: boolean
+    ): Promise<void> {
+        if (page > memberAnniversaryRoleResults.stats.TotalPages)
+            page = memberAnniversaryRoleResults.stats.TotalPages;
+
+        let embed = await FormatUtils.getMemberAnniversaryRoleList(
+            guild,
+            memberAnniversaryRoleResults,
+            page,
+            pageSize,
+            hasPremium
+        );
+
+        message = await MessageUtils.edit(message, embed);
+
+        if (!embed.title) {
             await message.reactions.removeAll();
             return;
         }

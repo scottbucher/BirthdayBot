@@ -1,6 +1,6 @@
 import mysql, { ConnectionConfig, Pool } from 'mysql';
 
-import { SQLUtils } from '../../utils';
+import { SqlUtils } from '../../utils';
 
 export class DataAccess {
     private pool: Pool;
@@ -10,7 +10,7 @@ export class DataAccess {
     }
 
     public async executeProcedure(name: string, params: any[]): Promise<any> {
-        let sql = SQLUtils.createProcedureSql(name, params);
+        let sql = SqlUtils.createProcedureSql(name, params);
         return new Promise((resolve, reject) => {
             // let startTime = Date.now();
             this.pool.query(sql, (error, results) => {

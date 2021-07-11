@@ -1,7 +1,9 @@
-export { BirthdayService } from './birthday-service';
 export { HttpService } from './http-service';
 export { Logger } from './logger';
 export { MasterApiService } from './master-api-services';
 export { SubscriptionService } from './subscription-service';
+export { Lang } from './lang';
 export { JobService } from './job-service';
 export { DiscordService } from './discord-service';
+export { RoleService } from './role-service';
+export { MessageService } from './message-service';

@@ -2,21 +2,19 @@ import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, TextChannel } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
 export class BlacklistListSubCommand {
     constructor(private blacklistRepo: BlacklistRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let page = 1;
 
         if (args[3]) {
-            try {
-                page = ParseUtils.parseInt(args[3]);
-            } catch (error) {
-                // Not A Number
-            }
+            page = ParseUtils.parseInt(args[3]);
             if (!page || page <= 0 || page > 100000) page = 1;
         }
 
@@ -39,7 +37,7 @@ export class BlacklistListSubCommand {
 
         let message = await MessageUtils.send(channel, embed);
 
-        if (embed.description === '**The blacklist is empty!**') return;
+        if (embed.description === Lang.getRef('list.emptyBlacklist', LangCode.EN_US)) return;
 
         await MessageUtils.react(message, Config.emotes.previousPage);
         await MessageUtils.react(message, Config.emotes.jumpToPage);

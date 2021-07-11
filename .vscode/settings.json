@@ -18,11 +18,14 @@
         "chrono",
         "customizability",
         "datas",
+        "deletable",
         "discordbotlist",
         "discordlabs",
+        "filesize",
         "isnt",
         "ondiscord",
         "parens",
+        "regexes",
         "repos",
         "respawn"
     ]

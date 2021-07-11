@@ -1,13 +1,21 @@
 export interface GuildData {
+    GuildId: number;
     GuildDiscordId: string;
     BirthdayChannelDiscordId: string;
     BirthdayRoleDiscordId: string;
-    TrustedRoleDiscordId: string;
     BirthdayMasterRoleDiscordId: string;
-    MentionSetting: string;
-    MessageTime: number;
+    BirthdayMentionSetting: string;
+    MemberAnniversaryChannelDiscordId: string;
+    ServerAnniversaryChannelDiscordId: string;
+    MemberAnniversaryMentionSetting: string;
+    ServerAnniversaryMentionSetting: string;
+    BirthdayMessageTime: number;
+    MemberAnniversaryMessageTime: number;
+    ServerAnniversaryMessageTime: number;
     TrustedPreventsRole: number;
     TrustedPreventsMessage: number;
-    UseEmbed: number;
-    MessageEmbedColor: string;
+    NameFormat: string;
+    DefaultTimezone: string;
+    UseTimezone: string;
+    RequireAllTrustedRoles: number;
 }

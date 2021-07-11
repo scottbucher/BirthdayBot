@@ -1,8 +1,7 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
-    MessageEmbedSubCommand,
     MessageListSubCommand,
     MessageMentionSubCommand,
     MessageRemoveSubCommand,
@@ -11,11 +10,9 @@ import {
 } from './message';
 
 import { Command } from './command';
-import { MessageColorSubCommand } from './message/message-color-sub-command';
-import { MessageUserListSubCommand } from './message/message-user-list-sub-command';
-import { MessageUtils } from '../utils';
-
-let Config = require('../../config/config.json');
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
+import { MessageUtils, FormatUtils } from '../utils';
 
 export class MessageCommand implements Command {
     public name: string = 'message';
@@ -35,67 +32,44 @@ export class MessageCommand implements Command {
         private messageRemoveSubCommand: MessageRemoveSubCommand,
         private messageTimeSubCommand: MessageTimeSubCommand,
         private messageMentionSubCommand: MessageMentionSubCommand,
-        private messageEmbedSubCommand: MessageEmbedSubCommand,
-        private messageTestSubCommand: MessageTestSubCommand,
-        private messageColorSubCommand: MessageColorSubCommand,
-        private messageUserListSubCommand: MessageUserListSubCommand
+        private messageTestSubCommand: MessageTestSubCommand
     ) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         if (args.length === 2) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a sub command for the custom birthday message! [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)\nAccepted Values: \`list\`, \`add <Value>\`, \`remove <#>\`, \`clear\`, \`time <0-23>\`, \`mention <Value>\`, \`useEmbed <T/F>\`,`
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US)
+            );
             return;
         }
-        if (args[2].toLowerCase() === 'list' && args[3]?.toLowerCase() !== 'user') {
+
+        let type = FormatUtils.extractMiscActionType(args[2]?.toLowerCase())?.toLowerCase() ?? '';
+
+        if (type === 'list') {
             this.messageListSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (args[2].toLowerCase() === 'list' && args[3]?.toLowerCase() === 'user') {
-            this.messageUserListSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (args[2].toLowerCase() === 'clear') {
+        } else if (type === 'clear') {
             this.messageClearSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'add' || args[2].toLowerCase() === 'create') {
+        } else if (type === 'add' || args[2].toLowerCase() === 'create') {
             this.messageAddSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (args[2].toLowerCase() === 'remove' || args[2].toLowerCase() === 'delete') {
+        } else if (type === 'remove' || args[2].toLowerCase() === 'delete') {
             this.messageRemoveSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'time') {
+        } else if (type === 'time') {
             this.messageTimeSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'mention' || args[2].toLowerCase() === 'role') {
+        } else if (type === 'mention' || args[2].toLowerCase() === 'role') {
             this.messageMentionSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'embed') {
-            this.messageEmbedSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'test') {
+        } else if (type === 'test') {
             this.messageTestSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'color') {
-            if (hasPremium) {
-                this.messageColorSubCommand.execute(args, msg, channel);
-            } else {
-                let embed = new MessageEmbed()
-                    .setTitle('Premium Required!')
-                    .setDescription(
-                        `Custom birthday message color is a premium feature! View information about **Birthday Bot Premium** using \`bday premium\`!`
-                    )
-                    .setFooter(
-                        'Premium helps us support and maintain the bot!',
-                        msg.client.user.avatarURL()
-                    )
-                    .setTimestamp()
-                    .setColor(Config.colors.default);
-                await MessageUtils.send(channel, embed);
-                return;
-            }
         } else {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a sub command for the custom birthday message! [(?)](${Config.links.docs}/faq#what-is-a-custom-birthday-message)\nAccepted Values: \`list\`, \`add <Value>\`, \`remove <#>\`, \`clear\`, \`time <0-23>\`, \`mention <Value>\`, \`useEmbed <T/F>\`,`
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US)
+            );
             return;
         }
     }

@@ -11,12 +11,15 @@
             "DIRECT_MESSAGES",
             "DIRECT_MESSAGE_REACTIONS"
         ],
-        "partials": ["MESSAGE", "REACTION"],
+        "partials": [
+            "MESSAGE",
+            "REACTION"
+        ],
         "caches": {
             "messages": {
                 "size": 0,
                 "lifetime": 0,
-                "sweepInterval": 1
+                "sweepInterval": 0
             }
         }
     },
@@ -33,7 +36,10 @@
         "secret": "00000000-0000-0000-0000-000000000000"
     },
     "support": {
-        "owners": ["478288246858711040", "212772875793334272"],
+        "owners": [
+            "478288246858711040",
+            "212772875793334272"
+        ],
         "server": "660711235766976553",
         "role": "660746189419053057"
     },
@@ -52,17 +58,27 @@
             "schedule": "0 */5 * * * *",
             "log": false
         },
-        "postBirthdays": {
+        "postCelebrationJob": {
             "schedule": "0 0 * * * *",
             "log": false,
             "interval": 0.6
         }
     },
+    "delays": {
+        "enabled": true,
+        "messages": 50,
+        "roles": 100
+    },
     "experience": {
         "promptExpireTime": 120,
+        "fastForwardAmount": "5",
+        "fastRewindAmount": "5",
         "birthdayListSize": "30",
+        "memberAnniversaryListSize": "30",
         "blacklistSize": "30",
-        "birthdayMessageListSize": "3"
+        "birthdayMessageListSize": "3",
+        "trustedRoleListSize": "10",
+        "memberAnniversaryRoleListSize": "10"
     },
     "colors": {
         "default": "#4eefff",
@@ -74,9 +90,11 @@
     "emotes": {
         "confirm": "✅",
         "deny": "❌",
+        "fastReverse": "⏪",
         "nextPage": "➡️",
-        "previousPage": "⬅️",
         "jumpToPage": "↗️",
+        "previousPage": "⬅️",
+        "fastForward": "⏩",
         "create": "🔨",
         "select": "🖱",
         "birthday": "🎂",
@@ -93,13 +111,41 @@
         },
         "custom": "✏"
     },
-    "stopCommands": ["stop", "cancel", "exit", "close", "quit"],
+    "stopCommands": [
+        "stop",
+        "cancel",
+        "exit",
+        "close",
+        "quit"
+    ],
     "validation": {
         "message": {
             "maxLength": 500,
             "maxCount": {
-                "free": 10,
-                "paid": 500
+                "birthday": {
+                    "free": 5,
+                    "paid": 500
+                },
+                "memberAnniversary": {
+                    "free": 5,
+                    "paid": 500
+                },
+                "serverAnniversary": {
+                    "free": 5,
+                    "paid": 500
+                }
+            }
+        },
+        "trustedRoles": {
+            "maxCount": {
+                "free": 1,
+                "paid": 250
+            }
+        },
+        "memberAnniversaryRoles": {
+            "maxCount": {
+                "free": 0,
+                "paid": 250
             }
         },
         "regions": [
@@ -119,7 +165,7 @@
         "spawnDelay": 5,
         "spawnTimeout": 300,
         "serversPerShard": 1000,
-        "largeBotSharding": true
+        "largeBotSharding": false
     },
     "clustering": {
         "enabled": false,

@@ -1,12 +1,11 @@
-import { Guild, MessageEmbed, Permissions } from 'discord.js';
+import { Guild, Permissions } from 'discord.js';
 
 import { EventHandler } from './event-handler';
-import { Logger } from '../services';
+import { Logger, Lang } from '../services';
 import { MessageUtils } from '../utils';
+import { LangCode } from '../models/enums';
 
 let Logs = require('../../lang/logs.json');
-let Config = require('../../config/config.json');
-
 export class GuildJoinHandler implements EventHandler {
     public async process(guild: Guild): Promise<void> {
         Logger.info(
@@ -14,23 +13,6 @@ export class GuildJoinHandler implements EventHandler {
                 .replace('{GUILD_NAME}', guild.name)
                 .replace('{GUILD_ID}', guild.id)
         );
-
-        let prefix = Config.prefix;
-        let embed = new MessageEmbed()
-            .setAuthor(guild.name, guild.iconURL())
-            .setTitle('Thank you for using Birthday Bot!')
-            .setDescription(
-                `To support the bot and unlock special features use \`${prefix} premium\` in your server.` +
-                    `\n\nTo view the commands of this bot use \`${prefix} help\`.` +
-                    `\nTo setup the bot run \`${prefix} setup\`.` +
-                    `\nTo set your birthday use \`${prefix} set\`.` +
-                    `\n\nView the [Documentation](${Config.links.docs}) or the [FAQ](${Config.links.docs}/faq.).` +
-                    `\nFor more support join our discord server [here](${Config.links.support})!`
-            )
-            .setFooter('Join our support server for help!', guild.iconURL())
-            .setTimestamp()
-            .setColor(Config.colors.default);
-
         // Get someone to message
         let user = guild.owner;
         if (!user) {
@@ -42,6 +24,8 @@ export class GuildJoinHandler implements EventHandler {
         if (!user) return;
 
         let userChannel = await user.createDM();
-        await MessageUtils.send(userChannel, embed);
+        await MessageUtils.send(userChannel, Lang.getEmbed('info.guildJoin', LangCode.EN_US, {
+            ICON: guild.client.user.avatarURL(),
+        }));
     }
 }

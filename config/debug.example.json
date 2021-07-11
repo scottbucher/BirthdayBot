@@ -1,10 +1,16 @@
 {
     "alwaysSendBirthdayMessage": false,
     "alwaysGiveBirthdayRole": false,
+    "alwaysMemberAnniversary": false,
+    "alwaysServerAnniversary": false,
     "override": {
         "shardMode": {
             "enabled": false,
             "value": "process"
         }
+    },
+    "dummyMode": {
+        "enabled": false,
+        "whitelist": ["212772875793334272", "478288246858711040"]
     }
 }

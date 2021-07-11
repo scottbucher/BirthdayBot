@@ -1,13 +1,15 @@
-import { ActionUtils, MessageUtils, PermissionUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Message, MessageEmbed, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import { Message, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import { MessageUtils, PermissionUtils } from '../../utils';
 
 import { GuildRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
@@ -19,7 +21,7 @@ const COLLECT_OPTIONS: CollectOptions = {
 export class SetupRequired {
     constructor(private guildRepo: GuildRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let guild = channel.guild;
         let botUser = guild.client.user;
         let stopFilter: MessageFilter = (nextMsg: Message) =>
@@ -28,34 +30,19 @@ export class SetupRequired {
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.send(
-                channel,
-                new MessageEmbed()
-                    .setTitle('Required Setup - Expired')
-                    .setDescription('Type `bday setup` to rerun the setup.')
-                    .setColor(Config.colors.error)
-            );
+            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
         };
 
         let birthdayChannel: string;
         let birthdayRole: string;
 
-        let channelEmbed = new MessageEmbed()
-            .setAuthor(`${guild.name}`, guild.iconURL())
-            .setTitle('Server Setup - Birthday Channel')
-            .setDescription(
-                `For help, view the required setup guide [here](${Config.links.docs}/server-setup/required-setup)!` +
-                    `\n\nTo begin you must set up the birthday channel [(?)](${Config.links.docs}/faq#why-does-birthday-bot-need-my-timezone)` +
-                    '\n\nPlease select an option'
-            )
-            .addField(
-                `Create New Channel ${Config.emotes.create}\nSelect Pre-Existing Channel ${Config.emotes.select}\nNo Birthday Channel ${Config.emotes.deny}`,
-                '\u200b'
-            )
-            .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
-            .setColor(Config.colors.default)
-            .setTimestamp();
-
+        let channelEmbed = Lang.getEmbed(
+            'serverPrompts.requiredSetupBirthdayChannel',
+            LangCode.EN_US,
+            {
+                ICON: msg.client.user.avatarURL(),
+            }
+        ).setAuthor(`${guild.name}`, guild.iconURL());
         let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 
         let channelMessage = await MessageUtils.send(channel, channelEmbed);
@@ -85,29 +72,38 @@ export class SetupRequired {
             case Config.emotes.create: {
                 // Create channel with desired attributes
                 birthdayChannel = (
-                    await guild.channels.create(`${Config.emotes.birthday} birthdays`, {
-                        type: 'text',
-                        topic: 'Birthday Announcements!',
-                        permissionOverwrites: [
-                            {
-                                id: guild.id,
-                                deny: ['SEND_MESSAGES'],
-                                allow: ['VIEW_CHANNEL'],
-                            },
-                            {
-                                id: guild.me.roles.cache.filter(role => role.managed).first(),
-                                allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
-                            },
-                        ],
-                    })
+                    await guild.channels.create(
+                        Lang.getRef('defaults.birthdayChannelName', LangCode.EN_US),
+                        {
+                            type: 'text',
+                            topic: Lang.getRef('defaults.birthdayChannelTopic', LangCode.EN_US),
+                            permissionOverwrites: [
+                                {
+                                    id: guild.id,
+                                    deny: ['SEND_MESSAGES'],
+                                    allow: ['VIEW_CHANNEL'],
+                                },
+                                {
+                                    id: guild.me.roles.cache.filter(role => role.managed).first(),
+                                    allow: [
+                                        'VIEW_CHANNEL',
+                                        'SEND_MESSAGES',
+                                        'EMBED_LINKS',
+                                        'ADD_REACTIONS',
+                                        'READ_MESSAGE_HISTORY',
+                                    ],
+                                },
+                            ],
+                        }
+                    )
                 )?.id;
                 break;
             }
             case Config.emotes.select: {
-                let embed = new MessageEmbed()
-                    .setDescription(`Please mention a channel or input a channel's name.`)
-                    .setColor(Config.colors.default);
-                let selectMessage = await MessageUtils.send(channel, embed);
+                let selectMessage = await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('serverPrompts.inputChannel', LangCode.EN_US)
+                );
 
                 birthdayChannel = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -131,23 +127,21 @@ export class SetupRequired {
                         }
 
                         if (!channelInput) {
-                            let embed = new MessageEmbed()
-                                .setDescription('Invalid channel!')
-                                .setFooter('Please try again.')
-                                .setColor(Config.colors.error);
-
-                            MessageUtils.send(channel, embed);
+                            await MessageUtils.send(
+                                channel,
+                                Lang.getEmbed('validation.invalidChannel', LangCode.EN_US)
+                            );
                             return;
                         }
 
                         // Bot needs to be able to message in the desired channel
                         if (!PermissionUtils.canSend(channelInput)) {
-                            let embed = new MessageEmbed()
-                                .setDescription(
-                                    `I don't have permission to send messages in ${channelInput.toString()}!`
-                                )
-                                .setColor(Config.colors.error);
-                            MessageUtils.send(channel, embed);
+                            await MessageUtils.send(
+                                channel,
+                                Lang.getEmbed('validation.noAccessToChannel', LangCode.EN_US, {
+                                    CHANNEL: channelInput.toString(),
+                                })
+                            );
                             return;
                         }
                         return channelInput?.id;
@@ -169,21 +163,9 @@ export class SetupRequired {
             }
         }
 
-        let roleEmbed = new MessageEmbed()
-            .setAuthor(`${guild.name}`, guild.iconURL())
-            .setTitle('Server Setup - Birthday Role')
-            .setDescription(
-                `Now, set up the birthday role [(?)](${Config.links.docs}/faq#what-is-the-birthday-role)` +
-                    `\nNote: The Birthday Role is actively removed from those whose birthday it isn't. [(?)](${Config.links.docs}/faq#what-does-it-mean-by-the-birthday-role-is-actively-removed)` +
-                    '\n\nPlease select an option'
-            )
-            .addField(
-                `Create New Role ${Config.emotes.create}\nSelect Pre-Existing Role ${Config.emotes.select}\nNo Birthday Role ${Config.emotes.deny}`,
-                '\u200b'
-            )
-            .setFooter(`This message expires in 2 minutes!`, botUser.avatarURL())
-            .setColor(Config.colors.default)
-            .setTimestamp();
+        let roleEmbed = Lang.getEmbed('serverPrompts.requiredSetupBirthdayRole', LangCode.EN_US, {
+            ICON: msg.client.user.avatarURL(),
+        }).setAuthor(`${guild.name}`, guild.iconURL());
 
         let roleMessage = await MessageUtils.send(channel, roleEmbed);
         for (let reactOption of reactOptions) {
@@ -224,10 +206,10 @@ export class SetupRequired {
                 break;
             }
             case Config.emotes.select: {
-                let embed = new MessageEmbed()
-                    .setDescription(`Please mention a role or input a role's name.`)
-                    .setColor(Config.colors.default);
-                let selectMessage = await MessageUtils.send(channel, embed);
+                let selectMessage = await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('serverPrompts.inputRole', LangCode.EN_US)
+                );
 
                 birthdayRole = await CollectorUtils.collectByMessage(
                     msg.channel,
@@ -253,11 +235,10 @@ export class SetupRequired {
                             roleInput.id === guild.id ||
                             nextMsg?.content.toLowerCase() === 'everyone'
                         ) {
-                            let embed = new MessageEmbed()
-                                .setDescription(`Invalid role!`)
-                                .setFooter('Please try again.')
-                                .setColor(Config.colors.error);
-                            MessageUtils.send(channel, embed);
+                            MessageUtils.send(
+                                channel,
+                                Lang.getEmbed('validation.invalidRole', LangCode.EN_US)
+                            );
                             return;
                         }
 
@@ -266,52 +247,48 @@ export class SetupRequired {
                             roleInput.position >
                             guild.members.resolve(botUser).roles.highest.position
                         ) {
-                            let embed = new MessageEmbed()
-                                .setDescription(`Birthday Role must be bellow the Bot's role!`)
-                                .setColor(Config.colors.error);
-                            MessageUtils.send(channel, embed);
+                            await MessageUtils.send(
+                                msg.channel as TextChannel,
+                                Lang.getEmbed('validation.roleHierarchyError', LangCode.EN_US, {
+                                    BOT: msg.client.user.toString(),
+                                    ICON: msg.client.user.avatarURL(),
+                                })
+                            );
                             return;
                         }
 
                         // Check if the role is managed
                         if (roleInput.managed) {
-                            let embed = new MessageEmbed()
-                                .setDescription(
-                                    `Birthday Role cannot be managed by an external service!`
-                                )
-                                .setColor(Config.colors.error);
-                            MessageUtils.send(channel, embed);
+                            MessageUtils.send(
+                                channel,
+                                Lang.getEmbed('validation.birthdayRoleManaged', LangCode.EN_US)
+                            );
                             return;
                         }
 
                         let membersWithRole = roleInput.members.size;
 
                         if (membersWithRole > 0 && membersWithRole < 100) {
-                            let embed = new MessageEmbed()
-                                .setTitle('Warning')
-                                .setDescription(
-                                    `We have detected that __**${membersWithRole}**__ user${
-                                        membersWithRole > 1 ? 's' : ''
-                                    } already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
+                            await MessageUtils.send(
+                                channel,
+                                Lang.getEmbed(
+                                    'validation.birthdayRoleUsedWarning',
+                                    LangCode.EN_US,
+                                    {
+                                        AMOUNT: membersWithRole.toString(),
+                                        S_Value: membersWithRole > 1 ? 's' : '',
+                                        ICON: msg.client.user.avatarURL(),
+                                    }
                                 )
-                                .setFooter(
-                                    `The Bot removes the Birthday Role from anyone whose birthday it isn't!`,
-                                    msg.client.user.avatarURL()
-                                )
-                                .setColor(Config.colors.warning);
-                            MessageUtils.send(channel, embed);
+                            );
                         } else if (membersWithRole > 100) {
-                            let embed = new MessageEmbed()
-                                .setTitle('Error')
-                                .setDescription(
-                                    `We have detected that __**${membersWithRole}**__ users already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!`
-                                )
-                                .setFooter(
-                                    `The Bot removes the Birthday Role from anyone whose birthday it isn't!`,
-                                    msg.client.user.avatarURL()
-                                )
-                                .setColor(Config.colors.error);
-                            MessageUtils.send(channel, embed);
+                            await MessageUtils.send(
+                                channel,
+                                Lang.getEmbed('validation.birthdayRoleUsedError', LangCode.EN_US, {
+                                    AMOUNT: membersWithRole.toString(),
+                                    ICON: msg.client.user.avatarURL(),
+                                })
+                            );
                             return;
                         }
 
@@ -336,26 +313,23 @@ export class SetupRequired {
 
         let channelOutput =
             birthdayChannel === '0'
-                ? 'Not Set'
-                : guild.channels.resolve(birthdayChannel)?.toString() || '**Unknown**';
+                ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
+                : guild.channels.resolve(birthdayChannel)?.toString() ||
+                  `**${Lang.getRef('terms.unknownChannel', LangCode.EN_US)}**`;
         let roleOutput =
             birthdayRole === '0'
-                ? 'Not Set'
-                : guild.roles.resolve(birthdayRole)?.toString() || '**Unknown**';
+                ? `${Lang.getRef('terms.notSet', LangCode.EN_US)}`
+                : guild.roles.resolve(birthdayRole)?.toString() ||
+                  `**${Lang.getRef('terms.unknownRole', LangCode.EN_US)}**`;
 
-        let embed = new MessageEmbed()
-            .setAuthor(`${guild.name}`, guild.iconURL())
-            .setTitle('Server Setup - Completed')
-            .setDescription(
-                'You have successfully completed the required server setup!' +
-                    `\n\n**Birthday Channel**: ${channelOutput}` +
-                    `\n**Birthday Role**: ${roleOutput}`
-            )
-            .setFooter(`All server commands unlocked!`, botUser.avatarURL())
-            .setColor(Config.colors.default)
-            .setTimestamp();
-
-        await MessageUtils.send(channel, embed);
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.requiredSetup', LangCode.EN_US, {
+                CHANNEL: channelOutput,
+                ROLE: roleOutput,
+                ICON: msg.client.user.avatarURL(),
+            })
+        );
 
         await this.guildRepo.addOrUpdateGuild(guild.id, birthdayChannel, birthdayRole);
     }

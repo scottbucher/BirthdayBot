@@ -1,13 +1,15 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import {
+    BlacklistAddSubCommand,
+    BlacklistClearSubCommand,
+    BlacklistListSubCommand,
+    BlacklistRemoveSubCommand,
+} from './blacklist';
+import { Message, TextChannel } from 'discord.js';
 
-import { BlacklistAddSubCommand } from './blacklist/blacklist-add-sub-command';
-import { BlacklistClearSubCommand } from './blacklist/blacklist-clear-sub-command';
-import { BlacklistListSubCommand } from './blacklist';
-import { BlacklistRemoveSubCommand } from './blacklist/blacklist-remove-sub-command';
 import { Command } from './command';
-import { MessageUtils } from '../utils';
-
-let Config = require('../../config/config.json');
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
+import { MessageUtils, FormatUtils } from '../utils';
 
 export class BlacklistCommand implements Command {
     public name: string = 'blacklist';
@@ -27,34 +29,30 @@ export class BlacklistCommand implements Command {
         private blacklistListSubCommand: BlacklistListSubCommand
     ) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 2) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a sub command for the blacklist! [(?)](${Config.links.docs}/faq#what-is-the-birthday-blacklist)\nAccepted Values: \`list\`, \`add <User>\`, \`remove <User>\`, \`clear\``
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noBlacklistArgs', LangCode.EN_US)
+            );
             return;
         }
 
-        if (args[2].toLowerCase() === 'add') {
+        let action = FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ?? '';
+
+        if (action === 'add') {
             this.blacklistAddSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'remove') {
+        } else if (action === 'remove') {
             this.blacklistRemoveSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'list') {
+        } else if (action === 'list') {
             this.blacklistListSubCommand.execute(args, msg, channel);
-        } else if (args[2].toLowerCase() === 'clear') {
+        } else if (action === 'clear') {
             this.blacklistClearSubCommand.execute(args, msg, channel);
         } else {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid Usage!')
-                .setDescription(
-                    `Please specify a sub command for the blacklist! [(?)](${Config.links.docs}/faq#what-is-the-birthday-blacklist)\nAccepted Values: \`list\`, \`add <User>\`, \`remove <User>\`, \`clear\``
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.noBlacklistArgs', LangCode.EN_US)
+            );
             return;
         }
     }

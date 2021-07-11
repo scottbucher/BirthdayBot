@@ -1,54 +1,67 @@
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { FormatUtils, MessageUtils, ParseUtils } from '../../utils';
+import { Message, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
-import { MessageUtils } from '../../utils';
-
-let Config = require('../../../config/config.json');
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 export class MessageTimeSubCommand {
-    constructor(private guildRepo: GuildRepo) {}
+    constructor(private guildRepo: GuildRepo) { }
 
-    public async execute(args: string[], msg: Message, channel: TextChannel) {
-        if (args.length < 4) {
-            let embed = new MessageEmbed()
-                .setDescription('Please provide a time! (0-23)')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
+        // bday message time <type> <0-23>
+        let type = FormatUtils.extractCelebrationType(args[3]?.toLowerCase())?.toLowerCase();
+
+        if (
+            !type ||
+            (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
+        ) {
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidMessageType', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
+            );
+            return;
+        }
+
+        if (args.length < 5) {
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noTime', LangCode.EN_US));
             return;
         }
 
         // Try and get the time
-        let messageTime: number;
-        try {
-            messageTime = parseInt(args[3]);
-        } catch (error) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid time!')
-                .setDescription('Accepted Values: `0-23`')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
-        }
+        let messageTime = ParseUtils.parseInt(args[4]);
 
         if (messageTime !== 0 && (messageTime < 0 || messageTime > 23 || !messageTime)) {
-            let embed = new MessageEmbed()
-                .setTitle('Invalid time!')
-                .setDescription('Accepted Values: `0-23`')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.invalidTime', LangCode.EN_US)
+            );
             return;
         }
-        await this.guildRepo.updateMessageTime(msg.guild.id, messageTime);
 
         let timeOutput: string;
-        if (messageTime === 0) timeOutput = '12:00 AM';
-        else if (messageTime === 12) timeOutput = '12:00 PM';
-        else if (messageTime < 12) timeOutput = messageTime + ':00 AM';
-        else timeOutput = messageTime - 12 + ':00 PM';
+        if (messageTime === 0) timeOutput = '12:00 ' + Lang.getRef('terms.amTime', LangCode.EN_US);
+        else if (messageTime === 12)
+            timeOutput = '12:00 ' + Lang.getRef('terms.pmTime', LangCode.EN_US);
+        else if (messageTime < 12)
+            timeOutput = messageTime + ':00 ' + Lang.getRef('terms.amTime', LangCode.EN_US);
+        else timeOutput = messageTime - 12 + ':00 ' + Lang.getRef('terms.pmTime', LangCode.EN_US);
 
-        let embed = new MessageEmbed()
-            .setDescription(`Successfully set the birthday message to send at **${timeOutput}**!`)
-            .setColor(Config.colors.success);
-        await MessageUtils.send(channel, embed);
+        let displayType = FormatUtils.getCelebrationDisplayType(type, false).toLowerCase();
+
+        type === 'birthday'
+            ? await this.guildRepo.updateBirthdayMessageTime(msg.guild.id, messageTime)
+            : type === 'memberanniversary'
+                ? await this.guildRepo.updateMemberAnniversaryMessageTime(msg.guild.id, messageTime)
+                : await this.guildRepo.updateServerAnniversaryMessageTime(msg.guild.id, messageTime);
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.setMessageTime', LangCode.EN_US, {
+                DISPLAY_TYPE: displayType,
+                TIME: timeOutput,
+            })
+        );
     }
 }

@@ -1,10 +1,10 @@
-import { ShardingManager } from 'discord.js';
-import schedule from 'node-schedule';
+import { HttpService, Logger } from '../services';
 
 import { BotSite } from '../models/config-models';
-import { HttpService, Logger } from '../services';
-import { ShardUtils } from '../utils';
 import { Job } from './job';
+import { ShardUtils } from '../utils';
+import { ShardingManager } from 'discord.js';
+import schedule from 'node-schedule';
 
 let Config = require('../../config/config.json');
 let BotSites: BotSite[] = require('../../config/bot-sites.json');
@@ -22,7 +22,6 @@ export class UpdateServerCountJob implements Job {
 
     public async run(): Promise<void> {
         let serverCount = await ShardUtils.serverCount(this.shardManager);
-
         await this.shardManager.broadcastEval(`
         (async () => {
             return await this.setPresence('STREAMING', 'bdays to ${serverCount.toLocaleString()} servers', '${

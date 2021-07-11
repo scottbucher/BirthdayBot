@@ -1,13 +1,15 @@
-import { ActionUtils, MessageUtils } from '../../utils';
+import { CelebrationUtils, ColorUtils, FormatUtils, MessageUtils } from '../../utils';
 import {
     CollectOptions,
     CollectorUtils,
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Message, MessageEmbed, MessageReaction, TextChannel, User } from 'discord.js';
+import { GuildMember, Message, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
+import { Lang } from '../../services';
+import { LangCode } from '../../models/enums';
 
 let Config = require('../../../config/config.json');
 
@@ -16,158 +18,215 @@ const COLLECT_OPTIONS: CollectOptions = {
     reset: true,
 };
 
+const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
+
 export class MessageAddSubCommand {
     constructor(private customMessageRepo: CustomMessageRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel, hasPremium: boolean) {
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel,
+        hasPremium: boolean
+    ): Promise<void> {
         let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === msg.author.id &&
             [Config.prefix, ...Config.stopCommands].includes(
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
         let expireFunction: ExpireFunction = async () => {
+            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
+        };
+        // get the english types based on their inputted types, if it equals none set to nothing so it fails on the next check
+        let type = FormatUtils.extractCelebrationType(args[3]?.toLowerCase());
+        if (
+            !type ||
+            (type !== 'birthday' && type !== 'memberanniversary' && type !== 'serveranniversary')
+        ) {
             await MessageUtils.send(
                 channel,
-                new MessageEmbed()
-                    .setTitle('Birthday Message Add - Expired')
-                    .setDescription(
-                        'Type `bday message add <Message>` to add a custom birthday message.'
-                    )
-                    .setColor(Config.colors.error)
+                Lang.getEmbed('validation.addMessageInvalidType', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
             );
-        };
-
-        // Variable that decides if we should overwrite an already set user message (default true as not all messages are user messages)
-        let overwrite = true;
-
-        if (args.length < 4) {
-            let embed = new MessageEmbed()
-                .setDescription('Please provide a message!')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
             return;
         }
 
+        if (args.length < 5) {
+            await MessageUtils.send(channel, Lang.getEmbed('validation.noMessage', LangCode.EN_US));
+            return;
+        }
+
+        let message: string;
+        let colorHex = '0';
+        let embedChoice: number;
+        let target: GuildMember;
+        let userId = '0';
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         // Try and find someone they are mentioning
-        let target = msg.mentions.members.first()?.user;
+        target = msg.mentions.members.first();
 
         // Did we find a user?
         if (target) {
-            if (target.bot) {
-                let embed = new MessageEmbed()
-                    .setTitle('Invalid Usage!')
-                    .setDescription('You cannot set a user-specific message for a bot!')
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+            if (target.user.bot) {
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.noUserMessageForBot', LangCode.EN_US)
+                );
                 return;
             } else if (!hasPremium) {
-                let embed = new MessageEmbed()
-                    .setTitle('Premium Required!')
-                    .setDescription(
-                        'User-specific birthday messages are a premium feature! View information about **Birthday Bot Premium** using `bday premium`!'
-                    )
-                    .setFooter(
-                        'Premium helps us support and maintain the bot!',
-                        msg.client.user.avatarURL()
-                    )
-                    .setTimestamp()
-                    .setColor(Config.colors.default);
-                await MessageUtils.send(channel, embed);
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN_US, {
+                        ICON: msg.client.user.avatarURL(),
+                    })
+                );
+                return;
+            }
+        }
+        /**
+         * The reason for this ugly code is due to the fact that in a message, if a user mentions someone
+         * who either has or has had a nickname, their string format of the mention is <@!USERID>
+         * so, we remove the ! if it is there, and replace for both that format, and the original format
+         * given by target.toString()
+         */
+        let mentionWithNickNameFormat =
+            target?.toString().substring(0, 2) + '!' + target?.toString().substring(2);
+        // Compile the message
+        message = msg.content
+            .substring(msg.content.toLowerCase().indexOf(type) + type.length + 1)
+            .replace(
+                target && type !== 'serveranniversary'
+                    ? mentionWithNickNameFormat
+                    : Lang.getRef('placeHolders.usersRegex', LangCode.EN_US),
+                '<Users>'
+            )
+            .replace(
+                target && type !== 'serveranniversary'
+                    ? target?.toString()
+                    : Lang.getRef('placeHolders.usersRegex', LangCode.EN_US),
+                '<Users>'
+            )
+            .replace(Lang.getRef('placeHolders.serverRegex', LangCode.EN_US), '<Server>')
+            .replace(Lang.getRef('placeHolders.yearRegex', LangCode.EN_US), '<Year>');
+
+        if (message.length > Config.validation.message.maxLength) {
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('validation.maxCustomMessageSize', LangCode.EN_US, {
+                    MAX_SIZE: Config.validation.message.maxLength.toString(),
+                })
+            );
+            return;
+        }
+
+        let typeDisplayName =
+            type === 'birthday'
+                ? Lang.getRef('terms.birthday', LangCode.EN_US).toLowerCase()
+                : type === 'memberanniversary'
+                ? Lang.getRef('terms.memberAnniversary', LangCode.EN_US).toLowerCase()
+                : Lang.getRef('terms.serverAnniversary', LangCode.EN_US).toLowerCase();
+
+        if (type === 'birthday' || type === 'memberanniversary') {
+            // Can also use year and server name placeholder
+            if (!message.includes('<Users>')) {
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.noUserPlaceholder', LangCode.EN_US, {
+                        TYPE: type,
+                        EXAMPLE_MESSAGE: Lang.getRef(
+                            type === 'birthday'
+                                ? 'defaults.birthdayMessage'
+                                : 'defaults.memberAnniversaryMessage',
+                            LangCode.EN_US
+                        ),
+                    })
+                );
+                return;
+            }
+        } else {
+            if (!message.includes('<Server>')) {
+                // NO SERVER PLACEHOLDER (can also use year placeholder)
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.noServerPlaceholder', LangCode.EN_US)
+                );
                 return;
             }
         }
 
-        // Get Message
-        let birthdayMessage: string;
+        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
 
-        // Compile the birthday message
-        if (target) {
-            // If the input of the target WASN'T a @mention, replace it with the <@USER_ID> format so the substring works universally
-            birthdayMessage = msg.content
-                .replace(args[3], target.toString() + ' ')
-                .substring(msg.content.indexOf('add') + 27)
-                .replace(/@users?|<users?>|{users?}/gi, '<Users>');
-        } else {
-            // Basic non user-specific custom message
-            birthdayMessage = msg.content
-                .substring(msg.content.indexOf('add') + 4)
-                .replace(/@users?|<users?>|{users?}/gi, '<Users>');
-        }
+        let messages = customMessages.customMessages.filter(message => message.Type === type);
 
-        if (birthdayMessage.length > Config.validation.message.maxLength) {
-            let embed = new MessageEmbed()
-                .setDescription(
-                    `Custom Messages are maxed at ${Config.validation.message.maxLength.toLocaleString()} characters!`
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
-        }
-
-        if (!birthdayMessage.includes('<Users>')) {
-            let embed = new MessageEmbed()
-                .setDescription(
-                    '' +
-                        'Please include the `<Users>` placeholder somewhere in the message. This indicates where birthday usernames will appear.' +
-                        '\n' +
-                        '\nEx: `bday message add Happy Birthday <Users>!`'
-                )
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
-        }
-
-        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id);
-
-        let globalMessageCount = customMessages.customMessages.filter(
-            message => message.UserDiscordId === '0'
+        let globalMessageCount = messages.filter(
+            message => message.UserDiscordId === '0' && message.Type === type
         ).length;
 
+        let maxMessageCountFree =
+            type === 'birthday'
+                ? Config.validation.message.maxCount.birthday.free
+                : type === 'memberanniversary'
+                ? Config.validation.message.maxCount.memberAnniversary.free
+                : Config.validation.message.maxCount.serverAnniversary.free;
+        let maxMessageCountPaid =
+            type === 'birthday'
+                ? Config.validation.message.maxCount.birthday.paid
+                : type === 'memberanniversary'
+                ? Config.validation.message.maxCount.memberAnniversary.paid
+                : Config.validation.message.maxCount.serverAnniversary.paid;
+
         if (customMessages) {
-            if (globalMessageCount >= Config.validation.message.maxCount.free && !hasPremium) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.free.toLocaleString()})`
-                    )
-                    .setFooter(
-                        `To have up to ${Config.validation.message.maxCount.paid.toLocaleString()} custom birthday messages get **Birthday Bot Premium**!`,
-                        msg.client.user.avatarURL()
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+            if (globalMessageCount >= maxMessageCountFree && !hasPremium) {
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.maxFreeCustomMessages', LangCode.EN_US, {
+                        TYPE: typeDisplayName,
+                        FREE_MAX: maxMessageCountFree,
+                        PAID_MAX: maxMessageCountPaid,
+                        ICON: msg.client.user.avatarURL(),
+                    })
+                );
                 return;
-            } else if (globalMessageCount >= Config.validation.message.maxCount.paid) {
-                let embed = new MessageEmbed()
-                    .setDescription(
-                        `Your server has reached the maximum custom messages! (${Config.validation.message.maxCount.paid.toLocaleString()})`
-                    )
-                    .setColor(Config.colors.error);
-                await MessageUtils.send(channel, embed);
+            } else if (globalMessageCount >= maxMessageCountPaid) {
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.maxPaidCustomMessages', LangCode.EN_US, {
+                        TYPE: typeDisplayName,
+                        PAID_MAX: maxMessageCountPaid,
+                    })
+                );
                 return;
             }
 
             // If there is a target, begin the checks if there is a user custom message already for the target
-            if (target) {
-                let userMessage = customMessages.customMessages.filter(
-                    message => message.UserDiscordId === target.id
-                );
+            if (target && type !== 'serveranniversary') {
+                let userMessage = messages.filter(message => message.UserDiscordId === target.id);
 
                 // if it found a message for this user
                 if (userMessage.length > 0) {
                     // There is already a message for this user should they overwrite it?
                     let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-                    let confirmationEmbed = new MessageEmbed()
-                        .setTitle('Caution')
-                        .setDescription(
-                            `There is already a custom message set for this user, would you like to overwrite it?` +
-                                `\n\n**Current Message**: ${userMessage[0].Message}` +
-                                `\n\n**New Message**: ${birthdayMessage}`
-                        )
-                        .setFooter('This action is irreversible!', msg.client.user.avatarURL())
-                        .setColor(Config.colors.warning);
-
-                    let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
+                    let confirmationMessage = await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.duplicateUserCustomMessage', LangCode.EN_US, {
+                            TYPE: typeDisplayName,
+                            CURRENT_MESSAGE: userMessage[0].Message.replace(
+                                '<Users>',
+                                target.toString()
+                            ),
+                            NEW_MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
+                                message,
+                                msg.guild,
+                                type,
+                                target?.toString()
+                            ),
+                            ICON: msg.client.user.avatarURL(),
+                        })
+                    ); // Send confirmation and emotes
                     for (let option of trueFalseOptions) {
                         await MessageUtils.react(confirmationMessage, option);
                     }
@@ -191,60 +250,150 @@ export class MessageAddSubCommand {
 
                     if (confirmation === undefined) return;
 
-                    // set the overwrite value
-                    overwrite = confirmation === Config.emotes.confirm ? true : false;
+                    if (confirmation === Config.emotes.deny) {
+                        await MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('results.actionCanceled', LangCode.EN_US)
+                        );
+                        return;
+                    }
                 }
             } else {
                 // Don't allow duplicate birthday messages for non user messages
-                let duplicateMessage = customMessages.customMessages
-                    .map(message => message.Message)
-                    .includes(birthdayMessage);
+                let duplicateMessage = messages.map(message => message.Message).includes(message);
                 if (duplicateMessage) {
-                    let embed = new MessageEmbed()
-                        .setDescription('Duplicate message found for this server!')
-                        .setColor(Config.colors.error);
-                    await MessageUtils.send(channel, embed);
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.duplicateMessage', LangCode.EN_US)
+                    );
                     return;
                 }
             }
         }
 
-        let userId = target ? target.id : '0';
+        // we can let there be an @ in the server anniversary message we just won't consider it a user specific messages
+        userId = target && type !== 'serveranniversary' ? target.id : '0';
 
-        if (overwrite) {
-            await this.customMessageRepo.addCustomMessage(msg.guild.id, birthdayMessage, userId);
-        } else {
-            let embed = new MessageEmbed()
-                .setDescription('Action Canceled.')
-                .setColor(Config.colors.error);
-            await MessageUtils.send(channel, embed);
-            return;
+        if (hasPremium) {
+            let selectMessage = await MessageUtils.send(
+                channel,
+                Lang.getEmbed('serverPrompts.customMessageColorSelection', LangCode.EN_US, {
+                    ICON: msg.client.user.avatarURL(),
+                })
+            );
+
+            colorHex = await CollectorUtils.collectByMessage(
+                msg.channel,
+                // Collect Filter
+                (nextMsg: Message) => nextMsg.author.id === msg.author.id,
+                stopFilter,
+                // Retrieve Result
+                async (nextMsg: Message) => {
+                    let check = ColorUtils.findHex(nextMsg.content);
+
+                    if (!check) {
+                        await MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('validation.invalidColor', LangCode.EN_US)
+                        );
+                        return;
+                    }
+
+                    return check;
+                },
+                expireFunction,
+                COLLECT_OPTIONS
+            );
+
+            MessageUtils.delete(selectMessage);
+
+            if (colorHex === undefined) {
+                return;
+            }
         }
 
-        let embed = new MessageEmbed().setColor(Config.colors.success);
-        if (!target) {
-            embed
-                .setDescription(
-                    `Successfully added the birthday message:\n\n\`${birthdayMessage}\`\n\u200b`
-                )
-                .addField(
-                    'Actions',
-                    '' +
-                        '`bday message list [page]` - List all custom birthday messages.' +
-                        '\n`bday message test <position> [user count]` - Test a birthday message.'
-                );
-        } else {
-            embed
-                .setDescription(
-                    `Successfully added the user birthday message for ${target.toString()}:\n\n\`${birthdayMessage}\`\n\u200b`
-                )
-                .addField(
-                    'Actions',
-                    '' +
-                        '`bday message list user [page]` - List all user birthday messages.' +
-                        '\n`bday message test <user>` - Test a user birthday message.'
-                );
+        let settingRole = await MessageUtils.send(
+            channel,
+            Lang.getEmbed('serverPrompts.customMessageEmbedSelection', LangCode.EN_US, {
+                ICON: msg.client.user.avatarURL(),
+            })
+        ); // Send confirmation and emotes
+        for (let option of trueFalseOptions) {
+            await settingRole.react(option);
         }
-        await MessageUtils.send(channel, embed);
+
+        let option: string = await CollectorUtils.collectByReaction(
+            settingRole,
+            // Collect Filter
+            (msgReaction: MessageReaction, reactor: User) =>
+                reactor.id === msg.author.id && trueFalseOptions.includes(msgReaction.emoji.name),
+            stopFilter,
+            // Retrieve Result
+            async (msgReaction: MessageReaction, reactor: User) => {
+                return msgReaction.emoji.name;
+            },
+            expireFunction,
+            COLLECT_OPTIONS
+        );
+
+        MessageUtils.delete(settingRole);
+
+        if (option === undefined) return;
+
+        embedChoice = option === Config.emotes.confirm ? 1 : 0;
+
+        await this.customMessageRepo.addCustomMessage(
+            msg.guild.id,
+            message,
+            userId,
+            type,
+            colorHex,
+            embedChoice
+        );
+
+        await MessageUtils.send(
+            channel,
+            userId === '0'
+                ? Lang.getEmbed('results.addCustomMessage', LangCode.EN_US, {
+                      DISPLAY_TYPE: typeDisplayName,
+                      MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
+                          message,
+                          msg.guild,
+                          type,
+                          null
+                      ),
+                      IS_EMBED: embedChoice === 1 ? 'True' : 'False',
+                      HAS_PREMIUM: !hasPremium
+                          ? Lang.getRef('conditionals.needColorForPremium', LangCode.EN_US)
+                          : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
+                                COLOR_HEX: colorHex,
+                            }),
+                      TYPE: type,
+                      ICON: msg.client.user.avatarURL(),
+                  })
+                : Lang.getEmbed('results.addCustomUserMessage', LangCode.EN_US, {
+                      DISPLAY_TYPE: typeDisplayName,
+                      MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
+                          message,
+                          msg.guild,
+                          type,
+                          target?.toString()
+                      ),
+                      IS_EMBED: embedChoice === 1 ? 'True' : 'False',
+                      HAS_PREMIUM: !hasPremium
+                          ? Lang.getRef('conditionals.colorForPremium', LangCode.EN_US)
+                          : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
+                                COLOR_HEX: colorHex,
+                            }),
+                      TYPE:
+                          type === 'birthday'
+                              ? 'userSpecificBirthday'
+                              : 'userSpecificMemberAnniversary',
+                      USER: target.toString(),
+                      ICON: msg.client.user.avatarURL(),
+                  })
+        );
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }

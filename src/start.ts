@@ -1,4 +1,3 @@
-import { BirthdayService, HttpService, JobService, Logger, SubscriptionService } from './services';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
@@ -7,52 +6,92 @@ import {
 } from './commands/blacklist';
 import {
     BlacklistCommand,
-    ClearCommand,
-    CreateCommand,
+    ConfigCommand,
+    DevCommand,
     DocumentationCommand,
     DonateCommand,
-    FAQCommand,
+    FaqCommand,
     HelpCommand,
+    InfoCommand,
     InviteCommand,
     ListCommand,
     MapCommand,
+    MemberAnniversaryRoleCommand,
     MessageCommand,
     NextCommand,
+    PremiumCommand,
     PurgeCommand,
     SetAttemptsCommand,
     SetCommand,
     SettingsCommand,
     SetupCommand,
+    StatsCommand,
+    SubscribeCommand,
     SupportCommand,
     TestCommand,
-    TrustedCommand,
+    TrustedRoleCommand,
     UpdateCommand,
     ViewCommand,
+    VoteCommand,
 } from './commands';
-import { BlacklistRepo, CustomMessageRepo, GuildRepo, UserRepo } from './services/database/repos';
+import {
+    BlacklistRepo,
+    CombinedRepo,
+    CustomMessageRepo,
+    GuildRepo,
+    MemberAnniversaryRoleRepo,
+    TrustedRoleRepo,
+    UserRepo,
+} from './services/database/repos';
 import { ClientOptions, DiscordAPIError } from 'discord.js';
+import {
+    ConfigBirthdayMasterRoleSubCommand,
+    ConfigChannelSubCommand,
+    ConfigNameFormatSubCommand,
+    ConfigRequireAllTrustedRolesSubCommand,
+    ConfigRoleSubCommand,
+    ConfigTimezoneSubCommand,
+    ConfigTrustedPreventsMsgSubCommand,
+    ConfigTrustedPreventsRoleSubCommand,
+    ConfigUseTimezoneSubCommand,
+} from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+import {
+    HttpService,
+    JobService,
+    Logger,
+    MessageService,
+    RoleService,
+    SubscriptionService,
+} from './services';
+import {
+    MemberAnniversaryRoleAddSubCommand,
+    MemberAnniversaryRoleClaimSubCommand,
+    MemberAnniversaryRoleClearSubCommand,
+    MemberAnniversaryRoleListSubCommand,
+    MemberAnniversaryRoleRemoveSubCommand,
+} from './commands/memberAnniversaryRole';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
-    MessageColorSubCommand,
-    MessageEmbedSubCommand,
     MessageListSubCommand,
     MessageMentionSubCommand,
     MessageRemoveSubCommand,
     MessageTestSubCommand,
     MessageTimeSubCommand,
-    MessageUserListSubCommand,
 } from './commands/message';
-import { SetupMessage, SetupRequired, SetupTrusted } from './commands/setup';
+import { SetupAnniversary, SetupRequired, SetupTrusted } from './commands/setup';
+import {
+    TrustedRoleAddSubCommand,
+    TrustedRoleClearSubCommand,
+    TrustedRoleListSubCommand,
+    TrustedRoleRemoveSubCommand,
+} from './commands/trusted';
 
 import { Bot } from './bot';
+import { CelebrationJob } from './jobs';
 import { CustomClient } from './extensions/custom-client';
 import { DataAccess } from './services/database/data-access';
-import { PostBirthdaysJob } from './jobs';
-import { PremiumCommand } from './commands/premium-commands';
-import { StatsCommand } from './commands/stats-command';
-import { SubscribeCommand } from './commands/subscribe-command';
 
 let Config = require('../config/config.json');
 
@@ -66,6 +105,9 @@ async function start(): Promise<void> {
     let userRepo = new UserRepo(dataAccess);
     let customMessageRepo = new CustomMessageRepo(dataAccess);
     let blacklistRepo = new BlacklistRepo(dataAccess);
+    let trustedRoleRepo = new TrustedRoleRepo(dataAccess);
+    let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
+    let combinedRepo = new CombinedRepo(dataAccess);
 
     let clientOptions: ClientOptions = {
         ws: { intents: Config.client.intents },
@@ -81,40 +123,46 @@ async function start(): Promise<void> {
 
     // Services
     let subscriptionService = new SubscriptionService(httpService);
-    let birthdayService = new BirthdayService(customMessageRepo, subscriptionService);
+    let messageService = new MessageService();
+    let roleService = new RoleService();
 
     // Commands
-    let setCommand = new SetCommand(guildRepo, userRepo);
-    let statsCommand = new StatsCommand(userRepo);
-
-    let createCommand = new CreateCommand(guildRepo);
-    let updateCommand = new UpdateCommand(guildRepo);
-    let clearCommand = new ClearCommand(guildRepo);
-    let settingsCommand = new SettingsCommand(guildRepo);
-
-    let listCommand = new ListCommand(userRepo);
-    let purgeCommand = new PurgeCommand(userRepo);
-    let inviteCommand = new InviteCommand();
-    let supportCommand = new SupportCommand();
-    let mapCommand = new MapCommand();
-    let viewCommand = new ViewCommand(userRepo);
-    let nextCommand = new NextCommand(userRepo);
-    let trustedCommand = new TrustedCommand(guildRepo);
-    let setAttemptsCommand = new SetAttemptsCommand(userRepo);
-    let testCommand = new TestCommand(birthdayService, guildRepo, blacklistRepo);
-    let faqCommand = new FAQCommand();
+    let devCommand = new DevCommand();
     let documentationCommand = new DocumentationCommand();
     let donateCommand = new DonateCommand();
+    let faqCommand = new FaqCommand();
+    let infoCommand = new InfoCommand();
+    let inviteCommand = new InviteCommand();
+    let listCommand = new ListCommand(userRepo, guildRepo);
+    let mapCommand = new MapCommand();
+    let nextCommand = new NextCommand(userRepo, guildRepo);
     let premiumCommand = new PremiumCommand(subscriptionService);
+    let purgeCommand = new PurgeCommand(userRepo);
+    let setAttemptsCommand = new SetAttemptsCommand(userRepo);
+    let setCommand = new SetCommand(guildRepo, userRepo);
+    let settingsCommand = new SettingsCommand(guildRepo, trustedRoleRepo);
+    let statsCommand = new StatsCommand(userRepo);
     let subscribeCommand = new SubscribeCommand(subscriptionService);
+    let supportCommand = new SupportCommand();
+    let testCommand = new TestCommand(
+        guildRepo,
+        userRepo,
+        customMessageRepo,
+        trustedRoleRepo,
+        blacklistRepo,
+        memberAnniversaryRoleRepo
+    );
+    let viewCommand = new ViewCommand(userRepo);
+    let voteCommand = new VoteCommand();
+    let updateCommand = new UpdateCommand();
 
     // Setup Sub Commands
     let setupRequired = new SetupRequired(guildRepo);
-    let setupMessage = new SetupMessage(guildRepo);
     let setupTrusted = new SetupTrusted(guildRepo);
+    let setupAnniversary = new SetupAnniversary(guildRepo);
 
     // Setup Command
-    let setupCommand = new SetupCommand(guildRepo, setupRequired, setupMessage, setupTrusted);
+    let setupCommand = new SetupCommand(guildRepo, setupRequired, setupTrusted, setupAnniversary);
 
     // Message Sub Commands
     let messageListSubCommand = new MessageListSubCommand(customMessageRepo);
@@ -123,10 +171,7 @@ async function start(): Promise<void> {
     let messageRemoveSubCommand = new MessageRemoveSubCommand(customMessageRepo);
     let messageTimSubCommand = new MessageTimeSubCommand(guildRepo);
     let messageMentionSubCommand = new MessageMentionSubCommand(guildRepo);
-    let messageEmbedSubCommand = new MessageEmbedSubCommand(guildRepo);
     let messageTestSubCommand = new MessageTestSubCommand(guildRepo, customMessageRepo);
-    let messageColorSubCommand = new MessageColorSubCommand(guildRepo);
-    let messageUserListSubCommand = new MessageUserListSubCommand(customMessageRepo);
 
     // Message Command
     let messageCommand = new MessageCommand(
@@ -136,10 +181,33 @@ async function start(): Promise<void> {
         messageRemoveSubCommand,
         messageTimSubCommand,
         messageMentionSubCommand,
-        messageEmbedSubCommand,
-        messageTestSubCommand,
-        messageColorSubCommand,
-        messageUserListSubCommand
+        messageTestSubCommand
+    );
+
+    // Config Sub Commands
+    let configChannelSubCommand = new ConfigChannelSubCommand(guildRepo);
+    let configRoleSubCommand = new ConfigRoleSubCommand(guildRepo);
+    let configBirthdayMasterRoleSubCommand = new ConfigBirthdayMasterRoleSubCommand(guildRepo);
+    let configNameFormatSubCommand = new ConfigNameFormatSubCommand(guildRepo);
+    let configTrustedPreventMsgSubCommand = new ConfigTrustedPreventsMsgSubCommand(guildRepo);
+    let configTrustedPreventRoleSubCommand = new ConfigTrustedPreventsRoleSubCommand(guildRepo);
+    let configTimezoneSubCommand = new ConfigTimezoneSubCommand(guildRepo);
+    let configUseTimezoneSubCommand = new ConfigUseTimezoneSubCommand(guildRepo);
+    let configRequireAllTrustedRolesSubCommand = new ConfigRequireAllTrustedRolesSubCommand(
+        guildRepo
+    );
+
+    // Config Command
+    let configCommand = new ConfigCommand(
+        configBirthdayMasterRoleSubCommand,
+        configChannelSubCommand,
+        configRoleSubCommand,
+        configNameFormatSubCommand,
+        configTrustedPreventMsgSubCommand,
+        configTrustedPreventRoleSubCommand,
+        configTimezoneSubCommand,
+        configUseTimezoneSubCommand,
+        configRequireAllTrustedRolesSubCommand
     );
 
     // Blacklist Sub Commands
@@ -156,34 +224,78 @@ async function start(): Promise<void> {
         blacklistListSubCommand
     );
 
+    // Trusted Role Sub Commands
+    let trustedRoleAddSubCommand = new TrustedRoleAddSubCommand(trustedRoleRepo);
+    let trustedRoleRemoveSubCommand = new TrustedRoleRemoveSubCommand(trustedRoleRepo);
+    let trustedRoleClearSubCommand = new TrustedRoleClearSubCommand(trustedRoleRepo);
+    let trustedRoleListSubCommand = new TrustedRoleListSubCommand(trustedRoleRepo);
+
+    // Trusted Role Command
+    let trustedRoleCommand = new TrustedRoleCommand(
+        trustedRoleAddSubCommand,
+        trustedRoleRemoveSubCommand,
+        trustedRoleClearSubCommand,
+        trustedRoleListSubCommand
+    );
+
+    // Member Anniversary Role Sub Commands
+    let memberAnniversaryRoleAddSubCommand = new MemberAnniversaryRoleAddSubCommand(
+        memberAnniversaryRoleRepo
+    );
+    let memberAnniversaryRoleRemoveSubCommand = new MemberAnniversaryRoleRemoveSubCommand(
+        memberAnniversaryRoleRepo
+    );
+    let memberAnniversaryRoleClearSubCommand = new MemberAnniversaryRoleClearSubCommand(
+        memberAnniversaryRoleRepo
+    );
+    let memberAnniversaryRoleListSubCommand = new MemberAnniversaryRoleListSubCommand(
+        memberAnniversaryRoleRepo
+    );
+    let memberAnniversaryRoleClaimSubCommand = new MemberAnniversaryRoleClaimSubCommand(
+        memberAnniversaryRoleRepo
+    );
+
+    // Member Anniversary Role Command
+    let memberAnniversaryRoleCommand = new MemberAnniversaryRoleCommand(
+        guildRepo,
+        memberAnniversaryRoleAddSubCommand,
+        memberAnniversaryRoleRemoveSubCommand,
+        memberAnniversaryRoleClearSubCommand,
+        memberAnniversaryRoleListSubCommand,
+        memberAnniversaryRoleClaimSubCommand
+    );
+
     // Events handlers
     let messageHandler = new MessageHandler(
         helpCommand,
         [
-            setCommand,
-            setupCommand,
-            createCommand,
-            updateCommand,
-            clearCommand,
-            messageCommand,
-            listCommand,
-            purgeCommand,
-            inviteCommand,
-            supportCommand,
-            mapCommand,
-            viewCommand,
-            nextCommand,
-            trustedCommand,
-            setAttemptsCommand,
-            settingsCommand,
-            testCommand,
-            statsCommand,
-            faqCommand,
+            blacklistCommand,
+            configCommand,
+            devCommand,
             documentationCommand,
             donateCommand,
-            blacklistCommand,
+            faqCommand,
+            infoCommand,
+            inviteCommand,
+            listCommand,
+            mapCommand,
+            memberAnniversaryRoleCommand,
+            messageCommand,
+            nextCommand,
             premiumCommand,
+            purgeCommand,
+            setAttemptsCommand,
+            setCommand,
+            settingsCommand,
+            setupCommand,
+            statsCommand,
             subscribeCommand,
+            supportCommand,
+            trustedRoleCommand,
+            viewCommand,
+            voteCommand,
+            testCommand,
+            updateCommand,
         ],
         subscriptionService,
         guildRepo,
@@ -191,22 +303,25 @@ async function start(): Promise<void> {
     );
     let reactionAddHandler = new ReactionAddHandler(
         userRepo,
+        guildRepo,
         customMessageRepo,
         blacklistRepo,
+        trustedRoleRepo,
         subscriptionService
     );
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
 
     let jobService = new JobService([
-        new PostBirthdaysJob(
+        new CelebrationJob(
             client,
-            guildRepo,
             userRepo,
-            blacklistRepo,
-            birthdayService
-        )
-    ])
+            combinedRepo,
+            messageService,
+            roleService,
+            subscriptionService
+        ),
+    ]);
 
     let bot = new Bot(
         Config.client.token,
@@ -222,9 +337,11 @@ async function start(): Promise<void> {
 }
 
 process.on('unhandledRejection', (reason, promise) => {
-    if (reason instanceof DiscordAPIError) {
-        if (reason.code === 10003) return;
+    // 10003: "Unknown channel"
+    if (reason instanceof DiscordAPIError && reason.code === 10003) {
+        return;
     }
+
     Logger.error('Unhandled promise rejection.', reason);
 });
 

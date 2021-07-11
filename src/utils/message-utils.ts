@@ -3,27 +3,36 @@ import {
     DiscordAPIError,
     EmojiResolvable,
     Message,
-    MessageEmbed,
     MessageReaction,
+    NewsChannel,
     StringResolvable,
     TextChannel,
     User,
 } from 'discord.js';
 
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
+import { TimeUtils } from '.';
+
 let Config = require('../../config/config.json');
 
-export abstract class MessageUtils {
+export class MessageUtils {
     public static async send(
-        target: User | DMChannel | TextChannel,
+        target: User | DMChannel | TextChannel | NewsChannel,
         content: StringResolvable
     ): Promise<Message> {
         try {
             return await target.send(content);
         } catch (error) {
-            // Error code 50007: "Cannot send messages to this user" (User blocked bot or DM disabled), Error code 10013: "Unknown User", Error code 50001: "Missing Access"
+            // 10003: "Unknown channel"
+            // 10004: "Unknown guild"
+            // 10013: "Unknown user"
+            // 50001: "Missing access"
+            // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+            // 50013: "Missing Permissions"
             if (
                 error instanceof DiscordAPIError &&
-                (error.code === 50007 || error.code === 10013 || error.code === 50001)
+                [10003, 10004, 10013, 50001, 50007, 50013].includes(error.code)
             ) {
                 return;
             } else {
@@ -31,25 +40,84 @@ export abstract class MessageUtils {
             }
         }
     }
-    public static async edit(target: Message, content: StringResolvable): Promise<Message> {
+    public static async sendWithDelay(
+        target: User | DMChannel | TextChannel | NewsChannel,
+        content: StringResolvable,
+        delay?: number
+    ): Promise<Message> {
+        delay = Config.delays.enabled ? delay : 0;
         try {
-            return await target.edit(content);
+            await target.send(content);
+            await TimeUtils.sleep(delay ?? 0);
+            return;
         } catch (error) {
-            // Error code 10008: "Unknown Message" (User blocked bot or DM disabled), Error code 10013: "Unknown User"
+            // 10003: "Unknown channel"
+            // 10004: "Unknown guild"
+            // 10013: "Unknown user"
+            // 50001: "Missing access"
+            // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+            // 50013: "Missing Permissions"
             if (
                 error instanceof DiscordAPIError &&
-                (error.code === 10008 || error.code === 10013)
+                [10003, 10004, 10013, 50001, 50007, 50013].includes(error.code)
             ) {
                 return;
-            } else if (error.code === 50001) {
-                // Error code 50001: "Missing Access"
-                let embed = new MessageEmbed()
-                    .setColor(Config.colors.error)
-                    .setDescription('I do not have permission to edit that message!');
-                this.send(target.channel as TextChannel, embed);
             } else {
                 throw error;
             }
+        }
+    }
+
+    public static async reply(
+        msg: Message,
+        content: StringResolvable,
+        delay?: number
+    ): Promise<Message> {
+        delay = Config.delays.enabled ? delay : 0;
+        try {
+            return await msg.reply(content);
+        } catch (error) {
+            // 10003: "Unknown channel"
+            // 10004: "Unknown guild"
+            // 10013: "Unknown user"
+            // 50001: "Missing access"
+            // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+            // 50013: "Missing Permissions"
+            if (
+                error instanceof DiscordAPIError &&
+                [10003, 10004, 10013, 50001, 50007, 50013].includes(error.code)
+            ) {
+                return;
+            } else {
+                throw error;
+            }
+        }
+    }
+
+    public static async edit(msg: Message, content: StringResolvable): Promise<Message> {
+        try {
+            return await msg.edit(content);
+        } catch (error) {
+            if (error instanceof DiscordAPIError) {
+                // 10008: "Unknown Message" (Message was deleted)
+                // 10013: "Unknown User"
+                // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+                // 50013: "Missing Permissions"
+                if ([10008, 10013, 50007, 50013].includes(error.code)) {
+                    return;
+                }
+
+                // 50001: "Missing Access"
+                if ([50001].includes(error.code)) {
+                    await this.send(
+                        msg.channel,
+                        Lang.getEmbed('validation.noPermToEdit', LangCode.EN_US)
+                    );
+                    return;
+                }
+            }
+
+            throw error;
         }
     }
 
@@ -57,11 +125,9 @@ export abstract class MessageUtils {
         try {
             return await msg.react(emoji);
         } catch (error) {
-            // Error code 90001: "Reaction blocked" (User blocked bot) Error code: 10008: "Unknown Message" (Message was deleted)
-            if (
-                error instanceof DiscordAPIError &&
-                (error.code === 90001 || error.code === 10008)
-            ) {
+            // 10008: "Unknown Message" (Message was deleted)
+            // 90001: "Reaction Blocked" (User blocked bot)
+            if (error instanceof DiscordAPIError && [10008, 90001].includes(error.code)) {
                 return;
             } else {
                 throw error;
@@ -74,28 +140,31 @@ export abstract class MessageUtils {
         reactor: User
     ): Promise<MessageReaction> {
         try {
-            return msgReaction.users.remove(reactor);
+            return await msgReaction.users.remove(reactor);
         } catch (error) {
-            // Error code 50001: "Missing Access", Error code: 10008: "Unknown Message" (Message was deleted), Error code: 50013: "Missing Permission"
-            if (
-                error instanceof DiscordAPIError &&
-                (error.code === 50001 || error.code === 10008 || error.code === 50013)
-            ) {
+            // 10008: "Unknown Message" (Message was deleted)
+            // 50001: "Missing Access"
+            // 50013: "Missing Permission"
+            if (error instanceof DiscordAPIError && [10008, 50001, 50013].includes(error.code)) {
                 return;
             } else {
                 throw error;
             }
         }
     }
-
-    public static async delete(message: Message): Promise<MessageReaction> {
+    public static async delete(msg: Message): Promise<Message> {
         try {
-            if (message.deletable) await message.delete();
+            if (msg.deletable) {
+                return await msg.delete();
+            }
         } catch (error) {
-            // Error code 50001: "Missing Access", Error code: 10008: "Unknown Message" (Message was deleted), Error code: 50013: "Missing Permission"
+            // 10008: "Unknown Message" (Message was deleted)
+            // 50001: "Missing Access"
+            // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+            // 50013: "Missing Permission"
             if (
                 error instanceof DiscordAPIError &&
-                (error.code === 50001 || error.code === 10008 || error.code === 50013)
+                [10008, 50001, 50007, 50013].includes(error.code)
             ) {
                 return;
             } else {

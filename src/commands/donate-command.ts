@@ -1,9 +1,9 @@
-import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
+import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import { MessageUtils } from '../utils';
-
-let Config = require('../../config/config.json');
 
 export class DonateCommand implements Command {
     public name: string = 'donate';
@@ -16,15 +16,14 @@ export class DonateCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    public async execute(args: string[], msg: Message, channel: TextChannel | DMChannel) {
-        let embed = new MessageEmbed()
-            .setDescription(
-                `You can support ${msg.client.user.toString()} by donating [here](${
-                    Config.links.donate
-                })!`
-            )
-            .setColor(Config.colors.default);
-
-        await MessageUtils.send(channel, embed);
+    public async execute(
+        args: string[],
+        msg: Message,
+        channel: TextChannel | DMChannel
+    ): Promise<void> {
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('info.donate', LangCode.EN_US, { BOT: msg.client.user.toString() })
+        );
     }
 }

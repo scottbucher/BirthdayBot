@@ -1,13 +1,13 @@
 import { Shard, ShardingManager } from 'discord.js';
 
 import { JobService, Logger } from './services';
-import { Job } from './jobs';
 
-let Logs = require('../lang/logs.json');
 let Config = require('../config/config.json');
+let Debug = require('../config/debug.json');
+let Logs = require('../lang/logs.json');
 
 export class Manager {
-    constructor(private shardManager: ShardingManager, private jobsService: JobService) { }
+    constructor(private shardManager: ShardingManager, private jobsService: JobService) {}
 
     public async start(): Promise<void> {
         this.registerListeners();
@@ -26,8 +26,13 @@ export class Manager {
                 Config.sharding.spawnDelay * 1000,
                 Config.sharding.spawnTimeout * 1000
             );
+            Logger.info(Logs.info.allShardsSpawned);
         } catch (error) {
             Logger.error(Logs.error.spawnShard, error);
+            return;
+        }
+
+        if (Debug.dummyMode.enabled) {
             return;
         }
 
