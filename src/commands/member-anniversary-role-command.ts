@@ -1,17 +1,17 @@
+import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import {
     MemberAnniversaryRoleAddSubCommand,
+    MemberAnniversaryRoleClaimSubCommand,
     MemberAnniversaryRoleClearSubCommand,
     MemberAnniversaryRoleListSubCommand,
     MemberAnniversaryRoleRemoveSubCommand,
-    MemberAnniversaryRoleClaimSubCommand,
 } from './memberAnniversaryRole';
 import { Message, TextChannel } from 'discord.js';
 
 import { Command } from './command';
+import { GuildRepo } from '../services/database/repos';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MessageUtils, FormatUtils, PermissionUtils } from '../utils';
-import { GuildRepo } from '../services/database/repos';
 
 export class MemberAnniversaryRoleCommand implements Command {
     public name: string = 'memberanniversaryrole';
@@ -82,7 +82,7 @@ export class MemberAnniversaryRoleCommand implements Command {
         } else {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.noMemberAnnviersaryRoleArgs', LangCode.EN_US)
+                Lang.getEmbed('validation.noMemberAnniversaryRoleArgs', LangCode.EN_US)
             );
             return;
         }
