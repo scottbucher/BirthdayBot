@@ -280,8 +280,8 @@ export class MessageService {
                               )
                             : '';
 
-                    let embedMessagesToSend = [];
-                    let regularMessagesToSend = [];
+                    let embedMessagesToSend: MessageEmbed[] = [];
+                    let regularMessagesToSend: string[] = [];
 
                     for (let year of differentYears) {
                         // Compile our user list to put in the message
@@ -357,8 +357,8 @@ export class MessageService {
 
                     // First we need to get a list of colors by mapping and removing duplicates
                     // If they don't have premium use the default color otherwise use the colors of the custom messages
-                    let colors: string[] = hasPremium
-                        ? [...new Set(embedMessagesToSend.map(embed => embed.Color))]
+                    let colors: number[] = hasPremium
+                        ? [...new Set(embedMessagesToSend.map(embed => embed.color))]
                         : [Config.colors.default];
 
                     // Now we loop through the colors and create a list of messages to send
@@ -367,8 +367,8 @@ export class MessageService {
                     for (let color of colors) {
                         // Only get the messages that have the specified color if they have premium
                         let embedDescriptions: string[] = embedMessagesToSend
-                            .filter(embed => !hasPremium || embed.Color === color)
-                            .map(embed => embed.Description);
+                            .filter(embed => !hasPremium || embed.color === color)
+                            .map(embed => embed.description);
                         for (let message of embedDescriptions) {
                             if (embedMessages.length === 0) {
                                 embedMessages.push(
@@ -391,10 +391,10 @@ export class MessageService {
                         counter++;
                     }
 
-                    if (embedMessagesToSend.length > 0) {
+                    if (embedMessages.length > 0) {
                         // Send our message(s)
 
-                        for (let message of embedMessagesToSend)
+                        for (let message of embedMessages)
                             await MessageUtils.sendWithDelay(
                                 memberAnniversaryChannel,
                                 message,

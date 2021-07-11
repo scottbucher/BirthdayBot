@@ -1969,7 +1969,8 @@
                     }
                 ],
                 "footer": {
-                    "text": "© {{DATE}} {{REF:bot.name}}"
+                    "text": "© {{DATE}} {{REF:bot.name}}",
+                    "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
