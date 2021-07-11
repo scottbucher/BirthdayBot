@@ -180,7 +180,7 @@ export class CelebrationUtils {
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
             anniversaryFormatted = '03-01';
 
-        if (currentDate.diff(memberAnniversary, 'years') == 0) return false;
+        if (currentDate.year() - memberAnniversary.year() === 0) return false;
 
         // The date is correct, now check the time
         return currentDateFormatted !== anniversaryFormatted
