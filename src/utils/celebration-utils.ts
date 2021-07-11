@@ -248,8 +248,6 @@ export class CelebrationUtils {
 
     public static getMentionString(guildData: GuildData, guild: Guild, type: string): string {
         // Find mentioned role
-        let mentionString: string = '';
-
         let mentionSetting = (
             type === 'birthday'
                 ? guildData.BirthdayMentionSetting
@@ -268,7 +266,7 @@ export class CelebrationUtils {
             return '@everyone';
         }
 
-        mentionString = `<@&${mentionSetting}>`;
+        return `<@&${mentionSetting}>`;
     }
 
     public static replacePlaceHolders(
