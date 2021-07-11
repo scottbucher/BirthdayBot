@@ -2177,7 +2177,7 @@
                 "title": "{{REF:bot.name}} Anniversary Help - Guild Only",
                 "description": [
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.add}} <role> <year>** - Add a member anniversary role.",
-                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.remove}} <position/role>** - Remove a member anniversary role",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.remove}} <role>** - Remove a member anniversary role",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.clear}}** - Clear all member anniversary roles.",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.list}} [page]** - List all member anniversary roles.",
                     "",
@@ -2201,7 +2201,7 @@
                     "**{{REF:bot.prefix}} message {{REF:types.list}} {{REF:types.userSpecificBirthday}} [page]** - List all user-specific birthday messages.",
                     "**{{REF:bot.prefix}} message {{REF:types.list}} {{REF:types.userSpecificMemberAnniversary}} [page]** - List all user-specific member anniversary messages.",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.add}} <role> <year>** - Add a member anniversary role.",
-                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.remove}} <position/role>** - Remove a member anniversary role",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.remove}} <role>** - Remove a member anniversary role",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.clear}}** - Clear all member anniversary roles.",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.list}} [page]** - List all member anniversary roles.",
                     "",
