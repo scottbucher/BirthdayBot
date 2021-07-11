@@ -9,7 +9,7 @@ import { TrustedRoleRepo } from '../../services/database/repos';
 const errorEmbed = Lang.getEmbed('validation.trustedRoleNoRoleOrPosition', LangCode.EN_US);
 
 export class TrustedRoleRemoveSubCommand {
-    constructor(private trustedRoleRepo: TrustedRoleRepo) { }
+    constructor(private trustedRoleRepo: TrustedRoleRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         // See if a role was specified
@@ -64,9 +64,7 @@ export class TrustedRoleRemoveSubCommand {
             return;
         }
 
-        let role: TrustedRole;
-
-        role = trustedRoles.trustedRoles.find(r => r.Position === position);
+        let role = trustedRoles.trustedRoles.find(r => r.Position === position);
 
         if (!role) {
             await MessageUtils.send(
