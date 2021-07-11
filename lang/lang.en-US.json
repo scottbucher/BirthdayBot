@@ -1207,11 +1207,30 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "anniversaryRoleNoRoleOrPosition": {
+                "title": "Member Anniversary Role Remove",
+                "description": "Please specify a year or role to remove!",
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
             "invalidTrustedRole": {
                 "title": "Trusted Role Remove - Not Found",
                 "description": [
                     "Trusted Role does not exist!",
                     "View your server's trusted roles with `{{REF:bot.prefix}} trustedRole {{REF:types.list}}`!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidAnniversaryRole": {
+                "title": "Member Anniversary Role Remove - Not Found",
+                "description": [
+                    "Member Anniversary Role does not exist!",
+                    "View your server's member anniversary roles with `{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.list}}`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}",
