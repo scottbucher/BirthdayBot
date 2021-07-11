@@ -180,7 +180,7 @@ export class SetCommand implements Command {
                 timeZone = timeZone ? guildData.DefaultTimezone : null;
             } else {
                 // Confirm
-                timeZone = guildData.DefaultTimezone;
+                timeZone = timeZone ?? guildData.DefaultTimezone;
             }
         }
 
