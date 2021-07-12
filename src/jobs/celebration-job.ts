@@ -110,7 +110,7 @@ export class CelebrationJob implements Job {
                     guildMembers = guild.members.cache;
                     // TODO: Update Logs
                     Logger.error(
-                        Logs.error.celebrationJobForGuild
+                        Logs.error.fetchMemberError
                             .replace('{GUILD_ID}', guild.id)
                             .replace('{GUILD_NAME}', guild.name)
                             .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
