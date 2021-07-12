@@ -49,7 +49,7 @@ export class MemberAnniversaryRoleClearSubCommand {
             channel,
             Lang.getEmbed('serverPrompts.memberAnniversaryRoleClearConfirmation', LangCode.EN_US, {
                 TOTAL: memberAnniversaryRoles.memberAnniversaryRoles.length.toString(),
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

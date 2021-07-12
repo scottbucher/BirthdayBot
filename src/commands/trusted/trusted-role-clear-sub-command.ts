@@ -47,7 +47,7 @@ export class TrustedRoleClearSubCommand {
             channel,
             Lang.getEmbed('serverPrompts.trustedRoleClearConfirmation', LangCode.EN_US, {
                 TOTAL: trustedRoles.trustedRoles.length.toString(),
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

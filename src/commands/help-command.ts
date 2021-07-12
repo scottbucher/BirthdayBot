@@ -21,7 +21,7 @@ export class HelpCommand implements Command {
         msg: Message,
         channel: TextChannel | DMChannel
     ): Promise<void> {
-        let clientAvatarUrl = msg.client.user.avatarURL();
+        let clientAvatarUrl = msg.client.user.displayAvatarURL();
 
         let option = FormatUtils.extractMiscActionType(args[2]?.toLowerCase())?.toLowerCase();
         if (!option) {

@@ -95,7 +95,7 @@ export class ViewCommand implements Command {
                           BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
                           TIMEZONE: userData.TimeZone,
                           CHANGES_LEFT: userData.ChangesLeft.toString(),
-                          ICON: msg.client.user.avatarURL(),
+                          ICON: msg.client.user.displayAvatarURL(),
                       })
                   )
                 : await MessageUtils.send(

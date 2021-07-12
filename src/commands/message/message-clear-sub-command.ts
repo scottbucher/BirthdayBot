@@ -43,7 +43,7 @@ export class MessageClearSubCommand {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.clearMessageInvalidType', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;
@@ -83,7 +83,7 @@ export class MessageClearSubCommand {
                     type,
                     totalMessages > 1
                 ).toLowerCase(),
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
         );
 

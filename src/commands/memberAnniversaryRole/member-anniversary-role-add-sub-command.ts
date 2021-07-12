@@ -10,7 +10,7 @@ let Config = require('../../../config/config.json');
 const errorEmbed = Lang.getEmbed('validation.invalidUsageMemberAnniversaryRoleAdd', LangCode.EN_US);
 
 export class MemberAnniversaryRoleAddSubCommand {
-    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) { }
+    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
 
     public async execute(
         args: string[],
@@ -23,7 +23,7 @@ export class MemberAnniversaryRoleAddSubCommand {
             MessageUtils.send(
                 channel,
                 Lang.getEmbed('premiumRequired.anniversaryRoles', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;
@@ -89,7 +89,7 @@ export class MemberAnniversaryRoleAddSubCommand {
         if (
             memberAnniversaryRoles &&
             memberAnniversaryRoles.memberAnniversaryRoles.length >=
-            Config.validation.memberAnniversaryRoles.maxCount.paid
+                Config.validation.memberAnniversaryRoles.maxCount.paid
         ) {
             await MessageUtils.send(
                 channel,

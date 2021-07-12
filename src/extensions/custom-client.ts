@@ -1,5 +1,5 @@
 import { ActivityType, Client, ClientOptions, Presence } from 'discord.js';
-import { DiscordService, Logger, Lang } from '../services';
+import { DiscordService, Lang, Logger } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
 import { PlanName, SubscriptionStatusName } from '../models/subscription-models';
 
@@ -50,50 +50,50 @@ export class CustomClient extends Client {
                 PlanName.premium3 ||
                 PlanName.premium6 ||
                 PlanName.premium12: {
-                    switch (status) {
-                        case SubscriptionStatusName.ACTIVE: {
-                            MessageUtils.send(
-                                channel,
-                                Lang.getEmbed('premiumPrompts.subscriptionAdded', LangCode.EN_US, {
-                                    SERVER_NAME: guild.name,
-                                    ICON: guild.client.user.avatarURL(),
-                                })
-                            );
-                            break;
-                        }
-                        case SubscriptionStatusName.CANCELLED: {
-                            MessageUtils.send(
-                                channel,
-                                Lang.getEmbed('premiumPrompts.subscriptionCanceled', LangCode.EN_US, {
-                                    SERVER_NAME: guild.name,
-                                    ICON: guild.client.user.avatarURL(),
-                                })
-                            );
-                            break;
-                        }
-                        case SubscriptionStatusName.EXPIRED: {
-                            MessageUtils.send(
-                                channel,
-                                Lang.getEmbed('premiumPrompts.subscriptionExpired', LangCode.EN_US, {
-                                    SERVER_NAME: guild.name,
-                                    ICON: guild.client.user.avatarURL(),
-                                })
-                            );
-                            break;
-                        }
-                        default: {
-                            break;
-                        }
+                switch (status) {
+                    case SubscriptionStatusName.ACTIVE: {
+                        MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('premiumPrompts.subscriptionAdded', LangCode.EN_US, {
+                                SERVER_NAME: guild.name,
+                                ICON: guild.client.user.displayAvatarURL(),
+                            })
+                        );
+                        break;
                     }
-
-                    Logger.info(
-                        Logs.info.guildSubStatus
-                            .replace('{GUILD_NAME}', guild.name)
-                            .replace('{GUILD_ID}', guild.id)
-                            .replace('{PLAN_NAME}', plan)
-                            .replace('{SUBSCRIPTION_STATUS}', status)
-                    );
+                    case SubscriptionStatusName.CANCELLED: {
+                        MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('premiumPrompts.subscriptionCanceled', LangCode.EN_US, {
+                                SERVER_NAME: guild.name,
+                                ICON: guild.client.user.displayAvatarURL(),
+                            })
+                        );
+                        break;
+                    }
+                    case SubscriptionStatusName.EXPIRED: {
+                        MessageUtils.send(
+                            channel,
+                            Lang.getEmbed('premiumPrompts.subscriptionExpired', LangCode.EN_US, {
+                                SERVER_NAME: guild.name,
+                                ICON: guild.client.user.displayAvatarURL(),
+                            })
+                        );
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
+
+                Logger.info(
+                    Logs.info.guildSubStatus
+                        .replace('{GUILD_NAME}', guild.name)
+                        .replace('{GUILD_ID}', guild.id)
+                        .replace('{PLAN_NAME}', plan)
+                        .replace('{SUBSCRIPTION_STATUS}', status)
+                );
+            }
         }
     }
 }

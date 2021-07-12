@@ -46,7 +46,7 @@ export class MessageAddSubCommand {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.addMessageInvalidType', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;
@@ -80,7 +80,7 @@ export class MessageAddSubCommand {
                 await MessageUtils.send(
                     channel,
                     Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN_US, {
-                        ICON: msg.client.user.avatarURL(),
+                        ICON: msg.client.user.displayAvatarURL(),
                     })
                 );
                 return;
@@ -186,7 +186,7 @@ export class MessageAddSubCommand {
                         TYPE: typeDisplayName,
                         FREE_MAX: maxMessageCountFree,
                         PAID_MAX: maxMessageCountPaid,
-                        ICON: msg.client.user.avatarURL(),
+                        ICON: msg.client.user.displayAvatarURL(),
                     })
                 );
                 return;
@@ -224,7 +224,7 @@ export class MessageAddSubCommand {
                                 type,
                                 target?.toString()
                             ),
-                            ICON: msg.client.user.avatarURL(),
+                            ICON: msg.client.user.displayAvatarURL(),
                         })
                     ); // Send confirmation and emotes
                     for (let option of trueFalseOptions) {
@@ -278,7 +278,7 @@ export class MessageAddSubCommand {
             let selectMessage = await MessageUtils.send(
                 channel,
                 Lang.getEmbed('serverPrompts.customMessageColorSelection', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
 
@@ -315,7 +315,7 @@ export class MessageAddSubCommand {
         let settingRole = await MessageUtils.send(
             channel,
             Lang.getEmbed('serverPrompts.customMessageEmbedSelection', LangCode.EN_US, {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
@@ -369,7 +369,7 @@ export class MessageAddSubCommand {
                                 COLOR_HEX: colorHex,
                             }),
                       TYPE: type,
-                      ICON: msg.client.user.avatarURL(),
+                      ICON: msg.client.user.displayAvatarURL(),
                   })
                 : Lang.getEmbed('results.addCustomUserMessage', LangCode.EN_US, {
                       DISPLAY_TYPE: typeDisplayName,
@@ -390,7 +390,7 @@ export class MessageAddSubCommand {
                               ? 'userSpecificBirthday'
                               : 'userSpecificMemberAnniversary',
                       USER: target.toString(),
-                      ICON: msg.client.user.avatarURL(),
+                      ICON: msg.client.user.displayAvatarURL(),
                   })
         );
 

@@ -209,7 +209,7 @@ export class FormatUtils {
                 PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
                 MAX_FREE: maxMessagesFree.toString(),
                 MAX_PAID: maxMessagesPaid.toString(),
-                ICON: guild.client.user.avatarURL(),
+                ICON: guild.client.user.displayAvatarURL(),
             });
         } else {
             listEmbed +=
@@ -224,7 +224,7 @@ export class FormatUtils {
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
                 TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
                 PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
-                ICON: guild.client.user.avatarURL(),
+                ICON: guild.client.user.displayAvatarURL(),
             });
         }
 
@@ -286,7 +286,7 @@ export class FormatUtils {
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
                 TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
                 PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
-                ICON: guild.client.user.avatarURL(),
+                ICON: guild.client.user.displayAvatarURL(),
             });
         } else {
             listEmbed +=
@@ -299,7 +299,7 @@ export class FormatUtils {
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
                 TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
                 PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
-                ICON: guild.client.user.avatarURL(),
+                ICON: guild.client.user.displayAvatarURL(),
             });
         }
 
@@ -357,7 +357,7 @@ export class FormatUtils {
                 PER_PAGE: Config.experience.trustedRoleListSize.toString(),
                 MAX_FREE: Config.validation.trustedRoles.maxCount.free.toString(),
                 MAX_PAID: Config.validation.trustedRoles.maxCount.paid.toString(),
-                ICON: guild.client.user.avatarURL(),
+                ICON: guild.client.user.displayAvatarURL(),
             });
         } else {
             embed = Lang.getEmbed('list.trustedRoleFree', LangCode.EN_US, {
@@ -366,7 +366,7 @@ export class FormatUtils {
                 TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
                 TOTAL_ROLES: trustedRoleResults.stats.TotalItems.toString(),
                 PER_PAGE: Config.experience.trustedRoleListSize.toString(),
-                ICON: guild.client.user.avatarURL(),
+                ICON: guild.client.user.displayAvatarURL(),
             });
         }
 
@@ -414,7 +414,7 @@ export class FormatUtils {
             TOTAL_PAGES: userDataResults.stats.TotalPages.toString(),
             TOTAL_BIRTHDAYS: userDataResults.stats.TotalItems.toString(),
             PER_PAGE: pageSize.toString(),
-            ICON: guild.client.user.avatarURL(),
+            ICON: guild.client.user.displayAvatarURL(),
         });
 
         return embed.setThumbnail(guild.iconURL());
@@ -458,7 +458,7 @@ export class FormatUtils {
             TOTAL_PAGES: totalPages.toString(),
             TOTAL_ANNIVERSARIES: totalMembers.toString(),
             PER_PAGE: pageSize.toString(),
-            ICON: guild.client.user.avatarURL(),
+            ICON: guild.client.user.displayAvatarURL(),
         });
 
         return embed.setThumbnail(guild.iconURL());
@@ -494,7 +494,7 @@ export class FormatUtils {
             TOTAL_PAGES: blacklistResults.stats.TotalPages.toString(),
             TOTAL_BLACKLIST: blacklistResults.stats.TotalItems.toString(),
             PER_PAGE: Config.experience.blacklistSize.toString(),
-            ICON: guild.client.user.avatarURL(),
+            ICON: guild.client.user.displayAvatarURL(),
         });
 
         return embed.setThumbnail(guild.iconURL());
@@ -549,7 +549,7 @@ export class FormatUtils {
                 TOTAL_ROLES: memberAnniversaryRoleResults.stats.TotalItems.toString(),
                 PER_PAGE: Config.experience.memberAnniversaryRoleListSize.toString(),
                 MAX_PAID: Config.validation.memberAnniversaryRoles.maxCount.paid.toString(),
-                ICON: guild.client.user.avatarURL(),
+                ICON: guild.client.user.displayAvatarURL(),
             });
         } else {
             embed = Lang.getEmbed('list.memberAnniversaryRoleFree', LangCode.EN_US, {
@@ -558,7 +558,7 @@ export class FormatUtils {
                 TOTAL_PAGES: memberAnniversaryRoleResults.stats.TotalPages.toString(),
                 TOTAL_ROLES: memberAnniversaryRoleResults.stats.TotalItems.toString(),
                 PER_PAGE: Config.experience.memberAnniversaryRoleListSize.toString(),
-                ICON: guild.client.user.avatarURL(),
+                ICON: guild.client.user.displayAvatarURL(),
             });
         }
 

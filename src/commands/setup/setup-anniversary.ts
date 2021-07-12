@@ -42,7 +42,7 @@ export class SetupAnniversary {
             'serverPrompts.anniversarySetupMemberChannel',
             LangCode.EN_US,
             {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             }
         );
 
@@ -178,7 +178,7 @@ export class SetupAnniversary {
             'serverPrompts.anniversarySetupServerChannel',
             LangCode.EN_US,
             {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             }
         );
 
@@ -324,7 +324,7 @@ export class SetupAnniversary {
             Lang.getEmbed('results.anniversarySetup', LangCode.EN_US, {
                 MEMBER_CHANNEL: memberAnniversaryChannelOutput,
                 SERVER_CHANNEL: serverAnniversaryChannelOutput,
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
         );
 

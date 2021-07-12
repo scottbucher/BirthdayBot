@@ -58,7 +58,7 @@ export class TrustedRoleRemoveSubCommand {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.invalidTrustedRole', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;
@@ -70,7 +70,7 @@ export class TrustedRoleRemoveSubCommand {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.invalidTrustedRole', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;

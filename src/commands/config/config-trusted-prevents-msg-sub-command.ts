@@ -8,7 +8,7 @@ import { LangCode } from '../../models/enums';
 const errorEmbed = Lang.getEmbed('validation.noTrueFalse', LangCode.EN_US);
 
 export class ConfigTrustedPreventsMsgSubCommand {
-    constructor(private guildRepo: GuildRepo) { }
+    constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         if (args.length === 3) {
@@ -22,7 +22,7 @@ export class ConfigTrustedPreventsMsgSubCommand {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.invalidTrueFalseTrustedPreventsMessage', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;

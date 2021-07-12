@@ -1,9 +1,9 @@
 import { Guild, Permissions } from 'discord.js';
+import { Lang, Logger } from '../services';
 
 import { EventHandler } from './event-handler';
-import { Logger, Lang } from '../services';
-import { MessageUtils } from '../utils';
 import { LangCode } from '../models/enums';
+import { MessageUtils } from '../utils';
 
 let Logs = require('../../lang/logs.json');
 export class GuildJoinHandler implements EventHandler {
@@ -24,8 +24,11 @@ export class GuildJoinHandler implements EventHandler {
         if (!user) return;
 
         let userChannel = await user.createDM();
-        await MessageUtils.send(userChannel, Lang.getEmbed('info.guildJoin', LangCode.EN_US, {
-            ICON: guild.client.user.avatarURL(),
-        }));
+        await MessageUtils.send(
+            userChannel,
+            Lang.getEmbed('info.guildJoin', LangCode.EN_US, {
+                ICON: guild.client.user.displayAvatarURL(),
+            })
+        );
     }
 }

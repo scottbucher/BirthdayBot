@@ -40,7 +40,7 @@ export class SetupRequired {
             'serverPrompts.requiredSetupBirthdayChannel',
             LangCode.EN_US,
             {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             }
         ).setAuthor(`${guild.name}`, guild.iconURL());
         let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
@@ -164,7 +164,7 @@ export class SetupRequired {
         }
 
         let roleEmbed = Lang.getEmbed('serverPrompts.requiredSetupBirthdayRole', LangCode.EN_US, {
-            ICON: msg.client.user.avatarURL(),
+            ICON: msg.client.user.displayAvatarURL(),
         }).setAuthor(`${guild.name}`, guild.iconURL());
 
         let roleMessage = await MessageUtils.send(channel, roleEmbed);
@@ -251,7 +251,7 @@ export class SetupRequired {
                                 msg.channel as TextChannel,
                                 Lang.getEmbed('validation.roleHierarchyError', LangCode.EN_US, {
                                     BOT: msg.client.user.toString(),
-                                    ICON: msg.client.user.avatarURL(),
+                                    ICON: msg.client.user.displayAvatarURL(),
                                 })
                             );
                             return;
@@ -277,7 +277,7 @@ export class SetupRequired {
                                     {
                                         AMOUNT: membersWithRole.toString(),
                                         S_Value: membersWithRole > 1 ? 's' : '',
-                                        ICON: msg.client.user.avatarURL(),
+                                        ICON: msg.client.user.displayAvatarURL(),
                                     }
                                 )
                             );
@@ -286,7 +286,7 @@ export class SetupRequired {
                                 channel,
                                 Lang.getEmbed('validation.birthdayRoleUsedError', LangCode.EN_US, {
                                     AMOUNT: membersWithRole.toString(),
-                                    ICON: msg.client.user.avatarURL(),
+                                    ICON: msg.client.user.displayAvatarURL(),
                                 })
                             );
                             return;
@@ -327,7 +327,7 @@ export class SetupRequired {
             Lang.getEmbed('results.requiredSetup', LangCode.EN_US, {
                 CHANNEL: channelOutput,
                 ROLE: roleOutput,
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
         );
 

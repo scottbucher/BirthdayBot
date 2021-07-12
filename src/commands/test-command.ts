@@ -58,7 +58,7 @@ export class TestCommand implements Command {
             MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;
@@ -70,7 +70,7 @@ export class TestCommand implements Command {
             MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;
@@ -245,7 +245,7 @@ export class TestCommand implements Command {
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             let testingEmbed = Lang.getEmbed('results.birthdayTest', LangCode.EN_US, {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
                 .setColor(Config.colors.default)
                 .addField(
@@ -425,7 +425,7 @@ export class TestCommand implements Command {
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             let testingEmbed = Lang.getEmbed('results.memberAnniversaryTest', LangCode.EN_US, {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
                 .addField(
                     Lang.getRef('terms.defaultTimezone', LangCode.EN_US),
@@ -517,7 +517,7 @@ export class TestCommand implements Command {
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             let testingEmbed = Lang.getEmbed('results.serverAnniversaryTest', LangCode.EN_US, {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
                 .addField(
                     Lang.getRef('terms.defaultTimezone', LangCode.EN_US),

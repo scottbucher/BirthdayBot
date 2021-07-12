@@ -190,8 +190,8 @@ export class SetCommand implements Command {
                 channel,
                 Lang.getEmbed('userPrompts.birthdaySetupTimeZone', LangCode.EN_US, {
                     TARGET: target.username,
-                    AUTHOR_ICON: target.avatarURL(),
-                    ICON: msg.client.user.avatarURL(),
+                    AUTHOR_ICON: target.displayAvatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                     TAG: target.tag,
                 })
             );
@@ -211,7 +211,7 @@ export class SetCommand implements Command {
                                 LangCode.EN_US,
                                 {
                                     TARGET: target.username,
-                                    ICON: msg.client.user.avatarURL(),
+                                    ICON: msg.client.user.displayAvatarURL(),
                                 }
                             )
                         );
@@ -224,7 +224,7 @@ export class SetCommand implements Command {
                             channel,
                             Lang.getEmbed('validation.invalidTimezone', LangCode.EN_US, {
                                 TARGET: target.username,
-                                ICON: msg.client.user.avatarURL(),
+                                ICON: msg.client.user.displayAvatarURL(),
                             })
                         );
                         return;
@@ -248,10 +248,10 @@ export class SetCommand implements Command {
                 channel,
                 Lang.getEmbed('userPrompts.birthdaySetupBirthday', LangCode.EN_US, {
                     TARGET: target.username,
-                    AUTHOR_ICON: target.avatarURL(),
-                    ICON: msg.client.user.avatarURL(),
+                    AUTHOR_ICON: target.displayAvatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                     TAG: target.tag,
-                }).setAuthor(target.tag, target.avatarURL())
+                }).setAuthor(target.tag, target.displayAvatarURL())
             );
 
             birthday = await CollectorUtils.collectByMessage(
@@ -306,7 +306,7 @@ export class SetCommand implements Command {
             TIMEZONE: timeZone,
             TARGET_FOOTER: target.username,
             CHANGES_LEFT: `${changesLeft}`,
-            ICON: msg.client.user.avatarURL(),
+            ICON: msg.client.user.displayAvatarURL(),
         });
 
         let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
@@ -342,7 +342,7 @@ export class SetCommand implements Command {
                     BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                     TIMEZONE: timeZone,
                     AMOUNT: `${changesLeft - 1}`,
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;

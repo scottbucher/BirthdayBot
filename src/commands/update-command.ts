@@ -25,7 +25,7 @@ export class UpdateCommand implements Command {
             channel,
             Lang.getEmbed('info.update', LangCode.EN_US).setAuthor(
                 'Birthday Bot',
-                msg.client.user.avatarURL()
+                msg.client.user.displayAvatarURL()
             )
         );
     }

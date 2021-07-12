@@ -62,7 +62,7 @@ export class PurgeCommand implements Command {
                 CHANGES_LEFT: changesLeft.toString(),
                 APPEND:
                     changesLeft === 0 ? Lang.getRef('prompts.outOfAttemtps', LangCode.EN_US) : '',
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {

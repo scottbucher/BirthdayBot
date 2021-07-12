@@ -10,7 +10,7 @@ import moment from 'moment';
 let Config = require('../../../config/config.json');
 
 export class MemberAnniversaryRoleClaimSubCommand {
-    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) { }
+    constructor(private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
 
     public async execute(
         args: string[],
@@ -23,7 +23,7 @@ export class MemberAnniversaryRoleClaimSubCommand {
             MessageUtils.send(
                 channel,
                 Lang.getEmbed('premiumRequired.anniversaryRoles', LangCode.EN_US, {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;
@@ -92,7 +92,7 @@ export class MemberAnniversaryRoleClaimSubCommand {
         await MessageUtils.send(
             channel,
             Lang.getEmbed('results.memberAnniversaryRolesClaimed', LangCode.EN_US, {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
         );
     }

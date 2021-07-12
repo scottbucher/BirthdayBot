@@ -17,7 +17,7 @@ export class SettingsCommand implements Command {
     public requirePremium = false;
     public getPremium = true;
 
-    constructor(private guildRepo: GuildRepo, private trustedRoleRepo: TrustedRoleRepo) { }
+    constructor(private guildRepo: GuildRepo, private trustedRoleRepo: TrustedRoleRepo) {}
 
     async execute(
         args: string[],
@@ -31,7 +31,7 @@ export class SettingsCommand implements Command {
         let type =
             args.length > 2
                 ? FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ??
-                'general'
+                  'general'
                 : 'general';
 
         // split settings into general settings, message settings, advanced settings
@@ -51,21 +51,21 @@ export class SettingsCommand implements Command {
                 guildData.BirthdayChannelDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.channels.resolve(guildData.BirthdayChannelDiscordId)?.toString() ||
-                    `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
+                      `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
             memberAnniversaryChannel =
                 guildData.MemberAnniversaryChannelDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.channels
-                        .resolve(guildData.MemberAnniversaryChannelDiscordId)
-                        ?.toString() ||
-                    `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
+                          .resolve(guildData.MemberAnniversaryChannelDiscordId)
+                          ?.toString() ||
+                      `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
             serverAnniversaryChannel =
                 guildData.ServerAnniversaryChannelDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.channels
-                        .resolve(guildData.ServerAnniversaryChannelDiscordId)
-                        ?.toString() ||
-                    `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
+                          .resolve(guildData.ServerAnniversaryChannelDiscordId)
+                          ?.toString() ||
+                      `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
 
             // Get our mention settings
             birthdayMentionSetting = FormatUtils.getMentionSetting(
@@ -115,7 +115,7 @@ export class SettingsCommand implements Command {
                         LangCode.EN_US
                     ),
                     DATE: new Date().getFullYear().toString(),
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
         } else if (type === 'advanced') {
@@ -138,7 +138,7 @@ export class SettingsCommand implements Command {
                 guildData.BirthdayMasterRoleDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
-                    `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
+                      `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
 
             let trustedRoleCount =
                 (await this.trustedRoleRepo.getTrustedRoles(msg.guild.id))?.trustedRoles.length ??
@@ -160,7 +160,7 @@ export class SettingsCommand implements Command {
                         LangCode.EN_US
                     ),
                     DATE: new Date().getFullYear().toString(),
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
         } else {
@@ -170,7 +170,7 @@ export class SettingsCommand implements Command {
                 guildData.BirthdayRoleDiscordId === '0'
                     ? Lang.getRef('terms.notSet', LangCode.EN_US)
                     : guild.roles.resolve(guildData.BirthdayRoleDiscordId)?.toString() ||
-                    `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
+                      `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
 
             let nameFormat =
                 guildData.NameFormat.charAt(0).toUpperCase() + guildData.NameFormat.slice(1);
@@ -194,7 +194,7 @@ export class SettingsCommand implements Command {
                         LangCode.EN_US
                     ),
                     DATE: new Date().getFullYear().toString(),
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
         }

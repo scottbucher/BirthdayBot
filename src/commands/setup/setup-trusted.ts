@@ -46,7 +46,7 @@ export class SetupTrusted {
             'serverPrompts.trustedSetupPreventsRole',
             LangCode.EN_US,
             {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             }
         );
 
@@ -79,7 +79,7 @@ export class SetupTrusted {
             'serverPrompts.trustedSetupPreventsMessage',
             LangCode.EN_US,
             {
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             }
         );
 
@@ -114,7 +114,7 @@ export class SetupTrusted {
                 'serverPrompts.trustedSetupRequireAll',
                 LangCode.EN_US,
                 {
-                    ICON: msg.client.user.avatarURL(),
+                    ICON: msg.client.user.displayAvatarURL(),
                 }
             );
 
@@ -157,12 +157,12 @@ export class SetupTrusted {
                   PREVENTS_ROLE: preventRole === 1 ? 'True' : 'False',
                   PREVENTS_MESSAGE: preventMessage === 1 ? 'True' : 'False',
                   REQUIRE_ALL_ROLES: requireAllTrustedRoles === 1 ? 'True' : 'False',
-                  ICON: msg.client.user.avatarURL(),
+                  ICON: msg.client.user.displayAvatarURL(),
               })
             : Lang.getEmbed('results.trustedSetup', LangCode.EN_US, {
                   PREVENTS_ROLE: preventRole === 1 ? 'True' : 'False',
                   PREVENTS_MESSAGE: preventMessage === 1 ? 'True' : 'False',
-                  ICON: msg.client.user.avatarURL(),
+                  ICON: msg.client.user.displayAvatarURL(),
               });
 
         await MessageUtils.send(channel, embed);

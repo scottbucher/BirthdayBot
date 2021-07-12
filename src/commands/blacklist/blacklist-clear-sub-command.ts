@@ -47,7 +47,7 @@ export class BlacklistClearSubCommand {
             channel,
             Lang.getEmbed('serverPrompts.blacklistClearConfirmation', LangCode.EN_US, {
                 TOTAL: blacklisted.blacklist.length.toString(),
-                ICON: msg.client.user.avatarURL(),
+                ICON: msg.client.user.displayAvatarURL(),
             })
         ); // Send confirmation and emotes
         for (let option of trueFalseOptions) {
