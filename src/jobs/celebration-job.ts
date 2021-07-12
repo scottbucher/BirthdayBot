@@ -27,9 +27,9 @@ export class CelebrationJob implements Job {
 
     public async run(): Promise<void> {
         let now = moment();
-        let today = moment().format('MM-DD');
-        let tomorrow = moment().add(1, 'day').format('MM-DD');
-        let yesterday = moment().subtract(1, 'day').format('MM-DD');
+        let today = now.clone().format('MM-DD');
+        let tomorrow = now.clone().add(1, 'day').format('MM-DD');
+        let yesterday = now.clone().subtract(1, 'day').format('MM-DD');
 
         // Get a user data list of all POSSIBLE birthday events, this includes birthday role, message AND role take.
         // Do to timezones and custom message time this can range by a day, thus we get 3 days worth of birthdays for each check
@@ -210,7 +210,7 @@ export class CelebrationJob implements Job {
                 guildsWithAnniversaryMessage.push(guild);
 
             // We now have the full, filtered, list of guildsWithAnniversaryMessage
-            await TimeUtils.sleep(300);
+            await TimeUtils.sleep(600);
         }
 
         // We should now have the filtered lists of birthdayMessageGuildMembers, memberAnniversaryMessageGuildMembers, and guildsWithAnniversaryMessage
