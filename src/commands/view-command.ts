@@ -18,7 +18,7 @@ export class ViewCommand implements Command {
     public requirePremium = false;
     public getPremium = false;
 
-    constructor(private userRepo: UserRepo) { }
+    constructor(private userRepo: UserRepo) {}
 
     public async execute(
         args: string[],
@@ -70,59 +70,61 @@ export class ViewCommand implements Command {
             return;
         }
 
+        if (!target) target = msg.member;
+
         if (type === 'birthday') {
             let userData = await this.userRepo.getUser(target.id);
 
             if (!userData || !userData.Birthday || !userData.TimeZone) {
                 target === msg.member
                     ? await MessageUtils.send(
-                        channel,
-                        Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US)
-                    )
+                          channel,
+                          Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US)
+                      )
                     : await MessageUtils.send(
-                        channel,
-                        Lang.getEmbed('validation.userBirthdayNotSet', LangCode.EN_US, {
-                            USER: target.toString(),
-                        })
-                    );
+                          channel,
+                          Lang.getEmbed('validation.userBirthdayNotSet', LangCode.EN_US, {
+                              USER: target.toString(),
+                          })
+                      );
                 return;
             }
 
             msg.member === target
                 ? await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('results.viewBirthday', LangCode.EN_US, {
-                        BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
-                        TIMEZONE: userData.TimeZone,
-                        CHANGES_LEFT: userData.ChangesLeft.toString(),
-                        ICON: msg.client.user.avatarURL(),
-                    })
-                )
+                      channel,
+                      Lang.getEmbed('results.viewBirthday', LangCode.EN_US, {
+                          BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
+                          TIMEZONE: userData.TimeZone,
+                          CHANGES_LEFT: userData.ChangesLeft.toString(),
+                          ICON: msg.client.user.avatarURL(),
+                      })
+                  )
                 : await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('results.viewUserBirthday', LangCode.EN_US, {
-                        USER: target.toString(),
-                        BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
-                        TIMEZONE: userData.TimeZone,
-                    })
-                );
+                      channel,
+                      Lang.getEmbed('results.viewUserBirthday', LangCode.EN_US, {
+                          USER: target.toString(),
+                          BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
+                          TIMEZONE: userData.TimeZone,
+                      })
+                  );
         } else if (type === 'memberanniversary') {
             let memberAnniversary = moment(target.joinedAt).format('MMMM Do');
 
             msg.member === target
                 ? await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('results.viewMemberAnniversary', LangCode.EN_US, {
-                        DATE: memberAnniversary,
-                    })
-                )
+                      channel,
+                      Lang.getEmbed('results.viewMemberAnniversary', LangCode.EN_US, {
+                          DATE: memberAnniversary,
+                      })
+                  )
                 : await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('results.viewUserMemberAnniversary', LangCode.EN_US, {
-                        USER: target.toString(),
-                        DATE: memberAnniversary,
-                    })
-                );
+                      channel,
+                      Lang.getEmbed('results.viewUserMemberAnniversary', LangCode.EN_US, {
+                          USER: target.toString(),
+                          DATE: memberAnniversary,
+                      })
+                  );
         }
     }
 }
