@@ -137,7 +137,7 @@ export class SetCommand implements Command {
 
         // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
         if (
-            !(channel instanceof DMChannel) &&
+            guildData &&
             guildData?.DefaultTimezone !== '0' &&
             (!timeZone || timeZone !== guildData?.DefaultTimezone)
         ) {
