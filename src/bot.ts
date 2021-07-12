@@ -65,7 +65,6 @@ export class Bot {
 
         if (!Debug.dummyMode.enabled) {
             this.jobService.start();
-            Logger.info(Logs.info.startedJobs);
         }
 
         this.ready = true;
