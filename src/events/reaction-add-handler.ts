@@ -128,7 +128,8 @@ export class ReactionAddHandler implements EventHandler {
         try {
             users = await msgReaction?.users.fetch();
         } catch (error) {
-            Logger.error(Logs.error.userFetch, error);
+            // This doesn't seem like a log we need, essentially, if it fails, it's not a big deal
+            // Logger.error(Logs.error.userFetch, error);
             return;
         }
 
