@@ -103,8 +103,11 @@ export class TestCommand implements Command {
                     }
                 }
             }
-            userData = await this.userRepo.getUser(target.id);
         }
+
+        // If we have a target get their data otherwise use the client
+        if (!target) target = msg.client.user;
+        else if (!target.bot) userData = await this.userRepo.getUser(target.id);
 
         // Default target to bot for the test
         if (!target) target = msg.client.user;
