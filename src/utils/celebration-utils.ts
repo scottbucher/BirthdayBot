@@ -440,16 +440,16 @@ export class CelebrationUtils {
             let celebrationData = new GuildCelebrationData();
             celebrationData.guildData = rawData;
             celebrationData.customMessages = rawGuildCelebrationData.customMessages.filter(
-                guild => (guild.GuildId = rawData.GuildId)
+                c => c.GuildId === rawData.GuildId
             );
             celebrationData.blacklistedMembers = rawGuildCelebrationData.blacklistedMembers.filter(
-                guild => (guild.GuildId = rawData.GuildId)
+                b => b.GuildId === rawData.GuildId
             );
             celebrationData.trustedRoles = rawGuildCelebrationData.trustedRoles.filter(
-                guild => (guild.GuildId = rawData.GuildId)
+                t => t.GuildId === rawData.GuildId
             );
             celebrationData.anniversaryRoles = rawGuildCelebrationData.anniversaryRoles.filter(
-                guild => (guild.GuildId = rawData.GuildId)
+                ar => ar.GuildId === rawData.GuildId
             );
             dataSet.push(celebrationData);
         }
