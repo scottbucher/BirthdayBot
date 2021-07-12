@@ -1,4 +1,4 @@
-import { DMChannel, GuildMember, Message, TextChannel } from 'discord.js';
+import { DMChannel, GuildMember, Message, TextChannel, User } from 'discord.js';
 import { FormatUtils, GuildUtils, MessageUtils } from '../utils';
 
 import { Command } from './command';
@@ -38,7 +38,7 @@ export class ViewCommand implements Command {
 
         let checkArg = foundType ? 4 : 3;
 
-        let target: GuildMember;
+        let target: User;
 
         if (args.length === checkArg) {
             // Check if the user is trying to view another person's birthday
@@ -51,15 +51,15 @@ export class ViewCommand implements Command {
             }
 
             // Get who they are mentioning
-            target =
-                msg.mentions.members.first() ||
-                GuildUtils.findMember(msg.guild, args[checkArg - 1]);
+            target = (
+                msg.mentions.members.first() || GuildUtils.findMember(msg.guild, args[checkArg - 1])
+            )?.user;
 
             // Did we find a user?
             if (target) foundTarget = true;
         } else {
             // They didn't mention anyone
-            target = msg.member;
+            target = msg.author;
         }
 
         if (!foundTarget && !foundType && args.length > 2) {
@@ -70,13 +70,11 @@ export class ViewCommand implements Command {
             return;
         }
 
-        if (!target) target = msg.member;
-
         if (type === 'birthday') {
             let userData = await this.userRepo.getUser(target.id);
 
             if (!userData || !userData.Birthday || !userData.TimeZone) {
-                target === msg.member
+                target === msg.author
                     ? await MessageUtils.send(
                           channel,
                           Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US)
@@ -90,7 +88,7 @@ export class ViewCommand implements Command {
                 return;
             }
 
-            msg.member === target
+            msg.author === target
                 ? await MessageUtils.send(
                       channel,
                       Lang.getEmbed('results.viewBirthday', LangCode.EN_US, {
@@ -109,9 +107,10 @@ export class ViewCommand implements Command {
                       })
                   );
         } else if (type === 'memberanniversary') {
-            let memberAnniversary = moment(target.joinedAt).format('MMMM Do');
+            let guildMember = msg.guild.members.resolve(target.id);
+            let memberAnniversary = moment(guildMember.joinedAt).format('MMMM Do');
 
-            msg.member === target
+            msg.author === target
                 ? await MessageUtils.send(
                       channel,
                       Lang.getEmbed('results.viewMemberAnniversary', LangCode.EN_US, {
