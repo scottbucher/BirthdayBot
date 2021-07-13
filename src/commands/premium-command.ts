@@ -56,8 +56,9 @@ export class PremiumCommand implements Command {
                         Config.validation.message.maxCount.serverAnniversary.free.toString(),
                     SERVER_ANNIVERSARY_MESSAGE_MAX_PAID:
                         Config.validation.message.maxCount.serverAnniversary.paid.toString(),
-                    MAX_ANNIVERSARY_ROLES: Config.validation.trustedRoles.maxCount.paid.toString(),
-                    MAX_TRUSTED_ROLES: Config.validation.maxCount.paid.toString(),
+                    MAX_ANNIVERSARY_ROLES:
+                        Config.validation.memberAnniversaryRoles.maxCount.paid.toString(),
+                    MAX_TRUSTED_ROLES: Config.validation.trustedRoles.maxCount.paid.toString(),
                 })
             );
 
