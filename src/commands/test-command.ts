@@ -137,7 +137,7 @@ export class TestCommand implements Command {
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
             let roleCheck = false;
-            let messageCheck = PermissionUtils.canSend(messageChannel);
+            let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
             let trustedCheckMessage = false;
             let trustedCheckRole = false;
             let trustedPreventsMessage = guildData.TrustedPreventsMessage;
@@ -329,7 +329,7 @@ export class TestCommand implements Command {
 
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
-            let messageCheck = PermissionUtils.canSend(messageChannel);
+            let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
             let memberAnniversaryRolesCheck = false;
             let memberAnniversaryRoles: MemberAnniversaryRole[];
             let anniversaryResolvedRoles: Role[];
@@ -476,7 +476,7 @@ export class TestCommand implements Command {
 
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
-            let messageCheck = PermissionUtils.canSend(messageChannel);
+            let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
 
             let message = Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US);
             let color = Config.colors.default;
