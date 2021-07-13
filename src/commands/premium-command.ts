@@ -44,14 +44,20 @@ export class PremiumCommand implements Command {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('premiumPrompts.noSubscription', LangCode.EN_US, {
-                    BIRTHDAY_MESSAGE_MAX_FREE: Config.validation.message.maxCount.birthday.free.toLocaleString(),
-                    BIRTHDAY_MESSAGE_MAX_PAID: Config.validation.message.maxCount.birthday.paid.free.toLocaleString(),
-                    MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE: Config.validation.message.maxCount.memberAnniversary.paid.free.toLocaleString(),
-                    MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID: Config.validation.message.maxCount.memberAnniversary.paid.free.toLocaleString(),
-                    SERVER_ANNIVERSARY_MESSAGE_MAX_FREE: Config.validation.message.maxCount.serverAnniversary.paid.free.toLocaleString(),
-                    SERVER_ANNIVERSARY_MESSAGE_MAX_PAID: Config.validation.message.maxCount.serverAnniversary.paid.free.toLocaleString(),
-                    MAX_ANNIVERSARY_ROLES: Config.validation.trustedRoles.maxCount.paid.free.toLocaleString(),
-                    MAX_TRUSTED_ROLES: Config.validation.maxCount.paid.free.toLocaleString(),
+                    BIRTHDAY_MESSAGE_MAX_FREE:
+                        Config.validation.message.maxCount.birthday.free.toString(),
+                    BIRTHDAY_MESSAGE_MAX_PAID:
+                        Config.validation.message.maxCount.birthday.paid.toString(),
+                    MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE:
+                        Config.validation.message.maxCount.memberAnniversary.free.toString(),
+                    MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID:
+                        Config.validation.message.maxCount.memberAnniversary.paid.toString(),
+                    SERVER_ANNIVERSARY_MESSAGE_MAX_FREE:
+                        Config.validation.message.maxCount.serverAnniversary.free.toString(),
+                    SERVER_ANNIVERSARY_MESSAGE_MAX_PAID:
+                        Config.validation.message.maxCount.serverAnniversary.paid.toString(),
+                    MAX_ANNIVERSARY_ROLES: Config.validation.trustedRoles.maxCount.paid.toString(),
+                    MAX_TRUSTED_ROLES: Config.validation.maxCount.paid.toString(),
                 })
             );
 
