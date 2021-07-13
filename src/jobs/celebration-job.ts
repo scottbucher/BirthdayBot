@@ -217,6 +217,7 @@ export class CelebrationJob implements Job {
         // as well as the filtered lists of addBirthdayRoleGuildMembers, removeBirthdayRoleGuildMembers, and anniversaryRoleGuildMembers
         // This means we should be able to call the MessageService & the RoleService
 
+        Logger.info(Logs.info.messageServiceRun);
         this.messageService.run(
             this.client,
             guildCelebrationDatas,
@@ -226,6 +227,7 @@ export class CelebrationJob implements Job {
             premiumGuildIds
         );
 
+        Logger.info(Logs.info.roleServiceRun);
         this.roleService.run(
             this.client,
             guildCelebrationDatas,
