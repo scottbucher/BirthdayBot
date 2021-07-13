@@ -99,7 +99,7 @@ export class CelebrationUtils {
             birthdayFormatted = '03-01';
 
         // The date is correct, now check the time
-        return currentDateFormatted !== birthdayFormatted;
+        return currentDateFormatted === birthdayFormatted;
     }
 
     public static needsBirthdayRoleAdded(userData: UserData, guildData: GuildData): boolean {
