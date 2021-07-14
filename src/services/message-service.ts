@@ -187,7 +187,7 @@ export class MessageService {
                             await MessageUtils.sendWithDelay(
                                 birthdayChannel,
                                 customMessage.Embed ? embed : message,
-                                Config.delays.messages
+                                0 //Config.delays.messages
                             );
                         }
                     }
@@ -245,7 +245,7 @@ export class MessageService {
                     await MessageUtils.sendWithDelay(
                         birthdayChannel,
                         useEmbed ? embed : message,
-                        Config.delays.messages
+                        0 //Config.delays.messages
                     );
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -398,7 +398,7 @@ export class MessageService {
                             await MessageUtils.sendWithDelay(
                                 memberAnniversaryChannel,
                                 message,
-                                Config.delays.messages
+                                0 //Config.delays.messages
                             );
                     }
 
@@ -409,7 +409,7 @@ export class MessageService {
                             await MessageUtils.sendWithDelay(
                                 memberAnniversaryChannel,
                                 message,
-                                Config.delays.messages
+                                0 //Config.delays.messages
                             );
                     }
                 }
@@ -490,7 +490,7 @@ export class MessageService {
                     await MessageUtils.sendWithDelay(
                         serverAnniversaryChannel,
                         useEmbed ? embed : message,
-                        Config.delays.messages
+                        0 //Config.delays.messages
                     );
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -505,5 +505,6 @@ export class MessageService {
                 continue;
             }
         }
+        Logger.info(Logs.info.messageServiceCompleted);
     }
 }

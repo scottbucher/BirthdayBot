@@ -104,7 +104,11 @@ export class RoleService {
                         ) {
                             // Don't send an api request if they already have the role
                             if (!addBirthdayMember.roles.cache.has(birthdayRole.id)) {
-                                await ActionUtils.giveRole(addBirthdayMember, birthdayRole, Config.delays.roles);
+                                await ActionUtils.giveRole(
+                                    addBirthdayMember,
+                                    birthdayRole,
+                                    0 //Config.delays.roles
+                                );
                             }
                         }
                     }
@@ -113,7 +117,11 @@ export class RoleService {
                     for (let removeBirthdayMember of removeBirthdayGuildMembers) {
                         // Don't send an api request if they don't have the role
                         if (removeBirthdayMember.roles.cache.has(birthdayRole.id)) {
-                            await ActionUtils.removeRole(removeBirthdayMember, birthdayRole, Config.delays.roles);
+                            await ActionUtils.removeRole(
+                                removeBirthdayMember,
+                                birthdayRole,
+                                0 //Config.delays.roles
+                            );
                         }
                     }
                 }
@@ -137,7 +145,11 @@ export class RoleService {
                             if (roleData.Year === memberYears) {
                                 // Don't send an api request if they already have the role
                                 if (!addAnniversaryRoleMember.roles.cache.has(role.id)) {
-                                    await ActionUtils.giveRole(addAnniversaryRoleMember, role, Config.delays.roles);
+                                    await ActionUtils.giveRole(
+                                        addAnniversaryRoleMember,
+                                        role,
+                                        0 //Config.delays.roles
+                                    );
                                 }
                             }
                         }
@@ -157,5 +169,6 @@ export class RoleService {
                 continue;
             }
         }
+        Logger.info(Logs.info.roleServiceCompleted);
     }
 }

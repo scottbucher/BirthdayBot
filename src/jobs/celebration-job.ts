@@ -15,6 +15,7 @@ export class CelebrationJob implements Job {
     public name = 'Celebration';
     public schedule: string = Config.jobs.postCelebrationJob.schedule;
     public log: boolean = Config.jobs.postCelebrationJob.log;
+    public interval: number = Config.jobs.postBirthdays.interval;
 
     constructor(
         private client: Client,
@@ -48,21 +49,27 @@ export class CelebrationJob implements Job {
         }
         // Collection of guilds
         let guildCache = this.client.guilds.cache;
+        // Get list of guilds the client is connected to
+        let discordIds = guildCache.map(guild => guild.id);
 
         // String of guild ids who have an active subscription to birthday bot premium
         // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
         let premiumGuildIds: string[] = Config.payments.enabled
             ? (await this.subscriptionService.getAllSubscription('premium-1'))
                   .filter(g => g?.service)
-                  .map(g => g?.subscriber) ?? guildCache.map(guild => guild.id)
-            : guildCache.map(g => g.id);
-
-        // Get list of guilds the client is connected to
-        let discordIds = guildCache.map(guild => guild.id);
+                  .map(g => g?.subscriber) ?? discordIds
+            : discordIds;
 
         // Get the data from the database
         let guildCelebrationDatas = CelebrationUtils.convertCelebrationData(
             await this.combinedRepo.GetRawCelebrationData(discordIds)
+        );
+
+        Logger.info(
+            Logs.info.birthdayJobGuildCount.replace(
+                '{GUILD_COUNT}',
+                guildCelebrationDatas.length.toLocaleString()
+            )
         );
 
         // List of members with a birthday today
@@ -210,7 +217,7 @@ export class CelebrationJob implements Job {
                 guildsWithAnniversaryMessage.push(guild);
 
             // We now have the full, filtered, list of guildsWithAnniversaryMessage
-            await TimeUtils.sleep(600);
+            await TimeUtils.sleep(this.interval);
         }
 
         // We should now have the filtered lists of birthdayMessageGuildMembers, memberAnniversaryMessageGuildMembers, and guildsWithAnniversaryMessage
@@ -244,7 +251,7 @@ export class CelebrationJob implements Job {
             try {
                 Logger.info(Logs.info.birthdayJobStarted);
                 await this.run();
-                Logger.info(Logs.info.completedBirthdayJob);
+                // Logger.info(Logs.info.completedBirthdayJob);
             } catch (error) {
                 Logger.error(Logs.error.birthdayJob, error);
             }

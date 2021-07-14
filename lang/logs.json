@@ -8,6 +8,8 @@
         "jobRun": "Running job '{JOB}'.",
         "messageServiceRun": "Running the message service.",
         "roleServiceRun": "Running the role service.",
+        "messageServiceCompleted": "Completed the message service.",
+        "roleServiceCompleted": "Completed the role service.",
         "jobCompleted": "Job '{JOB}' completed.",
         "startedVotingApi": "Started the voting api.",
         "login": "Logged in as '{USER_TAG}'!",
