@@ -4,6 +4,7 @@ import { CombinedRepo, UserRepo } from '../services/database/repos';
 import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
 
 import { Job } from './job';
+import { SubscriptionStatus } from '../models';
 import { UserData } from '../models/database';
 import moment from 'moment';
 import schedule from 'node-schedule';
@@ -54,11 +55,14 @@ export class CelebrationJob implements Job {
 
         // String of guild ids who have an active subscription to birthday bot premium
         // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
-        let premiumGuildIds: string[] = Config.payments.enabled
-            ? (await this.subscriptionService.getAllSubscription('premium-1'))
-                  ?.filter(g => g?.service)
-                  ?.map(g => g?.subscriber) ?? discordIds
-            : discordIds;
+        let subStatuses: SubscriptionStatus[] = await this.subscriptionService.getAllSubscription(
+            'premium-1'
+        );
+
+        let premiumGuildIds: string[] =
+            Config.payments.enabled && subStatuses
+                ? subStatuses.filter(g => g?.service).map(g => g?.subscriber) ?? discordIds
+                : discordIds;
 
         // Get the data from the database
         let guildCelebrationDatas = CelebrationUtils.convertCelebrationData(
