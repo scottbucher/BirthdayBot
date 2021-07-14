@@ -1643,7 +1643,7 @@
                         "value": [
                             "- No voting needed for **any** commands",
                             "- Up to **{{BIRTHDAY_MESSAGE_MAX_FREE}}** custom birthday messages *(vs **{{BIRTHDAY_MESSAGE_MAX_PAID}}** free)*",
-                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** custom member anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MAX_PAID}}** free)*",
+                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** custom member anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID}}** free)*",
                             "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** custom server anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID}}** free)*",
                             "- Access to Member Anniversary Roles! (Up to {{MAX_ANNIVERSARY_ROLES}}!)",
                             "- Access to multiple Trusted Roles! (Up to {{MAX_TRUSTED_ROLES}}!)",
