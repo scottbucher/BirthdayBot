@@ -15,7 +15,7 @@ export class CelebrationJob implements Job {
     public name = 'Celebration';
     public schedule: string = Config.jobs.postCelebrationJob.schedule;
     public log: boolean = Config.jobs.postCelebrationJob.log;
-    public interval: number = Config.jobs.postBirthdays.interval;
+    public interval: number = Config.jobs.postCelebrationJob.interval;
 
     constructor(
         private client: Client,
