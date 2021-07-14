@@ -53,8 +53,8 @@ export class CelebrationJob implements Job {
         // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
         let premiumGuildIds: string[] = Config.payments.enabled
             ? (await this.subscriptionService.getAllSubscription('premium-1'))
-                  .filter(g => g.service)
-                  .map(g => g.subscriber)
+                  .filter(g => g?.service)
+                  .map(g => g?.subscriber) ?? guildCache.map(guild => guild.id)
             : guildCache.map(g => g.id);
 
         // Get list of guilds the client is connected to
