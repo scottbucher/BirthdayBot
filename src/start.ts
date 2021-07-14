@@ -112,6 +112,7 @@ async function start(): Promise<void> {
     let clientOptions: ClientOptions = {
         ws: { intents: Config.client.intents },
         partials: Config.client.partials,
+        fetchAllMembers: true,
         messageCacheMaxSize: Config.client.caches.messages.size,
         messageCacheLifetime: Config.client.caches.messages.lifetime,
         messageSweepInterval: Config.client.caches.messages.sweepInterval,
