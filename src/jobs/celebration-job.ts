@@ -56,8 +56,8 @@ export class CelebrationJob implements Job {
         // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
         let premiumGuildIds: string[] = Config.payments.enabled
             ? (await this.subscriptionService.getAllSubscription('premium-1'))
-                  .filter(g => g?.service)
-                  .map(g => g?.subscriber) ?? discordIds
+                  ?.filter(g => g?.service)
+                  ?.map(g => g?.subscriber) ?? discordIds
             : discordIds;
 
         // Get the data from the database
