@@ -187,7 +187,7 @@ export class MessageService {
                             await MessageUtils.sendWithDelay(
                                 birthdayChannel,
                                 customMessage.Embed ? embed : message,
-                                0 //Config.delays.messages
+                                100 //Config.delays.messages
                             );
                         }
                     }
@@ -245,7 +245,7 @@ export class MessageService {
                     await MessageUtils.sendWithDelay(
                         birthdayChannel,
                         useEmbed ? embed : message,
-                        0 //Config.delays.messages
+                        100 //Config.delays.messages
                     );
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -398,7 +398,7 @@ export class MessageService {
                             await MessageUtils.sendWithDelay(
                                 memberAnniversaryChannel,
                                 message,
-                                0 //Config.delays.messages
+                                100 //Config.delays.messages
                             );
                     }
 
@@ -409,7 +409,7 @@ export class MessageService {
                             await MessageUtils.sendWithDelay(
                                 memberAnniversaryChannel,
                                 message,
-                                0 //Config.delays.messages
+                                100 //Config.delays.messages
                             );
                     }
                 }
@@ -490,7 +490,7 @@ export class MessageService {
                     await MessageUtils.sendWithDelay(
                         serverAnniversaryChannel,
                         useEmbed ? embed : message,
-                        0 //Config.delays.messages
+                        100 //Config.delays.messages
                     );
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -107,7 +107,7 @@ export class RoleService {
                                 await ActionUtils.giveRole(
                                     addBirthdayMember,
                                     birthdayRole,
-                                    0 //Config.delays.roles
+                                    100 //Config.delays.roles
                                 );
                             }
                         }
@@ -120,7 +120,7 @@ export class RoleService {
                             await ActionUtils.removeRole(
                                 removeBirthdayMember,
                                 birthdayRole,
-                                0 //Config.delays.roles
+                                100 //Config.delays.roles
                             );
                         }
                     }
@@ -148,7 +148,7 @@ export class RoleService {
                                     await ActionUtils.giveRole(
                                         addAnniversaryRoleMember,
                                         role,
-                                        0 //Config.delays.roles
+                                        100 //Config.delays.roles
                                     );
                                 }
                             }
