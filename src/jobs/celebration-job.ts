@@ -112,31 +112,6 @@ export class CelebrationJob implements Job {
         for (let guild of guildCache.array()) {
             let hasPremium = premiumGuildIds.includes(guild.id);
             let guildMembers: Collection<string, GuildMember> = guild.members.cache;
-            let beforeCacheSize = guild.members.cache.size;
-
-            if (Math.abs(guild.memberCount - beforeCacheSize) > 1) {
-                try {
-                    guildMembers = await guild.members.fetch();
-                } catch (error) {
-                    guildMembers = guild.members.cache;
-                    // TODO: Update Logs
-                    Logger.error(
-                        Logs.error.fetchMemberError
-                            .replace('{GUILD_ID}', guild.id)
-                            .replace('{GUILD_NAME}', guild.name)
-                            .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                            .replace(
-                                '{MEMBER_CACHE_BEFORE_COUNT}',
-                                beforeCacheSize.toLocaleString()
-                            )
-                            .replace(
-                                '{MEMBER_CACHE_AFTER_COUNT}',
-                                guild.members.cache.size.toLocaleString()
-                            ),
-                        error
-                    );
-                }
-            }
 
             // Get the guildData for this guild
             let guildData = guildCelebrationDatas.find(
