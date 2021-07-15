@@ -203,24 +203,42 @@ export class CelebrationJob implements Job {
         // This means we should be able to call the MessageService & the RoleService
 
         Logger.info(Logs.info.messageServiceRun);
-        this.messageService.run(
-            this.client,
-            guildCelebrationDatas,
-            birthdayMessageGuildMembers,
-            memberAnniversaryMessageGuildMembers,
-            guildsWithAnniversaryMessage,
-            premiumGuildIds
+
+        let services = [];
+
+        services.push(
+            this.messageService
+                .run(
+                    this.client,
+                    guildCelebrationDatas,
+                    birthdayMessageGuildMembers,
+                    memberAnniversaryMessageGuildMembers,
+                    guildsWithAnniversaryMessage,
+                    premiumGuildIds
+                )
+                .catch(error => {
+                    // Error running the service
+                })
         );
 
         Logger.info(Logs.info.roleServiceRun);
-        this.roleService.run(
-            this.client,
-            guildCelebrationDatas,
-            addBirthdayRoleGuildMembers,
-            removeBirthdayRoleGuildMembers,
-            anniversaryRoleGuildMembers,
-            premiumGuildIds
+
+        services.push(
+            this.roleService
+                .run(
+                    this.client,
+                    guildCelebrationDatas,
+                    addBirthdayRoleGuildMembers,
+                    removeBirthdayRoleGuildMembers,
+                    anniversaryRoleGuildMembers,
+                    premiumGuildIds
+                )
+                .catch(error => {
+                    // Error running the service
+                })
         );
+
+        await Promise.allSettled(services);
     }
 
     public start(): void {
