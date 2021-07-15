@@ -1,4 +1,4 @@
-import { CelebrationUtils, MessageUtils } from '../utils';
+import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils';
 import { Client, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 
 import { GuildCelebrationData } from '../models/database';
@@ -504,6 +504,9 @@ export class MessageService {
                 );
                 continue;
             }
+
+            // Wait between guilds
+            await TimeUtils.sleep(Config.jobs.postCelebrationJob.interval);
         }
         Logger.info(Logs.info.messageServiceCompleted);
     }

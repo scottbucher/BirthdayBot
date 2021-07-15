@@ -9,7 +9,6 @@ let Logs = require('../../lang/logs.json');
 
 export class RoleService {
     // TODO: add to config
-    public interval: number = 0.5;
 
     public async run(
         client: Client,
@@ -157,7 +156,7 @@ export class RoleService {
                 }
 
                 // Wait between guilds
-                await TimeUtils.sleep(this.interval);
+                await TimeUtils.sleep(Config.jobs.postCelebrationJob.interval);
             } catch (error) {
                 // This guild had an error but we want to keep going
                 Logger.error(

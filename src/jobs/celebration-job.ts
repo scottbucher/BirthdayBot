@@ -196,7 +196,6 @@ export class CelebrationJob implements Job {
                 guildsWithAnniversaryMessage.push(guild);
 
             // We now have the full, filtered, list of guildsWithAnniversaryMessage
-            await TimeUtils.sleep(750);
         }
 
         // We should now have the filtered lists of birthdayMessageGuildMembers, memberAnniversaryMessageGuildMembers, and guildsWithAnniversaryMessage
