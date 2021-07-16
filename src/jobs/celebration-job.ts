@@ -203,6 +203,7 @@ export class CelebrationJob implements Job {
         // This means we should be able to call the MessageService & the RoleService
 
         Logger.info(Logs.info.messageServiceRun);
+        Logger.info(Logs.info.roleServiceRun);
 
         let services = [];
 
@@ -221,8 +222,6 @@ export class CelebrationJob implements Job {
                 })
         );
 
-        Logger.info(Logs.info.roleServiceRun);
-
         services.push(
             this.roleService
                 .run(
@@ -239,6 +238,8 @@ export class CelebrationJob implements Job {
         );
 
         await Promise.allSettled(services);
+        Logger.info(Logs.info.messageServiceCompleted);
+        Logger.info(Logs.info.roleServiceCompleted);
     }
 
     public start(): void {

@@ -536,6 +536,5 @@ export class MessageService {
                 `Delay after message service for guild ${guild.name} (ID:${guild.id}) has completed.`
             );
         }
-        Logger.info(Logs.info.messageServiceCompleted);
     }
 }
