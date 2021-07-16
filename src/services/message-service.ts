@@ -46,9 +46,12 @@ export class MessageService {
                 try {
                     guild = await client.guilds.fetch(filteredGuild.guildData.GuildDiscordId);
                 } catch (error) {
+                    // Wait between guilds less since we didn't do other calls
+                    await TimeUtils.sleep(200);
                     continue;
                 }
             }
+            Logger.info(`Running message service for guild ${guild.name} (ID:${guild.id})`);
 
             try {
                 // We need to filter the lists to only the GuildMembers in this guild and find the data for this guild
@@ -184,10 +187,17 @@ export class MessageService {
                                 await MessageUtils.send(birthdayChannel, mentionString);
 
                             let embed = new MessageEmbed().setDescription(message).setColor(color);
+
+                            Logger.info(
+                                `Sending user-specific birthday message for guild ${guild.name} (ID:${guild.id})`
+                            );
                             await MessageUtils.sendWithDelay(
                                 birthdayChannel,
                                 customMessage.Embed ? embed : message,
                                 100 //Config.delays.messages
+                            );
+                            Logger.info(
+                                `Sent user-specific  birthday message for guild ${guild.name} (ID:${guild.id})`
                             );
                         }
                     }
@@ -242,11 +252,15 @@ export class MessageService {
                         await MessageUtils.send(birthdayChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
+                    Logger.info(
+                        `Sending birthday message for guild ${guild.name} (ID:${guild.id})`
+                    );
                     await MessageUtils.sendWithDelay(
                         birthdayChannel,
                         useEmbed ? embed : message,
                         100 //Config.delays.messages
                     );
+                    Logger.info(`Sent birthday message for guild ${guild.name} (ID:${guild.id})`);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // The member anniversary channel must exists and we need to have members who need the message
@@ -390,7 +404,9 @@ export class MessageService {
                         }
                         counter++;
                     }
-
+                    Logger.info(
+                        `Sending all member anniversary messages for guild ${guild.name} (ID:${guild.id})`
+                    );
                     if (embedMessages.length > 0) {
                         // Send our message(s)
 
@@ -412,6 +428,9 @@ export class MessageService {
                                 100 //Config.delays.messages
                             );
                     }
+                    Logger.info(
+                        `Sent all member anniversary messages for guild ${guild.name} (ID:${guild.id})`
+                    );
                 }
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -487,10 +506,16 @@ export class MessageService {
                         await MessageUtils.send(serverAnniversaryChannel, mentionString);
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
+                    Logger.info(
+                        `Sending server anniversary messages for guild ${guild.name} (ID:${guild.id})`
+                    );
                     await MessageUtils.sendWithDelay(
                         serverAnniversaryChannel,
                         useEmbed ? embed : message,
                         100 //Config.delays.messages
+                    );
+                    Logger.info(
+                        `Sent server anniversary messages for guild ${guild.name} (ID:${guild.id})`
                     );
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -502,11 +527,14 @@ export class MessageService {
                         .replace('{GUILD_NAME}', guild.name),
                     error
                 );
-                continue;
             }
 
+            Logger.info(`Finished message service for guild ${guild.name} (ID:${guild.id})`);
             // Wait between guilds
             await TimeUtils.sleep(Config.jobs.postCelebrationJob.interval);
+            Logger.info(
+                `Delay after message service for guild ${guild.name} (ID:${guild.id}) has completed.`
+            );
         }
         Logger.info(Logs.info.messageServiceCompleted);
     }

@@ -38,8 +38,11 @@ export class RoleService {
             try {
                 guild = await client.guilds.fetch(filteredGuild.guildData.GuildDiscordId);
             } catch (error) {
+                // Wait between guilds less since we didn't do other calls
+                await TimeUtils.sleep(200);
                 continue;
             }
+            Logger.info(`Running role service for guild ${guild.name} (ID:${guild.id})`);
             try {
                 // We need to filter the GuildMember lists given by the parameters to only those in this guild
                 let addBirthdayGuildMembers = addBirthdayRoleGuildMembers.filter(
@@ -103,10 +106,16 @@ export class RoleService {
                         ) {
                             // Don't send an api request if they already have the role
                             if (!addBirthdayMember.roles.cache.has(birthdayRole.id)) {
+                                Logger.info(
+                                    `Giving birthday role to user in guild ${guild.name} (ID:${guild.id})`
+                                );
                                 await ActionUtils.giveRole(
                                     addBirthdayMember,
                                     birthdayRole,
                                     100 //Config.delays.roles
+                                );
+                                Logger.info(
+                                    `Giving birthday role to user in guild ${guild.name} (ID:${guild.id})`
                                 );
                             }
                         }
@@ -116,10 +125,16 @@ export class RoleService {
                     for (let removeBirthdayMember of removeBirthdayGuildMembers) {
                         // Don't send an api request if they don't have the role
                         if (removeBirthdayMember.roles.cache.has(birthdayRole.id)) {
+                            Logger.info(
+                                `Removing birthday role from user in guild ${guild.name} (ID:${guild.id})`
+                            );
                             await ActionUtils.removeRole(
                                 removeBirthdayMember,
                                 birthdayRole,
                                 100 //Config.delays.roles
+                            );
+                            Logger.info(
+                                `Removed birthday role from user in guild ${guild.name} (ID:${guild.id})`
                             );
                         }
                     }
@@ -144,29 +159,37 @@ export class RoleService {
                             if (roleData.Year === memberYears) {
                                 // Don't send an api request if they already have the role
                                 if (!addAnniversaryRoleMember.roles.cache.has(role.id)) {
+                                    Logger.info(
+                                        `Giving member anniversary role to user in guild ${guild.name} (ID:${guild.id})`
+                                    );
                                     await ActionUtils.giveRole(
                                         addAnniversaryRoleMember,
                                         role,
                                         100 //Config.delays.roles
+                                    );
+                                    Logger.info(
+                                        `Gave member anniversary role to user in guild ${guild.name} (ID:${guild.id})`
                                     );
                                 }
                             }
                         }
                     }
                 }
-
-                // Wait between guilds
-                await TimeUtils.sleep(Config.jobs.postCelebrationJob.interval);
             } catch (error) {
                 // This guild had an error but we want to keep going
                 Logger.error(
-                    Logs.error.messageServiceFailedForGuild
+                    Logs.error.roleServiceFailedForGuild
                         .replace('{GUILD_ID}', guild.id)
                         .replace('{GUILD_NAME}', guild.name),
                     error
                 );
-                continue;
             }
+            Logger.info(`Finished role service for guild ${guild.name} (ID:${guild.id})`);
+            // Wait between guilds
+            await TimeUtils.sleep(Config.jobs.postCelebrationJob.interval);
+            Logger.info(
+                `Delay after role service for guild ${guild.name} (ID:${guild.id}) has completed.`
+            );
         }
         Logger.info(Logs.info.roleServiceCompleted);
     }
