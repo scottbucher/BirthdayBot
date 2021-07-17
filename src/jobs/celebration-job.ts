@@ -137,8 +137,8 @@ export class CelebrationJob implements Job {
                 .array();
 
             // Only put those who need the birthday message (based on the timezone and hour) into birthdayMessageGuildMembers
-            birthdayMessageGuildMembers = birthdayMessageGuildMembers.concat(
-                membersWithBirthdayToday.filter(member =>
+            birthdayMessageGuildMembers.push(
+                ...membersWithBirthdayToday.filter(member =>
                     CelebrationUtils.needsBirthdayMessage(
                         birthdayUserData.find(data => data.UserDiscordId === member.id),
                         guildData
@@ -149,8 +149,8 @@ export class CelebrationJob implements Job {
             // We now have the full, filtered, list of birthdayMessageGuildMembers
 
             // Only put those who need the birthday role (based on the timezone and hour) into addBirthdayRoleGuildMembers
-            addBirthdayRoleGuildMembers = addBirthdayRoleGuildMembers.concat(
-                membersWithBirthdayToday.filter(member =>
+            addBirthdayRoleGuildMembers.push(
+                ...membersWithBirthdayToday.filter(member =>
                     CelebrationUtils.needsBirthdayRoleAdded(
                         birthdayUserData.find(data => data.UserDiscordId === member.id),
                         guildData
@@ -161,8 +161,8 @@ export class CelebrationJob implements Job {
             // We now have the full, filtered, list of addBirthdayRoleGuildMembers
 
             // Only put those who need the birthday role removed (based on the timezone and hour) into removeBirthdayRoleGuildMembers
-            removeBirthdayRoleGuildMembers = removeBirthdayRoleGuildMembers.concat(
-                membersWithBirthdayToday.filter(member =>
+            removeBirthdayRoleGuildMembers.push(
+                ...membersWithBirthdayToday.filter(member =>
                     CelebrationUtils.needsBirthdayRoleRemoved(
                         birthdayUserData.find(data => data.UserDiscordId === member.id),
                         guildData
@@ -181,13 +181,11 @@ export class CelebrationJob implements Job {
 
             // Only add these members to the anniversaryRolesGuildMembers array if the server has premium
             if (hasPremium) {
-                anniversaryRoleGuildMembers =
-                    anniversaryRoleGuildMembers.concat(anniversaryMembers);
+                anniversaryRoleGuildMembers.push(...anniversaryMembers);
             }
 
             // All servers get member anniversary messages so add them regardless of if they have premium
-            memberAnniversaryMessageGuildMembers =
-                memberAnniversaryMessageGuildMembers.concat(anniversaryMembers);
+            memberAnniversaryMessageGuildMembers.push(...anniversaryMembers);
 
             // We now have the full, filtered, list of memberAnniversaryMessageGuildMembers
 
