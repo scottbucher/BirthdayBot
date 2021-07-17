@@ -119,9 +119,9 @@ export class CelebrationJob implements Job {
             )?.guildData;
 
             // Get the blacklist for this guild
-            let blacklist = guildCelebrationDatas.find(
-                data => data.guildData.GuildDiscordId === guild.id
-            )?.blacklistedMembers;
+            let blacklist = guildCelebrationDatas
+                .find(data => data.guildData.GuildDiscordId === guild.id)
+                ?.blacklistedMembers.map(data => data.UserDiscordId);
 
             // We now have our list of guildMembers
 
@@ -132,7 +132,7 @@ export class CelebrationJob implements Job {
                         CelebrationUtils.isBirthdayToday(
                             birthdayUserData.find(data => data.UserDiscordId === member.id),
                             guildData
-                        ) && !blacklist.map(data => data.UserDiscordId).includes(member.id)
+                        ) && !blacklist.includes(member.id)
                 )
                 .array();
 
