@@ -7,6 +7,7 @@ import { Job } from './job';
 import { SubscriptionStatus } from '../models';
 import { UserData } from '../models/database';
 import moment from 'moment';
+import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
 
 let Config = require('../../config/config.json');
@@ -28,6 +29,8 @@ export class CelebrationJob implements Job {
     ) {}
 
     public async run(): Promise<void> {
+        Logger.info('Started fetching database information for guilds and users...');
+        let startCalculating = performance.now();
         let now = moment();
         let today = now.clone().format('MM-DD');
         let tomorrow = now.clone().add(1, 'day').format('MM-DD');
@@ -69,6 +72,13 @@ export class CelebrationJob implements Job {
             await this.combinedRepo.GetRawCelebrationData(discordIds)
         );
 
+        let endCalculating = performance.now();
+        Logger.info(
+            `Finished fetching database information for guilds and users in ${
+                (endCalculating - startCalculating) / 1000
+            }s`
+        );
+
         Logger.info(
             Logs.info.birthdayJobGuildCount.replace(
                 '{GUILD_COUNT}',
@@ -108,6 +118,9 @@ export class CelebrationJob implements Job {
 
         // This will be the array of GuildMembers who are able to get anniversary roles
         let anniversaryRoleGuildMembers: GuildMember[] = [];
+
+        Logger.info(`Start calculating all guild data...`);
+        let startCalculating2 = performance.now();
 
         for (let guild of guildCache.array()) {
             let hasPremium = premiumGuildIds.includes(guild.id);
@@ -195,6 +208,13 @@ export class CelebrationJob implements Job {
 
             // We now have the full, filtered, list of guildsWithAnniversaryMessage
         }
+
+        let endCalculating2 = performance.now();
+        Logger.info(
+            `Finished calculating all guild data in ${
+                (endCalculating2 - startCalculating2) / 1000
+            }s`
+        );
 
         // We should now have the filtered lists of birthdayMessageGuildMembers, memberAnniversaryMessageGuildMembers, and guildsWithAnniversaryMessage
         // as well as the filtered lists of addBirthdayRoleGuildMembers, removeBirthdayRoleGuildMembers, and anniversaryRoleGuildMembers

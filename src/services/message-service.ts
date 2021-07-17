@@ -5,6 +5,7 @@ import { GuildCelebrationData } from '../models/database';
 import { Lang } from './lang';
 import { LangCode } from '../models/enums';
 import { Logger } from '.';
+import { performance } from 'perf_hooks';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -36,6 +37,7 @@ export class MessageService {
 
         // Lets loop through the guilds that are left
         for (let filteredGuild of filteredGuilds) {
+            let guildServiceTimeStart = performance.now();
             // Lets see if we already have the guild
             let guild: Guild = guildsWithAnniversaryMessage.find(
                 data => data.id === filteredGuild.guildData.GuildDiscordId
@@ -528,8 +530,12 @@ export class MessageService {
                     error
                 );
             }
-
-            Logger.info(`Finished message service for guild ${guild.name} (ID:${guild.id})`);
+            let guildServiceTimeEnd = performance.now();
+            Logger.info(
+                `Finished message service for guild ${guild.name} (ID:${guild.id}) in ${
+                    (guildServiceTimeEnd - guildServiceTimeStart) / 1000
+                }s`
+            );
             // Wait between guilds
             await TimeUtils.sleep(Config.jobs.postCelebrationJob.interval);
             Logger.info(

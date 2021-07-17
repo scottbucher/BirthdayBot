@@ -3,6 +3,7 @@ import { Client, Guild, GuildMember, Role } from 'discord.js';
 import { GuildCelebrationData, MemberAnniversaryRole } from '../models/database';
 
 import { Logger } from '.';
+import { performance } from 'perf_hooks';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -34,6 +35,7 @@ export class RoleService {
 
         // Lets loop through the guilds
         for (let filteredGuild of filteredGuilds) {
+            let guildServiceTimeStart = performance.now();
             let guild: Guild;
             try {
                 guild = await client.guilds.fetch(filteredGuild.guildData.GuildDiscordId);
@@ -184,7 +186,12 @@ export class RoleService {
                     error
                 );
             }
-            Logger.info(`Finished role service for guild ${guild.name} (ID:${guild.id})`);
+            let guildServiceTimeEnd = performance.now();
+            Logger.info(
+                `Finished message service for guild ${guild.name} (ID:${guild.id}) in ${
+                    (guildServiceTimeEnd - guildServiceTimeStart) / 1000
+                }s`
+            );
             // Wait between guilds
             await TimeUtils.sleep(Config.jobs.postCelebrationJob.interval);
             Logger.info(
