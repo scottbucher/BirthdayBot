@@ -1,5 +1,5 @@
 import { CelebrationUtils, TimeUtils } from '../utils';
-import { Client, Collection, Guild, GuildMember } from 'discord.js';
+import { Client, Collection, Guild, GuildMember, Role, TextChannel } from 'discord.js';
 import { CombinedRepo, UserRepo } from '../services/database/repos';
 import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
 
@@ -9,6 +9,7 @@ import { UserData } from '../models/database';
 import moment from 'moment';
 import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
+import { BirthdayMemberRoleStatus, BirthdayMessageGuildMembers, BirthdayRoleGuildMembers, MemberAnniversaryMessageGuildMembers, MemberAnniversaryRoleGuildMember } from '../models/celebration-job';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -26,7 +27,7 @@ export class CelebrationJob implements Job {
         private messageService: MessageService,
         private roleService: RoleService,
         private subscriptionService: SubscriptionService
-    ) {}
+    ) { }
 
     public async run(): Promise<void> {
         Logger.info('Started fetching database information for guilds and users...');
@@ -74,8 +75,7 @@ export class CelebrationJob implements Job {
 
         let endCalculating = performance.now();
         Logger.info(
-            `Finished fetching database information for guilds and users in ${
-                (endCalculating - startCalculating) / 1000
+            `Finished fetching database information for guilds and users in ${(endCalculating - startCalculating) / 1000
             }s`
         );
 
@@ -87,13 +87,13 @@ export class CelebrationJob implements Job {
         );
 
         // List of members with a birthday today
-        let birthdayMessageGuildMembers: GuildMember[] = [];
+        let guildBirthdayMessageMemberData: BirthdayMessageGuildMembers[] = [];
 
         // This will be the array of GuildMembers who have an anniversary this hour
-        let memberAnniversaryMessageGuildMembers: GuildMember[] = [];
+        let guildBirthdayRoleData: BirthdayRoleGuildMembers[] = [];
 
         // This will be the array of guilds with server anniversaries today
-        let guildsWithAnniversaryMessage: Guild[] = [];
+        let guildAnniversaryMessageMemberData: MemberAnniversaryMessageGuildMembers[] = [];
 
         // Message service will take in a list of birthdayGuildMembers objects, a list of guild members with an anniversary today, and a list of guilds with an anniversary today
         // To get these we will:
@@ -110,14 +110,8 @@ export class CelebrationJob implements Job {
         // ----Simply check if this guild has a server anniversary today, tomorrow, or yesterday
         // ----Then check for the hour based on the timezone of the server
 
-        // This will be the array of GuildMembers who are able to get the birthday role
-        let addBirthdayRoleGuildMembers: GuildMember[] = [];
-
-        // This will be the array of GuildMembers who are able to have the birthday role removed
-        let removeBirthdayRoleGuildMembers: GuildMember[] = [];
-
         // This will be the array of GuildMembers who are able to get anniversary roles
-        let anniversaryRoleGuildMembers: GuildMember[] = [];
+        let guildAnniversaryRoleMemberData: MemberAnniversaryRoleGuildMember[] = [];
 
         Logger.info(`Start calculating all guild data...`);
         let startCalculating2 = performance.now();
@@ -136,8 +130,91 @@ export class CelebrationJob implements Job {
                 .find(data => data.guildData.GuildDiscordId === guild.id)
                 ?.blacklistedMembers.map(data => data.UserDiscordId);
 
-            // We now have our list of guildMembers
 
+            let birthdayChannel: TextChannel;
+            let memberAnniversaryChannel: TextChannel;
+            let serverAnniversaryChannel: TextChannel;
+            let birthdayRole: Role;
+
+            if (guildData.BirthdayChannelDiscordId !== '0') {
+                try {
+                    birthdayChannel = guild.channels.resolve(
+                        guildData.BirthdayChannelDiscordId
+                    ) as TextChannel;
+                } catch (error) {
+                    // No birthday channel
+                }
+            }
+
+            if (guildData.BirthdayRoleDiscordId !== '0') {
+                try {
+                    birthdayRole = guild.roles.resolve(
+                        guildData.BirthdayRoleDiscordId
+                    ) as Role;
+                } catch (error) {
+                    // No Birthday Role
+                }
+
+            }
+
+            if (birthdayChannel || birthdayRole) {
+                let membersWithBirthdayTodayOrTomorrow = guildMembers
+                    .filter(
+                        member =>
+                            CelebrationUtils.isBirthdayTodayOrYesterday(
+                                birthdayUserData.find(data => data.UserDiscordId === member.id),
+                                guildData
+                            ) && !blacklist.includes(member.id)
+                    )
+                    .array();
+
+                let birthdayMemberStatuses = membersWithBirthdayTodayOrTomorrow.map(m => CelebrationUtils.getBirthdayMemberStatuses(birthdayUserData.find(data => data.UserDiscordId === m.id), m, guildData))
+
+                if (birthdayChannel) {
+                    // Calculate who needs the birthday message & push them to BirthdayMessageGuildMembers
+                    guildBirthdayMessageMemberData.push(new BirthdayMessageGuildMembers(birthdayChannel, birthdayMemberStatuses.filter(m => m.needsMessage).map(m => m.member)))
+                }
+
+
+                if (birthdayRole) {
+                    // Calculate the give and take for birthday roles
+                    guildBirthdayRoleData.push(new BirthdayRoleGuildMembers(birthdayRole, birthdayMemberStatuses.filter(m => m.needsRoleAdded || m.needsRoleRemoved).map(m => new BirthdayMemberRoleStatus(m.member, m.needsRoleAdded ? m.needsRoleAdded : m.needsRoleRemoved))))
+                }
+            }
+
+            if (guildData.MemberAnniversaryChannelDiscordId !== '0') {
+                try {
+                    memberAnniversaryChannel = guild.channels.resolve(
+                        guildData.MemberAnniversaryChannelDiscordId
+                    ) as TextChannel;
+                } catch (error) {
+                    // No member anniversary channel
+                }
+            }
+
+
+            // Get the blacklist for this guild
+            let memberAnniversaryRoles = guildCelebrationDatas
+                .find(data => data.guildData.GuildDiscordId === guild.id)
+                ?.anniversaryRoles;
+
+            if (memberAnniversaryChannel || memberAnniversaryRoles.length > 0) {
+                let anniversaryMemberStatuses = guildMembers.map(m => CelebrationUtils.getAnniversaryMemberStatuses(m, guildData, memberAnniversaryRoles))
+
+                if (memberAnniversaryChannel) {
+                    guildAnniversaryMessageMemberData.push(new MemberAnniversaryMessageGuildMembers(memberAnniversaryChannel, anniversaryMemberStatuses.filter(m => m.needsMessage).map(m => m.member)))
+                }
+
+                if (memberAnniversaryRoles.length > 0) {
+                    //////////////// WORK ON YEET
+                    // guildAnniversaryRoleMemberData.push(new MemberAnniversaryRoleGuildMember(anniversaryMemberStatuses.filter(m => m.role !== null).map(m => m.role)))
+                }
+
+            }
+
+            /*
+            // We now have our list of guildMembers
+ 
             // Get a list of members with a birthday today (by using either the user or server timezone)
             let membersWithBirthdayToday = guildMembers
                 .filter(
@@ -148,7 +225,7 @@ export class CelebrationJob implements Job {
                         ) && !blacklist.includes(member.id)
                 )
                 .array();
-
+ 
             // Only put those who need the birthday message (based on the timezone and hour) into birthdayMessageGuildMembers
             birthdayMessageGuildMembers.push(
                 ...membersWithBirthdayToday.filter(member =>
@@ -158,9 +235,9 @@ export class CelebrationJob implements Job {
                     )
                 )
             );
-
+ 
             // We now have the full, filtered, list of birthdayMessageGuildMembers
-
+ 
             // Only put those who need the birthday role (based on the timezone and hour) into addBirthdayRoleGuildMembers
             addBirthdayRoleGuildMembers.push(
                 ...membersWithBirthdayToday.filter(member =>
@@ -170,9 +247,9 @@ export class CelebrationJob implements Job {
                     )
                 )
             );
-
+ 
             // We now have the full, filtered, list of addBirthdayRoleGuildMembers
-
+ 
             // Only put those who need the birthday role removed (based on the timezone and hour) into removeBirthdayRoleGuildMembers
             removeBirthdayRoleGuildMembers.push(
                 ...membersWithBirthdayToday.filter(member =>
@@ -182,37 +259,37 @@ export class CelebrationJob implements Job {
                     )
                 )
             );
-
+ 
             // We now have the full, filtered, list of removeBirthdayRoleGuildMembers
-
+ 
             // Next lets get the list of guild members who are eligible for the birthday role
-
+ 
             // Next lets find the list of members with anniversaries today
             let anniversaryMembers = guildMembers
                 .filter(member => CelebrationUtils.isMemberAnniversaryMessage(member, guildData))
                 .array();
-
+ 
             // Only add these members to the anniversaryRolesGuildMembers array if the server has premium
             if (hasPremium) {
                 anniversaryRoleGuildMembers.push(...anniversaryMembers);
             }
-
+ 
             // All servers get member anniversary messages so add them regardless of if they have premium
             memberAnniversaryMessageGuildMembers.push(...anniversaryMembers);
-
+ 
             // We now have the full, filtered, list of memberAnniversaryMessageGuildMembers
-
+ 
             // Next lets find the list of guildsWithAnniversaryMessage
             if (CelebrationUtils.isServerAnniversaryMessage(guild, guildData))
                 guildsWithAnniversaryMessage.push(guild);
-
+ 
             // We now have the full, filtered, list of guildsWithAnniversaryMessage
+            */
         }
 
         let endCalculating2 = performance.now();
         Logger.info(
-            `Finished calculating all guild data in ${
-                (endCalculating2 - startCalculating2) / 1000
+            `Finished calculating all guild data in ${(endCalculating2 - startCalculating2) / 1000
             }s`
         );
 
@@ -225,35 +302,35 @@ export class CelebrationJob implements Job {
 
         let services = [];
 
-        services.push(
-            this.messageService
-                .run(
-                    this.client,
-                    guildCelebrationDatas,
-                    birthdayMessageGuildMembers,
-                    memberAnniversaryMessageGuildMembers,
-                    guildsWithAnniversaryMessage,
-                    premiumGuildIds
-                )
-                .catch(error => {
-                    // Error running the service
-                })
-        );
+        // services.push(
+        //     this.messageService
+        //         .run(
+        //             this.client,
+        //             guildCelebrationDatas,
+        //             birthdayMessageGuildMembers,
+        //             memberAnniversaryMessageGuildMembers,
+        //             guildsWithAnniversaryMessage,
+        //             premiumGuildIds
+        //         )
+        //         .catch(error => {
+        //             // Error running the service
+        //         })
+        // );
 
-        services.push(
-            this.roleService
-                .run(
-                    this.client,
-                    guildCelebrationDatas,
-                    addBirthdayRoleGuildMembers,
-                    removeBirthdayRoleGuildMembers,
-                    anniversaryRoleGuildMembers,
-                    premiumGuildIds
-                )
-                .catch(error => {
-                    // Error running the service
-                })
-        );
+        // services.push(
+        //     this.roleService
+        //         .run(
+        //             this.client,
+        //             guildCelebrationDatas,
+        //             addBirthdayRoleGuildMembers,
+        //             removeBirthdayRoleGuildMembers,
+        //             anniversaryRoleGuildMembers,
+        //             premiumGuildIds
+        //         )
+        //         .catch(error => {
+        //             // Error running the service
+        //         })
+        // );
 
         await Promise.allSettled(services);
         Logger.info(Logs.info.messageServiceCompleted);
@@ -272,4 +349,5 @@ export class CelebrationJob implements Job {
             }
         });
     }
+
 }
