@@ -292,11 +292,32 @@ export class CelebrationJob implements Job {
 
         let services = [];
 
+        let messageGuildIds = [
+            ...guildBirthdayMessageMemberData.map(data => data.birthdayChannel.guild.id),
+            ...guildAnniversaryMessageMemberData.map(
+                data => data.memberAnniversaryChannel.guild.id
+            ),
+            ...guildsWithAnniversaryMessage.map(data => data.guild.id),
+        ];
+
+        let roleGuildIds = [
+            ...guildBirthdayRoleData.map(data => data.role.guild.id),
+            ...[
+                new Set(
+                    guildAnniversaryRoleMemberData.filter(
+                        data => data.memberAnniversaryRole.guild.id
+                    )
+                ),
+            ],
+        ];
+
         services.push(
             this.messageService
                 .run(
                     this.client,
-                    guildCelebrationDatas,
+                    guildCelebrationDatas.filter(data =>
+                        messageGuildIds.includes(data.guildData.GuildDiscordId)
+                    ),
                     guildBirthdayMessageMemberData,
                     guildAnniversaryMessageMemberData,
                     guildsWithAnniversaryMessage,
@@ -311,7 +332,9 @@ export class CelebrationJob implements Job {
             this.roleService
                 .run(
                     this.client,
-                    guildCelebrationDatas,
+                    guildCelebrationDatas.filter(data =>
+                        roleGuildIds.includes(data.guildData.GuildDiscordId)
+                    ),
                     guildBirthdayRoleData,
                     guildAnniversaryRoleMemberData,
                     premiumGuildIds
