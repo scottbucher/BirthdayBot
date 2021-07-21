@@ -1,10 +1,11 @@
-import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils';
-import { Client, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { CelebrationUtils, MessageUtils } from '../utils';
+import { Client, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 
-import { GuildCelebrationData } from '../models/database';
 import { Lang } from './lang';
 import { LangCode } from '../models/enums';
 import { Logger } from '.';
+import { BirthdayMessageGuildMembers, MemberAnniversaryMessageGuildMembers } from '../models';
+import { GuildCelebrationData } from '../models/database';
 import { performance } from 'perf_hooks';
 
 let Config = require('../../config/config.json');
@@ -16,138 +17,90 @@ export class MessageService {
     public async run(
         client: Client,
         guildCelebrationDatas: GuildCelebrationData[],
-        birthdayMessageGuildMembers: GuildMember[],
-        memberAnniversaryMessageGuildMembers: GuildMember[],
-        guildsWithAnniversaryMessage: Guild[],
+        birthdayMessageGuildMembers: BirthdayMessageGuildMembers[],
+        memberAnniversaryMemberGuildMembers: MemberAnniversaryMessageGuildMembers[],
+        serverAnniversaryMessageChannels: TextChannel[],
         guildsWithPremium: string[]
     ): Promise<void> {
-        // Only get the guilds which actually might need a message sent
-        let filteredGuilds = guildCelebrationDatas.filter(
-            data =>
-                birthdayMessageGuildMembers
-                    .map(member => member.guild.id)
-                    .includes(data.guildData.GuildDiscordId) ||
-                memberAnniversaryMessageGuildMembers
-                    .map(member => member.guild.id)
-                    .includes(data.guildData.GuildDiscordId) ||
-                guildsWithAnniversaryMessage
-                    .map(guild => guild.id)
-                    .includes(data.guildData.GuildDiscordId)
-        );
+        let birthdayMesagePerformanceStart = performance.now();
+        // Birhtday Messages
+        if (birthdayMessageGuildMembers.length > 0) {
+            for (let birthdayMessageGuildMember of birthdayMessageGuildMembers) {
+                // Calculate birthday messages for this guild (channel)
+                let birthdayMembers = birthdayMessageGuildMember.members;
+                let birthdayChannel = birthdayMessageGuildMember.birthdayChannel;
 
-        // Lets loop through the guilds that are left
-        for (let filteredGuild of filteredGuilds) {
-            let guildServiceTimeStart = performance.now();
-            // Lets see if we already have the guild
-            let guild: Guild = guildsWithAnniversaryMessage.find(
-                data => data.id === filteredGuild.guildData.GuildDiscordId
-            );
-
-            // If we don't we need to fetch it
-            if (!guild) {
+                let guild = birthdayChannel.guild;
                 try {
-                    guild = await client.guilds.fetch(filteredGuild.guildData.GuildDiscordId);
-                } catch (error) {
-                    // Wait between guilds less since we didn't do other calls
-                    await TimeUtils.sleep(200);
-                    continue;
-                }
-            }
-            Logger.info(`Running message service for guild ${guild.name} (ID:${guild.id})`);
-
-            try {
-                // We need to filter the lists to only the GuildMembers in this guild and find the data for this guild
-                let birthdaysInThisGuild: GuildMember[] = birthdayMessageGuildMembers.filter(
-                    member => member.guild.id === guild.id
-                );
-                let anniversariesInThisGuild: GuildMember[] =
-                    memberAnniversaryMessageGuildMembers.filter(
-                        member => member.guild.id === guild.id
-                    );
-                let thisGuildCelebrationData: GuildCelebrationData = guildCelebrationDatas.find(
-                    data => data.guildData.GuildDiscordId === guild.id
-                );
-
-                let hasPremium = guildsWithPremium.includes(guild.id);
-                let birthdayChannel: TextChannel;
-                let trustedRoles: Role[];
-                let memberAnniversaryChannel: TextChannel;
-                let serverAnniversaryChannel: TextChannel;
-
-                try {
-                    birthdayChannel = guild.channels.resolve(
-                        filteredGuild.guildData.BirthdayChannelDiscordId
-                    ) as TextChannel;
-                } catch (error) {
-                    // No birthday channel
-                }
-
-                try {
-                    memberAnniversaryChannel = guild.channels.resolve(
-                        filteredGuild.guildData.MemberAnniversaryChannelDiscordId
-                    ) as TextChannel;
-                } catch (error) {
-                    // No Member Anniversary Channel channel
-                }
-
-                try {
-                    serverAnniversaryChannel = guild.channels.resolve(
-                        filteredGuild.guildData.ServerAnniversaryChannelDiscordId
-                    ) as TextChannel;
-                } catch (error) {
-                    // No Server Anniversary channel
-                }
-
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // The birthday channel must exists and we need to have members who need the message
-                if (birthdayChannel && birthdaysInThisGuild.length > 0) {
-                    // Get our list of trusted roles
-                    trustedRoles = await CelebrationUtils.getTrustedRoleList(
-                        guild,
-                        filteredGuild.trustedRoles
+                    let guildCelebrationData = guildCelebrationDatas.find(
+                        g => g.guildData.GuildDiscordId === guild.id
                     );
 
-                    // Remove the GuildMembers who don't pass the trusted check
-                    birthdaysInThisGuild = birthdaysInThisGuild.filter(member =>
-                        CelebrationUtils.passesTrustedCheck(
-                            filteredGuild.guildData.RequireAllTrustedRoles,
-                            trustedRoles,
-                            member,
-                            filteredGuild.guildData.TrustedPreventsMessage,
-                            hasPremium
-                        )
-                    );
+                    let hasPremium = guildsWithPremium.includes(guild.id);
 
-                    // Get all birthday messages
-                    let birthdayMessages = filteredGuild.customMessages.filter(
+                    let trustedRoles: Role[];
+
+                    // If trusted prevents the message and there are trusted roles in the database lets try to resolve them
+                    if (
+                        guildCelebrationData.guildData.TrustedPreventsMessage &&
+                        guildCelebrationData.trustedRoles.length > 0
+                    ) {
+                        trustedRoles = await CelebrationUtils.getTrustedRoleList(
+                            guild,
+                            guildCelebrationData.trustedRoles
+                        );
+                    }
+
+                    // If there are trusted roles only take those who pass the trusted check
+                    if (trustedRoles?.length > 0) {
+                        birthdayMembers = birthdayMembers.filter(m =>
+                            CelebrationUtils.passesTrustedCheck(
+                                guildCelebrationData.guildData.RequireAllTrustedRoles,
+                                trustedRoles,
+                                m,
+                                guildCelebrationData.guildData.TrustedPreventsMessage,
+                                hasPremium
+                            )
+                        );
+
+                        // If we filter all members out we don't need to continue with birthday messages
+                        if (birthdayMembers.length === 0) continue;
+                    }
+
+                    // Get all regular birthday messages
+                    let birthdayMessages = guildCelebrationData.customMessages.filter(
                         message => message.Type === 'birthday' && message.UserDiscordId === '0'
                     );
 
-                    // Lets deal with the user specific messages if they have premium
+                    // User-Specific Birthday Messages
                     if (hasPremium) {
                         let color = Config.colors.default;
                         // All messages with a user id (and where that user id exists in our birthday guild member list) is a user specific message
-                        let birthdayUserSpecificMessages = filteredGuild.customMessages.filter(
-                            message =>
-                                message.Type === 'birthday' &&
-                                message.UserDiscordId !== '0' &&
-                                birthdaysInThisGuild
-                                    .map(member => member.id)
-                                    .includes(message.UserDiscordId)
+                        let memberIds = birthdayMembers.map(member => member.id);
+                        let birthdayUserSpecificMessages =
+                            guildCelebrationData.customMessages.filter(
+                                message =>
+                                    message.Type === 'birthday' &&
+                                    message.UserDiscordId !== '0' &&
+                                    memberIds.includes(message.UserDiscordId)
+                            );
+
+                        // Map to a user id string array
+                        let userSpecificMessageIds = birthdayUserSpecificMessages.map(
+                            message => message.UserDiscordId
                         );
 
                         // List of members with a user specific message
-                        let birthdayMembersUserSpecific: GuildMember[] =
-                            birthdaysInThisGuild.filter(member =>
-                                birthdayUserSpecificMessages
-                                    .map(message => message.UserDiscordId)
-                                    .includes(member.id)
-                            );
+                        let birthdayMembersUserSpecific: GuildMember[] = birthdayMembers.filter(
+                            member => userSpecificMessageIds.includes(member.id)
+                        );
 
                         // Now update the original list by removing guildMembers in the user specific list
-                        birthdaysInThisGuild = birthdaysInThisGuild.filter(
+                        birthdayMembers = birthdayMembers.filter(
                             birthday => !birthdayMembersUserSpecific.includes(birthday)
                         );
+
+                        let userSpecificMessagesToSend = [];
 
                         // Send our user specific messages for this guild
                         for (let birthdayMember of birthdayMembersUserSpecific) {
@@ -156,19 +109,10 @@ export class MessageService {
                             let customMessage = birthdayUserSpecificMessages.find(
                                 message => message.UserDiscordId
                             );
-                            // Get the mention string
-                            let mentionString =
-                                filteredGuild.guildData.BirthdayMentionSetting !== 'none'
-                                    ? CelebrationUtils.getMentionString(
-                                          filteredGuild.guildData,
-                                          guild,
-                                          'birthday'
-                                      )
-                                    : '';
 
                             // Compile our user list to put in the message
                             let userList = CelebrationUtils.getUserListString(
-                                filteredGuild.guildData,
+                                guildCelebrationData.guildData,
                                 [birthdayMember]
                             );
 
@@ -184,22 +128,41 @@ export class MessageService {
                             // Find the color of the embed
                             color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
 
+                            let embed = new MessageEmbed().setDescription(message).setColor(color);
+
+                            userSpecificMessagesToSend.push(customMessage.Embed ? embed : message);
+                        }
+
+                        // Send the user specific messages
+
+                        // Send our user specific messages for this guild
+                        if (userSpecificMessagesToSend.length > 0) {
+                            // Get the mention string
+                            let mentionString =
+                                guildCelebrationData.guildData.BirthdayMentionSetting !== 'none'
+                                    ? CelebrationUtils.getMentionString(
+                                          guildCelebrationData.guildData,
+                                          guild,
+                                          'birthday'
+                                      )
+                                    : '';
+
                             // Send our message(s)
                             if (mentionString && mentionString !== '')
                                 await MessageUtils.send(birthdayChannel, mentionString);
 
-                            let embed = new MessageEmbed().setDescription(message).setColor(color);
-
                             Logger.info(
-                                `Sending user-specific birthday message for guild ${guild.name} (ID:${guild.id})`
+                                `Sending user specific member anniversary messages for guild ${guild.name} (ID:${guild.id})`
                             );
-                            await MessageUtils.sendWithDelay(
-                                birthdayChannel,
-                                customMessage.Embed ? embed : message,
-                                100 //Config.delays.messages
-                            );
+                            for (let message of userSpecificMessagesToSend) {
+                                await MessageUtils.sendWithDelay(
+                                    birthdayChannel,
+                                    message,
+                                    100 //Config.delays.messages
+                                );
+                            }
                             Logger.info(
-                                `Sent user-specific  birthday message for guild ${guild.name} (ID:${guild.id})`
+                                `Sent user specific member anniversary messages for guild ${guild.name} (ID:${guild.id})`
                             );
                         }
                     }
@@ -211,9 +174,9 @@ export class MessageService {
 
                     // Get the mention string
                     let mentionString =
-                        filteredGuild.guildData.BirthdayMentionSetting !== 'none'
+                        guildCelebrationData.guildData.BirthdayMentionSetting !== 'none'
                             ? CelebrationUtils.getMentionString(
-                                  filteredGuild.guildData,
+                                  guildCelebrationData.guildData,
                                   guild,
                                   'birthday'
                               )
@@ -221,8 +184,8 @@ export class MessageService {
 
                     // Compile our user list to put in the message
                     let userList = CelebrationUtils.getUserListString(
-                        filteredGuild.guildData,
-                        birthdaysInThisGuild
+                        guildCelebrationData.guildData,
+                        birthdayMembers
                     );
 
                     // Add the compiled user list
@@ -263,34 +226,165 @@ export class MessageService {
                         100 //Config.delays.messages
                     );
                     Logger.info(`Sent birthday message for guild ${guild.name} (ID:${guild.id})`);
+                } catch (error) {
+                    // Error when giving out birthday messages
+                    Logger.error(
+                        Logs.error.birthdayMessageServiceFailed
+                            .replace('{GUILD_ID}', guild.id)
+                            .replace('{GUILD_NAME}', guild.name),
+                        error
+                    );
                 }
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // The member anniversary channel must exists and we need to have members who need the message
-                if (memberAnniversaryChannel && anniversariesInThisGuild.length > 0) {
+            }
+        }
+        Logger.info(
+            `Finished birthday message service in ${
+                (performance.now() - birthdayMesagePerformanceStart) / 1000
+            }s`
+        );
+
+        let memberAnniversaryMesagePerformanceStart = performance.now();
+        // Member Annviersary Messages
+        if (memberAnniversaryMemberGuildMembers.length > 0) {
+            for (let memberAnniversarymemberGuildMember of memberAnniversaryMemberGuildMembers) {
+                let memberAnniversaryMembers = memberAnniversarymemberGuildMember.members;
+                let memberAnniversaryChannel =
+                    memberAnniversarymemberGuildMember.memberAnniversaryChannel;
+                let guild = memberAnniversaryChannel.guild;
+
+                try {
+                    let guildCelebrationData = guildCelebrationDatas.find(
+                        g => g.guildData.GuildDiscordId === guild.id
+                    );
+
+                    let hasPremium = guildsWithPremium.includes(guild.id);
+
+                    // Get all regular birthday messages
+                    let memberAnniversaryMessages = guildCelebrationData.customMessages.filter(
+                        message =>
+                            message.Type === 'memberanniversary' && message.UserDiscordId === '0'
+                    );
+
+                    // User-Specific Member Anniversary Messages
+                    if (hasPremium) {
+                        let color = Config.colors.default;
+                        // All messages with a user id (and where that user id exists in our birthday guild member list) is a user specific message
+                        let memberIds = memberAnniversaryMembers.map(member => member.id);
+                        let memberAnniversaryUserSpecificMessages =
+                            guildCelebrationData.customMessages.filter(
+                                message =>
+                                    message.Type === 'memberanniversary' &&
+                                    message.UserDiscordId !== '0' &&
+                                    memberIds.includes(message.UserDiscordId)
+                            );
+
+                        // Map to a user id string array
+                        let userSpecificMessageIds = memberAnniversaryUserSpecificMessages.map(
+                            message => message.UserDiscordId
+                        );
+
+                        // List of members with a user specific message
+                        let memberAnniversaryMembersUserSpecific: GuildMember[] =
+                            memberAnniversaryMembers.filter(member =>
+                                userSpecificMessageIds.includes(member.id)
+                            );
+
+                        // Now update the original list by removing guildMembers in the user specific list
+                        memberAnniversaryMembers = memberAnniversaryMembers.filter(
+                            anniversary =>
+                                !memberAnniversaryMembersUserSpecific.includes(anniversary)
+                        );
+
+                        let userSpecificMessagesToSend = [];
+
+                        // Send our user specific messages for this guild
+                        for (let anniversaryMember of memberAnniversaryMembersUserSpecific) {
+                            let message: string;
+                            // Get our custom message
+                            let customMessage = memberAnniversaryUserSpecificMessages.find(
+                                message => message.UserDiscordId
+                            );
+
+                            // Compile our user list to put in the message
+                            let userList = CelebrationUtils.getUserListString(
+                                guildCelebrationData.guildData,
+                                [anniversaryMember]
+                            );
+
+                            // Replace the placeholders
+                            message = CelebrationUtils.replacePlaceHolders(
+                                customMessage.Message,
+                                guild,
+                                customMessage.Type,
+                                userList,
+                                CelebrationUtils.getMemberYears(
+                                    anniversaryMember,
+                                    guildCelebrationData.guildData
+                                )
+                            );
+
+                            // Find the color of the embed
+                            color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
+
+                            let embed = new MessageEmbed().setDescription(message).setColor(color);
+
+                            userSpecificMessagesToSend.push(customMessage.Embed ? embed : message);
+                        }
+
+                        // Send our user specific messages for this guild
+                        if (userSpecificMessagesToSend.length > 0) {
+                            // Get the mention string
+                            let mentionString =
+                                guildCelebrationData.guildData.MemberAnniversaryMentionSetting !==
+                                'none'
+                                    ? CelebrationUtils.getMentionString(
+                                          guildCelebrationData.guildData,
+                                          guild,
+                                          'memberanniversary'
+                                      )
+                                    : '';
+
+                            // Send our message(s)
+                            if (mentionString && mentionString !== '')
+                                await MessageUtils.send(memberAnniversaryChannel, mentionString);
+
+                            Logger.info(
+                                `Sending user specific member anniversary messages for guild ${guild.name} (ID:${guild.id})`
+                            );
+                            for (let message of userSpecificMessagesToSend) {
+                                await MessageUtils.sendWithDelay(
+                                    memberAnniversaryChannel,
+                                    message,
+                                    100 //Config.delays.messages
+                                );
+                            }
+                            Logger.info(
+                                `Sent user specific member anniversary messages for guild ${guild.name} (ID:${guild.id})`
+                            );
+                        }
+                    }
+
                     // Get our generic member anniversary message
                     let message = Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US);
                     let color = Config.colors.default;
                     let useEmbed = true;
 
-                    // Get all member anniversary messages
-                    let memberAnniversaryMessages = filteredGuild.customMessages.filter(
-                        message =>
-                            message.Type === 'memberanniversary' && message.UserDiscordId === '0'
-                    );
-
                     // Get an array of year values (Use set to remove duplicates)
                     let differentYears = [
                         ...new Set(
-                            anniversariesInThisGuild.map(data =>
-                                CelebrationUtils.getMemberYears(data, filteredGuild.guildData)
+                            memberAnniversaryMembers.map(data =>
+                                CelebrationUtils.getMemberYears(
+                                    data,
+                                    guildCelebrationData.guildData
+                                )
                             )
                         ),
                     ];
                     // Get the mention string
                     let mentionString =
-                        filteredGuild.guildData.MemberAnniversaryMentionSetting !== 'none'
+                        guildCelebrationData.guildData.MemberAnniversaryMentionSetting !== 'none'
                             ? CelebrationUtils.getMentionString(
-                                  filteredGuild.guildData,
+                                  guildCelebrationData.guildData,
                                   guild,
                                   'memberanniversary'
                               )
@@ -302,12 +396,12 @@ export class MessageService {
                     for (let year of differentYears) {
                         // Compile our user list to put in the message
                         let userList = CelebrationUtils.getUserListString(
-                            filteredGuild.guildData,
-                            anniversariesInThisGuild.filter(
+                            guildCelebrationData.guildData,
+                            memberAnniversaryMembers.filter(
                                 member =>
                                     CelebrationUtils.getMemberYears(
                                         member,
-                                        filteredGuild.guildData
+                                        guildCelebrationData.guildData
                                     ) === year
                             )
                         );
@@ -433,33 +527,51 @@ export class MessageService {
                     Logger.info(
                         `Sent all member anniversary messages for guild ${guild.name} (ID:${guild.id})`
                     );
+                } catch (error) {
+                    // Error when giving out member anniversary messages
+                    Logger.error(
+                        Logs.error.memberAnniversaryMessageServiceFailed
+                            .replace('{GUILD_ID}', guild.id)
+                            .replace('{GUILD_NAME}', guild.name),
+                        error
+                    );
                 }
+            }
+        }
+        Logger.info(
+            `Finished member anniversary message service in ${
+                (performance.now() - memberAnniversaryMesagePerformanceStart) / 1000
+            }s`
+        );
 
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // The server anniversary channel must exists and this guild needs to have Celebration Data
-                if (
-                    guildsWithAnniversaryMessage
-                        .map(g => g.id)
-                        .includes(filteredGuild.guildData.GuildDiscordId) &&
-                    serverAnniversaryChannel &&
-                    thisGuildCelebrationData
-                ) {
+        let serverAnniversaryMesagePerformanceStart = performance.now();
+        // Server Anniversary Messages
+        if (serverAnniversaryMessageChannels.length > 0) {
+            for (let serverAnniversaryChannel of serverAnniversaryMessageChannels) {
+                let guild = serverAnniversaryChannel.guild;
+
+                let guildCelebrationData = guildCelebrationDatas.find(
+                    g => g.guildData.GuildDiscordId === guild.id
+                );
+                try {
+                    let hasPremium = guildsWithPremium.includes(guild.id);
+
                     // Get our generic server anniversary message
                     let message = Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US);
                     let color = Config.colors.default;
                     let useEmbed = true;
 
                     // Get all server anniversary messages
-                    let serverAnniversaryMessages = filteredGuild.customMessages.filter(
+                    let serverAnniversaryMessages = guildCelebrationData.customMessages.filter(
                         message =>
                             message.Type === 'serveranniversary' && message.UserDiscordId === '0'
                     );
 
                     // Get the mention string
                     let mentionString =
-                        filteredGuild.guildData.ServerAnniversaryMentionSetting !== 'none'
+                        guildCelebrationData.guildData.ServerAnniversaryMentionSetting !== 'none'
                             ? CelebrationUtils.getMentionString(
-                                  filteredGuild.guildData,
+                                  guildCelebrationData.guildData,
                                   guild,
                                   'serveranniversary'
                               )
@@ -467,7 +579,7 @@ export class MessageService {
 
                     let serverYears = CelebrationUtils.getServerYears(
                         guild,
-                        filteredGuild.guildData
+                        guildCelebrationData.guildData
                     );
                     // Add the compiled user list
                     if (serverAnniversaryMessages.length > 0) {
@@ -519,28 +631,21 @@ export class MessageService {
                     Logger.info(
                         `Sent server anniversary messages for guild ${guild.name} (ID:${guild.id})`
                     );
+                } catch (error) {
+                    // Error when giving out server anniversary messages
+                    Logger.error(
+                        Logs.error.serverAnniversaryMessageServiceFailed
+                            .replace('{GUILD_ID}', guild.id)
+                            .replace('{GUILD_NAME}', guild.name),
+                        error
+                    );
                 }
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            } catch (error) {
-                // This guild had an error but we want to keep going
-                Logger.error(
-                    Logs.error.messageServiceFailedForGuild
-                        .replace('{GUILD_ID}', guild.id)
-                        .replace('{GUILD_NAME}', guild.name),
-                    error
-                );
             }
-            let guildServiceTimeEnd = performance.now();
-            Logger.info(
-                `Finished message service for guild ${guild.name} (ID:${guild.id}) in ${
-                    (guildServiceTimeEnd - guildServiceTimeStart) / 1000
-                }s`
-            );
-            // Wait between guilds
-            await TimeUtils.sleep(Config.jobs.postCelebrationJob.interval);
-            Logger.info(
-                `Delay after message service for guild ${guild.name} (ID:${guild.id}) has completed.`
-            );
         }
+        Logger.info(
+            `Finished server anniversary message service in ${
+                (performance.now() - serverAnniversaryMesagePerformanceStart) / 1000
+            }s`
+        );
     }
 }
