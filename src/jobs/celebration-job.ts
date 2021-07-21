@@ -4,7 +4,7 @@ import { CombinedRepo, UserRepo } from '../services/database/repos';
 import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
 
 import { Job } from './job';
-import { BirthdayMemberRoleStatus, BirthdayMessageGuildMembers, BirthdayRoleGuildMembers, MemberAnniversaryMessageGuildMembers, MemberAnniversaryRoleGuildMember, SubscriptionStatus } from '../models';
+import { BirthdayMemberRoleStatus, BirthdayMessageGuildMembers, BirthdayRoleGuildMembers, MemberAnniversaryMessageGuildMembers, MemberAnniversaryRoleGuildMembers, SubscriptionStatus } from '../models';
 import moment from 'moment';
 import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
@@ -95,14 +95,21 @@ export class CelebrationJob implements Job {
         let guildAnniversaryMessageMemberData: MemberAnniversaryMessageGuildMembers[] = [];
 
         // Object to send the role service for member anniversary role members
-        let guildAnniversaryRoleMemberData: MemberAnniversaryRoleGuildMember[] = [];
+        let guildAnniversaryRoleMemberData: MemberAnniversaryRoleGuildMembers[] = [];
 
         let guildsWithAnniversaryMessage: TextChannel[] = [];
 
         Logger.info(`Start calculating all guild data...`);
         let startCalculating2 = performance.now();
 
-        for (let guild of guildCache.array()) {
+        for (let guildInCache of guildCache.array()) {
+            let guild = guildInCache
+            try {
+                guild = await this.client.guilds.fetch(guildInCache.id);
+            } catch (error) {
+                await TimeUtils.sleep(200);
+                continue;
+            }
             let hasPremium = premiumGuildIds.includes(guild.id);
             let guildMembers: Collection<string, GuildMember> = guild.members.cache;
 
@@ -232,7 +239,7 @@ export class CelebrationJob implements Job {
                     let giveRoles = [...new Set(anniversaryMemberStatuses.map(m => m.role))];
                     for (let role of giveRoles) {
                         guildAnniversaryRoleMemberData.push(
-                            new MemberAnniversaryRoleGuildMember(
+                            new MemberAnniversaryRoleGuildMembers(
                                 role,
                                 anniversaryMemberStatuses
                                     .filter(m => m?.role === role)

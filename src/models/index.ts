@@ -10,7 +10,7 @@ export {
     BirthdayRoleGuildMembers,
     BirthdayMemberRoleStatus,
     MemberAnniversaryMessageGuildMembers,
-    MemberAnniversaryRoleGuildMember,
+    MemberAnniversaryRoleGuildMembers,
     BirthdayMemberStatus,
     AnniversaryMemberStatus
 } from './celebration-job'

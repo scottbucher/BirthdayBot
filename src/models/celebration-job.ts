@@ -16,7 +16,7 @@ export class MemberAnniversaryMessageGuildMembers {
     constructor(public memberAnniversaryChannel: TextChannel, public member: GuildMember[]) {}
 }
 
-export class MemberAnniversaryRoleGuildMember {
+export class MemberAnniversaryRoleGuildMembers {
     constructor(public memberAnniversaryRole: Role, public member: GuildMember[]) {}
 }
 
