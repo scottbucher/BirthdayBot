@@ -1,21 +1,21 @@
+import { CelebrationUtils, TimeUtils } from '../utils';
+import { Client, Collection, Guild, GuildMember, Role, TextChannel } from 'discord.js';
+import { CombinedRepo, UserRepo } from '../services/database/repos';
+import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
+
+import { Job } from './job';
 import {
     BirthdayMemberRoleStatus,
     BirthdayMessageGuildMembers,
     BirthdayRoleGuildMembers,
     MemberAnniversaryMessageGuildMembers,
-    MemberAnniversaryRoleGuildMember,
-} from '../models/celebration-job';
-import { CelebrationUtils, TimeUtils } from '../utils';
-import { Client, Collection, Guild, GuildMember, Role, TextChannel } from 'discord.js';
-import { CombinedRepo, UserRepo } from '../services/database/repos';
-import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
-import { MemberAnniversaryRole, UserData } from '../models/database';
-
-import { Job } from './job';
-import { SubscriptionStatus } from '../models';
+    MemberAnniversaryRoleGuildMembers,
+    SubscriptionStatus,
+} from '../models';
 import moment from 'moment';
 import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
+import { UserData, MemberAnniversaryRole } from '../models/database';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -103,14 +103,21 @@ export class CelebrationJob implements Job {
         let guildAnniversaryMessageMemberData: MemberAnniversaryMessageGuildMembers[] = [];
 
         // Object to send the role service for member anniversary role members
-        let guildAnniversaryRoleMemberData: MemberAnniversaryRoleGuildMember[] = [];
+        let guildAnniversaryRoleMemberData: MemberAnniversaryRoleGuildMembers[] = [];
 
         let guildsWithAnniversaryMessage: TextChannel[] = [];
 
         Logger.info(`Start calculating all guild data...`);
         let startCalculating2 = performance.now();
 
-        for (let guild of guildCache.array()) {
+        for (let guildInCache of guildCache.array()) {
+            let guild = guildInCache;
+            try {
+                guild = await this.client.guilds.fetch(guildInCache.id);
+            } catch (error) {
+                await TimeUtils.sleep(200);
+                continue;
+            }
             let hasPremium = premiumGuildIds.includes(guild.id);
             let guildMembers: Collection<string, GuildMember> = guild.members.cache;
 
@@ -241,7 +248,7 @@ export class CelebrationJob implements Job {
                     let giveRoles = [...new Set(anniversaryMemberStatuses.map(m => m.role))];
                     for (let role of giveRoles) {
                         guildAnniversaryRoleMemberData.push(
-                            new MemberAnniversaryRoleGuildMember(
+                            new MemberAnniversaryRoleGuildMembers(
                                 role,
                                 anniversaryMemberStatuses
                                     .filter(m => m?.role === role)
@@ -286,35 +293,57 @@ export class CelebrationJob implements Job {
 
         let services = [];
 
-        // services.push(
-        //     this.messageService
-        //         .run(
-        //             this.client,
-        //             guildCelebrationDatas,
-        //             birthdayMessageGuildMembers,
-        //             memberAnniversaryMessageGuildMembers,
-        //             guildsWithAnniversaryMessage,
-        //             premiumGuildIds
-        //         )
-        //         .catch(error => {
-        //             // Error running the service
-        //         })
-        // );
+        let messageGuildIds = [
+            ...guildBirthdayMessageMemberData.map(data => data.birthdayChannel.guild.id),
+            ...guildAnniversaryMessageMemberData.map(
+                data => data.memberAnniversaryChannel.guild.id
+            ),
+            ...guildsWithAnniversaryMessage.map(data => data.guild.id),
+        ];
 
-        // services.push(
-        //     this.roleService
-        //         .run(
-        //             this.client,
-        //             guildCelebrationDatas,
-        //             addBirthdayRoleGuildMembers,
-        //             removeBirthdayRoleGuildMembers,
-        //             anniversaryRoleGuildMembers,
-        //             premiumGuildIds
-        //         )
-        //         .catch(error => {
-        //             // Error running the service
-        //         })
-        // );
+        let roleGuildIds = [
+            ...guildBirthdayRoleData.map(data => data.role.guild.id),
+            ...[
+                new Set(
+                    guildAnniversaryRoleMemberData.filter(
+                        data => data.memberAnniversaryRole.guild.id
+                    )
+                ),
+            ],
+        ];
+
+        services.push(
+            this.messageService
+                .run(
+                    this.client,
+                    guildCelebrationDatas.filter(data =>
+                        messageGuildIds.includes(data.guildData.GuildDiscordId)
+                    ),
+                    guildBirthdayMessageMemberData,
+                    guildAnniversaryMessageMemberData,
+                    guildsWithAnniversaryMessage,
+                    premiumGuildIds
+                )
+                .catch(error => {
+                    // Error running the service
+                })
+        );
+
+        services.push(
+            this.roleService
+                .run(
+                    this.client,
+                    guildCelebrationDatas.filter(data =>
+                        roleGuildIds.includes(data.guildData.GuildDiscordId)
+                    ),
+                    guildBirthdayRoleData,
+                    guildAnniversaryRoleMemberData,
+                    premiumGuildIds
+                )
+                .catch(error => {
+                    // Error running the service
+                })
+        );
 
         await Promise.allSettled(services);
         Logger.info(Logs.info.messageServiceCompleted);

@@ -1,7 +1,7 @@
 import { GuildMember, Role, TextChannel } from 'discord.js';
 
 export class BirthdayMessageGuildMembers {
-    constructor(public birthdayChannel: TextChannel, public member: GuildMember[]) {}
+    constructor(public birthdayChannel: TextChannel, public members: GuildMember[]) {}
 }
 
 export class BirthdayRoleGuildMembers {
@@ -13,11 +13,11 @@ export class BirthdayMemberRoleStatus {
 }
 
 export class MemberAnniversaryMessageGuildMembers {
-    constructor(public memberAnniversaryChannel: TextChannel, public member: GuildMember[]) {}
+    constructor(public memberAnniversaryChannel: TextChannel, public members: GuildMember[]) {}
 }
 
-export class MemberAnniversaryRoleGuildMember {
-    constructor(public memberAnniversaryRole: Role, public member: GuildMember[]) {}
+export class MemberAnniversaryRoleGuildMembers {
+    constructor(public memberAnniversaryRole: Role, public members: GuildMember[]) {}
 }
 
 export class BirthdayMemberStatus {
@@ -31,8 +31,4 @@ export class BirthdayMemberStatus {
 
 export class AnniversaryMemberStatus {
     constructor(public member: GuildMember, public needsMessage: Boolean, public role: Role) {}
-}
-
-export class GenericCelebrationGuildMember {
-    constructor(public member: GuildMember, public date: string, public timezone: string) {}
 }

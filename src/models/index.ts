@@ -8,7 +8,9 @@ export {
 export {
     BirthdayMessageGuildMembers,
     BirthdayRoleGuildMembers,
+    BirthdayMemberRoleStatus,
     MemberAnniversaryMessageGuildMembers,
-    MemberAnniversaryRoleAddGuildMember,
-    BirthdayMemberStatus
+    MemberAnniversaryRoleGuildMembers,
+    BirthdayMemberStatus,
+    AnniversaryMemberStatus
 } from './celebration-job'
