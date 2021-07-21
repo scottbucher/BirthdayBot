@@ -188,7 +188,7 @@ export class CelebrationJob implements Job {
                                     m =>
                                         new BirthdayMemberRoleStatus(
                                             m.member,
-                                            m.needsRoleAdded ? m.needsRoleAdded : m.needsRoleRemoved
+                                            m.needsRoleAdded || m.needsRoleRemoved
                                         )
                                 )
                         )
@@ -237,6 +237,7 @@ export class CelebrationJob implements Job {
                 }
 
                 if (memberAnniversaryRoles && memberAnniversaryRoles.length > 0) {
+                    // Test that this removes duplicates
                     let giveRoles = [...new Set(anniversaryMemberStatuses.map(m => m.role))];
                     for (let role of giveRoles) {
                         guildAnniversaryRoleMemberData.push(

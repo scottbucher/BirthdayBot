@@ -129,7 +129,7 @@ export class CelebrationUtils {
         let currentHour = currentDate.hour();
 
         let needsBirthdayMessage =
-            currentHour === guildData.BirthdayMessageTime || Debug.alwaysGiveBirthdayMessagee;
+            currentHour === guildData.BirthdayMessageTime || Debug.alwaysGiveBirthdayMessage;
         let needsBirthdayRoleAdded = currentHour === 0 || Debug.alwaysGiveBirthdayRole;
         let needsBirthdayRoleRemoved = false;
 
