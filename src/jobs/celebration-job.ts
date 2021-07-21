@@ -4,7 +4,14 @@ import { CombinedRepo, UserRepo } from '../services/database/repos';
 import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
 
 import { Job } from './job';
-import { BirthdayMemberRoleStatus, BirthdayMessageGuildMembers, BirthdayRoleGuildMembers, MemberAnniversaryMessageGuildMembers, MemberAnniversaryRoleGuildMembers, SubscriptionStatus } from '../models';
+import {
+    BirthdayMemberRoleStatus,
+    BirthdayMessageGuildMembers,
+    BirthdayRoleGuildMembers,
+    MemberAnniversaryMessageGuildMembers,
+    MemberAnniversaryRoleGuildMembers,
+    SubscriptionStatus,
+} from '../models';
 import moment from 'moment';
 import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
@@ -26,7 +33,7 @@ export class CelebrationJob implements Job {
         private messageService: MessageService,
         private roleService: RoleService,
         private subscriptionService: SubscriptionService
-    ) { }
+    ) {}
 
     public async run(): Promise<void> {
         Logger.info('Started fetching database information for guilds and users...');
@@ -74,7 +81,8 @@ export class CelebrationJob implements Job {
 
         let endCalculating = performance.now();
         Logger.info(
-            `Finished fetching database information for guilds and users in ${(endCalculating - startCalculating) / 1000
+            `Finished fetching database information for guilds and users in ${
+                (endCalculating - startCalculating) / 1000
             }s`
         );
 
@@ -103,7 +111,7 @@ export class CelebrationJob implements Job {
         let startCalculating2 = performance.now();
 
         for (let guildInCache of guildCache.array()) {
-            let guild = guildInCache
+            let guild = guildInCache;
             try {
                 guild = await this.client.guilds.fetch(guildInCache.id);
             } catch (error) {
@@ -270,7 +278,8 @@ export class CelebrationJob implements Job {
 
         let endCalculating2 = performance.now();
         Logger.info(
-            `Finished calculating all guild data in ${(endCalculating2 - startCalculating2) / 1000
+            `Finished calculating all guild data in ${
+                (endCalculating2 - startCalculating2) / 1000
             }s`
         );
 
@@ -283,35 +292,34 @@ export class CelebrationJob implements Job {
 
         let services = [];
 
-        // services.push(
-        //     this.messageService
-        //         .run(
-        //             this.client,
-        //             guildCelebrationDatas,
-        //             birthdayMessageGuildMembers,
-        //             memberAnniversaryMessageGuildMembers,
-        //             guildsWithAnniversaryMessage,
-        //             premiumGuildIds
-        //         )
-        //         .catch(error => {
-        //             // Error running the service
-        //         })
-        // );
+        services.push(
+            this.messageService
+                .run(
+                    this.client,
+                    guildCelebrationDatas,
+                    guildBirthdayMessageMemberData,
+                    guildAnniversaryMessageMemberData,
+                    guildsWithAnniversaryMessage,
+                    premiumGuildIds
+                )
+                .catch(error => {
+                    // Error running the service
+                })
+        );
 
-        // services.push(
-        //     this.roleService
-        //         .run(
-        //             this.client,
-        //             guildCelebrationDatas,
-        //             addBirthdayRoleGuildMembers,
-        //             removeBirthdayRoleGuildMembers,
-        //             anniversaryRoleGuildMembers,
-        //             premiumGuildIds
-        //         )
-        //         .catch(error => {
-        //             // Error running the service
-        //         })
-        // );
+        services.push(
+            this.roleService
+                .run(
+                    this.client,
+                    guildCelebrationDatas,
+                    guildBirthdayRoleData,
+                    guildAnniversaryRoleMemberData,
+                    premiumGuildIds
+                )
+                .catch(error => {
+                    // Error running the service
+                })
+        );
 
         await Promise.allSettled(services);
         Logger.info(Logs.info.messageServiceCompleted);
