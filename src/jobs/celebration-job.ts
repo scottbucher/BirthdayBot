@@ -1,21 +1,14 @@
-import {
-    BirthdayMemberRoleStatus,
-    BirthdayMessageGuildMembers,
-    BirthdayRoleGuildMembers,
-    MemberAnniversaryMessageGuildMembers,
-    MemberAnniversaryRoleGuildMember,
-} from '../models/celebration-job';
 import { CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Collection, Guild, GuildMember, Role, TextChannel } from 'discord.js';
 import { CombinedRepo, UserRepo } from '../services/database/repos';
 import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
-import { MemberAnniversaryRole, UserData } from '../models/database';
 
 import { Job } from './job';
-import { SubscriptionStatus } from '../models';
+import { BirthdayMemberRoleStatus, BirthdayMessageGuildMembers, BirthdayRoleGuildMembers, MemberAnniversaryMessageGuildMembers, MemberAnniversaryRoleGuildMember, SubscriptionStatus } from '../models';
 import moment from 'moment';
 import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
+import { UserData, MemberAnniversaryRole } from '../models/database';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -33,7 +26,7 @@ export class CelebrationJob implements Job {
         private messageService: MessageService,
         private roleService: RoleService,
         private subscriptionService: SubscriptionService
-    ) {}
+    ) { }
 
     public async run(): Promise<void> {
         Logger.info('Started fetching database information for guilds and users...');
@@ -81,8 +74,7 @@ export class CelebrationJob implements Job {
 
         let endCalculating = performance.now();
         Logger.info(
-            `Finished fetching database information for guilds and users in ${
-                (endCalculating - startCalculating) / 1000
+            `Finished fetching database information for guilds and users in ${(endCalculating - startCalculating) / 1000
             }s`
         );
 
@@ -271,8 +263,7 @@ export class CelebrationJob implements Job {
 
         let endCalculating2 = performance.now();
         Logger.info(
-            `Finished calculating all guild data in ${
-                (endCalculating2 - startCalculating2) / 1000
+            `Finished calculating all guild data in ${(endCalculating2 - startCalculating2) / 1000
             }s`
         );
 

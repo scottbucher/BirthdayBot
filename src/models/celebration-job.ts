@@ -32,7 +32,3 @@ export class BirthdayMemberStatus {
 export class AnniversaryMemberStatus {
     constructor(public member: GuildMember, public needsMessage: Boolean, public role: Role) {}
 }
-
-export class GenericCelebrationGuildMember {
-    constructor(public member: GuildMember, public date: string, public timezone: string) {}
-}
