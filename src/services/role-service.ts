@@ -51,7 +51,7 @@ export class RoleService {
                     for (let birthdayMemberStatus of birthdayRoleData.memberRoleStatuses) {
                         // If any trusted roles resolved and they don't pass the trusted check lets skip them
                         if (
-                            trustedRoles.length > 0 &&
+                            trustedRoles?.length > 0 &&
                             !CelebrationUtils.passesTrustedCheck(
                                 guildCelebrationData.guildData.RequireAllTrustedRoles,
                                 trustedRoles,
@@ -92,41 +92,43 @@ export class RoleService {
             }
         }
         Logger.info(
-            `Finished birthday role service for in ${
+            `Finished birthday role service in ${
                 (performance.now() - birthdayRolePerformanceStart) / 1000
             }s`
         );
 
         let memberAnniversaryRolePerformanceStart = performance.now();
         // Do we need a premium check here? Server without premium shouldn't have roles passed in so maybe no?
-        for (let memberAnniversaryRoleData of memberAnniversaryRoleGuildMembers) {
-            try {
-                // Give Role
-                for (let giveMemberRole of memberAnniversaryRoleData.member) {
-                    await ActionUtils.giveRole(
-                        giveMemberRole,
-                        memberAnniversaryRoleData.memberAnniversaryRole,
-                        Config.delays.roles
+        if (memberAnniversaryRoleGuildMembers.length > 0) {
+            for (let memberAnniversaryRoleData of memberAnniversaryRoleGuildMembers) {
+                try {
+                    // Give Role
+                    for (let giveMemberRole of memberAnniversaryRoleData.members) {
+                        await ActionUtils.giveRole(
+                            giveMemberRole,
+                            memberAnniversaryRoleData.memberAnniversaryRole,
+                            Config.delays.roles
+                        );
+                    }
+                } catch (error) {
+                    // Error when giving out a member anniversary role to members
+                    Logger.error(
+                        Logs.error.anniversaryRoleServiceFailed
+                            .replace(
+                                '{GUILD_ID}',
+                                memberAnniversaryRoleData.memberAnniversaryRole.guild.id
+                            )
+                            .replace(
+                                '{GUILD_NAME}',
+                                memberAnniversaryRoleData.memberAnniversaryRole.guild.name
+                            ),
+                        error
                     );
                 }
-            } catch (error) {
-                // Error when giving out a member anniversary role to members
-                Logger.error(
-                    Logs.error.anniversaryRoleServiceFailed
-                        .replace(
-                            '{GUILD_ID}',
-                            memberAnniversaryRoleData.memberAnniversaryRole.guild.id
-                        )
-                        .replace(
-                            '{GUILD_NAME}',
-                            memberAnniversaryRoleData.memberAnniversaryRole.guild.name
-                        ),
-                    error
-                );
             }
         }
         Logger.info(
-            `Finished member anniversary role service for in ${
+            `Finished member anniversary role service in ${
                 (performance.now() - memberAnniversaryRolePerformanceStart) / 1000
             }s`
         );
