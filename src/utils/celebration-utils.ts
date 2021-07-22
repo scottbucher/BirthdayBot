@@ -126,16 +126,35 @@ export class CelebrationUtils {
                 ? userData.TimeZone
                 : guildData.DefaultTimezone
         );
+        let birthday = moment(userData.Birthday);
+
+        let currentDateFormatted = currentDate.format('MM-DD');
+        let birthdayFormatted = birthday.format('MM-DD');
+
+        if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
+            birthdayFormatted = '03-01';
+
         let currentHour = currentDate.hour();
-
-        let needsBirthdayMessage =
-            currentHour === guildData.BirthdayMessageTime || Debug.alwaysGiveBirthdayMessage;
-        let needsBirthdayRoleAdded = currentHour === 0 || Debug.alwaysGiveBirthdayRole;
-        let needsBirthdayRoleRemoved = false;
-
-        if (!needsBirthdayRoleAdded) {
+        let needsBirthdayMessage: boolean;
+        let needsBirthdayRoleAdded: boolean;
+        let needsBirthdayRoleRemoved: boolean;
+        if (currentDateFormatted === birthdayFormatted) {
+            needsBirthdayMessage = currentHour === guildData.BirthdayMessageTime;
+            needsBirthdayRoleAdded = currentHour === 0;
+            needsBirthdayRoleRemoved = false;
+        } else {
+            needsBirthdayMessage = false;
+            needsBirthdayRoleAdded = false;
+            // I don't think I need to even subtract 1 hour from the birthday time, but I'm going to just in case
             needsBirthdayRoleRemoved = currentDate.subtract(1, 'days').hour() === 0;
         }
+
+        if (!needsBirthdayRoleAdded) {
+        }
+
+        console.log(
+            `User ${guildMember.displayName} (ID: ${guildMember.id}) needsMessage: ${needsBirthdayMessage} - needsRoleAdded: ${needsBirthdayRoleAdded} - needsMessageRemoved: ${needsBirthdayRoleRemoved}`
+        );
 
         return new BirthdayMemberStatus(
             guildMember,
