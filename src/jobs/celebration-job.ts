@@ -143,10 +143,13 @@ export class CelebrationJob implements Job {
             } catch (error) {
                 Logger.error(
                     Logs.error.birthdayService
-                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                        .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                        .replace('{GUILD_ID}', guildData?.GuildDiscordId)
+                        .replace('{GUILD_NAME}', guild?.name)
+                        .replace('{MEMBER_COUNT}', guild?.memberCount.toLocaleString())
+                        .replace(
+                            '{MEMBER_CACHE_COUNT}',
+                            guild?.members.cache.size.toLocaleString()
+                        ),
                     error
                 );
                 continue;
