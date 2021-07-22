@@ -216,7 +216,8 @@ export class TestCommand implements Command {
                         // Get our custom message
                         let customMessage = CelebrationUtils.randomMessage(
                             customMessages,
-                            hasPremium
+                            hasPremium,
+                            'birthday'
                         );
                         // Find the color of the embed
                         color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
@@ -399,7 +400,11 @@ export class TestCommand implements Command {
 
                 if (customMessages.length > 0) {
                     // Get our custom message
-                    let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
+                    let customMessage = CelebrationUtils.randomMessage(
+                        customMessages,
+                        hasPremium,
+                        'memberanniversary'
+                    );
                     // Find the color of the embed
                     color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
                     useEmbed = customMessage.Embed ? true : false;
@@ -491,7 +496,11 @@ export class TestCommand implements Command {
             if (messageCheck) {
                 if (customMessages.length > 0) {
                     // Get our custom message
-                    let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium);
+                    let customMessage = CelebrationUtils.randomMessage(
+                        customMessages,
+                        hasPremium,
+                        'serveranniversary'
+                    );
                     // Find the color of the embed
                     color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
                     useEmbed = customMessage.Embed ? true : false;
