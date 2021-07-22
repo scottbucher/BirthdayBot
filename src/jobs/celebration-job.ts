@@ -181,7 +181,15 @@ export class CelebrationJob implements Job {
                         )
                     );
 
-                    if (birthdayChannel) {
+                    // See if we have any to push to the message/role service
+                    let totalMembersWhoNeedMessage = birthdayMemberStatuses.filter(
+                        m => m.needsMessage
+                    ).length;
+                    let totalMembersWhoNeedRole = birthdayMemberStatuses.filter(
+                        m => m.needsRoleAdded || m.needsRoleRemoved
+                    ).length;
+
+                    if (birthdayChannel && totalMembersWhoNeedMessage > 0) {
                         // Calculate who needs the birthday message & push them to BirthdayMessageGuildMembers
                         guildBirthdayMessageMemberData.push(
                             new BirthdayMessageGuildMembers(
@@ -193,7 +201,7 @@ export class CelebrationJob implements Job {
                         );
                     }
 
-                    if (birthdayRole) {
+                    if (birthdayRole && totalMembersWhoNeedRole > 0) {
                         // Calculate the give and take for birthday roles
                         guildBirthdayRoleData.push(
                             new BirthdayRoleGuildMembers(
@@ -253,7 +261,7 @@ export class CelebrationJob implements Job {
                         )
                     );
 
-                    if (memberAnniversaryChannel) {
+                    if (memberAnniversaryChannel && anniversaryMemberStatuses.length > 0) {
                         guildAnniversaryMessageMemberData.push(
                             new MemberAnniversaryMessageGuildMembers(
                                 memberAnniversaryChannel,
@@ -314,6 +322,8 @@ export class CelebrationJob implements Job {
                     error
                 );
             }
+            // Wait between guilds to reduce spam and free up resources
+            await TimeUtils.sleep(500);
         }
 
         let endCalculating2 = performance.now();
