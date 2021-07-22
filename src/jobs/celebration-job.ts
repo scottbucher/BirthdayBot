@@ -142,143 +142,177 @@ export class CelebrationJob implements Job {
 
             if (!guildData) continue;
 
-            if (guildData.BirthdayChannelDiscordId !== '0') {
-                try {
-                    birthdayChannel = guild.channels.resolve(
-                        guildData.BirthdayChannelDiscordId
-                    ) as TextChannel;
-                } catch (error) {
-                    // No birthday channel
+            try {
+                if (guildData.BirthdayChannelDiscordId !== '0') {
+                    try {
+                        birthdayChannel = guild.channels.resolve(
+                            guildData.BirthdayChannelDiscordId
+                        ) as TextChannel;
+                    } catch (error) {
+                        // No birthday channel
+                    }
                 }
-            }
 
-            if (guildData.BirthdayRoleDiscordId !== '0') {
-                try {
-                    birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
-                } catch (error) {
-                    // No Birthday Role
+                if (guildData.BirthdayRoleDiscordId !== '0') {
+                    try {
+                        birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
+                    } catch (error) {
+                        // No Birthday Role
+                    }
                 }
-            }
 
-            // If either are set we have to calculate birthday information
-            if (birthdayChannel || birthdayRole) {
-                let membersWithBirthdayTodayOrTomorrow = guildMembers
-                    .filter(
-                        member =>
-                            CelebrationUtils.isBirthdayTodayOrYesterday(
-                                birthdayUserData.find(data => data.UserDiscordId === member.id),
-                                guildData
-                            ) && !blacklist.includes(member.id)
-                    )
-                    .array();
+                // If either are set we have to calculate birthday information
+                if (birthdayChannel || birthdayRole) {
+                    let membersWithBirthdayTodayOrTomorrow = guildMembers
+                        .filter(
+                            member =>
+                                CelebrationUtils.isBirthdayTodayOrYesterday(
+                                    birthdayUserData.find(data => data.UserDiscordId === member.id),
+                                    guildData
+                                ) && !blacklist.includes(member.id)
+                        )
+                        .array();
 
-                let birthdayMemberStatuses = membersWithBirthdayTodayOrTomorrow.map(m =>
-                    CelebrationUtils.getBirthdayMemberStatus(
-                        birthdayUserData.find(data => data.UserDiscordId === m.id),
-                        m,
-                        guildData
-                    )
-                );
-
-                if (birthdayChannel) {
-                    // Calculate who needs the birthday message & push them to BirthdayMessageGuildMembers
-                    guildBirthdayMessageMemberData.push(
-                        new BirthdayMessageGuildMembers(
-                            birthdayChannel,
-                            birthdayMemberStatuses.filter(m => m.needsMessage).map(m => m.member)
+                    let birthdayMemberStatuses = membersWithBirthdayTodayOrTomorrow.map(m =>
+                        CelebrationUtils.getBirthdayMemberStatus(
+                            birthdayUserData.find(data => data.UserDiscordId === m.id),
+                            m,
+                            guildData
                         )
                     );
-                }
 
-                if (birthdayRole) {
-                    // Calculate the give and take for birthday roles
-                    guildBirthdayRoleData.push(
-                        new BirthdayRoleGuildMembers(
-                            birthdayRole,
-                            birthdayMemberStatuses
-                                .filter(m => m.needsRoleAdded || m.needsRoleRemoved)
-                                .map(
-                                    m =>
-                                        new BirthdayMemberRoleStatus(
-                                            m.member,
-                                            m.needsRoleAdded || m.needsRoleRemoved
-                                        )
-                                )
-                        )
-                    );
-                }
-            }
+                    if (birthdayChannel) {
+                        // Calculate who needs the birthday message & push them to BirthdayMessageGuildMembers
+                        guildBirthdayMessageMemberData.push(
+                            new BirthdayMessageGuildMembers(
+                                birthdayChannel,
+                                birthdayMemberStatuses
+                                    .filter(m => m.needsMessage)
+                                    .map(m => m.member)
+                            )
+                        );
+                    }
 
-            if (guildData.MemberAnniversaryChannelDiscordId !== '0') {
-                try {
-                    memberAnniversaryChannel = guild.channels.resolve(
-                        guildData.MemberAnniversaryChannelDiscordId
-                    ) as TextChannel;
-                } catch (error) {
-                    // No member anniversary channel
-                }
-            }
-
-            // Get the member anniversaries for this guild if they have premium
-            let memberAnniversaryRoles: MemberAnniversaryRole[];
-
-            if (hasPremium) {
-                memberAnniversaryRoles = guildCelebrationDatas.find(
-                    data => data.guildData.GuildDiscordId === guild.id
-                )?.anniversaryRoles;
-            }
-
-            if (
-                memberAnniversaryChannel ||
-                (memberAnniversaryRoles && memberAnniversaryRoles.length > 0)
-            ) {
-                let anniversaryMemberStatuses = guildMembers.map(m =>
-                    CelebrationUtils.getAnniversaryMemberStatuses(
-                        m,
-                        guildData,
-                        memberAnniversaryRoles
-                    )
-                );
-
-                if (memberAnniversaryChannel) {
-                    guildAnniversaryMessageMemberData.push(
-                        new MemberAnniversaryMessageGuildMembers(
-                            memberAnniversaryChannel,
-                            anniversaryMemberStatuses.filter(m => m.needsMessage).map(m => m.member)
-                        )
-                    );
-                }
-
-                if (memberAnniversaryRoles && memberAnniversaryRoles.length > 0) {
-                    // Test that this removes duplicates
-                    let statuses = anniversaryMemberStatuses.filter(r => r.role);
-                    let giveRoles = [...new Set(statuses.map(m => m.role))];
-                    for (let role of giveRoles) {
-                        guildAnniversaryRoleMemberData.push(
-                            new MemberAnniversaryRoleGuildMembers(
-                                role,
-                                statuses.filter(m => m.role === role).map(m => m.member)
+                    if (birthdayRole) {
+                        // Calculate the give and take for birthday roles
+                        guildBirthdayRoleData.push(
+                            new BirthdayRoleGuildMembers(
+                                birthdayRole,
+                                birthdayMemberStatuses
+                                    .filter(m => m.needsRoleAdded || m.needsRoleRemoved)
+                                    .map(
+                                        m =>
+                                            new BirthdayMemberRoleStatus(
+                                                m.member,
+                                                m.needsRoleAdded || m.needsRoleRemoved
+                                            )
+                                    )
                             )
                         );
                     }
                 }
+            } catch (error) {
+                // Error in calculating birthday information for this guild
+                Logger.error(
+                    Logs.error.errorWhenCalculatingBirthdayDataForGuild
+                        .replace('{GUILD_ID}', guild.id)
+                        .replace('{GUILD_NAME}', guild.name),
+                    error
+                );
             }
 
-            if (guildData.ServerAnniversaryChannelDiscordId !== '0') {
-                try {
-                    serverAnniversaryChannel = guild.channels.resolve(
-                        guildData.ServerAnniversaryChannelDiscordId
-                    ) as TextChannel;
-                } catch (error) {
-                    // No server anniversary channel
+            try {
+                if (guildData.MemberAnniversaryChannelDiscordId !== '0') {
+                    try {
+                        memberAnniversaryChannel = guild.channels.resolve(
+                            guildData.MemberAnniversaryChannelDiscordId
+                        ) as TextChannel;
+                    } catch (error) {
+                        // No member anniversary channel
+                    }
+                }
+
+                // Get the member anniversaries for this guild if they have premium
+                let memberAnniversaryRoles: MemberAnniversaryRole[];
+
+                if (hasPremium) {
+                    memberAnniversaryRoles = guildCelebrationDatas.find(
+                        data => data.guildData.GuildDiscordId === guild.id
+                    )?.anniversaryRoles;
                 }
 
                 if (
-                    serverAnniversaryChannel &&
-                    CelebrationUtils.isServerAnniversaryMessage(guild, guildData)
+                    memberAnniversaryChannel ||
+                    (memberAnniversaryRoles && memberAnniversaryRoles.length > 0)
                 ) {
-                    guildsWithAnniversaryMessage.push(serverAnniversaryChannel);
+                    let anniversaryMemberStatuses = guildMembers.map(m =>
+                        CelebrationUtils.getAnniversaryMemberStatuses(
+                            m,
+                            guildData,
+                            memberAnniversaryRoles
+                        )
+                    );
+
+                    if (memberAnniversaryChannel) {
+                        guildAnniversaryMessageMemberData.push(
+                            new MemberAnniversaryMessageGuildMembers(
+                                memberAnniversaryChannel,
+                                anniversaryMemberStatuses
+                                    .filter(m => m.needsMessage)
+                                    .map(m => m.member)
+                            )
+                        );
+                    }
+
+                    if (memberAnniversaryRoles && memberAnniversaryRoles.length > 0) {
+                        // Test that this removes duplicates
+                        let statuses = anniversaryMemberStatuses.filter(r => r.role);
+                        let giveRoles = [...new Set(statuses.map(m => m.role))];
+                        for (let role of giveRoles) {
+                            guildAnniversaryRoleMemberData.push(
+                                new MemberAnniversaryRoleGuildMembers(
+                                    role,
+                                    statuses.filter(m => m.role === role).map(m => m.member)
+                                )
+                            );
+                        }
+                    }
                 }
+            } catch (error) {
+                // Error getting member anniversary data for this guild
+                Logger.error(
+                    Logs.error.errorWhenCalculatingMemberAnniversaryDataForGuild
+                        .replace('{GUILD_ID}', guild.id)
+                        .replace('{GUILD_NAME}', guild.name),
+                    error
+                );
+            }
+
+            try {
+                if (guildData.ServerAnniversaryChannelDiscordId !== '0') {
+                    try {
+                        serverAnniversaryChannel = guild.channels.resolve(
+                            guildData.ServerAnniversaryChannelDiscordId
+                        ) as TextChannel;
+                    } catch (error) {
+                        // No server anniversary channel
+                    }
+
+                    if (
+                        serverAnniversaryChannel &&
+                        CelebrationUtils.isServerAnniversaryMessage(guild, guildData)
+                    ) {
+                        guildsWithAnniversaryMessage.push(serverAnniversaryChannel);
+                    }
+                }
+            } catch (error) {
+                // Error getting server anniversary information for this guild
+                Logger.error(
+                    Logs.error.errorWhenCalculatingServerAnniversaryDataForGuild
+                        .replace('{GUILD_ID}', guild.id)
+                        .replace('{GUILD_NAME}', guild.name),
+                    error
+                );
             }
         }
 

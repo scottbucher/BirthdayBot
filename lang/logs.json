@@ -56,6 +56,9 @@
         "serverAnniversaryMessageServiceFailed": "An error occurred while running the server anniversary message service for '{GUILD_NAME}' ({GUILD_ID})!",
         "birthdayRoleServiceFailed": "An error occurred while running the birthday role service for '{GUILD_NAME}' ({GUILD_ID})!",
         "anniversaryRoleServiceFailed": "An error occurred while running the anniversary role service for '{GUILD_NAME}' ({GUILD_ID})!",
-        "messageServiceFailedForGuild": "An error occurred while running the message service for '{GUILD_NAME}' ({GUILD_ID})!"
+        "messageServiceFailedForGuild": "An error occurred while running the message service for '{GUILD_NAME}' ({GUILD_ID})!",
+        "errorWhenCalculatingBirthdayDataForGuild": "An error occurred while calculating the birthday data for '{GUILD_NAME}' ({GUILD_ID})!",
+        "errorWhenCalculatingMemberAnniversaryDataForGuild": "An error occurred while calculating the member anniversary data for '{GUILD_NAME}' ({GUILD_ID})!",
+        "errorWhenCalculatingServerAnniversaryDataForGuild": "An error occurred while calculating the server anniversary data for '{GUILD_NAME}' ({GUILD_ID})!"
     }
 }
