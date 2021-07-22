@@ -22,8 +22,8 @@ export class MessageService {
         serverAnniversaryMessageChannels: TextChannel[],
         guildsWithPremium: string[]
     ): Promise<void> {
-        let birthdayMesagePerformanceStart = performance.now();
-        // Birhtday Messages
+        let birthdayMessagePerformanceStart = performance.now();
+        // Birthday Messages
         if (birthdayMessageGuildMembers.length > 0) {
             for (let birthdayMessageGuildMember of birthdayMessageGuildMembers) {
                 // Calculate birthday messages for this guild (channel)
@@ -225,11 +225,11 @@ export class MessageService {
         }
         Logger.info(
             `Finished birthday message service in ${
-                (performance.now() - birthdayMesagePerformanceStart) / 1000
+                (performance.now() - birthdayMessagePerformanceStart) / 1000
             }s`
         );
 
-        let memberAnniversaryMesagePerformanceStart = performance.now();
+        let memberAnniversaryMessagePerformanceStart = performance.now();
         // Member Anniversary Messages
         if (memberAnniversaryMessageGuildMembers.length > 0) {
             for (let memberAnniversaryMessageGuildMember of memberAnniversaryMessageGuildMembers) {
@@ -512,11 +512,11 @@ export class MessageService {
         }
         Logger.info(
             `Finished member anniversary message service in ${
-                (performance.now() - memberAnniversaryMesagePerformanceStart) / 1000
+                (performance.now() - memberAnniversaryMessagePerformanceStart) / 1000
             }s`
         );
 
-        let serverAnniversaryMesagePerformanceStart = performance.now();
+        let serverAnniversaryMessagePerformanceStart = performance.now();
         // Server Anniversary Messages
         if (serverAnniversaryMessageChannels.length > 0) {
             for (let serverAnniversaryChannel of serverAnniversaryMessageChannels) {
@@ -618,7 +618,7 @@ export class MessageService {
         }
         Logger.info(
             `Finished server anniversary message service in ${
-                (performance.now() - serverAnniversaryMesagePerformanceStart) / 1000
+                (performance.now() - serverAnniversaryMessagePerformanceStart) / 1000
             }s`
         );
     }
