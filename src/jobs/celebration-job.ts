@@ -86,8 +86,8 @@ export class CelebrationJob implements Job {
             } catch (error) {
                 Logger.error(
                     Logs.error.resolveGuild
-                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild.name),
+                        .replace('{GUILD_ID}', guildData?.GuildDiscordId)
+                        .replace('{GUILD_NAME}', guild?.name),
                     error
                 );
                 continue;
@@ -134,8 +134,8 @@ export class CelebrationJob implements Job {
                         .catch(error => {
                             Logger.error(
                                 Logs.error.celebrateBirthday
-                                    .replace('{GUILD_NAME}', guild.name)
-                                    .replace('{GUILD_ID}', guild.id),
+                                    .replace('{GUILD_NAME}', guild?.name)
+                                    .replace('{GUILD_ID}', guild?.id),
                                 error
                             );
                         })
