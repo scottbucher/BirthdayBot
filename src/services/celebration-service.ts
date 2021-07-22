@@ -1,7 +1,7 @@
 import { ActionUtils, CelebrationUtils, MessageUtils } from '../utils';
 import { Client, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
-
 import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database';
+
 import { Logger } from '.';
 
 let Config = require('../../config/config.json');
@@ -107,18 +107,23 @@ export class CelebrationService {
                         )
                         .map(m => m.member);
 
+                    if (guild.id === '660711235766976553') {
+                        let test = 'dadwad';
+                    }
+
                     // Filter for those who need the role added/removed and pass the trusted check
                     let membersWhoNeedRole = birthdayMemberStatuses.filter(
                         m =>
                             (m.needsRoleAdded || m.needsRoleRemoved) &&
-                            trustedRoles?.length > 0 &&
-                            CelebrationUtils.passesTrustedCheck(
-                                guildCelebrationData.guildData.RequireAllTrustedRoles,
-                                trustedRoles,
-                                m.member,
-                                guildData.TrustedPreventsRole,
-                                hasPremium
-                            )
+                            (!trustedRoles ||
+                                trustedRoles.length > 0 ||
+                                CelebrationUtils.passesTrustedCheck(
+                                    guildCelebrationData.guildData.RequireAllTrustedRoles,
+                                    trustedRoles,
+                                    m.member,
+                                    guildData.TrustedPreventsMessage,
+                                    hasPremium
+                                ))
                     );
 
                     if (birthdayChannel && membersWhoNeedMessage.length > 0) {
