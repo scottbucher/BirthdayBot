@@ -1,11 +1,11 @@
-import { SubscriptionStatus } from '../models';
+import { CelebrationService, Logger, SubscriptionService } from '../services';
 import { CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import { CombinedRepo, UserRepo } from '../services/database/repos';
-import { CelebrationService, Logger, SubscriptionService } from '../services';
-import { UserData } from '../models/database';
 
 import { Job } from './job';
+import { SubscriptionStatus } from '../models';
+import { UserData } from '../models/database';
 import moment from 'moment';
 import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
@@ -161,6 +161,11 @@ export class CelebrationJob implements Job {
             }s`
         );
         await Promise.allSettled(promises);
+        Logger.info(
+            `All guilds have finished running the celebration service. Total time of ${
+                (performance.now() - startCalculating) / 1000
+            }s`
+        );
     }
 
     public start(): void {
