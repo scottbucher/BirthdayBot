@@ -366,7 +366,7 @@ export class CelebrationUtils {
     ): MessageEmbed | string {
         let message =
             type === 'birthday'
-                ? Lang.getRef('defaults.birthday', LangCode.EN_US)
+                ? Lang.getRef('defaults.birthdayMessage', LangCode.EN_US)
                 : type === 'memberanniversary'
                 ? Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US)
                 : Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US);
