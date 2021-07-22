@@ -156,6 +156,9 @@ export class CelebrationUtils {
         let currentDate = moment().tz(guildData.DefaultTimezone);
         let memberAnniversary = moment(guildMember.joinedAt);
 
+        if (currentDate.year() - memberAnniversary.year() === 0)
+            return new AnniversaryMemberStatus(guildMember, false, null);
+
         let currentDateFormatted = currentDate.format('MM-DD');
         let anniversaryFormatted = memberAnniversary.format('MM-DD');
 
