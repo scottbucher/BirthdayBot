@@ -149,13 +149,6 @@ export class CelebrationUtils {
             needsBirthdayRoleRemoved = currentDate.subtract(1, 'days').hour() === 0;
         }
 
-        if (!needsBirthdayRoleAdded) {
-        }
-
-        console.log(
-            `User ${guildMember.displayName} (ID: ${guildMember.id}) needsMessage: ${needsBirthdayMessage} - needsRoleAdded: ${needsBirthdayRoleAdded} - needsMessageRemoved: ${needsBirthdayRoleRemoved}`
-        );
-
         return new BirthdayMemberStatus(
             guildMember,
             needsBirthdayMessage,
