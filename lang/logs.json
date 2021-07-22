@@ -51,7 +51,14 @@
         "fetchMemberError": "An error occurred while trying to fetch the members for '{GUILD_NAME}' ({GUILD_ID}) with {MEMBER_COUNT} members and {MEMBER_CACHE_BEFORE_COUNT} in the cache before and {MEMBER_CACHE_AFTER_COUNT} after the fetch.",
         "commandGuild": "[{MESSAGE_ID}] An error occurred while executing the '{COMMAND_KEYWORD}' command for user '{SENDER_TAG}' ({SENDER_ID}) in channel '{CHANNEL_NAME}' ({CHANNEL_ID}) in guild '{GUILD_NAME}' ({GUILD_ID}).",
         "apiRequest": "An error occurred while processing a '{HTTP_METHOD}' request to '{URL}'.",
-        "roleServiceFailedForGuild": "An error occurred while running the role service for '{GUILD_NAME}' ({GUILD_ID})!",
-        "messageServiceFailedForGuild": "An error occurred while running the message service for '{GUILD_NAME}' ({GUILD_ID})!"
+        "birthdayMessageServiceFailed": "An error occurred while running the birthday message service for '{GUILD_NAME}' ({GUILD_ID})!",
+        "memberAnniversaryMessageServiceFailed": "An error occurred while running the member anniversary message service for '{GUILD_NAME}' ({GUILD_ID})!",
+        "serverAnniversaryMessageServiceFailed": "An error occurred while running the server anniversary message service for '{GUILD_NAME}' ({GUILD_ID})!",
+        "birthdayRoleServiceFailed": "An error occurred while running the birthday role service for '{GUILD_NAME}' ({GUILD_ID})!",
+        "anniversaryRoleServiceFailed": "An error occurred while running the anniversary role service for '{GUILD_NAME}' ({GUILD_ID})!",
+        "messageServiceFailedForGuild": "An error occurred while running the message service for '{GUILD_NAME}' ({GUILD_ID})!",
+        "errorWhenCalculatingBirthdayDataForGuild": "An error occurred while calculating the birthday data for '{GUILD_NAME}' ({GUILD_ID})!",
+        "errorWhenCalculatingMemberAnniversaryDataForGuild": "An error occurred while calculating the member anniversary data for '{GUILD_NAME}' ({GUILD_ID})!",
+        "errorWhenCalculatingServerAnniversaryDataForGuild": "An error occurred while calculating the server anniversary data for '{GUILD_NAME}' ({GUILD_ID})!"
     }
 }

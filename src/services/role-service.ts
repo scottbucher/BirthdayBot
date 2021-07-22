@@ -1,8 +1,10 @@
 import { ActionUtils, CelebrationUtils, TimeUtils } from '../utils';
-import { Client, Guild, GuildMember, Role } from 'discord.js';
-import { GuildCelebrationData, MemberAnniversaryRole } from '../models/database';
+import { Client, Role } from 'discord.js';
 
+import { BirthdayRoleGuildMembers } from '../models';
+import { GuildCelebrationData } from '../models/database';
 import { Logger } from '.';
+import { MemberAnniversaryRoleGuildMembers } from '../models/celebration-job';
 import { performance } from 'perf_hooks';
 
 let Config = require('../../config/config.json');
@@ -14,189 +16,125 @@ export class RoleService {
     public async run(
         client: Client,
         guildCelebrationDatas: GuildCelebrationData[],
-        addBirthdayRoleGuildMembers: GuildMember[],
-        removeBirthdayRoleGuildMembers: GuildMember[],
-        anniversaryRoleGuildMembers: GuildMember[],
+        birthdayRoleGuildMembers: BirthdayRoleGuildMembers[],
+        memberAnniversaryRoleGuildMembers: MemberAnniversaryRoleGuildMembers[],
         guildsWithPremium: string[]
     ): Promise<void> {
-        // Only get the guilds which actually might need a role given
-        let filteredGuilds = guildCelebrationDatas.filter(
-            data =>
-                addBirthdayRoleGuildMembers
-                    .map(member => member.guild.id)
-                    .includes(data.guildData.GuildDiscordId) ||
-                removeBirthdayRoleGuildMembers
-                    .map(member => member.guild.id)
-                    .includes(data.guildData.GuildDiscordId) ||
-                anniversaryRoleGuildMembers
-                    .map(member => member.guild.id)
-                    .includes(data.guildData.GuildDiscordId)
-        );
+        let birthdayRolePerformanceStart = performance.now();
+        if (birthdayRoleGuildMembers.length > 0) {
+            // Do our trusted checks and then do roles
 
-        // Lets loop through the guilds
-        for (let filteredGuild of filteredGuilds) {
-            let guildServiceTimeStart = performance.now();
-            let guild: Guild;
-            try {
-                guild = await client.guilds.fetch(filteredGuild.guildData.GuildDiscordId);
-            } catch (error) {
-                // Wait between guilds less since we didn't do other calls
-                await TimeUtils.sleep(200);
-                continue;
-            }
-            Logger.info(`Running role service for guild ${guild.name} (ID:${guild.id})`);
-            try {
-                // We need to filter the GuildMember lists given by the parameters to only those in this guild
-                let addBirthdayGuildMembers = addBirthdayRoleGuildMembers.filter(
-                    member => member.guild.id === guild.id
-                );
-                let removeBirthdayGuildMembers = removeBirthdayRoleGuildMembers.filter(
-                    member => member.guild.id === guild.id
-                );
-                let addAnniversaryGuildMembers = anniversaryRoleGuildMembers.filter(
-                    member => member.guild.id === guild.id
-                );
-
-                let hasPremium = guildsWithPremium.includes(guild.id);
-                let birthdayRole: Role;
-                let trustedRoles: Role[];
-                let anniversaryRoles: Role[];
-
+            // Each birthday role data should be one guild (one birthday role per guild)
+            for (let birthdayRoleData of birthdayRoleGuildMembers) {
+                let guild = birthdayRoleData.role.guild;
                 try {
-                    birthdayRole = await guild.roles.fetch(
-                        filteredGuild.guildData.BirthdayRoleDiscordId
-                    );
-                } catch (error) {
-                    // No birthday role
-                }
+                    let hasPremium = guildsWithPremium.includes(guild.id);
 
-                let anniversaryRoleData: MemberAnniversaryRole[];
-
-                // Only premium guilds get anniversary roles
-                if (hasPremium) {
-                    // Get our list of anniversary roles
-                    anniversaryRoles = await CelebrationUtils.getMemberAnniversaryRoleList(
-                        guild,
-                        filteredGuild.anniversaryRoles
+                    let guildCelebrationData = guildCelebrationDatas.find(
+                        g => g.guildData.GuildDiscordId === guild.id
                     );
 
-                    // Get the data of the roles we could resolve (we need the data so we can check years later!)
-                    anniversaryRoleData = filteredGuild.anniversaryRoles.filter(data =>
-                        anniversaryRoles
-                            .map(r => r.id)
-                            .includes(data.MemberAnniversaryRoleDiscordId)
-                    );
-                }
+                    let trustedRoles: Role[];
 
-                // The birthday role must exist in order to add/remove it and we need at least one member who need the role
-                if (birthdayRole && addBirthdayGuildMembers.length > 0) {
-                    // Get our list of trusted roles
-                    trustedRoles = await CelebrationUtils.getTrustedRoleList(
-                        guild,
-                        filteredGuild.trustedRoles
-                    );
+                    // If trusted prevents the role and there are trusted roles in the database lets try to resolve them
+                    if (
+                        guildCelebrationData.guildData.TrustedPreventsRole &&
+                        guildCelebrationData.trustedRoles.length > 0
+                    ) {
+                        trustedRoles = await CelebrationUtils.getTrustedRoleList(
+                            guild,
+                            guildCelebrationData.trustedRoles
+                        );
+                    }
 
-                    for (let addBirthdayMember of addBirthdayGuildMembers) {
+                    // Give Role
+                    for (let birthdayMemberStatus of birthdayRoleData.memberRoleStatuses) {
+                        // If any trusted roles resolved and they don't pass the trusted check lets skip them
                         if (
-                            CelebrationUtils.passesTrustedCheck(
-                                filteredGuild.guildData.RequireAllTrustedRoles,
+                            trustedRoles?.length > 0 &&
+                            !CelebrationUtils.passesTrustedCheck(
+                                guildCelebrationData.guildData.RequireAllTrustedRoles,
                                 trustedRoles,
-                                addBirthdayMember,
-                                filteredGuild.guildData.TrustedPreventsRole,
+                                birthdayMemberStatus.member,
+                                guildCelebrationData.guildData.TrustedPreventsRole,
                                 hasPremium
                             )
                         ) {
-                            // Don't send an api request if they already have the role
-                            if (!addBirthdayMember.roles.cache.has(birthdayRole.id)) {
-                                Logger.info(
-                                    `Giving birthday role to user in guild ${guild.name} (ID:${guild.id})`
-                                );
-                                await ActionUtils.giveRole(
-                                    addBirthdayMember,
-                                    birthdayRole,
-                                    100 //Config.delays.roles
-                                );
-                                Logger.info(
-                                    `Giving birthday role to user in guild ${guild.name} (ID:${guild.id})`
-                                );
-                            }
+                            continue;
                         }
-                    }
 
-                    // Take birthday role regardless of trusted role?
-                    for (let removeBirthdayMember of removeBirthdayGuildMembers) {
-                        // Don't send an api request if they don't have the role
-                        if (removeBirthdayMember.roles.cache.has(birthdayRole.id)) {
-                            Logger.info(
-                                `Removing birthday role from user in guild ${guild.name} (ID:${guild.id})`
+                        // Otherwise lets give/take the role
+                        if (birthdayMemberStatus.give) {
+                            // Give the role
+                            await ActionUtils.giveRole(
+                                birthdayMemberStatus.member,
+                                birthdayRoleData.role,
+                                Config.delays.roles
                             );
+                        } else {
+                            // Remove the role
                             await ActionUtils.removeRole(
-                                removeBirthdayMember,
-                                birthdayRole,
-                                100 //Config.delays.roles
-                            );
-                            Logger.info(
-                                `Removed birthday role from user in guild ${guild.name} (ID:${guild.id})`
+                                birthdayMemberStatus.member,
+                                birthdayRoleData.role,
+                                Config.delays.roles
                             );
                         }
                     }
+                } catch (error) {
+                    // Error for a guild when giving birthday roles
+                    Logger.error(
+                        Logs.error.birthdayRoleServiceFailed
+                            .replace('{GUILD_ID}', guild.id)
+                            .replace('{GUILD_NAME}', guild.name),
+                        error
+                    );
                 }
-
-                // There has to be anniversary roles in order to give them (extra premium check is prob redundant)
-                if (
-                    addAnniversaryGuildMembers.length > 0 &&
-                    anniversaryRoles.length > 0 &&
-                    hasPremium
-                ) {
-                    for (let addAnniversaryRoleMember of addAnniversaryGuildMembers) {
-                        let memberYears = CelebrationUtils.getMemberYears(
-                            addAnniversaryRoleMember,
-                            filteredGuild.guildData
-                        );
-                        for (let role of anniversaryRoles) {
-                            let roleData = anniversaryRoleData.find(
-                                data => data.MemberAnniversaryRoleDiscordId === role.id
-                            );
-
-                            if (roleData.Year === memberYears) {
-                                // Don't send an api request if they already have the role
-                                if (!addAnniversaryRoleMember.roles.cache.has(role.id)) {
-                                    Logger.info(
-                                        `Giving member anniversary role to user in guild ${guild.name} (ID:${guild.id})`
-                                    );
-                                    await ActionUtils.giveRole(
-                                        addAnniversaryRoleMember,
-                                        role,
-                                        100 //Config.delays.roles
-                                    );
-                                    Logger.info(
-                                        `Gave member anniversary role to user in guild ${guild.name} (ID:${guild.id})`
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (error) {
-                // This guild had an error but we want to keep going
-                Logger.error(
-                    Logs.error.roleServiceFailedForGuild
-                        .replace('{GUILD_ID}', guild.id)
-                        .replace('{GUILD_NAME}', guild.name),
-                    error
-                );
+                // Sleep in between guilds
+                await TimeUtils.sleep(300);
             }
-            let guildServiceTimeEnd = performance.now();
-            Logger.info(
-                `Finished message service for guild ${guild.name} (ID:${guild.id}) in ${
-                    (guildServiceTimeEnd - guildServiceTimeStart) / 1000
-                }s`
-            );
-            // Wait between guilds
-            await TimeUtils.sleep(Config.jobs.postCelebrationJob.interval);
-            Logger.info(
-                `Delay after role service for guild ${guild.name} (ID:${guild.id}) has completed.`
-            );
         }
+        Logger.info(
+            `Finished birthday role service in ${
+                (performance.now() - birthdayRolePerformanceStart) / 1000
+            }s`
+        );
+
+        let memberAnniversaryRolePerformanceStart = performance.now();
+        // Do we need a premium check here? Server without premium shouldn't have roles passed in so maybe no?
+        if (memberAnniversaryRoleGuildMembers.length > 0) {
+            for (let memberAnniversaryRoleData of memberAnniversaryRoleGuildMembers) {
+                try {
+                    // Give Role
+                    for (let giveMemberRole of memberAnniversaryRoleData.members) {
+                        await ActionUtils.giveRole(
+                            giveMemberRole,
+                            memberAnniversaryRoleData.memberAnniversaryRole,
+                            Config.delays.roles
+                        );
+                    }
+                } catch (error) {
+                    // Error when giving out a member anniversary role to members
+                    Logger.error(
+                        Logs.error.anniversaryRoleServiceFailed
+                            .replace(
+                                '{GUILD_ID}',
+                                memberAnniversaryRoleData.memberAnniversaryRole.guild.id
+                            )
+                            .replace(
+                                '{GUILD_NAME}',
+                                memberAnniversaryRoleData.memberAnniversaryRole.guild.name
+                            ),
+                        error
+                    );
+                }
+                // Sleep in between guilds
+                await TimeUtils.sleep(300);
+            }
+        }
+        Logger.info(
+            `Finished member anniversary role service in ${
+                (performance.now() - memberAnniversaryRolePerformanceStart) / 1000
+            }s`
+        );
     }
 }

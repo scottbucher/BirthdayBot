@@ -10,6 +10,8 @@ import {
 } from '../models/database';
 import { Guild, GuildMember, Role } from 'discord.js';
 
+import { AnniversaryMemberStatus } from '../models/celebration-job';
+import { BirthdayMemberStatus } from '../models';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
@@ -77,7 +79,8 @@ export class CelebrationUtils {
         return 0;
     }
 
-    public static isBirthdayToday(userData: UserData, guildData: GuildData): boolean {
+    // Might be better to combine this with getBirthdayMemberStatus
+    public static isBirthdayTodayOrYesterday(userData: UserData, guildData: GuildData): boolean {
         if (!userData || !guildData) return false;
 
         // If the server doesn't have a default timezone, use the user's timezone
@@ -93,20 +96,26 @@ export class CelebrationUtils {
         let birthday = moment(userData.Birthday);
 
         let currentDateFormatted = currentDate.format('MM-DD');
+        let yesterdayDateFormatted = currentDate.subtract(1, 'day').format('MM-DD');
         let birthdayFormatted = birthday.format('MM-DD');
 
         if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
             birthdayFormatted = '03-01';
 
         // The date is correct, now check the time
-        return currentDateFormatted === birthdayFormatted;
+        return (
+            currentDateFormatted === birthdayFormatted ||
+            yesterdayDateFormatted === birthdayFormatted
+        );
     }
 
-    public static needsBirthdayRoleAdded(userData: UserData, guildData: GuildData): boolean {
-        if (Debug.alwaysGiveBirthdayRole) {
-            return true;
-        }
-
+    public static getBirthdayMemberStatus(
+        userData: UserData,
+        guildMember: GuildMember,
+        guildData: GuildData
+    ): BirthdayMemberStatus {
+        if (!userData || !guildData)
+            return new BirthdayMemberStatus(guildMember, false, false, false);
         // If the server doesn't have a default timezone, use the user's timezone
         // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
         // Else, use the server's default timezone
@@ -118,47 +127,69 @@ export class CelebrationUtils {
                 : guildData.DefaultTimezone
         );
         let currentHour = currentDate.hour();
-        return currentHour === 0;
-    }
 
-    public static needsBirthdayRoleRemoved(userData: UserData, guildData: GuildData): boolean {
-        if (Debug.alwaysGiveBirthdayRole) {
-            return true;
+        let needsBirthdayMessage =
+            currentHour === guildData.BirthdayMessageTime || Debug.alwaysGiveBirthdayMessage;
+        let needsBirthdayRoleAdded = currentHour === 0 || Debug.alwaysGiveBirthdayRole;
+        let needsBirthdayRoleRemoved = false;
+
+        if (!needsBirthdayRoleAdded) {
+            needsBirthdayRoleRemoved = currentDate.subtract(1, 'days').hour() === 0;
         }
 
-        // If the server doesn't have a default timezone, use the user's timezone
-        // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
-        // Else, use the server's default timezone
-        let currentDate = moment()
-            .tz(
-                guildData.DefaultTimezone === '0'
-                    ? userData.TimeZone
-                    : guildData.UseTimezone !== 'server'
-                    ? userData.TimeZone
-                    : guildData.DefaultTimezone
-            )
-            .subtract(1, 'days');
-        let currentHour = currentDate.hour();
-        return currentHour === 0;
-    }
-
-    public static needsBirthdayMessage(userData: UserData, guildData: GuildData): boolean {
-        if (Debug.alwaysSendBirthdayMessage) {
-            return true;
-        }
-
-        // If the server doesn't have a default timezone, use the user's timezone
-        // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
-        // Else, use the server's default timezone
-        let currentDate = moment().tz(
-            guildData.DefaultTimezone === '0'
-                ? userData.TimeZone
-                : guildData.UseTimezone !== 'server'
-                ? userData.TimeZone
-                : guildData.DefaultTimezone
+        return new BirthdayMemberStatus(
+            guildMember,
+            needsBirthdayMessage,
+            needsBirthdayRoleAdded,
+            needsBirthdayRoleRemoved
         );
-        let currentHour = currentDate.hour();
-        return currentHour === guildData.BirthdayMessageTime;
+    }
+
+    public static getAnniversaryMemberStatuses(
+        guildMember: GuildMember,
+        guildData: GuildData,
+        memberAnniversaryRoles: MemberAnniversaryRole[]
+    ): AnniversaryMemberStatus {
+        if (!guildMember || !guildData || guildData.DefaultTimezone === '0')
+            return new AnniversaryMemberStatus(guildMember, false, null);
+
+        let currentDate = moment().tz(guildData.DefaultTimezone);
+        let memberAnniversary = moment(guildMember.joinedAt);
+
+        if (currentDate.year() - memberAnniversary.year() === 0)
+            return new AnniversaryMemberStatus(guildMember, false, null);
+
+        let currentDateFormatted = currentDate.format('MM-DD');
+        let anniversaryFormatted = memberAnniversary.format('MM-DD');
+
+        if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
+            anniversaryFormatted = '03-01';
+
+        if (currentDateFormatted !== anniversaryFormatted)
+            return new AnniversaryMemberStatus(guildMember, false, null);
+
+        let needsAnniversaryMessage = currentDate.hour() === guildData.MemberAnniversaryMessageTime;
+        let role: Role;
+
+        if (
+            currentDate.hour() === 0 &&
+            memberAnniversaryRoles &&
+            memberAnniversaryRoles.length > 0
+        ) {
+            let anniversaryRole = memberAnniversaryRoles.find(
+                role => CelebrationUtils.getMemberYears(guildMember, guildData) === role.Year
+            );
+
+            if (anniversaryRole) {
+                try {
+                    role = guildMember.guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
+                } catch (error) {
+                    // No Member Anniversary Role
+                }
+            }
+        }
+
+        return new AnniversaryMemberStatus(guildMember, needsAnniversaryMessage, role);
     }
 
     public static isMemberAnniversaryMessage(
