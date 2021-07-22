@@ -95,16 +95,18 @@ export class CelebrationService {
                         .filter(
                             m =>
                                 m.needsMessage &&
-                                trustedRoles?.length > 0 &&
-                                CelebrationUtils.passesTrustedCheck(
-                                    guildCelebrationData.guildData.RequireAllTrustedRoles,
-                                    trustedRoles,
-                                    m.member,
-                                    guildData.TrustedPreventsMessage,
-                                    hasPremium
-                                )
+                                (!trustedRoles ||
+                                    trustedRoles.length > 0 ||
+                                    CelebrationUtils.passesTrustedCheck(
+                                        guildCelebrationData.guildData.RequireAllTrustedRoles,
+                                        trustedRoles,
+                                        m.member,
+                                        guildData.TrustedPreventsMessage,
+                                        hasPremium
+                                    ))
                         )
                         .map(m => m.member);
+
                     // Filter for those who need the role added/removed and pass the trusted check
                     let membersWhoNeedRole = birthdayMemberStatuses.filter(
                         m =>
