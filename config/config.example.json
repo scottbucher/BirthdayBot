@@ -55,13 +55,13 @@
         "postCelebrationJob": {
             "schedule": "0 0 * * * *",
             "log": false,
-            "interval": 0.6
+            "interval": 600
         }
     },
     "delays": {
         "enabled": true,
-        "messages": 300,
-        "roles": 300
+        "messages": 100,
+        "roles": 100
     },
     "experience": {
         "promptExpireTime": 120,
