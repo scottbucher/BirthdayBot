@@ -57,11 +57,10 @@ import {
 } from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
+    CelebrationService,
     HttpService,
     JobService,
     Logger,
-    MessageService,
-    RoleService,
     SubscriptionService,
 } from './services';
 import {
@@ -124,8 +123,7 @@ async function start(): Promise<void> {
 
     // Services
     let subscriptionService = new SubscriptionService(httpService);
-    let messageService = new MessageService();
-    let roleService = new RoleService();
+    let celebrationService = new CelebrationService();
 
     // Commands
     let devCommand = new DevCommand();
@@ -314,14 +312,7 @@ async function start(): Promise<void> {
     let guildLeaveHandler = new GuildLeaveHandler();
 
     let jobService = new JobService([
-        new CelebrationJob(
-            client,
-            userRepo,
-            combinedRepo,
-            messageService,
-            roleService,
-            subscriptionService
-        ),
+        new CelebrationJob(client, userRepo, combinedRepo, celebrationService, subscriptionService),
     ]);
 
     let bot = new Bot(
