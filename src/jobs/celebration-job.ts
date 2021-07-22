@@ -322,8 +322,6 @@ export class CelebrationJob implements Job {
                     error
                 );
             }
-            // Wait between guilds to reduce spam and free up resources
-            await TimeUtils.sleep(500);
         }
 
         let endCalculating2 = performance.now();
