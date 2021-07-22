@@ -1,11 +1,11 @@
+import { BirthdayMessageGuildMembers, MemberAnniversaryMessageGuildMembers } from '../models';
 import { CelebrationUtils, MessageUtils } from '../utils';
 import { Client, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 
+import { GuildCelebrationData } from '../models/database';
 import { Lang } from './lang';
 import { LangCode } from '../models/enums';
 import { Logger } from '.';
-import { BirthdayMessageGuildMembers, MemberAnniversaryMessageGuildMembers } from '../models';
-import { GuildCelebrationData } from '../models/database';
 import { performance } from 'perf_hooks';
 
 let Config = require('../../config/config.json');
@@ -72,6 +72,8 @@ export class MessageService {
                         message => message.Type === 'birthday' && message.UserDiscordId === '0'
                     );
 
+                    let userSpecificMessagesToSend = [];
+
                     // User-Specific Birthday Messages
                     if (hasPremium) {
                         let color = Config.colors.default;
@@ -99,8 +101,6 @@ export class MessageService {
                         birthdayMembers = birthdayMembers.filter(
                             birthday => !birthdayMembersUserSpecific.includes(birthday)
                         );
-
-                        let userSpecificMessagesToSend = [];
 
                         // Send our user specific messages for this guild
                         for (let birthdayMember of birthdayMembersUserSpecific) {
@@ -131,39 +131,6 @@ export class MessageService {
                             let embed = new MessageEmbed().setDescription(message).setColor(color);
 
                             userSpecificMessagesToSend.push(customMessage.Embed ? embed : message);
-                        }
-
-                        // Send the user specific messages
-
-                        // Send our user specific messages for this guild
-                        if (userSpecificMessagesToSend.length > 0) {
-                            // Get the mention string
-                            let mentionString =
-                                guildCelebrationData.guildData.BirthdayMentionSetting !== 'none'
-                                    ? CelebrationUtils.getMentionString(
-                                          guildCelebrationData.guildData,
-                                          guild,
-                                          'birthday'
-                                      )
-                                    : '';
-
-                            // Send our message(s)
-                            if (mentionString && mentionString !== '')
-                                await MessageUtils.send(birthdayChannel, mentionString);
-
-                            Logger.info(
-                                `Sending user specific member anniversary messages for guild ${guild.name} (ID:${guild.id})`
-                            );
-                            for (let message of userSpecificMessagesToSend) {
-                                await MessageUtils.sendWithDelay(
-                                    birthdayChannel,
-                                    message,
-                                    100 //Config.delays.messages
-                                );
-                            }
-                            Logger.info(
-                                `Sent user specific member anniversary messages for guild ${guild.name} (ID:${guild.id})`
-                            );
                         }
                     }
 
@@ -212,9 +179,40 @@ export class MessageService {
                         null
                     );
 
-                    // Send our message(s)
+                    // Only send one mention string per celebration message type
                     if (mentionString && mentionString !== '')
                         await MessageUtils.send(birthdayChannel, mentionString);
+
+                    // Send our user specific messages for this guild
+                    if (userSpecificMessagesToSend?.length > 0) {
+                        // Get the mention string
+                        let mentionString =
+                            guildCelebrationData.guildData.BirthdayMentionSetting !== 'none'
+                                ? CelebrationUtils.getMentionString(
+                                      guildCelebrationData.guildData,
+                                      guild,
+                                      'birthday'
+                                  )
+                                : '';
+
+                        // Send our message(s)
+                        if (mentionString && mentionString !== '')
+                            await MessageUtils.send(birthdayChannel, mentionString);
+
+                        Logger.info(
+                            `Sending user specific member anniversary messages for guild ${guild.name} (ID:${guild.id})`
+                        );
+                        for (let message of userSpecificMessagesToSend) {
+                            await MessageUtils.sendWithDelay(
+                                birthdayChannel,
+                                message,
+                                Config.delays.messages
+                            );
+                        }
+                        Logger.info(
+                            `Sent user specific member anniversary messages for guild ${guild.name} (ID:${guild.id})`
+                        );
+                    }
 
                     let embed = new MessageEmbed().setDescription(message).setColor(color);
                     Logger.info(
@@ -223,7 +221,7 @@ export class MessageService {
                     await MessageUtils.sendWithDelay(
                         birthdayChannel,
                         useEmbed ? embed : message,
-                        100 //Config.delays.messages
+                        Config.delays.messages
                     );
                     Logger.info(`Sent birthday message for guild ${guild.name} (ID:${guild.id})`);
                 } catch (error) {
@@ -355,7 +353,7 @@ export class MessageService {
                                 await MessageUtils.sendWithDelay(
                                     memberAnniversaryChannel,
                                     message,
-                                    100 //Config.delays.messages
+                                    Config.delays.messages
                                 );
                             }
                             Logger.info(
@@ -510,7 +508,7 @@ export class MessageService {
                             await MessageUtils.sendWithDelay(
                                 memberAnniversaryChannel,
                                 message,
-                                100 //Config.delays.messages
+                                Config.delays.messages
                             );
                     }
 
@@ -521,7 +519,7 @@ export class MessageService {
                             await MessageUtils.sendWithDelay(
                                 memberAnniversaryChannel,
                                 message,
-                                100 //Config.delays.messages
+                                Config.delays.messages
                             );
                     }
                     Logger.info(
@@ -626,7 +624,7 @@ export class MessageService {
                     await MessageUtils.sendWithDelay(
                         serverAnniversaryChannel,
                         useEmbed ? embed : message,
-                        100 //Config.delays.messages
+                        Config.delays.messages
                     );
                     Logger.info(
                         `Sent server anniversary messages for guild ${guild.name} (ID:${guild.id})`
