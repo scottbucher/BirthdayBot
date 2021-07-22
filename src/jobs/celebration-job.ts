@@ -155,6 +155,11 @@ export class CelebrationJob implements Job {
             await TimeUtils.sleep(this.interval);
         }
 
+        Logger.info(
+            `Finished calculating all guild promises... waiting for them to finish. ${
+                (performance.now() - startCalculating) / 1000
+            }s`
+        );
         await Promise.allSettled(promises);
     }
 
