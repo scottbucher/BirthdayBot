@@ -1,5 +1,5 @@
 import { BirthdayMessageGuildMembers, MemberAnniversaryMessageGuildMembers } from '../models';
-import { CelebrationUtils, MessageUtils } from '../utils';
+import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils';
 import { Client, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 
 import { GuildCelebrationData } from '../models/database';
@@ -219,6 +219,8 @@ export class MessageService {
                         error
                     );
                 }
+                // Sleep in between guilds
+                await TimeUtils.sleep(300);
             }
         }
         Logger.info(
@@ -504,6 +506,8 @@ export class MessageService {
                         error
                     );
                 }
+                // Sleep in between guilds
+                await TimeUtils.sleep(300);
             }
         }
         Logger.info(
@@ -608,6 +612,8 @@ export class MessageService {
                         error
                     );
                 }
+                // Sleep in between guilds
+                await TimeUtils.sleep(300);
             }
         }
         Logger.info(

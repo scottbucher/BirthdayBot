@@ -1,11 +1,11 @@
-import { ActionUtils, CelebrationUtils } from '../utils';
+import { ActionUtils, CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Role } from 'discord.js';
-import { GuildCelebrationData } from '../models/database';
 
-import { Logger } from '.';
-import { performance } from 'perf_hooks';
 import { BirthdayRoleGuildMembers } from '../models';
+import { GuildCelebrationData } from '../models/database';
+import { Logger } from '.';
 import { MemberAnniversaryRoleGuildMembers } from '../models/celebration-job';
+import { performance } from 'perf_hooks';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -89,6 +89,8 @@ export class RoleService {
                         error
                     );
                 }
+                // Sleep in between guilds
+                await TimeUtils.sleep(300);
             }
         }
         Logger.info(
@@ -125,6 +127,8 @@ export class RoleService {
                         error
                     );
                 }
+                // Sleep in between guilds
+                await TimeUtils.sleep(300);
             }
         }
         Logger.info(
