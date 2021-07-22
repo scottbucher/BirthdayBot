@@ -1,9 +1,3 @@
-import { CelebrationUtils, TimeUtils } from '../utils';
-import { Client, Collection, Guild, GuildMember, Role, TextChannel } from 'discord.js';
-import { CombinedRepo, UserRepo } from '../services/database/repos';
-import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
-
-import { Job } from './job';
 import {
     BirthdayMemberRoleStatus,
     BirthdayMessageGuildMembers,
@@ -12,10 +6,16 @@ import {
     MemberAnniversaryRoleGuildMembers,
     SubscriptionStatus,
 } from '../models';
+import { CelebrationUtils, TimeUtils } from '../utils';
+import { Client, Collection, Guild, GuildMember, Role, TextChannel } from 'discord.js';
+import { CombinedRepo, UserRepo } from '../services/database/repos';
+import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
+import { MemberAnniversaryRole, UserData } from '../models/database';
+
+import { Job } from './job';
 import moment from 'moment';
 import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
-import { UserData, MemberAnniversaryRole } from '../models/database';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -65,9 +65,13 @@ export class CelebrationJob implements Job {
 
         // String of guild ids who have an active subscription to birthday bot premium
         // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
-        let subStatuses: SubscriptionStatus[] = await this.subscriptionService.getAllSubscription(
-            'premium-1'
-        );
+        let subStatuses: SubscriptionStatus[];
+
+        try {
+            subStatuses = await this.subscriptionService.getAllSubscription('premium-1');
+        } catch (error) {
+            // Could not fetch subscription data
+        }
 
         let premiumGuildIds: string[] =
             Config.payments.enabled && subStatuses
@@ -135,6 +139,8 @@ export class CelebrationJob implements Job {
             let memberAnniversaryChannel: TextChannel;
             let serverAnniversaryChannel: TextChannel;
             let birthdayRole: Role;
+
+            if (!guildData) continue;
 
             if (guildData.BirthdayChannelDiscordId !== '0') {
                 try {
@@ -245,14 +251,13 @@ export class CelebrationJob implements Job {
 
                 if (memberAnniversaryRoles && memberAnniversaryRoles.length > 0) {
                     // Test that this removes duplicates
-                    let giveRoles = [...new Set(anniversaryMemberStatuses.map(m => m.role))];
+                    let statuses = anniversaryMemberStatuses.filter(r => r.role);
+                    let giveRoles = [...new Set(statuses.map(m => m.role))];
                     for (let role of giveRoles) {
                         guildAnniversaryRoleMemberData.push(
                             new MemberAnniversaryRoleGuildMembers(
                                 role,
-                                anniversaryMemberStatuses
-                                    .filter(m => m?.role === role)
-                                    .map(m => m.member)
+                                statuses.filter(m => m.role === role).map(m => m.member)
                             )
                         );
                     }
@@ -305,9 +310,7 @@ export class CelebrationJob implements Job {
             ...guildBirthdayRoleData.map(data => data.role.guild.id),
             ...[
                 new Set(
-                    guildAnniversaryRoleMemberData.filter(
-                        data => data.memberAnniversaryRole.guild.id
-                    )
+                    guildAnniversaryRoleMemberData.map(data => data.memberAnniversaryRole.guild.id)
                 ),
             ],
         ];
