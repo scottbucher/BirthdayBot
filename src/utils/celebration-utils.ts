@@ -8,7 +8,7 @@ import {
     TrustedRole,
     UserData,
 } from '../models/database';
-import { Guild, GuildMember, Role } from 'discord.js';
+import { Guild, GuildMember, MessageEmbed, Role } from 'discord.js';
 
 import { AnniversaryMemberStatus } from '../models/celebration-job';
 import { BirthdayMemberStatus } from '../models';
@@ -272,7 +272,11 @@ export class CelebrationUtils {
     }
 
     // Change input to just take an array of CustomMessage
-    public static randomMessage(messages: CustomMessage[], hasPremium: boolean): CustomMessage {
+    public static randomMessage(
+        messages: CustomMessage[],
+        hasPremium: boolean,
+        type: string
+    ): CustomMessage {
         if (messages.length > 0) {
             if (hasPremium) {
                 // Choose a random one
@@ -280,7 +284,17 @@ export class CelebrationUtils {
             } else {
                 // Only choose from the first 10
                 return ArrayUtils.chooseRandom(
-                    messages.slice(0, Config.validation.message.maxCount.birthday.free)
+                    type === 'birthday'
+                        ? messages.slice(0, Config.validation.message.maxCount.birthday.free)
+                        : type === 'memberanniversary'
+                        ? messages.slice(
+                              0,
+                              Config.validation.message.maxCount.memberAnniversary.free
+                          )
+                        : messages.slice(
+                              0,
+                              Config.validation.message.maxCount.serverAnniversary.free
+                          )
                 );
             }
         } else {
@@ -327,9 +341,9 @@ export class CelebrationUtils {
             if (type !== 'birthday')
                 message = message
                     .split('<Year>')
-                    .join(year.toString())
+                    .join(year?.toString())
                     .split('@Year')
-                    .join(year.toString());
+                    .join(year?.toString());
         }
 
         return message;
@@ -368,6 +382,81 @@ export class CelebrationUtils {
         }
 
         return message;
+    }
+
+    public static getCelebrationMessage(
+        guild: Guild,
+        guildData: GuildData,
+        customMessages: CustomMessage[],
+        type: string,
+        celebrationMembers: GuildMember[],
+        year: number,
+        hasPremium: boolean
+    ): MessageEmbed | string {
+        let message =
+            type === 'birthday'
+                ? Lang.getRef('defaults.birthday', LangCode.EN_US)
+                : type === 'memberanniversary'
+                ? Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US)
+                : Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US);
+        let color = Config.colors.default;
+        let useEmbed = true;
+
+        let userList: string;
+
+        // Compile our user list to put in the message
+        if (type !== 'serveranniversary')
+            userList = CelebrationUtils.getUserListString(guildData, celebrationMembers);
+
+        // Add the compiled user list
+        if (customMessages.length > 0) {
+            // Get our custom message
+            let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium, type);
+
+            // Find the color of the embed
+            color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
+            useEmbed = customMessage.Embed ? true : false;
+
+            message = customMessage.Message;
+        }
+
+        // Replace the placeholders
+        message = CelebrationUtils.replacePlaceHolders(message, guild, type, userList, year);
+
+        let embed = new MessageEmbed().setDescription(message).setColor(color);
+
+        return useEmbed ? embed : message;
+    }
+
+    public static getUserSpecificCelebrationMessage(
+        guild: Guild,
+        guildData: GuildData,
+        customMessage: CustomMessage,
+        celebrationMember: GuildMember,
+        year: number,
+        hasPremium: boolean
+    ): MessageEmbed | string {
+        let message: string;
+        let color = Config.colors.default;
+
+        // Compile our user list to put in the message
+        let userList = CelebrationUtils.getUserListString(guildData, [celebrationMember]);
+
+        // Replace the placeholders
+        message = CelebrationUtils.replacePlaceHolders(
+            customMessage.Message,
+            guild,
+            customMessage.Type,
+            userList,
+            year
+        );
+
+        // Find the color of the embed
+        color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
+
+        let embed = new MessageEmbed().setDescription(message).setColor(color);
+
+        return customMessage.Embed ? embed : message;
     }
 
     public static getUserListString(guildData: GuildData, guildMember: GuildMember[]): string {
