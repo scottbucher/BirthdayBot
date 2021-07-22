@@ -204,35 +204,6 @@ export class CelebrationUtils {
         return new AnniversaryMemberStatus(guildMember, needsAnniversaryMessage, role);
     }
 
-    public static isMemberAnniversaryMessage(
-        guildMember: GuildMember,
-        guildData: GuildData
-    ): boolean {
-        // TODO: add debug mode for member anniversary
-        // if (Debug.alwaysGiveBirthdayRole) {
-        //     return true;
-        // }
-
-        if (!guildMember || !guildData || guildData.DefaultTimezone === '0') return false;
-        let currentDate = moment().tz(guildData.DefaultTimezone);
-        let memberAnniversary = moment(guildMember.joinedAt);
-
-        let currentDateFormatted = currentDate.format('MM-DD');
-        let anniversaryFormatted = memberAnniversary.format('MM-DD');
-
-        if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            anniversaryFormatted = '03-01';
-
-        if (currentDate.year() - memberAnniversary.year() === 0) return false;
-
-        // The date is correct, now check the time
-        return currentDateFormatted !== anniversaryFormatted
-            ? false
-            : currentDate.hour() !== guildData.MemberAnniversaryMessageTime
-            ? false
-            : true;
-    }
-
     public static isServerAnniversaryMessage(guild: Guild, guildData: GuildData): boolean {
         // TODO: add debug mode for server anniversary
         // if (Debug.alwaysGiveBirthdayRole) {
