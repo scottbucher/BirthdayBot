@@ -1,4 +1,4 @@
-import { ActionUtils, CelebrationUtils, MessageUtils } from '../utils';
+import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils';
 import { Client, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database';
 
@@ -44,6 +44,10 @@ export class CelebrationService {
                         // No Birthday Role
                     }
                 }
+
+                // If we can't send a message to the channel then set it to null so we skip messages
+                if (birthdayChannel && !PermissionUtils.canSend(birthdayChannel, false))
+                    birthdayChannel = null;
 
                 // If either are set we have to calculate birthday information
                 if (birthdayChannel || birthdayRole) {
@@ -292,6 +296,13 @@ export class CelebrationService {
                 if (hasPremium) {
                     memberAnniversaryRoles = guildCelebrationData?.anniversaryRoles;
                 }
+
+                // If we can't send a message to the channel then set it to null so we skip messages
+                if (
+                    memberAnniversaryChannel &&
+                    !PermissionUtils.canSend(memberAnniversaryChannel, false)
+                )
+                    memberAnniversaryChannel = null;
 
                 if (
                     memberAnniversaryChannel ||
@@ -572,6 +583,12 @@ export class CelebrationService {
                         // No server anniversary channel
                     }
 
+                    // If we can't send a message to the channel then set it to null so we skip messages
+                    if (
+                        serverAnniversaryChannel &&
+                        !PermissionUtils.canSend(serverAnniversaryChannel, false)
+                    )
+                        serverAnniversaryChannel = null;
                     if (
                         serverAnniversaryChannel &&
                         CelebrationUtils.isServerAnniversaryMessage(guild, guildData)
