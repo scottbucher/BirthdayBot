@@ -91,7 +91,7 @@ import {
 } from './commands/trusted';
 
 import { Bot } from './bot';
-import { CelebrationJob } from './jobs';
+import { CelebrationJob, UpdateMemberCacheJob } from './jobs';
 import { CustomClient } from './extensions/custom-client';
 import { DataAccess } from './services/database/data-access';
 
@@ -322,6 +322,7 @@ async function start(): Promise<void> {
 
     let jobService = new JobService([
         new CelebrationJob(client, userRepo, combinedRepo, celebrationService, subscriptionService),
+        new UpdateMemberCacheJob(client),
     ]);
 
     let bot = new Bot(
