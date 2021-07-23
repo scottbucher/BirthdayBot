@@ -156,10 +156,6 @@ export class GuildRepo {
         ]);
     }
 
-    public async updateUseEmbed(discordId: string, value: number): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateUseEmbed, [discordId, value]);
-    }
-
     public async updateTrustedPreventsMessage(discordId: string, value: number): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateTrustedPreventsMessage, [
             discordId,
