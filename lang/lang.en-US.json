@@ -926,6 +926,10 @@
                 "description": "There are no upcoming birthdays!",
                 "color": "{{REF:colors.error}}"
             },
+            "noUpcomingMemberAnniversaries": {
+                "description": "There are no upcoming member anniversaries!",
+                "color": "{{REF:colors.error}}"
+            },
             "outOfAttempts": {
                 "description": "You are out of birthday attempts!",
                 "color": "{{REF:colors.error}}"
