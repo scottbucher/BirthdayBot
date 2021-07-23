@@ -38,11 +38,11 @@ export class FormatUtils {
     }
 
     // TODO: take another look at this
-    public static getBirthday(input: string): string {
+    public static getBirthday(input: string, parser: any, littleEndian: boolean): string {
         // Try and get a date from the 3rd args
         if (
-            input.includes('02/29') ||
-            input.includes('2/29') ||
+            (!littleEndian && (input.includes('02/29') || input.includes('2/29'))) ||
+            (littleEndian && (input.includes('29/02') || input.includes('29/2'))) ||
             input
                 .toLowerCase()
                 .includes(Lang.getRef('months.feb', LangCode.EN_US).toLowerCase() + ' 29') ||
@@ -61,14 +61,14 @@ export class FormatUtils {
                 )
         )
             input = '2000-02-29';
-        let results = Chrono.parseDate(input); // Try an parse a date
+        let results = parser.parseDate(input); // Try an parse a date
 
         if (!results) return null;
 
         let month = results.getMonth() + 1; // Get the numeric value of month
         let day = results.getDate();
         let temp = `2000-${month}-${day}`;
-        let doubleCheck = Chrono.parseDate(temp);
+        let doubleCheck = parser.parseDate(temp);
 
         return doubleCheck ? temp : null;
     }
