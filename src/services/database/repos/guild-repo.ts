@@ -181,6 +181,13 @@ export class GuildRepo {
         ]);
     }
 
+    public async updateDateForamt(discordId: string, value: number): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateDateFormat, [
+            discordId,
+            value,
+        ]);
+    }
+
     public async guildSetupTrusted(
         discordId: string,
         requireAllTrustedRoles: number,

@@ -34,6 +34,7 @@ export enum Procedure {
     Guild_UpdateTrustedPreventsMessage = 'Guild_UpdateTrustedPreventsMessage',
     Guild_UpdateTrustedPreventsRole = 'Guild_UpdateTrustedPreventsRole',
     Guild_UpdateRequireAllTrustedRoles = 'Guild_UpdateRequireAllTrustedRoles',
+    Guild_UpdateDateFormat = 'Guild_UpdateDateFormat',
     Guild_SetupAnniversary = 'Guild_SetupAnniversary',
     Guild_SetupTrusted = 'Guild_SetupTrusted',
     Guild_AddOrUpdate = 'Guild_AddOrUpdate',
