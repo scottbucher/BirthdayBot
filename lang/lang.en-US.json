@@ -919,6 +919,11 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
+            "noRole": {
+                "title": "Invalid Usage!",
+                "description": ["Please provide a role!"],
+                "color": "{{REF:colors.error}}"
+            },
             "needReactAndMessageHistoryPerms": {
                 "title": "Missing Permissions!",
                 "description": "I need permission to **Add Reactions** and **Read Message History** in this channel!",

@@ -7,7 +7,7 @@ import { TrustedRoleRepo } from '../../services/database/repos';
 
 let Config = require('../../../config/config.json');
 
-const errorEmbed = Lang.getEmbed('validation.noTrustedRoleSpecified', LangCode.EN_US);
+const errorEmbed = Lang.getEmbed('validation.noRole', LangCode.EN_US);
 
 export class TrustedRoleAddSubCommand {
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
