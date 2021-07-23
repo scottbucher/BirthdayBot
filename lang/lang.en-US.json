@@ -1474,13 +1474,6 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
-            "updateMessageNoSetting": {
-                "description": [
-                    "Please provide a setting to change! Accepted settings: `{{REF:types.embed}} or {{REF:types.color}}`",
-                    "Example: `bday message {{REF:types.update}} {[REF:types.birthday}} {{REF:types.embed}} {{REF:boolean.true}}"
-                ],
-                "color": "{{REF:colors.error}}"
-            },
             "updateMessageNoEmbed": {
                 "description": [
                     "Please provide an embed setting: `T/F`",
@@ -2865,6 +2858,7 @@
             "test": "test",
             "create": "create",
             "user": "user",
+            "update": "update",
             "server": "server",
             "claim": "claim"
         },

@@ -14,17 +14,13 @@ import { CustomMessage, CustomMessages } from '../../models/database';
 
 let Config = require('../../../config/config.json');
 
-export class MessageUpdateSubCommand {
-    // bday message update type position embed/color value
-    // 0    1       2       3   4           5           6
+export class MessageEmbedSubCommand {
+    // bday message embed type # T/F
+    // 0    1       2     3    4 5
+
     constructor(private customMessageRepo: CustomMessageRepo) {}
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel,
-        hasPremium: boolean
-    ): Promise<void> {
+    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
         let type = FormatUtils.extractCelebrationType(args[3]?.toLowerCase());
 
         if (
@@ -124,78 +120,33 @@ export class MessageUpdateSubCommand {
             );
             return;
         }
-        let setting = FormatUtils.extractMiscActionType(args[5]?.toLowerCase());
 
-        if (args.length < 6 || !setting) {
+        if (args.length < 6) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.updateMessageNoSetting', LangCode.EN_US)
+                Lang.getEmbed('validation.updateMessageNoEmbed', LangCode.EN_US)
             );
             return;
         }
 
-        if (args.length < 7) {
+        let embed = FormatUtils.findBoolean(args[5]);
+
+        if (!embed) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed(
-                    'validation.' +
-                        (setting === 'embed' ? 'updateMessageNoEmbed' : 'updateMessageNoColor'),
-                    LangCode.EN_US
-                )
+                Lang.getEmbed('validation.updateMessageNoEmbed', LangCode.EN_US)
             );
             return;
         }
 
-        if (setting === 'embed') {
-            let embed = FormatUtils.findBoolean(args[6]);
-
-            if (!embed) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.updateMessageNoEmbed', LangCode.EN_US)
-                );
-                return;
-            }
-
-            // Update the question base on if it is a user or global message
-            target
-                ? await this.customMessageRepo.updateMessageEmbedUser(
-                      msg.guild.id,
-                      position,
-                      type,
-                      embed
-                  )
-                : await this.customMessageRepo.updateMessageEmbed(
-                      msg.guild.id,
-                      position,
-                      type,
-                      embed
-                  );
-        } else if (setting === 'color') {
-            let color = ColorUtils.findHex(args[6]);
-
-            if (!color) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.invalidColor', LangCode.EN_US)
-                );
-                return;
-            }
-
-            // Update the question base on if it is a user or global message
-            target
-                ? await this.customMessageRepo.updateMessageColorUser(
-                      msg.guild.id,
-                      position,
-                      type,
-                      color
-                  )
-                : await this.customMessageRepo.updateMessageColor(
-                      msg.guild.id,
-                      position,
-                      type,
-                      color
-                  );
-        }
+        // Update the question base on if it is a user or global message
+        target
+            ? await this.customMessageRepo.updateMessageEmbedUser(
+                  msg.guild.id,
+                  position,
+                  type,
+                  embed
+              )
+            : await this.customMessageRepo.updateMessageEmbed(msg.guild.id, position, type, embed);
     }
 }

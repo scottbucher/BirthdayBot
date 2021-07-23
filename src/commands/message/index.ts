@@ -5,4 +5,5 @@ export { MessageMentionSubCommand } from './message-mention-sub-command';
 export { MessageRemoveSubCommand } from './message-remove-sub-command';
 export { MessageTestSubCommand } from './message-test-sub-command';
 export { MessageTimeSubCommand } from './message-time-sub-command';
-export { MessageUpdateSubCommand } from './message-update-sub-command';
+export { MessageEmbedSubCommand } from './message-embed-sub-command';
+export { MessageColorSubCommand } from './message-color-sub-command';

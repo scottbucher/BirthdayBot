@@ -74,12 +74,13 @@ import {
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
+    MessageColorSubCommand,
+    MessageEmbedSubCommand,
     MessageListSubCommand,
     MessageMentionSubCommand,
     MessageRemoveSubCommand,
     MessageTestSubCommand,
     MessageTimeSubCommand,
-    MessageUpdateSubCommand,
 } from './commands/message';
 import { SetupAnniversary, SetupRequired, SetupTrusted } from './commands/setup';
 import {
@@ -173,7 +174,8 @@ async function start(): Promise<void> {
     let messageTimSubCommand = new MessageTimeSubCommand(guildRepo);
     let messageMentionSubCommand = new MessageMentionSubCommand(guildRepo);
     let messageTestSubCommand = new MessageTestSubCommand(guildRepo, customMessageRepo);
-    let messageUpdateSubCommand = new MessageUpdateSubCommand(customMessageRepo);
+    let messageEmbedSubCommand = new MessageEmbedSubCommand(customMessageRepo);
+    let messageColorSubCommand = new MessageColorSubCommand(customMessageRepo);
 
     // Message Command
     let messageCommand = new MessageCommand(
@@ -184,7 +186,8 @@ async function start(): Promise<void> {
         messageTimSubCommand,
         messageMentionSubCommand,
         messageTestSubCommand,
-        messageUpdateSubCommand
+        messageEmbedSubCommand,
+        messageColorSubCommand
     );
 
     // Config Sub Commands
