@@ -96,7 +96,7 @@ export class CelebrationService {
                             m =>
                                 m.needsMessage &&
                                 (!trustedRoles ||
-                                    trustedRoles.length > 0 ||
+                                    trustedRoles.length === 0 ||
                                     CelebrationUtils.passesTrustedCheck(
                                         guildCelebrationData.guildData.RequireAllTrustedRoles,
                                         trustedRoles,
@@ -116,7 +116,7 @@ export class CelebrationService {
                         m =>
                             (m.needsRoleAdded || m.needsRoleRemoved) &&
                             (!trustedRoles ||
-                                trustedRoles.length > 0 ||
+                                trustedRoles.length === 0 ||
                                 CelebrationUtils.passesTrustedCheck(
                                     guildCelebrationData.guildData.RequireAllTrustedRoles,
                                     trustedRoles,
