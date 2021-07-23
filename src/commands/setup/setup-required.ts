@@ -84,7 +84,8 @@ export class SetupRequired {
                                     allow: ['VIEW_CHANNEL'],
                                 },
                                 {
-                                    id: guild.me.roles.cache.filter(role => role.managed).first(),
+                                    id: guild.me.roles.cache.filter(role => role.managed).first()
+                                        .id,
                                     allow: [
                                         'VIEW_CHANNEL',
                                         'SEND_MESSAGES',

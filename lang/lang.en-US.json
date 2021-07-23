@@ -1782,7 +1782,7 @@
             "update": {
                 "title": "{{REF:bot.name}} 3.0 Update Notes",
                 "description": [
-                    "For full break down of the update visit the [3.0 Update Guide]({{REF:recentUpdateDoc}}).",
+                    "For full break down of the update visit the [3.0 Update Guide]({{REF:docLinks.recentUpdateDoc}}).",
                     "",
                     "When I started this Birthday Bot update I had no plans for it to be this large.",
                     "Fast forward almost **8 months** and it is finally ready to go!",
