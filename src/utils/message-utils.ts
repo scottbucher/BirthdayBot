@@ -122,6 +122,7 @@ export class MessageUtils {
     }
 
     public static async react(msg: Message, emoji: EmojiResolvable): Promise<MessageReaction> {
+        if (!msg) return;
         try {
             return await msg.react(emoji);
         } catch (error) {

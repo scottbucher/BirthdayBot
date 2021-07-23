@@ -70,6 +70,8 @@ export class ViewCommand implements Command {
             return;
         }
 
+        if (!target) target = msg.author;
+
         if (type === 'birthday') {
             let userData = await this.userRepo.getUser(target.id);
 
