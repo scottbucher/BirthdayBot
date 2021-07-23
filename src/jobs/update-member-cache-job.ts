@@ -1,18 +1,17 @@
 import { Client } from 'discord.js';
-import { Logger } from '../services';
-
 import { Job } from './job';
-import schedule from 'node-schedule';
+import { Logger } from '../services';
 import { TimeUtils } from '../utils';
+import schedule from 'node-schedule';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 
 export class UpdateMemberCacheJob implements Job {
     public name = 'Update Member Cache';
-    public schedule: string = Config.jobs.udateMemberCacheJob.schedule;
-    public log: boolean = Config.jobs.udateMemberCacheJob.log;
-    public interval: number = Config.jobs.updateMemberCache.interval;
+    public schedule: string = Config.jobs.updateMemberCacheJob.schedule;
+    public log: boolean = Config.jobs.updateMemberCacheJob.log;
+    public interval: number = Config.jobs.updateMemberCacheJob.interval;
 
     constructor(private client: Client) {}
 
