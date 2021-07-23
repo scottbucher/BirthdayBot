@@ -2150,7 +2150,7 @@
                     "**{{REF:bot.prefix}} config {{REF:types.timezone}} <timezone> - Set the default server timezone.",
                     "**{{REF:bot.prefix}} config {{REF:types.useTimezone}} <{{REF:types.user}}/{{REF:types.server}}> - Set which timezone to use for celebrations.",
                     "**{{REF:bot.prefix}} config {{REF:types.nameFormat}} <{{REF:types.mention}}/{{REF:types.nickname}}/{{REF:types.username}}/{{REF:types.tag}}/{{REF:types.default}}>** - Decide how member's names will appear.",
-                    "**{{REF:bot.prefix}} config {{REF:types.dateFormat}} <{{REF:types.monthDay}} or {{REF:types.dayMonth}}>** - Decide how birthdays are detected when member set their birthday.",
+                    "**{{REF:bot.prefix}} config {{REF:types.dateFormat}} <{{REF:types.monthDay}} or {{REF:types.dayMonth}}>** - Decide how birthdays are detected when members set their birthday.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
