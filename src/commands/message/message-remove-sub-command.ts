@@ -103,7 +103,7 @@ export class MessageRemoveSubCommand {
         if (!message) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validiation.customMessageInvalidMessageNumber', LangCode.EN_US, {
+                Lang.getEmbed('validation.customMessageInvalidMessageNumber', LangCode.EN_US, {
                     ICON: msg.client.user.displayAvatarURL(),
                 })
             );

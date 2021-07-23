@@ -1,18 +1,11 @@
-import {
-    BirthdayMemberRoleStatus,
-    BirthdayMessageGuildMembers,
-    BirthdayRoleGuildMembers,
-    MemberAnniversaryMessageGuildMembers,
-    MemberAnniversaryRoleGuildMembers,
-    SubscriptionStatus,
-} from '../models';
+import { CelebrationService, Logger, SubscriptionService } from '../services';
 import { CelebrationUtils, TimeUtils } from '../utils';
-import { Client, Collection, Guild, GuildMember, Role, TextChannel } from 'discord.js';
+import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import { CombinedRepo, UserRepo } from '../services/database/repos';
-import { Logger, MessageService, RoleService, SubscriptionService } from '../services';
-import { MemberAnniversaryRole, UserData } from '../models/database';
 
 import { Job } from './job';
+import { SubscriptionStatus } from '../models';
+import { UserData } from '../models/database';
 import moment from 'moment';
 import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
@@ -30,8 +23,7 @@ export class CelebrationJob implements Job {
         private client: Client,
         private userRepo: UserRepo,
         private combinedRepo: CombinedRepo,
-        private messageService: MessageService,
-        private roleService: RoleService,
+        private celebrationService: CelebrationService,
         private subscriptionService: SubscriptionService
     ) {}
 
@@ -83,316 +75,100 @@ export class CelebrationJob implements Job {
             await this.combinedRepo.GetRawCelebrationData(discordIds)
         );
 
-        let endCalculating = performance.now();
-        Logger.info(
-            `Finished fetching database information for guilds and users in ${
-                (endCalculating - startCalculating) / 1000
-            }s`
-        );
-
-        Logger.info(
-            Logs.info.birthdayJobGuildCount.replace(
-                '{GUILD_COUNT}',
-                guildCelebrationDatas.length.toLocaleString()
-            )
-        );
-
-        // Object to send the message service for birthday message members
-        let guildBirthdayMessageMemberData: BirthdayMessageGuildMembers[] = [];
-
-        // Object to send the role service for birthday role members
-        let guildBirthdayRoleData: BirthdayRoleGuildMembers[] = [];
-
-        // Object to send the message service for server anniversary message servers
-        let guildAnniversaryMessageMemberData: MemberAnniversaryMessageGuildMembers[] = [];
-
-        // Object to send the role service for member anniversary role members
-        let guildAnniversaryRoleMemberData: MemberAnniversaryRoleGuildMembers[] = [];
-
-        let guildsWithAnniversaryMessage: TextChannel[] = [];
-
-        Logger.info(`Start calculating all guild data...`);
-        let startCalculating2 = performance.now();
-
-        for (let guildInCache of guildCache.array()) {
-            let guild = guildInCache;
+        let promises = [];
+        for (let guildCelebrationData of guildCelebrationDatas) {
+            // Resolve Guild
+            let guildData = guildCelebrationData.guildData;
+            let guild: Guild;
             try {
-                guild = await this.client.guilds.fetch(guildInCache.id);
+                guild = await this.client.guilds.fetch(guildData.GuildDiscordId);
+                if (!guild) continue;
             } catch (error) {
-                await TimeUtils.sleep(200);
+                Logger.error(
+                    Logs.error.resolveGuild
+                        .replace('{GUILD_ID}', guildData?.GuildDiscordId)
+                        .replace('{GUILD_NAME}', guild?.name),
+                    error
+                );
                 continue;
             }
-            let hasPremium = premiumGuildIds.includes(guild.id);
-            let guildMembers: Collection<string, GuildMember> = guild.members.cache;
-
-            // Get the guildData for this guild
-            let guildData = guildCelebrationDatas.find(
-                data => data.guildData.GuildDiscordId === guild.id
-            )?.guildData;
-
-            // Get the blacklist for this guild
-            let blacklist = guildCelebrationDatas
-                .find(data => data.guildData.GuildDiscordId === guild.id)
-                ?.blacklistedMembers.map(data => data.UserDiscordId);
-
-            let birthdayChannel: TextChannel;
-            let memberAnniversaryChannel: TextChannel;
-            let serverAnniversaryChannel: TextChannel;
-            let birthdayRole: Role;
-
-            if (!guildData) continue;
 
             try {
-                if (guildData.BirthdayChannelDiscordId !== '0') {
-                    try {
-                        birthdayChannel = guild.channels.resolve(
-                            guildData.BirthdayChannelDiscordId
-                        ) as TextChannel;
-                    } catch (error) {
-                        // No birthday channel
-                    }
-                }
+                let members: Collection<string, GuildMember> = guild.members.cache;
+                let beforeCacheSize = guild.members.cache.size;
 
-                if (guildData.BirthdayRoleDiscordId !== '0') {
-                    try {
-                        birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
-                    } catch (error) {
-                        // No Birthday Role
-                    }
-                }
+                // if (Math.abs(guild.memberCount - beforeCacheSize) > 1) {
+                //     try {
+                //         members = await guild.members.fetch();
+                //     } catch (error) {
+                //         members = guild.members.cache;
+                //         Logger.error(
+                //             Logs.error.birthdayService
+                //                 .replace('{GUILD_ID}', guildData.GuildDiscordId)
+                //                 .replace('{GUILD_NAME}', guild.name)
+                //                 .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                //                 .replace(
+                //                     '{MEMBER_CACHE_BEFORE_COUNT}',
+                //                     beforeCacheSize.toLocaleString()
+                //                 )
+                //                 .replace(
+                //                     '{MEMBER_CACHE_AFTER_COUNT}',
+                //                     guild.members.cache.size.toLocaleString()
+                //                 ),
+                //             error
+                //         );
+                //     }
+                // }
 
-                // If either are set we have to calculate birthday information
-                if (birthdayChannel || birthdayRole) {
-                    let membersWithBirthdayTodayOrTomorrow = guildMembers
-                        .filter(
-                            member =>
-                                CelebrationUtils.isBirthdayTodayOrYesterday(
-                                    birthdayUserData.find(data => data.UserDiscordId === member.id),
-                                    guildData
-                                ) && !blacklist.includes(member.id)
+                let hasPremium = premiumGuildIds.includes(guild.id);
+
+                promises.push(
+                    this.celebrationService
+                        .run(
+                            guild,
+                            guildCelebrationData,
+                            birthdayUserData,
+                            members.map(m => m),
+                            hasPremium
                         )
-                        .array();
-
-                    let birthdayMemberStatuses = membersWithBirthdayTodayOrTomorrow.map(m =>
-                        CelebrationUtils.getBirthdayMemberStatus(
-                            birthdayUserData.find(data => data.UserDiscordId === m.id),
-                            m,
-                            guildData
-                        )
-                    );
-
-                    // See if we have any to push to the message/role service
-                    let totalMembersWhoNeedMessage = birthdayMemberStatuses.filter(
-                        m => m.needsMessage
-                    ).length;
-                    let totalMembersWhoNeedRole = birthdayMemberStatuses.filter(
-                        m => m.needsRoleAdded || m.needsRoleRemoved
-                    ).length;
-
-                    if (birthdayChannel && totalMembersWhoNeedMessage > 0) {
-                        // Calculate who needs the birthday message & push them to BirthdayMessageGuildMembers
-                        guildBirthdayMessageMemberData.push(
-                            new BirthdayMessageGuildMembers(
-                                birthdayChannel,
-                                birthdayMemberStatuses
-                                    .filter(m => m.needsMessage)
-                                    .map(m => m.member)
-                            )
-                        );
-                    }
-
-                    if (birthdayRole && totalMembersWhoNeedRole > 0) {
-                        // Calculate the give and take for birthday roles
-                        guildBirthdayRoleData.push(
-                            new BirthdayRoleGuildMembers(
-                                birthdayRole,
-                                birthdayMemberStatuses
-                                    .filter(m => m.needsRoleAdded || m.needsRoleRemoved)
-                                    .map(
-                                        m =>
-                                            new BirthdayMemberRoleStatus(
-                                                m.member,
-                                                m.needsRoleAdded || m.needsRoleRemoved
-                                            )
-                                    )
-                            )
-                        );
-                    }
-                }
-            } catch (error) {
-                // Error in calculating birthday information for this guild
-                Logger.error(
-                    Logs.error.errorWhenCalculatingBirthdayDataForGuild
-                        .replace('{GUILD_ID}', guild.id)
-                        .replace('{GUILD_NAME}', guild.name),
-                    error
-                );
-            }
-
-            try {
-                if (guildData.MemberAnniversaryChannelDiscordId !== '0') {
-                    try {
-                        memberAnniversaryChannel = guild.channels.resolve(
-                            guildData.MemberAnniversaryChannelDiscordId
-                        ) as TextChannel;
-                    } catch (error) {
-                        // No member anniversary channel
-                    }
-                }
-
-                // Get the member anniversaries for this guild if they have premium
-                let memberAnniversaryRoles: MemberAnniversaryRole[];
-
-                if (hasPremium) {
-                    memberAnniversaryRoles = guildCelebrationDatas.find(
-                        data => data.guildData.GuildDiscordId === guild.id
-                    )?.anniversaryRoles;
-                }
-
-                if (
-                    memberAnniversaryChannel ||
-                    (memberAnniversaryRoles && memberAnniversaryRoles.length > 0)
-                ) {
-                    let anniversaryMemberStatuses = guildMembers.map(m =>
-                        CelebrationUtils.getAnniversaryMemberStatuses(
-                            m,
-                            guildData,
-                            memberAnniversaryRoles
-                        )
-                    );
-
-                    if (memberAnniversaryChannel && anniversaryMemberStatuses.length > 0) {
-                        guildAnniversaryMessageMemberData.push(
-                            new MemberAnniversaryMessageGuildMembers(
-                                memberAnniversaryChannel,
-                                anniversaryMemberStatuses
-                                    .filter(m => m.needsMessage)
-                                    .map(m => m.member)
-                            )
-                        );
-                    }
-
-                    if (memberAnniversaryRoles && memberAnniversaryRoles.length > 0) {
-                        // Test that this removes duplicates
-                        let statuses = anniversaryMemberStatuses.filter(r => r.role);
-                        let giveRoles = [...new Set(statuses.map(m => m.role))];
-                        for (let role of giveRoles) {
-                            guildAnniversaryRoleMemberData.push(
-                                new MemberAnniversaryRoleGuildMembers(
-                                    role,
-                                    statuses.filter(m => m.role === role).map(m => m.member)
-                                )
+                        .catch(error => {
+                            Logger.error(
+                                Logs.error.celebrateBirthday
+                                    .replace('{GUILD_NAME}', guild?.name)
+                                    .replace('{GUILD_ID}', guild?.id),
+                                error
                             );
-                        }
-                    }
-                }
+                        })
+                );
             } catch (error) {
-                // Error getting member anniversary data for this guild
                 Logger.error(
-                    Logs.error.errorWhenCalculatingMemberAnniversaryDataForGuild
-                        .replace('{GUILD_ID}', guild.id)
-                        .replace('{GUILD_NAME}', guild.name),
+                    Logs.error.birthdayService
+                        .replace('{GUILD_ID}', guildData?.GuildDiscordId)
+                        .replace('{GUILD_NAME}', guild?.name)
+                        .replace('{MEMBER_COUNT}', guild?.memberCount.toLocaleString())
+                        .replace(
+                            '{MEMBER_CACHE_COUNT}',
+                            guild?.members.cache.size.toLocaleString()
+                        ),
                     error
                 );
+                continue;
             }
 
-            try {
-                if (guildData.ServerAnniversaryChannelDiscordId !== '0') {
-                    try {
-                        serverAnniversaryChannel = guild.channels.resolve(
-                            guildData.ServerAnniversaryChannelDiscordId
-                        ) as TextChannel;
-                    } catch (error) {
-                        // No server anniversary channel
-                    }
-
-                    if (
-                        serverAnniversaryChannel &&
-                        CelebrationUtils.isServerAnniversaryMessage(guild, guildData)
-                    ) {
-                        guildsWithAnniversaryMessage.push(serverAnniversaryChannel);
-                    }
-                }
-            } catch (error) {
-                // Error getting server anniversary information for this guild
-                Logger.error(
-                    Logs.error.errorWhenCalculatingServerAnniversaryDataForGuild
-                        .replace('{GUILD_ID}', guild.id)
-                        .replace('{GUILD_NAME}', guild.name),
-                    error
-                );
-            }
+            await TimeUtils.sleep(this.interval);
         }
 
-        let endCalculating2 = performance.now();
         Logger.info(
-            `Finished calculating all guild data in ${
-                (endCalculating2 - startCalculating2) / 1000
+            `Finished calculating all guild promises... waiting for them to finish. ${
+                (performance.now() - startCalculating) / 1000
             }s`
         );
-
-        // We should now have the filtered lists of birthdayMessageGuildMembers, memberAnniversaryMessageGuildMembers, and guildsWithAnniversaryMessage
-        // as well as the filtered lists of addBirthdayRoleGuildMembers, removeBirthdayRoleGuildMembers, and anniversaryRoleGuildMembers
-        // This means we should be able to call the MessageService & the RoleService
-
-        Logger.info(Logs.info.messageServiceRun);
-        Logger.info(Logs.info.roleServiceRun);
-
-        let services = [];
-
-        let messageGuildIds = [
-            ...guildBirthdayMessageMemberData.map(data => data.birthdayChannel.guild.id),
-            ...guildAnniversaryMessageMemberData.map(
-                data => data.memberAnniversaryChannel.guild.id
-            ),
-            ...guildsWithAnniversaryMessage.map(data => data.guild.id),
-        ];
-
-        let roleGuildIds = [
-            ...guildBirthdayRoleData.map(data => data.role.guild.id),
-            ...[
-                new Set(
-                    guildAnniversaryRoleMemberData.map(data => data.memberAnniversaryRole.guild.id)
-                ),
-            ],
-        ];
-
-        services.push(
-            this.messageService
-                .run(
-                    this.client,
-                    guildCelebrationDatas.filter(data =>
-                        messageGuildIds.includes(data.guildData.GuildDiscordId)
-                    ),
-                    guildBirthdayMessageMemberData,
-                    guildAnniversaryMessageMemberData,
-                    guildsWithAnniversaryMessage,
-                    premiumGuildIds
-                )
-                .catch(error => {
-                    // Error running the service
-                })
+        await Promise.allSettled(promises);
+        Logger.info(
+            `All guilds have finished running the celebration service. Total time of ${
+                (performance.now() - startCalculating) / 1000
+            }s`
         );
-
-        services.push(
-            this.roleService
-                .run(
-                    this.client,
-                    guildCelebrationDatas.filter(data =>
-                        roleGuildIds.includes(data.guildData.GuildDiscordId)
-                    ),
-                    guildBirthdayRoleData,
-                    guildAnniversaryRoleMemberData,
-                    premiumGuildIds
-                )
-                .catch(error => {
-                    // Error running the service
-                })
-        );
-
-        await Promise.allSettled(services);
-        Logger.info(Logs.info.messageServiceCompleted);
-        Logger.info(Logs.info.roleServiceCompleted);
     }
 
     public start(): void {

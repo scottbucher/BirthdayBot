@@ -142,7 +142,9 @@ export class NextCommand implements Command {
                 }
 
                 guildMembers = guildMembers.filter(
-                    member => moment(member.joinedAt).format('MM-DD') === closestMonthDay
+                    member =>
+                        moment(member.joinedAt).format('MM-DD') === closestMonthDay &&
+                        now.year() - moment(member.joinedAt).year() === 0
                 );
 
                 let userList = CelebrationUtils.getUserListString(guildData, guildMembers);
