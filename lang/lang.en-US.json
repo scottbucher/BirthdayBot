@@ -1974,6 +1974,11 @@
                         "inline": true
                     },
                     {
+                        "name": "{{REF:terms.dateFormat}}",
+                        "value": "{{DATE_FORMAT}}",
+                        "inline": true
+                    },
+                    {
                         "name": "{{REF:terms.trustedPreventsRole}}",
                         "value": "{{TRUSTED_PREVENTS_ROLE}}",
                         "inline": true
@@ -2765,6 +2770,7 @@
             "numberOfTrustedRoles": "Number Of Trusted Roles",
             "useTimezone": "Use Timezone",
             "nameFormat": "Name Format",
+            "dateFormat": "Date Format",
             "memberAnniversaryChannel": "Member Anniversary Channel",
             "serverAnniversaryChannel": "Server Anniversary Channel",
             "birthdayMessageTime": "Birthday Message Time",
