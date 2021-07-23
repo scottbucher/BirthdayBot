@@ -185,10 +185,25 @@ export class FormatUtils {
         for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
             if (hasPremium || customMessage.Position <= maxMessagesFree) {
-                description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
+                description += `**${i.toLocaleString()}.** ${customMessage.Message}\n`;
             } else {
-                description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n\n`;
+                description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n`;
             }
+
+            // Added embedded part
+            description += ` - **${Lang.getRef('terms.embedded', LangCode.EN_US)}**: ${
+                customMessage.Embed
+                    ? Lang.getRef('boolean.true', LangCode.EN_US)
+                    : Lang.getRef('boolean.False', LangCode.EN_US)
+            }\n`;
+
+            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            // Added color part
+            description += ` - **${Lang.getRef('terms.color', LangCode.EN_US)}**: #${
+                customMessage.Color
+            }`;
+            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            description += '\n\n';
             i++;
         }
 
@@ -263,14 +278,29 @@ export class FormatUtils {
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
+                } ${customMessage.Message.replace('<Users>', member.toString())}\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
+                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n`;
             }
+
+            // Added embedded part
+            description += ` - **${Lang.getRef('terms.embedded', LangCode.EN_US)}**: ${
+                customMessage.Embed
+                    ? Lang.getRef('boolean.true', LangCode.EN_US)
+                    : Lang.getRef('boolean.False', LangCode.EN_US)
+            }\n`;
+
+            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            // Added color part
+            description += ` - **${Lang.getRef('terms.color', LangCode.EN_US)}**: #${
+                customMessage.Color
+            }`;
+            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            description += '\n\n';
         }
 
         let listEmbed = 'list.';

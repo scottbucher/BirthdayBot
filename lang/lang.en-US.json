@@ -2756,6 +2756,8 @@
             "amTime": "AM",
             "pmTime": "PM",
             "noOne": "no one",
+            "color": "Color",
+            "embedded": "Embedded",
             "na": "N/A",
             "change": "Change",
             "suggest": "Suggest",
