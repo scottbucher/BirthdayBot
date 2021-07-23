@@ -131,9 +131,9 @@
             "anniversarySetupMemberChannel": {
                 "title": "Anniversary Setup - Member Anniversary Channel",
                 "description": [
-                    "For help, view the anniversary setup guide [here]({{REF:dockLinks.setupAnniversaryGuide}})!",
+                    "For help, view the anniversary setup guide [here]({{REF:docLinks.setupAnniversaryGuide}})!",
                     "",
-                    "To begin you must set up the member anniversary channel [(?)]({{REF:dockLinks.whatIsMemberAnniversaryChannel}})",
+                    "To begin you must set up the member anniversary channel [(?)]({{REF:docLinks.whatIsMemberAnniversaryChannel}})",
                     "",
                     "Please select an option"
                 ],
@@ -156,9 +156,9 @@
             "anniversarySetupServerChannel": {
                 "title": "Anniversary Setup - Server Anniversary Channel",
                 "description": [
-                    "For help, view the anniversary setup guide [here]({{REF:dockLinks.setupAnniversaryGuide}})!",
+                    "For help, view the anniversary setup guide [here]({{REF:docLinks.setupAnniversaryGuide}})!",
                     "",
-                    "To begin you must set up the server anniversary channel [(?)]({{REF:dockLinks.whatIsServerAnniversaryChannel}})",
+                    "To begin you must set up the server anniversary channel [(?)]({{REF:docLinks.whatIsServerAnniversaryChannel}})",
                     "",
                     "Please select an option"
                 ],
