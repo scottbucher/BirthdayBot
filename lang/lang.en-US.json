@@ -490,11 +490,11 @@
                 "color": "{{REF:colors.success}}"
             },
             "blacklistAddSuccess": {
-                "description": "Successfully removed {{TARGET}} from the birthday blacklist!",
+                "description": "Successfully added {{TARGET}} to the birthday blacklist!",
                 "color": "{{REF:colors.success}}"
             },
             "blacklistRemoveSuccess": {
-                "description": "Successfully added {{TARGET}} to the birthday blacklist!",
+                "description": "Successfully removed {{TARGET}} from the birthday blacklist!",
                 "color": "{{REF:colors.success}}"
             },
             "masterRoleCreated": {
