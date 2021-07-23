@@ -49,7 +49,7 @@ export class MessageTestSubCommand {
             // Try and get the position
             position = ParseUtils.parseInt(args[4]);
 
-            if (!position) {
+            if (position === undefined || position === null) {
                 await MessageUtils.send(
                     channel,
                     Lang.getEmbed('validation.invalidMessageNumber', LangCode.EN_US)
@@ -89,7 +89,7 @@ export class MessageTestSubCommand {
                 ? moment().diff(msg.guild.createdAt, 'years') + 1
                 : null;
 
-        if (!messages) {
+        if (messages.customMessages.length === 0 || position === 0) {
             let defaultMessage =
                 type === 'memberanniversary'
                     ? Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US)
@@ -111,6 +111,7 @@ export class MessageTestSubCommand {
                     )
                     .setColor(Config.colors.default)
             );
+            return;
         }
 
         let chosenMessage = target
