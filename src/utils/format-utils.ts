@@ -733,6 +733,10 @@ export class FormatUtils {
                 return 'trusted';
             case Lang.getRef('types.claim', LangCode.EN_US).toLowerCase():
                 return 'claim';
+            case Lang.getRef('types.embed', LangCode.EN_US).toLowerCase():
+                return 'embed';
+            case Lang.getRef('types.color', LangCode.EN_US).toLowerCase():
+                return 'color';
             default:
                 return null;
         }

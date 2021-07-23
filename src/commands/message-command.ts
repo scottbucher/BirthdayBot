@@ -13,6 +13,7 @@ import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MessageUtils, FormatUtils } from '../utils';
+import { MessageUpdateSubCommand } from './message/message-update-sub-command';
 
 export class MessageCommand implements Command {
     public name: string = 'message';
@@ -32,7 +33,8 @@ export class MessageCommand implements Command {
         private messageRemoveSubCommand: MessageRemoveSubCommand,
         private messageTimeSubCommand: MessageTimeSubCommand,
         private messageMentionSubCommand: MessageMentionSubCommand,
-        private messageTestSubCommand: MessageTestSubCommand
+        private messageTestSubCommand: MessageTestSubCommand,
+        private messageUpdateSubCommand: MessageUpdateSubCommand
     ) {}
 
     public async execute(
@@ -65,6 +67,8 @@ export class MessageCommand implements Command {
             this.messageMentionSubCommand.execute(args, msg, channel);
         } else if (type === 'test') {
             this.messageTestSubCommand.execute(args, msg, channel);
+        } else if (type === 'update') {
+            this.messageUpdateSubCommand.execute(args, msg, channel, hasPremium);
         } else {
             await MessageUtils.send(
                 channel,

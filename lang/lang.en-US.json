@@ -1016,6 +1016,16 @@
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
             },
+            "updateMessageInvalidType": {
+                "title": "Update Custom Message",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
             "clearMessageInvalidType": {
                 "title": "Clear Custom Message",
                 "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
@@ -1461,6 +1471,27 @@
                 "description": [
                     "Please provide a message number or user!",
                     "Find this using `{{REF:bot.prefix}} message {{REF:types.list}} <type>`!"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "updateMessageNoSetting": {
+                "description": [
+                    "Please provide a setting to change! Accepted settings: `{{REF:types.embed}} or {{REF:types.color}}`",
+                    "Example: `bday message {{REF:types.update}} {[REF:types.birthday}} {{REF:types.embed}} {{REF:boolean.true}}"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "updateMessageNoEmbed": {
+                "description": [
+                    "Please provide an embed setting: `T/F`",
+                    "Example: `bday message {{REF:types.update}} {[REF:types.birthday}} {{REF:types.embed}} {{REF:boolean.true}}"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "updateMessageNoColor": {
+                "description": [
+                    "Please provide a color!",
+                    "Example: `bday message {{REF:types.update}} {[REF:types.birthday}} {{REF:types.color}} blue"
                 ],
                 "color": "{{REF:colors.error}}"
             },
