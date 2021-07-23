@@ -1768,7 +1768,17 @@
             },
             "userSpecificMessages": {
                 "title": "{{REF:terms.premiumRequired}}",
-                "description": "User-specific messages are a premium feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
+                "description": "User-specific messages are a premium only feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
+                "footer": {
+                    "text": "{{REF:footers.whyPremium}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "messageColor": {
+                "title": "{{REF:terms.premiumRequired}}",
+                "description": "Message colors are a premium only feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
                 "footer": {
                     "text": "{{REF:footers.whyPremium}}",
                     "icon": "{{ICON}}"

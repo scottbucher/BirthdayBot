@@ -26,6 +26,16 @@ export class MessageColorSubCommand {
         channel: TextChannel,
         hasPremium: boolean
     ): Promise<void> {
+        if (!hasPremium) {
+            await MessageUtils.send(
+                channel,
+                Lang.getEmbed('premiumRequired.messageColor', LangCode.EN_US, {
+                    ICON: msg.client.user.displayAvatarURL(),
+                })
+            );
+            return;
+        }
+
         let type = FormatUtils.extractCelebrationType(args[3]?.toLowerCase());
 
         if (
