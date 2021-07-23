@@ -107,10 +107,6 @@ export class CelebrationService {
                         )
                         .map(m => m.member);
 
-                    if (guild.id === '660711235766976553') {
-                        let test = 'dadwad';
-                    }
-
                     // Filter for those who need the role added/removed and pass the trusted check
                     let membersWhoNeedRole = birthdayMemberStatuses.filter(
                         m =>
