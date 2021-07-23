@@ -142,7 +142,7 @@ export class TestCommand implements Command {
             let trustedCheckRole = false;
             let trustedPreventsMessage = guildData.TrustedPreventsMessage;
             let trustedPreventsRole = guildData.TrustedPreventsRole;
-            let birthdayCheck = target.bot ? true : userData.Birthday;
+            let birthdayCheck = target.bot ? true : userData?.Birthday ? true : false;
             let blacklistCheck = false;
 
             let message = Lang.getRef('defaults.birthdayMessage', LangCode.EN_US);
