@@ -163,5 +163,13 @@ export class MessageColorSubCommand {
                   color
               )
             : await this.customMessageRepo.updateMessageColor(msg.guild.id, position, type, color);
+
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.updateMessageColor', LangCode.EN_US, {
+                COLOR: `#${color}`,
+                ICON: msg.client.user.displayAvatarURL(),
+            })
+        );
     }
 }

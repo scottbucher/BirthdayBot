@@ -75,7 +75,7 @@ export class CustomMessageRepo {
         discordId: string,
         value: number,
         type: string,
-        embed: boolean
+        embed: number
     ): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Message_UpdateEmbedUser, [
             discordId,

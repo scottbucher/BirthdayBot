@@ -481,6 +481,22 @@
                 },
                 "color": "{{REF:colors.success}}"
             },
+            "updateMessageEmbed": {
+                "description": "Successfully updated the message's embed setting to {{EMBED}}!",
+                "footer": {
+                    "text": "{{REF:emotes.confirm}} Message Updated",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{REF:colors.success}}"
+            },
+            "updateMessageColor": {
+                "description": "Successfully updated the message's color to {{COLOR}}!",
+                "footer": {
+                    "text": "{{REF:emotes.confirm}} Message Updated",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{REF:colors.success}}"
+            },
             "promptExpired": {
                 "description": "This command has expired.",
                 "color": "{{REF:colors.error}}"
@@ -878,7 +894,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command!",
-                    "Accepted Values: `{{REF:types.list}} <value>`, `{{REF:types.add}} <Value>`, `{{REF:types.remove}} <#>`, `{{REF:types.clear}}`, `{{REF:types.time}} <0-23>`, and `{{REF:types.mention}} <Value>`, <{{REF:types.embed}}`, and `{{REF:types.color}}>`"
+                    "Accepted Values: `{{REF:types.list}} <value>`, `{{REF:types.add}} <Value>`, `{{REF:types.remove}} <#>`, `{{REF:types.clear}}`, `{{REF:types.time}} <0-23>`, and `{{REF:types.mention}} <Value>`, `{{REF:types.embed}} <T/F>`, and `{{REF:types.color}} <color/hex>`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -1477,14 +1493,14 @@
             "updateMessageNoEmbed": {
                 "description": [
                     "Please provide an embed setting: `T/F`",
-                    "Example: `bday message {{REF:types.update}} {[REF:types.birthday}} {{REF:types.embed}} {{REF:boolean.true}}"
+                    "Example: `bday message {{REF:types.update}} {{REF:types.birthday}} {{REF:types.embed}} {{REF:boolean.true}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
             "updateMessageNoColor": {
                 "description": [
                     "Please provide a color!",
-                    "Example: `bday message {{REF:types.update}} {[REF:types.birthday}} {{REF:types.color}} blue"
+                    "Example: `bday message {{REF:types.update}} {{REF:types.birthday}} {{REF:types.color}} blue`"
                 ],
                 "color": "{{REF:colors.error}}"
             },

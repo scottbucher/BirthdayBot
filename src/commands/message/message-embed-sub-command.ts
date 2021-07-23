@@ -4,7 +4,7 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { ColorUtils, FormatUtils, MessageUtils, ParseUtils } from '../../utils';
+import { CelebrationUtils, ColorUtils, FormatUtils, MessageUtils, ParseUtils } from '../../utils';
 import { Message, MessageReaction, TextChannel, User } from 'discord.js';
 
 import { CustomMessageRepo } from '../../services/database/repos';
@@ -131,7 +131,7 @@ export class MessageEmbedSubCommand {
 
         let embed = FormatUtils.findBoolean(args[5]);
 
-        if (!embed) {
+        if (embed === null) {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.updateMessageNoEmbed', LangCode.EN_US)
@@ -145,8 +145,16 @@ export class MessageEmbedSubCommand {
                   msg.guild.id,
                   position,
                   type,
-                  embed
+                  embed ? 1 : 0
               )
             : await this.customMessageRepo.updateMessageEmbed(msg.guild.id, position, type, embed);
+
+        await MessageUtils.send(
+            channel,
+            Lang.getEmbed('results.updateMessageEmbed', LangCode.EN_US, {
+                EMBED: Lang.getRef('boolean.' + (embed ? 'true' : 'false'), LangCode.EN_US),
+                ICON: msg.client.user.displayAvatarURL(),
+            })
+        );
     }
 }

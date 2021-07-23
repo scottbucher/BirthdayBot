@@ -194,14 +194,14 @@ export class FormatUtils {
             description += ` - **${Lang.getRef('terms.embedded', LangCode.EN_US)}**: ${
                 customMessage.Embed
                     ? Lang.getRef('boolean.true', LangCode.EN_US)
-                    : Lang.getRef('boolean.False', LangCode.EN_US)
+                    : Lang.getRef('boolean.false', LangCode.EN_US)
             }\n`;
 
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
             // Added color part
             description += ` - **${Lang.getRef('terms.color', LangCode.EN_US)}**: #${
                 customMessage.Color === '0'
-                    ? Config.colors.default.substring(1)
+                    ? Config.colors.default.substring(1).toUpperCase()
                     : customMessage.Color
             }`;
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
@@ -293,14 +293,14 @@ export class FormatUtils {
             description += ` - **${Lang.getRef('terms.embedded', LangCode.EN_US)}**: ${
                 customMessage.Embed
                     ? Lang.getRef('boolean.true', LangCode.EN_US)
-                    : Lang.getRef('boolean.False', LangCode.EN_US)
+                    : Lang.getRef('boolean.false', LangCode.EN_US)
             }\n`;
 
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
             // Added color part
             description += ` - **${Lang.getRef('terms.color', LangCode.EN_US)}**: #${
                 customMessage.Color === '0'
-                    ? Config.colors.default.substring(1)
+                    ? Config.colors.default.substring(1).toUpperCase()
                     : customMessage.Color
             }`;
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
