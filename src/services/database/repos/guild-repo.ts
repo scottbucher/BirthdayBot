@@ -181,7 +181,7 @@ export class GuildRepo {
         ]);
     }
 
-    public async updateDateForamt(discordId: string, value: number): Promise<void> {
+    public async updateDateForamt(discordId: string, value: string): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateDateFormat, [
             discordId,
             value,

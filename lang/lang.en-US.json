@@ -563,8 +563,15 @@
             },
             "nameFormatSet": {
                 "description": [
-                    "Successfully updated your name format setting to `{{SETTING}}`!",
-                    "Name will now appear in this format: **{{FORMAT}}**"
+                    "Successfully updated the server's name format setting to `{{SETTING}}`!",
+                    "Names will now appear in this format: **{{FORMAT}}**"
+                ],
+                "color": "{{REF:colors.success}}"
+            },
+            "dateFormatSet": {
+                "description": [
+                    "Successfully updated the server's date format setting to `{{SETTING}}`!",
+                    "This is how birthdays will be detected in this server!"
                 ],
                 "color": "{{REF:colors.success}}"
             },
@@ -1100,6 +1107,16 @@
                     "`nickname`: **{{NICKNAME}}**",
                     "`tag:` **{{TAG}}**"
                 ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidDateFormat": {
+                "title": "Invalid Date Format",
+                "description": ["Accepted Values", "`Month/Day`", "`Day/Month`"],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}",
                     "icon": "{{ICON}}"
@@ -2773,6 +2790,7 @@
             "trustedPreventsRole": "trustedPreventsRole",
             "trustedPreventsMessage": "trustedPreventsMessage",
             "requireAllTrustedRoles": "requireAllTrustedRoles",
+            "dateFormat": "dateFormat",
             "alternatives": {
                 "birthday": ["birthdays"],
                 "memberAnniversary": ["member"],
@@ -2780,6 +2798,8 @@
                 "userSpecificBirthday": ["specificBirthday", "userBirthday"],
                 "userSpecificMemberAnniversary": ["specificAnniversary", "userAnniversary"]
             },
+            "monthDay": "month/day",
+            "dayMonth": "day/month",
             "mention": "mention",
             "nickname": "nickname",
             "username": "username",

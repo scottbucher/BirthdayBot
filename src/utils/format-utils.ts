@@ -622,6 +622,19 @@ export class FormatUtils {
                 return 'trustedPreventsMessage';
             case Lang.getRef('types.requireAllTrustedRoles', LangCode.EN_US).toLowerCase():
                 return 'requireAllTrustedRoles';
+            case Lang.getRef('types.dateFormat', LangCode.EN_US).toLowerCase():
+                return 'dateFormat';
+            default:
+                return null;
+        }
+    }
+
+    public static extractDateFormatType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.monthDay', LangCode.EN_US).toLowerCase() || 'mm/dd':
+                return 'month_day';
+            case Lang.getRef('types.dayMonth', LangCode.EN_US).toLowerCase() || 'dd/mm':
+                return 'day_month';
             default:
                 return null;
         }
