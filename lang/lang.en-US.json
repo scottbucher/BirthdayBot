@@ -878,7 +878,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command!",
-                    "Accepted Values: `{{REF:types.list}} <value>`, `{{REF:types.add}} <Value>`, `{{REF:types.remove}} <#>`, `{{REF:types.clear}}`, `{{REF:types.time}} <0-23>`, and `{{REF:types.mention}} <Value>`"
+                    "Accepted Values: `{{REF:types.list}} <value>`, `{{REF:types.add}} <Value>`, `{{REF:types.remove}} <#>`, `{{REF:types.clear}}`, `{{REF:types.time}} <0-23>`, and `{{REF:types.mention}} <Value>`, and `{{REF:types.update}} <{{REF:types.embed}}/{{REF:types.color}}>`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -2169,11 +2169,12 @@
                     " - Placeholder for users: `{{REF:placeHolders.users}}`",
                     " - Placeholder for year: `{{REF:placeHolders.year}}`",
                     " - Placeholder for server name: `{{REF:placeHolders.server}}`",
+                    "**{{REF:bot.prefix}} message {{REF:types.update}} <type> <position> <{{REF:types.embed}}/{{REF:types.color}}>** - Test a custom message.",
                     "**{{REF:bot.prefix}} message {{REF:types.remove}} <type> <position>** - Remove a certain message for that type.",
                     "**{{REF:bot.prefix}} message {{REF:types.clear}} <type>** - Clear all messages for that type.",
                     "**{{REF:bot.prefix}} message {{REF:types.time}} <type> <0-23>** - Set the message time for that type",
                     "**{{REF:bot.prefix}} message {{REF:types.mention}} <type> <role/group>** - Set the message mention setting for that type.",
-                    "**{{REF:bot.prefix}} message {{REF:types.test}} <position> [user count]** - Test a custom message.",
+                    "**{{REF:bot.prefix}} message {{REF:types.test}} <type> <position> [user count]** - Test a custom message.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2820,6 +2821,8 @@
             "list": "list",
             "time": "time",
             "useEmbed": "useEmbed",
+            "embed": "embed",
+            "color": "color",
             "help": "help",
             "setup": "setup",
             "trusted": "trusted",
