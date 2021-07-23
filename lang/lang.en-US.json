@@ -878,7 +878,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command!",
-                    "Accepted Values: `{{REF:types.list}} <value>`, `{{REF:types.add}} <Value>`, `{{REF:types.remove}} <#>`, `{{REF:types.clear}}`, `{{REF:types.time}} <0-23>`, and `{{REF:types.mention}} <Value>`, and `{{REF:types.update}} <{{REF:types.embed}}/{{REF:types.color}}>`"
+                    "Accepted Values: `{{REF:types.list}} <value>`, `{{REF:types.add}} <Value>`, `{{REF:types.remove}} <#>`, `{{REF:types.clear}}`, `{{REF:types.time}} <0-23>`, and `{{REF:types.mention}} <Value>`, <{{REF:types.embed}}`, and `{{REF:types.color}}>`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
