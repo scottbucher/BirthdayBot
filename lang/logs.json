@@ -39,7 +39,7 @@
         "guildJoin": "An error occurred while processing a guild join.",
         "guildLeave": "An error occurred while processing a guild leave.",
         "job": "An error occurred while running the '{JOB}' job.",
-        "resolveGuild": "Guild '{GUILD_NAME}' ({GUILD_ID}) could not be resolved even though it is in the cache.",
+        "resolveGuild": "Guild '{GUILD_NAME}' ({GUILD_ID}) was not in the cache and couldn't be fetched.",
         "message": "An error occurred while processing a message.",
         "reaction": "An error occurred while processing a reaction.",
         "rateLimit": "A rate limit was hit while making a request.",
