@@ -47,6 +47,7 @@ import { ClientOptions, DiscordAPIError } from 'discord.js';
 import {
     ConfigBirthdayMasterRoleSubCommand,
     ConfigChannelSubCommand,
+    ConfigDateFormatSubCommand,
     ConfigNameFormatSubCommand,
     ConfigRequireAllTrustedRolesSubCommand,
     ConfigRoleSubCommand,
@@ -195,6 +196,7 @@ async function start(): Promise<void> {
     let configRequireAllTrustedRolesSubCommand = new ConfigRequireAllTrustedRolesSubCommand(
         guildRepo
     );
+    let configDateFormatSubCommand = new ConfigDateFormatSubCommand(guildRepo);
 
     // Config Command
     let configCommand = new ConfigCommand(
@@ -206,7 +208,8 @@ async function start(): Promise<void> {
         configTrustedPreventRoleSubCommand,
         configTimezoneSubCommand,
         configUseTimezoneSubCommand,
-        configRequireAllTrustedRolesSubCommand
+        configRequireAllTrustedRolesSubCommand,
+        configDateFormatSubCommand
     );
 
     // Blacklist Sub Commands

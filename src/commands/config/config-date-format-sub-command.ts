@@ -5,7 +5,7 @@ import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
 import { LangCode } from '../../models/enums';
 
-export class ConfigNameFormatSubCommand {
+export class ConfigDateFormatSubCommand {
     constructor(private guildRepo: GuildRepo) {}
 
     public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {

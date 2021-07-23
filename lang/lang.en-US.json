@@ -862,7 +862,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a config value to change!",
-                    "Accepted Values: `{{REF:types.channel}}`, `{{REF:types.birthdayRole}}`, `{{REF:types.birthdayMasterRole}}`, `{{REF:types.nameFormat}}`, `{{REF:types.timezone}}`, `{{REF:types.useTimezone}}`, `{{REF:types.trustedPreventsMessage}}`, `{{REF:types.trustedPreventsRole}}`, `{{REF:types.requireAllTrustedRoles}}`"
+                    "Accepted Values: `{{REF:types.channel}}`, `{{REF:types.birthdayRole}}`, `{{REF:types.birthdayMasterRole}}`, `{{REF:types.nameFormat}}`, `{{REF:types.timezone}}`, `{{REF:types.useTimezone}}`, `{{REF:types.trustedPreventsMessage}}`, `{{REF:types.trustedPreventsRole}}`, `{{REF:types.requireAllTrustedRoles}}`, `{{REF:types.dateFormat}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -2145,6 +2145,7 @@
                     "**{{REF:bot.prefix}} config {{REF:types.timezone}} <timezone> - Set the default server timezone.",
                     "**{{REF:bot.prefix}} config {{REF:types.useTimezone}} <{{REF:types.user}}/{{REF:types.server}}> - Set which timezone to use for celebrations.",
                     "**{{REF:bot.prefix}} config {{REF:types.nameFormat}} <{{REF:types.mention}}/{{REF:types.nickname}}/{{REF:types.username}}/{{REF:types.tag}}/{{REF:types.default}}>** - Decide how member's names will appear.",
+                    "**{{REF:bot.prefix}} config {{REF:types.dateFormat}} <{{REF:types.monthDay}} or {{REF:types.dayMonth}}>** - Decide how birthdays are detected when member set their birthday.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
