@@ -57,7 +57,7 @@
             "log": false,
             "interval": 600
         },
-        "udateMemberCacheJob": {
+        "updateMemberCacheJob": {
             "schedule": "0 30 */2 * * *",
             "log": false,
             "interval": 1500
