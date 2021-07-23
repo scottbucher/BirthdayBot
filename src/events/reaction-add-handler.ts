@@ -116,7 +116,8 @@ export class ReactionAddHandler implements EventHandler {
                 ) {
                     return;
                 } else {
-                    Logger.error(Logs.error.messagePartial, error);
+                    // There isn't much we can do here, so just return
+                    // Logger.error(Logs.error.messagePartial, error);
                     return;
                 }
             }
