@@ -111,6 +111,8 @@ export class NextCommand implements Command {
                 for (let member of guildMembers) {
                     let memberMonthDay = moment(member.joinedAt).format('MM-DD');
 
+                    if (memberMonthDay === nowMonthDay) continue;
+
                     // If this is the first run through
                     if (!closestMonthDay) {
                         closestMonthDay = memberMonthDay;
@@ -144,8 +146,16 @@ export class NextCommand implements Command {
                 guildMembers = guildMembers.filter(
                     member =>
                         moment(member.joinedAt).format('MM-DD') === closestMonthDay &&
-                        now.year() - moment(member.joinedAt).year() === 0
+                        now.year() - moment(member.joinedAt).year() !== 0
                 );
+
+                if (guildMembers?.length === 0) {
+                    await MessageUtils.send(
+                        channel,
+                        Lang.getEmbed('validation.noUpcomingMemberAnniversaries', LangCode.EN_US)
+                    );
+                    return;
+                }
 
                 let userList = CelebrationUtils.getUserListString(guildData, guildMembers);
 

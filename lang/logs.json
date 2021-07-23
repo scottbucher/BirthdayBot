@@ -34,6 +34,7 @@
         "shardInfo": "An error occurred while retrieving shard info.",
         "spawnShard": "An error occurred while spawning shards.",
         "updateServerCount": "An error occurred while updating the server count.",
+        "updateMemberCache": "An error occurred while updating the member cache.",
         "updateServerCountSite": "An error occurred while updating the server count on '{BOT_SITE}'.",
         "login": "An error occurred while the client attempted to login.",
         "guildJoin": "An error occurred while processing a guild join.",

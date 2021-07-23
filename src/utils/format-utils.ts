@@ -38,11 +38,11 @@ export class FormatUtils {
     }
 
     // TODO: take another look at this
-    public static getBirthday(input: string): string {
+    public static getBirthday(input: string, parser: any, littleEndian: boolean): string {
         // Try and get a date from the 3rd args
         if (
-            input.includes('02/29') ||
-            input.includes('2/29') ||
+            (!littleEndian && (input.includes('02/29') || input.includes('2/29'))) ||
+            (littleEndian && (input.includes('29/02') || input.includes('29/2'))) ||
             input
                 .toLowerCase()
                 .includes(Lang.getRef('months.feb', LangCode.EN_US).toLowerCase() + ' 29') ||
@@ -61,14 +61,14 @@ export class FormatUtils {
                 )
         )
             input = '2000-02-29';
-        let results = Chrono.parseDate(input); // Try an parse a date
+        let results = parser.parseDate(input); // Try an parse a date
 
         if (!results) return null;
 
         let month = results.getMonth() + 1; // Get the numeric value of month
         let day = results.getDate();
         let temp = `2000-${month}-${day}`;
-        let doubleCheck = Chrono.parseDate(temp);
+        let doubleCheck = parser.parseDate(temp);
 
         return doubleCheck ? temp : null;
     }
@@ -185,10 +185,27 @@ export class FormatUtils {
         for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
             if (hasPremium || customMessage.Position <= maxMessagesFree) {
-                description += `**${i.toLocaleString()}.** ${customMessage.Message}\n\n`;
+                description += `**${i.toLocaleString()}.** ${customMessage.Message}\n`;
             } else {
-                description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n\n`;
+                description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n`;
             }
+
+            // Added embedded part
+            description += ` - **${Lang.getRef('terms.embedded', LangCode.EN_US)}**: ${
+                customMessage.Embed
+                    ? Lang.getRef('boolean.true', LangCode.EN_US)
+                    : Lang.getRef('boolean.false', LangCode.EN_US)
+            }\n`;
+
+            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            // Added color part
+            description += ` - **${Lang.getRef('terms.color', LangCode.EN_US)}**: #${
+                customMessage.Color === '0'
+                    ? Config.colors.default.substring(1).toUpperCase()
+                    : customMessage.Color
+            }`;
+            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            description += '\n\n';
             i++;
         }
 
@@ -263,14 +280,31 @@ export class FormatUtils {
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ${customMessage.Message.replace('<Users>', member.toString())}\n\n`;
+                } ${customMessage.Message.replace('<Users>', member.toString())}\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}** `
-                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n\n`;
+                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n`;
             }
+
+            // Added embedded part
+            description += ` - **${Lang.getRef('terms.embedded', LangCode.EN_US)}**: ${
+                customMessage.Embed
+                    ? Lang.getRef('boolean.true', LangCode.EN_US)
+                    : Lang.getRef('boolean.false', LangCode.EN_US)
+            }\n`;
+
+            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            // Added color part
+            description += ` - **${Lang.getRef('terms.color', LangCode.EN_US)}**: #${
+                customMessage.Color === '0'
+                    ? Config.colors.default.substring(1).toUpperCase()
+                    : customMessage.Color
+            }`;
+            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            description += '\n\n';
         }
 
         let listEmbed = 'list.';
@@ -622,6 +656,19 @@ export class FormatUtils {
                 return 'trustedPreventsMessage';
             case Lang.getRef('types.requireAllTrustedRoles', LangCode.EN_US).toLowerCase():
                 return 'requireAllTrustedRoles';
+            case Lang.getRef('types.dateFormat', LangCode.EN_US).toLowerCase():
+                return 'dateFormat';
+            default:
+                return null;
+        }
+    }
+
+    public static extractDateFormatType(type: string): string {
+        switch (type) {
+            case Lang.getRef('types.monthDay', LangCode.EN_US).toLowerCase() || 'mm/dd':
+                return 'month_day';
+            case Lang.getRef('types.dayMonth', LangCode.EN_US).toLowerCase() || 'dd/mm':
+                return 'day_month';
             default:
                 return null;
         }
@@ -686,6 +733,10 @@ export class FormatUtils {
                 return 'trusted';
             case Lang.getRef('types.claim', LangCode.EN_US).toLowerCase():
                 return 'claim';
+            case Lang.getRef('types.embed', LangCode.EN_US).toLowerCase():
+                return 'embed';
+            case Lang.getRef('types.color', LangCode.EN_US).toLowerCase():
+                return 'color';
             default:
                 return null;
         }

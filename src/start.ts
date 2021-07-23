@@ -43,10 +43,19 @@ import {
     TrustedRoleRepo,
     UserRepo,
 } from './services/database/repos';
+import { CelebrationJob, UpdateMemberCacheJob } from './jobs';
+import {
+    CelebrationService,
+    HttpService,
+    JobService,
+    Logger,
+    SubscriptionService,
+} from './services';
 import { ClientOptions, DiscordAPIError } from 'discord.js';
 import {
     ConfigBirthdayMasterRoleSubCommand,
     ConfigChannelSubCommand,
+    ConfigDateFormatSubCommand,
     ConfigNameFormatSubCommand,
     ConfigRequireAllTrustedRolesSubCommand,
     ConfigRoleSubCommand,
@@ -57,13 +66,6 @@ import {
 } from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
 import {
-    CelebrationService,
-    HttpService,
-    JobService,
-    Logger,
-    SubscriptionService,
-} from './services';
-import {
     MemberAnniversaryRoleAddSubCommand,
     MemberAnniversaryRoleClaimSubCommand,
     MemberAnniversaryRoleClearSubCommand,
@@ -73,6 +75,8 @@ import {
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
+    MessageColorSubCommand,
+    MessageEmbedSubCommand,
     MessageListSubCommand,
     MessageMentionSubCommand,
     MessageRemoveSubCommand,
@@ -88,7 +92,6 @@ import {
 } from './commands/trusted';
 
 import { Bot } from './bot';
-import { CelebrationJob } from './jobs';
 import { CustomClient } from './extensions/custom-client';
 import { DataAccess } from './services/database/data-access';
 
@@ -171,6 +174,8 @@ async function start(): Promise<void> {
     let messageTimSubCommand = new MessageTimeSubCommand(guildRepo);
     let messageMentionSubCommand = new MessageMentionSubCommand(guildRepo);
     let messageTestSubCommand = new MessageTestSubCommand(guildRepo, customMessageRepo);
+    let messageEmbedSubCommand = new MessageEmbedSubCommand(customMessageRepo);
+    let messageColorSubCommand = new MessageColorSubCommand(customMessageRepo);
 
     // Message Command
     let messageCommand = new MessageCommand(
@@ -180,7 +185,9 @@ async function start(): Promise<void> {
         messageRemoveSubCommand,
         messageTimSubCommand,
         messageMentionSubCommand,
-        messageTestSubCommand
+        messageTestSubCommand,
+        messageEmbedSubCommand,
+        messageColorSubCommand
     );
 
     // Config Sub Commands
@@ -195,6 +202,7 @@ async function start(): Promise<void> {
     let configRequireAllTrustedRolesSubCommand = new ConfigRequireAllTrustedRolesSubCommand(
         guildRepo
     );
+    let configDateFormatSubCommand = new ConfigDateFormatSubCommand(guildRepo);
 
     // Config Command
     let configCommand = new ConfigCommand(
@@ -206,7 +214,8 @@ async function start(): Promise<void> {
         configTrustedPreventRoleSubCommand,
         configTimezoneSubCommand,
         configUseTimezoneSubCommand,
-        configRequireAllTrustedRolesSubCommand
+        configRequireAllTrustedRolesSubCommand,
+        configDateFormatSubCommand
     );
 
     // Blacklist Sub Commands
@@ -313,6 +322,7 @@ async function start(): Promise<void> {
 
     let jobService = new JobService([
         new CelebrationJob(client, userRepo, combinedRepo, celebrationService, subscriptionService),
+        new UpdateMemberCacheJob(client),
     ]);
 
     let bot = new Bot(

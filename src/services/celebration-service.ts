@@ -1,4 +1,4 @@
-import { ActionUtils, CelebrationUtils, MessageUtils } from '../utils';
+import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils';
 import { Client, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database';
 
@@ -44,6 +44,10 @@ export class CelebrationService {
                         // No Birthday Role
                     }
                 }
+
+                // If we can't send a message to the channel then set it to null so we skip messages
+                if (birthdayChannel && !PermissionUtils.canSend(birthdayChannel, false))
+                    birthdayChannel = null;
 
                 // If either are set we have to calculate birthday information
                 if (birthdayChannel || birthdayRole) {
@@ -96,7 +100,7 @@ export class CelebrationService {
                             m =>
                                 m.needsMessage &&
                                 (!trustedRoles ||
-                                    trustedRoles.length > 0 ||
+                                    trustedRoles.length === 0 ||
                                     CelebrationUtils.passesTrustedCheck(
                                         guildCelebrationData.guildData.RequireAllTrustedRoles,
                                         trustedRoles,
@@ -112,7 +116,7 @@ export class CelebrationService {
                         m =>
                             (m.needsRoleAdded || m.needsRoleRemoved) &&
                             (!trustedRoles ||
-                                trustedRoles.length > 0 ||
+                                trustedRoles.length === 0 ||
                                 CelebrationUtils.passesTrustedCheck(
                                     guildCelebrationData.guildData.RequireAllTrustedRoles,
                                     trustedRoles,
@@ -282,6 +286,13 @@ export class CelebrationService {
                 if (hasPremium) {
                     memberAnniversaryRoles = guildCelebrationData?.anniversaryRoles;
                 }
+
+                // If we can't send a message to the channel then set it to null so we skip messages
+                if (
+                    memberAnniversaryChannel &&
+                    !PermissionUtils.canSend(memberAnniversaryChannel, false)
+                )
+                    memberAnniversaryChannel = null;
 
                 if (
                     memberAnniversaryChannel ||
@@ -514,7 +525,7 @@ export class CelebrationService {
                     if (memberAnniversaryRoles && memberAnniversaryRoles.length > 0) {
                         // Give Member Anniversary Roles
                         let statuses = anniversaryMemberStatuses.filter(r => r.role);
-                        let giveRoles = [...new Set(statuses.map(m => m.role))];
+                        let giveRoles = [...new Set(anniversaryMemberStatuses.map(m => m.role))];
 
                         for (let role of giveRoles) {
                             let membersWhoNeedsThisRole = statuses
@@ -556,6 +567,12 @@ export class CelebrationService {
                         // No server anniversary channel
                     }
 
+                    // If we can't send a message to the channel then set it to null so we skip messages
+                    if (
+                        serverAnniversaryChannel &&
+                        !PermissionUtils.canSend(serverAnniversaryChannel, false)
+                    )
+                        serverAnniversaryChannel = null;
                     if (
                         serverAnniversaryChannel &&
                         CelebrationUtils.isServerAnniversaryMessage(guild, guildData)

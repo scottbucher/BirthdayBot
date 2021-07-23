@@ -2,6 +2,8 @@ import { Message, TextChannel } from 'discord.js';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
+    MessageColorSubCommand,
+    MessageEmbedSubCommand,
     MessageListSubCommand,
     MessageMentionSubCommand,
     MessageRemoveSubCommand,
@@ -32,7 +34,9 @@ export class MessageCommand implements Command {
         private messageRemoveSubCommand: MessageRemoveSubCommand,
         private messageTimeSubCommand: MessageTimeSubCommand,
         private messageMentionSubCommand: MessageMentionSubCommand,
-        private messageTestSubCommand: MessageTestSubCommand
+        private messageTestSubCommand: MessageTestSubCommand,
+        private messageEmbedSubCommand: MessageEmbedSubCommand,
+        private messageColorSubCommand: MessageColorSubCommand
     ) {}
 
     public async execute(
@@ -65,6 +69,10 @@ export class MessageCommand implements Command {
             this.messageMentionSubCommand.execute(args, msg, channel);
         } else if (type === 'test') {
             this.messageTestSubCommand.execute(args, msg, channel);
+        } else if (type === 'embed') {
+            this.messageEmbedSubCommand.execute(args, msg, channel);
+        } else if (type === 'color') {
+            this.messageColorSubCommand.execute(args, msg, channel, hasPremium);
         } else {
             await MessageUtils.send(
                 channel,

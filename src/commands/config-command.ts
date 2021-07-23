@@ -15,6 +15,7 @@ import { Command } from './command';
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MessageUtils, FormatUtils } from '../utils';
+import { ConfigDateFormatSubCommand } from './config/config-date-format-sub-command';
 
 export class ConfigCommand implements Command {
     public name: string = 'config';
@@ -36,7 +37,8 @@ export class ConfigCommand implements Command {
         private configTrustedPreventsRoleSubCommand: ConfigTrustedPreventsRoleSubCommand,
         private configTimezoneSubCommand: ConfigTimezoneSubCommand,
         private configUseTimezoneSubCommand: ConfigUseTimezoneSubCommand,
-        private configRequireAllTrustedRolesSubCommand: ConfigRequireAllTrustedRolesSubCommand
+        private configRequireAllTrustedRolesSubCommand: ConfigRequireAllTrustedRolesSubCommand,
+        private configDateFormatSubCommand: ConfigDateFormatSubCommand
     ) {}
 
     public async execute(
@@ -80,6 +82,8 @@ export class ConfigCommand implements Command {
             this.configTrustedPreventsRoleSubCommand.execute(args, msg, channel);
         } else if (subCommand === 'requirealltrustedroles') {
             this.configRequireAllTrustedRolesSubCommand.execute(args, msg, channel);
+        } else if (subCommand === 'dateformat') {
+            this.configDateFormatSubCommand.execute(args, msg, channel);
         } else {
             await MessageUtils.send(
                 channel,

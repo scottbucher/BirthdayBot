@@ -7,3 +7,4 @@ export { ConfigTrustedPreventsRoleSubCommand } from './config-trusted-prevents-r
 export { ConfigTimezoneSubCommand } from './config-timezone-sub-command';
 export { ConfigUseTimezoneSubCommand } from './config-use-timezone-sub-command';
 export { ConfigRequireAllTrustedRolesSubCommand } from './config-require-all-trusted-roles-sub-command';
+export { ConfigDateFormatSubCommand } from './config-date-format-sub-command';

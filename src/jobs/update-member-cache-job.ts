@@ -1,36 +1,33 @@
-import { Client, Collection, GuildMember, ShardingManager } from 'discord.js';
-import { HttpService, Logger } from '../services';
+import { Client } from 'discord.js';
+import { Logger } from '../services';
 
-import { BotSite } from '../models/config-models';
 import { Job } from './job';
-import { ShardUtils } from '../utils';
 import schedule from 'node-schedule';
+import { TimeUtils } from '../utils';
 
 let Config = require('../../config/config.json');
-let BotSites: BotSite[] = require('../../config/bot-sites.json');
 let Logs = require('../../lang/logs.json');
 
 export class UpdateMemberCacheJob implements Job {
-    public name = 'Update Server Count';
-    public schedule: string = Config.jobs.updateMemberCache.schedule;
-    public log: boolean = Config.jobs.updateMemberCache.log;
+    public name = 'Update Member Cache';
+    public schedule: string = Config.jobs.udateMemberCacheJob.schedule;
+    public log: boolean = Config.jobs.udateMemberCacheJob.log;
+    public interval: number = Config.jobs.updateMemberCache.interval;
 
     constructor(private client: Client) {}
 
     public async run(): Promise<void> {
-        // Update cache
-
         // Collection of guilds
         let guildCache = this.client.guilds.cache;
 
         for (let guild of guildCache.array()) {
-            let guildMembers: Collection<string, GuildMember> = guild.members.cache;
-            let beforeCacheSize = guild.members.cache.size;
-
             try {
-                guildMembers = await guild.members.fetch();
+                await guild.members.fetch();
             } catch (error) {
                 // Ignore, not much we can do
+            } finally {
+                // Regardless we wait since we made an api call
+                await TimeUtils.sleep(this.interval);
             }
         }
     }
@@ -40,7 +37,7 @@ export class UpdateMemberCacheJob implements Job {
             try {
                 await this.run();
             } catch (error) {
-                Logger.error(Logs.error.updateServerCount, error);
+                Logger.error(Logs.error.updateMemberCache, error);
             }
         });
     }

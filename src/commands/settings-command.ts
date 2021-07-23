@@ -140,6 +140,8 @@ export class SettingsCommand implements Command {
                     : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
                       `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
 
+            let dateFormat = guildData.DateFormat === 'month_day' ? 'Month/Day' : 'Day/Month';
+
             let trustedRoleCount =
                 (await this.trustedRoleRepo.getTrustedRoles(msg.guild.id))?.trustedRoles.length ??
                 0;
@@ -154,6 +156,7 @@ export class SettingsCommand implements Command {
                     REQUIRE_ALL_TRUSTED_ROLES: requireAllTrustedRoles,
                     TRUSTED_ROLE_COUNT: trustedRoleCount.toString(),
                     USE_TIMEZONE: useTimezone,
+                    DATE_FORMAT: dateFormat,
                     GUILD_ID: guild.id,
                     HAS_PREMIUM: Lang.getRef(
                         'terms.' + (hasPremium ? 'active' : 'notActive'),

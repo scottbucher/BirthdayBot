@@ -131,9 +131,9 @@
             "anniversarySetupMemberChannel": {
                 "title": "Anniversary Setup - Member Anniversary Channel",
                 "description": [
-                    "For help, view the anniversary setup guide [here]({{REF:dockLinks.setupAnniversaryGuide}})!",
+                    "For help, view the anniversary setup guide [here]({{REF:docLinks.setupAnniversaryGuide}})!",
                     "",
-                    "To begin you must set up the member anniversary channel [(?)]({{REF:dockLinks.whatIsMemberAnniversaryChannel}})",
+                    "To begin you must set up the member anniversary channel [(?)]({{REF:docLinks.whatIsMemberAnniversaryChannel}})",
                     "",
                     "Please select an option"
                 ],
@@ -156,9 +156,9 @@
             "anniversarySetupServerChannel": {
                 "title": "Anniversary Setup - Server Anniversary Channel",
                 "description": [
-                    "For help, view the anniversary setup guide [here]({{REF:dockLinks.setupAnniversaryGuide}})!",
+                    "For help, view the anniversary setup guide [here]({{REF:docLinks.setupAnniversaryGuide}})!",
                     "",
-                    "To begin you must set up the server anniversary channel [(?)]({{REF:dockLinks.whatIsServerAnniversaryChannel}})",
+                    "To begin you must set up the server anniversary channel [(?)]({{REF:docLinks.whatIsServerAnniversaryChannel}})",
                     "",
                     "Please select an option"
                 ],
@@ -481,6 +481,22 @@
                 },
                 "color": "{{REF:colors.success}}"
             },
+            "updateMessageEmbed": {
+                "description": "Successfully updated the message's embed setting to {{EMBED}}!",
+                "footer": {
+                    "text": "{{REF:emotes.confirm}} Message Updated",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{REF:colors.success}}"
+            },
+            "updateMessageColor": {
+                "description": "Successfully updated the message's color to {{COLOR}}!",
+                "footer": {
+                    "text": "{{REF:emotes.confirm}} Message Updated",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{REF:colors.success}}"
+            },
             "promptExpired": {
                 "description": "This command has expired.",
                 "color": "{{REF:colors.error}}"
@@ -563,8 +579,15 @@
             },
             "nameFormatSet": {
                 "description": [
-                    "Successfully updated your name format setting to `{{SETTING}}`!",
-                    "Name will now appear in this format: **{{FORMAT}}**"
+                    "Successfully updated the server's name format setting to `{{SETTING}}`!",
+                    "Names will now appear in this format: **{{FORMAT}}**"
+                ],
+                "color": "{{REF:colors.success}}"
+            },
+            "dateFormatSet": {
+                "description": [
+                    "Successfully updated the server's date format setting to `{{SETTING}}`!",
+                    "This is how birthdays will be detected in this server!"
                 ],
                 "color": "{{REF:colors.success}}"
             },
@@ -855,7 +878,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a config value to change!",
-                    "Accepted Values: `{{REF:types.channel}}`, `{{REF:types.birthdayRole}}`, `{{REF:types.birthdayMasterRole}}`, `{{REF:types.nameFormat}}`, `{{REF:types.timezone}}`, `{{REF:types.useTimezone}}`, `{{REF:types.trustedPreventsMessage}}`, `{{REF:types.trustedPreventsRole}}`, `{{REF:types.requireAllTrustedRoles}}`"
+                    "Accepted Values: `{{REF:types.channel}}`, `{{REF:types.birthdayRole}}`, `{{REF:types.birthdayMasterRole}}`, `{{REF:types.nameFormat}}`, `{{REF:types.timezone}}`, `{{REF:types.useTimezone}}`, `{{REF:types.trustedPreventsMessage}}`, `{{REF:types.trustedPreventsRole}}`, `{{REF:types.requireAllTrustedRoles}}`, `{{REF:types.dateFormat}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -871,7 +894,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command!",
-                    "Accepted Values: `{{REF:types.list}} <value>`, `{{REF:types.add}} <Value>`, `{{REF:types.remove}} <#>`, `{{REF:types.clear}}`, `{{REF:types.time}} <0-23>`, and `{{REF:types.mention}} <Value>`"
+                    "Accepted Values: `{{REF:types.list}} <value>`, `{{REF:types.add}} <Value>`, `{{REF:types.remove}} <#>`, `{{REF:types.clear}}`, `{{REF:types.time}} <0-23>`, and `{{REF:types.mention}} <Value>`, `{{REF:types.embed}} <T/F>`, and `{{REF:types.color}} <color/hex>`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -903,6 +926,10 @@
                 "description": "There are no upcoming birthdays!",
                 "color": "{{REF:colors.error}}"
             },
+            "noUpcomingMemberAnniversaries": {
+                "description": "There are no upcoming member anniversaries!",
+                "color": "{{REF:colors.error}}"
+            },
             "outOfAttempts": {
                 "description": "You are out of birthday attempts!",
                 "color": "{{REF:colors.error}}"
@@ -917,6 +944,11 @@
                     "Please provide a year and a role!",
                     "Example Usage: `bday memberAnniversaryRole {{REF:types.add}} 5 @Role`"
                 ],
+                "color": "{{REF:colors.error}}"
+            },
+            "noRole": {
+                "title": "Invalid Usage!",
+                "description": ["Please provide a role!"],
                 "color": "{{REF:colors.error}}"
             },
             "needReactAndMessageHistoryPerms": {
@@ -996,6 +1028,16 @@
             },
             "removeMessageInvalidType": {
                 "title": "Remove Custom Message",
+                "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "updateMessageInvalidType": {
+                "title": "Update Custom Message",
                 "description": "Please specify a message type! Accepted Values: `birthday`, `memberAnniversary`, `serverAnniversary`, `userSpecificBirthday`, `userSpecificMemberAnniversary`",
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}",
@@ -1095,6 +1137,16 @@
                     "`nickname`: **{{NICKNAME}}**",
                     "`tag:` **{{TAG}}**"
                 ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "invalidDateFormat": {
+                "title": "Invalid Date Format",
+                "description": ["Accepted Values", "`Month/Day`", "`Day/Month`"],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}",
                     "icon": "{{ICON}}"
@@ -1442,6 +1494,20 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
+            "updateMessageNoEmbed": {
+                "description": [
+                    "Please provide an embed setting: `T/F`",
+                    "Example: `bday message {{REF:types.update}} {{REF:types.birthday}} {{REF:types.embed}} {{REF:boolean.true}}`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
+            "updateMessageNoColor": {
+                "description": [
+                    "Please provide a color!",
+                    "Example: `bday message {{REF:types.update}} {{REF:types.birthday}} {{REF:types.color}} blue`"
+                ],
+                "color": "{{REF:colors.error}}"
+            },
             "userAlreadyInBlacklist": {
                 "description": "That user is already in the blacklist!",
                 "color": "{{REF:colors.error}}"
@@ -1722,7 +1788,17 @@
             },
             "userSpecificMessages": {
                 "title": "{{REF:terms.premiumRequired}}",
-                "description": "User-specific messages are a premium feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
+                "description": "User-specific messages are a premium only feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
+                "footer": {
+                    "text": "{{REF:footers.whyPremium}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
+            },
+            "messageColor": {
+                "title": "{{REF:terms.premiumRequired}}",
+                "description": "Message colors are a premium only feature! View information about **{{REF:bot.name}} Premium** using `{{REF:bot.prefix}} premium`!",
                 "footer": {
                     "text": "{{REF:footers.whyPremium}}",
                     "icon": "{{ICON}}"
@@ -1952,6 +2028,11 @@
                         "inline": true
                     },
                     {
+                        "name": "{{REF:terms.dateFormat}}",
+                        "value": "{{DATE_FORMAT}}",
+                        "inline": true
+                    },
+                    {
                         "name": "{{REF:terms.trustedPreventsRole}}",
                         "value": "{{TRUSTED_PREVENTS_ROLE}}",
                         "inline": true
@@ -2123,6 +2204,7 @@
                     "**{{REF:bot.prefix}} config {{REF:types.timezone}} <timezone> - Set the default server timezone.",
                     "**{{REF:bot.prefix}} config {{REF:types.useTimezone}} <{{REF:types.user}}/{{REF:types.server}}> - Set which timezone to use for celebrations.",
                     "**{{REF:bot.prefix}} config {{REF:types.nameFormat}} <{{REF:types.mention}}/{{REF:types.nickname}}/{{REF:types.username}}/{{REF:types.tag}}/{{REF:types.default}}>** - Decide how member's names will appear.",
+                    "**{{REF:bot.prefix}} config {{REF:types.dateFormat}} <{{REF:types.monthDay}} or {{REF:types.dayMonth}}>** - Decide how birthdays are detected when members set their birthday.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2141,11 +2223,13 @@
                     " - Placeholder for users: `{{REF:placeHolders.users}}`",
                     " - Placeholder for year: `{{REF:placeHolders.year}}`",
                     " - Placeholder for server name: `{{REF:placeHolders.server}}`",
+                    "**{{REF:bot.prefix}} message {{REF:types.embed}} <type> <position> <T/F>** - Update a message's embed setting.",
+                    "**{{REF:bot.prefix}} message {{REF:types.color}} <type> <position> <color/hex>** - Update a message's color setting.",
                     "**{{REF:bot.prefix}} message {{REF:types.remove}} <type> <position>** - Remove a certain message for that type.",
                     "**{{REF:bot.prefix}} message {{REF:types.clear}} <type>** - Clear all messages for that type.",
                     "**{{REF:bot.prefix}} message {{REF:types.time}} <type> <0-23>** - Set the message time for that type",
                     "**{{REF:bot.prefix}} message {{REF:types.mention}} <type> <role/group>** - Set the message mention setting for that type.",
-                    "**{{REF:bot.prefix}} message {{REF:types.test}} <position> [user count]** - Test a custom message.",
+                    "**{{REF:bot.prefix}} message {{REF:types.test}} <type> <position> [user count]** - Test a custom message.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2216,6 +2300,7 @@
                     " - Example Usage: `{{REF:bot.prefix}} message {{REF:types.add}} {{REF:types.birthday}} Happy Birthday @Stqlth!`",
                     " - Placeholder for year: `{{REF:placeHolders.year}}`",
                     " - Placeholder for server name: `{{REF:placeHolders.server}}`",
+                    "**{{REF:bot.prefix}} message {{REF:types.color}} <type> <position> <color/hex>** - Update a message's color setting.",
                     "**{{REF:bot.prefix}} message {{REF:types.remove}} <type> <@user>** - Remove a user specific custom message.",
                     "**{{REF:bot.prefix}} message {{REF:types.list}} {{REF:types.userSpecificBirthday}} [page]** - List all user-specific birthday messages.",
                     "**{{REF:bot.prefix}} message {{REF:types.list}} {{REF:types.userSpecificMemberAnniversary}} [page]** - List all user-specific member anniversary messages.",
@@ -2634,8 +2719,8 @@
             "userMemberAnniversaryMessagesTitle": "{{REF:terms.userMemberAnniversaryMessages}} | {{REF:list.pageTitle}}",
             "memberAnniversaryMessagesTitle": "{{REF:terms.memberAnniversaryMessages}} | {{REF:list.pageTitle}}",
             "serverAnniversaryMessagesTitle": "{{REF:terms.serverAnniversaryMessages}} {{REF:terms.messages}} | {{REF:list.pageTitle}}",
-            "trustedRolesTitle": "{{REF:terms.memberAnniversaryRoles}} | {{REF:list.pageTitle}}",
-            "memberAnniversaryRolesTitle": "{{REF:terms.trustedRoles}} | {{REF:list.pageTitle}}",
+            "trustedRolesTitle": "{{REF:terms.trustedRoles}} | {{REF:list.pageTitle}}",
+            "memberAnniversaryRolesTitle": "{{REF:terms.memberAnniversaryRoles}} | {{REF:list.pageTitle}}",
             "messagesFooter": "Total Message: {{TOTAL_MESSAGES}} • {{PER_PAGE}} per page",
             "rolesFooter": "Total Roles: {{TOTAL_ROLES}} • {{PER_PAGE}} per page",
             "pageTitle": "Page {{PAGE}}/{{TOTAL_PAGES}}",
@@ -2728,6 +2813,8 @@
             "amTime": "AM",
             "pmTime": "PM",
             "noOne": "no one",
+            "color": "Color",
+            "embedded": "Embedded",
             "na": "N/A",
             "change": "Change",
             "suggest": "Suggest",
@@ -2742,6 +2829,7 @@
             "numberOfTrustedRoles": "Number Of Trusted Roles",
             "useTimezone": "Use Timezone",
             "nameFormat": "Name Format",
+            "dateFormat": "Date Format",
             "memberAnniversaryChannel": "Member Anniversary Channel",
             "serverAnniversaryChannel": "Server Anniversary Channel",
             "birthdayMessageTime": "Birthday Message Time",
@@ -2768,6 +2856,7 @@
             "trustedPreventsRole": "trustedPreventsRole",
             "trustedPreventsMessage": "trustedPreventsMessage",
             "requireAllTrustedRoles": "requireAllTrustedRoles",
+            "dateFormat": "dateFormat",
             "alternatives": {
                 "birthday": ["birthdays"],
                 "memberAnniversary": ["member"],
@@ -2775,6 +2864,8 @@
                 "userSpecificBirthday": ["specificBirthday", "userBirthday"],
                 "userSpecificMemberAnniversary": ["specificAnniversary", "userAnniversary"]
             },
+            "monthDay": "month/day",
+            "dayMonth": "day/month",
             "mention": "mention",
             "nickname": "nickname",
             "username": "username",
@@ -2786,6 +2877,8 @@
             "list": "list",
             "time": "time",
             "useEmbed": "useEmbed",
+            "embed": "embed",
+            "color": "color",
             "help": "help",
             "setup": "setup",
             "trusted": "trusted",
@@ -2797,6 +2890,7 @@
             "test": "test",
             "create": "create",
             "user": "user",
+            "update": "update",
             "server": "server",
             "claim": "claim"
         },

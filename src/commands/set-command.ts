@@ -1,4 +1,4 @@
-import * as Chrono from 'chrono-node';
+import { Chrono, en, ParsedComponents, ParsedResult } from 'chrono-node';
 
 import {
     CollectOptions,
@@ -59,7 +59,6 @@ export class SetCommand implements Command {
             await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
         };
         let target: User;
-        let birthday = FormatUtils.getBirthday(args.slice(2).join(' '));
         let timeZone: string;
         let dm = channel instanceof DMChannel;
         let guildData: GuildData;
@@ -243,6 +242,11 @@ export class SetCommand implements Command {
             return;
         }
 
+        let littleEndian = !guildData ? false : guildData.DateFormat === 'month_day' ? false : true;
+
+        let parser = new Chrono(en.createConfiguration(true, littleEndian));
+        let birthday = FormatUtils.getBirthday(args.slice(2).join(' '), parser, littleEndian);
+
         if (!birthday) {
             let birthdayMessage = await MessageUtils.send(
                 channel,
@@ -261,7 +265,7 @@ export class SetCommand implements Command {
                 stopFilter,
                 // Retrieve Result
                 async (nextMsg: Message) => {
-                    let result = FormatUtils.getBirthday(nextMsg.content);
+                    let result = FormatUtils.getBirthday(nextMsg.content, parser, littleEndian);
 
                     // Don't laugh at my double check it prevents the dates chrono misses on the first input
                     if (!result) {
@@ -288,7 +292,8 @@ export class SetCommand implements Command {
         }
 
         // Re-Parse into a Chrono date to format the output variables
-        let birthDate = Chrono.parseDate(birthday);
+
+        let birthDate = parser.parseDate(birthday);
         let month = birthDate.getMonth() + 1;
         let day = birthDate.getDate();
 

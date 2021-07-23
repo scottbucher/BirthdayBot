@@ -56,6 +56,11 @@
             "schedule": "0 0 * * * *",
             "log": false,
             "interval": 600
+        },
+        "updateMemberCacheJob": {
+            "schedule": "0 30 */2 * * *",
+            "log": false,
+            "interval": 1500
         }
     },
     "delays": {

@@ -4,7 +4,10 @@ import { Command } from '../commands';
 import { GuildData } from '../models/database';
 
 export class PermissionUtils {
-    public static canSend(channel: TextChannel | DMChannel | NewsChannel): boolean {
+    public static canSend(
+        channel: TextChannel | DMChannel | NewsChannel,
+        requireReaction = true
+    ): boolean {
         if (channel instanceof DMChannel) return true;
 
         let channelPerms = channel.permissionsFor(channel.client.user);
@@ -19,13 +22,15 @@ export class PermissionUtils {
         // ADD_REACTIONS - Needed to add new reactions to messages
         // READ_MESSAGE_HISTORY - Needed to add new reactions to messages
         //    https://discordjs.guide/popular-topics/permissions-extended.html#implicit-permissions
-        return channelPerms.has([
-            Permissions.FLAGS.VIEW_CHANNEL,
-            Permissions.FLAGS.SEND_MESSAGES,
-            Permissions.FLAGS.EMBED_LINKS,
-            Permissions.FLAGS.ADD_REACTIONS,
-            Permissions.FLAGS.READ_MESSAGE_HISTORY,
-        ]);
+        return (
+            channelPerms.has([
+                Permissions.FLAGS.VIEW_CHANNEL,
+                Permissions.FLAGS.SEND_MESSAGES,
+                Permissions.FLAGS.EMBED_LINKS,
+                Permissions.FLAGS.ADD_REACTIONS,
+            ]) &&
+            (!requireReaction || channelPerms.has(Permissions.FLAGS.READ_MESSAGE_HISTORY))
+        );
     }
 
     public static canReact(

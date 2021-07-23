@@ -44,6 +44,60 @@ export class CustomMessageRepo {
         ]);
     }
 
+    public async updateMessageEmbed(
+        discordId: string,
+        value: number,
+        type: string,
+        embed: boolean
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Message_UpdateEmbed, [
+            discordId,
+            value,
+            type,
+            embed,
+        ]);
+    }
+    public async updateMessageColor(
+        discordId: string,
+        value: number,
+        type: string,
+        color: string
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Message_UpdateColor, [
+            discordId,
+            value,
+            type,
+            color,
+        ]);
+    }
+
+    public async updateMessageEmbedUser(
+        discordId: string,
+        value: number,
+        type: string,
+        embed: number
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Message_UpdateEmbedUser, [
+            discordId,
+            value,
+            type,
+            embed,
+        ]);
+    }
+    public async updateMessageColorUser(
+        discordId: string,
+        value: number,
+        type: string,
+        color: string
+    ): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Message_UpdateColorUser, [
+            discordId,
+            value,
+            type,
+            color,
+        ]);
+    }
+
     public async clearCustomMessages(discordId: string, type: string): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Message_Clear, [discordId, type]);
     }
