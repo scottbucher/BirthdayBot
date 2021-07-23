@@ -82,7 +82,7 @@ export class ConfigCommand implements Command {
             this.configTrustedPreventsRoleSubCommand.execute(args, msg, channel);
         } else if (subCommand === 'requirealltrustedroles') {
             this.configRequireAllTrustedRolesSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'dateFormat') {
+        } else if (subCommand === 'dateformat') {
             this.configDateFormatSubCommand.execute(args, msg, channel);
         } else {
             await MessageUtils.send(
