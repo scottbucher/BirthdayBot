@@ -43,6 +43,14 @@ import {
     TrustedRoleRepo,
     UserRepo,
 } from './services/database/repos';
+import { CelebrationJob, UpdateMemberCacheJob } from './jobs';
+import {
+    CelebrationService,
+    HttpService,
+    JobService,
+    Logger,
+    SubscriptionService,
+} from './services';
 import { ClientOptions, DiscordAPIError } from 'discord.js';
 import {
     ConfigBirthdayMasterRoleSubCommand,
@@ -57,13 +65,6 @@ import {
     ConfigUseTimezoneSubCommand,
 } from './commands/config';
 import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
-import {
-    CelebrationService,
-    HttpService,
-    JobService,
-    Logger,
-    SubscriptionService,
-} from './services';
 import {
     MemberAnniversaryRoleAddSubCommand,
     MemberAnniversaryRoleClaimSubCommand,
@@ -91,7 +92,6 @@ import {
 } from './commands/trusted';
 
 import { Bot } from './bot';
-import { CelebrationJob, UpdateMemberCacheJob } from './jobs';
 import { CustomClient } from './extensions/custom-client';
 import { DataAccess } from './services/database/data-access';
 

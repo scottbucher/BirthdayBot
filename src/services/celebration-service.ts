@@ -111,10 +111,6 @@ export class CelebrationService {
                         )
                         .map(m => m.member);
 
-                    if (guild.id === '660711235766976553') {
-                        let test = 'dadwad';
-                    }
-
                     // Filter for those who need the role added/removed and pass the trusted check
                     let membersWhoNeedRole = birthdayMemberStatuses.filter(
                         m =>
@@ -213,9 +209,6 @@ export class CelebrationService {
                         }
 
                         if (userSpecificMessagesToSend.length > 0) {
-                            Logger.info(
-                                `Sending user specific birthday messages for guild ${guild.name} (ID:${guild.id})`
-                            );
                             for (let message of userSpecificMessagesToSend) {
                                 await MessageUtils.sendWithDelay(
                                     birthdayChannel,
@@ -229,9 +222,6 @@ export class CelebrationService {
                         }
 
                         if (genericBirthdayMessage) {
-                            Logger.info(
-                                `Sending birthday message for guild ${guild.name} (ID:${guild.id})`
-                            );
                             await MessageUtils.sendWithDelay(
                                 birthdayChannel,
                                 genericBirthdayMessage,
@@ -431,9 +421,6 @@ export class CelebrationService {
 
                                 // Send our user specific messages for this guild
                                 if (userSpecificMessagesToSend.length > 0) {
-                                    Logger.info(
-                                        `Sending user specific member anniversary messages for guild ${guild.name} (ID:${guild.id})`
-                                    );
                                     for (let message of userSpecificMessagesToSend) {
                                         await MessageUtils.sendWithDelay(
                                             memberAnniversaryChannel,
@@ -507,9 +494,6 @@ export class CelebrationService {
                                     }
                                     counter++;
                                 }
-                                Logger.info(
-                                    `Sending all member anniversary messages for guild ${guild.name} (ID:${guild.id})`
-                                );
                                 if (embedMessages.length > 0) {
                                     // Send our message(s)
 
@@ -610,9 +594,6 @@ export class CelebrationService {
                         );
 
                         if (message) {
-                            Logger.info(
-                                `Sending server anniversary message for guild ${guild.name} (ID:${guild.id})`
-                            );
                             await MessageUtils.sendWithDelay(
                                 serverAnniversaryChannel,
                                 message,

@@ -80,7 +80,7 @@ export class PremiumCommand implements Command {
             channel,
             Lang.getEmbed('premiumPrompts.subscription', LangCode.EN_US, {
                 IS_ACTIVE: Lang.getRef(
-                    'boolean.' + subStatus.service ? 'yes' : 'no',
+                    'boolean.' + (subStatus.service ? 'yes' : 'no'),
                     LangCode.EN_US
                 ),
                 SUBSCRIPTION_ID: subStatus.subscription.id
