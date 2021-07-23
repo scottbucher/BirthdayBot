@@ -200,7 +200,9 @@ export class FormatUtils {
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
             // Added color part
             description += ` - **${Lang.getRef('terms.color', LangCode.EN_US)}**: #${
-                customMessage.Color
+                customMessage.Color === '0'
+                    ? Config.colors.default.substring(1)
+                    : customMessage.Color
             }`;
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
             description += '\n\n';
@@ -297,7 +299,9 @@ export class FormatUtils {
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
             // Added color part
             description += ` - **${Lang.getRef('terms.color', LangCode.EN_US)}**: #${
-                customMessage.Color
+                customMessage.Color === '0'
+                    ? Config.colors.default.substring(1)
+                    : customMessage.Color
             }`;
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
             description += '\n\n';
