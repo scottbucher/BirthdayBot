@@ -1960,7 +1960,7 @@
                 "color": "{{REF:colors.default}}"
             },
             "faq": {
-                "description": "View our FAQ for {{BOT}} [here]({{REF:links.docs}}/faq)!",
+                "description": "View our FAQ for {{BOT}} [here]({{REF:links.docs}}/faq-1/general)!",
                 "color": "{{REF:colors.default}}"
             },
             "invite": {
@@ -2666,7 +2666,7 @@
             "voteImage": "https://i.imgur.com/wak8g4V.png"
         },
         "docLinks": {
-            "faq": "{{REF:links.docs}}/faq",
+            "faq": "{{REF:links.docs}}/faq-1/general",
             "setupRequiredGuide": "{{REF:links.docs}}/server-setup/required-setup",
             "setupAnniversaryGuide": "{{REF:links.docs}}/",
             "setupTrustedGuide": "{{REF:links.docs}}/server-setup/trusted-setup",
