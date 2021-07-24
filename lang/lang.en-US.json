@@ -392,7 +392,7 @@
                     "You have successfully completed the trusted server setup!",
                     "",
                     "**Trusted Prevents Role**: {{PREVENTS_ROLE}}",
-                    "**Trusted Prevents Role**: {{PREVENTS_MESSAGE}}"
+                    "**Trusted Prevents Message**: {{PREVENTS_MESSAGE}}"
                 ],
                 "footer": {
                     "text": "Trusted Setup Complete!",
