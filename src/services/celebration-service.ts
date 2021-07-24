@@ -525,7 +525,7 @@ export class CelebrationService {
                     if (memberAnniversaryRoles && memberAnniversaryRoles.length > 0) {
                         // Give Member Anniversary Roles
                         let statuses = anniversaryMemberStatuses.filter(r => r.role);
-                        let giveRoles = [...new Set(anniversaryMemberStatuses.map(m => m.role))];
+                        let giveRoles = [...new Set(statuses.map(m => m.role))];
 
                         for (let role of giveRoles) {
                             let membersWhoNeedsThisRole = statuses
