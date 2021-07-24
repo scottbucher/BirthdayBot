@@ -279,6 +279,16 @@ export class TestCommand implements Command {
                     true
                 );
 
+            if (!target.bot) {
+                testingEmbed.addField(
+                    Lang.getRef('terms.hasBirthdaySet', LangCode.EN_US),
+                    birthdayCheck
+                        ? `${Config.emotes.confirm} ${Lang.getRef('boolean.yes', LangCode.EN_US)}`
+                        : `${Config.emotes.deny} ${Lang.getRef('boolean.no', LangCode.EN_US)}`,
+                    true
+                );
+            }
+
             if (blacklistData.blacklist.length > 0) {
                 testingEmbed.addField(
                     Lang.getRef('terms.memberInBlacklist', LangCode.EN_US),

@@ -2782,6 +2782,7 @@
             "unknownMember": "Unknown Member",
             "unknownChannel": "Unknown Channel",
             "unknownRole": "Unknown Role",
+            "hasBirthdaySet": "User Has Their Birthday Set",
             "none": "None",
             "and": "and",
             "deletedRole": "Deleted Role",
