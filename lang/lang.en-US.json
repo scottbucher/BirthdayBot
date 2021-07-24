@@ -465,7 +465,7 @@
                 "color": "{{REF:colors.default}}"
             },
             "memberAnniversaryRolesClaimed": {
-                "description": "Successfully claimed all member anniversary roles available to you/",
+                "description": "Successfully claimed all member anniversary roles available!",
                 "footer": {
                     "text": "If some roles were not given Birthday Bot may not have permission to give them.",
                     "icon": "{{ICON}}"
