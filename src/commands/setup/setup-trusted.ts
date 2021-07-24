@@ -170,8 +170,8 @@ export class SetupTrusted {
         await this.guildRepo.guildSetupTrusted(
             guild.id,
             requireAllTrustedRoles,
-            preventMessage,
-            preventRole
+            preventRole,
+            preventMessage
         );
     }
 }
