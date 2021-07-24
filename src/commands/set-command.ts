@@ -1,5 +1,4 @@
-import { Chrono, en, ParsedComponents, ParsedResult } from 'chrono-node';
-
+import { Chrono, ParsedComponents, ParsedResult, en } from 'chrono-node';
 import {
     CollectOptions,
     CollectorUtils,

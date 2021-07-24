@@ -41,7 +41,9 @@ export class FormatUtils {
     public static getBirthday(input: string, parser: any, littleEndian: boolean): string {
         // Try and get a date from the 3rd args
         if (
-            (!littleEndian && (input.includes('02/29') || input.includes('2/29'))) ||
+            (!littleEndian &&
+                (input.includes('02/29') ||
+                    (input.includes('2/29') && !input.includes('12/29')))) ||
             (littleEndian && (input.includes('29/02') || input.includes('29/2'))) ||
             input
                 .toLowerCase()
