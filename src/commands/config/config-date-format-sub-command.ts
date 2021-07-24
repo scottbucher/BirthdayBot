@@ -31,15 +31,7 @@ export class ConfigDateFormatSubCommand {
         await MessageUtils.send(
             channel,
             Lang.getEmbed('results.dateFormatSet', LangCode.EN_US, {
-                SETTING: setting,
-                FORMAT:
-                    setting === 'mention'
-                        ? msg.author.toString()
-                        : setting === 'nickname'
-                        ? msg.member.displayName
-                        : setting === 'username'
-                        ? msg.author.username
-                        : `${msg.author.username}#${msg.author.discriminator}`,
+                SETTING: setting === 'month_day' ? 'Month/Day' : 'Day/Month',
             })
         );
     }
