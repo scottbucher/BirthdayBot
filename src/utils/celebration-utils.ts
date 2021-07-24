@@ -16,6 +16,7 @@ import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 import { Moment } from 'moment-timezone';
+import { getPriority } from 'os';
 import moment from 'moment';
 
 let Debug = require('../../config/debug.json');
@@ -194,7 +195,9 @@ export class CelebrationUtils {
 
             if (anniversaryRole) {
                 try {
-                    role = guildMember.guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
+                    role = guildMember.guild.roles.resolve(
+                        anniversaryRole.MemberAnniversaryRoleDiscordId
+                    ) as Role;
                 } catch (error) {
                     // No Member Anniversary Role
                 }
