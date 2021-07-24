@@ -26,7 +26,7 @@ export class ConfigDateFormatSubCommand {
 
         if (setting === 'default') setting = 'mention';
 
-        await this.guildRepo.updateDateForamt(msg.guild.id, setting);
+        await this.guildRepo.updateDateFormat(msg.guild.id, setting);
 
         await MessageUtils.send(
             channel,
