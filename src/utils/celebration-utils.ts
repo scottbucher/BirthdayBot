@@ -466,7 +466,7 @@ export class CelebrationUtils {
         // Default this to true if there are no trusted roles
         // If there are trusted roles and trusted DOESN'T prevent Role/Message (the trusted setting passed in) then set it to true
         let passTrustedCheck =
-            !trustedRoles || trustedRoles.length === 0 ? true : trustedSetting ? false : true;
+            !trustedRoles || (trustedRoles.length === 0 ? true : trustedSetting ? false : true);
 
         // if passTrustedCheck is already true we don't have to check for trusted role(s)
         if (!passTrustedCheck) {
