@@ -7,6 +7,7 @@ import {
 } from 'discord.js-collector-utils';
 import {
     Collection,
+    DMChannel,
     DiscordAPIError,
     Message,
     MessageReaction,
@@ -74,8 +75,8 @@ export class ReactionAddHandler implements EventHandler {
     ) {}
 
     public async process(msgReaction: MessageReaction, reactor: User): Promise<void> {
-        // Don't respond to bots, and only text channels
-        if (reactor.bot || !(msgReaction.message.channel instanceof TextChannel)) return;
+        // Don't respond to bots or DMChannel reactions
+        if (reactor.bot || msgReaction.message.channel instanceof DMChannel) return;
 
         // Check permissions needed to respond
         let channel = msgReaction.message.channel as TextChannel;
@@ -122,7 +123,9 @@ export class ReactionAddHandler implements EventHandler {
                 }
             }
         } else {
-            msg = msgReaction.message;
+            if (msgReaction.message.partial) {
+                msg = await msgReaction.message.fetch();
+            } else msg = msgReaction.message as Message;
         }
 
         let users: Collection<string, User>;
@@ -253,7 +256,7 @@ export class ReactionAddHandler implements EventHandler {
                 )
             ) {
                 pageSize = Config.experience.birthdayListSize;
-                let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
+                let users = [...msg.guild.members.cache.filter(member => !member.user.bot).keys()];
 
                 let userDataResults = await this.userRepo.getBirthdayListFull(
                     users,
@@ -540,7 +543,7 @@ export class ReactionAddHandler implements EventHandler {
                         Lang.getRef('terms.list', LangCode.EN_US)
                 )
             ) {
-                let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
+                let users = [...msg.guild.members.cache.filter(member => !member.user.bot).keys()];
 
                 let userDataResults = await this.userRepo.getBirthdayListFull(
                     users,

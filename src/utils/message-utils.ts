@@ -3,9 +3,10 @@ import {
     DiscordAPIError,
     EmojiResolvable,
     Message,
+    MessageEmbed,
+    MessageOptions,
     MessageReaction,
-    NewsChannel,
-    StringResolvable,
+    TextBasedChannels,
     TextChannel,
     User,
 } from 'discord.js';
@@ -18,11 +19,12 @@ let Config = require('../../config/config.json');
 
 export class MessageUtils {
     public static async send(
-        target: User | DMChannel | TextChannel | NewsChannel,
-        content: StringResolvable
+        target: User | TextBasedChannels,
+        content: string | MessageEmbed | MessageOptions
     ): Promise<Message> {
         try {
-            return await target.send(content);
+            let msgOptions = this.messageOptions(content);
+            return await target.send(msgOptions);
         } catch (error) {
             // 10003: "Unknown channel"
             // 10004: "Unknown guild"
@@ -41,13 +43,14 @@ export class MessageUtils {
         }
     }
     public static async sendWithDelay(
-        target: User | DMChannel | TextChannel | NewsChannel,
-        content: StringResolvable,
+        target: User | TextBasedChannels,
+        content: string | MessageEmbed | MessageOptions,
         delay?: number
     ): Promise<Message> {
         delay = Config.delays.enabled ? delay : 0;
         try {
-            await target.send(content);
+            let msgOptions = this.messageOptions(content);
+            await target.send(msgOptions);
             await TimeUtils.sleep(delay ?? 0);
             return;
         } catch (error) {
@@ -67,15 +70,15 @@ export class MessageUtils {
             }
         }
     }
-
     public static async reply(
         msg: Message,
-        content: StringResolvable,
+        content: string | MessageEmbed | MessageOptions,
         delay?: number
     ): Promise<Message> {
         delay = Config.delays.enabled ? delay : 0;
         try {
-            return await msg.reply(content);
+            let msgOptions = this.messageOptions(content);
+            return await msg.reply(msgOptions);
         } catch (error) {
             // 10003: "Unknown channel"
             // 10004: "Unknown guild"
@@ -93,10 +96,13 @@ export class MessageUtils {
             }
         }
     }
-
-    public static async edit(msg: Message, content: StringResolvable): Promise<Message> {
+    public static async edit(
+        msg: Message,
+        content: string | MessageEmbed | MessageOptions
+    ): Promise<Message> {
         try {
-            return await msg.edit(content);
+            let msgOptions = this.messageOptions(content);
+            return await msg.edit(msgOptions);
         } catch (error) {
             if (error instanceof DiscordAPIError) {
                 // 10008: "Unknown Message" (Message was deleted)
@@ -172,5 +178,17 @@ export class MessageUtils {
                 throw error;
             }
         }
+    }
+
+    private static messageOptions(content: string | MessageEmbed | MessageOptions): MessageOptions {
+        let options: MessageOptions = {};
+        if (typeof content === 'string') {
+            options.content = content;
+        } else if (content instanceof MessageEmbed) {
+            options.embeds = [content];
+        } else {
+            options = content;
+        }
+        return options;
     }
 }

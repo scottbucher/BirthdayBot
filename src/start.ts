@@ -51,7 +51,7 @@ import {
     Logger,
     SubscriptionService,
 } from './services';
-import { ClientOptions, DiscordAPIError } from 'discord.js';
+import { ClientOptions, DiscordAPIError, Options } from 'discord.js';
 import {
     ConfigBirthdayMasterRoleSubCommand,
     ConfigChannelSubCommand,
@@ -112,12 +112,14 @@ async function start(): Promise<void> {
     let combinedRepo = new CombinedRepo(dataAccess);
 
     let clientOptions: ClientOptions = {
-        ws: { intents: Config.client.intents },
+        intents: Config.client.intents,
         partials: Config.client.partials,
-        fetchAllMembers: true,
-        messageCacheMaxSize: Config.client.caches.messages.size,
-        messageCacheLifetime: Config.client.caches.messages.lifetime,
-        messageSweepInterval: Config.client.caches.messages.sweepInterval,
+        makeCache: Options.cacheWithLimits({
+            // Keep default caching behavior
+            ...Options.defaultMakeCacheSettings,
+            // Override specific options from config
+            ...Config.caches,
+        }),
     };
 
     let client = new CustomClient(clientOptions, guildRepo);

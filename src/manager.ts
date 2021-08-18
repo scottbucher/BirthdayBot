@@ -1,6 +1,5 @@
-import { Shard, ShardingManager } from 'discord.js';
-
 import { JobService, Logger } from './services';
+import { Shard, ShardingManager } from 'discord.js';
 
 let Config = require('../config/config.json');
 let Debug = require('../config/debug.json');
@@ -14,18 +13,18 @@ export class Manager {
 
         // TODO: Refactor this once DJS fixes their typings
         // tslint:disable-next-line:no-string-literal
-        let shardList: number[] = this.shardManager['shardList'];
+        let shardList = this.shardManager.shardList as number[];
         try {
             Logger.info(
                 Logs.info.spawningShards
                     .replace('{SHARD_COUNT}', shardList.length.toLocaleString())
                     .replace('{SHARD_LIST}', shardList.join(', '))
             );
-            await this.shardManager.spawn(
-                this.shardManager.totalShards,
-                Config.sharding.spawnDelay * 1000,
-                Config.sharding.spawnTimeout * 1000
-            );
+            await this.shardManager.spawn({
+                amount: this.shardManager.totalShards,
+                delay: Config.sharding.spawnDelay * 1000,
+                timeout: Config.sharding.spawnTimeout * 1000,
+            });
             Logger.info(Logs.info.allShardsSpawned);
         } catch (error) {
             Logger.error(Logs.error.spawnShard, error);

@@ -1,9 +1,11 @@
-import { HttpService, Logger } from '../services';
+import { ActivityType, ShardingManager } from 'discord.js';
+import { HttpService, Lang, Logger } from '../services';
 
 import { BotSite } from '../models/config-models';
+import { CustomClient } from '../extensions';
 import { Job } from './job';
+import { LangCode } from '../models/enums';
 import { ShardUtils } from '../utils';
-import { ShardingManager } from 'discord.js';
 import schedule from 'node-schedule';
 
 let Config = require('../../config/config.json');
@@ -22,13 +24,18 @@ export class UpdateServerCountJob implements Job {
 
     public async run(): Promise<void> {
         let serverCount = await ShardUtils.serverCount(this.shardManager);
-        await this.shardManager.broadcastEval(`
-        (async () => {
-            return await this.setPresence('STREAMING', 'bdays to ${serverCount.toLocaleString()} servers', '${
-            Config.links.stream
-        }');
-        })();
-`);
+
+        let type: ActivityType = 'STREAMING';
+        let name = `to ${serverCount.toLocaleString()} servers`;
+        let url = Lang.getRef('links.stream', LangCode.EN_US);
+
+        await this.shardManager.broadcastEval(
+            async (client, context) => {
+                let customClient = client as CustomClient;
+                return await customClient.setPresence(context.type, context.name, context.url);
+            },
+            { context: { type, name, url } }
+        );
 
         Logger.info(
             Logs.info.updatedServerCount.replace('{SERVER_COUNT}', serverCount.toLocaleString())

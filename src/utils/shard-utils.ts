@@ -10,18 +10,22 @@ export class ShardUtils {
         token: string,
         largeBotSharding: boolean = false
     ): Promise<number> {
-        return await this.recommendedShardCount(token, MAX_SERVERS_PER_SHARD, largeBotSharding);
+        return await this.recommendedShardCount(
+            token,
+            MAX_SERVERS_PER_SHARD,
+            largeBotSharding ? 16 : 1
+        );
     }
 
     public static async recommendedShardCount(
         token: string,
-        serversPerShard: number,
-        largeBotSharding: boolean = false
+        guildsPerShard: number,
+        multipleOf: number = 1
     ): Promise<number> {
-        return MathUtils.ceilToMultiple(
-            await Util.fetchRecommendedShards(token, serversPerShard),
-            largeBotSharding ? LARGE_BOT_SHARDING_MULTIPLE : 1
-        );
+        return await Util.fetchRecommendedShards(token, {
+            guildsPerShard,
+            multipleOf,
+        });
     }
 
     public static shardIds(shardInterface: ShardingManager | ShardClientUtil): number[] {
@@ -35,9 +39,9 @@ export class ShardUtils {
     public static async serverCount(
         shardInterface: ShardingManager | ShardClientUtil
     ): Promise<number> {
-        let shardGuildCounts: number[] = await shardInterface.fetchClientValues(
+        let shardGuildCounts = (await shardInterface.fetchClientValues(
             'guilds.cache.size'
-        );
+        )) as number[];
         return MathUtils.sum(shardGuildCounts);
     }
 }
