@@ -71,7 +71,7 @@ export class DevCommand implements Command {
                     serverCount > 0
                         ? fileSize(memory.heapUsed / serverCount)
                         : Lang.getRef('terms.na', LangCode.EN_US),
-                SHARD_ID: (msg.guild?.shardID ?? 0).toString(),
+                SHARD_ID: (msg.guild?.shardId ?? 0).toString(),
                 SERVER_ID: msg.guild?.id ?? Lang.getRef('other.na', LangCode.EN_US),
                 BOT_ID: msg.client.user.id,
                 USER_ID: msg.author.id,
