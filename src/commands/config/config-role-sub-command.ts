@@ -22,7 +22,7 @@ export class ConfigRoleSubCommand {
 
         if (action === 'create') {
             // User wants to create the default birthday role
-            if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
+            if (!msg.guild.me.permissions.has('MANAGE_ROLES')) {
                 await MessageUtils.send(
                     channel,
                     Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US)
@@ -32,12 +32,10 @@ export class ConfigRoleSubCommand {
 
             // Create role with desired attributes
             let birthdayRole = await msg.guild.roles.create({
-                data: {
-                    name: Config.emotes.birthday,
-                    color: Config.colors.role,
-                    hoist: true,
-                    mentionable: true,
-                },
+                name: Config.emotes.birthday,
+                color: Config.colors.role,
+                hoist: true,
+                mentionable: true,
             });
 
             await this.guildRepo.updateBirthdayRole(msg.guild.id, birthdayRole?.id);
@@ -58,7 +56,7 @@ export class ConfigRoleSubCommand {
             );
         } else {
             // See if a role was specified
-            if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
+            if (!msg.guild.me.permissions.has('MANAGE_ROLES')) {
                 await MessageUtils.send(
                     channel,
                     Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US)

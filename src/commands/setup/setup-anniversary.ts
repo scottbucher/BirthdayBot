@@ -4,8 +4,8 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Message, MessageReaction, TextChannel, User } from 'discord.js';
-import { MessageUtils, PermissionUtils } from '../../utils';
+import { GuildUtils, MessageUtils, PermissionUtils } from '../../utils';
+import { Message, MessageReaction, TextBasedChannels, TextChannel, User } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
@@ -81,7 +81,7 @@ export class SetupAnniversary {
                     await guild.channels.create(
                         Lang.getRef('defaults.memberAnniversaryChannelName', LangCode.EN_US),
                         {
-                            type: 'text',
+                            type: 'GUILD_TEXT',
                             topic: Lang.getRef(
                                 'defaults.memberAnniversaryChannelTopic',
                                 LangCode.EN_US
@@ -122,7 +122,8 @@ export class SetupAnniversary {
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned channel
-                        let channelInput: TextChannel = nextMsg.mentions.channels.first();
+                        let channelInput: TextBasedChannels =
+                            GuildUtils.getMentionedTextChannel(nextMsg);
 
                         if (!channelInput) {
                             channelInput = guild.channels.cache
@@ -215,7 +216,7 @@ export class SetupAnniversary {
                     await guild.channels.create(
                         Lang.getRef('defaults.serverAnniversaryChannelName', LangCode.EN_US),
                         {
-                            type: 'text',
+                            type: 'GUILD_TEXT',
                             topic: Lang.getRef(
                                 'defaults.serverAnniversaryChannelTopic',
                                 LangCode.EN_US
@@ -256,7 +257,8 @@ export class SetupAnniversary {
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned channel
-                        let channelInput: TextChannel = nextMsg.mentions.channels.first();
+                        let channelInput: TextBasedChannels =
+                            GuildUtils.getMentionedTextChannel(nextMsg);
 
                         if (!channelInput) {
                             channelInput = guild.channels.cache
