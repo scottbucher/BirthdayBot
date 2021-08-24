@@ -2,30 +2,18 @@ import { ShardClientUtil, ShardingManager, Util } from 'discord.js';
 
 import { MathUtils } from '.';
 
-const MAX_SERVERS_PER_SHARD = 2500;
 const LARGE_BOT_SHARDING_MULTIPLE = 16;
-
 export class ShardUtils {
-    public static async requiredShardCount(
-        token: string,
-        largeBotSharding: boolean = false
-    ): Promise<number> {
-        return await this.recommendedShardCount(
-            token,
-            MAX_SERVERS_PER_SHARD,
-            largeBotSharding ? 16 : 1
-        );
-    }
-
     public static async recommendedShardCount(
         token: string,
         guildsPerShard: number,
-        multipleOf: number = 1
+        largeBotSharding: boolean = false
     ): Promise<number> {
-        return await Util.fetchRecommendedShards(token, {
+        let num = await Util.fetchRecommendedShards(token, {
             guildsPerShard,
-            multipleOf,
+            multipleOf: largeBotSharding ? LARGE_BOT_SHARDING_MULTIPLE : 1,
         });
+        return num;
     }
 
     public static shardIds(shardInterface: ShardingManager | ShardClientUtil): number[] {

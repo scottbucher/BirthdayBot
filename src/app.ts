@@ -21,6 +21,8 @@ let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
 let Debug = require('../config/debug.json');
 
+const MAX_SERVERS_PER_SHARD = 2500;
+
 async function start(): Promise<void> {
     Logger.info(Logs.info.started);
 
@@ -36,8 +38,9 @@ async function start(): Promise<void> {
         if (Config.clustering.enabled) {
             let resBody = await masterApiService.login();
             shardList = resBody.shardList;
-            let requiredShards = await ShardUtils.requiredShardCount(
+            let requiredShards = await ShardUtils.recommendedShardCount(
                 Config.client.token,
+                MAX_SERVERS_PER_SHARD,
                 Config.sharding.largeBotSharding
             );
             totalShards = Math.max(requiredShards, resBody.totalShards);
