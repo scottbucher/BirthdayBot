@@ -38,10 +38,10 @@ export class SubscriptionEventsController implements Controller {
                         return await customClient.notifySubscription(
                             context.subscriber,
                             context.plan,
-                            status
+                            context.status
                         );
                     },
-                    { context: { subscriber: reqBody.subscriber, plan: reqBody.plan } }
+                    { context: { subscriber: reqBody.subscriber, plan: reqBody.plan, status } }
                 );
 
                 res.sendStatus(201);
