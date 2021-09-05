@@ -886,7 +886,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command!",
-                    "Accepted Values: `{{REF:types.add}}`, `{{REF:types.remove}}`, `{{REF:types.clear}}`, `{{REF:types.list}}`"
+                    "Accepted Values: `{{REF:types.add}}`, `{{REF:types.remove}}`, `{{REF:types.clear}}`, `{{REF:types.list}}, `{{REF:types.claim}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
