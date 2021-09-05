@@ -1576,7 +1576,7 @@
         "premiumPrompts": {
             "subscriptionAdded": {
                 "title": "{{REF:bot.name}} Premium",
-                "description": "{{REF:emotes.party}} {[SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{REF:emotes.party}}",
+                "description": "{{REF:emotes.party}} {{SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{REF:emotes.party}}",
                 "fields": [
                     {
                         "name": "{{REF:bot.prefix}} premium",
