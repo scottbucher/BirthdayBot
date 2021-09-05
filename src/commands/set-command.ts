@@ -254,6 +254,7 @@ export class SetCommand implements Command {
                     AUTHOR_ICON: target.displayAvatarURL(),
                     ICON: msg.client.user.displayAvatarURL(),
                     TAG: target.tag,
+                    DATE_FORMAT: littleEndian ? 'DD/MM' : 'MM/DD',
                 }).setAuthor(target.tag, target.displayAvatarURL())
             );
 

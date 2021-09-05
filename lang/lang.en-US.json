@@ -248,7 +248,7 @@
                 "description": [
                     "Please type your birth month and day below. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
                     "",
-                    "**Example Usage:** `08/28` (MM/DD)",
+                    "**Example Usage:** `08/28` ({{DATE_FORMAT}})",
                     "",
                     "**Important**: By submitting this information you agree it can be shown to anyone."
                 ],
