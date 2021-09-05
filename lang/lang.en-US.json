@@ -2279,7 +2279,7 @@
                 },
                 "title": "{{REF:bot.name}} Anniversary Help - Guild Only",
                 "description": [
-                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.add}} <role> <year>** - Add a member anniversary role.",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.add}} <year> <role>** - Add a member anniversary role.",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.remove}} <role>** - Remove a member anniversary role",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.clear}}** - Clear all member anniversary roles.",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.list}} [page]** - List all member anniversary roles.",
