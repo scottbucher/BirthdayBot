@@ -1,4 +1,5 @@
 import {
+    Channel,
     DMChannel,
     GuildMember,
     NewsChannel,
@@ -12,7 +13,7 @@ import { Command } from '../commands';
 import { GuildData } from '../models/database';
 
 export class PermissionUtils {
-    public static canSend(channel: TextBasedChannels, requireReaction = true): boolean {
+    public static canSend(channel: Channel, requireReaction = true): boolean {
         if (channel instanceof DMChannel) return true;
 
         if (

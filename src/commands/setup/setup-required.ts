@@ -1,19 +1,23 @@
 import {
-    CollectOptions,
-    CollectorUtils,
-    ExpireFunction,
-    MessageFilter,
-} from 'discord.js-collector-utils';
-import {
+    BaseGuildTextChannel,
+    DMChannel,
     Message,
     MessageReaction,
+    NewsChannel,
+    PartialGroupDMChannel,
     Role,
     TextBasedChannel,
     TextBasedChannels,
     TextChannel,
     User,
 } from 'discord.js';
-import { MessageUtils, PermissionUtils } from '../../utils';
+import {
+    CollectOptions,
+    CollectorUtils,
+    ExpireFunction,
+    MessageFilter,
+} from 'discord.js-collector-utils';
+import { GuildUtils, MessageUtils, PermissionUtils } from '../../utils';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
@@ -122,20 +126,8 @@ export class SetupRequired {
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned channel
-                        let channelInput: TextBasedChannels = nextMsg.mentions.channels
-                            .filter(c => c instanceof TextBasedChannel)
-                            .first() as TextBasedChannels;
-
-                        if (!channelInput) {
-                            channelInput = guild.channels.cache
-                                .filter(channel => channel instanceof TextChannel)
-                                .map(channel => channel as TextChannel)
-                                .find(channel =>
-                                    channel.name
-                                        .toLowerCase()
-                                        .includes(nextMsg.content.toLowerCase())
-                                );
-                        }
+                        let channelInput: BaseGuildTextChannel =
+                            GuildUtils.getMentionedTextChannel(nextMsg);
 
                         if (!channelInput) {
                             await MessageUtils.send(

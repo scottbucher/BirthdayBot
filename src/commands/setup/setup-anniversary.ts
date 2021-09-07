@@ -1,11 +1,18 @@
 import {
+    BaseGuildTextChannel,
+    Message,
+    MessageReaction,
+    TextBasedChannels,
+    TextChannel,
+    User,
+} from 'discord.js';
+import {
     CollectOptions,
     CollectorUtils,
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
 import { GuildUtils, MessageUtils, PermissionUtils } from '../../utils';
-import { Message, MessageReaction, TextBasedChannels, TextChannel, User } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
@@ -122,19 +129,8 @@ export class SetupAnniversary {
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned channel
-                        let channelInput: TextBasedChannels =
+                        let channelInput: BaseGuildTextChannel =
                             GuildUtils.getMentionedTextChannel(nextMsg);
-
-                        if (!channelInput) {
-                            channelInput = guild.channels.cache
-                                .filter(channel => channel instanceof TextChannel)
-                                .map(channel => channel as TextChannel)
-                                .find(channel =>
-                                    channel.name
-                                        .toLowerCase()
-                                        .includes(nextMsg.content.toLowerCase())
-                                );
-                        }
 
                         if (!channelInput) {
                             MessageUtils.send(
@@ -257,19 +253,8 @@ export class SetupAnniversary {
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned channel
-                        let channelInput: TextBasedChannels =
+                        let channelInput: BaseGuildTextChannel =
                             GuildUtils.getMentionedTextChannel(nextMsg);
-
-                        if (!channelInput) {
-                            channelInput = guild.channels.cache
-                                .filter(channel => channel instanceof TextChannel)
-                                .map(channel => channel as TextChannel)
-                                .find(channel =>
-                                    channel.name
-                                        .toLowerCase()
-                                        .includes(nextMsg.content.toLowerCase())
-                                );
-                        }
 
                         if (!channelInput) {
                             MessageUtils.send(

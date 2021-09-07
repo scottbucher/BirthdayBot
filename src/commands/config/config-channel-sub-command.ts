@@ -1,5 +1,5 @@
+import { BaseGuildTextChannel, Message, TextBasedChannels, TextChannel } from 'discord.js';
 import { FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../../utils';
-import { Message, TextBasedChannels, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
@@ -95,15 +95,7 @@ export class ConfigChannelSubCommand {
         } else {
             // See if a channel was specified
 
-            let newChannel: TextBasedChannels = GuildUtils.getMentionedTextChannel(msg);
-
-            // If could not find in mention check, try to find by name
-            if (!newChannel) {
-                newChannel = msg.guild.channels.cache
-                    .filter(channel => channel instanceof TextChannel)
-                    .map(channel => channel as TextChannel)
-                    .find(channel => channel.name.toLowerCase().includes(args[4].toLowerCase()));
-            }
+            let newChannel: BaseGuildTextChannel = GuildUtils.getMentionedTextChannel(msg);
 
             // Could it find the channel in either check?
             if (!newChannel) {

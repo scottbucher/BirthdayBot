@@ -1,7 +1,18 @@
-import { Guild, GuildMember, Message, TextBasedChannel, TextBasedChannels, Util } from 'discord.js';
+import {
+    BaseGuildTextChannel,
+    Guild,
+    GuildMember,
+    Message,
+    NewsChannel,
+    TextBasedChannel,
+    TextBasedChannels,
+    TextChannel,
+    Util,
+} from 'discord.js';
 
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { channel } from 'diagnostics_channel';
 
 export class GuildUtils {
     public static findMember(guild: Guild, input: string): GuildMember {
@@ -30,18 +41,19 @@ export class GuildUtils {
         return guild.members.resolve(memberDiscordId)?.toString() || 'Unknown Member';
     }
 
-    public static getMentionedTextChannel(msg: Message): TextBasedChannels {
+    public static getMentionedTextChannel(msg: Message): BaseGuildTextChannel {
         let textChannel = msg.mentions.channels
-            .filter(c => c instanceof TextBasedChannel)
-            .first() as TextBasedChannels;
+            .filter(c => c instanceof TextChannel || c instanceof NewsChannel)
+            .first() as BaseGuildTextChannel;
 
         if (textChannel) return textChannel;
 
-        let channelName = msg.guild.channels.resolve(
-            msg.content.match(/<#(\d+)>/)[1]
-        ) as TextBasedChannels;
+        textChannel = msg.guild.channels.cache
+            .filter(channel => channel instanceof TextChannel)
+            .map(channel => channel as TextChannel)
+            .find(channel => channel.name.toLowerCase().includes(msg.content.toLowerCase()));
 
-        if (channelName) return channelName;
+        if (textChannel) return textChannel;
 
         return null;
     }
