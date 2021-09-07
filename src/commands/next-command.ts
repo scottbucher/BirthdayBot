@@ -47,7 +47,7 @@ export class NextCommand implements Command {
 
         if (args.length === 2 || type === 'birthday') {
             // Next birthday
-            let users = msg.guild.members.cache.filter(member => !member.user.bot).keyArray();
+            let users = [...msg.guild.members.cache.filter(member => !member.user.bot).keys()];
 
             let userDatas = await this.userRepo.getAllUsers(users);
 

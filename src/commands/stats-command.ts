@@ -44,7 +44,7 @@ export class StatsCommand implements Command {
             }
         }
 
-        let shardId = msg.guild?.shardID || 0;
+        let shardId = msg.guild?.shardId || 0;
 
         await MessageUtils.send(
             channel,

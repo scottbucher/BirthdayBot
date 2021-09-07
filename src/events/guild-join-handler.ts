@@ -14,16 +14,16 @@ export class GuildJoinHandler implements EventHandler {
                 .replace('{GUILD_ID}', guild.id)
         );
         // Get someone to message
-        let user = guild.owner;
-        if (!user) {
-            user = guild.members.cache.find(member =>
-                member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)
+        let target = await guild.fetchOwner();
+        if (!target) {
+            target = guild.members.cache.find(member =>
+                member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
             );
         }
 
-        if (!user) return;
+        if (!target) return;
 
-        let userChannel = await user.createDM();
+        let userChannel = await target.createDM();
         await MessageUtils.send(
             userChannel,
             Lang.getEmbed('info.guildJoin', LangCode.EN_US, {

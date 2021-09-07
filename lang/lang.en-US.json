@@ -248,7 +248,7 @@
                 "description": [
                     "Please type your birth month and day below. [(?)]({{REF:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
                     "",
-                    "**Example Usage:** `08/28` (MM/DD)",
+                    "**Example Usage:** `{{DATE_EXAMPLE}}` ({{DATE_FORMAT}})",
                     "",
                     "**Important**: By submitting this information you agree it can be shown to anyone."
                 ],
@@ -886,7 +886,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command!",
-                    "Accepted Values: `{{REF:types.add}}`, `{{REF:types.remove}}`, `{{REF:types.clear}}`, `{{REF:types.list}}`"
+                    "Accepted Values: `{{REF:types.add}}`, `{{REF:types.remove}}`, `{{REF:types.clear}}`, `{{REF:types.list}}, `{{REF:types.claim}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
@@ -1576,7 +1576,7 @@
         "premiumPrompts": {
             "subscriptionAdded": {
                 "title": "{{REF:bot.name}} Premium",
-                "description": "{{REF:emotes.party}} {[SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{REF:emotes.party}}",
+                "description": "{{REF:emotes.party}} {{SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{REF:emotes.party}}",
                 "fields": [
                     {
                         "name": "{{REF:bot.prefix}} premium",
@@ -2279,7 +2279,7 @@
                 },
                 "title": "{{REF:bot.name}} Anniversary Help - Guild Only",
                 "description": [
-                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.add}} <role> <year>** - Add a member anniversary role.",
+                    "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.add}} <year> <role>** - Add a member anniversary role.",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.remove}} <role>** - Remove a member anniversary role",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.clear}}** - Clear all member anniversary roles.",
                     "**{{REF:bot.prefix}} memberAnniversaryRole {{REF:types.list}} [page]** - List all member anniversary roles.",
@@ -2840,7 +2840,9 @@
             "memberAnniversaryMention": "Member Anniversary Mention Setting",
             "serverAnniversaryMention": "Server Anniversary Mention Setting",
             "serverLanguage": "Server Language",
-            "never": "Never"
+            "never": "Never",
+            "mmdd": "MM/DD",
+            "ddmm": "DD/MM"
         },
         "types": {
             "birthday": "birthday",

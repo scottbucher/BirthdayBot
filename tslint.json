@@ -4,6 +4,7 @@
     "jsRules": {},
     "rules": {
         "no-console": false,
+        "no-return-await": true,
         "no-unused-variable": true,
         "quotemark": [true, "single"],
         "ordered-imports": true,

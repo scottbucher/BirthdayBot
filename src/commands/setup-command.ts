@@ -1,5 +1,5 @@
+import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import { Message, TextChannel } from 'discord.js';
-import { MessageUtils, PermissionUtils, FormatUtils } from '../utils';
 import { SetupRequired, SetupTrusted } from './setup';
 
 import { Command } from '.';
@@ -24,7 +24,7 @@ export class SetupCommand implements Command {
         private setupRequired: SetupRequired,
         private setupTrusted: SetupTrusted,
         private setupAnniversary: SetupAnniversary
-    ) { }
+    ) {}
 
     public async execute(
         args: string[],
@@ -44,8 +44,8 @@ export class SetupCommand implements Command {
         // Run required setup if no arguments
         if (args.length <= 2) {
             if (
-                !msg.guild.me.hasPermission('MANAGE_CHANNELS') ||
-                !msg.guild.me.hasPermission('MANAGE_ROLES')
+                !msg.guild.me.permissions.has('MANAGE_CHANNELS') ||
+                !msg.guild.me.permissions.has('MANAGE_ROLES')
             ) {
                 await MessageUtils.send(
                     channel,
@@ -76,7 +76,7 @@ export class SetupCommand implements Command {
                 await this.setupAnniversary.execute(args, msg, channel);
                 return;
             case 'trusted':
-                if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
+                if (!msg.guild.me.permissions.has('MANAGE_ROLES')) {
                     await MessageUtils.send(
                         channel,
                         Lang.getEmbed('validation.needManageRolesPerm', LangCode.EN_US)

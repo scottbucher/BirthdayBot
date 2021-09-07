@@ -83,6 +83,23 @@ export class FormatUtils {
         );
     }
 
+    public static checkIfMonth(month: string): boolean {
+        return (
+            month.toLowerCase() === Lang.getRef('months.jan', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.feb', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.mar', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.apr', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.may', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.jun', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.jul', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.aug', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.sep', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.oct', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.nov', LangCode.EN_US).toLowerCase() ||
+            month.toLowerCase() === Lang.getRef('months.dec', LangCode.EN_US).toLowerCase()
+        );
+    }
+
     public static getMonth(month: number): string {
         switch (month) {
             case 1:

@@ -4,7 +4,15 @@ import {
     ExpireFunction,
     MessageFilter,
 } from 'discord.js-collector-utils';
-import { Message, MessageReaction, Role, TextChannel, User } from 'discord.js';
+import {
+    Message,
+    MessageReaction,
+    Role,
+    TextBasedChannel,
+    TextBasedChannels,
+    TextChannel,
+    User,
+} from 'discord.js';
 import { MessageUtils, PermissionUtils } from '../../utils';
 
 import { GuildRepo } from '../../services/database/repos';
@@ -75,7 +83,7 @@ export class SetupRequired {
                     await guild.channels.create(
                         Lang.getRef('defaults.birthdayChannelName', LangCode.EN_US),
                         {
-                            type: 'text',
+                            type: 'GUILD_TEXT',
                             topic: Lang.getRef('defaults.birthdayChannelTopic', LangCode.EN_US),
                             permissionOverwrites: [
                                 {
@@ -114,7 +122,9 @@ export class SetupRequired {
                     // Retrieve Result
                     async (nextMsg: Message) => {
                         // Find mentioned channel
-                        let channelInput: TextChannel = nextMsg.mentions.channels.first();
+                        let channelInput: TextBasedChannels = nextMsg.mentions.channels
+                            .filter(c => c instanceof TextBasedChannel)
+                            .first() as TextBasedChannels;
 
                         if (!channelInput) {
                             channelInput = guild.channels.cache
@@ -196,12 +206,10 @@ export class SetupRequired {
                 // Create role with desired attributes
                 birthdayRole = (
                     await guild.roles.create({
-                        data: {
-                            name: Config.emotes.birthday,
-                            color: Config.colors.role,
-                            hoist: true,
-                            mentionable: true,
-                        },
+                        name: Config.emotes.birthday,
+                        color: Config.colors.role,
+                        hoist: true,
+                        mentionable: true,
                     })
                 )?.id;
                 break;

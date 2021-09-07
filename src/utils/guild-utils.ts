@@ -1,4 +1,4 @@
-import { Guild, GuildMember, Util } from 'discord.js';
+import { Guild, GuildMember, Message, TextBasedChannel, TextBasedChannels, Util } from 'discord.js';
 
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
@@ -28,5 +28,21 @@ export class GuildUtils {
 
     public static getMemberMention(memberDiscordId: string, guild: Guild): string {
         return guild.members.resolve(memberDiscordId)?.toString() || 'Unknown Member';
+    }
+
+    public static getMentionedTextChannel(msg: Message): TextBasedChannels {
+        let textChannel = msg.mentions.channels
+            .filter(c => c instanceof TextBasedChannel)
+            .first() as TextBasedChannels;
+
+        if (textChannel) return textChannel;
+
+        let channelName = msg.guild.channels.resolve(
+            msg.content.match(/<#(\d+)>/)[1]
+        ) as TextBasedChannels;
+
+        if (channelName) return channelName;
+
+        return null;
     }
 }

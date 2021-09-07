@@ -1,7 +1,5 @@
-import { ShardingManager } from 'discord.js';
 import 'reflect-metadata';
 
-import { Api } from './api';
 import {
     GuildsController,
     RootController,
@@ -9,16 +7,21 @@ import {
     SubscriptionEventsController,
     VotesController,
 } from './controllers';
-import { UpdateServerCountJob } from './jobs';
-import { Manager } from './manager';
 import { HttpService, JobService, Logger, MasterApiService } from './services';
-import { DataAccess } from './services/database/data-access';
-import { UserRepo } from './services/database/repos';
 import { MathUtils, ShardUtils } from './utils';
+
+import { Api } from './api';
+import { DataAccess } from './services/database/data-access';
+import { Manager } from './manager';
+import { ShardingManager } from 'discord.js';
+import { UpdateServerCountJob } from './jobs';
+import { UserRepo } from './services/database/repos';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
 let Debug = require('../config/debug.json');
+
+const MAX_SERVERS_PER_SHARD = 2500;
 
 async function start(): Promise<void> {
     Logger.info(Logs.info.started);
@@ -35,8 +38,9 @@ async function start(): Promise<void> {
         if (Config.clustering.enabled) {
             let resBody = await masterApiService.login();
             shardList = resBody.shardList;
-            let requiredShards = await ShardUtils.requiredShardCount(
+            let requiredShards = await ShardUtils.recommendedShardCount(
                 Config.client.token,
+                MAX_SERVERS_PER_SHARD,
                 Config.sharding.largeBotSharding
             );
             totalShards = Math.max(requiredShards, resBody.totalShards);

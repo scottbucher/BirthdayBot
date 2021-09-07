@@ -73,7 +73,7 @@ export class ListCommand implements Command {
 
         if (type === 'birthday') {
             // Birthday List
-            let users = guildMembers.filter(member => !member.user.bot).keyArray();
+            let users = [...guildMembers.filter(member => !member.user.bot).keys()];
 
             let userDataResults: UserDataResults;
 

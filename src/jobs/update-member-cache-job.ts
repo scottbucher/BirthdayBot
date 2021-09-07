@@ -19,7 +19,7 @@ export class UpdateMemberCacheJob implements Job {
         // Collection of guilds
         let guildCache = this.client.guilds.cache;
 
-        for (let guild of guildCache.array()) {
+        for (let guild of guildCache.values()) {
             try {
                 await guild.members.fetch();
             } catch (error) {

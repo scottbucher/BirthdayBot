@@ -1,4 +1,4 @@
-import { DMChannel, Message, TextChannel } from 'discord.js';
+import { DMChannel, Message, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
 import { GuildRepo, UserRepo } from '../services/database/repos';
 import { Lang, Logger, SubscriptionService } from '../services';
 import { MessageUtils, PermissionUtils } from '../utils';
@@ -36,9 +36,6 @@ export class MessageHandler {
         //     channel,
         //     `${msg.author.username}'s joinedAt is: \`${msg.member.joinedAt}\` and their joinedTimestamp is: \`${msg.member.joinedTimestamp}\``
         // );
-
-        // Only handle messages from text or DM channels
-        if (!(channel instanceof TextChannel || channel instanceof DMChannel)) return;
 
         if (channel instanceof TextChannel) {
             if (!PermissionUtils.canSend(channel)) {
@@ -210,7 +207,11 @@ export class MessageHandler {
                         .replace('{SENDER_ID}', msg.author.id),
                     error
                 );
-            } else if (msg.channel instanceof TextChannel) {
+            } else if (
+                msg.channel instanceof TextChannel ||
+                msg.channel instanceof NewsChannel ||
+                msg.channel instanceof ThreadChannel
+            ) {
                 Logger.error(
                     Logs.error.commandGuild
                         .replace('{MESSAGE_ID}', msg.id)

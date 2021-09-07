@@ -1,5 +1,5 @@
-import { FormatUtils, MessageUtils, PermissionUtils } from '../../utils';
-import { Message, TextChannel } from 'discord.js';
+import { FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../../utils';
+import { Message, TextBasedChannels, TextChannel } from 'discord.js';
 
 import { GuildRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
@@ -44,7 +44,7 @@ export class ConfigChannelSubCommand {
 
         if (action === 'create') {
             // User wants to create the default birthday channel
-            if (!msg.guild.me.hasPermission('MANAGE_CHANNELS')) {
+            if (!msg.guild.me.permissions.has('MANAGE_CHANNELS')) {
                 await MessageUtils.send(
                     channel,
                     Lang.getEmbed('validation.needsManageChannels', LangCode.EN_US)
@@ -56,7 +56,7 @@ export class ConfigChannelSubCommand {
             let newChannel = await msg.guild.channels.create(
                 Lang.getRef('terms.' + refType + 'Title', LangCode.EN_US),
                 {
-                    type: 'text',
+                    type: 'GUILD_TEXT',
                     topic: Lang.getRef('terms.' + refType + 'Topic', LangCode.EN_US),
                     permissionOverwrites: [
                         {
@@ -95,7 +95,7 @@ export class ConfigChannelSubCommand {
         } else {
             // See if a channel was specified
 
-            let newChannel: TextChannel = msg.mentions.channels.first();
+            let newChannel: TextBasedChannels = GuildUtils.getMentionedTextChannel(msg);
 
             // If could not find in mention check, try to find by name
             if (!newChannel) {
