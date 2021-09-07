@@ -36,7 +36,7 @@
         "filesize": "8.0.0",
         "moment-timezone": "0.5.33",
         "mysql": "2.18.1",
-        "node-fetch": "3.0.0",
+        "node-fetch": "2.6.1",
         "node-schedule": "2.0.0",
         "pm2": "^5.1.1",
         "reflect-metadata": "^0.1.13",
