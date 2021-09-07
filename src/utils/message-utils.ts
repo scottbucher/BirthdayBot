@@ -86,11 +86,15 @@ export class MessageUtils {
             // 50001: "Missing access"
             // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
             // 50013: "Missing Permissions"
+            // 50035: "Unknown Message"
             if (
                 error instanceof DiscordAPIError &&
                 [10003, 10004, 10013, 50001, 50007, 50013].includes(error.code)
             ) {
                 return;
+            } else if (error instanceof DiscordAPIError && error.code === 50035) {
+                // If we can't reply just send it as a normal message
+                await this.send(msg.channel, content);
             } else {
                 throw error;
             }
