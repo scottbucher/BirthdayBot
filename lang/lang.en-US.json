@@ -1443,6 +1443,10 @@
                 "description": "Please specify a user!",
                 "color": "{{REF:colors.error}}"
             },
+            "noUserOrRoleSpecified": {
+                "description": "Please specify a user or role!",
+                "color": "{{REF:colors.error}}"
+            },
             "noUserFound": {
                 "description": "Could not find that user!",
                 "color": "{{REF:colors.error}}"
@@ -1508,8 +1512,8 @@
                 ],
                 "color": "{{REF:colors.error}}"
             },
-            "userAlreadyInBlacklist": {
-                "description": "That user is already in the blacklist!",
+            "userOrRoleAlreadyInBlacklist": {
+                "description": "That {{TYPE}} is already in the blacklist!",
                 "color": "{{REF:colors.error}}"
             },
             "userNotInBlacklist": {
@@ -2895,7 +2899,8 @@
             "user": "user",
             "update": "update",
             "server": "server",
-            "claim": "claim"
+            "claim": "claim",
+            "role": "role"
         },
         "placeHolders": {
             "users": "<Users>",
