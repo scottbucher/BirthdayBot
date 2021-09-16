@@ -2267,10 +2267,10 @@
                 },
                 "title": "{{REF:bot.name}} Blacklist Help - Guild Only",
                 "description": [
-                    "**{{REF:bot.prefix}} blacklist {{REF:types.add}} <user>** - Add user to the blacklist.",
-                    "**{{REF:bot.prefix}} blacklist {{REF:types.remove}} <user>** - Remove user from the blacklist.",
+                    "**{{REF:bot.prefix}} blacklist {{REF:types.add}} <user/role>** - Add user/role to the blacklist.",
+                    "**{{REF:bot.prefix}} blacklist {{REF:types.remove}} <user/role/id>** - Remove user/role from the blacklist.",
                     "**{{REF:bot.prefix}} blacklist {{REF:types.clear}}** - Clear the birthday blacklist.",
-                    "**{{REF:bot.prefix}} blacklist {{REF:types.list}}** - View all blacklisted users in your server.",
+                    "**{{REF:bot.prefix}} blacklist {{REF:types.list}}** - View all blacklisted users/roles in your server.",
                     "",
                     "If you have any question/problems please join our support server [here]({{REF:links.support}})."
                 ]
@@ -2608,12 +2608,12 @@
             "blacklist": {
                 "title": "{{REF:terms.blacklistList}} | {{REF:list.pageTitle}}",
                 "description": [
-                    "*Users on this list will not have their birthdays celebrated no matter what. Edit this list with `{{REF:bot.prefix}} blacklist <{{REF:types.add}}/{{REF:types.remove}}> <User>`!*",
+                    "*Users on this list or who have roles on this list will not have their birthdays celebrated no matter what. Edit this list with `{{REF:bot.prefix}} blacklist <{{REF:types.add}}/{{REF:types.remove}}> <User/Role>`!*",
                     "",
                     "{{LIST_DATA}}"
                 ],
                 "footer": {
-                    "text": "Total Blacklisted Users: {{TOTAL_BLACKLIST}} • {{PER_PAGE}} per page",
+                    "text": "Total Blacklisted Users/Roles: {{TOTAL_BLACKLIST}} • {{PER_PAGE}} per page",
                     "icon": "{{ICON}}"
                 },
                 "timestamp": true
@@ -2784,6 +2784,7 @@
             "canBeGiven": "Can be given",
             "cantBeGivenPermIssue": "Can't be given (Permission Issue)",
             "unknownMember": "Unknown Member",
+            "unknownTarget": "Unknown Target",
             "unknownChannel": "Unknown Channel",
             "unknownRole": "Unknown Role",
             "hasBirthdaySet": "User Has Their Birthday Set",

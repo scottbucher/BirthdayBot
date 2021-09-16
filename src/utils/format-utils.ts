@@ -532,13 +532,14 @@ export class FormatUtils {
             return embed;
         }
         let description = '';
-        let users = blacklistResults.blacklist.map(data => data.DiscordId);
+        let targets = blacklistResults.blacklist.map(data => data.DiscordId);
 
-        for (let user of users) {
+        for (let target of targets) {
             description += `**${
-                guild.members.resolve(user)?.displayName ||
-                `**${Lang.getRef('terms.unknownMember', LangCode.EN_US)}**`
-            }**: (ID: ${user})\n`; // Append the description
+                guild.members.resolve(target)?.displayName ||
+                guild.roles.resolve(target)?.toString() ||
+                `**${Lang.getRef('terms.unknownTarget', LangCode.EN_US)}**`
+            }**: (ID: ${target})\n`; // Append the description
         }
 
         embed = Lang.getEmbed('list.blacklist', LangCode.EN_US, {
