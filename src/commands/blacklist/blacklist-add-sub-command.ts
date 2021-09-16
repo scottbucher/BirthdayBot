@@ -12,7 +12,7 @@ export class BlacklistAddSubCommand {
         if (args.length === 3) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.noUserSpecified', LangCode.EN_US)
+                Lang.getEmbed('validation.noUserOrRoleSpecified', LangCode.EN_US)
             );
             return;
         }
