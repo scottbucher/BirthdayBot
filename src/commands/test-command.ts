@@ -16,7 +16,7 @@ import {
     UserRepo,
 } from '../services/database/repos';
 import { CustomMessage, UserData } from '../models/database';
-import { Message, MessageEmbed, Role, TextChannel, User } from 'discord.js';
+import { GuildMember, Message, MessageEmbed, Role, TextChannel, User } from 'discord.js';
 
 import { Command } from './command';
 import { Lang } from '../services';
@@ -76,16 +76,16 @@ export class TestCommand implements Command {
             return;
         }
 
-        let target: User;
+        let target: GuildMember;
         let year = 0;
         let userData: UserData;
 
         if (args.length >= 4) {
             // Get who they are mentioning
             target =
-                msg.mentions.members.first()?.user ||
-                GuildUtils.findMember(msg.guild, args[3])?.user ||
-                (args.length >= 5 && GuildUtils.findMember(msg.guild, args[4])?.user);
+                msg.mentions.members.first() ||
+                GuildUtils.findMember(msg.guild, args[3]) ||
+                (args.length >= 5 && GuildUtils.findMember(msg.guild, args[4]));
 
             // Did we find a user?
             if (!target) {
@@ -106,11 +106,11 @@ export class TestCommand implements Command {
         }
 
         // If we have a target get their data otherwise use the client
-        if (!target) target = msg.client.user;
-        else if (!target.bot) userData = await this.userRepo.getUser(target.id);
+        if (!target) target = guild.members.resolve(msg.client.user);
+        else if (!target.user.bot) userData = await this.userRepo.getUser(target.id);
 
         // Default target to bot for the test
-        if (!target) target = msg.client.user;
+        if (!target) target = guild.members.resolve(msg.client.user);
 
         let guildData = await this.guildRepo.getGuild(msg.guild.id);
 
@@ -142,7 +142,7 @@ export class TestCommand implements Command {
             let trustedCheckRole = false;
             let trustedPreventsMessage = guildData.TrustedPreventsMessage;
             let trustedPreventsRole = guildData.TrustedPreventsRole;
-            let birthdayCheck = target.bot ? true : userData?.Birthday ? true : false;
+            let birthdayCheck = target.user.bot ? true : userData?.Birthday ? true : false;
             let blacklistCheck = false;
 
             let message = Lang.getRef('defaults.birthdayMessage', LangCode.EN_US);
@@ -152,9 +152,12 @@ export class TestCommand implements Command {
             // Get the blacklist data for this guild
             let blacklistData = await this.blacklistRepo.getBlacklist(guild.id);
 
-            blacklistCheck = !blacklistData.blacklist
-                .map(data => data.UserDiscordId)
-                .includes(target.id);
+            let blacklistIds = blacklistData.blacklist.map(data => data.DiscordId);
+
+            blacklistCheck = !(
+                blacklistIds.includes(target.id) ||
+                target.roles.cache.map(r => r.id).find(r => blacklistIds.includes(r))
+            );
 
             // Get the birthday role for this guild
             let birthdayRole: Role;
@@ -192,7 +195,7 @@ export class TestCommand implements Command {
             );
 
             // Check for user specific messages
-            if (target.bot) {
+            if (target.user.bot) {
                 customMessages = (
                     await this.customMessageRepo.getCustomUserMessages(guild.id, 'birthday')
                 ).customMessages.filter(message => message.UserDiscordId === target.id);
@@ -279,7 +282,7 @@ export class TestCommand implements Command {
                     true
                 );
 
-            if (!target.bot) {
+            if (!target.user.bot) {
                 testingEmbed.addField(
                     Lang.getRef('terms.hasBirthdaySet', LangCode.EN_US),
                     birthdayCheck
@@ -379,7 +382,7 @@ export class TestCommand implements Command {
             }
 
             // Check for user specific messages
-            if (target.bot) {
+            if (target.user.bot) {
                 customMessages = (
                     await this.customMessageRepo.getCustomUserMessages(
                         guild.id,

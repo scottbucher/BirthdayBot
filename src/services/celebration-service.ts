@@ -56,7 +56,7 @@ export class CelebrationService {
 
                     // Get the blacklist data for this guild
                     let blacklistData = guildCelebrationData.blacklistedMembers.map(
-                        m => m.UserDiscordId
+                        m => m.DiscordId
                     );
 
                     // Remove members who are not apart of this guild and who are in the birthday blacklist
@@ -66,14 +66,18 @@ export class CelebrationService {
                             !blacklistData.includes(userData.UserDiscordId)
                     );
 
-                    let membersWithBirthdayTodayOrTomorrow = guildMembers.filter(member =>
-                        CelebrationUtils.isBirthdayTodayOrYesterday(
-                            memberUserDatas.find(data => data.UserDiscordId === member.id),
-                            guildData
-                        )
+                    let membersWithBirthdayTodayOrYesterday = guildMembers.filter(
+                        member =>
+                            !member.roles.cache
+                                .map(r => r.id)
+                                .find(r => blacklistData.includes(r)) &&
+                            CelebrationUtils.isBirthdayTodayOrYesterday(
+                                memberUserDatas.find(data => data.UserDiscordId === member.id),
+                                guildData
+                            )
                     );
 
-                    let birthdayMemberStatuses = membersWithBirthdayTodayOrTomorrow.map(m =>
+                    let birthdayMemberStatuses = membersWithBirthdayTodayOrYesterday.map(m =>
                         CelebrationUtils.getBirthdayMemberStatus(
                             memberUserDatas.find(data => data.UserDiscordId === m.id),
                             m,
