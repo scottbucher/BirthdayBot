@@ -1516,8 +1516,8 @@
                 "description": "That {{TYPE}} is already in the blacklist!",
                 "color": "{{REF:colors.error}}"
             },
-            "userNotInBlacklist": {
-                "description": "That user is not in the blacklist!",
+            "userOrRoleNotInBlacklist": {
+                "description": "That {{TYPE}} is not in the blacklist!",
                 "color": "{{REF:colors.error}}"
             },
             "masterRoleManaged": {
