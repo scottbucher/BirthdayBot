@@ -57,7 +57,9 @@ export class BlacklistAddSubCommand {
 
         let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
-        if (blacklist.blacklist.map(entry => entry.DiscordId).includes(target.id)) {
+        if (
+            blacklist.blacklist.map(entry => entry.DiscordId).includes(target ? target.id : role.id)
+        ) {
             await MessageUtils.send(
                 channel,
                 Lang.getEmbed('validation.userOrRoleAlreadyInBlacklist', LangCode.EN_US, {

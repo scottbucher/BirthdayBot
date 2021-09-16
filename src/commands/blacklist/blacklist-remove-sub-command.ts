@@ -57,23 +57,29 @@ export class BlacklistRemoveSubCommand {
             // If we have a user or role use the correct type, otherwise default to combining them (user/role) in the message
             await MessageUtils.send(
                 channel,
-                !target && !role
-                    ? Lang.getRef('types.user', LangCode.EN_US) +
-                          '/' +
-                          Lang.getRef('types.role', LangCode.EN_US)
-                    : Lang.getEmbed('validation.userOrRoleNotInBlacklist', LangCode.EN_US, {
-                          TYPE: Lang.getRef('types.' + (target ? 'user' : 'role'), LangCode.EN_US),
-                      })
+
+                Lang.getEmbed('validation.userOrRoleNotInBlacklist', LangCode.EN_US, {
+                    TYPE:
+                        !target && !role
+                            ? Lang.getRef('types.user', LangCode.EN_US) +
+                              '/' +
+                              Lang.getRef('types.role', LangCode.EN_US)
+                            : Lang.getRef('types.' + (target ? 'user' : 'role'), LangCode.EN_US),
+                })
             );
             return;
         }
 
-        await this.blacklistRepo.removeBlacklist(msg.guild.id, target ? target.id : role.id);
+        await this.blacklistRepo.removeBlacklist(msg.guild.id, id);
 
         await MessageUtils.send(
             channel,
-            Lang.getEmbed('results.blacklistAddSuccess', LangCode.EN_US, {
-                TARGET: target.toString(),
+            Lang.getEmbed('results.blacklistRemoveSuccess', LangCode.EN_US, {
+                TARGET: target
+                    ? target.toString()
+                    : role
+                    ? role.toString()
+                    : `**${Lang.getRef('terms.unknownTarget', LangCode.EN_US)}**`,
             })
         );
     }

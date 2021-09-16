@@ -862,7 +862,7 @@
                 "title": "Invalid Usage!",
                 "description": [
                     "Please specify a sub command for the blacklist! [(?)]({{REF:docLinks.whatIsBirthdayBlacklist}})",
-                    "Accepted Values: `{{REF:types.list}}`, `{{REF:types.add}} <User>`, `{{REF:types.remove}} <User>`, `{{REF:types.clear}}`"
+                    "Accepted Values: `{{REF:types.list}}`, `{{REF:types.add}} <User/Role>`, `{{REF:types.remove}} <User/Role>`, `{{REF:types.clear}}`"
                 ],
                 "color": "{{REF:colors.error}}"
             },
