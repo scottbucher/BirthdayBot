@@ -532,7 +532,7 @@ export class FormatUtils {
             return embed;
         }
         let description = '';
-        let users = blacklistResults.blacklist.map(data => data.UserDiscordId);
+        let users = blacklistResults.blacklist.map(data => data.DiscordId);
 
         for (let user of users) {
             description += `**${

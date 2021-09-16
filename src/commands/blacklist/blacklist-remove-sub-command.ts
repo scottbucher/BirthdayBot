@@ -53,7 +53,7 @@ export class BlacklistRemoveSubCommand {
 
         let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
-        if (!blacklist.blacklist.map(entry => entry.UserDiscordId).includes(id)) {
+        if (!blacklist.blacklist.map(entry => entry.DiscordId).includes(id)) {
             // If we have a user or role use the correct type, otherwise default to combining them (user/role) in the message
             await MessageUtils.send(
                 channel,
