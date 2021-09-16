@@ -295,7 +295,7 @@ export class TestCommand implements Command {
             if (blacklistData.blacklist.length > 0) {
                 testingEmbed.addField(
                     Lang.getRef('terms.memberInBlacklist', LangCode.EN_US),
-                    trustedCheckMessage
+                    blacklistCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
                               'terms.notInBlacklist',
                               LangCode.EN_US
