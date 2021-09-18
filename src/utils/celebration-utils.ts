@@ -548,7 +548,7 @@ export class CelebrationUtils {
             celebrationData.customMessages = rawGuildCelebrationData.customMessages.filter(
                 c => c.GuildId === rawData.GuildId
             );
-            celebrationData.blacklistedMembers = rawGuildCelebrationData.blacklistedMembers.filter(
+            celebrationData.blacklist = rawGuildCelebrationData.blacklist.filter(
                 b => b.GuildId === rawData.GuildId
             );
             celebrationData.trustedRoles = rawGuildCelebrationData.trustedRoles.filter(

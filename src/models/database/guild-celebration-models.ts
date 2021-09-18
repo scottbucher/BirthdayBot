@@ -7,7 +7,7 @@ import { MemberAnniversaryRole } from './member-anniversary-role-models';
 export class GuildCelebrationData {
     guildData: GuildData;
     customMessages: CustomMessage[];
-    blacklistedMembers: Blacklist[];
+    blacklist: Blacklist[];
     trustedRoles: TrustedRole[];
     anniversaryRoles: MemberAnniversaryRole[];
 }
