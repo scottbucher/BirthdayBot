@@ -156,7 +156,7 @@ export class TestCommand implements Command {
 
             blacklistCheck = !(
                 blacklistIds.includes(target.id) ||
-                target.roles.cache.map(r => r.id).find(r => blacklistIds.includes(r))
+                [...target.roles.cache.keys()].find(r => blacklistIds.includes(r))
             );
 
             // Get the birthday role for this guild

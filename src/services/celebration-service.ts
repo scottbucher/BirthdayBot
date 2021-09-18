@@ -66,9 +66,7 @@ export class CelebrationService {
 
                     let membersWithBirthdayTodayOrYesterday = guildMembers.filter(
                         member =>
-                            !member.roles.cache
-                                .map(r => r.id)
-                                .find(r => blacklistData.includes(r)) &&
+                            ![...member.roles.cache.keys()].find(r => blacklistData.includes(r)) &&
                             CelebrationUtils.isBirthdayTodayOrYesterday(
                                 memberUserDatas.find(data => data.UserDiscordId === member.id),
                                 guildData
