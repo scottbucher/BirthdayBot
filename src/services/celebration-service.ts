@@ -55,7 +55,7 @@ export class CelebrationService {
                     let memberIds = guildMembers.map(member => member.id);
 
                     // Get the blacklist data for this guild
-                    let blacklistData = guildCelebrationData.blacklist.map(m => m.DiscordId);
+                    let blacklistData = guildCelebrationData.blacklist.map(b => b.DiscordId);
 
                     // Remove members who are not apart of this guild and who are in the birthday blacklist
                     let memberUserDatas = userData.filter(
