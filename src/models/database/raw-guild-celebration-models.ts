@@ -8,7 +8,7 @@ export class RawGuildCelebrationData {
     constructor(
         public guildDatas: GuildData[],
         public customMessages: CustomMessage[],
-        public blacklistedMembers: Blacklist[],
+        public blacklist: Blacklist[],
         public trustedRoles: TrustedRole[],
         public anniversaryRoles: MemberAnniversaryRole[]
     ) {}

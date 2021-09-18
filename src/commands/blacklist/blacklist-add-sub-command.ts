@@ -1,5 +1,5 @@
 import { GuildUtils, MessageUtils } from '../../utils';
-import { Message, TextChannel } from 'discord.js';
+import { Message, Role, TextChannel } from 'discord.js';
 
 import { BlacklistRepo } from '../../services/database/repos';
 import { Lang } from '../../services';
@@ -12,7 +12,7 @@ export class BlacklistAddSubCommand {
         if (args.length === 3) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.noUserSpecified', LangCode.EN_US)
+                Lang.getEmbed('validation.noUserOrRoleSpecified', LangCode.EN_US)
             );
             return;
         }
@@ -21,39 +21,60 @@ export class BlacklistAddSubCommand {
         let target =
             msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, args[3])?.user;
 
-        // Did we find a user?
+        // Get the role they are mentioning
+        let role: Role = msg.mentions.roles.first();
+
         if (!target) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noUserFound', LangCode.EN_US)
-            );
-            return;
+            if (!role) {
+                role = msg.guild.roles.cache.find(
+                    role =>
+                        role.name.toLowerCase().includes(args[3].toLowerCase()) ||
+                        role.id === args[3].toLowerCase()
+                );
+            }
+
+            if (role?.id === msg.guild.id || args[3].toLowerCase() === 'everyone') {
+                MessageUtils.send(channel, Lang.getEmbed('validation.invalidRole', LangCode.EN_US));
+                return;
+            }
+        } else {
+            if (target.bot) {
+                await MessageUtils.send(
+                    channel,
+                    Lang.getEmbed('validation.cantBlacklistBot', LangCode.EN_US)
+                );
+                return;
+            }
         }
 
-        if (target.bot) {
+        if (!target && !role) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.cantBlacklistBot', LangCode.EN_US)
+                Lang.getEmbed('validation.noUserOrRoleSpecified', LangCode.EN_US)
             );
             return;
         }
 
         let blacklist = await this.blacklistRepo.getBlacklist(msg.guild.id);
 
-        if (blacklist.blacklist.map(entry => entry.UserDiscordId).includes(target.id)) {
+        if (
+            blacklist.blacklist.map(entry => entry.DiscordId).includes(target ? target.id : role.id)
+        ) {
             await MessageUtils.send(
                 channel,
-                Lang.getEmbed('validation.userAlreadyInBlacklist', LangCode.EN_US)
+                Lang.getEmbed('validation.userOrRoleAlreadyInBlacklist', LangCode.EN_US, {
+                    TYPE: Lang.getRef('types.' + (target ? 'user' : 'role'), LangCode.EN_US),
+                })
             );
             return;
         }
 
-        await this.blacklistRepo.addBlacklist(msg.guild.id, target.id);
+        await this.blacklistRepo.addBlacklist(msg.guild.id, target ? target.id : role.id);
 
         await MessageUtils.send(
             channel,
             Lang.getEmbed('results.blacklistAddSuccess', LangCode.EN_US, {
-                TARGET: target.toString(),
+                TARGET: target ? target.toString() : role.toString(),
             })
         );
     }

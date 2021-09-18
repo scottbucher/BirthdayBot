@@ -1,5 +1,4 @@
 import { Blacklisted } from '../../../models/database';
-
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
 import { SqlUtils } from '../../../utils';
@@ -7,12 +6,12 @@ import { SqlUtils } from '../../../utils';
 export class BlacklistRepo {
     constructor(private dataAccess: DataAccess) {}
 
-    public async addBlacklist(discordId: string, userId: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Blacklist_Add, [discordId, userId]);
+    public async addBlacklist(discordId: string, targetId: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Blacklist_Add, [discordId, targetId]);
     }
 
-    public async removeBlacklist(discordId: string, userId: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Blacklist_Remove, [discordId, userId]);
+    public async removeBlacklist(discordId: string, targetId: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.Blacklist_Remove, [discordId, targetId]);
     }
 
     public async clearBlacklist(discordId: string): Promise<void> {

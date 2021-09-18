@@ -12,6 +12,6 @@ export class Blacklisted {
 
 export class Blacklist {
     GuildId: number;
-    UserDiscordId: string;
+    DiscordId: string;
     Position: number;
 }
