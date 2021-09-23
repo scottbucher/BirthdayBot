@@ -12,6 +12,7 @@ import {
 import { Command } from '../commands';
 import { GuildData } from '../models/database';
 
+let Config = require('../../config.json');
 export class PermissionUtils {
     public static canSend(channel: Channel, requireReaction = true): boolean {
         if (channel instanceof DMChannel) return true;
@@ -157,7 +158,11 @@ export class PermissionUtils {
         command?: Command
     ): boolean {
         if (!command || command.adminOnly) {
-            if (member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return true;
+            if (
+                member.permissions.has(Permissions.FLAGS.MANAGE_GUILD) ||
+                Config.support.owners.includes(member.id)
+            )
+                return true;
 
             if (guildData) {
                 // Check if member has a required role
