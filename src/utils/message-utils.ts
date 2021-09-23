@@ -92,8 +92,8 @@ export class MessageUtils {
                 [10003, 10004, 10013, 50001, 50007, 50013].includes(error.code)
             ) {
                 return;
-            } else if (error instanceof DiscordAPIError && error.code === 50035) {
-                // If we can't reply just send it as a normal message
+            } else if (!msg || (error instanceof DiscordAPIError && error.code === 50035)) {
+                // If the original message was deleted or if we can't reply send it as a normal message
                 await this.send(msg.channel, content);
             } else {
                 throw error;
