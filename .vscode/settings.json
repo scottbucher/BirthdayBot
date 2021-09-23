@@ -15,7 +15,9 @@
         "autopay",
         "bday",
         "bdays",
+        "bot's",
         "chrono",
+        "cmds",
         "customizability",
         "datas",
         "deletable",
@@ -25,8 +27,10 @@
         "isnt",
         "ondiscord",
         "parens",
+        "pino",
         "regexes",
         "repos",
-        "respawn"
+        "respawn",
+        "varchar"
     ]
 }
