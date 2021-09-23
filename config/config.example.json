@@ -175,6 +175,7 @@
         }
     },
     "logging": {
+        "pretty": true,
         "rateLimit": {
             "minTimeout": 30
         }
