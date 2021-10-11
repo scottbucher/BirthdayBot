@@ -56,6 +56,7 @@ export class DevCommand implements Command {
                 DJS_VERSION: `v${djs.version}`,
                 SHARD_COUNT: shardCount.toLocaleString(),
                 SERVER_COUNT: serverCount.toLocaleString(),
+                SERVER_COUNT_PER_SHARD: Math.round(serverCount / shardCount).toLocaleString(),
                 RSS_SIZE: fileSize(memory.rss),
                 RSS_SIZE_PER_SERVER:
                     serverCount > 0
@@ -72,7 +73,7 @@ export class DevCommand implements Command {
                         ? fileSize(memory.heapUsed / serverCount)
                         : Lang.getRef('terms.na', LangCode.EN_US),
                 SHARD_ID: (msg.guild?.shardId ?? 0).toString(),
-                SERVER_ID: msg.guild?.id ?? Lang.getRef('other.na', LangCode.EN_US),
+                SERVER_ID: msg.guild?.id ?? Lang.getRef('terms.na', LangCode.EN_US),
                 BOT_ID: msg.client.user.id,
                 USER_ID: msg.author.id,
             })
