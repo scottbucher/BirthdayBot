@@ -1,5 +1,6 @@
 import { MessageUtils, ShardUtils } from '../utils';
 import djs, { DMChannel, Message, TextChannel } from 'discord.js';
+import os from 'os';
 
 import { Command } from './command';
 import { Lang } from '../services';
@@ -72,6 +73,7 @@ export class DevCommand implements Command {
                     serverCount > 0
                         ? fileSize(memory.heapUsed / serverCount)
                         : Lang.getRef('terms.na', LangCode.EN_US),
+                HOSTNAME: os.hostname(),
                 SHARD_ID: (msg.guild?.shardId ?? 0).toString(),
                 SERVER_ID: msg.guild?.id ?? Lang.getRef('terms.na', LangCode.EN_US),
                 BOT_ID: msg.client.user.id,
