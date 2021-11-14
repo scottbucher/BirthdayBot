@@ -158,11 +158,14 @@ export class PermissionUtils {
         command?: Command
     ): boolean {
         if (!command || command.adminOnly) {
+            // Developers, server owners, and members with "Manage Server" have permission for all commands
             if (
+                member.guild.ownerId === member.id ||
                 member.permissions.has(Permissions.FLAGS.MANAGE_GUILD) ||
                 Config.support.owners.includes(member.id)
-            )
+            ) {
                 return true;
+            }
 
             if (guildData) {
                 // Check if member has a required role
