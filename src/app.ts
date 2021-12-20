@@ -1,35 +1,26 @@
+import { ShardingManager } from 'discord.js';
 import 'reflect-metadata';
 
-import {
-    GuildsController,
-    RootController,
-    ShardsController,
-    SubscriptionEventsController,
-    VotesController,
-} from './controllers';
+import { Api } from './api';
+import { GuildsController, RootController, ShardsController } from './controllers';
+import { UpdateServerCountJob } from './jobs';
+import { Manager } from './manager';
 import { HttpService, JobService, Logger, MasterApiService } from './services';
 import { MathUtils, ShardUtils } from './utils';
 
-import { Api } from './api';
-import { DataAccess } from './services/database/data-access';
-import { Manager } from './manager';
-import { ShardingManager } from 'discord.js';
-import { UpdateServerCountJob } from './jobs';
-import { UserRepo } from './services/database/repos';
-
 let Config = require('../config/config.json');
-let Logs = require('../lang/logs.json');
 let Debug = require('../config/debug.json');
-
-const MAX_SERVERS_PER_SHARD = 2500;
+let Logs = require('../lang/logs.json');
 
 async function start(): Promise<void> {
-    Logger.info(Logs.info.started);
+    Logger.info(Logs.info.appStarted);
 
     // Dependencies
     let httpService = new HttpService();
     let masterApiService = new MasterApiService(httpService);
-    if (Config.clustering.enabled) await masterApiService.register();
+    if (Config.clustering.enabled) {
+        await masterApiService.register();
+    }
 
     // Sharding
     let shardList: number[];
@@ -38,17 +29,12 @@ async function start(): Promise<void> {
         if (Config.clustering.enabled) {
             let resBody = await masterApiService.login();
             shardList = resBody.shardList;
-            let requiredShards = await ShardUtils.recommendedShardCount(
-                Config.client.token,
-                MAX_SERVERS_PER_SHARD,
-                Config.sharding.largeBotSharding
-            );
+            let requiredShards = await ShardUtils.requiredShardCount(Config.client.token);
             totalShards = Math.max(requiredShards, resBody.totalShards);
         } else {
             let recommendedShards = await ShardUtils.recommendedShardCount(
                 Config.client.token,
-                Config.sharding.serversPerShard,
-                Config.sharding.largeBotSharding
+                Config.sharding.serversPerShard
             );
             shardList = MathUtils.range(0, recommendedShards);
             totalShards = recommendedShards;
@@ -59,7 +45,7 @@ async function start(): Promise<void> {
     }
 
     if (shardList.length === 0) {
-        Logger.warn(Logs.warn.noShards);
+        Logger.warn(Logs.warn.managerNoShards);
         return;
     }
 
@@ -70,12 +56,6 @@ async function start(): Promise<void> {
         totalShards,
         shardList,
     });
-
-    // Data Access for repos
-    let dataAccess = new DataAccess(Config.mysql);
-
-    // Repos
-    let userRepo = new UserRepo(dataAccess);
 
     // Jobs
     let jobs = [
@@ -89,15 +69,7 @@ async function start(): Promise<void> {
     let guildsController = new GuildsController(shardManager);
     let shardsController = new ShardsController(shardManager);
     let rootController = new RootController();
-    let votesController = new VotesController(userRepo);
-    let subscriptionEventsController = new SubscriptionEventsController(shardManager);
-    let api = new Api([
-        guildsController,
-        shardsController,
-        rootController,
-        votesController,
-        subscriptionEventsController,
-    ]);
+    let api = new Api([guildsController, shardsController, rootController]);
 
     // Start
     await manager.start();
@@ -107,4 +79,10 @@ async function start(): Promise<void> {
     }
 }
 
-start();
+process.on('unhandledRejection', (reason, promise) => {
+    Logger.error(Logs.error.unhandledRejection, reason);
+});
+
+start().catch(error => {
+    Logger.error(Logs.error.unspecified, error);
+});

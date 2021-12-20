@@ -1,19 +1,10 @@
-import { DMChannel, Message, TextChannel } from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, PermissionResolvable } from 'discord.js';
+import { EventData } from '../models/internal-models';
 
 export interface Command {
-    name: string;
-    aliases: string[];
-    requireSetup: boolean;
-    guildOnly: boolean;
-    adminOnly: boolean;
-    ownerOnly: boolean;
-    voteOnly: boolean;
-    requirePremium: boolean;
-    getPremium: boolean;
-    execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel | DMChannel,
-        hasPremium?: boolean
-    ): Promise<void>;
+    data: ApplicationCommandData;
+    requireDev: boolean;
+    requireGuild: boolean;
+    requirePerms: PermissionResolvable[];
+    execute(intr: CommandInteraction, data: EventData): Promise<void>;
 }

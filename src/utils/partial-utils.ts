@@ -34,10 +34,12 @@ export class PartialUtils {
                 }
             }
         }
+
         msgReaction.message = await this.fillMessage(msgReaction.message);
         if (!msgReaction.message) {
             return;
         }
+
         return msgReaction;
     }
 }

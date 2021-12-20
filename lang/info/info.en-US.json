@@ -1,0 +1,204 @@
+{
+    "data": {
+        "displayEmbeds": {
+            "guildJoin": {
+                "title": "Thank you for using {{COM:bot.name}}!",
+                "description": [
+                    "To support the bot and unlock special features use `/premium` in your server.",
+                    "",
+                    "To view the commands of this bow use `/help`.",
+                    "To setup the bot run `/setup` in your server.",
+                    "To set your birthday use `/set`.",
+                    "",
+                    "View the {{COM:bot.name}} [Documentation]({{COM:links.docs}}) or [FAQ]({{COM:docLinks.faq}}).",
+                    "For more support join the {{COM:bot.name}} support server [here]({{COM:links.support}})!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.joinSupport}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "welcome": {
+                "title": "Thank you for using {{COM:bot.name}}!",
+                "description": ["{{REF:bot.description}}"],
+                "fields": [
+                    {
+                        "name": "Important {{REF:fields.commands}}",
+                        "value": ["**/{{COM:commands.help}}** - {{REF:commandDescs.help}}"]
+                    },
+                    {
+                        "name": "{{REF:fields.links}}",
+                        "value": [
+                            "{{REF:links.docsEmbed}}",
+                            "{{REF:links.supportEmbed}}",
+                            "{{REF:links.inviteEmbed}}"
+                        ]
+                    }
+                ]
+            }
+        },
+        "help": {
+            "title": "{{COM:bot.name}} - Help",
+            "description": "{{REF:bot.description}}",
+            "fields": [
+                {
+                    "name": "{{REF:fields.commands}}",
+                    "value": [
+                        "**/{{COM:commands.test}}** - {{REF:commandDescs.test}}",
+                        "**/{{COM:commands.info}}** - {{REF:commandDescs.info}}"
+                    ]
+                },
+                {
+                    "name": "{{REF:fields.links}}",
+                    "value": [
+                        "{{REF:links.docsEmbed}}",
+                        "{{REF:links.supportEmbed}}",
+                        "{{REF:links.inviteEmbed}}"
+                    ]
+                }
+            ]
+        },
+        "info": {
+            "title": "{{COM:bot.name}} - Info",
+            "fields": [
+                { "name": "Author", "value": "{{REF:links.authorEmbed}}" },
+                {
+                    "name": "{{REF:fields.links}}",
+                    "value": [
+                        "{{REF:links.sourceEmbed}}",
+                        "{{REF:links.docsEmbed}}",
+                        "{{REF:links.donateEmbed}}",
+                        "{{REF:links.supportEmbed}}",
+                        "{{REF:links.inviteEmbed}}"
+                    ]
+                },
+                {
+                    "name": "Created With",
+                    "value": ["{{REF:links.templateEmbed}}"]
+                }
+            ]
+        },
+        "stats": {
+            "fields": [
+                {
+                    "name": "Total Birthdays",
+                    "value": "{{TOTAL_BIRTHDAYS}}",
+                    "inline": true
+                },
+                {
+                    "name": "Total Servers",
+                    "value": "{{TOTAL_SERVERS}}",
+                    "inline": true
+                },
+                {
+                    "name": "Shard ID",
+                    "value": "{{SHARD_ID}}",
+                    "inline": true
+                },
+                {
+                    "name": "Birthdays Today",
+                    "value": "{{BIRTHDAYS_TODAY}}",
+                    "inline": true
+                },
+                {
+                    "name": "Birthdays This Month",
+                    "value": "{{BIRTHDAYS_THIS_MONTH}}",
+                    "inline": true
+                }
+            ]
+        },
+        "dev": {
+            "title": "{{COM:bot.name}} - Developer Info",
+            "fields": [
+                {
+                    "name": "Versions",
+                    "value": [
+                        "**Node.js**: {{NODE_VERSION}}",
+                        "**TypeScript**: {{TS_VERSION}}",
+                        "**ECMAScript**: {{ES_VERSION}}",
+                        "**discord.js**: {{DJS_VERSION}}"
+                    ]
+                },
+                {
+                    "name": "Stats",
+                    "value": [
+                        "**Shards**: {{SHARD_COUNT}}",
+                        "**Servers**: {{SERVER_COUNT}} ({{SERVER_COUNT_PER_SHARD}}/Shard)"
+                    ]
+                },
+                {
+                    "name": "Memory",
+                    "value": [
+                        "**RSS**: {{RSS_SIZE}} ({{RSS_SIZE_PER_SERVER}}/Server)",
+                        "**Heap**: {{HEAP_TOTAL_SIZE}} ({{HEAP_TOTAL_SIZE_PER_SERVER}}/Server)",
+                        "**Used**: {{HEAP_USED_SIZE}} ({{HEAP_USED_SIZE_PER_SERVER}}/Server)"
+                    ]
+                },
+                {
+                    "name": "IDs",
+                    "value": [
+                        "**Hostname**: {{HOSTNAME}}",
+                        "**Shard ID**: {{SHARD_ID}}",
+                        "**Server ID**: {{SERVER_ID}}",
+                        "**Bot ID**: {{BOT_ID}}",
+                        "**User ID**: {{USER_ID}}"
+                    ]
+                }
+            ]
+        },
+        "documentation": {
+            "description": "View our documentation for {{BOT}} [here]({{COM:links.docs}})!",
+            "color": "{{COM:colors.default}}"
+        },
+        "vote": {
+            "description": "Support {{BOT}} by voting [here]({{COM:links.vote}})!",
+            "color": "{{COM:colors.default}}"
+        },
+        "donate": {
+            "description": "You can support {{BOT}} by donating [here]({{COM:links.donate}})!",
+            "color": "{{COM:colors.default}}"
+        },
+        "faq": {
+            "description": "View our FAQ for {{BOT}} [here]({{COM:links.docs}}/faq-1/general)!",
+            "color": "{{COM:colors.default}}"
+        },
+        "invite": {
+            "description": "Invite {{BOT}} to your server [here]({{COM:links.invite}})!",
+            "color": "{{COM:colors.default}}"
+        },
+        "support": {
+            "description": "For support join our discord server [here]({{COM:links.support}})!",
+            "color": "{{COM:colors.default}}"
+        },
+        "map": {
+            "description": [
+                "[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker]({{COM:links.map}})!",
+                "",
+                "Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `{{COM:bot.prefix}} set` command."
+            ],
+            "color": "{{COM:colors.default}}"
+        },
+        "test": {
+            "description": "Test command works!"
+        },
+        "translate": {
+            "title": "{{COM:bot.name}} - Translations",
+            "description": "Thank you to our translators who have made it possible for {{COM:bot.name}} to be used in the following languages. If you are interested in providing a translation, please contact the staff in our [support server]({{COM:links.support}})."
+        }
+    },
+    "refs": {
+        "meta": {
+            "language": "en-US",
+            "languageDisplay": "English",
+            "translators": "[Stqlth#0001](https://github.com/scottbucher)"
+        },
+        "footers": {
+            "whyPremium": "Premium helps us support and maintain the bot!",
+            "joinSupport": "Please join our support server if you have any questions."
+        },
+        "other": {
+            "na": "N/A"
+        }
+    }
+}

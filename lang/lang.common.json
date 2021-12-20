@@ -1,0 +1,75 @@
+{
+    "bot": {
+        "name": "Birthday Bot",
+        "author": "Scott Bucher"
+    },
+    "commands": {
+        "dev": "dev",
+        "help": "help",
+        "info": "info",
+        "link": "link",
+        "test": "test",
+        "translate": "translate"
+    },
+    "arguments": {
+        "link": "link"
+    },
+    "colors": {
+        "default": "#4eefff",
+        "success": "#1cfe86",
+        "warn": "#ffa255",
+        "error": "#ff0000",
+        "role": "#ac1cfe"
+    },
+    "emotes": {
+        "confirm": "✅",
+        "deny": "❌",
+        "create": "🔨",
+        "select": "🖱",
+        "birthdayEmote": "🎂",
+        "party": "🎉"
+    },
+    "links": {
+        "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268921936&scope=bot%20applications.commands",
+        "support": "https://discord.gg/9gUQFtz",
+        "docs": "https://birthdaybot.scottbucher.dev",
+        "vote": "https://top.gg/bot/656621136808902656/vote",
+        "donate": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url",
+        "map": "https://kevinnovak.github.io/Time-Zone-Picker/",
+        "colors": "https://codepen.io/meodai/full/pXNpXe",
+        "stream": "https://www.twitch.tv/stqlth",
+        "autopay": "https://www.paypal.com/myaccount/autopay",
+        "inviteEmbed": "[Invite {{REF:bot.name}} to a Server!]({{REF:links.invite}})",
+        "supportEmbed": "[Join Support Server]({{REF:links.support}})",
+        "author": "https://github.com/scottbucher",
+        "authorEmbed": "[Scott Bucher]({{REF:links.author}})",
+        "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
+        "templateEmbed": "[Discord Bot TypeScript Template]({{REF:links.template}})",
+        "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
+        "voteImage": "https://i.imgur.com/wak8g4V.png"
+    },
+    "docLinks": {
+        "faq": "{{REF:links.docs}}/faq-1/general",
+        "setupRequiredGuide": "{{REF:links.docs}}/server-setup/required-setup",
+        "setupAnniversaryGuide": "{{REF:links.docs}}/",
+        "setupTrustedGuide": "{{REF:links.docs}}/server-setup/trusted-setup",
+        "setupBirthday": "{{REF:links.docs}}/setting-your-birthday",
+        "whyDoesItNeedMyTimezone": "{{REF:links.docs}}/faq-1/user#why-does-birthday-bot-need-my-timezone",
+        "whyDoesItNeedOnlyMonthAndDate": "{{REF:links.docs}}/faq-1/user#why-does-birthday-bot-only-need-my-birth-month-and-date",
+        "whatIsBirthdayRole": "{{REF:links.docs}}/faq-1/birthday-system#what-is-the-birthday-role",
+        "whatIsBirthdayChannel": "{{REF:links.docs}}/faq-1/birthday-system#what-is-the-birthday-channel",
+        "whatIsMemberAnniversaryChannel": "{{REF:links.docs}}/faq-1/member-anniversaries#what-is-the-member-anniversary-channel",
+        "whatIsServerAnniversaryChannel": "{{REF:links.docs}}/faq-1/server-anniversaries#what-is-the-server-anniversary-channel",
+        "whatIsMessageEmbedColor": "{{REF:links.docs}}/faq-1/custom-messages#what-is-a-message-embed-color",
+        "whatIsAnEmbed": "{{REF:links.docs}}/faq-1/custom-messages#what-is-a-message-embed-setting",
+        "whatIsTrustedRole": "{{REF:links.docs}}/faq-1/birthday-system/trusted-system#do-i-need-to-set-up-the-trusted-role",
+        "whatIsCustomMessage": "{{REF:links.docs}}/faq-1/custom-messages#what-are-the-different-types-of-custom-messages",
+        "whatIsUserSpecificCustomMessage": "{{REF:links.docs}}/premium-features#user-specific-custom-messages",
+        "whatIsAnniversaryRole": "{{REF:links.docs}}/premium-features#user-specific-custom-messages",
+        "trustedPreventsMessage": "{{REF:links.docs}}/faq-1/birthday-system/trusted-system#what-is-the-trusted-prevents-message-role-setting",
+        "trustedPreventsRole": "{{REF:links.docs}}/faq-1/birthday-system/trusted-system#what-is-the-trusted-prevents-message-role-setting",
+        "requireAllTrustedRoles": "{{REF:links.docs}}/faq-1/birthday-system/trusted-system#what-is-the-require-all-trusted-role-setting",
+        "whatIsBirthdayBlacklist": "{{REF:links.docs}}/faq-1/general#what-is-the-birthday-blacklist",
+        "recentUpdateDoc": "{{REF:links.docs}}/3.0-update"
+    }
+}

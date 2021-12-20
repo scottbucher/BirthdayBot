@@ -1,5 +1,5 @@
-import { ActivityType, Constants } from 'discord.js';
 import { IsDefined, IsEnum, IsString, IsUrl, Length } from 'class-validator';
+import { ActivityType, Constants } from 'discord.js';
 
 export interface GetShardsResponse {
     shards: ShardInfo[];

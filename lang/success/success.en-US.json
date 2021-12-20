@@ -1,0 +1,34 @@
+{
+    "data": {
+        "displayEmbeds": {
+            "welcome": {
+                "title": "Thank you for using {{COM:bot.name}}!",
+                "description": ["{{REF:bot.description}}"],
+                "fields": [
+                    {
+                        "name": "Important {{REF:fields.commands}}",
+                        "value": ["**/{{COM:commands.help}}** - {{REF:commandDescs.help}}"]
+                    },
+                    {
+                        "name": "{{REF:fields.links}}",
+                        "value": [
+                            "{{REF:links.docsEmbed}}",
+                            "{{REF:links.supportEmbed}}",
+                            "{{REF:links.inviteEmbed}}"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "refs": {
+        "meta": {
+            "language": "en-US",
+            "languageDisplay": "English",
+            "translators": "[Stqlth#0001](https://github.com/scottbucher)"
+        },
+        "other": {
+            "na": "N/A"
+        }
+    }
+}

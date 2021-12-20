@@ -2,13 +2,22 @@ import {
     Client,
     Constants,
     Guild,
+    Interaction,
     Message,
     MessageReaction,
     RateLimitData,
     User,
 } from 'discord.js';
-import { GuildJoinHandler, GuildLeaveHandler, MessageHandler, ReactionAddHandler } from './events';
+
+import {
+    CommandHandler,
+    GuildJoinHandler,
+    GuildLeaveHandler,
+    MessageHandler,
+    ReactionHandler,
+} from './events';
 import { JobService, Logger } from './services';
+import { PartialUtils } from './utils';
 
 let Config = require('../config/config.json');
 let Debug = require('../config/debug.json');
@@ -22,8 +31,9 @@ export class Bot {
         private client: Client,
         private guildJoinHandler: GuildJoinHandler,
         private guildLeaveHandler: GuildLeaveHandler,
-        private reactionAddHandler: ReactionAddHandler,
         private messageHandler: MessageHandler,
+        private commandHandler: CommandHandler,
+        private reactionHandler: ReactionHandler,
         private jobService: JobService
     ) {}
 
@@ -40,10 +50,12 @@ export class Bot {
         this.client.on(Constants.Events.GUILD_CREATE, (guild: Guild) => this.onGuildJoin(guild));
         this.client.on(Constants.Events.GUILD_DELETE, (guild: Guild) => this.onGuildLeave(guild));
         this.client.on(Constants.Events.MESSAGE_CREATE, (msg: Message) => this.onMessage(msg));
+        this.client.on(Constants.Events.INTERACTION_CREATE, (intr: Interaction) =>
+            this.onInteraction(intr)
+        );
         this.client.on(
             Constants.Events.MESSAGE_REACTION_ADD,
-            (msgReaction: MessageReaction, reactor: User) =>
-                this.onReactionAdd(msgReaction, reactor)
+            (messageReaction: MessageReaction, user: User) => this.onReaction(messageReaction, user)
         );
         this.client.on(Constants.Events.RATE_LIMIT, (rateLimitData: RateLimitData) =>
             this.onRateLimit(rateLimitData)
@@ -54,20 +66,21 @@ export class Bot {
         try {
             await this.client.login(token);
         } catch (error) {
-            Logger.error(Logs.error.login, error);
+            Logger.error(Logs.error.clientLogin, error);
             return;
         }
     }
 
-    private onReady(): void {
+    private async onReady(): Promise<void> {
         let userTag = this.client.user.tag;
-        Logger.info(Logs.info.login.replace('{USER_TAG}', userTag));
+        Logger.info(Logs.info.clientLogin.replaceAll('{USER_TAG}', userTag));
 
         if (!Debug.dummyMode.enabled) {
             this.jobService.start();
         }
 
         this.ready = true;
+        Logger.info(Logs.info.clientReady);
     }
 
     private onShardReady(shardId: number): void {
@@ -98,26 +111,16 @@ export class Bot {
         }
     }
 
-    private async onReactionAdd(msgReaction: any, reactor: User): Promise<void> {
-        if (
-            !this.ready ||
-            (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(reactor.id))
-        ) {
-            return;
-        }
-
-        try {
-            this.reactionAddHandler.process(msgReaction, reactor);
-        } catch (error) {
-            Logger.error(Logs.error.reaction, error);
-        }
-    }
-
     private async onMessage(msg: Message): Promise<void> {
         if (
             !this.ready ||
             (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(msg.author.id))
         ) {
+            return;
+        }
+
+        msg = await PartialUtils.fillMessage(msg);
+        if (!msg) {
             return;
         }
 
@@ -128,9 +131,45 @@ export class Bot {
         }
     }
 
+    private async onInteraction(intr: Interaction): Promise<void> {
+        if (
+            !intr.isCommand() ||
+            !this.ready ||
+            (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(intr.user.id))
+        ) {
+            return;
+        }
+
+        try {
+            await this.commandHandler.process(intr);
+        } catch (error) {
+            Logger.error(Logs.error.command, error);
+        }
+    }
+
+    private async onReaction(msgReaction: MessageReaction, reactor: User): Promise<void> {
+        if (
+            !this.ready ||
+            (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(reactor.id))
+        ) {
+            return;
+        }
+
+        msgReaction = await PartialUtils.fillReaction(msgReaction);
+        if (!msgReaction) {
+            return;
+        }
+
+        try {
+            await this.reactionHandler.process(msgReaction, reactor);
+        } catch (error) {
+            Logger.error(Logs.error.reaction, error);
+        }
+    }
+
     private async onRateLimit(rateLimitData: RateLimitData): Promise<void> {
         if (rateLimitData.timeout >= Config.logging.rateLimit.minTimeout * 1000) {
-            Logger.error(Logs.error.rateLimit, rateLimitData);
+            Logger.error(Logs.error.apiRateLimit, rateLimitData);
         }
     }
 }

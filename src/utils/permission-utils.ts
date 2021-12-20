@@ -1,7 +1,5 @@
 import {
-    Channel,
     DMChannel,
-    GuildMember,
     NewsChannel,
     Permissions,
     TextBasedChannels,
@@ -9,15 +7,11 @@ import {
     ThreadChannel,
 } from 'discord.js';
 
-import { Command } from '../commands';
-import { GuildData } from '../models/database';
-
-let Config = require('../../config/config.json');
 export class PermissionUtils {
-    public static canSend(channel: Channel, requireReaction = true): boolean {
-        if (channel instanceof DMChannel) return true;
-
-        if (
+    public static canSend(channel: TextBasedChannels): boolean {
+        if (channel instanceof DMChannel) {
+            return true;
+        } else if (
             channel instanceof TextChannel ||
             channel instanceof NewsChannel ||
             channel instanceof ThreadChannel
@@ -30,19 +24,12 @@ export class PermissionUtils {
 
             // VIEW_CHANNEL - Needed to view the channel
             // SEND_MESSAGES - Needed to send messages
-            // EMBED_LINKS - Needed to send embedded links
-            // ADD_REACTIONS - Needed to add new reactions to messages
-            // READ_MESSAGE_HISTORY - Needed to add new reactions to messages
-            //    https://discordjs.guide/popular-topics/permissions-extended.html#implicit-permissions
-            return (
-                channelPerms.has([
-                    Permissions.FLAGS.VIEW_CHANNEL,
-                    Permissions.FLAGS.SEND_MESSAGES,
-                    Permissions.FLAGS.EMBED_LINKS,
-                    Permissions.FLAGS.ADD_REACTIONS,
-                ]) &&
-                (!requireReaction || channelPerms.has(Permissions.FLAGS.READ_MESSAGE_HISTORY))
-            );
+            return channelPerms.has([
+                Permissions.FLAGS.VIEW_CHANNEL,
+                Permissions.FLAGS.SEND_MESSAGES,
+            ]);
+        } else {
+            return false;
         }
     }
 
@@ -128,8 +115,7 @@ export class PermissionUtils {
         }
     }
 
-    public static canHandleReaction(channel: TextBasedChannels): boolean {
-        // Bot always has permission in direct message
+    public static canPin(channel: TextBasedChannels, unpinOld: boolean = false): boolean {
         if (channel instanceof DMChannel) {
             return true;
         } else if (
@@ -144,57 +130,15 @@ export class PermissionUtils {
             }
 
             // VIEW_CHANNEL - Needed to view the channel
-            // READ_MESSAGE_HISTORY - Needed to react to old messages
+            // MANAGE_MESSAGES - Needed to pin messages
+            // READ_MESSAGE_HISTORY - Needed to find old pins to unpin
             return channelPerms.has([
                 Permissions.FLAGS.VIEW_CHANNEL,
-                Permissions.FLAGS.READ_MESSAGE_HISTORY,
+                Permissions.FLAGS.MANAGE_MESSAGES,
+                ...(unpinOld ? [Permissions.FLAGS.READ_MESSAGE_HISTORY] : []),
             ]);
-        }
-    }
-
-    public static hasPermission(
-        member: GuildMember,
-        guildData: GuildData,
-        command?: Command
-    ): boolean {
-        if (!command || command.adminOnly) {
-            // Developers, server owners, and members with "Manage Server" have permission for all commands
-            if (
-                member.guild.ownerId === member.id ||
-                member.permissions.has(Permissions.FLAGS.MANAGE_GUILD) ||
-                Config.support.owners.includes(member.id)
-            ) {
-                return true;
-            }
-
-            if (guildData) {
-                // Check if member has a required role
-                let memberRoles = member.roles.cache.map(role => role.id);
-                if (
-                    guildData.BirthdayMasterRoleDiscordId &&
-                    memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
-                ) {
-                    return true;
-                }
-            }
+        } else {
             return false;
         }
-        return true;
-    }
-
-    public static hasSubCommandPermission(member: GuildMember, guildData: GuildData): boolean {
-        if (member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return true;
-
-        if (guildData) {
-            // Check if member has a required role
-            let memberRoles = member.roles.cache.map(role => role.id);
-            if (
-                guildData.BirthdayMasterRoleDiscordId &&
-                memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
-            ) {
-                return true;
-            }
-        }
-        return false;
     }
 }
