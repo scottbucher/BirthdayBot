@@ -34,12 +34,14 @@
     "subCommands": {
         "add": "add",
         "remove": "remove",
+        "user": "user",
         "clear": "clear",
         "edit": "edit",
         "test": "test",
         "role": "role",
         "id": "id",
-        "setting": "setting"
+        "setting": "setting",
+        "list": "list"
     },
     "arguments": {
         "nameFormat": "Name_Format",
@@ -53,6 +55,7 @@
         "color": "color",
         "time": "time",
         "mention": "mention",
+        "user": "user",
         "id": "id",
         "page": "page"
     },

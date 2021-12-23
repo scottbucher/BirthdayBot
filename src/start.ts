@@ -1,4 +1,11 @@
-import { Command, HelpCommand, InfoCommand, LinkCommand, TestCommand } from './commands';
+import {
+    BlacklistCommand,
+    Command,
+    HelpCommand,
+    InfoCommand,
+    LinkCommand,
+    TestCommand,
+} from './commands';
 import {
     CommandHandler,
     GuildJoinHandler,
@@ -36,6 +43,7 @@ async function start(): Promise<void> {
         new InfoCommand(),
         new LinkCommand(),
         new TestCommand(),
+        new BlacklistCommand(),
     ].sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
 
     // Event handlers
