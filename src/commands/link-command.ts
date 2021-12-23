@@ -1,10 +1,10 @@
-import { ApplicationCommandOptionType } from 'discord-api-types';
 import { ApplicationCommandData, CommandInteraction, MessageEmbed } from 'discord.js';
 
+import { ApplicationCommandOptionType } from 'discord-api-types';
+import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { MessageUtils } from '../utils';
-import { Command } from './command';
 
 export class LinkCommand implements Command {
     public data: ApplicationCommandData = {
@@ -12,7 +12,7 @@ export class LinkCommand implements Command {
         description: Lang.getRef('commandDescs.link', Lang.Default),
         options: [
             {
-                name: Lang.getCom('arguments.link'),
+                name: 'link',
                 description: 'Link to display.',
                 required: true,
                 type: ApplicationCommandOptionType.String.valueOf(),
