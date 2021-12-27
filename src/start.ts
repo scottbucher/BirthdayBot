@@ -1,6 +1,7 @@
 import {
     BlacklistCommand,
     Command,
+    ConfigCommand,
     HelpCommand,
     InfoCommand,
     LinkCommand,
@@ -44,6 +45,7 @@ async function start(): Promise<void> {
         new LinkCommand(),
         new TestCommand(),
         new BlacklistCommand(),
+        new ConfigCommand(),
     ].sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
 
     // Event handlers
