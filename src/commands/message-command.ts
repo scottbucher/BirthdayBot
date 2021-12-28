@@ -13,7 +13,7 @@ export class MessageCommand implements Command {
         description: 'Manage message settings and specific custom messages.',
         options: [
             {
-                name: Lang.getCom('subCommandGroups.edit'),
+                name: Lang.getCom('subCommands.edit'),
                 description: "Edit a custom message's settings.",
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
@@ -47,7 +47,7 @@ export class MessageCommand implements Command {
                 ],
             },
             {
-                name: Lang.getCom('subCommandGroups.setting'),
+                name: Lang.getCom('subCommands.setting'),
                 description: 'Edit the global message settings for each type.',
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [

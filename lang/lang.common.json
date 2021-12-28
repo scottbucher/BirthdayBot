@@ -31,15 +31,11 @@
         "docs": "docs",
         "map": "map"
     },
-    "subCommandGroups": {
-        "add": "add",
-        "remove": "remove",
-        "edit": "edit",
-        "setting": "setting"
-    },
     "subCommands": {
         "add": "add",
         "user": "user",
+        "edit": "edit",
+        "setting": "setting",
         "role": "role",
         "remove": "remove",
         "id": "id",

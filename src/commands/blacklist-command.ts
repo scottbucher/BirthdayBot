@@ -13,7 +13,7 @@ export class BlacklistCommand implements Command {
         description: 'Manage the blacklist.',
         options: [
             {
-                name: Lang.getCom('subCommandGroups.add'),
+                name: Lang.getCom('subCommands.add'),
                 description: 'Add something to the blacklist',
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
@@ -46,7 +46,7 @@ export class BlacklistCommand implements Command {
                 ],
             },
             {
-                name: Lang.getCom('subCommandGroups.remove'),
+                name: Lang.getCom('subCommands.remove'),
                 description: 'Remove something from the blacklist.',
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
