@@ -33,7 +33,8 @@ export class MessageCommand implements Command {
                     },
                     {
                         name: Lang.getCom('subCommands.color'),
-                        description: 'Change the embed color of a message.',
+                        description:
+                            '[Premium Feature] Change the embed color of a message. Only works if embed is enabled for this message.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
@@ -265,7 +266,7 @@ export class MessageCommand implements Command {
                     {
                         name: Lang.getCom('arguments.message'),
                         description:
-                            'The message to add. Use %Users% as a placeholder an @User to add a user specific message.',
+                            'The message to add. Available placeholders: %Users%, %Server%, %Year% (Anniversaries only). Use @User for a user specific message. Unlock up to 500 custom messages with premium.',
                         type: ApplicationCommandOptionType.String.valueOf(),
                         required: true,
                     },

@@ -9,11 +9,11 @@ import { MessageUtils } from '../utils';
 export class MemberAnniversaryRoleCommand implements Command {
     public data: ApplicationCommandData = {
         name: Lang.getCom('commands.mar'),
-        description: 'Manage the Member Anniversary Roles. (Premium only)',
+        description: '[Premium Feature] Manage the Member Anniversary Roles.',
         options: [
             {
                 name: Lang.getCom('subCommands.add'),
-                description: 'Add a member anniversary role. (Premium only)',
+                description: 'Add a member anniversary role.',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
@@ -33,7 +33,7 @@ export class MemberAnniversaryRoleCommand implements Command {
             },
             {
                 name: Lang.getCom('subCommands.remove'),
-                description: 'Remove a member anniversary role. (Premium only)',
+                description: '[Premium Feature] Remove a member anniversary role.',
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
                     {
@@ -52,7 +52,7 @@ export class MemberAnniversaryRoleCommand implements Command {
                     {
                         name: Lang.getCom('subCommands.id'),
                         description:
-                            'Remove an ID from the member anniversary role list. Used when a role has been deleted.',
+                            '[Premium Feature] Remove an ID from the member anniversary role list. Used when a role has been deleted.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
@@ -67,12 +67,12 @@ export class MemberAnniversaryRoleCommand implements Command {
             },
             {
                 name: Lang.getCom('subCommands.clear'),
-                description: 'Clear all member anniversary roles.',
+                description: '[Premium Feature] Clear all member anniversary roles.',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
             },
             {
                 name: Lang.getCom('subCommands.list'),
-                description: 'List the member anniversary roles.',
+                description: '[Premium Feature] List the member anniversary roles.',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
