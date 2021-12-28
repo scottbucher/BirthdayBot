@@ -17,6 +17,7 @@ import {
     TriggerHandler,
 } from './events';
 import { JobService, Logger } from './services';
+import { Trigger } from './triggers';
 
 import { Bot } from './bot';
 import { CustomClient } from './extensions';
@@ -50,15 +51,21 @@ async function start(): Promise<void> {
         new MessageCommand(),
     ].sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
 
+    // Reactions
     let reactions: Reaction[] = [
         // TODO: Add new reactions here
+    ];
+
+    // Triggers
+    let triggers: Trigger[] = [
+        // TODO: Add new triggers here
     ];
 
     // Event handlers
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
     let commandHandler = new CommandHandler(commands);
-    let triggerHandler = new TriggerHandler([]);
+    let triggerHandler = new TriggerHandler(triggers);
     let messageHandler = new MessageHandler(triggerHandler);
     let reactionHandler = new ReactionHandler(reactions);
 
