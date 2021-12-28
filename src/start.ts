@@ -8,6 +8,7 @@ import {
     MemberAnniversaryRoleCommand,
     MessageCommand,
     TestCommand,
+    TrustedRoleCommand,
 } from './commands';
 import {
     CommandHandler,
@@ -52,6 +53,7 @@ async function start(): Promise<void> {
         new ConfigCommand(),
         new MessageCommand(),
         new MemberAnniversaryRoleCommand(),
+        new TrustedRoleCommand(),
     ].sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
 
     // Reactions

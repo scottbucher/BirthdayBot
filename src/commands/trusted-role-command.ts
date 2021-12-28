@@ -6,14 +6,15 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
-export class MemberAnniversaryRoleCommand implements Command {
+export class TrustedRoleCommand implements Command {
     public data: ApplicationCommandData = {
-        name: Lang.getCom('commands.mar'),
-        description: 'Manage the Member Anniversary Roles.',
+        name: Lang.getCom('commands.trustedRole'),
+        description: 'Manage the Trusted Roles. (Premium servers can have multiple trusted roles)',
         options: [
             {
                 name: Lang.getCom('subCommands.add'),
-                description: 'Add a member anniversary role',
+                description:
+                    'Add a trusted role. (Premium servers can have multiple trusted roles)',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
@@ -22,23 +23,16 @@ export class MemberAnniversaryRoleCommand implements Command {
                         type: ApplicationCommandOptionType.Role.valueOf(),
                         required: true,
                     },
-                    {
-                        name: Lang.getCom('arguments.year'),
-                        description:
-                            'The year of the member anniversary the role should be given at.',
-                        type: ApplicationCommandOptionType.Number.valueOf(),
-                        required: true,
-                    },
                 ],
             },
             {
                 name: Lang.getCom('subCommands.remove'),
-                description: 'Remove a member anniversary role',
+                description: 'Remove a trusted role',
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
                     {
                         name: Lang.getCom('subCommands.role'),
-                        description: 'Role to remove from the member anniversary list.',
+                        description: 'Role to remove from the trusted role list.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
@@ -52,7 +46,7 @@ export class MemberAnniversaryRoleCommand implements Command {
                     {
                         name: Lang.getCom('subCommands.id'),
                         description:
-                            'Remove an ID from the member anniversary role list. Used when a role has been deleted.',
+                            'Remove an ID from the trusted role list. Used when a role has been deleted.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
@@ -67,12 +61,13 @@ export class MemberAnniversaryRoleCommand implements Command {
             },
             {
                 name: Lang.getCom('subCommands.clear'),
-                description: 'Clear all member anniversary roles.',
+                description: 'Clear all trusted roles.',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
             },
             {
                 name: Lang.getCom('subCommands.list'),
-                description: 'List the member anniversary roles.',
+                description:
+                    'List the trusted roles. (Premium servers can have multiple trusted roles)',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {

@@ -6,7 +6,6 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
-// did I not split this up correctly?
 export class BlacklistCommand implements Command {
     public data: ApplicationCommandData = {
         name: Lang.getCom('commands.blacklist'),

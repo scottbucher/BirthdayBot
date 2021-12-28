@@ -7,3 +7,4 @@ export { BlacklistCommand } from './blacklist-command';
 export { ConfigCommand } from './config-command';
 export { MessageCommand } from './message-command';
 export { MemberAnniversaryRoleCommand } from './mar-command';
+export { TrustedRoleCommand } from './trusted-role-command';
