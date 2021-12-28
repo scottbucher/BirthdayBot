@@ -14,34 +14,14 @@ export class BlacklistCommand implements Command {
         options: [
             {
                 name: Lang.getCom('subCommands.add'),
-                description: 'Add something to the blacklist',
-                type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
+                description: 'Add a role or user to the blacklist.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
-                        name: Lang.getCom('subCommands.user'),
-                        description: 'Add a user to the blacklist.',
-                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
-                        options: [
-                            {
-                                name: Lang.getCom('arguments.user'),
-                                description: 'User.',
-                                type: ApplicationCommandOptionType.User.valueOf(),
-                                required: true,
-                            },
-                        ],
-                    },
-                    {
-                        name: Lang.getCom('subCommands.role'),
-                        description: 'Add a role to the blacklist.',
-                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
-                        options: [
-                            {
-                                name: Lang.getCom('arguments.role'),
-                                description: 'Role.',
-                                type: ApplicationCommandOptionType.Role.valueOf(),
-                                required: true,
-                            },
-                        ],
+                        name: Lang.getCom('arguments.roleOrUser'),
+                        description: 'The role or user to add to the blacklist.',
+                        type: ApplicationCommandOptionType.Mentionable.valueOf(),
+                        required: true,
                     },
                 ],
             },
@@ -51,34 +31,22 @@ export class BlacklistCommand implements Command {
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
                     {
-                        name: Lang.getCom('subCommands.user'),
-                        description: 'Remove a user from the blacklist.',
+                        name: Lang.getCom('subCommands.roleOrUser'),
+                        description: 'Remove a role or user from the blacklist.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
-                                name: Lang.getCom('arguments.user'),
-                                description: 'User.',
-                                type: ApplicationCommandOptionType.User.valueOf(),
-                                required: true,
-                            },
-                        ],
-                    },
-                    {
-                        name: Lang.getCom('subCommands.role'),
-                        description: 'Remove a role from the blacklist.',
-                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
-                        options: [
-                            {
-                                name: Lang.getCom('arguments.role'),
-                                description: 'Role.',
-                                type: ApplicationCommandOptionType.Role.valueOf(),
+                                name: Lang.getCom('arguments.roleOrUser'),
+                                description: 'The role or user to remove.',
+                                type: ApplicationCommandOptionType.Mentionable.valueOf(),
                                 required: true,
                             },
                         ],
                     },
                     {
                         name: Lang.getCom('subCommands.id'),
-                        description: 'Remove an ID from the blacklist.',
+                        description:
+                            'Remove an ID from the blacklist. Used when a user has left or a role has been deleted.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {

@@ -27,9 +27,7 @@
         "update": "update",
         "view": "view",
         "vote": "vote",
-        "list": "list",
-        "docs": "docs",
-        "map": "map"
+        "list": "list"
     },
     "subCommands": {
         "add": "add",
@@ -38,6 +36,7 @@
         "setting": "setting",
         "role": "role",
         "remove": "remove",
+        "roleOrUser": "role_or_user",
         "id": "id",
         "clear": "clear",
         "list": "list",
@@ -46,11 +45,17 @@
         "time": "time",
         "mention": "mention",
         "test": "test",
+        "docs": "docs",
+        "map": "map",
+        "donate": "donate",
+        "support": "support",
+        "": "",
         "": ""
     },
     "arguments": {
         "setting": "setting",
         "user": "user",
+        "roleOrUser": "role_or_user",
         "role": "role",
         "id": "id",
         "page": "page",
