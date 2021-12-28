@@ -50,13 +50,17 @@ async function start(): Promise<void> {
         new MessageCommand(),
     ].sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
 
+    let reactions: Reaction[] = [
+        // TODO: Add new reactions here
+    ];
+
     // Event handlers
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
     let commandHandler = new CommandHandler(commands);
     let triggerHandler = new TriggerHandler([]);
     let messageHandler = new MessageHandler(triggerHandler);
-    let reactionHandler = new ReactionHandler([]);
+    let reactionHandler = new ReactionHandler(reactions);
 
     let bot = new Bot(
         Config.client.token,
