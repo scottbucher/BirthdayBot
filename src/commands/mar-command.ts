@@ -9,11 +9,11 @@ import { MessageUtils } from '../utils';
 export class MemberAnniversaryRoleCommand implements Command {
     public data: ApplicationCommandData = {
         name: Lang.getCom('commands.mar'),
-        description: 'Manage the Member Anniversary Roles.',
+        description: 'Manage the Member Anniversary Roles. (Premium only)',
         options: [
             {
                 name: Lang.getCom('subCommands.add'),
-                description: 'Add a member anniversary role',
+                description: 'Add a member anniversary role. (Premium only)',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
@@ -33,7 +33,7 @@ export class MemberAnniversaryRoleCommand implements Command {
             },
             {
                 name: Lang.getCom('subCommands.remove'),
-                description: 'Remove a member anniversary role',
+                description: 'Remove a member anniversary role. (Premium only)',
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
                     {
