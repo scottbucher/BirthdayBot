@@ -80,6 +80,8 @@
         "timeZone": "timezone",
         "useTimezone": "useTimezone",
         "dateFormat": "dateFormat",
+        "trustedPreventsMessage": "trustedPreventsMessage",
+        "trustedPreventsRole": "trustedPreventsRole",
         "requireAllTrustedRoles": "requireAllTrustedRoles",
         "channel": "channel",
         "role": "role"
