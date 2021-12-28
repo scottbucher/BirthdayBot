@@ -7,38 +7,45 @@ import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
 // did I not split this up correctly?
-export class BlacklistCommand implements Command {
+export class MemberAnniversaryRoleCommand implements Command {
     public data: ApplicationCommandData = {
-        name: Lang.getCom('commands.blacklist'),
-        description: 'Manage the blacklist.',
+        name: Lang.getCom('commands.mar'),
+        description: 'Manage the Member Anniversary Roles.',
         options: [
             {
                 name: Lang.getCom('subCommands.add'),
-                description: 'Add a role or user to the blacklist.',
+                description: 'Add a member anniversary role',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
-                        name: Lang.getCom('arguments.roleOrUser'),
-                        description: 'The role or user to add to the blacklist.',
-                        type: ApplicationCommandOptionType.Mentionable.valueOf(),
+                        name: Lang.getCom('arguments.role'),
+                        description: 'The role to add.',
+                        type: ApplicationCommandOptionType.Role.valueOf(),
+                        required: true,
+                    },
+                    {
+                        name: Lang.getCom('arguments.year'),
+                        description:
+                            'The year of the member anniversary the role should be given at.',
+                        type: ApplicationCommandOptionType.Number.valueOf(),
                         required: true,
                     },
                 ],
             },
             {
                 name: Lang.getCom('subCommands.remove'),
-                description: 'Remove something from the blacklist.',
+                description: 'Remove a member anniversary role',
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
                     {
-                        name: Lang.getCom('subCommands.roleOrUser'),
-                        description: 'Remove a role or user from the blacklist.',
+                        name: Lang.getCom('subCommands.role'),
+                        description: 'Role to remove from the member anniversary list.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
-                                name: Lang.getCom('arguments.roleOrUser'),
-                                description: 'The role or user to remove.',
-                                type: ApplicationCommandOptionType.Mentionable.valueOf(),
+                                name: Lang.getCom('arguments.role'),
+                                description: 'The role to remove.',
+                                type: ApplicationCommandOptionType.Role.valueOf(),
                                 required: true,
                             },
                         ],
@@ -46,12 +53,12 @@ export class BlacklistCommand implements Command {
                     {
                         name: Lang.getCom('subCommands.id'),
                         description:
-                            'Remove an ID from the blacklist. Used when a user has left or a role has been deleted.',
+                            'Remove an ID from the member anniversary role list. Used when a role has been deleted.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
                                 name: Lang.getCom('arguments.id'),
-                                description: 'ID.',
+                                description: 'The id to remove.',
                                 type: ApplicationCommandOptionType.String.valueOf(),
                                 required: true,
                             },
@@ -61,12 +68,12 @@ export class BlacklistCommand implements Command {
             },
             {
                 name: Lang.getCom('subCommands.clear'),
-                description: 'Clear the blacklist.',
+                description: 'Clear all member anniversary roles.',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
             },
             {
                 name: Lang.getCom('subCommands.list'),
-                description: 'Show the blacklist.',
+                description: 'List the member anniversary roles.',
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {

@@ -65,7 +65,8 @@
         "time": "time",
         "mention": "mention",
         "position": "position",
-        "message": "message"
+        "message": "message",
+        "year": "year"
     },
     "settingType": {
         "nameFormat": "nameFormat",

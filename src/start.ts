@@ -5,6 +5,7 @@ import {
     HelpCommand,
     InfoCommand,
     LinkCommand,
+    MemberAnniversaryRoleCommand,
     MessageCommand,
     TestCommand,
 } from './commands';
@@ -50,6 +51,7 @@ async function start(): Promise<void> {
         new BlacklistCommand(),
         new ConfigCommand(),
         new MessageCommand(),
+        new MemberAnniversaryRoleCommand(),
     ].sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
 
     // Reactions
