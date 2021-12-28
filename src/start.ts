@@ -6,13 +6,17 @@ import {
     InfoCommand,
     LinkCommand,
     ListCommand,
+    MapCommand,
     MemberAnniversaryRoleCommand,
     MessageCommand,
     NextCommand,
+    PremiumCommand,
+    PurgeCommand,
     SetAttemptsCommand,
     SetCommand,
     SettingsCommand,
     SetupCommand,
+    SubscribeCommand,
     TestCommand,
     TrustedRoleCommand,
     ViewCommand,
@@ -68,6 +72,10 @@ async function start(): Promise<void> {
         new NextCommand(),
         new ViewCommand(),
         new SetCommand(),
+        new MapCommand(),
+        new PurgeCommand(),
+        new PremiumCommand(),
+        new SubscribeCommand(),
     ].sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
 
     // Reactions

@@ -27,7 +27,8 @@
         "update": "update",
         "view": "view",
         "vote": "vote",
-        "list": "list"
+        "list": "list",
+        "map": "map"
     },
     "subCommands": {
         "add": "add",
