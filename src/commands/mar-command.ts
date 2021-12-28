@@ -52,7 +52,7 @@ export class MemberAnniversaryRoleCommand implements Command {
                     {
                         name: Lang.getCom('subCommands.id'),
                         description:
-                            '[Premium Feature] Remove an ID from the member anniversary role list. Used when a role has been deleted.',
+                            '[Premium Feature] Remove a deleted role from the member anniversary role list using an id.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
