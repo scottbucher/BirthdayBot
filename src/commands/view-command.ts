@@ -6,14 +6,15 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
-export class TestCommand implements Command {
+export class ViewCommand implements Command {
     public data: ApplicationCommandData = {
-        name: Lang.getCom('commands.test'),
-        description: 'View the next event date. Defaults to birthday.',
+        name: Lang.getCom('commands.view'),
+        description:
+            "View your, or someone else's birthday or anniversary. Or view the server's anniversary.",
         options: [
             {
                 name: Lang.getCom('arguments.type'),
-                description: 'What type of event to test.',
+                description: 'What type of event to view.',
                 type: ApplicationCommandOptionType.String.valueOf(),
                 required: false,
                 choices: [
@@ -33,7 +34,7 @@ export class TestCommand implements Command {
             },
             {
                 name: Lang.getCom('arguments.user'),
-                description: 'Optional user argument to test the event on.',
+                description: 'Optional user argument to view. Defaults to you.',
                 type: ApplicationCommandOptionType.User.valueOf(),
                 required: false,
             },

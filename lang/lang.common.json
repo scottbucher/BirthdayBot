@@ -49,7 +49,10 @@
         "map": "map",
         "donate": "donate",
         "support": "support",
-        "": ""
+        "set": "set",
+        "setAttempts": "set_attempts",
+        "next": "next",
+        "view": "view"
     },
     "arguments": {
         "setting": "setting",
@@ -65,7 +68,11 @@
         "mention": "mention",
         "position": "position",
         "message": "message",
-        "year": "year"
+        "year": "year",
+        "number": "number",
+        "type": "type",
+        "date": "date",
+        "timezone": "timezone"
     },
     "settingType": {
         "nameFormat": "nameFormat",

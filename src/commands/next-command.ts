@@ -1,19 +1,18 @@
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, MessageEmbed } from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { MessageUtils } from '../utils';
 
-export class TestCommand implements Command {
+export class NextCommand implements Command {
     public data: ApplicationCommandData = {
-        name: Lang.getCom('commands.test'),
+        name: Lang.getCom('commands.next'),
         description: 'View the next event date. Defaults to birthday.',
         options: [
             {
                 name: Lang.getCom('arguments.type'),
-                description: 'What type of event to test.',
+                description: 'What type of event to view the next of.',
                 type: ApplicationCommandOptionType.String.valueOf(),
                 required: false,
                 choices: [
@@ -30,12 +29,6 @@ export class TestCommand implements Command {
                         value: 'SERVER_ANNIVERSARY',
                     },
                 ],
-            },
-            {
-                name: Lang.getCom('arguments.user'),
-                description: 'Optional user argument to test the event on.',
-                type: ApplicationCommandOptionType.User.valueOf(),
-                required: false,
             },
         ],
     };

@@ -5,10 +5,17 @@ import {
     HelpCommand,
     InfoCommand,
     LinkCommand,
+    ListCommand,
     MemberAnniversaryRoleCommand,
     MessageCommand,
+    NextCommand,
+    SetAttemptsCommand,
+    SetCommand,
+    SettingsCommand,
+    SetupCommand,
     TestCommand,
     TrustedRoleCommand,
+    ViewCommand,
 } from './commands';
 import {
     CommandHandler,
@@ -54,6 +61,13 @@ async function start(): Promise<void> {
         new MessageCommand(),
         new MemberAnniversaryRoleCommand(),
         new TrustedRoleCommand(),
+        new SetupCommand(),
+        new SettingsCommand(),
+        new SetAttemptsCommand(),
+        new ListCommand(),
+        new NextCommand(),
+        new ViewCommand(),
+        new SetCommand(),
     ].sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
 
     // Reactions
