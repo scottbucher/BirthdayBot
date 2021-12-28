@@ -35,6 +35,14 @@ export class ConfigCommand implements Command {
                         value: 'DATE_FORMAT',
                     },
                     {
+                        name: Lang.getCom('settingType.trustedPreventsMessage'),
+                        value: 'TRUSTED_PREVENTS_MESSAGE',
+                    },
+                    {
+                        name: Lang.getCom('settingType.trustedPreventsRole'),
+                        value: 'TRUSTED_PREVENTS_ROLE',
+                    },
+                    {
                         name: Lang.getCom('settingType.requireAllTrustedRoles'),
                         value: 'REQUIRE_ALL_TRUSTED_ROLES',
                     },
