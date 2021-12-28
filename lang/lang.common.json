@@ -31,6 +31,12 @@
         "docs": "docs",
         "map": "map"
     },
+    "subCommandGroups": {
+        "add": "add",
+        "remove": "remove",
+        "edit": "edit",
+        "setting": "setting"
+    },
     "subCommands": {
         "add": "add",
         "user": "user",
@@ -38,7 +44,13 @@
         "remove": "remove",
         "id": "id",
         "clear": "clear",
-        "list": "list"
+        "list": "list",
+        "embed": "embed",
+        "color": "color",
+        "time": "time",
+        "mention": "mention",
+        "test": "test",
+        "": ""
     },
     "arguments": {
         "setting": "setting",
@@ -47,7 +59,12 @@
         "id": "id",
         "page": "page",
         "reset": "reset",
-        "": ""
+        "embed": "embed",
+        "color": "color",
+        "time": "time",
+        "mention": "mention",
+        "position": "position",
+        "message": "message"
     },
     "settingType": {
         "nameFormat": "nameFormat",
