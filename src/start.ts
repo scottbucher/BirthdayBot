@@ -22,6 +22,7 @@ import { Bot } from './bot';
 import { CustomClient } from './extensions';
 import { Options } from 'discord.js';
 import { REST } from '@discordjs/rest';
+import { Reaction } from './reactions';
 import { Routes } from 'discord-api-types/rest/v9';
 import { Trigger } from './triggers';
 
