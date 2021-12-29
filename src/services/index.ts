@@ -4,5 +4,4 @@ export { MasterApiService } from './master-api-services';
 export { SubscriptionService } from './subscription-service';
 export { Lang } from './lang';
 export { JobService } from './job-service';
-export { DiscordService } from './discord-service';
 export { CelebrationService } from './celebration-service';
