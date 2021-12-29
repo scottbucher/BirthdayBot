@@ -2,6 +2,7 @@ import { Linguini, TypeMapper, TypeMappers, Utils } from 'linguini';
 
 import { LangCode } from '../models/enums';
 import { MessageEmbed } from 'discord.js';
+import { info } from 'console';
 import path from 'path';
 
 export class Lang {
@@ -57,7 +58,7 @@ export class Lang {
     }
 
     public static getCom(location: string, variables?: { [name: string]: string }): string {
-        return this.linguini.getCom(location, variables);
+        return this.linguiniObjects['info'].getCom(location, variables);
     }
 
     private static messageEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
