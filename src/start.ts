@@ -22,6 +22,15 @@ import {
     ViewCommand,
 } from './commands';
 import {
+    BlacklistRepo,
+    CombinedRepo,
+    CustomMessageRepo,
+    GuildRepo,
+    MemberAnniversaryRoleRepo,
+    TrustedRoleRepo,
+    UserRepo,
+} from './services/database/repos';
+import {
     CommandHandler,
     GuildJoinHandler,
     GuildLeaveHandler,
@@ -29,10 +38,11 @@ import {
     ReactionHandler,
     TriggerHandler,
 } from './events';
-import { JobService, Logger } from './services';
+import { HttpService, JobService, Logger } from './services';
 
 import { Bot } from './bot';
 import { CustomClient } from './extensions';
+import { DataAccess } from './services/database/data-access';
 import { Options } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Reaction } from './reactions';
@@ -43,6 +53,7 @@ let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
 
 async function start(): Promise<void> {
+    Logger.info('Starting Bot!');
     let client = new CustomClient({
         intents: Config.client.intents,
         partials: Config.client.partials,
@@ -53,6 +64,18 @@ async function start(): Promise<void> {
             ...Config.client.caches,
         }),
     });
+
+    let dataAccess = new DataAccess(Config.mysql);
+    let httpService = new HttpService();
+
+    // Repos
+    let guildRepo = new GuildRepo(dataAccess);
+    let userRepo = new UserRepo(dataAccess);
+    let customMessageRepo = new CustomMessageRepo(dataAccess);
+    let blacklistRepo = new BlacklistRepo(dataAccess);
+    let trustedRoleRepo = new TrustedRoleRepo(dataAccess);
+    let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
+    let combinedRepo = new CombinedRepo(dataAccess);
 
     // Commands
     let commands: Command[] = [
@@ -73,7 +96,7 @@ async function start(): Promise<void> {
         new ViewCommand(),
         new SetCommand(),
         new MapCommand(),
-        new PurgeCommand(),
+        new PurgeCommand(userRepo),
         new PremiumCommand(),
         new SubscribeCommand(),
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
