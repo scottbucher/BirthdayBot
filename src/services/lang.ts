@@ -1,40 +1,58 @@
-import { MessageEmbed } from 'discord.js';
 import { Linguini, TypeMapper, TypeMappers, Utils } from 'linguini';
-import path from 'path';
 
 import { LangCode } from '../models/enums';
+import { MessageEmbed } from 'discord.js';
+import path from 'path';
 
 export class Lang {
     public static Default = LangCode.EN_US;
 
-    private static linguini = new Linguini(path.resolve(__dirname, '../../lang'), 'lang');
+    private static linguiniObjects: { [key: string]: Linguini } = {
+        prompts: new Linguini(path.resolve(__dirname, '../../lang/prompts'), 'prompts', {
+            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
+        }),
+        info: new Linguini(path.resolve(__dirname, '../../lang/info'), 'info', {
+            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
+        }),
+        results: new Linguini(path.resolve(__dirname, '../../lang/results'), 'results', {
+            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
+        }),
+        validation: new Linguini(path.resolve(__dirname, '../../lang/validation'), 'validation', {
+            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
+        }),
+        errors: new Linguini(path.resolve(__dirname, '../../lang/errors'), 'errors', {
+            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
+        }),
+    };
 
     public static getEmbed(
+        type: string,
         location: string,
         langCode: LangCode,
         variables?: { [name: string]: string }
     ): MessageEmbed {
         return (
-            this.linguini.get(location, langCode, this.messageEmbedTm, variables) ??
-            this.linguini.get(location, this.Default, this.messageEmbedTm, variables)
+            this.linguiniObjects[type].get(location, langCode, this.messageEmbedTm, variables) ??
+            this.linguiniObjects[type].get(location, this.Default, this.messageEmbedTm, variables)
         );
     }
 
-    public static getRegex(location: string, langCode: LangCode): RegExp {
+    public static getRegex(type: string, location: string, langCode: LangCode): RegExp {
         return (
-            this.linguini.get(location, langCode, TypeMappers.RegExp) ??
-            this.linguini.get(location, this.Default, TypeMappers.RegExp)
+            this.linguiniObjects[type].get(location, langCode, TypeMappers.RegExp) ??
+            this.linguiniObjects[type].get(location, this.Default, TypeMappers.RegExp)
         );
     }
 
     public static getRef(
+        type: string,
         location: string,
         langCode: LangCode,
         variables?: { [name: string]: string }
     ): string {
         return (
-            this.linguini.getRef(location, langCode, variables) ??
-            this.linguini.getRef(location, this.Default, variables)
+            this.linguiniObjects[type].getRef(location, langCode, variables) ??
+            this.linguiniObjects[type].getRef(location, this.Default, variables)
         );
     }
 
