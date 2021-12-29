@@ -7,7 +7,7 @@ import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
 export class TestCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.test'),
         description: 'View the next event date. Defaults to birthday.',
         options: [

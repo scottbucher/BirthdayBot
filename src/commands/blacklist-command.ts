@@ -7,7 +7,7 @@ import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
 export class BlacklistCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.blacklist'),
         description: 'Manage the blacklist.',
         options: [

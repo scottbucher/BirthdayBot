@@ -7,7 +7,7 @@ import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
 export class TrustedRoleCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.trustedRole'),
         description: 'Manage the Trusted Roles. (Premium servers can have multiple trusted roles)',
         options: [

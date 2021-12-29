@@ -5,7 +5,7 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 
 export class PurgeCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.purge'),
         description: 'Remove your information from the database.',
     };

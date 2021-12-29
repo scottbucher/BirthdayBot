@@ -7,7 +7,7 @@ import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
 export class ViewCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.view'),
         description:
             "View your, or someone else's birthday or anniversary. Or view the server's anniversary.",

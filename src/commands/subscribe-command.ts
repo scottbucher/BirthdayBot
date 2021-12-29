@@ -5,7 +5,7 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 
 export class SubscribeCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.subscribe'),
         description: 'Subscribe to Birthday Bot Premium.',
     };

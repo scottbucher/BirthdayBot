@@ -7,7 +7,7 @@ import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
 export class MemberAnniversaryRoleCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.mar'),
         description: '[Premium Feature] Manage the Member Anniversary Roles.',
         options: [

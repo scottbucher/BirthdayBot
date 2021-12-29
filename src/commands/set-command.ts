@@ -6,7 +6,7 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 
 export class SetCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.set'),
         description: 'Set your birthday',
         options: [

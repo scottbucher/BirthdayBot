@@ -8,7 +8,7 @@ import { Lang } from '../services';
 import { MessageUtils } from '../utils';
 
 export class ConfigCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.config'),
         description: 'Manage config settings.',
         options: [

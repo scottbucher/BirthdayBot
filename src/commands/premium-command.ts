@@ -5,7 +5,7 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 
 export class PremiumCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.premium'),
         description: 'View information about premium, or about your current premium subscription.',
     };

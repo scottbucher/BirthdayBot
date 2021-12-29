@@ -8,7 +8,7 @@ import { MessageUtils } from '../utils';
 
 // did I not split this up correctly?
 export class MessageCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.message'),
         description: 'Manage message settings and specific custom messages.',
         options: [

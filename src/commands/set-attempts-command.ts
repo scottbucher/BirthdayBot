@@ -6,7 +6,7 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 
 export class SetAttemptsCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.setAttempts'),
         description: 'Set the attempts for a user. (Birthday bot staff only command)',
         options: [

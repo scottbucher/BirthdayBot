@@ -6,7 +6,7 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 
 export class NextCommand implements Command {
-    public data: ApplicationCommandData = {
+    public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.next'),
         description: 'View the next event date. Defaults to birthday.',
         options: [
