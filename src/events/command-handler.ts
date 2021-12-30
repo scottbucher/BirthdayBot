@@ -1,11 +1,11 @@
 import { CommandInteraction, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
-import { RateLimiter } from 'discord.js-rate-limiter';
+import { CommandUtils, MessageUtils, PermissionUtils } from '../utils';
+import { Lang, Logger } from '../services';
 
-import { EventHandler } from '.';
 import { Command } from '../commands';
 import { EventData } from '../models/internal-models';
-import { Lang, Logger } from '../services';
-import { CommandUtils, MessageUtils, PermissionUtils } from '../utils';
+import { EventHandler } from '.';
+import { RateLimiter } from 'discord.js-rate-limiter';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -34,7 +34,7 @@ export class CommandHandler implements EventHandler {
 
         // Check if I have permission to send a message
         if (!PermissionUtils.canSendEmbed(intr.channel)) {
-            let message = Lang.getRef('messages.missingEmbedPerms', data.lang());
+            let message = Lang.getRef('errors', 'embeds.missingEmbedPerms', data.lang());
             await MessageUtils.sendIntr(intr, message);
             return;
         }
@@ -89,7 +89,7 @@ export class CommandHandler implements EventHandler {
         try {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('errorEmbeds.command', data.lang(), {
+                Lang.getEmbed('errors', 'embeds.command', data.lang(), {
                     ERROR_CODE: intr.id,
                 })
             );

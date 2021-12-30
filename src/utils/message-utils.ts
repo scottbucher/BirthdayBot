@@ -10,6 +10,10 @@ import {
     User,
 } from 'discord.js';
 
+import { TimeUtils } from '.';
+
+let Config = require('../../config/config.json');
+
 export class MessageUtils {
     public static async send(
         target: User | TextBasedChannel,
@@ -131,5 +135,35 @@ export class MessageUtils {
             options = content;
         }
         return options;
+    }
+
+    // From pre-update, determine if this is still valid
+    public static async sendWithDelay(
+        target: User | TextBasedChannel,
+        content: string | MessageEmbed | MessageOptions,
+        delay?: number
+    ): Promise<Message> {
+        delay = Config.delays.enabled ? delay : 0;
+        try {
+            let msgOptions = this.messageOptions(content);
+            await target.send(msgOptions);
+            await TimeUtils.sleep(delay ?? 0);
+            return;
+        } catch (error) {
+            // 10003: "Unknown channel"
+            // 10004: "Unknown guild"
+            // 10013: "Unknown user"
+            // 50001: "Missing access"
+            // 50007: "Cannot send messages to this user" (User blocked bot or DM disabled)
+            // 50013: "Missing Permissions"
+            if (
+                error instanceof DiscordAPIError &&
+                [10003, 10004, 10013, 50001, 50007, 50013].includes(error.code)
+            ) {
+                return;
+            } else {
+                throw error;
+            }
+        }
     }
 }

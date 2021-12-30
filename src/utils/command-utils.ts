@@ -1,8 +1,9 @@
 import { CommandInteraction, GuildMember, Permissions } from 'discord.js';
-import { MessageUtils } from '.';
+
 import { Command } from '../commands';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { MessageUtils } from '.';
 
 let Config = require('../../config/config.json');
 let Debug = require('../../config/debug.json');
@@ -16,7 +17,7 @@ export class CommandUtils {
         if (command.requireDev && !Config.developers.includes(intr.user.id)) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validationEmbeds.devOnlyCommand', data.lang())
+                Lang.getEmbed('validationEmbeds', 'embeds.devOnlyCommand', data.lang())
             );
             return false;
         }
@@ -24,7 +25,7 @@ export class CommandUtils {
         if (command.requireGuild && !intr.guild) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validationEmbeds.serverOnlyCommand', data.lang())
+                Lang.getEmbed('validationEmbeds', 'embeds.serverOnlyCommand', data.lang())
             );
             return false;
         }
@@ -33,7 +34,7 @@ export class CommandUtils {
         if (intr.member && !this.hasPermission(intr.member as GuildMember, command)) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validationEmbeds.permissionRequired', data.lang())
+                Lang.getEmbed('validationEmbeds', 'embeds.permissionRequired', data.lang())
             );
             return false;
         }

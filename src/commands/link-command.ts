@@ -9,7 +9,7 @@ import { MessageUtils } from '../utils';
 export class LinkCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.link'),
-        description: Lang.getRef('commandDescs.link', Lang.Default),
+        description: 'Useful links for the bot.',
         options: [
             {
                 name: 'link',
@@ -51,23 +51,23 @@ export class LinkCommand implements Command {
         let embed: MessageEmbed;
         switch (link) {
             case 'docs': {
-                embed = Lang.getEmbed('displayEmbeds.linkDocs', data.lang());
+                // embed = Lang.getEmbed('embeds.linkDocs', data.lang());
                 break;
             }
             case 'donate': {
-                embed = Lang.getEmbed('displayEmbeds.linkDonate', data.lang());
+                // embed = Lang.getEmbed('embeds.linkDonate', data.lang());
                 break;
             }
             case 'invite': {
-                embed = Lang.getEmbed('displayEmbeds.linkInvite', data.lang());
+                // embed = Lang.getEmbed('embeds.linkInvite', data.lang());
                 break;
             }
             case 'support': {
-                embed = Lang.getEmbed('displayEmbeds.linkSupport', data.lang());
+                // embed = Lang.getEmbed('embeds.linkSupport', data.lang());
                 break;
             }
             case 'vote': {
-                embed = Lang.getEmbed('displayEmbeds.linkVote', data.lang());
+                // embed = Lang.getEmbed('embeds.linkVote', data.lang());
                 break;
             }
             default: {

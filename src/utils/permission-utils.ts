@@ -8,10 +8,10 @@ import {
 } from 'discord.js';
 
 export class PermissionUtils {
-    public static canSend(channel: TextBasedChannel): boolean {
-        if (channel instanceof DMChannel) {
-            return true;
-        } else if (
+    public static canSend(channel: TextBasedChannel, requireReaction = true): boolean {
+        if (channel instanceof DMChannel) return true;
+
+        if (
             channel instanceof TextChannel ||
             channel instanceof NewsChannel ||
             channel instanceof ThreadChannel
@@ -24,12 +24,19 @@ export class PermissionUtils {
 
             // VIEW_CHANNEL - Needed to view the channel
             // SEND_MESSAGES - Needed to send messages
-            return channelPerms.has([
-                Permissions.FLAGS.VIEW_CHANNEL,
-                Permissions.FLAGS.SEND_MESSAGES,
-            ]);
-        } else {
-            return false;
+            // EMBED_LINKS - Needed to send embedded links
+            // ADD_REACTIONS - Needed to add new reactions to messages
+            // READ_MESSAGE_HISTORY - Needed to add new reactions to messages
+            //    https://discordjs.guide/popular-topics/permissions-extended.html#implicit-permissions
+            return (
+                channelPerms.has([
+                    Permissions.FLAGS.VIEW_CHANNEL,
+                    Permissions.FLAGS.SEND_MESSAGES,
+                    Permissions.FLAGS.EMBED_LINKS,
+                    Permissions.FLAGS.ADD_REACTIONS,
+                ]) &&
+                (!requireReaction || channelPerms.has(Permissions.FLAGS.READ_MESSAGE_HISTORY))
+            );
         }
     }
 

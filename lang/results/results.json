@@ -1,6 +1,6 @@
 {
     "data": {
-        "displayEmbeds": {
+        "embeds": {
             "welcome": {
                 "title": "Thank you for using {{COM:bot.name}}!",
                 "description": ["{{REF:bot.description}}"],
@@ -18,6 +18,11 @@
                         ]
                     }
                 ]
+            },
+            
+            "promptExpired": {
+                "description": "This command has expired.",
+                "color": "{{COM:colors.warning}}"
             }
         }
     },

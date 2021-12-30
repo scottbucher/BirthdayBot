@@ -1,6 +1,6 @@
 {
     "data": {
-        "displayEmbeds": {
+        "embeds": {
             "devOnlyCommand": {
                 "description": "This command can only be used by developers.",
                 "color": "{{COM:colors.warning}}"

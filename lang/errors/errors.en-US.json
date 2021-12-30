@@ -1,6 +1,6 @@
 {
     "data": {
-        "displayEmbeds": {
+        "embeds": {
             "command": {
                 "description": "Something went wrong!",
                 "fields": [
@@ -18,6 +18,10 @@
             "startupInProcess": {
                 "description": "{{COM:bot.name}} is still starting up. Try again later.",
                 "color": "{{COM:colors.warning}}"
+            },
+            "missingEmbedPerms": {
+                "description": "I don't have all permission required to send messages here!\n\nPlease allow me to **View Channel**, **Send Messages**, **ADD_REACTIONS**, **READ_MESSAGE_HISTORY** and **Embed Links** in this channel.*",
+                "color": "{{COM:colors.error}}"
             }
         }
     },

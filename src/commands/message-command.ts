@@ -279,6 +279,6 @@ export class MessageCommand implements Command {
     public requirePerms = [];
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        await MessageUtils.sendIntr(intr, Lang.getEmbed('displayEmbeds.help', data.lang()));
+        // await MessageUtils.sendIntr(intr, Lang.getEmbed('embeds.help', data.lang()));
     }
 }

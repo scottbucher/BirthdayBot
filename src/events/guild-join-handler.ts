@@ -1,8 +1,8 @@
-import { Guild } from 'discord.js';
-
-import { Lang, Logger } from '../services';
 import { ClientUtils, MessageUtils } from '../utils';
+import { Lang, Logger } from '../services';
+
 import { EventHandler } from './event-handler';
+import { Guild } from 'discord.js';
 
 let Logs = require('../../lang/logs.json');
 
@@ -24,7 +24,7 @@ export class GuildJoinHandler implements EventHandler {
         if (notifyChannel) {
             await MessageUtils.send(
                 notifyChannel,
-                Lang.getEmbed('displayEmbeds.welcome', guildLang).setAuthor({
+                Lang.getEmbed('info', 'embeds.guildJoin', guildLang).setAuthor({
                     name: guild.name,
                     iconURL: guild.iconURL(),
                 })
@@ -38,7 +38,7 @@ export class GuildJoinHandler implements EventHandler {
         if (owner) {
             await MessageUtils.send(
                 owner.user,
-                Lang.getEmbed('displayEmbeds.welcome', ownerLang).setAuthor({
+                Lang.getEmbed('info', 'embeds.guildJoin', ownerLang).setAuthor({
                     name: guild.name,
                     iconURL: guild.iconURL(),
                 })

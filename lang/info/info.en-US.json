@@ -1,6 +1,6 @@
 {
     "data": {
-        "displayEmbeds": {
+        "embeds": {
             "guildJoin": {
                 "title": "Thank you for using {{COM:bot.name}}!",
                 "description": [
@@ -185,6 +185,271 @@
         "translate": {
             "title": "{{COM:bot.name}} - Translations",
             "description": "Thank you to our translators who have made it possible for {{COM:bot.name}} to be used in the following languages. If you are interested in providing a translation, please contact the staff in our [support server]({{COM:links.support}})."
+        },
+        "list": {
+            "birthday": {
+                "title": "{{REF:terms.birthdayList}} | {{REF:list.pageTitle}}",
+                "description": [
+                    "*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use `{{REF:bot.prefix}} set`!*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "Total Birthdays: {{TOTAL_BIRTHDAYS}} • {{PER_PAGE}} per page",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "memberAnniversary": {
+                "title": "{{REF:terms.memberAnniversaryList}} | {{REF:list.pageTitle}}",
+                "description": [
+                    "*Member Anniversaries are celebrated on the day of the user's server join date (in the timezone of the __server__).*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "Total Member Anniversaries: {{TOTAL_ANNIVERSARIES}} • {{PER_PAGE}} per page",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "birthdayMessageUnLocked": {
+                "title": "{{REF:list.birthdayMessagesTitle}}",
+                "description": [
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "birthdayMessageLocked": {
+                "title": "{{REF:list.birthdayMessagesTitle}}",
+                "description": [
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.messagePaidFieldTitle}}",
+                        "value": "{{REF:list.birthdayMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "memberAnniversaryMessageUnLocked": {
+                "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "memberAnniversaryMessageLocked": {
+                "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.messagePaidFieldTitle}}",
+                        "value": "{{REF:list.memberAnniversaryMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "serverAnniversaryMessageUnLocked": {
+                "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "serverAnniversaryMessageLocked": {
+                "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.messagePaidFieldTitle}}",
+                        "value": "{{REF:list.serverAnniversaryMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "userSpecificBirthdayMessageUnLocked": {
+                "title": "{{REF:list.userBirthdayMessagesTitle}}",
+                "description": [
+                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "userSpecificBirthdayMessageLocked": {
+                "title": "{{REF:list.userBirthdayMessagesTitle}}",
+                "description": [
+                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.userSpecificMessageFieldTitle}}",
+                        "value": "{{REF:list.userSpecificMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "userSpecificMemberAnniversaryMessageUnLocked": {
+                "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "userSpecificMemberAnniversaryMessageLocked": {
+                "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.userSpecificMessageFieldTitle}}",
+                        "value": "{{REF:list.userSpecificMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "trustedRoleFree": {
+                "title": "{{REF:list.trustedRolesTitle}}",
+                "description": [
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `{{REF:bot.prefix}} config` [(?)]({{REF:docLinks.whatIsTrustedRole}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "trustedRolePaid": {
+                "title": "{{REF:list.trustedRolesTitle}}",
+                "description": [
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `{{REF:bot.prefix}} config` [(?)]({{REF:docLinks.whatIsTrustedRole}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.trustedRoleFieldTitle}}",
+                        "value": "{{REF:list.trustedRoleFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "memberAnniversaryRoleFree": {
+                "title": "{{REF:list.memberAnniversaryRolesTitle}}",
+                "description": [
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{REF:docLinks.whatIsAnniversaryRole}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "memberAnniversaryRolePaid": {
+                "title": "{{REF:list.memberAnniversaryRolesTitle}}",
+                "description": [
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{REF:docLinks.whatIsAnniversaryRole}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.memberAnniversaryRoleFieldTitle}}",
+                        "value": "{{REF:list.memberAnniversaryFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "blacklist": {
+                "title": "{{REF:terms.blacklistList}} | {{REF:list.pageTitle}}",
+                "description": [
+                    "*Users on this list or who have roles on this list will not have their birthdays celebrated no matter what. Edit this list with `{{REF:bot.prefix}} blacklist <{{REF:types.add}}/{{REF:types.remove}}> <User/Role>`!*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "Total Blacklisted Users/Roles: {{TOTAL_BLACKLIST}} • {{PER_PAGE}} per page",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            }
         }
     },
     "refs": {
@@ -199,6 +464,235 @@
         },
         "other": {
             "na": "N/A"
+        },
+        "defaults": {
+            "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
+            "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.year}} year(s) in the server {{REF:placeHolders.users}}!",
+            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeHolders.year}} year(s) old!",
+            "birthdayChannelName": "{{REF:emotes.birthdayEmote}} birthdays",
+            "birthdayChannelTopic": "Birthdays Announcements!",
+            "memberAnniversaryChannelName": "{{REF:emotes.party}} member anniversaries",
+            "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
+            "serverAnniversaryChannelName": "{{REF:emotes.party}} server anniversaries",
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
+        },
+        "BREAK": {
+            "BELLOW HERE WILL ALL BE MOVED TO GOL WHEN LINGUINI IS UPDATED": "----------------------------------------------------------------------------------------------------------------------------------"
+        },
+        "placeHolders": {
+            "users": "%Users%",
+            "usersRegex": "/@users?|<users?>|{users?}|%users?%/gi",
+            "year": "%Year%",
+            "yearRegex": "/@year?|<year?>|{year?}|%year?%/gi",
+            "server": "%Server%",
+            "serverRegex": "/@server?|<server?>|{server?}|%server?%/gi"
+        },
+        "permissions": {
+            "manageRoles": "Manage Roles",
+            "manageChannels": "Manage Channels"
+        },
+        "boolean": {
+            "yes": "Yes",
+            "no": "No",
+            "true": "True",
+            "false": "False"
+        },
+        "months": {
+            "jan": "January",
+            "feb": "February",
+            "mar": "March",
+            "apr": "April",
+            "may": "May",
+            "jun": "June",
+            "jul": "July",
+            "aug": "August",
+            "sep": "September",
+            "oct": "October",
+            "nov": "November",
+            "dec": "December",
+            "invalid": "Invalid Month"
+        },
+        "list": {
+            "birthdayMessagesTitle": "{{REF:terms.birthdayMessages}} | {{REF:list.pageTitle}}",
+            "userBirthdayMessagesTitle": "{{REF:terms.userBirthdayMessages}} | {{REF:list.pageTitle}}",
+            "userMemberAnniversaryMessagesTitle": "{{REF:terms.userMemberAnniversaryMessages}} | {{REF:list.pageTitle}}",
+            "memberAnniversaryMessagesTitle": "{{REF:terms.memberAnniversaryMessages}} | {{REF:list.pageTitle}}",
+            "serverAnniversaryMessagesTitle": "{{REF:terms.serverAnniversaryMessages}} {{REF:terms.messages}} | {{REF:list.pageTitle}}",
+            "trustedRolesTitle": "{{REF:terms.trustedRoles}} | {{REF:list.pageTitle}}",
+            "memberAnniversaryRolesTitle": "{{REF:terms.memberAnniversaryRoles}} | {{REF:list.pageTitle}}",
+            "messagesFooter": "Total Message: {{TOTAL_MESSAGES}} • {{PER_PAGE}} per page",
+            "rolesFooter": "Total Roles: {{TOTAL_ROLES}} • {{PER_PAGE}} per page",
+            "pageTitle": "Page {{PAGE}}/{{TOTAL_PAGES}}",
+            "noTrustedRoles": "**No Trusted Roles!**",
+            "noMemberAnniversaryRoles": "**No MemberAnniversary Roles!**",
+            "noBirthdays": "**No Birthdays in this server!**",
+            "noMemberAnniversaries": "**No Member Anniversaries in this server!**",
+            "emptyBlacklist": "**The Birthday Blacklist is empty!**",
+            "noCustomBirthdayMessages": "**No Custom Birthday Messages!**",
+            "noCustomUserSpecificBirthdayMessages": "**No User-Specific Birthday Messages!**",
+            "noCustomUserSpecificMemberAnnivesaryMessages": "**No User-Specific Member Anniversary Messages!**",
+            "noCustomMemberAnniversaryMessages": "**No Custom Member Anniversary Messages!**",
+            "noCustomServerAnniversaryMessages": "**No Custom Server Anniversary Messages!**",
+            "messagePaidFieldTitle": "Message Limit",
+            "birthdayMessageFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom birthday messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
+            "memberAnniversaryMessageFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom member anniversary messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
+            "serverAnniversaryMessageFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** custom server anniversary messages. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
+            "userSpecificMessageFieldTitle": "Locked Feature",
+            "userSpecificMessageFieldText": "User-specific messages are a premium only feature. Unlock them with `{{REF:bot.prefix}} premium`!",
+            "trustedRoleFieldTitle": "Trusted Role Limit",
+            "trustedRoleFieldText": "The free version of {{REF:bot.name}} can only have up to **{{MAX_FREE}}** trusted roles. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!",
+            "memberAnniversaryRoleFieldTitle": "Member Anniversary Roles Unavailable",
+            "memberAnniversaryRoleFieldText": "Member anniversary roles are a premium feature **only**. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!"
+        },
+        "types": {
+            "birthday": "birthday",
+            "memberAnniversary": "memberAnniversary",
+            "serverAnniversary": "serverAnniversary",
+            "userSpecificBirthday": "userSpecificBirthday",
+            "userSpecificMemberAnniversary": "userSpecificMemberAnniversary",
+            "channel": "channel",
+            "birthdayRole": "role",
+            "birthdayMasterRole": "birthdayMasterRole",
+            "nameFormat": "nameFormat",
+            "timezone": "timezone",
+            "useTimezone": "useTimezone",
+            "trustedPreventsRole": "trustedPreventsRole",
+            "trustedPreventsMessage": "trustedPreventsMessage",
+            "requireAllTrustedRoles": "requireAllTrustedRoles",
+            "dateFormat": "dateFormat",
+            "alternatives": {
+                "birthday": ["birthdays"],
+                "memberAnniversary": ["member"],
+                "serverAnniversary": ["server"],
+                "userSpecificBirthday": ["specificBirthday", "userBirthday"],
+                "userSpecificMemberAnniversary": ["specificAnniversary", "userAnniversary"]
+            },
+            "monthDay": "month/day",
+            "dayMonth": "day/month",
+            "mention": "mention",
+            "nickname": "nickname",
+            "username": "username",
+            "tag": "tag",
+            "default": "default",
+            "add": "add",
+            "remove": "remove",
+            "clear": "clear",
+            "list": "list",
+            "time": "time",
+            "useEmbed": "useEmbed",
+            "embed": "embed",
+            "color": "color",
+            "help": "help",
+            "setup": "setup",
+            "trusted": "trusted",
+            "anniversary": "anniversary",
+            "message": "message",
+            "blacklist": "blacklist",
+            "advanced": "advanced",
+            "premium": "premium",
+            "test": "test",
+            "create": "create",
+            "user": "user",
+            "update": "update",
+            "server": "server",
+            "claim": "claim",
+            "role": "role"
+        },
+        "terms": {
+            "timeZone": "Time Zone",
+            "birthday": "Birthday",
+            "birthdays": "Birthdays",
+            "user": "User",
+            "users": "Users",
+            "list": "List",
+            "total": "Total",
+            "messages": "Messages",
+            "message": "Message",
+            "general": "General",
+            "advanced": "Advanced",
+            "memberAnniversary": "Member Anniversary",
+            "serverAnniversary": "Server Anniversary",
+            "blacklist": "Blacklist",
+            "blacklisted": "Blacklisted",
+            "correctlySet": "Correctly Set",
+            "notSet": "Not Set",
+            "notSetOrIncorrect": "Not Set (or Incorrectly Set)",
+            "memberInBlacklist": "Member In Birthday Blacklist",
+            "inBlacklist": "In Blacklist",
+            "notInBlacklist": "Not In Blacklist",
+            "trustedPreventMsg": "Trusted Prevented Message",
+            "trustedPreventRole": "Trusted Prevented Role",
+            "didPreventMsg": "Didn't Prevent Message",
+            "didntPreventMsg": "Prevented Message",
+            "didPreventRole": "Didn't Prevent Role",
+            "didntPreventRole": "Prevented Role",
+            "canBeGiven": "Can be given",
+            "cantBeGivenPermIssue": "Can't be given (Permission Issue)",
+            "unknownMember": "Unknown Member",
+            "unknownTarget": "Unknown Target",
+            "unknownChannel": "Unknown Channel",
+            "unknownRole": "Unknown Role",
+            "hasBirthdaySet": "User Has Their Birthday Set",
+            "none": "None",
+            "and": "and",
+            "deletedRole": "Deleted Role",
+            "deletedChannel": "Deleted Channel",
+            "birthdayList": "Birthday List",
+            "memberAnniversaryList": "Member Anniversary List",
+            "birthdayMessages": "Birthday Messages",
+            "userBirthdayMessages": "User-Specific Birthday Messages",
+            "userMemberAnniversaryMessages": "User-Specific Member Anniversary Messages",
+            "serverAnniversaryMessages": "Server Anniversary Messages",
+            "memberAnniversaryMessages": "Member Anniversary Messages",
+            "birthdayMessage": "Birthday Message",
+            "userBirthdayMessage": "User-Specific Birthday Message",
+            "userMemberAnniversaryMessage": "User-Specific Member Anniversary Message",
+            "serverAnniversaryMessage": "Server Anniversary Message",
+            "memberAnniversaryMessage": "Member Anniversary Message",
+            "trustedRoles": "Trusted Roles",
+            "memberAnniversaryRoles": "Member Anniversary Roles",
+            "blacklistList": "Blacklist List",
+            "birthdayChannelTitle": "{{REF:emotes.birthdayEmote}} birthdays",
+            "birthdayChannelTopic": "Birthday Announcements!",
+            "memberAnniversaryChannelTitle": "{{REF:emotes.party}} member anniversaries",
+            "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
+            "serverAnniversaryChannelTitle": "{{REF:emotes.party}} server anniversaries",
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
+            "premiumRequired": "Premium Required!",
+            "active": "Active",
+            "notActive": "Not Active",
+            "amTime": "AM",
+            "pmTime": "PM",
+            "noOne": "no one",
+            "color": "Color",
+            "embedded": "Embedded",
+            "na": "N/A",
+            "change": "Change",
+            "suggest": "Suggest",
+            "server": "Server",
+            "birthdayChannel": "Birthday Channel",
+            "birthdayRole": "Birthday Role",
+            "birthdayMasterRole": "Birthday Master Role",
+            "trustedPreventsRole": "Trusted Prevents Role",
+            "trustedPreventsMessage": "Trusted Prevents Message",
+            "requireAllTrustedRoles": "Require All Trusted Roles",
+            "defaultTimezone": "Default Timezone",
+            "numberOfTrustedRoles": "Number Of Trusted Roles",
+            "useTimezone": "Use Timezone",
+            "nameFormat": "Name Format",
+            "dateFormat": "Date Format",
+            "memberAnniversaryChannel": "Member Anniversary Channel",
+            "serverAnniversaryChannel": "Server Anniversary Channel",
+            "birthdayMessageTime": "Birthday Message Time",
+            "memberAnniversaryMessageTime": "Member Anniversary Time",
+            "serverAnniversaryMessageTime": "Server Anniversary Time",
+            "birthdayMention": "Birthday  Mention Setting",
+            "memberAnniversaryMention": "Member Anniversary Mention Setting",
+            "serverAnniversaryMention": "Server Anniversary Mention Setting",
+            "serverLanguage": "Server Language",
+            "never": "Never",
+            "mmdd": "MM/DD",
+            "ddmm": "DD/MM"
         }
     }
 }

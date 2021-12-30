@@ -1,9 +1,9 @@
 import { Client, NewsChannel } from 'discord.js';
 import { DiscordAPIError, Guild, GuildMember, TextChannel, User } from 'discord.js';
-
 import { PermissionUtils, RegexUtils } from '.';
-import { LangCode } from '../models/enums';
+
 import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 
 const FETCH_MEMBER_LIMIT = 20;
 
@@ -66,8 +66,7 @@ export class ClientUtils {
         return (await guild.channels.fetch()).find(
             channel =>
                 (channel instanceof TextChannel || channel instanceof NewsChannel) &&
-                PermissionUtils.canSendEmbed(channel) &&
-                Lang.getRegex('channelRegexes.bot', langCode).test(channel.name)
+                PermissionUtils.canSendEmbed(channel)
         ) as TextChannel | NewsChannel;
     }
 }
