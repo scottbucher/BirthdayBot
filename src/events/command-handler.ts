@@ -43,7 +43,7 @@ export class CommandHandler implements EventHandler {
             intr.guild
                 ? await this.subService.getSubscription(PlanName.premium1, intr.guild?.id)
                 : undefined,
-            await await this.userRepo.getUserVote(intr.user.id)
+            await this.userRepo.getUserVote(intr.user.id)
         );
 
         // Check if I have permission to send a message
