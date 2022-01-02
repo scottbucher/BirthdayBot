@@ -1,10 +1,12 @@
 import { CommandInteraction, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
 import { CommandUtils, MessageUtils, PermissionUtils } from '../utils';
-import { Lang, Logger } from '../services';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { Lang, Logger, SubscriptionService } from '../services';
 
 import { Command } from '../commands';
 import { EventData } from '../models/internal-models';
 import { EventHandler } from '.';
+import { PlanName } from '../models';
 import { RateLimiter } from 'discord.js-rate-limiter';
 
 let Config = require('../../config/config.json');
@@ -16,7 +18,12 @@ export class CommandHandler implements EventHandler {
         Config.rateLimiting.commands.interval * 1000
     );
 
-    constructor(public commands: Command[]) {}
+    constructor(
+        public commands: Command[],
+        public subService: SubscriptionService,
+        public guildRepo: GuildRepo,
+        public userRepo: UserRepo
+    ) {}
 
     public async process(intr: CommandInteraction): Promise<void> {
         // Check if user is rate limited
@@ -30,7 +37,14 @@ export class CommandHandler implements EventHandler {
         await intr.deferReply();
 
         // TODO: Get data from database
-        let data = new EventData();
+        // Get data from database
+        let data = new EventData(
+            intr.guild ? await this.guildRepo.getGuild(intr.guild?.id) : undefined,
+            intr.guild
+                ? await this.subService.getSubscription(PlanName.premium1, intr.guild?.id)
+                : undefined,
+            await await this.userRepo.getUserVote(intr.user.id)
+        );
 
         // Check if I have permission to send a message
         if (!PermissionUtils.canSendEmbed(intr.channel)) {
