@@ -66,6 +66,10 @@
                 },
                 "timestamp": true,
                 "color": "{{REF:colors.error}}"
+            },
+            "birthdayNotSet": {
+                "description": "Your birthday isn't set!",
+                "color": "{{REF:colors.error}}"
             }
         }
     },
@@ -79,8 +83,7 @@
             "na": "N/A"
         },
         "links": {
-         
-            "voteImage": "https://i.imgur.com/wak8g4V.png"   
+            "voteImage": "https://i.imgur.com/wak8g4V.png"
         }
     }
 }

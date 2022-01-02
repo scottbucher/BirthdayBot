@@ -19,6 +19,22 @@
                     }
                 ]
             }
+        },
+        "birthdayConfirmPurge": {
+            "title": "Clear User Data",
+            "description": "This command will remove both your time zone and your birthday from the database. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
+            "fields": [
+                {
+                    "name": "Actions",
+                    "value": ["{{REF:emotes.confirm}} Confirm", "{{REF:emotes.deny}} Cancel"]
+                }
+            ],
+            "footer": {
+                "text": "{{REF:footers.expire}}",
+                "icon": "{{ICON}}"
+            },
+            "color": "{{REF:colors.warn}}",
+            "timestamp": true
         }
     },
     "refs": {

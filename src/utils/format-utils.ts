@@ -1,11 +1,8 @@
-import { Blacklisted, CustomMessages, GuildData, UserDataResults } from '../models/database';
-import { CelebrationUtils, GuildUtils, ParseUtils } from '.';
-import { Guild, GuildMember, Message, MessageEmbed, Role, User } from 'discord.js';
+import { Guild, Message, Role, User } from 'discord.js';
+import { GuildUtils, ParseUtils } from '.';
 
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
-import { TrustedRoles } from '../models/database/trusted-role-models';
 import moment from 'moment';
 
 let Config = require('../../config/config.json');
