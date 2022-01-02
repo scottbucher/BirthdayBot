@@ -1,10 +1,17 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import {
+    ApplicationCommandData,
+    CommandInteraction,
+    DMChannel,
+    PermissionString,
+} from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { MessageUtils } from '../utils';
+import { UserRepo } from '../services/database/repos';
+import moment from 'moment';
 
 export class ViewCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -26,10 +33,6 @@ export class ViewCommand implements Command {
                         name: 'memberAnniversary',
                         value: 'MEMBER_ANNIVERSARY',
                     },
-                    {
-                        name: 'serverAnniversary',
-                        value: 'SERVER_ANNIVERSARY',
-                    },
                 ],
             },
             {
@@ -48,7 +51,72 @@ export class ViewCommand implements Command {
     public requireVote = false;
     public requirePremium = false;
 
+    constructor(private userRepo: UserRepo) {}
+
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        // yeet
+        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
+        let target = intr.options.getUser(Lang.getCom('arguments.user')) ?? intr.user;
+
+        if (target !== intr.user && intr.channel instanceof DMChannel) {
+            MessageUtils.sendIntr(
+                intr,
+                Lang.getEmbed('validation', 'embeds.viewUserInDm', data.lang())
+            );
+            return;
+        }
+
+        switch (type) {
+            case 'BIRTHDAY':
+                let userData = await this.userRepo.getUser(target.id);
+
+                if (!userData || !userData.Birthday || !userData.TimeZone) {
+                    target === intr.user
+                        ? await MessageUtils.sendIntr(
+                              intr,
+                              Lang.getEmbed('validation', 'embeds.birthdayNotSet', data.lang())
+                          )
+                        : await MessageUtils.sendIntr(
+                              intr,
+                              Lang.getEmbed(
+                                  'validation',
+                                  'embeds.userBirthdayNotSet',
+                                  data.lang(),
+                                  {
+                                      USER: target.toString(),
+                                  }
+                              )
+                          );
+                    return;
+                }
+
+                await MessageUtils.sendIntr(
+                    intr,
+                    Lang.getEmbed('results', 'embeds.viewBirthday', data.lang(), {
+                        USER: target.toString(),
+                        BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
+                        TIMEZONE: userData.TimeZone,
+                    })
+                );
+                break;
+            case 'MEMBER_ANNIVERSARY':
+                if (intr.channel instanceof DMChannel) {
+                    await MessageUtils.sendIntr(
+                        intr,
+                        Lang.getEmbed('validation', 'embeds.memberAnniversaryInDM', data.lang())
+                    );
+                    return;
+                }
+                let guildMember = intr.guild.members.resolve(target.id);
+                let memberAnniversary = moment(guildMember.joinedAt).format('MMMM Do');
+
+                await MessageUtils.sendIntr(
+                    intr,
+                    Lang.getEmbed('results', 'embeds.viewMemberAnniversary', data.lang(), {
+                        USER: target.toString(),
+                        DATE: memberAnniversary,
+                    })
+                );
+                break;
+        }
     }
 }

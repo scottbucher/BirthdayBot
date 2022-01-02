@@ -94,7 +94,7 @@ async function start(): Promise<void> {
         new SetAttemptsCommand(),
         new ListCommand(),
         new NextCommand(),
-        new ViewCommand(),
+        new ViewCommand(userRepo),
         new SetCommand(),
         new MapCommand(),
         new PurgeCommand(userRepo),

@@ -70,6 +70,18 @@
             "birthdayNotSet": {
                 "description": "Your birthday isn't set!",
                 "color": "{{COM:colors.error}}"
+            },
+            "userBirthdayNotSet": {
+                "description": "{{USER}} hasn't set their birthday!",
+                "color": "{{COM:colors.error}}"
+            },
+            "viewUserInDm": {
+                "description": "You cannot request another user's information in a DM!",
+                "color": "{{COM:colors.error}}"
+            },
+            "memberAnniversaryInDM": {
+                "description": "You cannot view member anniversaries in a DM!",
+                "color": "{{COM:colors.error}}"
             }
         }
     },

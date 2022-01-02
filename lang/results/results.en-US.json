@@ -30,6 +30,14 @@
             "purgeSuccessful": {
                 "description": "Successfully purged your data from the database.",
                 "color": "{{COM:colors.success}}"
+            },
+            "viewBirthday": {
+                "description": "{{USER}}'s birthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!",
+                "color": "{{COM:colors.default}}"
+            },
+            "viewMemberAnniversary": {
+                "description": "{{USER}}'s member anniversary is on **{{DATE}}**!",
+                "color": "{{COM:colors.default}}"
             }
         }
     },
