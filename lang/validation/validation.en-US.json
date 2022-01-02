@@ -24,7 +24,7 @@
             "setupRequired": {
                 "title": "Setup Required!",
                 "description": "Please run basic setup with `/setup` before using that command!",
-                "color": "{{REF:colors.error}}"
+                "color": "{{COM:colors.error}}"
             },
             "premiumRequired": {
                 "title": "Premium Required!",
@@ -65,11 +65,11 @@
                     "icon": "{{ICON}}"
                 },
                 "timestamp": true,
-                "color": "{{REF:colors.error}}"
+                "color": "{{COM:colors.error}}"
             },
             "birthdayNotSet": {
                 "description": "Your birthday isn't set!",
-                "color": "{{REF:colors.error}}"
+                "color": "{{COM:colors.error}}"
             }
         }
     },

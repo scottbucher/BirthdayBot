@@ -24,12 +24,12 @@
                 "color": "{{COM:colors.warning}}"
             },
             "actionCanceled": {
-                "description": "{{REF:emotes.deny}} Action canceled.",
-                "color": "{{REF:colors.error}}"
+                "description": "{{COM:emotes.deny}} Action canceled.",
+                "color": "{{COM:colors.error}}"
             },
             "purgeSuccessful": {
                 "description": "Successfully purged your data from the database.",
-                "color": "{{REF:colors.success}}"
+                "color": "{{COM:colors.success}}"
             }
         }
     },

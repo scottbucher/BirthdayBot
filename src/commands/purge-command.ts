@@ -49,7 +49,7 @@ export class PurgeCommand implements Command {
         let expireFunction: ExpireFunction = async () => {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'results.promptExpired', data.lang())
+                Lang.getEmbed('validation', 'embeds.promptExpired', data.lang())
             );
         };
 
@@ -57,7 +57,7 @@ export class PurgeCommand implements Command {
             // Are they in the database?
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'embed.birthdayNotSet', data.lang())
+                Lang.getEmbed('validation', 'embeds.birthdayNotSet', data.lang())
             );
             return;
         }
@@ -66,7 +66,7 @@ export class PurgeCommand implements Command {
 
         let confirmationMessage = await MessageUtils.sendIntr(
             intr,
-            Lang.getEmbed('prompts', 'embeds.birthdayConfirmPurge', LangCode.EN_US, {
+            Lang.getEmbed('prompts', 'embeds.birthdayConfirmPurge', data.lang(), {
                 ICON: intr.user.displayAvatarURL(),
             })
         ); // Send confirmation and emotes
@@ -98,13 +98,13 @@ export class PurgeCommand implements Command {
 
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('results', 'embeds.purgeSuccessful', LangCode.EN_US)
+                Lang.getEmbed('results', 'embeds.purgeSuccessful', data.lang())
             );
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('results', 'embeds.actionCanceled', LangCode.EN_US)
+                Lang.getEmbed('results', 'embeds.actionCanceled', data.lang())
             );
         }
     }
