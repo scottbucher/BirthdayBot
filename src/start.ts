@@ -38,7 +38,7 @@ import {
     ReactionHandler,
     TriggerHandler,
 } from './events';
-import { HttpService, JobService, Logger } from './services';
+import { HttpService, JobService, Logger, SubscriptionService } from './services';
 
 import { Bot } from './bot';
 import { CustomClient } from './extensions';
@@ -67,6 +67,7 @@ async function start(): Promise<void> {
 
     let dataAccess = new DataAccess(Config.mysql);
     let httpService = new HttpService();
+    let subService = new SubscriptionService(httpService);
 
     // Repos
     let guildRepo = new GuildRepo(dataAccess);
@@ -114,7 +115,7 @@ async function start(): Promise<void> {
     // Event handlers
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
-    let commandHandler = new CommandHandler(commands);
+    let commandHandler = new CommandHandler(commands, subService, guildRepo, userRepo);
     let triggerHandler = new TriggerHandler(triggers);
     let messageHandler = new MessageHandler(triggerHandler);
     let reactionHandler = new ReactionHandler(reactions);
