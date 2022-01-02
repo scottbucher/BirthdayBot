@@ -40,10 +40,10 @@ export class CommandHandler implements EventHandler {
         // Get data from database
         let data = new EventData(
             intr.guild ? await this.guildRepo.getGuild(intr.guild?.id) : undefined,
-            intr.guild
+            intr.guild && Config.payments.enabled
                 ? await this.subService.getSubscription(PlanName.premium1, intr.guild?.id)
                 : undefined,
-            await this.userRepo.getUserVote(intr.user.id)
+            Config.payments.enabled ? await this.userRepo.getUserVote(intr.user.id) : undefined
         );
 
         // Check if I have permission to send a message
