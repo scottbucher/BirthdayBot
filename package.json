@@ -42,6 +42,7 @@
         "pino": "7.6.2",
         "pino-pretty": "7.3.0",
         "pm2": "^5.1.2",
+        "process-warning": "^1.0.0",
         "reflect-metadata": "^0.1.13",
         "remove-markdown": "0.3.0"
     },
