@@ -16,10 +16,8 @@ import {
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { LangCode } from '../models/enums';
 import { MessageUtils } from '../utils';
 import { UserRepo } from '../services/database/repos';
-import { channel } from 'diagnostics_channel';
 
 let Config = require('../../config/config.json');
 
@@ -34,7 +32,12 @@ export class PurgeCommand implements Command {
     };
     public requireDev = false;
     public requireGuild = false;
-    public requireClientPerms: PermissionString[] = [];
+    public requireClientPerms: PermissionString[] = [
+        'ADD_REACTIONS',
+        'VIEW_CHANNEL',
+        'MANAGE_MESSAGES',
+        'READ_MESSAGE_HISTORY',
+    ];
     public requireUserPerms: PermissionString[] = [];
     public requireSetup = false;
     public requireVote = false;
