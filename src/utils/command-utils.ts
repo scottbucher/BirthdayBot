@@ -37,7 +37,7 @@ export class CommandUtils {
         ) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validationEmbeds.missingClientPerms', data.lang(), {
+                Lang.getEmbed('validation', 'embeds.missingClientPerms', data.lang(), {
                     PERMISSIONS: command.requireClientPerms
                         .map(perm => `**${Permission.Data[perm].displayName(data.lang())}**`)
                         .join(', '),
