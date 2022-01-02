@@ -81,9 +81,12 @@ export class TrustedRoleCommand implements Command {
         ],
     };
     public requireDev = false;
-    public requireGuild = false;
+    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
+    public requireSetup = true;
+    public requireVote = false;
+    public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         // Yeet

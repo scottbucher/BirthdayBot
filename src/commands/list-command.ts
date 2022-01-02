@@ -24,9 +24,12 @@ export class ListCommand implements Command {
         ],
     };
     public requireDev = false;
-    public requireGuild = false;
+    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
+    public requireSetup = false;
+    public requireVote = true;
+    public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         // yeet

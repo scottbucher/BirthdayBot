@@ -79,9 +79,12 @@ export class BlacklistCommand implements Command {
         ],
     };
     public requireDev = false;
-    public requireGuild = false;
+    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
+    public requireSetup = true;
+    public requireVote = false;
+    public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         // await MessageUtils.sendIntr(intr, Lang.getEmbed('embeds.help', data.lang()));
