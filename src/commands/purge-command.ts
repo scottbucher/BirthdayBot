@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, Message } from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, Message, PermissionString } from 'discord.js';
 import { ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
 
 import { Command } from './command';
@@ -19,7 +19,8 @@ export class PurgeCommand implements Command {
     public requireVote = false;
     public requirePremium = false;
     public getPremium = false;
-    public requirePerms = [];
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
 
     constructor(private userRepo: UserRepo) {}
 
