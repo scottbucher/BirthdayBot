@@ -3,7 +3,7 @@ import { GuildUtils, ParseUtils } from '.';
 
 import { Lang } from '../services';
 import { LangCode } from '../models/enums';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 let Config = require('../../config/config.json');
 let Abbreviations = require('../../config/abbreviations.json');
