@@ -46,15 +46,6 @@ export class CommandHandler implements EventHandler {
             Config.payments.enabled ? await this.userRepo.getUserVote(intr.user.id) : undefined
         );
 
-        // Check if I have permission to send a message
-        if (!PermissionUtils.canSendEmbed(intr.channel)) {
-            await MessageUtils.sendIntr(
-                intr,
-                Lang.getRef('errors', 'embeds.missingEmbedPerms', data.lang())
-            );
-            return;
-        }
-
         // Try to find the command the user wants
         let command = this.commands.find(command => command.metadata.name === intr.commandName);
         if (!command) {
