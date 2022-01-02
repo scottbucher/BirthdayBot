@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { Command } from './command';
@@ -41,7 +41,7 @@ export class TestCommand implements Command {
     };
     public requireDev = false;
     public requireGuild = false;
-    public requireUserPerms = [];
+    public requireUserPerms: PermissionString[] = [];
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         // yeet

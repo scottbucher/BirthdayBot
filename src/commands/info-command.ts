@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
@@ -12,7 +12,7 @@ export class InfoCommand implements Command {
     };
     public requireDev = false;
     public requireGuild = false;
-    public requireUserPerms = [];
+    public requireUserPerms: PermissionString[] = [];
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         // await MessageUtils.sendIntr(intr, Lang.getEmbed('embeds.help', data.lang()));
