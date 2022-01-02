@@ -34,8 +34,10 @@ export class CommandHandler implements EventHandler {
 
         // Check if I have permission to send a message
         if (!PermissionUtils.canSendEmbed(intr.channel)) {
-            let message = Lang.getRef('errors', 'embeds.missingEmbedPerms', data.lang());
-            await MessageUtils.sendIntr(intr, message);
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getRef('errors', 'embeds.missingEmbedPerms', data.lang())
+            );
             return;
         }
 
@@ -73,8 +75,8 @@ export class CommandHandler implements EventHandler {
                           .replaceAll('{USER_ID}', intr.user.id)
                           .replaceAll('{CHANNEL_NAME}', intr.channel.name)
                           .replaceAll('{CHANNEL_ID}', intr.channel.id)
-                          .replaceAll('{GUILD_NAME}', intr.guild.name)
-                          .replaceAll('{GUILD_ID}', intr.guild.id)
+                          .replaceAll('{GUILD_NAME}', intr.guild?.name)
+                          .replaceAll('{GUILD_ID}', intr.guild?.id)
                     : Logs.error.commandOther
                           .replaceAll('{INTERACTION_ID}', intr.id)
                           .replaceAll('{COMMAND_NAME}', command.metadata.name)
