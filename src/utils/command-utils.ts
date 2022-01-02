@@ -58,7 +58,7 @@ export class CommandUtils {
         }
 
         // Check if member has required permissions for command
-        if (!member.permissions.has(command.requirePerms)) {
+        if (!member.permissions.has(command.requireUserPerms)) {
             return false;
         }
 
