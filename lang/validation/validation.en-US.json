@@ -20,6 +20,52 @@
                     "Required permissions: {{PERMISSIONS}}"
                 ],
                 "color": "{{COM:colors.warning}}"
+            },
+            "setupRequired": {
+                "title": "Setup Required!",
+                "description": "Please run basic setup with `/setup` before using that command!",
+                "color": "{{REF:colors.error}}"
+            },
+            "premiumRequired": {
+                "title": "Premium Required!",
+                "description": ["This command requires this server to have premium!"],
+                "fields": [
+                    {
+                        "name": "Premium Commands",
+                        "value": [
+                            "Subscribe to **{{REF:bot.name}} Premium** for access to our premium features!",
+                            "See `/premium` for more information."
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.whyPremium}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "voteRequired": {
+                "title": "Vote Required!",
+                "thumbnail": "{{REF:links.voteImage}}",
+                "description": ["This command requires you to have voted in the past 24 hours!"],
+                "fields": [
+                    {
+                        "name": "Last Vote",
+                        "value": ["{{LAST_VOTE}}"],
+                        "inline": true
+                    },
+                    {
+                        "name": "Vote Here",
+                        "value": ["[Top.gg]({{REF:links.vote}})"],
+                        "inline": true
+                    }
+                ],
+                "footer": {
+                    "text": "Don't want to vote? Disable voting for the whole server with {{REF:bot.name}} Premium!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{REF:colors.error}}"
             }
         }
     },
@@ -31,6 +77,10 @@
         },
         "other": {
             "na": "N/A"
+        },
+        "links": {
+         
+            "voteImage": "https://i.imgur.com/wak8g4V.png"   
         }
     }
 }

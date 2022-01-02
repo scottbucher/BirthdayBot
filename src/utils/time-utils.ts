@@ -10,6 +10,10 @@ export class TimeUtils {
         return await setTimeoutAsync(ms);
     }
 
+    public static now(): Moment {
+        return moment.utc();
+    }
+
     public static getMoment(time: Date | string): Moment {
         if (!time) {
             return;
