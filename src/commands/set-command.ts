@@ -79,19 +79,8 @@ export class SetCommand implements Command {
         let dm = intr.channel instanceof DMChannel;
         let guildData: GuildData;
 
-        let timeZone: string;
+        let timeZone = timezoneInput ? FormatUtils.findZone(timezoneInput) : undefined;
         let suggest = intr.user !== target;
-
-        if (timezoneInput) {
-            for (let i = 2; i < timezoneInput.length; i++) {
-                if (
-                    !FormatUtils.checkAbbreviation(timezoneInput[i]) &&
-                    !FormatUtils.checkIfMonth(timezoneInput[i])
-                )
-                    timeZone = FormatUtils.findZone(timezoneInput[i]);
-                if (timeZone) break;
-            }
-        }
 
         if (suggest) {
             if (dm) {
@@ -312,7 +301,8 @@ export class SetCommand implements Command {
         let confirmation: boolean = await collectReact(
             confirmationMessage,
             async (msgReaction: MessageReaction, reactor: User) => {
-                if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
+                if (!trueFalseOptions.includes(msgReaction.emoji.name) || reactor !== target)
+                    return;
                 return msgReaction.emoji.name === Config.emotes.confirm;
             }
         );
