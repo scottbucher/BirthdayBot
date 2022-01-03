@@ -8,7 +8,6 @@ import {
     RateLimitData,
     User,
 } from 'discord.js';
-
 import {
     CommandHandler,
     GuildJoinHandler,
@@ -17,6 +16,7 @@ import {
     ReactionHandler,
 } from './events';
 import { JobService, Logger } from './services';
+
 import { PartialUtils } from './utils';
 
 let Config = require('../config/config.json');

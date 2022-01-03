@@ -82,6 +82,48 @@
             "memberAnniversaryInDM": {
                 "description": "You cannot view member anniversaries in a DM!",
                 "color": "{{COM:colors.error}}"
+            },
+            "suggestBirthdayInDM": {
+                "description": "You can't set another person's birthday in a DM!",
+                "color": "{{COM:colors.error}}"
+            },
+            "cantSuggest": {
+                "description": "You don't have permission to suggest another user's birthday!",
+                "color": "{{COM:colors.error}}"
+            },
+            "cantSuggestForBot": {
+                "description": "You can't suggest a birthday for a bot!",
+                "color": "{{COM:colors.error}}"
+            },
+            "invalidTimezone": {
+                "title": "Time Zone Setup - {{TARGET}}",
+                "description": [
+                    "Invalid time zone!",
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            },
+            "invalidTimeZoneAbbreviation": {
+                "title": "Time Zone Setup - {{TARGET}}",
+                "description": [
+                    "Invalid time zone! Do not use timezone abbreviations!",
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            },
+            "invalidBirthday": {
+                "description": "Invalid birthday!",
+                "color": "{{COM:colors.error}}"
             }
         }
     },
@@ -96,6 +138,9 @@
         },
         "links": {
             "voteImage": "https://i.imgur.com/wak8g4V.png"
+        },
+        "footers": {
+            "tryAgain": "Please try again!"
         }
     }
 }

@@ -95,7 +95,7 @@ async function start(): Promise<void> {
         new ListCommand(),
         new NextCommand(),
         new ViewCommand(userRepo),
-        new SetCommand(),
+        new SetCommand(guildRepo, userRepo),
         new MapCommand(),
         new PurgeCommand(userRepo),
         new PremiumCommand(),

@@ -10,18 +10,18 @@
                         "value": ["**/{{COM:commands.help}}** - {{REF:commandDescs.help}}"]
                     },
                     {
-                        "name": "{{REF:fields.links}}",
+                        "name": "{{COM:fields.links}}",
                         "value": [
-                            "{{REF:links.docsEmbed}}",
-                            "{{REF:links.supportEmbed}}",
-                            "{{REF:links.inviteEmbed}}"
+                            "{{COM:links.docsEmbed}}",
+                            "{{COM:links.supportEmbed}}",
+                            "{{COM:links.inviteEmbed}}"
                         ]
                     }
                 ]
             },
             "birthdayConfirmPurge": {
                 "title": "Clear User Data",
-                "description": "This command will remove both your time zone and your birthday from the database. [(?)]({{REF:docLinks.whyDoesItNeedMyTimezone}})",
+                "description": "This command will remove both your time zone and your birthday from the database. [(?)]({{COM:docLinks.whyDoesItNeedMyTimezone}})",
                 "fields": [
                     {
                         "name": "Actions",
@@ -34,6 +34,72 @@
                 },
                 "color": "{{COM:colors.warn}}",
                 "timestamp": true
+            }
+        },
+        "settingBirthday": {
+            "defaultTimeZoneAvailable": {
+                "title": "Time Zone Setup - {{TARGET}}",
+                "description": [
+                    "This server has a default timezone of **{{SERVER_TIMEZONE}}**. Do you want to use the server's timezone?"
+                ],
+                "color": "{{COM:colors.success}}"
+            },
+            "defaultTimeZoneAvailableOverride": {
+                "title": "Time Zone Setup - {{TARGET}}",
+                "description": [
+                    "This server has a default timezone of **{{SERVER_TIMEZONE}}**. Do you want to use **{{INPUTTED_TIMEZONE}}** instead?",
+                    "",
+                    "Clicking {{COM:emotes.confirm}} will set your timezone to **{{INPUTTED_TIMEZONE}}**",
+                    "Clicking {{COM:emotes.deny}} will set your timezone **{{SERVER_TIMEZONE}}**"
+                ],
+                "color": "{{COM:colors.success}}"
+            },
+            "birthdaySetupTimeZone": {
+                "author": {
+                    "name": "{{TAG}}",
+                    "icon": "{{AUTHOR_ICON}}",
+                    "url": "{{COM:docLinks.setupBirthday}}"
+                },
+                "title": "Time Zone Setup - {{TARGET}}",
+                "description": [
+                    "First, please type/paste your time zone below. [(?)]({{COM:docLinks.whyDoesItNeedMyTimezone}})",
+                    "To find your time zone please use the [map time zone picker]({{COM:links.map}})!",
+                    "",
+                    "Simply click your location on the map and copy the name of the selected time zone.",
+                    "",
+                    "**Example Usage:** `America/New_York`",
+                    "",
+                    "**Important**: By submitting this information you agree it can be shown to anyone."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "birthdaySetupBirthday": {
+                "author": {
+                    "name": "{{TAG}}",
+                    "icon": "{{AUTHOR_ICON}}",
+                    "url": "{{COM:docLinks.setupBirthday}}"
+                },
+                "title": "Birthday Setup - {{TARGET}}",
+                "description": [
+                    "Please type your birth month and day below. [(?)]({{COM:docLinks.whyDoesItNeedOnlyMonthAndDate}})",
+                    "",
+                    "**Example Usage:** `{{DATE_EXAMPLE}}` ({{DATE_FORMAT}})",
+                    "",
+                    "**Important**: By submitting this information you agree it can be shown to anyone."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "confirmBirthday": {
+                "description": "{{TARGET}}, please confirm this information is correct: **{{BIRTHDAY}}, {{TIMEZONE}}**",
+                "color": "{{COM:colors.warn}}"
             }
         }
     },
