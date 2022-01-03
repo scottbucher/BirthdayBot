@@ -74,11 +74,11 @@ export class PurgeCommand implements Command {
             await MessageUtils.react(confirmationMessage, option);
         }
 
-        let confirmation: string = await collect(
+        let confirmation: boolean = await collect(
             confirmationMessage,
             async (msgReaction: MessageReaction, reactor: User) => {
                 if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
-                return msgReaction.emoji.name;
+                return msgReaction.emoji.name === Config.emotes.confirm;
             }
         );
 
@@ -86,7 +86,7 @@ export class PurgeCommand implements Command {
 
         if (confirmation === undefined) return;
 
-        if (confirmation === Config.emotes.confirm) {
+        if (confirmation) {
             // Confirm
             await this.userRepo.addOrUpdateUser(target.id, null, null, userData.ChangesLeft); // Add or update user
 
