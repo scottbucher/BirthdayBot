@@ -324,6 +324,7 @@ export class SetCommand implements Command {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('results', 'embeds.setBirthday', LangCode.EN_US, {
+                    USER: target.toString(),
                     BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                     TIMEZONE: timeZone,
                 })

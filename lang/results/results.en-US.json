@@ -41,7 +41,7 @@
             },
             "setBirthday": {
                 "description": [
-                    "Successfully set your birthday to **{{BIRTHDAY}}, {{TIMEZONE}}**",
+                    "Success! {{USER}}'s birthday has been set to **{{BIRTHDAY}}, {{TIMEZONE}}**",
                     "",
                     "**Important Note:** Birthdays are stored globally. This means your birthday is now set for all servers with Birthday Bot!"
                 ],
