@@ -86,6 +86,9 @@
         "channel": "channel",
         "role": "role"
     },
+    "keywords": {
+        "stop": "stop"
+    },
     "colors": {
         "default": "#4eefff",
         "success": "#1cfe86",

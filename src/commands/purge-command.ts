@@ -6,13 +6,9 @@ import {
     PermissionString,
     User,
 } from 'discord.js';
-import {
-    CollectOptions,
-    CollectorUtils,
-    ExpireFunction,
-    MessageFilter,
-} from 'discord.js-collector-utils';
+import { CollectOptions, ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
 
+import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
@@ -49,12 +45,6 @@ export class PurgeCommand implements Command {
         let target = intr.user;
         let userData = await this.userRepo.getUser(target.id);
         let stopFilter: MessageFilter = (nextMsg: Message) => nextMsg.author.id === intr.user.id;
-        let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.sendIntr(
-                intr,
-                Lang.getEmbed('validation', 'embeds.promptExpired', data.lang())
-            );
-        };
 
         if (!userData || !(userData.Birthday && userData.TimeZone)) {
             // Are they in the database?
@@ -64,6 +54,13 @@ export class PurgeCommand implements Command {
             );
             return;
         }
+
+        let collect = CollectorUtils.createReactCollect(intr.user, async () => {
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getEmbed('validation', 'embeds.promptExpired', data.lang())
+            );
+        });
 
         let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
@@ -77,18 +74,12 @@ export class PurgeCommand implements Command {
             await MessageUtils.react(confirmationMessage, option);
         }
 
-        let confirmation: string = await CollectorUtils.collectByReaction(
+        let confirmation: string = await collect(
             confirmationMessage,
-            // Collect Filter
-            (msgReaction: MessageReaction, reactor: User) =>
-                reactor.id === target.id && trueFalseOptions.includes(msgReaction.emoji.name),
-            stopFilter,
-            // Retrieve Result
             async (msgReaction: MessageReaction, reactor: User) => {
+                if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
                 return msgReaction.emoji.name;
-            },
-            expireFunction,
-            COLLECT_OPTIONS
+            }
         );
 
         MessageUtils.delete(confirmationMessage);
