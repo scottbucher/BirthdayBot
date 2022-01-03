@@ -1,5 +1,9 @@
-import { DMChannel, GuildChannel, Permissions, TextBasedChannel } from 'discord.js';
+import { DMChannel, GuildChannel, GuildMember, Permissions, TextBasedChannel } from 'discord.js';
 
+import { Command } from 'pm2';
+import { GuildData } from '../models/database';
+
+let Config = require('../../config/config.json');
 export class PermissionUtils {
     public static canSend(channel: TextBasedChannel, embedLinks: boolean = false): boolean {
         if (channel instanceof DMChannel) {
@@ -92,5 +96,44 @@ export class PermissionUtils {
         } else {
             return false;
         }
+    }
+
+    public static hasPermission(member: GuildMember, guildData: GuildData): boolean {
+        // Developers, server owners, and members with "Manage Server" have permission for all commands
+        if (
+            member.guild.ownerId === member.id ||
+            member.permissions.has(Permissions.FLAGS.MANAGE_GUILD) ||
+            Config.support.owners.includes(member.id)
+        ) {
+            return true;
+        }
+
+        if (guildData) {
+            // Check if member has a required role
+            let memberRoles = member.roles.cache.map(role => role.id);
+            if (
+                guildData.BirthdayMasterRoleDiscordId &&
+                memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
+            ) {
+                return true;
+            }
+        }
+        return true;
+    }
+
+    public static hasSubCommandPermission(member: GuildMember, guildData: GuildData): boolean {
+        if (member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return true;
+
+        if (guildData) {
+            // Check if member has a required role
+            let memberRoles = member.roles.cache.map(role => role.id);
+            if (
+                guildData.BirthdayMasterRoleDiscordId &&
+                memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 }
