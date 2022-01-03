@@ -21,7 +21,7 @@
             },
             "promptExpired": {
                 "description": "This command has expired.",
-                "color": "{{COM:colors.warning}}"
+                "color": "{{COM:colors.warn}}"
             },
             "actionCanceled": {
                 "description": "{{COM:emotes.deny}} Action canceled.",

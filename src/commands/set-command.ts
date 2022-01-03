@@ -12,6 +12,7 @@ import {
 import { Chrono, ParsedComponents, ParsedResult, en } from 'chrono-node';
 import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import { GuildRepo, UserRepo } from '../services/database/repos';
+import { Lang, Logger } from '../services';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { CollectOptions } from 'discord.js-collector-utils';
@@ -19,7 +20,6 @@ import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { GuildData } from '../models/database';
-import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 import { channel } from 'diagnostics_channel';
 
@@ -121,18 +121,18 @@ export class SetCommand implements Command {
         if (!(channel instanceof DMChannel) && !guildData)
             guildData = await this.guildRepo.getGuild(intr.guild.id);
 
-        let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-            await MessageUtils.sendIntr(
-                intr,
-                Lang.getEmbed('validation', 'embeds.promptExpired', data.lang())
-            );
-        });
         // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
         if (
             guildData &&
             guildData?.DefaultTimezone !== '0' &&
             (!timeZone || timeZone !== guildData?.DefaultTimezone)
         ) {
+            let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
+                await MessageUtils.sendIntr(
+                    intr,
+                    Lang.getEmbed('results', 'embeds.promptExpired', data.lang())
+                );
+            });
             let confirmationMessage = await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed(
@@ -282,6 +282,13 @@ export class SetCommand implements Command {
 
         let confirmationEmbed: MessageEmbed;
 
+        let collectReact = CollectorUtils.createReactCollect(target, async () => {
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getEmbed('results', 'embeds.promptExpired', data.lang())
+            );
+        });
+
         confirmationEmbed = Lang.getEmbed(
             'prompts',
             'settingBirthday.confirmBirthday',
@@ -301,8 +308,7 @@ export class SetCommand implements Command {
         let confirmation: boolean = await collectReact(
             confirmationMessage,
             async (msgReaction: MessageReaction, reactor: User) => {
-                if (!trueFalseOptions.includes(msgReaction.emoji.name) || reactor !== target)
-                    return;
+                if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
                 return msgReaction.emoji.name === Config.emotes.confirm;
             }
         );
