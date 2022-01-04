@@ -76,7 +76,7 @@ export class Lang {
     private static errorEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
         return new MessageEmbed({
             description: jsonValue,
-            color: Lang.getCom('colors.default') as ColorResolvable,
+            color: Lang.getCom('colors.error') as ColorResolvable,
         });
     };
 
