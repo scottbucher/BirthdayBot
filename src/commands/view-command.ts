@@ -91,7 +91,7 @@ export class ViewCommand implements Command {
 
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('results', 'embeds.viewBirthday', data.lang(), {
+                    Lang.getEmbed('results', 'success.viewBirthday', data.lang(), {
                         USER: target.toString(),
                         BIRTHDAY: moment(userData.Birthday).format('MMMM Do'),
                         TIMEZONE: userData.TimeZone,
@@ -111,7 +111,7 @@ export class ViewCommand implements Command {
 
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('results', 'embeds.viewMemberAnniversary', data.lang(), {
+                    Lang.getEmbed('results', 'success.viewMemberAnniversary', data.lang(), {
                         USER: target.toString(),
                         DATE: memberAnniversary,
                     })

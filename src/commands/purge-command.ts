@@ -92,13 +92,13 @@ export class PurgeCommand implements Command {
 
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('results', 'embeds.purgeSuccessful', data.lang())
+                Lang.getEmbed('results', 'success.purgeSuccessful', data.lang())
             );
         } else if (confirmation === Config.emotes.deny) {
             // Cancel
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('results', 'embeds.actionCanceled', data.lang())
+                Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
         }
     }

@@ -1,35 +1,13 @@
 {
     "data": {
-        "embeds": {
-            "welcome": {
-                "title": "Thank you for using {{COM:bot.name}}!",
-                "description": ["{{REF:bot.description}}"],
-                "fields": [
-                    {
-                        "name": "Important {{REF:fields.commands}}",
-                        "value": ["**/{{COM:commands.help}}** - {{REF:commandDescs.help}}"]
-                    },
-                    {
-                        "name": "{{REF:fields.links}}",
-                        "value": [
-                            "{{REF:links.docsEmbed}}",
-                            "{{REF:links.supportEmbed}}",
-                            "{{REF:links.inviteEmbed}}"
-                        ]
-                    }
-                ]
-            },
-            "promptExpired": {
-                "description": "This command has expired.",
-                "color": "{{COM:colors.warn}}"
-            },
-            "actionCanceled": {
-                "description": "{{COM:emotes.deny}} Action canceled.",
-                "color": "{{COM:colors.error}}"
-            },
+        "success": {
             "purgeSuccessful": {
                 "description": "Successfully purged your data from the database.",
                 "color": "{{COM:colors.success}}"
+            },
+            "nextBirthday": {
+                "description": "{{USERS}}'s birthday is next on **{{BIRTHDAY}}**!",
+                "color": "{{COM:colors.warn}}"
             },
             "viewBirthday": {
                 "description": "{{USER}}'s birthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!",
@@ -46,6 +24,17 @@
                     "**Important Note:** Birthdays are stored globally. This means your birthday is now set for all servers with Birthday Bot!"
                 ],
                 "color": "{{COM:colors.success}}"
+            }
+
+        },
+        "fail": {
+            "promptExpired": {
+                "description": "This command has expired.",
+                "color": "{{COM:colors.warn}}"
+            },
+            "actionCanceled": {
+                "description": "{{COM:emotes.deny}} Action canceled.",
+                "color": "{{COM:colors.error}}"
             }
         }
     },

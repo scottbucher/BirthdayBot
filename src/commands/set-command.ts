@@ -130,7 +130,7 @@ export class SetCommand implements Command {
             let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('results', 'embeds.promptExpired', data.lang())
+                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                 );
             });
             let confirmationMessage = await MessageUtils.sendIntr(
@@ -285,7 +285,7 @@ export class SetCommand implements Command {
         let collectReact = CollectorUtils.createReactCollect(target, async () => {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('results', 'embeds.promptExpired', data.lang())
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
 
@@ -323,7 +323,7 @@ export class SetCommand implements Command {
 
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('results', 'embeds.setBirthday', LangCode.EN_US, {
+                Lang.getEmbed('results', 'success.setBirthday', LangCode.EN_US, {
                     USER: target.toString(),
                     BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                     TIMEZONE: timeZone,
@@ -334,7 +334,7 @@ export class SetCommand implements Command {
             // Cancel
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('results', 'embeds.actionCanceled', LangCode.EN_US)
+                Lang.getEmbed('results', 'fail.actionCanceled', LangCode.EN_US)
             );
             return;
         }
