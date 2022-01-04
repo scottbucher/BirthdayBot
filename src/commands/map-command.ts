@@ -12,7 +12,7 @@ export class MapCommand implements Command {
         description: 'View the timezone map.',
     };
     public requireDev = false;
-    public requireGuild = true;
+    public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireSetup = false;
