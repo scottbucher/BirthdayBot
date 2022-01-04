@@ -19,7 +19,6 @@ import { CollectOptions } from 'discord.js-collector-utils';
 import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
-import { GuildData } from '../models/database';
 import { LangCode } from '../models/enums';
 import { channel } from 'diagnostics_channel';
 
@@ -77,7 +76,6 @@ export class SetCommand implements Command {
         let timezoneInput = intr.options.getString(Lang.getCom('arguments.timezone'));
         let target = intr.options.getUser(Lang.getCom('arguments.user')) ?? intr.user;
         let dm = intr.channel instanceof DMChannel;
-        let guildData: GuildData;
 
         let timeZone = timezoneInput ? FormatUtils.findZone(timezoneInput) : undefined;
         let suggest = intr.user !== target;
@@ -99,12 +97,9 @@ export class SetCommand implements Command {
                 return;
             }
 
-            // Else we check if they have permission
-            guildData = await this.guildRepo.getGuild(intr.guild.id);
-
             if (
-                guildData &&
-                !PermissionUtils.hasPermission(intr.guild.members.resolve(intr.user.id), guildData)
+                data.guild &&
+                !PermissionUtils.hasPermission(intr.guild.members.resolve(intr.user.id), data.guild)
             ) {
                 await MessageUtils.sendIntr(
                     intr,
@@ -118,59 +113,57 @@ export class SetCommand implements Command {
 
         let changesLeft = userData ? userData?.ChangesLeft : 5;
 
-        if (!(channel instanceof DMChannel) && !guildData)
-            guildData = await this.guildRepo.getGuild(intr.guild.id);
-
-        // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
-        if (
-            guildData &&
-            guildData?.DefaultTimezone !== '0' &&
-            (!timeZone || timeZone !== guildData?.DefaultTimezone)
-        ) {
-            let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-                await MessageUtils.sendIntr(
+        if (!(channel instanceof DMChannel) && !data.guild)
+            if (
+                data.guild &&
+                data.guild?.DefaultTimezone !== '0' &&
+                (!timeZone || timeZone !== data.guild?.DefaultTimezone)
+            ) {
+                // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
+                let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
+                    await MessageUtils.sendIntr(
+                        intr,
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                    );
+                });
+                let confirmationMessage = await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                    Lang.getEmbed(
+                        'prompts',
+                        'settingBirthday.defaultTimeZoneAvailable' + (timeZone ? 'Override' : ''),
+                        LangCode.EN_US,
+                        {
+                            SERVER_TIMEZONE: data.guild.DefaultTimezone,
+                            INPUTTED_TIMEZONE: timeZone,
+                            TARGET: target.username,
+                        }
+                    )
                 );
-            });
-            let confirmationMessage = await MessageUtils.sendIntr(
-                intr,
-                Lang.getEmbed(
-                    'prompts',
-                    'settingBirthday.defaultTimeZoneAvailable' + (timeZone ? 'Override' : ''),
-                    LangCode.EN_US,
-                    {
-                        SERVER_TIMEZONE: guildData.DefaultTimezone,
-                        INPUTTED_TIMEZONE: timeZone,
-                        TARGET: target.username,
-                    }
-                )
-            );
-            // Send confirmation and emotes
-            for (let option of trueFalseOptions) {
-                await MessageUtils.react(confirmationMessage, option);
-            }
-
-            let confirmation: boolean = await collectReact(
-                confirmationMessage,
-                async (msgReaction: MessageReaction, reactor: User) => {
-                    if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
-                    return msgReaction.emoji.name === Config.emotes.confirm;
+                // Send confirmation and emotes
+                for (let option of trueFalseOptions) {
+                    await MessageUtils.react(confirmationMessage, option);
                 }
-            );
 
-            // MessageUtils.delete(confirmationMessage);
+                let confirmation: boolean = await collectReact(
+                    confirmationMessage,
+                    async (msgReaction: MessageReaction, reactor: User) => {
+                        if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
+                        return msgReaction.emoji.name === Config.emotes.confirm;
+                    }
+                );
 
-            if (confirmation === undefined) return;
+                // MessageUtils.delete(confirmationMessage);
 
-            if (confirmation) {
-                // Confirm
-                timeZone = timeZone ?? guildData.DefaultTimezone;
-            } else {
-                // deny
-                timeZone = timeZone ? guildData.DefaultTimezone : null;
+                if (confirmation === undefined) return;
+
+                if (confirmation) {
+                    // Confirm
+                    timeZone = timeZone ?? data.guild.DefaultTimezone;
+                } else {
+                    // deny
+                    timeZone = timeZone ? data.guild.DefaultTimezone : null;
+                }
             }
-        }
 
         let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
             await MessageUtils.sendIntr(
@@ -234,7 +227,11 @@ export class SetCommand implements Command {
             return;
         }
 
-        let littleEndian = !guildData ? false : guildData.DateFormat === 'month_day' ? false : true;
+        let littleEndian = !data.guild
+            ? false
+            : data.guild.DateFormat === 'month_day'
+            ? false
+            : true;
 
         let parser = new Chrono(en.createConfiguration(true, littleEndian));
         let birthday = birthdayInput
