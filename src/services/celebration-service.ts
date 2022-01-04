@@ -386,7 +386,11 @@ export class CelebrationService {
                                     guildData,
                                     memberAnniversaryMessages,
                                     'memberanniversary',
-                                    membersWhoNeedMessage,
+                                    membersWhoNeedMessage.filter(
+                                        member =>
+                                            CelebrationUtils.getMemberYears(member, guildData) ===
+                                            year
+                                    ),
                                     year,
                                     hasPremium
                                 );
