@@ -93,7 +93,7 @@ async function start(): Promise<void> {
         new SettingsCommand(),
         new SetAttemptsCommand(),
         new ListCommand(),
-        new NextCommand(),
+        new NextCommand(userRepo),
         new ViewCommand(userRepo),
         new SetCommand(guildRepo, userRepo),
         new MapCommand(),

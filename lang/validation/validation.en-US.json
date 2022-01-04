@@ -95,6 +95,7 @@
             "invalidBirthday": "Invalid birthday!",
             "noBirthdaysInServer": "No one has set their birthday in this server! :(",
             "noUpcomingBirthdays": "There are no upcoming birthdays!",
+            "noUpcomingMemberAnniversaries": "There are no upcoming member anniversaries!",
             "serverTimezoneNotSet": "This server doesn't have a default timezone set! The anniversary system requires one to be set!"
         }
     },

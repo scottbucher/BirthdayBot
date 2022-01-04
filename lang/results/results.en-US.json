@@ -9,6 +9,14 @@
                 "description": "{{USERS}}'s birthday is next on **{{BIRTHDAY}}**!",
                 "color": "{{COM:colors.warn}}"
             },
+            "nextMemberAnniversary": {
+                "description": "{{USERS}}'s member anniversary is next on **{{DATE}}**!",
+                "color": "{{REF:colors.default}}"
+            },
+            "nextServerAnniversary": {
+                "description": "**{{SERVER}}**'s anniversary is on **{{DATE}}**. It will be turning **{{YEARS}}**!",
+                "color": "{{REF:colors.default}}"
+            },
             "viewBirthday": {
                 "description": "{{USER}}'s birthday is on **{{BIRTHDAY}}, {{TIMEZONE}}**!",
                 "color": "{{COM:colors.default}}"
