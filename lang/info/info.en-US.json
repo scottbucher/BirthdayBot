@@ -186,6 +186,169 @@
             "title": "{{COM:bot.name}} - Translations",
             "description": "Thank you to our translators who have made it possible for {{COM:bot.name}} to be used in the following languages. If you are interested in providing a translation, please contact the staff in our [support server]({{COM:links.support}})."
         },
+        "settings": {
+            "general": {
+                "title": "{{SERVER_NAME}}'s General Settings",
+                "fields": [
+                    {
+                        "name": "{{REF:terms.birthdayRole}}",
+                        "value": "{{BIRTHDAY_ROLE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.nameFormat}}",
+                        "value": "{{NAME_FORMAT}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.defaultTimezone}}",
+                        "value": "{{DEFAULT_TIMEZONE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.serverLanguage}}",
+                        "value": "{{SERVER_LANGUAGE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Guild Id",
+                        "value": "{{GUILD_ID}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Premium",
+                        "value": "{{HAS_PREMIUM}}",
+                        "inline": true
+                    }
+                ],
+                "footer": {
+                    "text": "© {{DATE}} {{COM:bot.name}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "advanced": {
+                "title": "{{SERVER_NAME}}'s Advanced Settings",
+                "fields": [
+                    {
+                        "name": "{{REF:terms.birthdayMasterRole}}",
+                        "value": "{{BIRTHDAY_MASTER_ROLE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.dateFormat}}",
+                        "value": "{{DATE_FORMAT}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.trustedPreventsRole}}",
+                        "value": "{{TRUSTED_PREVENTS_ROLE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.trustedPreventsMessage}}",
+                        "value": "{{TRUSTED_PREVENTS_MESSAGE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.requireAllTrustedRoles}}",
+                        "value": "{{REQUIRE_ALL_TRUSTED_ROLES}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.numberOfTrustedRoles}}",
+                        "value": "{{TRUSTED_ROLE_COUNT}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.useTimezone}}",
+                        "value": "{{USE_TIMEZONE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Guild Id",
+                        "value": "{{GUILD_ID}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Premium",
+                        "value": "{{HAS_PREMIUM}}",
+                        "inline": true
+                    }
+                ],
+                "footer": {
+                    "text": "© {{DATE}} {{COM:bot.name}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "message": {
+                "title": "{{SERVER_NAME}}'s Message Settings",
+                "fields": [
+                    {
+                        "name": "{{REF:terms.birthdayChannel}}",
+                        "value": "{{BIRTHDAY_CHANNEL}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryChannel}}",
+                        "value": "{{MEMBER_ANNIVERSARY_CHANNEL}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryChannel}}",
+                        "value": "{{SERVER_ANNIVERSARY_CHANNEL}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.birthdayMessageTime}}",
+                        "value": "{{BIRTHDAY_MESSAGE_TIME}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryMessageTime}}",
+                        "value": "{{MEMBER_ANNIVERSARY_MESSAGE_TIME}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryMessageTime}}",
+                        "value": "{{SERVER_ANNIVERSARY_MESSAGE_TIME}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.birthdayMention}}",
+                        "value": "{{BIRTHDAY_MENTION}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryMention}}",
+                        "value": "{{MEMBER_ANNIVERSARY_MENTION}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryMention}}",
+                        "value": "{{SERVER_ANNIVERSARY_MENTION}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Guild Id",
+                        "value": "{{GUILD_ID}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Premium",
+                        "value": "{{HAS_PREMIUM}}",
+                        "inline": true
+                    }
+                ],
+                "footer": {
+                    "text": "© {{DATE}} {{COM:bot.name}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            }
+
+        },
         "list": {
             "birthday": {
                 "title": "{{REF:terms.birthdayList}} | {{REF:list.pageTitle}}",

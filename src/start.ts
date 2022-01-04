@@ -91,7 +91,7 @@ async function start(): Promise<void> {
         new MemberAnniversaryRoleCommand(),
         new TrustedRoleCommand(),
         new SetupCommand(),
-        new SettingsCommand(),
+        new SettingsCommand(trustedRoleRepo),
         new SetAttemptsCommand(),
         new ListCommand(),
         new NextCommand(userRepo),
