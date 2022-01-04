@@ -36,6 +36,26 @@
                         ]
                     }
                 ]
+            },
+            "vote": {
+                "description": "Support {{BOT}} by voting [here]({{COM:links.vote}})!",
+                "color": "{{COM:colors.default}}"
+            },
+            "donate": {
+                "description": "You can support {{BOT}} by donating [here]({{COM:links.donate}})!",
+                "color": "{{COM:colors.default}}"
+            },
+            "faq": {
+                "description": "View our FAQ for {{BOT}} [here]({{COM:links.docs}}/faq-1/general)!",
+                "color": "{{COM:colors.default}}"
+            },
+            "invite": {
+                "description": "Invite {{BOT}} to your server [here]({{COM:links.invite}})!",
+                "color": "{{COM:colors.default}}"
+            },
+            "support": {
+                "description": "For support join our discord server [here]({{COM:links.support}})!",
+                "color": "{{COM:colors.default}}"
             }
         },
         "help": {
@@ -149,26 +169,6 @@
         },
         "documentation": {
             "description": "View our documentation for {{BOT}} [here]({{COM:links.docs}})!",
-            "color": "{{COM:colors.default}}"
-        },
-        "vote": {
-            "description": "Support {{BOT}} by voting [here]({{COM:links.vote}})!",
-            "color": "{{COM:colors.default}}"
-        },
-        "donate": {
-            "description": "You can support {{BOT}} by donating [here]({{COM:links.donate}})!",
-            "color": "{{COM:colors.default}}"
-        },
-        "faq": {
-            "description": "View our FAQ for {{BOT}} [here]({{COM:links.docs}}/faq-1/general)!",
-            "color": "{{COM:colors.default}}"
-        },
-        "invite": {
-            "description": "Invite {{BOT}} to your server [here]({{COM:links.invite}})!",
-            "color": "{{COM:colors.default}}"
-        },
-        "support": {
-            "description": "For support join our discord server [here]({{COM:links.support}})!",
             "color": "{{COM:colors.default}}"
         },
         "map": {

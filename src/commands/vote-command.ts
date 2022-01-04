@@ -3,6 +3,9 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { LangCode } from '../models/enums';
+import { MessageUtils } from '../utils';
+import { channel } from 'diagnostics_channel';
 
 export class VoteCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -18,6 +21,11 @@ export class VoteCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        // yeet
+        await MessageUtils.sendIntr(
+            intr,
+            Lang.getEmbed('info', 'embeds.vote', LangCode.EN_US, {
+                BOT: intr.client.user.toString(),
+            })
+        );
     }
 }
