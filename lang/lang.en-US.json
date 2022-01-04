@@ -1895,7 +1895,7 @@
                 "description": [
                     "To support the bot and unlock special features use `{{REF:bot.prefix}} premium` in your server.",
                     "",
-                    "To view the commands of this bow use `{{REF:bot.prefix}} help`.",
+                    "To view the commands of this bot use `{{REF:bot.prefix}} help`.",
                     "To setup the bot run `{{REF:bot.prefix}} setup` in your server.",
                     "To set your birthday use `{{REF:bot.prefix}} set`.",
                     "",

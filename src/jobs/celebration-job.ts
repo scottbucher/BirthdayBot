@@ -70,9 +70,15 @@ export class CelebrationJob implements Job {
                 ? subStatuses.filter(g => g?.service).map(g => g?.subscriber) ?? discordIds
                 : discordIds;
 
+        // Remove guilds that are premium
+        let nonPremiumIds = discordIds.filter(id => !premiumGuildIds.includes(id));
+
+        // Combine arrays with premium guilds at the front
+        let orderedGuildIds = premiumGuildIds.concat(nonPremiumIds);
+
         // Get the data from the database
         let guildCelebrationDatas = CelebrationUtils.convertCelebrationData(
-            await this.combinedRepo.GetRawCelebrationData(discordIds)
+            await this.combinedRepo.GetRawCelebrationData(orderedGuildIds)
         );
 
         let promises = [];
