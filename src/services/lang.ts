@@ -1,7 +1,7 @@
+import { ColorResolvable, MessageEmbed } from 'discord.js';
 import { Linguini, TypeMapper, TypeMappers, Utils } from 'linguini';
 
 import { LangCode } from '../models/enums';
-import { MessageEmbed } from 'discord.js';
 import { info } from 'console';
 import path from 'path';
 
@@ -25,6 +25,18 @@ export class Lang {
             customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
         }),
     };
+
+    public static getErrorEmbed(
+        type: string,
+        location: string,
+        langCode: LangCode,
+        variables?: { [name: string]: string }
+    ): MessageEmbed {
+        return (
+            this.linguiniObjects[type].get(location, langCode, this.errorEmbedTm, variables) ??
+            this.linguiniObjects[type].get(location, this.Default, this.errorEmbedTm, variables)
+        );
+    }
 
     public static getEmbed(
         type: string,
@@ -60,6 +72,13 @@ export class Lang {
     public static getCom(location: string, variables?: { [name: string]: string }): string {
         return this.linguiniObjects['info'].getCom(location, variables);
     }
+
+    private static errorEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
+        return new MessageEmbed({
+            description: jsonValue,
+            color: Lang.getCom('colors.default') as ColorResolvable,
+        });
+    };
 
     private static messageEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
         return new MessageEmbed({

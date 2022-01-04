@@ -28,7 +28,7 @@ export class CommandUtils {
         if (command.requireDev && !Config.developers.includes(intr.user.id)) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'embeds.devOnlyCommand', data.lang())
+                Lang.getErrorEmbed('validation', 'errorEmbeds.devOnlyCommand', data.lang())
             );
             return false;
         }
@@ -37,7 +37,7 @@ export class CommandUtils {
         if (command.requireGuild && !intr.guild) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'embeds.serverOnlyCommand', data.lang())
+                Lang.getErrorEmbed('validation', 'errorEmbeds.serverOnlyCommand', data.lang())
             );
             return false;
         }
@@ -79,7 +79,11 @@ export class CommandUtils {
                 if (intr.member && !this.hasPermission(intr.member as GuildMember, command)) {
                     await MessageUtils.sendIntr(
                         intr,
-                        Lang.getEmbed('validation', 'embeds.missingUserPerms', data.lang())
+                        Lang.getErrorEmbed(
+                            'validation',
+                            'errorEmbeds.missingUserPerms',
+                            data.lang()
+                        )
                     );
                     return false;
                 }

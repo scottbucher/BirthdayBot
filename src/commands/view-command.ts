@@ -60,7 +60,7 @@ export class ViewCommand implements Command {
         if (target !== intr.user && intr.channel instanceof DMChannel) {
             MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'embeds.viewUserInDm', data.lang())
+                Lang.getErrorEmbed('validation', 'errorEmbeds.viewUserInDm', data.lang())
             );
             return;
         }
@@ -70,22 +70,17 @@ export class ViewCommand implements Command {
                 let userData = await this.userRepo.getUser(target.id);
 
                 if (!userData || !userData.Birthday || !userData.TimeZone) {
-                    target === intr.user
-                        ? await MessageUtils.sendIntr(
-                              intr,
-                              Lang.getEmbed('validation', 'embeds.birthdayNotSet', data.lang())
-                          )
-                        : await MessageUtils.sendIntr(
-                              intr,
-                              Lang.getEmbed(
-                                  'validation',
-                                  'embeds.userBirthdayNotSet',
-                                  data.lang(),
-                                  {
-                                      USER: target.toString(),
-                                  }
-                              )
-                          );
+                    await MessageUtils.sendIntr(
+                        intr,
+                        Lang.getErrorEmbed(
+                            'validation',
+                            'errorEmbeds.userBirthdayNotSet',
+                            data.lang(),
+                            {
+                                USER: target.toString(),
+                            }
+                        )
+                    );
                     return;
                 }
 
@@ -102,7 +97,11 @@ export class ViewCommand implements Command {
                 if (intr.channel instanceof DMChannel) {
                     await MessageUtils.sendIntr(
                         intr,
-                        Lang.getEmbed('validation', 'embeds.memberAnniversaryInDM', data.lang())
+                        Lang.getErrorEmbed(
+                            'validation',
+                            'errorEmbeds.memberAnniversaryInDM',
+                            data.lang()
+                        )
                     );
                     return;
                 }

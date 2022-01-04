@@ -86,7 +86,7 @@ export class SetCommand implements Command {
             if (dm) {
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('validation', 'embeds.suggestBirthdayInDM', data.lang())
+                    Lang.getErrorEmbed('validation', 'errorEmbeds.suggestBirthdayInDM', data.lang())
                 );
                 return;
             }
@@ -94,7 +94,7 @@ export class SetCommand implements Command {
             if (target.bot) {
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('validation', 'embeds.cantSuggestForBot', data.lang())
+                    Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggestForBot', data.lang())
                 );
                 return;
             }
@@ -108,7 +108,7 @@ export class SetCommand implements Command {
             ) {
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('validation', 'embeds.cantSuggest', LangCode.EN_US)
+                    Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggest', LangCode.EN_US)
                 );
                 return;
             }
@@ -175,7 +175,7 @@ export class SetCommand implements Command {
         let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'embeds.promptExpired', data.lang())
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
 
@@ -211,10 +211,15 @@ export class SetCommand implements Command {
                 if (!input) {
                     await MessageUtils.sendIntr(
                         intr,
-                        Lang.getEmbed('validation', 'embeds.invalidTimezone', LangCode.EN_US, {
-                            TARGET: target.username,
-                            ICON: intr.client.user.displayAvatarURL(),
-                        })
+                        Lang.getErrorEmbed(
+                            'validation',
+                            'errorEmbeds.invalidTimezone',
+                            LangCode.EN_US,
+                            {
+                                TARGET: target.username,
+                                ICON: intr.client.user.displayAvatarURL(),
+                            }
+                        )
                     );
                     return;
                 }
@@ -258,9 +263,14 @@ export class SetCommand implements Command {
                 if (!result) {
                     await MessageUtils.sendIntr(
                         intr,
-                        Lang.getEmbed('validation', 'embeds.invalidBirthday', LangCode.EN_US, {
-                            TARGET: target.username,
-                        })
+                        Lang.getErrorEmbed(
+                            'validation',
+                            'errorEmbeds.invalidBirthday',
+                            LangCode.EN_US,
+                            {
+                                TARGET: target.username,
+                            }
+                        )
                     );
                     return;
                 }

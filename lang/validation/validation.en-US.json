@@ -1,18 +1,6 @@
 {
     "data": {
         "embeds": {
-            "devOnlyCommand": {
-                "description": "This command can only be used by developers.",
-                "color": "{{COM:colors.warning}}"
-            },
-            "serverOnlyCommand": {
-                "description": "This command can only be used in a server.",
-                "color": "{{COM:colors.warning}}"
-            },
-            "missingUserPerms": {
-                "description": "You don't have permission to run that command!",
-                "color": "{{COM:colors.warning}}"
-            },
             "missingClientPerms": {
                 "description": [
                     "I don't have all permissions required to run that command here! Please check the server and channel permissions to make sure I have the following permissions.",
@@ -67,34 +55,6 @@
                 "timestamp": true,
                 "color": "{{COM:colors.error}}"
             },
-            "birthdayNotSet": {
-                "description": "Your birthday isn't set!",
-                "color": "{{COM:colors.error}}"
-            },
-            "userBirthdayNotSet": {
-                "description": "{{USER}} hasn't set their birthday!",
-                "color": "{{COM:colors.error}}"
-            },
-            "viewUserInDm": {
-                "description": "You cannot request another user's information in a DM!",
-                "color": "{{COM:colors.error}}"
-            },
-            "memberAnniversaryInDM": {
-                "description": "You cannot view member anniversaries in a DM!",
-                "color": "{{COM:colors.error}}"
-            },
-            "suggestBirthdayInDM": {
-                "description": "You can't set another person's birthday in a DM!",
-                "color": "{{COM:colors.error}}"
-            },
-            "cantSuggest": {
-                "description": "You don't have permission to suggest another user's birthday!",
-                "color": "{{COM:colors.error}}"
-            },
-            "cantSuggestForBot": {
-                "description": "You can't suggest a birthday for a bot!",
-                "color": "{{COM:colors.error}}"
-            },
             "invalidTimezone": {
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
@@ -120,11 +80,22 @@
                 },
                 "timestamp": true,
                 "color": "{{COM:colors.error}}"
-            },
-            "invalidBirthday": {
-                "description": "Invalid birthday!",
-                "color": "{{COM:colors.error}}"
             }
+        },
+        "errorEmbeds": {
+            "devOnlyCommand": "This command can only be used by developers.",
+            "serverOnlyCommand": "This command can only be used in a server.",
+            "missingUserPerms": "You don't have permission to run that command!",
+            "birthdayNotSet": "{{USER}} hasn't set their birthday!",
+            "viewUserInDm": "You cannot request another user's information in a DM!",
+            "memberAnniversaryInDM": "You cannot view member anniversaries in a DM!",
+            "suggestBirthdayInDM": "You can't set another person's birthday in a DM!",
+            "cantSuggest": "You don't have permission to suggest another user's birthday!",
+            "cantSuggestForBot": "You can't suggest a birthday for a bot!",
+            "invalidBirthday": "Invalid birthday!",
+            "noBirthdaysInServer": "No one has set their birthday in this server! :(",
+            "noUpcomingBirthdays": "There are no upcoming birthdays!",
+            "serverTimezoneNotSet": "This server doesn't have a default timezone set! The anniversary system requires one to be set!"
         }
     },
     "refs": {

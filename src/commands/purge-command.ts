@@ -50,7 +50,7 @@ export class PurgeCommand implements Command {
             // Are they in the database?
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'embeds.birthdayNotSet', data.lang())
+                Lang.getErrorEmbed('validation', 'errorEmbeds.birthdayNotSet', data.lang())
             );
             return;
         }
