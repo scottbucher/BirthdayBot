@@ -28,6 +28,10 @@ export class LinkCommand implements Command {
                         value: 'docs',
                     },
                     {
+                        name: 'faq',
+                        value: 'faq',
+                    },
+                    {
                         name: 'donate',
                         value: 'donate',
                     },
@@ -42,6 +46,10 @@ export class LinkCommand implements Command {
                     {
                         name: 'vote',
                         value: 'vote',
+                    },
+                    {
+                        name: 'map',
+                        value: 'map',
                     },
                 ],
             },
@@ -61,6 +69,12 @@ export class LinkCommand implements Command {
         switch (link) {
             case 'docs': {
                 embed = Lang.getEmbed('info', 'embeds.docs', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                });
+                break;
+            }
+            case 'faq': {
+                embed = Lang.getEmbed('info', 'embeds.faq', data.lang(), {
                     BOT: intr.client.user.toString(),
                 });
                 break;
@@ -85,6 +99,12 @@ export class LinkCommand implements Command {
             }
             case 'vote': {
                 embed = Lang.getEmbed('info', 'embeds.vote', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                });
+                break;
+            }
+            case 'map': {
+                embed = Lang.getEmbed('info', 'embeds.map', data.lang(), {
                     BOT: intr.client.user.toString(),
                 });
                 break;

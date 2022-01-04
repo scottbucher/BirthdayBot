@@ -48,6 +48,7 @@ import { REST } from '@discordjs/rest';
 import { Reaction } from './reactions';
 import { Routes } from 'discord-api-types/rest/v9';
 import { Trigger } from './triggers';
+import { VoteCommand } from './commands/vote-command';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -100,6 +101,7 @@ async function start(): Promise<void> {
         new PurgeCommand(userRepo),
         new PremiumCommand(),
         new SubscribeCommand(),
+        new VoteCommand(),
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Reactions

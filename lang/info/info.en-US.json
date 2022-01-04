@@ -49,6 +49,18 @@
                 "description": "View our FAQ for {{BOT}} [here]({{COM:links.docs}}/faq-1/general)!",
                 "color": "{{COM:colors.default}}"
             },
+            "docs": {
+                "description": "View our documentation for {{BOT}} [here]({{COM:links.docs}})!",
+                "color": "{{COM:colors.default}}"
+            },
+            "map": {
+                "description": [
+                    "[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker]({{COM:links.map}})!",
+                    "",
+                    "Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `/set` command."
+                ],
+                "color": "{{COM:colors.default}}"
+            },
             "invite": {
                 "description": "Invite {{BOT}} to your server [here]({{COM:links.invite}})!",
                 "color": "{{COM:colors.default}}"
@@ -166,18 +178,6 @@
                     ]
                 }
             ]
-        },
-        "documentation": {
-            "description": "View our documentation for {{BOT}} [here]({{COM:links.docs}})!",
-            "color": "{{COM:colors.default}}"
-        },
-        "map": {
-            "description": [
-                "[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker]({{COM:links.map}})!",
-                "",
-                "Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `{{COM:bot.prefix}} set` command."
-            ],
-            "color": "{{COM:colors.default}}"
         },
         "test": {
             "description": "Test command works!"
