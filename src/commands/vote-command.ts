@@ -23,7 +23,7 @@ export class VoteCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         await MessageUtils.sendIntr(
             intr,
-            Lang.getEmbed('info', 'embeds.vote', LangCode.EN_US, {
+            Lang.getEmbed('info', 'embeds.vote', data.lang(), {
                 BOT: intr.client.user.toString(),
             })
         );

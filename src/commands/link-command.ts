@@ -9,6 +9,7 @@ import { ApplicationCommandOptionType } from 'discord-api-types';
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import { MessageUtils } from '../utils';
 
 export class LinkCommand implements Command {
@@ -56,27 +57,36 @@ export class LinkCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let link = intr.options.getString('link');
-
         let embed: MessageEmbed;
         switch (link) {
             case 'docs': {
-                // embed = Lang.getEmbed('embeds.linkDocs', data.lang());
+                embed = Lang.getEmbed('info', 'embeds.docs', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                });
                 break;
             }
             case 'donate': {
-                // embed = Lang.getEmbed('embeds.linkDonate', data.lang());
+                embed = Lang.getEmbed('info', 'embeds.donate', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                });
                 break;
             }
             case 'invite': {
-                // embed = Lang.getEmbed('embeds.linkInvite', data.lang());
+                embed = Lang.getEmbed('info', 'embeds.invite', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                });
                 break;
             }
             case 'support': {
-                // embed = Lang.getEmbed('embeds.linkSupport', data.lang());
+                embed = Lang.getEmbed('info', 'embeds.support', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                });
                 break;
             }
             case 'vote': {
-                // embed = Lang.getEmbed('embeds.linkVote', data.lang());
+                embed = Lang.getEmbed('info', 'embeds.vote', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                });
                 break;
             }
             default: {

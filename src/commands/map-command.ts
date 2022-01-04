@@ -3,6 +3,8 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { LangCode } from '../models/enums';
+import { MessageUtils } from '../utils';
 
 export class MapCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -18,6 +20,11 @@ export class MapCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        // yeet
+        await MessageUtils.sendIntr(
+            intr,
+            Lang.getEmbed('info', 'embeds.map', data.lang(), {
+                BOT: intr.client.user.toString(),
+            })
+        );
     }
 }
