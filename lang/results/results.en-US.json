@@ -47,6 +47,10 @@
                 },
                 "color": "{{COM:colors.success}}",
                 "timestamp": true
+            },
+            "setAttempts": {
+                "description": "Successfully set {{USER}}'s birthday attempts to {{AMOUNT}}!",
+                "color": "{{REF:colors.success}}"
             }
 
         },

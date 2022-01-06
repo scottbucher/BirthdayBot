@@ -92,7 +92,7 @@ async function start(): Promise<void> {
         new TrustedRoleCommand(),
         new SetupCommand(guildRepo),
         new SettingsCommand(trustedRoleRepo),
-        new SetAttemptsCommand(),
+        new SetAttemptsCommand(userRepo),
         new ListCommand(),
         new NextCommand(userRepo),
         new ViewCommand(userRepo),

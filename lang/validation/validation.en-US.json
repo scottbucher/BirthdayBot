@@ -147,6 +147,7 @@
             "invalidChannel": "Invalid channel!",
             "invalidRole": "Invalid role!",
             "birthdayRoleManaged": "Birthday Role cannot be managed by an external service!",
+            "attemptsLeft": "That user has not used any attempts!",
             "": "",
             "": "",
             "": "",
