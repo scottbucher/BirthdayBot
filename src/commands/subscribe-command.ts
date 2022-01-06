@@ -30,7 +30,7 @@ export class SubscribeCommand implements Command {
         if (!Config.payments.enabled) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('info', 'premium.premiumDisabled', LangCode.EN_US)
+                Lang.getEmbed('info', 'premium.premiumDisabled', data.lang())
             );
             return;
         }
@@ -38,7 +38,7 @@ export class SubscribeCommand implements Command {
         if (!Config.payments.allowNewTransactions) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('info', 'premium.refuseNewTransactions', LangCode.EN_US)
+                Lang.getEmbed('info', 'premium.refuseNewTransactions', data.lang())
             );
             return;
         }
@@ -50,14 +50,14 @@ export class SubscribeCommand implements Command {
         if (!subLink) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('info', 'premium.premiumAlreadyActive', LangCode.EN_US)
+                Lang.getEmbed('info', 'premium.premiumAlreadyActive', data.lang())
             );
             return;
         }
 
         await MessageUtils.send(
             intr.user,
-            Lang.getEmbed('info', 'premium.subscriptionPM', LangCode.EN_US, {
+            Lang.getEmbed('info', 'premium.subscriptionPM', data.lang(), {
                 SUB_LINK: subLink.link,
                 BIRTHDAY_MESSAGE_MAX_FREE:
                     Config.validation.message.maxCount.birthday.free.toString(),
@@ -79,7 +79,7 @@ export class SubscribeCommand implements Command {
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getEmbed('info', 'premium.subscriptionDMPrompt', LangCode.EN_US)
+            Lang.getEmbed('info', 'premium.subscriptionDMPrompt', data.lang())
         );
 
         Logger.info(
