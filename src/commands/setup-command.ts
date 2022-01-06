@@ -86,7 +86,7 @@ export class SetupCommand implements Command {
             channelMessage,
             async (msgReaction: MessageReaction, reactor: User) => {
                 if (!reactOptions.includes(msgReaction.emoji.name)) return;
-                return msgReaction.emoji.name === Config.emotes.confirm;
+                return msgReaction.emoji.name;
             }
         );
 
@@ -177,7 +177,7 @@ export class SetupCommand implements Command {
             }
         }
 
-        let roleEmbed = Lang.getEmbed('prompt', 'setup.birthdayRole', data.lang(), {
+        let roleEmbed = Lang.getEmbed('prompts', 'setup.birthdayRole', data.lang(), {
             ICON: intr.client.user.displayAvatarURL(),
         }).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
 
@@ -190,7 +190,7 @@ export class SetupCommand implements Command {
             roleMessage,
             async (msgReaction: MessageReaction, reactor: User) => {
                 if (!reactOptions.includes(msgReaction.emoji.name)) return;
-                return msgReaction.emoji.name === Config.emotes.confirm;
+                return msgReaction.emoji.name;
             }
         );
 
@@ -212,7 +212,7 @@ export class SetupCommand implements Command {
             case Config.emotes.select: {
                 let selectMessage = await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('prompt', 'setup.inputRole', data.lang())
+                    Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
                 );
 
                 birthdayRole = await collect(async (nextMsg: Message) => {

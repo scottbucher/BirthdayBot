@@ -148,7 +148,7 @@
                     }
                 ],
                 "footer": {
-                    "text": "{{COM:footers.expire}}",
+                    "text": "{{REF:footers.expire}}",
                     "icon": "{{ICON}}"
                 },
                 "timestamp": true

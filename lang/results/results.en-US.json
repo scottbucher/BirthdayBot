@@ -45,7 +45,7 @@
                     "text": "All server commands unlocked!",
                     "icon": "{{ICON}}"
                 },
-                "color": "{{REF:colors.success}}",
+                "color": "{{COM:colors.success}}",
                 "timestamp": true
             }
 
