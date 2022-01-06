@@ -28,7 +28,7 @@ let Config = require('../../config/config.json');
 export class SetupCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.setup'),
-        description: 'Run one of the setup processes.',
+        description: 'Run the initial setup processes.',
     };
     public requireDev = false;
     public requireGuild = true;
