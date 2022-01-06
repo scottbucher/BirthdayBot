@@ -20,6 +20,7 @@ export class ListCommand implements Command {
                 description: 'An optional page number to jump to.',
                 type: ApplicationCommandOptionType.String.valueOf(),
                 required: false,
+                minValue: 1,
             },
         ],
     };
