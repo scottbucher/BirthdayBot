@@ -104,7 +104,6 @@
         },
         "setup": {
             "birthdayChannel": {
-                
                 "title": "Server Setup - Birthday Channel",
                 "description": [
                     "For help, view the required setup guide [here]({{COM:docLinks.setupRequiredGuide}})!",
@@ -129,7 +128,7 @@
                 },
                 "timestamp": true
             },
-            "requiredSetupBirthdayRole": {
+            "birthdayRole": {
                 "title": "Server Setup - Birthday Role",
                 "description": [
                     "Now, set up the birthday role [(?)]({{COM:docLinks.whatIsBirthdayRole}})",

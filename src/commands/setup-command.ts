@@ -71,14 +71,9 @@ export class SetupCommand implements Command {
         let birthdayChannel: string;
         let birthdayRole: string;
 
-        let channelEmbed = Lang.getEmbed(
-            'prompts',
-            'setup.requiredSetupBirthdayChannel',
-            data.lang(),
-            {
-                ICON: intr.client.user.displayAvatarURL(),
-            }
-        ).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
+        let channelEmbed = Lang.getEmbed('prompts', 'setup.birthdayChannel', data.lang(), {
+            ICON: intr.client.user.displayAvatarURL(),
+        }).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
 
         let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 
@@ -182,7 +177,7 @@ export class SetupCommand implements Command {
             }
         }
 
-        let roleEmbed = Lang.getEmbed('prompt', 'setup.requiredSetupBirthdayRole', data.lang(), {
+        let roleEmbed = Lang.getEmbed('prompt', 'setup.birthdayRole', data.lang(), {
             ICON: intr.client.user.displayAvatarURL(),
         }).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
 
