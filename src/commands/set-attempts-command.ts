@@ -25,8 +25,8 @@ export class SetAttemptsCommand implements Command {
                 description: 'The number of attempts you are setting their total to.',
                 type: ApplicationCommandOptionType.Number.valueOf(),
                 required: true,
-                minValue: 0,
-                maxValue: 127,
+                min_value: 0,
+                max_value: 127,
             },
         ],
     };

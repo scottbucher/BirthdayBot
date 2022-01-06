@@ -235,7 +235,7 @@ export class MessageCommand implements Command {
                         description: 'An optional page number to jump to.',
                         type: ApplicationCommandOptionType.String.valueOf(),
                         required: false,
-                        minValue: 1,
+                        min_value: 1,
                     },
                 ],
             },
