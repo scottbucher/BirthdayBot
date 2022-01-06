@@ -47,6 +47,7 @@ export class SubscribeCommand implements Command {
             PlanName.premium1,
             intr.guild.id
         );
+
         if (!subLink) {
             await MessageUtils.sendIntr(
                 intr,
