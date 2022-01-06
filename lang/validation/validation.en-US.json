@@ -80,6 +80,53 @@
                 },
                 "timestamp": true,
                 "color": "{{COM:colors.error}}"
+            },
+            "noAccessToChannel": {
+                "description": [
+                    "I don't have permission to send messages in {{CHANNEL}}!",
+                    "Please allow me to **View Channel**, **Send Messages**, **Embed Links**, and **Add Reactions** in {{CHANNEL}}."
+                ],
+                "color": "{{COM:colors.error}}"
+            },
+            "roleHierarchyError": {
+                "title": "Role Hierarchy Error!",
+                "description": [
+                    "The birthday role must be below {{BOT}}'s role.",
+                    "Additional Note: {{BOT}}'s role must be higher than the users it is assigning the birthday role to.",
+                    "",
+                    "Example Role Hierarchy:",
+                    "`{{COM:bot.name}}'s Role`",
+                    "`Birthday Role`",
+                    "`Birthday User's Highest Role`",
+                    "",
+                    "Essentially the bot is unable to give a role to someone with a higher role than them or give a role that is higher than the bot's."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.joinSupport}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            },
+            "birthdayRoleUsedWarning": {
+                "title": "Warning",
+                "description": "We have detected that __**{{AMOUNT}}**__ user{{S_VALUE}} already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
+                "footer": {
+                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.warn}}"
+            },
+            "birthdayRoleUsedError": {
+                "title": "Error",
+                "description": "We have detected that __**{{AMOUNT}}**__ users already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
+                "footer": {
+                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
             }
         },
         "errorEmbeds": {
@@ -96,7 +143,20 @@
             "noBirthdaysInServer": "No one has set their birthday in this server! :(",
             "noUpcomingBirthdays": "There are no upcoming birthdays!",
             "noUpcomingMemberAnniversaries": "There are no upcoming member anniversaries!",
-            "serverTimezoneNotSet": "This server doesn't have a default timezone set! The anniversary system requires one to be set!"
+            "serverTimezoneNotSet": "This server doesn't have a default timezone set! The anniversary system requires one to be set!",
+            "invalidChannel": "Invalid channel!",
+            "invalidRole": "Invalid role!",
+            "birthdayRoleManaged": "Birthday Role cannot be managed by an external service!",
+            "": "",
+            "": "",
+            "": "",
+            "": "",
+            "": "",
+            "": "",
+            "": "",
+            "": "",
+            "": "",
+            "": ""
         }
     },
     "refs": {
@@ -112,7 +172,8 @@
             "voteImage": "https://i.imgur.com/wak8g4V.png"
         },
         "footers": {
-            "tryAgain": "Please try again!"
+            "tryAgain": "Please try again!",
+            "joinSupport": "Please join our support server if you have any questions."
         }
     }
 }

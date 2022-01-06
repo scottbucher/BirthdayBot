@@ -101,6 +101,65 @@
                 "description": "{{TARGET}}, please confirm this information is correct: **{{BIRTHDAY}}, {{TIMEZONE}}**",
                 "color": "{{COM:colors.warn}}"
             }
+        },
+        "setup": {
+            "birthdayChannel": {
+                
+                "title": "Server Setup - Birthday Channel",
+                "description": [
+                    "For help, view the required setup guide [here]({{COM:docLinks.setupRequiredGuide}})!",
+                    "",
+                    "To begin you must set up the birthday channel [(?)]({{COM:docLinks.whatIsBirthdayChannel}})",
+                    "",
+                    "Please select an option"
+                ],
+                "fields": [
+                    {
+                        "name": [
+                            "Create New Channel {{COM:emotes.create}}",
+                            "Select Pre-Existing Channel {{COM:emotes.select}}",
+                            "No Birthday Channel {{COM:emotes.deny}}"
+                        ],
+                        "value": "\u200b"
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "requiredSetupBirthdayRole": {
+                "title": "Server Setup - Birthday Role",
+                "description": [
+                    "Now, set up the birthday role [(?)]({{COM:docLinks.whatIsBirthdayRole}})",
+                    "",
+                    "Note: The Birthday Role is actively removed from those whose birthday it isn't.",
+                    "",
+                    "Please select an option"
+                ],
+                "fields": [
+                    {
+                        "name": [
+                            "Create New Role {{COM:emotes.create}}",
+                            "Select Pre-Existing Role {{COM:emotes.select}}",
+                            "No Birthday Role {{COM:emotes.deny}}"
+                        ],
+                        "value": "\u200b"
+                    }
+                ],
+                "footer": {
+                    "text": "{{COM:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "inputChannel": {
+                "description": "Please mention a channel or input a channel's name."
+            },
+            "inputRole": {
+                "description": "Please mention a role or input a role's name."
+            }
         }
     },
     "refs": {

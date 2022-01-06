@@ -32,6 +32,21 @@
                     "**Important Note:** Birthdays are stored globally. This means your birthday is now set for all servers with Birthday Bot!"
                 ],
                 "color": "{{COM:colors.success}}"
+            },
+            "requiredSetup": {
+                "title": "Server Setup - Completed",
+                "description": [
+                    "You have successfully completed the required server setup!",
+                    "",
+                    "**Birthday Channel**: {{CHANNEL}}",
+                    "**Birthday Role**: {{ROLE}}"
+                ],
+                "footer": {
+                    "text": "All server commands unlocked!",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{REF:colors.success}}",
+                "timestamp": true
             }
 
         },

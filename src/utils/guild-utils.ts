@@ -1,9 +1,9 @@
 import {
-    BaseGuildTextChannel,
     Guild,
     GuildMember,
     Message,
     NewsChannel,
+    TextBasedChannel,
     TextChannel,
     Util,
 } from 'discord.js';
@@ -39,10 +39,10 @@ export class GuildUtils {
         return guild.members.resolve(memberDiscordId)?.toString() || 'Unknown Member';
     }
 
-    public static getMentionedTextChannel(msg: Message): BaseGuildTextChannel {
+    public static getMentionedTextChannel(msg: Message): TextBasedChannel {
         let textChannel = msg.mentions.channels
             .filter(c => c instanceof TextChannel || c instanceof NewsChannel)
-            .first() as BaseGuildTextChannel;
+            .first() as TextBasedChannel;
 
         if (textChannel) return textChannel;
 
