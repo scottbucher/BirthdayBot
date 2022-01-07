@@ -8,7 +8,7 @@ import {
     DateFormatSubCommand,
     NameFormatSubCommand,
     TimezoneSubCommand,
-    TrustedSettingsCommand,
+    TrustedSettingsSubCommand,
     UseTimezoneSubCommand,
 } from './config-settings';
 
@@ -82,7 +82,7 @@ export class ConfigCommand implements Command {
         public timezoneSubCommand: TimezoneSubCommand,
         public useTimezoneSubCommand: UseTimezoneSubCommand,
         public dateFormatSubCommand: DateFormatSubCommand,
-        public trustedSettingsCommand: TrustedSettingsCommand
+        public trustedSettingsCommand: TrustedSettingsSubCommand
     ) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {

@@ -8,7 +8,7 @@ import { CollectorUtils } from '../../utils/collector-utils';
 let Config = require('../../../config/config.json');
 
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
-export class TrustedSettingsCommand {
+export class TrustedSettingsSubCommand {
     constructor(public guildRepo: GuildRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData, reset: boolean): Promise<void> {
