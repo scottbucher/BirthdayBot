@@ -1,13 +1,12 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString, User } from 'discord.js';
-import { GuildUtils, MathUtils, MessageUtils, ParseUtils } from '../utils';
+import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { MessageUtils } from '../utils';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { Command } from './command';
+import { LangCode } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { LangCode } from '../models/enums';
 import { UserRepo } from '../services/database/repos';
-import { channel } from 'diagnostics_channel';
+import { Command } from './command';
 
 export class SetAttemptsCommand implements Command {
     public metadata: ApplicationCommandData = {

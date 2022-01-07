@@ -1,6 +1,6 @@
-import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils';
-import { Client, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database';
+import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils';
 
 import { Logger } from '.';
 

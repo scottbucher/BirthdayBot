@@ -6,14 +6,14 @@ import {
     PermissionString,
     User,
 } from 'discord.js';
-import { CollectOptions, ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
+import { CollectOptions, MessageFilter } from 'discord.js-collector-utils';
 
-import { CollectorUtils } from '../utils/collector-utils';
-import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { MessageUtils } from '../utils';
 import { UserRepo } from '../services/database/repos';
+import { MessageUtils } from '../utils';
+import { CollectorUtils } from '../utils/collector-utils';
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 

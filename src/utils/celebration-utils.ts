@@ -1,3 +1,4 @@
+import { Guild, GuildMember, MessageEmbed, Role } from 'discord.js';
 import { ArrayUtils, ColorUtils, FormatUtils, TimeUtils } from '.';
 import {
     CustomMessage,
@@ -8,16 +9,14 @@ import {
     TrustedRole,
     UserData,
 } from '../models/database';
-import { Guild, GuildMember, MessageEmbed, Role } from 'discord.js';
 
-import { AnniversaryMemberStatus } from '../models/celebration-job';
-import { BirthdayMemberStatus } from '../models';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
-import { Moment } from 'moment-timezone';
-import { getPriority } from 'os';
 import moment from 'moment';
+import { Moment } from 'moment-timezone';
+import { BirthdayMemberStatus } from '../models';
+import { AnniversaryMemberStatus } from '../models/celebration-job';
+import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
+import { LangCode } from '../models/enums';
+import { Lang } from '../services';
 
 let Debug = require('../../config/debug.json');
 

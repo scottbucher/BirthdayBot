@@ -1,27 +1,21 @@
 import {
     ApplicationCommandData,
-    BaseGuildTextChannel,
     CommandInteraction,
     Message,
-    MessageEmbed,
     MessageReaction,
     PermissionString,
     Role,
     TextBasedChannel,
-    TextChannel,
     User,
 } from 'discord.js';
 import { ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
 import { GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 
-import { ApplicationCommandOptionType } from 'discord-api-types';
+import { EventData } from '../models/internal-models';
+import { Lang } from '../services';
+import { GuildRepo } from '../services/database/repos';
 import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
-import { EventData } from '../models/internal-models';
-import { GuildRepo } from '../services/database/repos';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { channel } from 'diagnostics_channel';
 
 let Config = require('../../config/config.json');
 

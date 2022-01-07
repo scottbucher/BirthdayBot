@@ -1,9 +1,8 @@
 import { ColorResolvable, MessageEmbed } from 'discord.js';
 import { Linguini, TypeMapper, TypeMappers, Utils } from 'linguini';
 
-import { LangCode } from '../models/enums';
-import { info } from 'console';
 import path from 'path';
+import { LangCode } from '../models/enums';
 
 export class Lang {
     public static Default = LangCode.EN_US;

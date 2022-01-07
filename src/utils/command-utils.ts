@@ -3,7 +3,6 @@ import {
     DMChannel,
     GuildChannel,
     GuildMember,
-    MessageEmbed,
     NewsChannel,
     Permissions,
     TextChannel,
@@ -11,9 +10,9 @@ import {
 import { MessageUtils, TimeUtils } from '.';
 
 import { Command } from '../commands';
+import { Permission } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { Permission } from '../models/enums';
 
 let Config = require('../../config/config.json');
 let Debug = require('../../config/debug.json');

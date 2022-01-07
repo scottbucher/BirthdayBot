@@ -1,7 +1,7 @@
 import { Blacklisted } from '../../../models/database';
+import { SqlUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
-import { SqlUtils } from '../../../utils';
 
 export class BlacklistRepo {
     constructor(private dataAccess: DataAccess) {}

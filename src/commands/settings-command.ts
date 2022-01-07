@@ -1,18 +1,16 @@
 import {
     ApplicationCommandData,
     CommandInteraction,
-    MessageEmbed,
     PermissionString,
 } from 'discord.js';
+import { Language } from '../models/enums';
 import { FormatUtils, MessageUtils } from '../utils';
-import { LangCode, Language } from '../models/enums';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { TrustedRoleRepo } from '../services/database/repos';
-import { channel } from 'diagnostics_channel';
+import { Command } from './command';
 
 export class SettingsCommand implements Command {
     public metadata: ApplicationCommandData = {

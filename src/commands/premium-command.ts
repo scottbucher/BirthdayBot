@@ -2,8 +2,8 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { Lang, Logger } from '../services';
 import { MessageUtils, TimeUtils } from '../utils';
 
-import { Command } from './command';
 import { EventData } from '../models/internal-models';
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');

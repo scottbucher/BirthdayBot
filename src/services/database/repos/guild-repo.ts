@@ -1,8 +1,8 @@
-import { DataAccess } from '../data-access';
 import { GuildData } from '../../../models/database';
-import { Logger } from '../../logger';
-import { Procedure } from '../procedure';
 import { SqlUtils } from '../../../utils';
+import { Logger } from '../../logger';
+import { DataAccess } from '../data-access';
+import { Procedure } from '../procedure';
 
 export class GuildRepo {
     constructor(private dataAccess: DataAccess) {}

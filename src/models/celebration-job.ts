@@ -1,4 +1,4 @@
-import { GuildMember, Role, TextChannel } from 'discord.js';
+import { GuildMember, Role } from 'discord.js';
 export class BirthdayMemberRoleStatus {
     constructor(public member: GuildMember, public give: Boolean) {}
 }

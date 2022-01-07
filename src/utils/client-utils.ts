@@ -2,7 +2,6 @@ import { Client, NewsChannel } from 'discord.js';
 import { DiscordAPIError, Guild, GuildMember, TextChannel, User } from 'discord.js';
 import { PermissionUtils, RegexUtils } from '.';
 
-import { Lang } from '../services';
 import { LangCode } from '../models/enums';
 
 const FETCH_MEMBER_LIMIT = 20;

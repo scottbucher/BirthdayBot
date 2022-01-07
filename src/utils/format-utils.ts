@@ -1,9 +1,9 @@
 import { Guild, Message, Role, User } from 'discord.js';
 import { GuildUtils, ParseUtils } from '.';
 
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
 import moment from 'moment-timezone';
+import { LangCode } from '../models/enums';
+import { Lang } from '../services';
 
 let Config = require('../../config/config.json');
 let Abbreviations = require('../../config/abbreviations.json');

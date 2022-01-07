@@ -1,8 +1,8 @@
-import { ClientUtils, MessageUtils } from '../utils';
 import { Lang, Logger } from '../services';
+import { ClientUtils, MessageUtils } from '../utils';
 
-import { EventHandler } from './event-handler';
 import { Guild } from 'discord.js';
+import { EventHandler } from './event-handler';
 
 let Logs = require('../../lang/logs.json');
 

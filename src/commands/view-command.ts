@@ -6,12 +6,12 @@ import {
 } from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { Command } from './command';
+import moment from 'moment';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { MessageUtils } from '../utils';
 import { UserRepo } from '../services/database/repos';
-import moment from 'moment';
+import { MessageUtils } from '../utils';
+import { Command } from './command';
 
 export class ViewCommand implements Command {
     public metadata: ApplicationCommandData = {

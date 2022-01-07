@@ -4,8 +4,8 @@ import {
     RegisterClusterResponse,
 } from '../models/master-api';
 
-import { HttpService } from '.';
 import { URL } from 'url';
+import { HttpService } from '.';
 
 let Config = require('../../config/config.json');
 

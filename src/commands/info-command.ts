@@ -1,9 +1,8 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { MessageUtils } from '../utils';
+import { Command } from './command';
 
 export class InfoCommand implements Command {
     public metadata: ApplicationCommandData = {
