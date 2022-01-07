@@ -229,8 +229,7 @@
                     "False: {{COM:emotes.deny}}"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}",
-                    "icon": "{{ICON}}"
+                    "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
             },
@@ -243,8 +242,7 @@
                     "False: {{COM:emotes.deny}}"
                 ],
                 "footer": {
-                    "text": "{{COM:footers.expire}}",
-                    "icon": "{{ICON}}"
+                    "text": "{{COM:footers.expire}}"
                 },
                 "timestamp": true
             },
@@ -259,8 +257,7 @@
                     "False: {{COM:emotes.deny}}"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}",
-                    "icon": "{{ICON}}"
+                    "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
             }

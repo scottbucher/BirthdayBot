@@ -36,16 +36,13 @@ export class TrustedSettingsCommand {
                     Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                 );
             });
-            let confirmationMessage = await MessageUtils.sendIntr(
-                intr,
-                Lang.getEmbed('prompts', `config.${promptEmbed}`, data.lang())
-            );
+            let confirmationMessage = await MessageUtils.sendIntr(intr, promptEmbed);
             // Send confirmation and emotes
             for (let option of trueFalseOptions) {
                 await MessageUtils.react(confirmationMessage, option);
             }
 
-            let option: number = await collectReact(
+            choice = await collectReact(
                 confirmationMessage,
                 async (msgReaction: MessageReaction, reactor: User) => {
                     if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
@@ -53,7 +50,7 @@ export class TrustedSettingsCommand {
                 }
             );
 
-            if (option === undefined) return;
+            if (choice === undefined) return;
         } else choice = 1;
 
         let successEmbed: string;
@@ -71,7 +68,7 @@ export class TrustedSettingsCommand {
                     : 'successEmbeds.trustedPreventsMessageNo';
                 await this.guildRepo.updateTrustedPreventsRole(intr.guild.id, choice);
                 break;
-            case 'TRUSTED_REQUIRE_ALL':
+            case 'REQUIRE_ALL_TRUSTED_ROLES':
                 successEmbed = choice
                     ? 'successEmbeds.requireAllTrustedYes'
                     : 'successEmbeds.requireAllTrustedNo';
