@@ -7,7 +7,7 @@ let setTimeoutAsync = promisify(setTimeout);
 
 export class TimeUtils {
     public static async sleep(ms: number): Promise<void> {
-        return await setTimeoutAsync(ms);
+        return setTimeoutAsync(ms);
     }
 
     public static now(): Moment {

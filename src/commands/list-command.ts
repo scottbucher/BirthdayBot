@@ -1,8 +1,4 @@
-import {
-    ApplicationCommandData,
-    CommandInteraction,
-    PermissionString,
-} from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { EventData } from '../models/internal-models';
