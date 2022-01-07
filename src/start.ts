@@ -20,6 +20,7 @@ import {
     TestCommand,
     TrustedRoleCommand,
     ViewCommand,
+    VoteCommand,
 } from './commands';
 import {
     CommandHandler,
@@ -50,7 +51,6 @@ import {
     TimezoneSubCommand,
     UseTimezoneSubCommand,
 } from './commands/config-settings';
-import { VoteCommand } from './commands/vote-command';
 import { CustomClient } from './extensions';
 import { Reaction } from './reactions';
 import { DataAccess } from './services/database/data-access';

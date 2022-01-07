@@ -19,3 +19,4 @@ export { SubscribeCommand } from './subscribe-command';
 export { PremiumCommand } from './premium-command';
 export { PurgeCommand } from './purge-command';
 export { MapCommand } from './map-command';
+export { VoteCommand } from './vote-command';
