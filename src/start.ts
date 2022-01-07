@@ -55,7 +55,7 @@ import {
 import { CustomClient } from './extensions';
 import { Reaction } from './reactions';
 import { DataAccess } from './services/database/data-access';
-import { Trigger } from './triggers';
+import { OldPrefixTrigger, Trigger } from './triggers';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -130,9 +130,7 @@ async function start(): Promise<void> {
     ];
 
     // Triggers
-    let triggers: Trigger[] = [
-        // TODO: Add new triggers here
-    ];
+    let triggers: Trigger[] = [new OldPrefixTrigger()];
 
     // Event handlers
     let guildJoinHandler = new GuildJoinHandler();
