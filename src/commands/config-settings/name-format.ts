@@ -1,6 +1,5 @@
 import { CommandInteraction, Message } from 'discord.js';
 import { EventData } from '../../models';
-import { LangCode } from '../../models/enums';
 import { Lang } from '../../services';
 import { GuildRepo } from '../../services/database/repos';
 import { FormatUtils, MessageUtils } from '../../utils';
@@ -13,7 +12,7 @@ export class NameFormatSubCommand {
         let nameFormat: string;
         let guildMember = intr.guild.members.resolve(intr.user.id);
         if (!reset) {
-            //prompt them for a setting
+            // prompt them for a setting
             let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
                 await MessageUtils.sendIntr(
                     intr,

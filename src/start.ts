@@ -20,6 +20,7 @@ import {
     TestCommand,
     TrustedRoleCommand,
     ViewCommand,
+    VoteCommand,
 } from './commands';
 import {
     CommandHandler,
@@ -44,17 +45,16 @@ import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/rest/v9';
 import { Options } from 'discord.js';
 import { Bot } from './bot';
-import { VoteCommand } from './commands/vote-command';
-import { CustomClient } from './extensions';
-import { Reaction } from './reactions';
-import { DataAccess } from './services/database/data-access';
-import { Trigger } from './triggers';
 import {
     DateFormatSubCommand,
     NameFormatSubCommand,
     TimezoneSubCommand,
     UseTimezoneSubCommand,
 } from './commands/config-settings';
+import { CustomClient } from './extensions';
+import { Reaction } from './reactions';
+import { DataAccess } from './services/database/data-access';
+import { Trigger } from './triggers';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
