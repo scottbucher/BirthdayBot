@@ -1,6 +1,5 @@
 import { DMChannel, GuildChannel, GuildMember, Permissions, TextBasedChannel } from 'discord.js';
 
-import { Command } from 'pm2';
 import { GuildData } from '../models/database';
 
 let Config = require('../../config/config.json');

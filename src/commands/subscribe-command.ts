@@ -1,12 +1,10 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import { Lang, Logger, SubscriptionService } from '../services';
 
-import { Command } from './command';
-import { EventData } from '../models/internal-models';
-import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
 import { PlanName } from '../models';
-import { channel } from 'diagnostics_channel';
+import { EventData } from '../models/internal-models';
+import { MessageUtils } from '../utils';
+import { Command } from './command';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');

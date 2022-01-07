@@ -8,9 +8,9 @@ import {
     Util,
 } from 'discord.js';
 
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
 import { channel } from 'diagnostics_channel';
+import { LangCode } from '../models/enums';
+import { Lang } from '../services';
 
 export class GuildUtils {
     public static findMember(guild: Guild, input: string): GuildMember {

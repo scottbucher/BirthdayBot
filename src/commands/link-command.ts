@@ -6,11 +6,10 @@ import {
 } from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { LangCode } from '../models/enums';
 import { MessageUtils } from '../utils';
+import { Command } from './command';
 
 export class LinkCommand implements Command {
     public metadata: ApplicationCommandData = {

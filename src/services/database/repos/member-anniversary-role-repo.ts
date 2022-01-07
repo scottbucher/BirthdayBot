@@ -1,7 +1,7 @@
-import { DataAccess } from '../data-access';
 import { MemberAnniversaryRoles } from '../../../models/database/member-anniversary-role-models';
-import { Procedure } from '../procedure';
 import { SqlUtils } from '../../../utils';
+import { DataAccess } from '../data-access';
+import { Procedure } from '../procedure';
 
 export class MemberAnniversaryRoleRepo {
     constructor(private dataAccess: DataAccess) {}

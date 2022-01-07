@@ -22,15 +22,6 @@ import {
     ViewCommand,
 } from './commands';
 import {
-    BlacklistRepo,
-    CombinedRepo,
-    CustomMessageRepo,
-    GuildRepo,
-    MemberAnniversaryRoleRepo,
-    TrustedRoleRepo,
-    UserRepo,
-} from './services/database/repos';
-import {
     CommandHandler,
     GuildJoinHandler,
     GuildLeaveHandler,
@@ -39,16 +30,25 @@ import {
     TriggerHandler,
 } from './events';
 import { HttpService, JobService, Logger, SubscriptionService } from './services';
+import {
+    BlacklistRepo,
+    CombinedRepo,
+    CustomMessageRepo,
+    GuildRepo,
+    MemberAnniversaryRoleRepo,
+    TrustedRoleRepo,
+    UserRepo,
+} from './services/database/repos';
 
-import { Bot } from './bot';
-import { CustomClient } from './extensions';
-import { DataAccess } from './services/database/data-access';
-import { Options } from 'discord.js';
 import { REST } from '@discordjs/rest';
-import { Reaction } from './reactions';
 import { Routes } from 'discord-api-types/rest/v9';
-import { Trigger } from './triggers';
+import { Options } from 'discord.js';
+import { Bot } from './bot';
 import { VoteCommand } from './commands/vote-command';
+import { CustomClient } from './extensions';
+import { Reaction } from './reactions';
+import { DataAccess } from './services/database/data-access';
+import { Trigger } from './triggers';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');

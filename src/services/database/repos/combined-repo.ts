@@ -1,7 +1,7 @@
-import { DataAccess } from '../data-access';
-import { Procedure } from '../procedure';
 import { RawGuildCelebrationData } from '../../../models/database';
 import { SqlUtils } from '../../../utils';
+import { DataAccess } from '../data-access';
+import { Procedure } from '../procedure';
 
 export class CombinedRepo {
     constructor(private dataAccess: DataAccess) {}

@@ -1,7 +1,7 @@
+import { TrustedRoles } from '../../../models/database/trusted-role-models';
+import { SqlUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
-import { SqlUtils } from '../../../utils';
-import { TrustedRoles } from '../../../models/database/trusted-role-models';
 
 export class TrustedRoleRepo {
     constructor(private dataAccess: DataAccess) {}
