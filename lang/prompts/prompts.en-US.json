@@ -219,6 +219,50 @@
                     "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
+            },
+            "trustedPreventsMessage": {
+                "title": "Configure the Trusted Prevents Message Setting",
+                "description": [
+                    "Should the trusted role prevent the birthday message? [(?)]({{REF:docLinks.trustedPreventsMessage)",
+                    "",
+                    "True: {{REF:emotes.confirm}}",
+                    "False: {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "trustedPreventsRole": {
+                "title": "Configure the Trusted Prevents Message Role",
+                "description": [
+                    "Should the trusted role prevent the birthday role? [(?)]({{REF:docLinks.trustedPreventsRole}})",
+                    "",
+                    "True: {{REF:emotes.confirm}}",
+                    "False: {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "trustedRequireAll": {
+                "title": "Configure the Require All Trusted Roles Setting",
+                "description": [
+                    "With **{{COM:bot.name}} premium** you can set multiple trusted roles. Because of this, you can choose if a user needs one or all of the trusted roles to have their birthday celebrated.",
+                    "",
+                    "Should birthdays require all trusted roles? [(?)]({{REF:docLinks.requireAllTrustedRoles}})",
+                    "",
+                    "True: {{REF:emotes.confirm}}",
+                    "False: {{REF:emotes.deny}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
             }
         }
     },
