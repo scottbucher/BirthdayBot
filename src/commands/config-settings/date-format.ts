@@ -12,7 +12,7 @@ export class DateFormatSubCommand {
         let dateFormat: string;
 
         if (!reset) {
-            //prompt them for a setting
+            // prompt them for a setting
             let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
                 await MessageUtils.sendIntr(
                     intr,
