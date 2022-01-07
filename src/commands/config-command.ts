@@ -4,6 +4,12 @@ import { ApplicationCommandOptionType } from 'discord-api-types';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { Command } from './command';
+import {
+    DateFormatSubCommand,
+    NameFormatSubCommand,
+    TimezoneSubCommand,
+    UseTimezoneSubCommand,
+} from './config-settings';
 
 export class ConfigCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -70,22 +76,29 @@ export class ConfigCommand implements Command {
     public requireVote = false;
     public requirePremium = false;
 
+    constructor(
+        public nameFormatSubCommand: NameFormatSubCommand,
+        public timezoneSubCommand: TimezoneSubCommand,
+        public useTimezoneSubCommand: UseTimezoneSubCommand,
+        public dateFormatSubCommand: DateFormatSubCommand
+    ) {}
+
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let setting = intr.options.getString('arguments.setting');
-        let reset = intr.options.getBoolean('arguments.reset');
+        let setting = intr.options.getString(Lang.getCom('arguments.setting'));
+        let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
 
         switch (setting) {
             case 'NAME_FORMAT':
-                // Code here
+                await this.nameFormatSubCommand.execute(intr, data, reset);
                 break;
             case 'TIME_ZONE':
-                // Code here
+                await this.timezoneSubCommand.execute(intr, data, reset);
                 break;
             case 'USE_TIMEZONE':
-                // Code here
+                await this.useTimezoneSubCommand.execute(intr, data, reset);
                 break;
             case 'DATE_FORMAT':
-                // Code here
+                await this.dateFormatSubCommand.execute(intr, data, reset);
                 break;
             case 'TRUSTED_PREVENTS_MESSAGE':
             case 'TRUSTED_PREVENTS_ROLE':

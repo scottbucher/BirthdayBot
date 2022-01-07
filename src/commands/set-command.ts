@@ -23,11 +23,6 @@ import { Command } from './command';
 
 let Config = require('../../config/config.json');
 
-const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.experience.promptExpireTime * 1000,
-    reset: true,
-};
-
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 export class SetCommand implements Command {
     public metadata: ApplicationCommandData = {

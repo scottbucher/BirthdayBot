@@ -145,6 +145,10 @@
         "trustedPreventsRole": "{{COM:links.docs}}/faq-1/birthday-system/trusted-system#what-is-the-trusted-prevents-message-role-setting",
         "requireAllTrustedRoles": "{{COM:links.docs}}/faq-1/birthday-system/trusted-system#what-is-the-require-all-trusted-role-setting",
         "whatIsBirthdayBlacklist": "{{COM:links.docs}}/faq-1/general#what-is-the-birthday-blacklist",
-        "recentUpdateDoc": "{{COM:links.docs}}/3.0-update"
+        "recentUpdateDoc": "{{COM:links.docs}}/3.0-update",
+        "whatIsNameFormat": "{{COM:links.docs}}/faq-1/general#what-is-the-name-format-setting",
+        "whatIsDefaultTimezone": "{{COM:links.docs}}/faq-1/general#what-is-the-default-timezone-setting",
+        "whatIsUseTimezone": "{{COM:links.docs}}/faq-1/general#what-is-the-use-timezone-setting",
+        "whatIsDateFormat": "{{COM:links.docs}}/faq-1/general#what-is-the-date-format-setting"
     }
 }

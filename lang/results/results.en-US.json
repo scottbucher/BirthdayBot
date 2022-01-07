@@ -51,6 +51,32 @@
             "setAttempts": {
                 "description": "Successfully set {{USER}}'s birthday attempts to {{AMOUNT}}!",
                 "color": "{{REF:colors.success}}"
+            },
+            "nameFormatSet": {
+                "description": [
+                    "Successfully updated the server's name format setting to `{{SETTING}}`!",
+                    "Names will now appear in this format: **{{FORMAT}}**"
+                ],
+                "color": "{{COM:colors.success}}"
+            },
+            "dateFormatSet": {
+                "description": [
+                    "Successfully updated the server's date format setting to `{{SETTING}}`!",
+                    "This is how birthdays will be detected in this server!"
+                ],
+                "color": "{{COM:colors.success}}"
+            },
+            "defaultTimeZoneSet": {
+                "description": "Successfully set your server's default timezone to **{{TIMEZONE}}**!",
+                "color": "{{COM:colors.success}}"
+            },
+            "useTimeZoneSettingSet": {
+                "description": "Birthdays will now be celebrated based on the {{OPTION}}'s timezone!",
+                "color": "{{COM:colors.success}}"
+            },
+            "defaultTimeCleared": {
+                "description": "Successfully cleared your server's default timezone!",
+                "color": "{{COM:colors.success}}"
             }
 
         },

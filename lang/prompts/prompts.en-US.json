@@ -159,6 +159,67 @@
             "inputRole": {
                 "description": "Please mention a role or input a role's name."
             }
+        },
+        "config": {
+            "nameFormat": {
+                "title": "Configure the Name Format Setting",
+                "description": [
+                    "Please type/paste the name format setting you would like. [(?)]({{COM:docLinks.whatIsNameFormat}})",
+                    "",
+                    "*Besides each option is how {{COM:bot.name}} will show names with that setting.*",
+                    "",
+                    "**Options**: ",
+                    "`Mention` - {{MENTION}}",
+                    "`Username` - {{USERNAME}}",
+                    "`Nickname` - {{NICKNAME}}",
+                    "`Tag` - {{TAG}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "timezone": {
+                "title": "Configure the Server Timezone Setting",
+                "description": [
+                    "Please type/paste the timezone you would like. [(?)]({{COM:docLinks.defaultTimeZone}})",
+                    "To find your time zone please use the [map time zone picker]({{COM:links.map}})!",
+                    "",
+                    "Simply click your location on the map and copy the name of the selected time zone.",
+                    "",
+                    "**Example Usage:** `America/New_York`"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "useTimezone": {
+                "title": "Configure the Use Timezone Setting",
+                "description": [
+                    "Please type/paste the use timezone setting you would like. [(?)]({{COM:docLinks.whatIsUseTimezone}})",
+                    "This decides whether or not {{COM:bot.name}} will use the server's timezone or the user's timezone.",
+                    "",
+                    "**Example Usage:** `user`"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "dateFormat": {
+                "title": "Configure the Date Format Setting",
+                "description": [
+                    "Please type/paste the date format setting you would like. [(?)]({{COM:docLinks.whatIsDateFormat}})",
+                    "This determines how {{COM:bot.name}} will detect dates in your discord.",
+                    "",
+                    "**Example Usage:** `month/day` or `day/month`"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            }
         }
     },
     "refs": {

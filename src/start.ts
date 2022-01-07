@@ -49,6 +49,12 @@ import { CustomClient } from './extensions';
 import { Reaction } from './reactions';
 import { DataAccess } from './services/database/data-access';
 import { Trigger } from './triggers';
+import {
+    DateFormatSubCommand,
+    NameFormatSubCommand,
+    TimezoneSubCommand,
+    UseTimezoneSubCommand,
+} from './commands/config-settings';
 
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -79,6 +85,12 @@ async function start(): Promise<void> {
     let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
     let combinedRepo = new CombinedRepo(dataAccess);
 
+    // Sub Commands
+    let nameFormatSubCommand = new NameFormatSubCommand(guildRepo);
+    let timezoneSubCommand = new TimezoneSubCommand(guildRepo);
+    let useTimezoneSubCommand = new UseTimezoneSubCommand(guildRepo);
+    let dateFormatSubCommand = new DateFormatSubCommand(guildRepo);
+
     // Commands
     let commands: Command[] = [
         new HelpCommand(),
@@ -86,7 +98,12 @@ async function start(): Promise<void> {
         new LinkCommand(),
         new TestCommand(),
         new BlacklistCommand(),
-        new ConfigCommand(),
+        new ConfigCommand(
+            nameFormatSubCommand,
+            timezoneSubCommand,
+            useTimezoneSubCommand,
+            dateFormatSubCommand
+        ),
         new MessageCommand(),
         new MemberAnniversaryRoleCommand(),
         new TrustedRoleCommand(),
