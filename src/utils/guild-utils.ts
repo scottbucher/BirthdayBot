@@ -14,7 +14,7 @@ import { Lang } from '../services';
 
 export class GuildUtils {
     public static findMember(guild: Guild, input: string): GuildMember {
-        const search = input.toLowerCase();
+        let search = input.toLowerCase();
         return guild.members.cache.find(
             member =>
                 member.displayName.toLowerCase().includes(search) ||
@@ -31,7 +31,7 @@ export class GuildUtils {
     }
 
     public static getMemberDisplayName(memberDiscordId: string, guild: Guild): string {
-        const displayName = guild.members.resolve(memberDiscordId)?.displayName;
+        let displayName = guild.members.resolve(memberDiscordId)?.displayName;
         return displayName ? Util.escapeMarkdown(displayName) : 'Unknown Member';
     }
 

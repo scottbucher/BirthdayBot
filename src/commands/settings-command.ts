@@ -1,13 +1,11 @@
 import {
     ApplicationCommandData,
     CommandInteraction,
-    MessageEmbed,
     PermissionString,
 } from 'discord.js';
-import { LangCode, Language } from '../models/enums';
+import { Language } from '../models/enums';
 import { FormatUtils, MessageUtils } from '../utils';
 
-import { channel } from 'diagnostics_channel';
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
@@ -52,9 +50,9 @@ export class SettingsCommand implements Command {
     constructor(public trustedRoleRepo: TrustedRoleRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        const type = intr.options.getString(Lang.getCom('arguments.setting')) ?? 'GENERAL';
-        const guild = intr.guild;
-        const hasPremium = data.subscription && data.subscription.service;
+        let type = intr.options.getString(Lang.getCom('arguments.setting')) ?? 'GENERAL';
+        let guild = intr.guild;
+        let hasPremium = data.subscription && data.subscription.service;
 
         if (type === 'MESSAGE') {
             // message settings
@@ -142,31 +140,31 @@ export class SettingsCommand implements Command {
         } else if (type === 'ADVANCED') {
             // advanced settings
             let birthdayMasterRole: string;
-            const preventsRole = Lang.getRef(
+            let preventsRole = Lang.getRef(
                 'info',
                 'boolean.' + (data.guild.TrustedPreventsRole ? 'true' : 'false'),
                 data.lang()
             );
-            const preventsMessage = Lang.getRef(
+            let preventsMessage = Lang.getRef(
                 'info',
                 'boolean.' + (data.guild.TrustedPreventsMessage ? 'true' : 'false'),
                 data.lang()
             );
-            const requireAllTrustedRoles = Lang.getRef(
+            let requireAllTrustedRoles = Lang.getRef(
                 'info',
                 'boolean.' + (data.guild.RequireAllTrustedRoles ? 'true' : 'false'),
                 data.lang()
             );
-            const useTimezone = Lang.getRef('info', 'terms.' + data.guild.UseTimezone, data.lang());
+            let useTimezone = Lang.getRef('info', 'terms.' + data.guild.UseTimezone, data.lang());
             birthdayMasterRole =
                 data.guild.BirthdayMasterRoleDiscordId === '0'
                     ? Lang.getRef('info', 'terms.notSet', data.lang())
                     : guild.roles.resolve(data.guild.BirthdayMasterRoleDiscordId)?.toString() ||
                       `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
 
-            const dateFormat = data.guild.DateFormat === 'month_day' ? 'Month/Day' : 'Day/Month';
+            let dateFormat = data.guild.DateFormat === 'month_day' ? 'Month/Day' : 'Day/Month';
 
-            const trustedRoleCount =
+            let trustedRoleCount =
                 (await this.trustedRoleRepo.getTrustedRoles(guild.id))?.trustedRoles.length ?? 0;
 
             await MessageUtils.sendIntr(
@@ -199,13 +197,13 @@ export class SettingsCommand implements Command {
                     : guild.roles.resolve(data.guild.BirthdayRoleDiscordId)?.toString() ||
                       `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
 
-            const nameFormat =
+            let nameFormat =
                 data.guild.NameFormat.charAt(0).toUpperCase() + data.guild.NameFormat.slice(1);
-            const defaultTimezone =
+            let defaultTimezone =
                 data.guild.DefaultTimezone === '0'
                     ? Lang.getRef('info', 'terms.notSet', data.lang())
                     : data.guild.DefaultTimezone;
-            const serverLanguage = Language.displayName(data.lang());
+            let serverLanguage = Language.displayName(data.lang());
 
             await MessageUtils.sendIntr(
                 intr,

@@ -30,11 +30,11 @@ export class MemberAnniversaryRoleRepo {
     }
 
     public async getMemberAnniversaryRoles(discordId: string): Promise<MemberAnniversaryRoles> {
-        const results = await this.dataAccess.executeProcedure(Procedure.MemberAnniversaryRole_Get, [
+        let results = await this.dataAccess.executeProcedure(Procedure.MemberAnniversaryRole_Get, [
             discordId,
         ]);
 
-        const memberAnniversaryRoles = SqlUtils.getTable(results, 0);
+        let memberAnniversaryRoles = SqlUtils.getTable(results, 0);
         return new MemberAnniversaryRoles(memberAnniversaryRoles, null);
     }
 
@@ -43,13 +43,13 @@ export class MemberAnniversaryRoleRepo {
         pageSize: number,
         page: number
     ): Promise<MemberAnniversaryRoles> {
-        const results = await this.dataAccess.executeProcedure(
+        let results = await this.dataAccess.executeProcedure(
             Procedure.MemberAnniversaryRole_GetList,
             [guildId, pageSize, page]
         );
 
-        const memberAnniversaryRolesData = SqlUtils.getTable(results, 0);
-        const stats = SqlUtils.getRow(results, 1, 0);
+        let memberAnniversaryRolesData = SqlUtils.getTable(results, 0);
+        let stats = SqlUtils.getRow(results, 1, 0);
         return new MemberAnniversaryRoles(memberAnniversaryRolesData, stats);
     }
 }

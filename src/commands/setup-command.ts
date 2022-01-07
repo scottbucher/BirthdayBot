@@ -1,29 +1,23 @@
 import {
     ApplicationCommandData,
-    BaseGuildTextChannel,
     CommandInteraction,
     Message,
-    MessageEmbed,
     MessageReaction,
     PermissionString,
     Role,
     TextBasedChannel,
-    TextChannel,
     User,
 } from 'discord.js';
 import { ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
 import { GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 
-import { channel } from 'diagnostics_channel';
-import { ApplicationCommandOptionType } from 'discord-api-types';
-import { LangCode } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { GuildRepo } from '../services/database/repos';
 import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
 
-const Config = require('../../config/config.json');
+let Config = require('../../config/config.json');
 
 export class SetupCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -41,27 +35,27 @@ export class SetupCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        const guild = intr.guild;
-        const botUser = guild.client.user;
+        let guild = intr.guild;
+        let botUser = guild.client.user;
         // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
-        const collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
+        let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
-        const collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
+        let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
-        const stopFilter: MessageFilter = (nextMsg: Message) =>
+        let stopFilter: MessageFilter = (nextMsg: Message) =>
             nextMsg.author.id === intr.user.id &&
             [Config.prefix, ...Config.stopCommands].includes(
                 nextMsg.content.split(/\s+/)[0].toLowerCase()
             );
-        const expireFunction: ExpireFunction = async () => {
+        let expireFunction: ExpireFunction = async () => {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
@@ -71,18 +65,18 @@ export class SetupCommand implements Command {
         let birthdayChannel: string;
         let birthdayRole: string;
 
-        const channelEmbed = Lang.getEmbed('prompts', 'setup.birthdayChannel', data.lang(), {
+        let channelEmbed = Lang.getEmbed('prompts', 'setup.birthdayChannel', data.lang(), {
             ICON: intr.client.user.displayAvatarURL(),
         }).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
 
-        const reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
+        let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 
-        const channelMessage = await MessageUtils.sendIntr(intr, channelEmbed);
-        for (const reactOption of reactOptions) {
+        let channelMessage = await MessageUtils.sendIntr(intr, channelEmbed);
+        for (let reactOption of reactOptions) {
             await MessageUtils.react(channelMessage, reactOption);
         }
 
-        const channelOption: boolean = await collectReact(
+        let channelOption: boolean = await collectReact(
             channelMessage,
             async (msgReaction: MessageReaction, reactor: User) => {
                 if (!reactOptions.includes(msgReaction.emoji.name)) return;
@@ -129,14 +123,14 @@ export class SetupCommand implements Command {
                 break;
             }
             case Config.emotes.select: {
-                const selectMessage = await MessageUtils.sendIntr(
+                let selectMessage = await MessageUtils.sendIntr(
                     intr,
                     Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())
                 );
 
                 birthdayChannel = await collect(async (nextMsg: Message) => {
                     // Find mentioned channel
-                    const channelInput: TextBasedChannel =
+                    let channelInput: TextBasedChannel =
                         GuildUtils.getMentionedTextChannel(nextMsg);
 
                     if (!channelInput) {
@@ -177,16 +171,16 @@ export class SetupCommand implements Command {
             }
         }
 
-        const roleEmbed = Lang.getEmbed('prompts', 'setup.birthdayRole', data.lang(), {
+        let roleEmbed = Lang.getEmbed('prompts', 'setup.birthdayRole', data.lang(), {
             ICON: intr.client.user.displayAvatarURL(),
         }).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
 
-        const roleMessage = await MessageUtils.sendIntr(intr, roleEmbed);
-        for (const reactOption of reactOptions) {
+        let roleMessage = await MessageUtils.sendIntr(intr, roleEmbed);
+        for (let reactOption of reactOptions) {
             await MessageUtils.react(roleMessage, reactOption);
         }
 
-        const roleOptions: boolean = await collectReact(
+        let roleOptions: boolean = await collectReact(
             roleMessage,
             async (msgReaction: MessageReaction, reactor: User) => {
                 if (!reactOptions.includes(msgReaction.emoji.name)) return;
@@ -210,7 +204,7 @@ export class SetupCommand implements Command {
                 break;
             }
             case Config.emotes.select: {
-                const selectMessage = await MessageUtils.sendIntr(
+                let selectMessage = await MessageUtils.sendIntr(
                     intr,
                     Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
                 );
@@ -266,7 +260,7 @@ export class SetupCommand implements Command {
                         return;
                     }
 
-                    const membersWithRole = roleInput.members.size;
+                    let membersWithRole = roleInput.members.size;
 
                     if (membersWithRole > 0 && membersWithRole < 100) {
                         await MessageUtils.sendIntr(
@@ -314,12 +308,12 @@ export class SetupCommand implements Command {
             }
         }
 
-        const channelOutput =
+        let channelOutput =
             birthdayChannel === '0'
                 ? `${Lang.getRef('info', 'terms.notSet', data.lang())}`
                 : guild.channels.resolve(birthdayChannel)?.toString() ||
                   `**${Lang.getRef('info', 'terms.unknownChannel', data.lang())}**`;
-        const roleOutput =
+        let roleOutput =
             birthdayRole === '0'
                 ? `${Lang.getRef('info', 'terms.notSet', data.lang())}`
                 : guild.roles.resolve(birthdayRole)?.toString() ||

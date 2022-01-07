@@ -1,11 +1,11 @@
-import { Client, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database';
 import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils';
 
 import { Logger } from '.';
 
-const Config = require('../../config/config.json');
-const Logs = require('../../lang/logs.json');
+let Config = require('../../config/config.json');
+let Logs = require('../../lang/logs.json');
 
 export class CelebrationService {
     // TODO: add to config
@@ -17,7 +17,7 @@ export class CelebrationService {
         hasPremium: boolean
     ): Promise<void> {
         try {
-            const guildData = guildCelebrationData.guildData;
+            let guildData = guildCelebrationData.guildData;
             let birthdayChannel: TextChannel;
             let memberAnniversaryChannel: TextChannel;
             let serverAnniversaryChannel: TextChannel;
@@ -52,19 +52,19 @@ export class CelebrationService {
                 // If either are set we have to calculate birthday information
                 if (birthdayChannel || birthdayRole) {
                     // Get a list of memberIds
-                    const memberIds = guildMembers.map(member => member.id);
+                    let memberIds = guildMembers.map(member => member.id);
 
                     // Get the blacklist data for this guild
-                    const blacklistData = guildCelebrationData.blacklist.map(b => b.DiscordId);
+                    let blacklistData = guildCelebrationData.blacklist.map(b => b.DiscordId);
 
                     // Remove members who are not apart of this guild and who are in the birthday blacklist
-                    const memberUserDatas = userData.filter(
+                    let memberUserDatas = userData.filter(
                         userData =>
                             memberIds.includes(userData.UserDiscordId) &&
                             !blacklistData.includes(userData.UserDiscordId)
                     );
 
-                    const membersWithBirthdayTodayOrYesterday = guildMembers.filter(
+                    let membersWithBirthdayTodayOrYesterday = guildMembers.filter(
                         member =>
                             ![...member.roles.cache.keys()].find(r => blacklistData.includes(r)) &&
                             CelebrationUtils.isBirthdayTodayOrYesterday(
@@ -73,7 +73,7 @@ export class CelebrationService {
                             )
                     );
 
-                    const birthdayMemberStatuses = membersWithBirthdayTodayOrYesterday.map(m =>
+                    let birthdayMemberStatuses = membersWithBirthdayTodayOrYesterday.map(m =>
                         CelebrationUtils.getBirthdayMemberStatus(
                             memberUserDatas.find(data => data.UserDiscordId === m.id),
                             m,
@@ -112,7 +112,7 @@ export class CelebrationService {
                         .map(m => m.member);
 
                     // Filter for those who need the role added/removed and pass the trusted check
-                    const membersWhoNeedRole = birthdayMemberStatuses.filter(
+                    let membersWhoNeedRole = birthdayMemberStatuses.filter(
                         m =>
                             (m.needsRoleAdded || m.needsRoleRemoved) &&
                             (!trustedRoles ||
@@ -130,16 +130,16 @@ export class CelebrationService {
                         // Send messages
 
                         // Get all regular birthday messages
-                        const birthdayMessages = guildCelebrationData.customMessages.filter(
+                        let birthdayMessages = guildCelebrationData.customMessages.filter(
                             message => message.Type === 'birthday' && message.UserDiscordId === '0'
                         );
 
-                        const userSpecificMessagesToSend = [];
+                        let userSpecificMessagesToSend = [];
 
                         if (hasPremium) {
                             // All messages with a user id (and where that user id exists in our birthday guild member list) is a user specific message
-                            const memberIds = membersWhoNeedMessage.map(member => member.id);
-                            const birthdayUserSpecificMessages =
+                            let memberIds = membersWhoNeedMessage.map(member => member.id);
+                            let birthdayUserSpecificMessages =
                                 guildCelebrationData.customMessages.filter(
                                     message =>
                                         message.Type === 'birthday' &&
@@ -148,12 +148,12 @@ export class CelebrationService {
                                 );
 
                             // Map to a user id string array
-                            const userSpecificMessageIds = birthdayUserSpecificMessages.map(
+                            let userSpecificMessageIds = birthdayUserSpecificMessages.map(
                                 message => message.UserDiscordId
                             );
 
                             // List of members with a user specific message
-                            const birthdayMembersUserSpecific: GuildMember[] =
+                            let birthdayMembersUserSpecific: GuildMember[] =
                                 membersWhoNeedMessage.filter(member =>
                                     userSpecificMessageIds.includes(member.id)
                                 );
@@ -163,7 +163,7 @@ export class CelebrationService {
                                 birthday => !birthdayMembersUserSpecific.includes(birthday)
                             );
 
-                            for (const birthdayMember of birthdayMembersUserSpecific) {
+                            for (let birthdayMember of birthdayMembersUserSpecific) {
                                 userSpecificMessagesToSend.push(
                                     CelebrationUtils.getUserSpecificCelebrationMessage(
                                         guild,
@@ -195,7 +195,7 @@ export class CelebrationService {
 
                         if (userSpecificMessagesToSend.length > 0 || genericBirthdayMessage) {
                             // Get the mention string
-                            const mentionString =
+                            let mentionString =
                                 guildCelebrationData.guildData.BirthdayMentionSetting !== 'none'
                                     ? CelebrationUtils.getMentionString(
                                           guildCelebrationData.guildData,
@@ -209,7 +209,7 @@ export class CelebrationService {
                         }
 
                         if (userSpecificMessagesToSend.length > 0) {
-                            for (const message of userSpecificMessagesToSend) {
+                            for (let message of userSpecificMessagesToSend) {
                                 await MessageUtils.sendWithDelay(
                                     birthdayChannel,
                                     message,
@@ -235,7 +235,7 @@ export class CelebrationService {
 
                     if (birthdayRole && membersWhoNeedRole.length > 0) {
                         // Give/Take roles
-                        for (const birthdayMemberStatus of membersWhoNeedRole) {
+                        for (let birthdayMemberStatus of membersWhoNeedRole) {
                             if (birthdayMemberStatus.needsRoleAdded) {
                                 // Give the role
                                 await ActionUtils.giveRole(
@@ -298,7 +298,7 @@ export class CelebrationService {
                     memberAnniversaryChannel ||
                     (memberAnniversaryRoles && memberAnniversaryRoles.length > 0)
                 ) {
-                    const anniversaryMemberStatuses = guildMembers.map(m =>
+                    let anniversaryMemberStatuses = guildMembers.map(m =>
                         CelebrationUtils.getAnniversaryMemberStatuses(
                             m,
                             guildData,
@@ -314,20 +314,20 @@ export class CelebrationService {
 
                         if (membersWhoNeedMessage.length > 0) {
                             // Get all regular birthday messages
-                            const memberAnniversaryMessages =
+                            let memberAnniversaryMessages =
                                 guildCelebrationData.customMessages.filter(
                                     message =>
                                         message.Type === 'memberanniversary' &&
                                         message.UserDiscordId === '0'
                                 );
 
-                            const userSpecificMessagesToSend = [];
+                            let userSpecificMessagesToSend = [];
 
                             if (hasPremium) {
                                 // User Specific Messages
                                 // All messages with a user id (and where that user id exists in our birthday guild member list) is a user specific message
-                                const memberIds = membersWhoNeedMessage.map(member => member.id);
-                                const memberAnniversaryUserSpecificMessages =
+                                let memberIds = membersWhoNeedMessage.map(member => member.id);
+                                let memberAnniversaryUserSpecificMessages =
                                     guildCelebrationData.customMessages.filter(
                                         message =>
                                             message.Type === 'memberanniversary' &&
@@ -336,13 +336,13 @@ export class CelebrationService {
                                     );
 
                                 // Map to a user id string array
-                                const userSpecificMessageIds =
+                                let userSpecificMessageIds =
                                     memberAnniversaryUserSpecificMessages.map(
                                         message => message.UserDiscordId
                                     );
 
                                 // List of members with a user specific message
-                                const memberAnniversaryMembersUserSpecific: GuildMember[] =
+                                let memberAnniversaryMembersUserSpecific: GuildMember[] =
                                     membersWhoNeedMessage.filter(member =>
                                         userSpecificMessageIds.includes(member.id)
                                     );
@@ -353,7 +353,7 @@ export class CelebrationService {
                                         !memberAnniversaryMembersUserSpecific.includes(anniversary)
                                 );
 
-                                for (const memberAnniversaryMember of memberAnniversaryMembersUserSpecific) {
+                                for (let memberAnniversaryMember of memberAnniversaryMembersUserSpecific) {
                                     userSpecificMessagesToSend.push(
                                         CelebrationUtils.getUserSpecificCelebrationMessage(
                                             guild,
@@ -370,18 +370,18 @@ export class CelebrationService {
                             }
 
                             // Get an array of year values (Use set to remove duplicates)
-                            const differentYears = [
+                            let differentYears = [
                                 ...new Set(
                                     membersWhoNeedMessage.map(data =>
                                         CelebrationUtils.getMemberYears(data, guildData)
                                     )
                                 ),
                             ];
-                            const regularMessagesToSend: string[] = [];
-                            const embedMessagesToSend: MessageEmbed[] = [];
+                            let regularMessagesToSend: string[] = [];
+                            let embedMessagesToSend: MessageEmbed[] = [];
 
-                            for (const year of differentYears) {
-                                const message = CelebrationUtils.getCelebrationMessage(
+                            for (let year of differentYears) {
+                                let message = CelebrationUtils.getCelebrationMessage(
                                     guild,
                                     guildData,
                                     memberAnniversaryMessages,
@@ -408,7 +408,7 @@ export class CelebrationService {
                                 userSpecificMessagesToSend.length > 0
                             ) {
                                 // Get the mention string
-                                const mentionString =
+                                let mentionString =
                                     guildCelebrationData.guildData
                                         .MemberAnniversaryMentionSetting !== 'none'
                                         ? CelebrationUtils.getMentionString(
@@ -425,7 +425,7 @@ export class CelebrationService {
 
                                 // Send our user specific messages for this guild
                                 if (userSpecificMessagesToSend.length > 0) {
-                                    for (const message of userSpecificMessagesToSend) {
+                                    for (let message of userSpecificMessagesToSend) {
                                         await MessageUtils.sendWithDelay(
                                             memberAnniversaryChannel,
                                             message,
@@ -438,10 +438,10 @@ export class CelebrationService {
                                 }
 
                                 // Compile our list of regular messages to send based on the 4096 character limit
-                                const regularMessages: string[] = [];
+                                let regularMessages: string[] = [];
                                 let counter = 0;
                                 if (regularMessagesToSend.length > 0) {
-                                    for (const message of regularMessagesToSend) {
+                                    for (let message of regularMessagesToSend) {
                                         if (
                                             regularMessages[counter].concat('\n\n' + message)
                                                 .length > 4096
@@ -460,19 +460,19 @@ export class CelebrationService {
 
                                 // First we need to get a list of colors by mapping and removing duplicates
                                 // If they don't have premium use the default color otherwise use the colors of the custom messages
-                                const colors: number[] = hasPremium
+                                let colors: number[] = hasPremium
                                     ? [...new Set(embedMessagesToSend.map(embed => embed.color))]
                                     : [Config.colors.default];
 
                                 // Now we loop through the colors and create a list of messages to send
-                                const embedMessages: MessageEmbed[] = [];
+                                let embedMessages: MessageEmbed[] = [];
                                 counter = 0;
-                                for (const color of colors) {
+                                for (let color of colors) {
                                     // Only get the messages that have the specified color if they have premium
-                                    const embedDescriptions: string[] = embedMessagesToSend
+                                    let embedDescriptions: string[] = embedMessagesToSend
                                         .filter(embed => !hasPremium || embed.color === color)
                                         .map(embed => embed.description);
-                                    for (const message of embedDescriptions) {
+                                    for (let message of embedDescriptions) {
                                         if (embedMessages.length === 0) {
                                             embedMessages.push(
                                                 new MessageEmbed()
@@ -501,7 +501,7 @@ export class CelebrationService {
                                 if (embedMessages.length > 0) {
                                     // Send our message(s)
 
-                                    for (const message of embedMessages)
+                                    for (let message of embedMessages)
                                         await MessageUtils.sendWithDelay(
                                             memberAnniversaryChannel,
                                             message,
@@ -512,7 +512,7 @@ export class CelebrationService {
                                 if (regularMessagesToSend.length > 0) {
                                     // Send our message(s)
 
-                                    for (const message of regularMessagesToSend)
+                                    for (let message of regularMessagesToSend)
                                         await MessageUtils.sendWithDelay(
                                             memberAnniversaryChannel,
                                             message,
@@ -528,15 +528,15 @@ export class CelebrationService {
 
                     if (memberAnniversaryRoles && memberAnniversaryRoles.length > 0) {
                         // Give Member Anniversary Roles
-                        const statuses = anniversaryMemberStatuses.filter(r => r.role);
-                        const giveRoles = [...new Set(statuses.map(m => m.role))];
+                        let statuses = anniversaryMemberStatuses.filter(r => r.role);
+                        let giveRoles = [...new Set(statuses.map(m => m.role))];
 
-                        for (const role of giveRoles) {
-                            const membersWhoNeedsThisRole = statuses
+                        for (let role of giveRoles) {
+                            let membersWhoNeedsThisRole = statuses
                                 .filter(m => m.role === role)
                                 .map(m => m.member);
                             // Give Anniversary Roles
-                            for (const memberWhoNeedsThisRole of membersWhoNeedsThisRole) {
+                            for (let memberWhoNeedsThisRole of membersWhoNeedsThisRole) {
                                 await ActionUtils.giveRole(
                                     memberWhoNeedsThisRole,
                                     role,
@@ -581,13 +581,13 @@ export class CelebrationService {
                         serverAnniversaryChannel &&
                         CelebrationUtils.isServerAnniversaryMessage(guild, guildData)
                     ) {
-                        const serverAnniversaryMessages = guildCelebrationData.customMessages.filter(
+                        let serverAnniversaryMessages = guildCelebrationData.customMessages.filter(
                             message =>
                                 message.Type === 'serveranniversary' &&
                                 message.UserDiscordId === '0'
                         );
                         // Give Server Anniversary Message
-                        const message = CelebrationUtils.getCelebrationMessage(
+                        let message = CelebrationUtils.getCelebrationMessage(
                             guild,
                             guildData,
                             serverAnniversaryMessages,

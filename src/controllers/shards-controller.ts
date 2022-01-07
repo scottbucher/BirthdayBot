@@ -13,8 +13,8 @@ import {
 import { Logger } from '../services';
 import { Controller } from './controller';
 
-const Config = require('../../config/config.json');
-const Logs = require('../../lang/logs.json');
+let Config = require('../../config/config.json');
+let Logs = require('../../lang/logs.json');
 
 export class ShardsController implements Controller {
     public path = '/shards';
@@ -31,16 +31,16 @@ export class ShardsController implements Controller {
     }
 
     private async getShards(req: Request, res: Response): Promise<void> {
-        const shardDatas = await Promise.all(
+        let shardDatas = await Promise.all(
             this.shardManager.shards.map(async shard => {
-                const shardInfo: ShardInfo = {
+                let shardInfo: ShardInfo = {
                     id: shard.id,
                     ready: shard.ready,
                     error: false,
                 };
 
                 try {
-                    const uptime = (await shard.fetchClientValue('uptime')) as number;
+                    let uptime = (await shard.fetchClientValue('uptime')) as number;
                     shardInfo.uptimeSecs = Math.floor(uptime / 1000);
                 } catch (error) {
                     Logger.error(Logs.error.managerShardInfo, error);
@@ -51,12 +51,12 @@ export class ShardsController implements Controller {
             })
         );
 
-        const stats: ShardStats = {
+        let stats: ShardStats = {
             shardCount: this.shardManager.shards.size,
             uptimeSecs: Math.floor(process.uptime()),
         };
 
-        const resBody: GetShardsResponse = {
+        let resBody: GetShardsResponse = {
             shards: shardDatas,
             stats,
         };
@@ -64,11 +64,11 @@ export class ShardsController implements Controller {
     }
 
     private async setShardPresences(req: Request, res: Response): Promise<void> {
-        const reqBody: SetShardPresencesRequest = res.locals.input;
+        let reqBody: SetShardPresencesRequest = res.locals.input;
 
         await this.shardManager.broadcastEval(
             (client, context) => {
-                const customClient = client as CustomClient;
+                let customClient = client as CustomClient;
                 return customClient.setPresence(context.type, context.name, context.url);
             },
             { context: { type: reqBody.type, name: reqBody.name, url: reqBody.url } }

@@ -19,9 +19,9 @@ export class BlacklistRepo {
     }
 
     public async getBlacklist(discordId: string): Promise<Blacklisted> {
-        const results = await this.dataAccess.executeProcedure(Procedure.Blacklist_Get, [discordId]);
+        let results = await this.dataAccess.executeProcedure(Procedure.Blacklist_Get, [discordId]);
 
-        const blacklist = SqlUtils.getTable(results, 0);
+        let blacklist = SqlUtils.getTable(results, 0);
         return new Blacklisted(blacklist, null);
     }
 
@@ -30,14 +30,14 @@ export class BlacklistRepo {
         pageSize: number,
         page: number
     ): Promise<Blacklisted> {
-        const results = await this.dataAccess.executeProcedure(Procedure.Blacklist_GetList, [
+        let results = await this.dataAccess.executeProcedure(Procedure.Blacklist_GetList, [
             guildId,
             pageSize,
             page,
         ]);
 
-        const blacklistData = SqlUtils.getTable(results, 0);
-        const stats = SqlUtils.getRow(results, 1, 0);
+        let blacklistData = SqlUtils.getTable(results, 0);
+        let stats = SqlUtils.getRow(results, 1, 0);
         return new Blacklisted(blacklistData, stats);
     }
 }

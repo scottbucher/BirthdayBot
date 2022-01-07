@@ -54,8 +54,8 @@ export class ViewCommand implements Command {
     constructor(private userRepo: UserRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        const type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
-        const target = intr.options.getUser(Lang.getCom('arguments.user')) ?? intr.user;
+        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
+        let target = intr.options.getUser(Lang.getCom('arguments.user')) ?? intr.user;
 
         if (target !== intr.user && intr.channel instanceof DMChannel) {
             MessageUtils.sendIntr(
@@ -67,7 +67,7 @@ export class ViewCommand implements Command {
 
         switch (type) {
             case 'BIRTHDAY':
-                const userData = await this.userRepo.getUser(target.id);
+                let userData = await this.userRepo.getUser(target.id);
 
                 if (!userData || !userData.Birthday || !userData.TimeZone) {
                     await MessageUtils.sendIntr(
@@ -105,8 +105,8 @@ export class ViewCommand implements Command {
                     );
                     return;
                 }
-                const guildMember = intr.guild.members.resolve(target.id);
-                const memberAnniversary = moment(guildMember.joinedAt).format('MMMM Do');
+                let guildMember = intr.guild.members.resolve(target.id);
+                let memberAnniversary = moment(guildMember.joinedAt).format('MMMM Do');
 
                 await MessageUtils.sendIntr(
                     intr,

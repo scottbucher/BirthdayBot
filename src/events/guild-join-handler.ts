@@ -4,7 +4,7 @@ import { ClientUtils, MessageUtils } from '../utils';
 import { Guild } from 'discord.js';
 import { EventHandler } from './event-handler';
 
-const Logs = require('../../lang/logs.json');
+let Logs = require('../../lang/logs.json');
 
 export class GuildJoinHandler implements EventHandler {
     public async process(guild: Guild): Promise<void> {
@@ -19,8 +19,8 @@ export class GuildJoinHandler implements EventHandler {
 
         // Send welcome message to the server's notify channel
         // TODO: Replace "Lang.Default" here with the server's language
-        const guildLang = Lang.Default;
-        const notifyChannel = await ClientUtils.findNotifyChannel(guild, guildLang);
+        let guildLang = Lang.Default;
+        let notifyChannel = await ClientUtils.findNotifyChannel(guild, guildLang);
         if (notifyChannel) {
             await MessageUtils.send(
                 notifyChannel,
@@ -33,8 +33,8 @@ export class GuildJoinHandler implements EventHandler {
 
         // Send welcome message to owner
         // TODO: Replace "Lang.Default" here with the owner's language
-        const ownerLang = Lang.Default;
-        const owner = await guild.fetchOwner();
+        let ownerLang = Lang.Default;
+        let owner = await guild.fetchOwner();
         if (owner) {
             await MessageUtils.send(
                 owner.user,

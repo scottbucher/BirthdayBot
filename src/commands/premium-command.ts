@@ -5,8 +5,8 @@ import { MessageUtils, TimeUtils } from '../utils';
 import { EventData } from '../models/internal-models';
 import { Command } from './command';
 
-const Config = require('../../config/config.json');
-const Logs = require('../../lang/logs.json');
+let Config = require('../../config/config.json');
+let Logs = require('../../lang/logs.json');
 export class PremiumCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.premium'),
@@ -29,7 +29,7 @@ export class PremiumCommand implements Command {
             return;
         }
 
-        const subStatus = data.subscription;
+        let subStatus = data.subscription;
 
         if (!subStatus || !subStatus.service) {
             await MessageUtils.sendIntr(
@@ -63,10 +63,10 @@ export class PremiumCommand implements Command {
             return;
         }
 
-        const lastPayment = TimeUtils.getMoment(subStatus.subscription.times.lastPayment);
-        const paidUntil = TimeUtils.getMoment(subStatus.subscription.times.paidUntil);
+        let lastPayment = TimeUtils.getMoment(subStatus.subscription.times.lastPayment);
+        let paidUntil = TimeUtils.getMoment(subStatus.subscription.times.paidUntil);
 
-        const na = Lang.getRef('info', 'terms.na', data.lang());
+        let na = Lang.getRef('info', 'terms.na', data.lang());
         await MessageUtils.sendIntr(
             intr,
             Lang.getEmbed('info', 'premium.subscription', data.lang(), {

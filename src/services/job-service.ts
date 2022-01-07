@@ -3,13 +3,13 @@ import schedule from 'node-schedule';
 import { Logger } from '.';
 import { Job } from '../jobs';
 
-const Logs = require('../../lang/logs.json');
+let Logs = require('../../lang/logs.json');
 
 export class JobService {
     constructor(private jobs: Job[]) {}
 
     public start(): void {
-        for (const job of this.jobs) {
+        for (let job of this.jobs) {
             schedule.scheduleJob(job.schedule, async () => {
                 try {
                     if (job.log) {

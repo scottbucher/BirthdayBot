@@ -5,10 +5,10 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
 export function mapClass(cls: ClassConstructor<object>): RequestHandler {
     return async (req: Request, res: Response, next: NextFunction) => {
         // Map to class
-        const obj: object = plainToInstance(cls, req.body);
+        let obj: object = plainToInstance(cls, req.body);
 
         // Validate class
-        const errors = await validate(obj, {
+        let errors = await validate(obj, {
             skipMissingProperties: true,
             whitelist: true,
             forbidNonWhitelisted: false,

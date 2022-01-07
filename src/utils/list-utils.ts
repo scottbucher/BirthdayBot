@@ -8,7 +8,7 @@ import { TrustedRoles } from '../models/database/trusted-role-models';
 import { LangCode } from '../models/enums';
 import { Lang } from '../services';
 
-const Config = require('../../config/config.json');
+let Config = require('../../config/config.json');
 // Class which handles list embed generation
 export class ListUtils {
     public static async getCustomMessageListEmbed(
@@ -41,20 +41,20 @@ export class ListUtils {
         }
         let description = '';
 
-        const maxMessagesFree: number =
+        let maxMessagesFree: number =
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.free
                 : type === 'serveranniversary'
                 ? Config.validation.message.maxCount.serverAnniversary.free
                 : Config.validation.message.maxCount.birthday.free;
-        const maxMessagesPaid: number =
+        let maxMessagesPaid: number =
             type === 'memberanniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.paid
                 : type === 'serveranniversary'
                 ? Config.validation.message.maxCount.serverAnniversary.paid
                 : Config.validation.message.maxCount.birthday.paid;
 
-        for (const customMessage of customMessageResults.customMessages) {
+        for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
             if (hasPremium || customMessage.Position <= maxMessagesFree) {
                 description += `**${i.toLocaleString()}.** ${customMessage.Message}\n`;
@@ -146,8 +146,8 @@ export class ListUtils {
         }
         let description = '';
 
-        for (const customMessage of customMessageResults.customMessages) {
-            const member = guild.members.resolve(customMessage.UserDiscordId);
+        for (let customMessage of customMessageResults.customMessages) {
+            let member = guild.members.resolve(customMessage.UserDiscordId);
             if (hasPremium) {
                 description += `${
                     member
@@ -225,16 +225,16 @@ export class ListUtils {
         let i = (page - 1) * pageSize + 1;
 
         if (trustedRoleResults.trustedRoles.length === 0) {
-            const embed = new MessageEmbed()
+            let embed = new MessageEmbed()
                 .setDescription(Lang.getRef('info', 'list.noTrustedRoles', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
         let description = '';
 
-        for (const trustedRole of trustedRoleResults.trustedRoles) {
+        for (let trustedRole of trustedRoleResults.trustedRoles) {
             // dynamically check which ones to cross out due to the server not having premium anymore
-            const role = guild.roles.resolve(trustedRole.TrustedRoleDiscordId);
+            let role = guild.roles.resolve(trustedRole.TrustedRoleDiscordId);
             if (
                 hasPremium ||
                 trustedRole.Position <= Config.validation.trustedRoles.maxCount.free
@@ -289,29 +289,29 @@ export class ListUtils {
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
         if (userDataResults.userData.length === 0) {
-            const embed = new MessageEmbed()
+            let embed = new MessageEmbed()
                 .setDescription(Lang.getRef('info', 'list.noBirthdays', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
         let description = '';
-        const birthdays = [
+        let birthdays = [
             ...new Set(
                 userDataResults.userData.map(data => moment(data.Birthday).format('MMMM Do'))
             ),
         ]; // remove duplicates
 
         // Go through the list of birthdays
-        for (const birthday of birthdays) {
-            const users = userDataResults.userData.filter(
+        for (let birthday of birthdays) {
+            let users = userDataResults.userData.filter(
                 data => moment(data.Birthday).format('MMMM Do') === birthday
             ); // Get all users with this birthday to create the sub list
 
-            const members = guild.members.cache
+            let members = guild.members.cache
                 .filter(m => users.map(u => u.UserDiscordId).includes(m.id))
                 .map(member => member);
 
-            const userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
+            let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
             description += `__**${birthday}**__: ${userList}\n`; // Append the description
         }
 
@@ -339,22 +339,22 @@ export class ListUtils {
         let embed: MessageEmbed;
         if (guildMembers.length === 0) {
             // Not implemented
-            const embed = new MessageEmbed()
+            let embed = new MessageEmbed()
                 .setDescription(Lang.getRef('info', 'list.noMemberAnniversaries', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
         let description = '';
-        const anniversaries = [
+        let anniversaries = [
             ...new Set(guildMembers.map(m => moment(m.joinedAt).format('MMMM Do'))),
         ]; // remove duplicates
 
         // Go through the list of birthdays
-        for (const anniversary of anniversaries) {
-            const members = guildMembers.filter(
+        for (let anniversary of anniversaries) {
+            let members = guildMembers.filter(
                 m => moment(m.joinedAt).format('MMMM Do') === anniversary
             ); // Get all users with this birthday to create the sub list
-            const userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
+            let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
             description += `__**${anniversary}**__: ${userList}\n`; // Append the description
         }
 
@@ -380,15 +380,15 @@ export class ListUtils {
         let embed: MessageEmbed;
 
         if (blacklistResults.blacklist.length === 0) {
-            const embed = new MessageEmbed()
+            let embed = new MessageEmbed()
                 .setDescription(Lang.getRef('info', 'list.emptyBlacklist', LangCode.EN_US))
                 .setColor(Config.colors.default);
             return embed;
         }
         let description = '';
-        const targets = blacklistResults.blacklist.map(data => data.DiscordId);
+        let targets = blacklistResults.blacklist.map(data => data.DiscordId);
 
-        for (const target of targets) {
+        for (let target of targets) {
             description += `**${
                 guild.members.resolve(target)?.displayName ||
                 guild.roles.resolve(target)?.toString() ||
@@ -418,7 +418,7 @@ export class ListUtils {
         let embed: MessageEmbed;
 
         if (memberAnniversaryRoleResults.memberAnniversaryRoles.length === 0) {
-            const embed = new MessageEmbed()
+            let embed = new MessageEmbed()
                 .setDescription(
                     Lang.getRef('info', 'list.noMemberAnniversaryRoles', LangCode.EN_US)
                 )
@@ -427,9 +427,9 @@ export class ListUtils {
         }
         let description = '';
 
-        for (const memberAnniversaryRole of memberAnniversaryRoleResults.memberAnniversaryRoles) {
+        for (let memberAnniversaryRole of memberAnniversaryRoleResults.memberAnniversaryRoles) {
             // dynamically check which ones to cross out due to the server not having premium anymore
-            const role = guild.roles.resolve(memberAnniversaryRole.MemberAnniversaryRoleDiscordId);
+            let role = guild.roles.resolve(memberAnniversaryRole.MemberAnniversaryRoleDiscordId);
             if (
                 hasPremium ||
                 memberAnniversaryRole.Position <=

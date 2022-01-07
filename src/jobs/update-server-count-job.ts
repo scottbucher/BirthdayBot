@@ -6,9 +6,9 @@ import { HttpService, Lang, Logger } from '../services';
 import { ShardUtils } from '../utils';
 import { Job } from './job';
 
-const Config = require('../../config/config.json');
-const BotSites: BotSite[] = require('../../config/bot-sites.json');
-const Logs = require('../../lang/logs.json');
+let Config = require('../../config/config.json');
+let BotSites: BotSite[] = require('../../config/bot-sites.json');
+let Logs = require('../../lang/logs.json');
 
 export class UpdateServerCountJob implements Job {
     public name = 'Update Server Count';
@@ -22,15 +22,15 @@ export class UpdateServerCountJob implements Job {
     }
 
     public async run(): Promise<void> {
-        const serverCount = await ShardUtils.serverCount(this.shardManager);
+        let serverCount = await ShardUtils.serverCount(this.shardManager);
 
-        const type: ActivityType = 'STREAMING';
-        const name = `to ${serverCount.toLocaleString()} servers`;
-        const url = Lang.getCom('links.stream');
+        let type: ActivityType = 'STREAMING';
+        let name = `to ${serverCount.toLocaleString()} servers`;
+        let url = Lang.getCom('links.stream');
 
         await this.shardManager.broadcastEval(
             (client, context) => {
-                const customClient = client as CustomClient;
+                let customClient = client as CustomClient;
                 return customClient.setPresence(context.type, context.name, context.url);
             },
             { context: { type, name, url } }
@@ -40,12 +40,12 @@ export class UpdateServerCountJob implements Job {
             Logs.info.updatedServerCount.replaceAll('{SERVER_COUNT}', serverCount.toLocaleString())
         );
 
-        for (const botSite of this.botSites) {
+        for (let botSite of this.botSites) {
             try {
-                const body = JSON.parse(
+                let body = JSON.parse(
                     botSite.body.replaceAll('{{SERVER_COUNT}}', serverCount.toString())
                 );
-                const res = await this.httpService.post(botSite.url, botSite.authorization, body);
+                let res = await this.httpService.post(botSite.url, botSite.authorization, body);
 
                 if (!res.ok) {
                     throw res;

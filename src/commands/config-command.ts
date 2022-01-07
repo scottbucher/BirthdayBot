@@ -1,10 +1,8 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { MessageUtils } from '../utils';
 import { Command } from './command';
 
 export class ConfigCommand implements Command {

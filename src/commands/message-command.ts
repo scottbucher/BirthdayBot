@@ -3,7 +3,6 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { MessageUtils } from '../utils';
 import { Command } from './command';
 
 // did I not split this up correctly?

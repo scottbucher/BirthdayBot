@@ -19,11 +19,11 @@ export class TrustedRoleRepo {
     }
 
     public async getTrustedRoles(discordId: string): Promise<TrustedRoles> {
-        const results = await this.dataAccess.executeProcedure(Procedure.TrustedRole_Get, [
+        let results = await this.dataAccess.executeProcedure(Procedure.TrustedRole_Get, [
             discordId,
         ]);
 
-        const trustedRoles = SqlUtils.getTable(results, 0);
+        let trustedRoles = SqlUtils.getTable(results, 0);
         return new TrustedRoles(trustedRoles, null);
     }
 
@@ -32,14 +32,14 @@ export class TrustedRoleRepo {
         pageSize: number,
         page: number
     ): Promise<TrustedRoles> {
-        const results = await this.dataAccess.executeProcedure(Procedure.TrustedRole_GetList, [
+        let results = await this.dataAccess.executeProcedure(Procedure.TrustedRole_GetList, [
             guildId,
             pageSize,
             page,
         ]);
 
-        const trustedRoleData = SqlUtils.getTable(results, 0);
-        const stats = SqlUtils.getRow(results, 1, 0);
+        let trustedRoleData = SqlUtils.getTable(results, 0);
+        let stats = SqlUtils.getRow(results, 1, 0);
         return new TrustedRoles(trustedRoleData, stats);
     }
 }

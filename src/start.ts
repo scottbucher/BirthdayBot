@@ -50,12 +50,12 @@ import { Reaction } from './reactions';
 import { DataAccess } from './services/database/data-access';
 import { Trigger } from './triggers';
 
-const Config = require('../config/config.json');
-const Logs = require('../lang/logs.json');
+let Config = require('../config/config.json');
+let Logs = require('../lang/logs.json');
 
 async function start(): Promise<void> {
     Logger.info('Starting Bot!');
-    const client = new CustomClient({
+    let client = new CustomClient({
         intents: Config.client.intents,
         partials: Config.client.partials,
         makeCache: Options.cacheWithLimits({
@@ -66,21 +66,21 @@ async function start(): Promise<void> {
         }),
     });
 
-    const dataAccess = new DataAccess(Config.mysql);
-    const httpService = new HttpService();
-    const subService = new SubscriptionService(httpService);
+    let dataAccess = new DataAccess(Config.mysql);
+    let httpService = new HttpService();
+    let subService = new SubscriptionService(httpService);
 
     // Repos
-    const guildRepo = new GuildRepo(dataAccess);
-    const userRepo = new UserRepo(dataAccess);
-    const customMessageRepo = new CustomMessageRepo(dataAccess);
-    const blacklistRepo = new BlacklistRepo(dataAccess);
-    const trustedRoleRepo = new TrustedRoleRepo(dataAccess);
-    const memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
-    const combinedRepo = new CombinedRepo(dataAccess);
+    let guildRepo = new GuildRepo(dataAccess);
+    let userRepo = new UserRepo(dataAccess);
+    let customMessageRepo = new CustomMessageRepo(dataAccess);
+    let blacklistRepo = new BlacklistRepo(dataAccess);
+    let trustedRoleRepo = new TrustedRoleRepo(dataAccess);
+    let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
+    let combinedRepo = new CombinedRepo(dataAccess);
 
     // Commands
-    const commands: Command[] = [
+    let commands: Command[] = [
         new HelpCommand(),
         new InfoCommand(),
         new LinkCommand(),
@@ -105,24 +105,24 @@ async function start(): Promise<void> {
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Reactions
-    const reactions: Reaction[] = [
+    let reactions: Reaction[] = [
         // TODO: Add new reactions here
     ];
 
     // Triggers
-    const triggers: Trigger[] = [
+    let triggers: Trigger[] = [
         // TODO: Add new triggers here
     ];
 
     // Event handlers
-    const guildJoinHandler = new GuildJoinHandler();
-    const guildLeaveHandler = new GuildLeaveHandler();
-    const commandHandler = new CommandHandler(commands, subService, guildRepo, userRepo);
-    const triggerHandler = new TriggerHandler(triggers);
-    const messageHandler = new MessageHandler(triggerHandler);
-    const reactionHandler = new ReactionHandler(reactions);
+    let guildJoinHandler = new GuildJoinHandler();
+    let guildLeaveHandler = new GuildLeaveHandler();
+    let commandHandler = new CommandHandler(commands, subService, guildRepo, userRepo);
+    let triggerHandler = new TriggerHandler(triggers);
+    let messageHandler = new MessageHandler(triggerHandler);
+    let reactionHandler = new ReactionHandler(reactions);
 
-    const bot = new Bot(
+    let bot = new Bot(
         Config.client.token,
         client,
         guildJoinHandler,
@@ -142,8 +142,8 @@ async function start(): Promise<void> {
 }
 
 async function registerCommands(commands: Command[]): Promise<void> {
-    const cmdDatas = commands.map(cmd => cmd.metadata);
-    const cmdNames = cmdDatas.map(cmdData => cmdData.name);
+    let cmdDatas = commands.map(cmd => cmd.metadata);
+    let cmdNames = cmdDatas.map(cmdData => cmdData.name);
 
     Logger.info(
         Logs.info.commandsRegistering.replaceAll(
@@ -153,7 +153,7 @@ async function registerCommands(commands: Command[]): Promise<void> {
     );
 
     try {
-        const rest = new REST({ version: '9' }).setToken(Config.client.token);
+        let rest = new REST({ version: '9' }).setToken(Config.client.token);
         await rest.put(Routes.applicationCommands(Config.client.id), { body: [] });
         await rest.put(Routes.applicationCommands(Config.client.id), { body: cmdDatas });
     } catch (error) {

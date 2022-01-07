@@ -3,7 +3,7 @@ import { Moment, tz } from 'moment-timezone';
 import moment from 'moment';
 import { promisify } from 'util';
 
-const setTimeoutAsync = promisify(setTimeout);
+let setTimeoutAsync = promisify(setTimeout);
 
 export class TimeUtils {
     public static async sleep(ms: number): Promise<void> {

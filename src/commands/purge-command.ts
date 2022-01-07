@@ -6,7 +6,7 @@ import {
     PermissionString,
     User,
 } from 'discord.js';
-import { CollectOptions, ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
+import { CollectOptions, MessageFilter } from 'discord.js-collector-utils';
 
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
@@ -15,7 +15,7 @@ import { MessageUtils } from '../utils';
 import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
 
-const Config = require('../../config/config.json');
+let Config = require('../../config/config.json');
 
 const COLLECT_OPTIONS: CollectOptions = {
     time: Config.experience.promptExpireTime * 1000,
@@ -42,9 +42,9 @@ export class PurgeCommand implements Command {
     constructor(private userRepo: UserRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        const target = intr.user;
-        const userData = await this.userRepo.getUser(target.id);
-        const stopFilter: MessageFilter = (nextMsg: Message) => nextMsg.author.id === intr.user.id;
+        let target = intr.user;
+        let userData = await this.userRepo.getUser(target.id);
+        let stopFilter: MessageFilter = (nextMsg: Message) => nextMsg.author.id === intr.user.id;
 
         if (!userData || !(userData.Birthday && userData.TimeZone)) {
             // Are they in the database?
@@ -55,26 +55,26 @@ export class PurgeCommand implements Command {
             return;
         }
 
-        const collect = CollectorUtils.createReactCollect(intr.user, async () => {
+        let collect = CollectorUtils.createReactCollect(intr.user, async () => {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('validation', 'embeds.promptExpired', data.lang())
             );
         });
 
-        const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
+        let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 
-        const confirmationMessage = await MessageUtils.sendIntr(
+        let confirmationMessage = await MessageUtils.sendIntr(
             intr,
             Lang.getEmbed('prompts', 'embeds.birthdayConfirmPurge', data.lang(), {
                 ICON: intr.user.displayAvatarURL(),
             })
         ); // Send confirmation and emotes
-        for (const option of trueFalseOptions) {
+        for (let option of trueFalseOptions) {
             await MessageUtils.react(confirmationMessage, option);
         }
 
-        const confirmation: boolean = await collect(
+        let confirmation: boolean = await collect(
             confirmationMessage,
             async (msgReaction: MessageReaction, reactor: User) => {
                 if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;

@@ -1,7 +1,6 @@
 import {
     ApplicationCommandData,
     CommandInteraction,
-    MessageEmbed,
     PermissionString,
 } from 'discord.js';
 

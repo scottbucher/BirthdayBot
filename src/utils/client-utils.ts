@@ -3,7 +3,6 @@ import { DiscordAPIError, Guild, GuildMember, TextChannel, User } from 'discord.
 import { PermissionUtils, RegexUtils } from '.';
 
 import { LangCode } from '../models/enums';
-import { Lang } from '../services';
 
 const FETCH_MEMBER_LIMIT = 20;
 
@@ -28,12 +27,12 @@ export class ClientUtils {
 
     public static async findMember(guild: Guild, input: string): Promise<GuildMember> {
         try {
-            const discordId = RegexUtils.discordId(input);
+            let discordId = RegexUtils.discordId(input);
             if (discordId) {
                 return await guild.members.fetch(discordId);
             }
 
-            const tag = RegexUtils.tag(input);
+            let tag = RegexUtils.tag(input);
             if (tag) {
                 return (
                     await guild.members.fetch({ query: tag.username, limit: FETCH_MEMBER_LIMIT })
@@ -57,7 +56,7 @@ export class ClientUtils {
         langCode: LangCode
     ): Promise<TextChannel | NewsChannel> {
         // Prefer the system channel
-        const systemChannel = guild.systemChannel;
+        let systemChannel = guild.systemChannel;
         if (systemChannel && PermissionUtils.canSend(systemChannel)) {
             return systemChannel;
         }

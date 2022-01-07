@@ -3,7 +3,7 @@ import { Guild } from 'discord.js';
 import { Logger } from '../services';
 import { EventHandler } from './event-handler';
 
-const Logs = require('../../lang/logs.json');
+let Logs = require('../../lang/logs.json');
 
 export class GuildLeaveHandler implements EventHandler {
     public async process(guild: Guild): Promise<void> {

@@ -1,7 +1,7 @@
 import { DiscordAPIError, GuildMember, Role } from 'discord.js';
 import { TimeUtils } from './time-utils';
 
-const Config = require('../../config/config.json');
+let Config = require('../../config/config.json');
 
 export class ActionUtils {
     // TODO: Have giveRole and removeRole take in an interval to sleep for to prevent rate limits

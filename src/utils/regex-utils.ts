@@ -1,6 +1,6 @@
 export class RegexUtils {
     public static regex(input: string): RegExp {
-        const match = input.match(/^\/(.*)\/([^\/]*)$/);
+        let match = input.match(/^\/(.*)\/([^\/]*)$/);
         if (!match) {
             return;
         }
@@ -13,7 +13,7 @@ export class RegexUtils {
     }
 
     public static tag(input: string): { username: string; tag: string; discriminator: string } {
-        const match = input.match(/\b(.+)#([\d]{4})\b/);
+        let match = input.match(/\b(.+)#([\d]{4})\b/);
         if (!match) {
             return;
         }

@@ -5,7 +5,7 @@ import { EventHandler } from '.';
 import { EventData } from '../models/internal-models';
 import { Reaction } from '../reactions';
 
-const Config = require('../../config/config.json');
+let Config = require('../../config/config.json');
 
 export class ReactionHandler implements EventHandler {
     private rateLimiter = new RateLimiter(
@@ -22,7 +22,7 @@ export class ReactionHandler implements EventHandler {
         }
 
         // Try to find the reaction the user wants
-        const reaction = this.findReaction(msgReaction.emoji.name);
+        let reaction = this.findReaction(msgReaction.emoji.name);
         if (!reaction) {
             return;
         }
@@ -36,13 +36,13 @@ export class ReactionHandler implements EventHandler {
         }
 
         // Check if user is rate limited
-        const limited = this.rateLimiter.take(msg.author.id);
+        let limited = this.rateLimiter.take(msg.author.id);
         if (limited) {
             return;
         }
 
         // TODO: Get data from database
-        const data = new EventData();
+        let data = new EventData();
 
         // Execute the reaction
         await reaction.execute(msgReaction, msg, reactor, data);

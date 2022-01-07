@@ -6,7 +6,6 @@ import {
 } from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { LangCode } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { MessageUtils } from '../utils';
@@ -64,7 +63,7 @@ export class LinkCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        const link = intr.options.getString('link');
+        let link = intr.options.getString('link');
         let embed: MessageEmbed;
         switch (link) {
             case 'docs': {

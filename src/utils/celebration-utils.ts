@@ -12,16 +12,15 @@ import {
 
 import moment from 'moment';
 import { Moment } from 'moment-timezone';
-import { getPriority } from 'os';
 import { BirthdayMemberStatus } from '../models';
 import { AnniversaryMemberStatus } from '../models/celebration-job';
 import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 import { LangCode } from '../models/enums';
 import { Lang } from '../services';
 
-const Debug = require('../../config/debug.json');
+let Debug = require('../../config/debug.json');
 
-const Config = require('../../config/config.json');
+let Config = require('../../config/config.json');
 
 export class CelebrationUtils {
     public static getMessageColor(message: CustomMessage, hasPremium: boolean): any {
@@ -35,20 +34,20 @@ export class CelebrationUtils {
     }
 
     public static getNextUsers(userDatas: UserData[], timeZone: string): UserData[] {
-        const userTime = timeZone && timeZone !== '0' ? moment.tz(timeZone) : moment.tz();
+        let userTime = timeZone && timeZone !== '0' ? moment.tz(timeZone) : moment.tz();
 
-        const { before: usersBefore, after: usersAfter } = this.splitUserDatasByTime(
+        let { before: usersBefore, after: usersAfter } = this.splitUserDatasByTime(
             userDatas,
             userTime
         );
 
         if (usersAfter.length > 0) {
-            const nextBirthday = usersAfter[0].Birthday; // First birthday after current date
+            let nextBirthday = usersAfter[0].Birthday; // First birthday after current date
             return usersAfter.filter(userData => userData.Birthday === nextBirthday); // TODO: Check by only month and day
         }
 
         if (usersBefore.length > 0) {
-            const nextBirthday = usersBefore[0].Birthday; // First birthday starting at beginning of year
+            let nextBirthday = usersBefore[0].Birthday; // First birthday starting at beginning of year
             return usersBefore.filter(userData => userData.Birthday === nextBirthday); // TODO: Check by only month and day
         }
     }
@@ -66,8 +65,8 @@ export class CelebrationUtils {
     }
 
     public static compareUserDatas(a: UserData, b: UserData): number {
-        const aBday = moment(a.Birthday).format('MM-DD');
-        const bBday = moment(b.Birthday).format('MM-DD');
+        let aBday = moment(a.Birthday).format('MM-DD');
+        let bBday = moment(b.Birthday).format('MM-DD');
 
         if (aBday > bBday) {
             return 1;
@@ -87,17 +86,17 @@ export class CelebrationUtils {
         // If the server doesn't have a default timezone, use the user's timezone
         // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
         // Else, use the server's default timezone
-        const currentDate = moment().tz(
+        let currentDate = moment().tz(
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
                 ? userData.TimeZone
                 : guildData.DefaultTimezone
         );
-        const birthday = moment(userData.Birthday);
+        let birthday = moment(userData.Birthday);
 
-        const currentDateFormatted = currentDate.format('MM-DD');
-        const yesterdayDateFormatted = currentDate.subtract(1, 'day').format('MM-DD');
+        let currentDateFormatted = currentDate.format('MM-DD');
+        let yesterdayDateFormatted = currentDate.subtract(1, 'day').format('MM-DD');
         let birthdayFormatted = birthday.format('MM-DD');
 
         if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
@@ -120,22 +119,22 @@ export class CelebrationUtils {
         // If the server doesn't have a default timezone, use the user's timezone
         // Else, since we have a server timezone, if the UseTimezone setting in the server does not prioritize the server, use the user's timezone
         // Else, use the server's default timezone
-        const currentDate = moment().tz(
+        let currentDate = moment().tz(
             guildData.DefaultTimezone === '0'
                 ? userData.TimeZone
                 : guildData.UseTimezone !== 'server'
                 ? userData.TimeZone
                 : guildData.DefaultTimezone
         );
-        const birthday = moment(userData.Birthday);
+        let birthday = moment(userData.Birthday);
 
-        const currentDateFormatted = currentDate.format('MM-DD');
+        let currentDateFormatted = currentDate.format('MM-DD');
         let birthdayFormatted = birthday.format('MM-DD');
 
         if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
             birthdayFormatted = '03-01';
 
-        const currentHour = currentDate.hour();
+        let currentHour = currentDate.hour();
         let needsBirthdayMessage: boolean;
         let needsBirthdayRoleAdded: boolean;
         let needsBirthdayRoleRemoved: boolean;
@@ -166,13 +165,13 @@ export class CelebrationUtils {
         if (!guildMember || !guildData || guildData.DefaultTimezone === '0')
             return new AnniversaryMemberStatus(guildMember, false, null);
 
-        const currentDate = moment().tz(guildData.DefaultTimezone);
-        const memberAnniversary = moment(guildMember.joinedAt);
+        let currentDate = moment().tz(guildData.DefaultTimezone);
+        let memberAnniversary = moment(guildMember.joinedAt);
 
         if (currentDate.year() - memberAnniversary.year() === 0)
             return new AnniversaryMemberStatus(guildMember, false, null);
 
-        const currentDateFormatted = currentDate.format('MM-DD');
+        let currentDateFormatted = currentDate.format('MM-DD');
         let anniversaryFormatted = memberAnniversary.format('MM-DD');
 
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
@@ -181,7 +180,7 @@ export class CelebrationUtils {
         if (currentDateFormatted !== anniversaryFormatted)
             return new AnniversaryMemberStatus(guildMember, false, null);
 
-        const needsAnniversaryMessage = currentDate.hour() === guildData.MemberAnniversaryMessageTime;
+        let needsAnniversaryMessage = currentDate.hour() === guildData.MemberAnniversaryMessageTime;
         let role: Role;
 
         if (
@@ -189,7 +188,7 @@ export class CelebrationUtils {
             memberAnniversaryRoles &&
             memberAnniversaryRoles.length > 0
         ) {
-            const anniversaryRole = memberAnniversaryRoles.find(
+            let anniversaryRole = memberAnniversaryRoles.find(
                 role => CelebrationUtils.getMemberYears(guildMember, guildData) === role.Year
             );
 
@@ -214,10 +213,10 @@ export class CelebrationUtils {
         // }
 
         if (!guild || !guildData || guildData.DefaultTimezone === '0') return false;
-        const currentDate = moment().tz(guildData.DefaultTimezone);
-        const serverAnniversary = moment(guild.createdAt);
+        let currentDate = moment().tz(guildData.DefaultTimezone);
+        let serverAnniversary = moment(guild.createdAt);
 
-        const currentDateFormatted = currentDate.format('MM-DD');
+        let currentDateFormatted = currentDate.format('MM-DD');
         let anniversaryFormatted = serverAnniversary.format('MM-DD');
 
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
@@ -233,15 +232,15 @@ export class CelebrationUtils {
 
     public static getMemberYears(guildMember: GuildMember, guildData: GuildData): number {
         if (!guildMember || !guildData || !guildData.DefaultTimezone) return 0;
-        const currentYear = moment().tz(guildData.DefaultTimezone).year();
-        const memberAnniversaryYear = moment(guildMember.joinedAt).year();
+        let currentYear = moment().tz(guildData.DefaultTimezone).year();
+        let memberAnniversaryYear = moment(guildMember.joinedAt).year();
         return currentYear - memberAnniversaryYear;
     }
 
     public static getServerYears(guild: Guild, guildData: GuildData): number {
         if (!guild || !guildData || !guildData.DefaultTimezone) return 0;
-        const currentYear = moment().tz(guildData.DefaultTimezone).year();
-        const memberAnniversaryYear = moment(guild.createdAt).year();
+        let currentYear = moment().tz(guildData.DefaultTimezone).year();
+        let memberAnniversaryYear = moment(guild.createdAt).year();
         return currentYear - memberAnniversaryYear;
     }
 
@@ -279,7 +278,7 @@ export class CelebrationUtils {
 
     public static getMentionString(guildData: GuildData, guild: Guild, type: string): string {
         // Find mentioned role
-        const mentionSetting = (
+        let mentionSetting = (
             type === 'birthday'
                 ? guildData.BirthdayMentionSetting
                 : type === 'memberanniversary'
@@ -330,7 +329,7 @@ export class CelebrationUtils {
         userString: string
     ): string {
         if (message) {
-            const serverPlaceholder = Lang.getRef('info', 'placeHolders.server', LangCode.EN_US);
+            let serverPlaceholder = Lang.getRef('info', 'placeHolders.server', LangCode.EN_US);
             message = message
                 .split('<Server>')
                 .join(serverPlaceholder)
@@ -338,7 +337,7 @@ export class CelebrationUtils {
                 .join(serverPlaceholder);
 
             if (type !== 'serveranniversary') {
-                const userPlaceholder = Lang.getRef('info', 'placeHolders.users', LangCode.EN_US);
+                let userPlaceholder = Lang.getRef('info', 'placeHolders.users', LangCode.EN_US);
                 message = message
                     .split('<Users>')
                     .join(userString ?? userPlaceholder)
@@ -346,7 +345,7 @@ export class CelebrationUtils {
                     .join(userString ?? userPlaceholder);
             }
             if (type !== 'birthday') {
-                const yearPlaceholder = Lang.getRef('info', 'placeHolders.year', LangCode.EN_US);
+                let yearPlaceholder = Lang.getRef('info', 'placeHolders.year', LangCode.EN_US);
                 message = message
                     .split('<Year>')
                     .join(yearPlaceholder)
@@ -385,7 +384,7 @@ export class CelebrationUtils {
         // Add the compiled user list
         if (customMessages.length > 0) {
             // Get our custom message
-            const customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium, type);
+            let customMessage = CelebrationUtils.randomMessage(customMessages, hasPremium, type);
 
             // Find the color of the embed
             color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
@@ -397,7 +396,7 @@ export class CelebrationUtils {
         // Replace the placeholders
         message = CelebrationUtils.replacePlaceHolders(message, guild, type, userList, year);
 
-        const embed = new MessageEmbed().setDescription(message).setColor(color);
+        let embed = new MessageEmbed().setDescription(message).setColor(color);
 
         return useEmbed ? embed : message;
     }
@@ -414,7 +413,7 @@ export class CelebrationUtils {
         let color = Config.colors.default;
 
         // Compile our user list to put in the message
-        const userList = CelebrationUtils.getUserListString(guildData, [celebrationMember]);
+        let userList = CelebrationUtils.getUserListString(guildData, [celebrationMember]);
 
         // Replace the placeholders
         message = CelebrationUtils.replacePlaceHolders(
@@ -428,7 +427,7 @@ export class CelebrationUtils {
         // Find the color of the embed
         color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
 
-        const embed = new MessageEmbed().setDescription(message).setColor(color);
+        let embed = new MessageEmbed().setDescription(message).setColor(color);
 
         return customMessage.Embed ? embed : message;
     }
@@ -473,7 +472,7 @@ export class CelebrationUtils {
             trustedRoles = hasPremium ? trustedRoles : [trustedRoles[0]];
             if (requireAllTrustedRoles) {
                 let hasAllTrusted = true;
-                for (const role of trustedRoles) {
+                for (let role of trustedRoles) {
                     if (!birthdayMember.roles.cache.has(role.id)) {
                         hasAllTrusted = false;
                         break;
@@ -481,7 +480,7 @@ export class CelebrationUtils {
                 }
                 passTrustedCheck = hasAllTrusted;
             } else {
-                for (const role of trustedRoles) {
+                for (let role of trustedRoles) {
                     if (birthdayMember.roles.cache.has(role.id)) {
                         passTrustedCheck = true;
                         break;
@@ -493,10 +492,10 @@ export class CelebrationUtils {
     }
 
     public static async getTrustedRoleList(guild: Guild, roles: TrustedRole[]): Promise<Role[]> {
-        const trustedRoles: Role[] = [];
-        for (const role of roles) {
+        let trustedRoles: Role[] = [];
+        for (let role of roles) {
             try {
-                const tRole: Role = await guild.roles.fetch(role.TrustedRoleDiscordId);
+                let tRole: Role = await guild.roles.fetch(role.TrustedRoleDiscordId);
                 if (tRole) trustedRoles.push(tRole);
             } catch (error) {
                 // Trusted role is invalid
@@ -509,10 +508,10 @@ export class CelebrationUtils {
         guild: Guild,
         roles: MemberAnniversaryRole[]
     ): Promise<Role[]> {
-        const memberAnniversaryRoles: Role[] = [];
-        for (const role of roles) {
+        let memberAnniversaryRoles: Role[] = [];
+        for (let role of roles) {
             try {
-                const tRole: Role = await guild.roles.fetch(role.MemberAnniversaryRoleDiscordId);
+                let tRole: Role = await guild.roles.fetch(role.MemberAnniversaryRoleDiscordId);
                 if (tRole) memberAnniversaryRoles.push(tRole);
             } catch (error) {
                 // Member Anniversary role is invalid
@@ -524,9 +523,9 @@ export class CelebrationUtils {
     public static canGiveAllRoles(guild: Guild, roles: Role[], guildMember: GuildMember): boolean {
         if (!roles) return true;
         let check = true;
-        for (const role of roles) {
+        for (let role of roles) {
             // See if the bot can give the roles
-            const highestBotRole = guild.members.resolve(guild.client.user).roles.highest.position;
+            let highestBotRole = guild.members.resolve(guild.client.user).roles.highest.position;
             // If a user isn't given and we test against the bot the last boolean will always be false
             check =
                 role &&
@@ -540,10 +539,10 @@ export class CelebrationUtils {
     public static convertCelebrationData(
         rawGuildCelebrationData: RawGuildCelebrationData
     ): GuildCelebrationData[] {
-        const dataSet: GuildCelebrationData[] = [];
+        let dataSet: GuildCelebrationData[] = [];
 
-        for (const rawData of rawGuildCelebrationData.guildDatas) {
-            const celebrationData = new GuildCelebrationData();
+        for (let rawData of rawGuildCelebrationData.guildDatas) {
+            let celebrationData = new GuildCelebrationData();
             celebrationData.guildData = rawData;
             celebrationData.customMessages = rawGuildCelebrationData.customMessages.filter(
                 c => c.GuildId === rawData.GuildId
