@@ -37,6 +37,26 @@
                     }
                 ]
             },
+            "info": {
+                "title": "{{COM:bot.name}} - Info",
+                "fields": [
+                    { "name": "Author", "value": "{{REF:links.authorEmbed}}" },
+                    {
+                        "name": "{{REF:fields.links}}",
+                        "value": [
+                            "{{REF:links.sourceEmbed}}",
+                            "{{REF:links.docsEmbed}}",
+                            "{{REF:links.donateEmbed}}",
+                            "{{REF:links.supportEmbed}}",
+                            "{{REF:links.inviteEmbed}}"
+                        ]
+                    },
+                    {
+                        "name": "Created With",
+                        "value": ["{{REF:links.templateEmbed}}"]
+                    }
+                ]
+            },
             "vote": {
                 "description": "Support {{BOT}} by voting [here]({{COM:links.vote}})!",
                 "color": "{{COM:colors.default}}"

@@ -1,8 +1,9 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
+import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { Command } from './command';
+import { MessageUtils } from '../utils';
 
 export class InfoCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -18,6 +19,6 @@ export class InfoCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        // await MessageUtils.sendIntr(intr, Lang.getEmbed('embeds.help', data.lang()));
+        await MessageUtils.sendIntr(intr, Lang.getEmbed('info', 'embeds.info', data.lang()));
     }
 }
