@@ -70,7 +70,7 @@ export class ConfigCommand implements Command {
     };
     public requireDev = false;
     public requireGuild = true;
-    public requireClientPerms: PermissionString[] = [];
+    public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
     public requireUserPerms: PermissionString[] = [];
     public requireSetup = true;
     public requireVote = false;
