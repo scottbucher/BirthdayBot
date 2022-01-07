@@ -15,7 +15,6 @@ import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 
 import { channel } from 'diagnostics_channel';
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { CollectOptions } from 'discord.js-collector-utils';
 import { LangCode } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { CollectorUtils } from '../utils/collector-utils';
