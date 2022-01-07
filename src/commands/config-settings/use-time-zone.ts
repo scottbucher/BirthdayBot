@@ -38,6 +38,7 @@ export class UseTimezoneSubCommand {
 
                 return input.toLowerCase();
             });
+            if (useTimezone === undefined) return;
         } else useTimezone = 'server';
 
         await this.guildRepo.updateUseTimezone(intr.guild.id, useTimezone);

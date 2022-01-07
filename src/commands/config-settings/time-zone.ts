@@ -51,6 +51,7 @@ export class TimezoneSubCommand {
 
                 return input;
             });
+            if (timezone === undefined) return;
         } else timezone = '0';
 
         if (timezone === 'clear') timezone = '0';

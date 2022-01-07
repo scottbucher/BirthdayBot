@@ -42,6 +42,7 @@ export class NameFormatSubCommand {
 
                 return input.toLowerCase();
             });
+            if (nameFormat === undefined) return;
         } else nameFormat = 'default';
 
         if (nameFormat === 'default') nameFormat = 'mention';
