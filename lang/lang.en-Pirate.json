@@ -134,15 +134,15 @@
                     "",
                     "Please allow me to **{{REF:permissions.VIEW_CHANNEL}}**, **{{REF:permissions.SEND_MESSAGES}}**, and **{{REF:permissions.EMBED_LINKS}}** in this channel."
                 ],
-                "color": "{{COM:colors.warning}}"
+                "color": "{{COM:colors.warn}}"
             },
             "devOnlyCommand": {
                 "description": "This command can only be used by developers.",
-                "color": "{{COM:colors.warning}}"
+                "color": "{{COM:colors.warn}}"
             },
             "serverOnlyCommand": {
                 "description": "This command can only be used in a server.",
-                "color": "{{COM:colors.warning}}"
+                "color": "{{COM:colors.warn}}"
             },
             "missingClientPerms": {
                 "description": [
@@ -150,11 +150,11 @@
                     "",
                     "Required permissions: {{PERMISSIONS}}"
                 ],
-                "color": "{{COM:colors.warning}}"
+                "color": "{{COM:colors.warn}}"
             },
             "missingUserPerms": {
                 "description": "You don't have permission to run that command!",
-                "color": "{{COM:colors.warning}}"
+                "color": "{{COM:colors.warn}}"
             }
         },
         "errorEmbeds": {
@@ -174,7 +174,7 @@
             },
             "startupInProcess": {
                 "description": "{{COM:bot.name}} is still starting up. Try again later.",
-                "color": "{{COM:colors.warning}}"
+                "color": "{{COM:colors.warn}}"
             }
         },
         "metaRegexes": {

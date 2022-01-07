@@ -924,7 +924,7 @@
             "alternatives": {
                 "birthday": ["birthdays"],
                 "memberAnniversary": ["member"],
-                "serverAnniversary": ["server"],
+                "serverAnniversary": ["server"], 
                 "userSpecificBirthday": ["specificBirthday", "userBirthday"],
                 "userSpecificMemberAnniversary": ["specificAnniversary", "userAnniversary"]
             },

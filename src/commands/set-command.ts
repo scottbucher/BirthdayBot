@@ -98,7 +98,7 @@ export class SetCommand implements Command {
             ) {
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggest', LangCode.EN_US)
+                    Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggest', data.lang())
                 );
                 return;
             }
@@ -126,7 +126,7 @@ export class SetCommand implements Command {
                     Lang.getEmbed(
                         'prompts',
                         'settingBirthday.defaultTimeZoneAvailable' + (timeZone ? 'Override' : ''),
-                        LangCode.EN_US,
+                        data.lang(),
                         {
                             SERVER_TIMEZONE: data.guild.DefaultTimezone,
                             INPUTTED_TIMEZONE: timeZone,

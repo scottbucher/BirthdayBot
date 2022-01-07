@@ -50,7 +50,7 @@
             },
             "setAttempts": {
                 "description": "Successfully set {{USER}}'s birthday attempts to {{AMOUNT}}!",
-                "color": "{{REF:colors.success}}"
+                "color": "{{COM:colors.success}}"
             },
             "nameFormatSet": {
                 "description": [
@@ -78,7 +78,6 @@
                 "description": "Successfully cleared your server's default timezone!",
                 "color": "{{COM:colors.success}}"
             }
-
         },
         "fail": {
             "promptExpired": {

@@ -7,7 +7,7 @@
                     "",
                     "Required permissions: {{PERMISSIONS}}"
                 ],
-                "color": "{{COM:colors.warning}}"
+                "color": "{{COM:colors.warn}}"
             },
             "setupRequired": {
                 "title": "Setup Required!",
