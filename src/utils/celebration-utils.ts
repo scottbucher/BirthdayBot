@@ -18,8 +18,6 @@ import { MemberAnniversaryRole } from '../models/database/member-anniversary-rol
 import { LangCode } from '../models/enums';
 import { Lang } from '../services';
 
-let Debug = require('../../config/debug.json');
-
 let Config = require('../../config/config.json');
 
 export class CelebrationUtils {

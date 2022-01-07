@@ -1,8 +1,4 @@
-import {
-    ApplicationCommandData,
-    CommandInteraction,
-    PermissionString,
-} from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import { Language } from '../models/enums';
 import { FormatUtils, MessageUtils } from '../utils';
 

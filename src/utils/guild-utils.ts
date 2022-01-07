@@ -8,7 +8,6 @@ import {
     Util,
 } from 'discord.js';
 
-import { channel } from 'diagnostics_channel';
 import { LangCode } from '../models/enums';
 import { Lang } from '../services';
 

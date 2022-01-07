@@ -12,7 +12,7 @@ export class ConfigCommand implements Command {
         options: [
             {
                 name: Lang.getCom('arguments.setting'),
-                description: "Change Birthday Bot's config settings.",
+                description: `Change Birthday Bot's config settings.`,
                 type: ApplicationCommandOptionType.String.valueOf(),
                 required: true,
                 choices: [

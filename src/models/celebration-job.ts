@@ -1,16 +1,16 @@
 import { GuildMember, Role } from 'discord.js';
 export class BirthdayMemberRoleStatus {
-    constructor(public member: GuildMember, public give: Boolean) {}
+    constructor(public member: GuildMember, public give: boolean) {}
 }
 export class BirthdayMemberStatus {
     constructor(
         public member: GuildMember,
-        public needsMessage: Boolean,
-        public needsRoleAdded: Boolean,
-        public needsRoleRemoved: Boolean
+        public needsMessage: boolean,
+        public needsRoleAdded: boolean,
+        public needsRoleRemoved: boolean
     ) {}
 }
 
 export class AnniversaryMemberStatus {
-    constructor(public member: GuildMember, public needsMessage: Boolean, public role: Role) {}
+    constructor(public member: GuildMember, public needsMessage: boolean, public role: Role) {}
 }
