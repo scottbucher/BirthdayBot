@@ -78,7 +78,6 @@
                 "description": "Successfully cleared your server's default timezone!",
                 "color": "{{COM:colors.success}}"
             }
-
         },
         "fail": {
             "promptExpired": {

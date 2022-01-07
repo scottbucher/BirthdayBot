@@ -1,6 +1,5 @@
 import { CommandInteraction, Message } from 'discord.js';
 import { EventData } from '../../models';
-import { LangCode } from '../../models/enums';
 import { Lang } from '../../services';
 import { GuildRepo } from '../../services/database/repos';
 import { FormatUtils, MessageUtils } from '../../utils';
