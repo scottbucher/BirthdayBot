@@ -1,19 +1,19 @@
-import { GuildData } from '../../../models/database';
-import { SqlUtils } from '../../../utils';
-import { Logger } from '../../logger';
 import { DataAccess } from '../data-access';
+import { GuildData } from '../../../models/database';
+import { Logger } from '../../logger';
 import { Procedure } from '../procedure';
+import { SqlUtils } from '../../../utils';
 
 export class GuildRepo {
     constructor(private dataAccess: DataAccess) {}
 
     public async getGuild(discordId: string): Promise<GuildData> {
-        const results = await this.dataAccess.executeProcedure(Procedure.Guild_Get, [discordId]);
+        let results = await this.dataAccess.executeProcedure(Procedure.Guild_Get, [discordId]);
         return SqlUtils.getRow(results, 0, 0);
     }
 
     public async getGuilds(discordIds: string[]): Promise<GuildData[]> {
-        const results = await this.dataAccess.executeProcedure(Procedure.Guild_GetAll, [
+        let results = await this.dataAccess.executeProcedure(Procedure.Guild_GetAll, [
             discordIds.join(','),
         ]);
         return SqlUtils.getTable(results, 0);

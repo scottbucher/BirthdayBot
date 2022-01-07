@@ -6,9 +6,9 @@ import {
 } from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
+import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { Command } from './command';
 
 export class ListCommand implements Command {
     public metadata: ApplicationCommandData = {

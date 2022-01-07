@@ -2,12 +2,12 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import moment from 'moment';
-import { LangCode } from '../models/enums';
+import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { LangCode } from '../models/enums';
 import { UserRepo } from '../services/database/repos';
-import { Command } from './command';
+import moment from 'moment';
 
 export class NextCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -47,10 +47,10 @@ export class NextCommand implements Command {
     constructor(public userRepo: UserRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        const type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
+        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
         let timezone = data.guild?.DefaultTimezone;
         let userList: string;
-        const now = moment.tz(timezone);
+        let now = moment.tz(timezone);
 
         if (type !== 'BIRTHDAY' && (!timezone || timezone === '0')) {
             await MessageUtils.sendIntr(
@@ -63,9 +63,9 @@ export class NextCommand implements Command {
         switch (type) {
             case 'BIRTHDAY':
                 // Next birthday
-                const users = [...intr.guild.members.cache.filter(member => !member.user.bot).keys()];
+                let users = [...intr.guild.members.cache.filter(member => !member.user.bot).keys()];
 
-                const userDatas = await this.userRepo.getAllUsers(users);
+                let userDatas = await this.userRepo.getAllUsers(users);
 
                 if (!userDatas) {
                     await MessageUtils.sendIntr(
@@ -79,14 +79,14 @@ export class NextCommand implements Command {
                     return;
                 }
 
-                const commandUser = userDatas.find(user => user.UserDiscordId === intr.user.id);
+                let commandUser = userDatas.find(user => user.UserDiscordId === intr.user.id);
 
                 timezone =
                     timezone && timezone !== '0' && data.guild?.UseTimezone === 'server'
                         ? timezone
                         : commandUser?.TimeZone;
 
-                const nextBirthdayUsers = CelebrationUtils.getNextUsers(userDatas, timezone);
+                let nextBirthdayUsers = CelebrationUtils.getNextUsers(userDatas, timezone);
 
                 if (!nextBirthdayUsers) {
                     await MessageUtils.sendIntr(
@@ -104,7 +104,7 @@ export class NextCommand implements Command {
                     data.guild,
                     nextBirthdayUsers.map(user => intr.guild.members.resolve(user.UserDiscordId))
                 );
-                const nextBirthday = moment(nextBirthdayUsers[0].Birthday).format('MMMM Do');
+                let nextBirthday = moment(nextBirthdayUsers[0].Birthday).format('MMMM Do');
 
                 await MessageUtils.sendIntr(
                     intr,
@@ -121,10 +121,10 @@ export class NextCommand implements Command {
                     .filter(member => !member.user.bot)
                     .map(member => member);
                 let closestMonthDay: string;
-                const nowMonthDay = now.format('MM-DD');
+                let nowMonthDay = now.format('MM-DD');
 
-                for (const member of guildMembers) {
-                    const memberMonthDay = moment(member.joinedAt).format('MM-DD');
+                for (let member of guildMembers) {
+                    let memberMonthDay = moment(member.joinedAt).format('MM-DD');
 
                     if (memberMonthDay === nowMonthDay) continue;
 
@@ -188,8 +188,8 @@ export class NextCommand implements Command {
                 break;
             case 'SERVER_ANNIVERSARY':
                 // Next server anniversary
-                const serverCreatedAt = moment(intr.guild.createdAt).tz(timezone);
-                const anniversaryFormatted = serverCreatedAt.format('MMMM Do');
+                let serverCreatedAt = moment(intr.guild.createdAt).tz(timezone);
+                let anniversaryFormatted = serverCreatedAt.format('MMMM Do');
                 let yearsOldRoundedUp = now.year() - serverCreatedAt.year();
 
                 // If the diff is negative that date has already passed so we need to increase the year (this is how we round up)

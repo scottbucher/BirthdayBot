@@ -1,17 +1,17 @@
-import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import { CelebrationService, Logger, SubscriptionService } from '../services';
-import { CombinedRepo, UserRepo } from '../services/database/repos';
 import { CelebrationUtils, TimeUtils } from '../utils';
+import { Client, Collection, Guild, GuildMember } from 'discord.js';
+import { CombinedRepo, UserRepo } from '../services/database/repos';
 
-import moment from 'moment';
-import schedule from 'node-schedule';
-import { performance } from 'perf_hooks';
+import { Job } from './job';
 import { SubscriptionStatus } from '../models';
 import { UserData } from '../models/database';
-import { Job } from './job';
+import moment from 'moment';
+import { performance } from 'perf_hooks';
+import schedule from 'node-schedule';
 
-const Config = require('../../config/config.json');
-const Logs = require('../../lang/logs.json');
+let Config = require('../../config/config.json');
+let Logs = require('../../lang/logs.json');
 
 export class CelebrationJob implements Job {
     public name = 'Celebration';
@@ -29,15 +29,15 @@ export class CelebrationJob implements Job {
 
     public async run(): Promise<void> {
         Logger.info('Started fetching database information for guilds and users...');
-        const startCalculating = performance.now();
-        const now = moment();
-        const today = now.clone().format('MM-DD');
-        const tomorrow = now.clone().add(1, 'day').format('MM-DD');
-        const yesterday = now.clone().subtract(1, 'day').format('MM-DD');
+        let startCalculating = performance.now();
+        let now = moment();
+        let today = now.clone().format('MM-DD');
+        let tomorrow = now.clone().add(1, 'day').format('MM-DD');
+        let yesterday = now.clone().subtract(1, 'day').format('MM-DD');
 
         // Get a user data list of all POSSIBLE birthday events, this includes birthday role, message AND role take.
         // Do to timezones and custom message time this can range by a day, thus we get 3 days worth of birthdays for each check
-        const birthdayUserData: UserData[] = [
+        let birthdayUserData: UserData[] = [
             ...(await this.userRepo.getUsersWithBirthday(today)),
             ...(await this.userRepo.getUsersWithBirthday(tomorrow)),
             ...(await this.userRepo.getUsersWithBirthday(yesterday)),
@@ -51,9 +51,9 @@ export class CelebrationJob implements Job {
             birthdayUserData.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
         }
         // Collection of guilds
-        const guildCache = this.client.guilds.cache;
+        let guildCache = this.client.guilds.cache;
         // Get list of guilds the client is connected to
-        const discordIds = guildCache.map(guild => guild.id);
+        let discordIds = guildCache.map(guild => guild.id);
 
         // String of guild ids who have an active subscription to birthday bot premium
         // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
@@ -65,26 +65,26 @@ export class CelebrationJob implements Job {
             // Could not fetch subscription data
         }
 
-        const premiumGuildIds: string[] =
+        let premiumGuildIds: string[] =
             Config.payments.enabled && subStatuses
                 ? subStatuses.filter(g => g?.service).map(g => g?.subscriber) ?? discordIds
                 : discordIds;
 
         // Remove guilds that are premium
-        const nonPremiumIds = discordIds.filter(id => !premiumGuildIds.includes(id));
+        let nonPremiumIds = discordIds.filter(id => !premiumGuildIds.includes(id));
 
         // Combine arrays with premium guilds at the front
-        const orderedGuildIds = premiumGuildIds.concat(nonPremiumIds);
+        let orderedGuildIds = premiumGuildIds.concat(nonPremiumIds);
 
         // Get the data from the database
-        const guildCelebrationDatas = CelebrationUtils.convertCelebrationData(
+        let guildCelebrationDatas = CelebrationUtils.convertCelebrationData(
             await this.combinedRepo.GetRawCelebrationData(orderedGuildIds)
         );
 
-        const promises = [];
-        for (const guildCelebrationData of guildCelebrationDatas) {
+        let promises = [];
+        for (let guildCelebrationData of guildCelebrationDatas) {
             // Resolve Guild
-            const guildData = guildCelebrationData.guildData;
+            let guildData = guildCelebrationData.guildData;
             let guild: Guild;
             try {
                 guild = await this.client.guilds.fetch(guildData.GuildDiscordId);
@@ -100,9 +100,9 @@ export class CelebrationJob implements Job {
             }
 
             try {
-                const members: Collection<string, GuildMember> = guild.members.cache;
+                let members: Collection<string, GuildMember> = guild.members.cache;
 
-                const hasPremium = premiumGuildIds.includes(guild.id);
+                let hasPremium = premiumGuildIds.includes(guild.id);
 
                 promises.push(
                     this.celebrationService

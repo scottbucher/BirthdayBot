@@ -11,12 +11,12 @@ import {
 import { MessageUtils, TimeUtils } from '.';
 
 import { Command } from '../commands';
-import { Permission } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { Permission } from '../models/enums';
 
-const Config = require('../../config/config.json');
-const Debug = require('../../config/debug.json');
+let Config = require('../../config/config.json');
+let Debug = require('../../config/debug.json');
 
 export class CommandUtils {
     public static async runChecks(
@@ -103,12 +103,12 @@ export class CommandUtils {
 
                 // Check if user needs to vote
                 if (Config.voting.enabled && command.requireVote && !data.subscription?.service) {
-                    const voteTime = TimeUtils.getMoment(data.vote?.VoteTime);
+                    let voteTime = TimeUtils.getMoment(data.vote?.VoteTime);
                     if (
                         !voteTime ||
                         TimeUtils.now() >= voteTime.clone().add(Config.voting.hours, 'hours')
                     ) {
-                        const voteTimeAgo = voteTime?.fromNow() ?? 'Never';
+                        let voteTimeAgo = voteTime?.fromNow() ?? 'Never';
 
                         await MessageUtils.sendIntr(
                             intr,

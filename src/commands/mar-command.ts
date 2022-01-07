@@ -1,10 +1,10 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { ApplicationCommandOptionType } from 'discord-api-types';
+import { Command } from './command';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { MessageUtils } from '../utils';
-import { Command } from './command';
 
 export class MemberAnniversaryRoleCommand implements Command {
     public metadata: ApplicationCommandData = {

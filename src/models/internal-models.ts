@@ -1,8 +1,8 @@
 import { GuildData, Vote } from './database';
 
-import { SubscriptionStatus } from '.';
 import { Lang } from '../services';
 import { LangCode } from './enums';
+import { SubscriptionStatus } from '.';
 
 // This class is used to store and pass data along in events
 export class EventData {

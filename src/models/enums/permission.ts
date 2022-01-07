@@ -1,6 +1,6 @@
-import { PermissionString } from 'discord.js';
-import { LangCode } from '.';
 import { Lang } from '../../services';
+import { LangCode } from '.';
+import { PermissionString } from 'discord.js';
 
 interface PermissionData {
     displayName(langCode: LangCode): string;

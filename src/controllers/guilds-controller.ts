@@ -5,7 +5,7 @@ import router from 'express-promise-router';
 import { GetGuildsResponse } from '../models/cluster-api';
 import { Controller } from './controller';
 
-const Config = require('../../config/config.json');
+let Config = require('../../config/config.json');
 
 export class GuildsController implements Controller {
     public path = '/guilds';
@@ -19,7 +19,7 @@ export class GuildsController implements Controller {
     }
 
     private async getGuilds(req: Request, res: Response): Promise<void> {
-        const guilds: string[] = [
+        let guilds: string[] = [
             ...new Set(
                 (
                     await this.shardManager.broadcastEval(client => [...client.guilds.cache.keys()])
@@ -27,7 +27,7 @@ export class GuildsController implements Controller {
             ),
         ];
 
-        const resBody: GetGuildsResponse = {
+        let resBody: GetGuildsResponse = {
             guilds,
         };
         res.status(200).json(resBody);

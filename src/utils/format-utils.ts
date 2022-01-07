@@ -1,14 +1,14 @@
 import { Guild, Message, Role, User } from 'discord.js';
 import { GuildUtils, ParseUtils } from '.';
 
-import moment from 'moment-timezone';
-import { LangCode } from '../models/enums';
 import { Lang } from '../services';
+import { LangCode } from '../models/enums';
+import moment from 'moment-timezone';
 
-const Config = require('../../config/config.json');
-const Abbreviations = require('../../config/abbreviations.json');
+let Config = require('../../config/config.json');
+let Abbreviations = require('../../config/abbreviations.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;
-const zoneNames = moment.tz
+let zoneNames = moment.tz
     .names()
     .filter(name => Config.validation.regions.some((region: any) => name.startsWith(`${region}/`)));
 export class FormatUtils {
@@ -45,7 +45,7 @@ export class FormatUtils {
     }
 
     public static findZone(input: string): string {
-        const zoneSearch = input.split(/\s+/).join('_').toLowerCase();
+        let zoneSearch = input.split(/\s+/).join('_').toLowerCase();
         return zoneNames.find(zone => zone.toLowerCase().includes(zoneSearch));
     }
 
@@ -81,14 +81,14 @@ export class FormatUtils {
                 )
         )
             input = '2000-02-29';
-        const results = parser.parseDate(input); // Try an parse a date
+        let results = parser.parseDate(input); // Try an parse a date
 
         if (!results) return null;
 
-        const month = results.getMonth() + 1; // Get the numeric value of month
-        const day = results.getDate();
-        const temp = `2000-${month}-${day}`;
-        const doubleCheck = parser.parseDate(temp);
+        let month = results.getMonth() + 1; // Get the numeric value of month
+        let day = results.getDate();
+        let temp = `2000-${month}-${day}`;
+        let doubleCheck = parser.parseDate(temp);
 
         return doubleCheck ? temp : null;
     }
@@ -189,7 +189,7 @@ export class FormatUtils {
     }
 
     public static extractPageNumber(input: string): number {
-        const match = PAGE_REGEX.exec(input);
+        let match = PAGE_REGEX.exec(input);
         return match ? ParseUtils.parseInt(match[1]) : null;
     }
 
@@ -384,7 +384,7 @@ export class FormatUtils {
 
     public static getMentionSetting(mentionSetting: string, guild: Guild): string {
         // Find mentioned role
-        const roleInput: Role = guild.roles.resolve(mentionSetting);
+        let roleInput: Role = guild.roles.resolve(mentionSetting);
 
         if (!roleInput || roleInput.guild.id !== guild.id) {
             if (
@@ -400,8 +400,8 @@ export class FormatUtils {
     }
 
     public static getMessageTime(time: number): string {
-        const am = Lang.getRef('info', 'terms.amTime', LangCode.EN_US);
-        const pm = Lang.getRef('info', 'terms.pmTime', LangCode.EN_US);
+        let am = Lang.getRef('info', 'terms.amTime', LangCode.EN_US);
+        let pm = Lang.getRef('info', 'terms.pmTime', LangCode.EN_US);
         if (time === 0) return '12:00 ' + am;
         else if (time === 12) return '12:00 ' + pm;
         else if (time < 12) return time + ':00 ' + am;

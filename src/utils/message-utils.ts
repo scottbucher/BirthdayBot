@@ -12,7 +12,7 @@ import {
 
 import { TimeUtils } from '.';
 
-const Config = require('../../config/config.json');
+let Config = require('../../config/config.json');
 
 export class MessageUtils {
     public static async send(
@@ -20,7 +20,7 @@ export class MessageUtils {
         content: string | MessageEmbed | MessageOptions
     ): Promise<Message> {
         try {
-            const msgOptions = this.messageOptions(content);
+            let msgOptions = this.messageOptions(content);
             return await target.send(msgOptions);
         } catch (error) {
             // 10003: "Unknown channel"
@@ -43,7 +43,7 @@ export class MessageUtils {
         content: string | MessageEmbed | MessageOptions
     ): Promise<Message> {
         try {
-            const msgOptions = this.messageOptions(content);
+            let msgOptions = this.messageOptions(content);
             return (await intr.webhook.send(msgOptions)) as Message;
         } catch (error) {
             // 10003: "Unknown channel"
@@ -66,7 +66,7 @@ export class MessageUtils {
         content: string | MessageEmbed | MessageOptions
     ): Promise<Message> {
         try {
-            const msgOptions = this.messageOptions(content);
+            let msgOptions = this.messageOptions(content);
             return await msg.reply(msgOptions);
         } catch (error) {
             // 10008: "Unknown Message" (Message was deleted)
@@ -84,7 +84,7 @@ export class MessageUtils {
         content: string | MessageEmbed | MessageOptions
     ): Promise<Message> {
         try {
-            const msgOptions = this.messageOptions(content);
+            let msgOptions = this.messageOptions(content);
             return await msg.edit(msgOptions);
         } catch (error) {
             // 10008: "Unknown Message" (Message was deleted)
@@ -145,7 +145,7 @@ export class MessageUtils {
     ): Promise<Message> {
         delay = Config.delays.enabled ? delay : 0;
         try {
-            const msgOptions = this.messageOptions(content);
+            let msgOptions = this.messageOptions(content);
             await target.send(msgOptions);
             await TimeUtils.sleep(delay ?? 0);
             return;

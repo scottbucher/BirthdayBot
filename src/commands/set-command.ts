@@ -1,4 +1,3 @@
-import { Chrono, en, ParsedComponents, ParsedResult } from 'chrono-node';
 import {
     ApplicationCommandData,
     CommandInteraction,
@@ -10,19 +9,20 @@ import {
     User,
     Util,
 } from 'discord.js';
-import { Lang, Logger } from '../services';
-import { GuildRepo, UserRepo } from '../services/database/repos';
+import { Chrono, ParsedComponents, ParsedResult, en } from 'chrono-node';
 import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { Lang, Logger } from '../services';
 
-import { channel } from 'diagnostics_channel';
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { CollectOptions } from 'discord.js-collector-utils';
-import { LangCode } from '../models/enums';
-import { EventData } from '../models/internal-models';
 import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
+import { EventData } from '../models/internal-models';
+import { LangCode } from '../models/enums';
+import { channel } from 'diagnostics_channel';
 
-const Config = require('../../config/config.json');
+let Config = require('../../config/config.json');
 
 const COLLECT_OPTIONS: CollectOptions = {
     time: Config.experience.promptExpireTime * 1000,
@@ -72,13 +72,13 @@ export class SetCommand implements Command {
     constructor(public guildRepo: GuildRepo, public userRepo: UserRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        const birthdayInput = intr.options.getString(Lang.getCom('arguments.date'));
-        const timezoneInput = intr.options.getString(Lang.getCom('arguments.timezone'));
-        const target = intr.options.getUser(Lang.getCom('arguments.user')) ?? intr.user;
-        const dm = intr.channel instanceof DMChannel;
+        let birthdayInput = intr.options.getString(Lang.getCom('arguments.date'));
+        let timezoneInput = intr.options.getString(Lang.getCom('arguments.timezone'));
+        let target = intr.options.getUser(Lang.getCom('arguments.user')) ?? intr.user;
+        let dm = intr.channel instanceof DMChannel;
 
         let timeZone = timezoneInput ? FormatUtils.findZone(timezoneInput) : undefined;
-        const suggest = intr.user !== target;
+        let suggest = intr.user !== target;
 
         if (suggest) {
             if (dm) {
@@ -109,9 +109,9 @@ export class SetCommand implements Command {
             }
         }
 
-        const userData = await this.userRepo.getUser(target.id);
+        let userData = await this.userRepo.getUser(target.id);
 
-        const changesLeft = userData ? userData?.ChangesLeft : 5;
+        let changesLeft = userData ? userData?.ChangesLeft : 5;
 
         if (!(channel instanceof DMChannel) && !data.guild)
             if (
@@ -120,13 +120,13 @@ export class SetCommand implements Command {
                 (!timeZone || timeZone !== data.guild?.DefaultTimezone)
             ) {
                 // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
-                const collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
+                let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
                     await MessageUtils.sendIntr(
                         intr,
                         Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                     );
                 });
-                const confirmationMessage = await MessageUtils.sendIntr(
+                let confirmationMessage = await MessageUtils.sendIntr(
                     intr,
                     Lang.getEmbed(
                         'prompts',
@@ -140,11 +140,11 @@ export class SetCommand implements Command {
                     )
                 );
                 // Send confirmation and emotes
-                for (const option of trueFalseOptions) {
+                for (let option of trueFalseOptions) {
                     await MessageUtils.react(confirmationMessage, option);
                 }
 
-                const confirmation: boolean = await collectReact(
+                let confirmation: boolean = await collectReact(
                     confirmationMessage,
                     async (msgReaction: MessageReaction, reactor: User) => {
                         if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
@@ -165,7 +165,7 @@ export class SetCommand implements Command {
                 }
             }
 
-        const collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
+        let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
@@ -173,7 +173,7 @@ export class SetCommand implements Command {
         });
 
         if (!timeZone) {
-            const timezoneMessage = await MessageUtils.sendIntr(
+            let timezoneMessage = await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', LangCode.EN_US, {
                     TARGET: target.username,
@@ -200,7 +200,7 @@ export class SetCommand implements Command {
                     return;
                 }
 
-                const input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
+                let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
                 if (!input) {
                     await MessageUtils.sendIntr(
                         intr,
@@ -227,19 +227,19 @@ export class SetCommand implements Command {
             return;
         }
 
-        const littleEndian = !data.guild
+        let littleEndian = !data.guild
             ? false
             : data.guild.DateFormat === 'month_day'
             ? false
             : true;
 
-        const parser = new Chrono(en.createConfiguration(true, littleEndian));
+        let parser = new Chrono(en.createConfiguration(true, littleEndian));
         let birthday = birthdayInput
             ? FormatUtils.getBirthday(birthdayInput, parser, littleEndian)
             : undefined;
 
         if (!birthday) {
-            const birthdayMessage = await MessageUtils.sendIntr(
+            let birthdayMessage = await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupBirthday', LangCode.EN_US, {
                     TARGET: target.username,
@@ -254,7 +254,7 @@ export class SetCommand implements Command {
             );
 
             birthday = await collect(async (nextMsg: Message) => {
-                const result = FormatUtils.getBirthday(nextMsg.content, parser, littleEndian);
+                let result = FormatUtils.getBirthday(nextMsg.content, parser, littleEndian);
 
                 // Don't laugh at my double check it prevents the dates chrono misses on the first input
                 if (!result) {
@@ -283,13 +283,13 @@ export class SetCommand implements Command {
 
         // Re-Parse into a Chrono date to format the output variables
 
-        const birthDate = parser.parseDate(birthday);
-        const month = birthDate.getMonth() + 1;
-        const day = birthDate.getDate();
+        let birthDate = parser.parseDate(birthday);
+        let month = birthDate.getMonth() + 1;
+        let day = birthDate.getDate();
 
         let confirmationEmbed: MessageEmbed;
 
-        const collectReact = CollectorUtils.createReactCollect(target, async () => {
+        let collectReact = CollectorUtils.createReactCollect(target, async () => {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
@@ -307,12 +307,12 @@ export class SetCommand implements Command {
             }
         );
 
-        const confirmationMessage = await MessageUtils.sendIntr(intr, confirmationEmbed); // Send confirmation and emotes
-        for (const option of trueFalseOptions) {
+        let confirmationMessage = await MessageUtils.sendIntr(intr, confirmationEmbed); // Send confirmation and emotes
+        for (let option of trueFalseOptions) {
             await MessageUtils.react(confirmationMessage, option);
         }
 
-        const confirmation: boolean = await collectReact(
+        let confirmation: boolean = await collectReact(
             confirmationMessage,
             async (msgReaction: MessageReaction, reactor: User) => {
                 if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
