@@ -71,6 +71,33 @@ export class ConfigCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        // await MessageUtils.sendIntr(intr, Lang.getEmbed('embeds.help', data.lang()));
+        let setting = intr.options.getString('arguments.setting');
+        let reset = intr.options.getBoolean('arguments.reset');
+
+        switch (setting) {
+            case 'NAME_FORMAT':
+                // Code here
+                break;
+            case 'TIME_ZONE':
+                // Code here
+                break;
+            case 'USE_TIMEZONE':
+                // Code here
+                break;
+            case 'DATE_FORMAT':
+                // Code here
+                break;
+            case 'TRUSTED_PREVENTS_MESSAGE':
+            case 'TRUSTED_PREVENTS_ROLE':
+            case 'REQUIRE_ALL_TRUSTED_ROLES':
+                // Code here
+                break;
+            case 'CHANNEL':
+                // Code here
+                break;
+            case 'ROLE':
+                // Code here
+                break;
+        }
     }
 }
