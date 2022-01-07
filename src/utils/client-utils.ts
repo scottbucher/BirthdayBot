@@ -2,8 +2,8 @@ import { Client, NewsChannel } from 'discord.js';
 import { DiscordAPIError, Guild, GuildMember, TextChannel, User } from 'discord.js';
 import { PermissionUtils, RegexUtils } from '.';
 
-import { Lang } from '../services';
 import { LangCode } from '../models/enums';
+import { Lang } from '../services';
 
 const FETCH_MEMBER_LIMIT = 20;
 
@@ -28,12 +28,12 @@ export class ClientUtils {
 
     public static async findMember(guild: Guild, input: string): Promise<GuildMember> {
         try {
-            let discordId = RegexUtils.discordId(input);
+            const discordId = RegexUtils.discordId(input);
             if (discordId) {
                 return await guild.members.fetch(discordId);
             }
 
-            let tag = RegexUtils.tag(input);
+            const tag = RegexUtils.tag(input);
             if (tag) {
                 return (
                     await guild.members.fetch({ query: tag.username, limit: FETCH_MEMBER_LIMIT })
@@ -57,7 +57,7 @@ export class ClientUtils {
         langCode: LangCode
     ): Promise<TextChannel | NewsChannel> {
         // Prefer the system channel
-        let systemChannel = guild.systemChannel;
+        const systemChannel = guild.systemChannel;
         if (systemChannel && PermissionUtils.canSend(systemChannel)) {
             return systemChannel;
         }

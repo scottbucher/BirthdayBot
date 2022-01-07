@@ -1,10 +1,10 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
+import { LangCode } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { LangCode } from '../models/enums';
 import { MessageUtils } from '../utils';
+import { Command } from './command';
 
 export class MapCommand implements Command {
     public metadata: ApplicationCommandData = {

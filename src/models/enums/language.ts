@@ -23,7 +23,7 @@ export class Language {
     }
 
     public static find(input: string): LangCode {
-        for (let langCode of Object.values(LangCode)) {
+        for (const langCode of Object.values(LangCode)) {
             if (this.regex(langCode).test(input)) {
                 return langCode;
             }

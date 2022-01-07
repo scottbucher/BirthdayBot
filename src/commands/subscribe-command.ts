@@ -1,15 +1,15 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import { Lang, Logger, SubscriptionService } from '../services';
 
-import { Command } from './command';
-import { EventData } from '../models/internal-models';
-import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
-import { PlanName } from '../models';
 import { channel } from 'diagnostics_channel';
+import { PlanName } from '../models';
+import { LangCode } from '../models/enums';
+import { EventData } from '../models/internal-models';
+import { MessageUtils } from '../utils';
+import { Command } from './command';
 
-let Config = require('../../config/config.json');
-let Logs = require('../../lang/logs.json');
+const Config = require('../../config/config.json');
+const Logs = require('../../lang/logs.json');
 export class SubscribeCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.subscribe'),
@@ -43,7 +43,7 @@ export class SubscribeCommand implements Command {
             return;
         }
 
-        let subLink = await this.subscriptionService.createSubscription(
+        const subLink = await this.subscriptionService.createSubscription(
             PlanName.premium1,
             intr.guild.id
         );

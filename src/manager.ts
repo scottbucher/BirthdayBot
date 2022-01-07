@@ -2,9 +2,9 @@ import { Shard, ShardingManager } from 'discord.js';
 
 import { JobService, Logger } from './services';
 
-let Config = require('../config/config.json');
-let Debug = require('../config/debug.json');
-let Logs = require('../lang/logs.json');
+const Config = require('../config/config.json');
+const Debug = require('../config/debug.json');
+const Logs = require('../lang/logs.json');
 
 export class Manager {
     constructor(private shardManager: ShardingManager, private jobService: JobService) {}
@@ -12,7 +12,7 @@ export class Manager {
     public async start(): Promise<void> {
         this.registerListeners();
 
-        let shardList = this.shardManager.shardList as number[];
+        const shardList = this.shardManager.shardList as number[];
 
         try {
             Logger.info(

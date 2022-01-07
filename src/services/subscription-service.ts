@@ -2,7 +2,7 @@ import { SubscriptionLink, SubscriptionStatus } from '../models/subscription-mod
 
 import { HttpService } from './http-service';
 
-let Config = require('../../config/config.json');
+const Config = require('../../config/config.json');
 
 export class SubscriptionService {
     constructor(private httpService: HttpService) {}
@@ -11,7 +11,7 @@ export class SubscriptionService {
         planName: string,
         subscriberId: string
     ): Promise<SubscriptionLink> {
-        let res = await this.httpService.post(
+        const res = await this.httpService.post(
             `${Config.payments.url}/plans/${planName}/subscriptions/${subscriberId}`,
             Config.payments.token
         );
@@ -28,7 +28,7 @@ export class SubscriptionService {
         planName: string,
         subscriberId: string
     ): Promise<SubscriptionStatus> {
-        let res = await this.httpService.get(
+        const res = await this.httpService.get(
             `${Config.payments.url}/plans/${planName}/subscriptions/${subscriberId}`,
             Config.payments.token
         );
@@ -41,7 +41,7 @@ export class SubscriptionService {
     }
 
     public async getAllSubscription(planName: string): Promise<SubscriptionStatus[]> {
-        let res = await this.httpService.get(
+        const res = await this.httpService.get(
             `${Config.payments.url}/plans/${planName}/subscriptions/`,
             Config.payments.token
         );
@@ -54,7 +54,7 @@ export class SubscriptionService {
     }
 
     public async hasService(planName: string, subscriberId: string): Promise<boolean> {
-        let subscription = await this.getSubscription(planName, subscriberId);
+        const subscription = await this.getSubscription(planName, subscriberId);
         return !subscription ? false : subscription.service;
     }
 }

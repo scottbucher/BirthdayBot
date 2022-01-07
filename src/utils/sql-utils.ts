@@ -2,7 +2,7 @@ import mysql from 'mysql';
 
 export class SqlUtils {
     public static createProcedureSql(name: string, params: any[]): string {
-        let sql = `Call ${name}(${new Array(params.length).fill('?').join(',')});`;
+        const sql = `Call ${name}(${new Array(params.length).fill('?').join(',')});`;
         params = params.map(this.typeCast);
         return mysql.format(sql, params);
     }

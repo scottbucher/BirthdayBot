@@ -22,15 +22,6 @@ import {
     ViewCommand,
 } from './commands';
 import {
-    BlacklistRepo,
-    CombinedRepo,
-    CustomMessageRepo,
-    GuildRepo,
-    MemberAnniversaryRoleRepo,
-    TrustedRoleRepo,
-    UserRepo,
-} from './services/database/repos';
-import {
     CommandHandler,
     GuildJoinHandler,
     GuildLeaveHandler,
@@ -39,23 +30,32 @@ import {
     TriggerHandler,
 } from './events';
 import { HttpService, JobService, Logger, SubscriptionService } from './services';
+import {
+    BlacklistRepo,
+    CombinedRepo,
+    CustomMessageRepo,
+    GuildRepo,
+    MemberAnniversaryRoleRepo,
+    TrustedRoleRepo,
+    UserRepo,
+} from './services/database/repos';
 
-import { Bot } from './bot';
-import { CustomClient } from './extensions';
-import { DataAccess } from './services/database/data-access';
-import { Options } from 'discord.js';
 import { REST } from '@discordjs/rest';
-import { Reaction } from './reactions';
 import { Routes } from 'discord-api-types/rest/v9';
-import { Trigger } from './triggers';
+import { Options } from 'discord.js';
+import { Bot } from './bot';
 import { VoteCommand } from './commands/vote-command';
+import { CustomClient } from './extensions';
+import { Reaction } from './reactions';
+import { DataAccess } from './services/database/data-access';
+import { Trigger } from './triggers';
 
-let Config = require('../config/config.json');
-let Logs = require('../lang/logs.json');
+const Config = require('../config/config.json');
+const Logs = require('../lang/logs.json');
 
 async function start(): Promise<void> {
     Logger.info('Starting Bot!');
-    let client = new CustomClient({
+    const client = new CustomClient({
         intents: Config.client.intents,
         partials: Config.client.partials,
         makeCache: Options.cacheWithLimits({
@@ -66,21 +66,21 @@ async function start(): Promise<void> {
         }),
     });
 
-    let dataAccess = new DataAccess(Config.mysql);
-    let httpService = new HttpService();
-    let subService = new SubscriptionService(httpService);
+    const dataAccess = new DataAccess(Config.mysql);
+    const httpService = new HttpService();
+    const subService = new SubscriptionService(httpService);
 
     // Repos
-    let guildRepo = new GuildRepo(dataAccess);
-    let userRepo = new UserRepo(dataAccess);
-    let customMessageRepo = new CustomMessageRepo(dataAccess);
-    let blacklistRepo = new BlacklistRepo(dataAccess);
-    let trustedRoleRepo = new TrustedRoleRepo(dataAccess);
-    let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
-    let combinedRepo = new CombinedRepo(dataAccess);
+    const guildRepo = new GuildRepo(dataAccess);
+    const userRepo = new UserRepo(dataAccess);
+    const customMessageRepo = new CustomMessageRepo(dataAccess);
+    const blacklistRepo = new BlacklistRepo(dataAccess);
+    const trustedRoleRepo = new TrustedRoleRepo(dataAccess);
+    const memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
+    const combinedRepo = new CombinedRepo(dataAccess);
 
     // Commands
-    let commands: Command[] = [
+    const commands: Command[] = [
         new HelpCommand(),
         new InfoCommand(),
         new LinkCommand(),
@@ -105,24 +105,24 @@ async function start(): Promise<void> {
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Reactions
-    let reactions: Reaction[] = [
+    const reactions: Reaction[] = [
         // TODO: Add new reactions here
     ];
 
     // Triggers
-    let triggers: Trigger[] = [
+    const triggers: Trigger[] = [
         // TODO: Add new triggers here
     ];
 
     // Event handlers
-    let guildJoinHandler = new GuildJoinHandler();
-    let guildLeaveHandler = new GuildLeaveHandler();
-    let commandHandler = new CommandHandler(commands, subService, guildRepo, userRepo);
-    let triggerHandler = new TriggerHandler(triggers);
-    let messageHandler = new MessageHandler(triggerHandler);
-    let reactionHandler = new ReactionHandler(reactions);
+    const guildJoinHandler = new GuildJoinHandler();
+    const guildLeaveHandler = new GuildLeaveHandler();
+    const commandHandler = new CommandHandler(commands, subService, guildRepo, userRepo);
+    const triggerHandler = new TriggerHandler(triggers);
+    const messageHandler = new MessageHandler(triggerHandler);
+    const reactionHandler = new ReactionHandler(reactions);
 
-    let bot = new Bot(
+    const bot = new Bot(
         Config.client.token,
         client,
         guildJoinHandler,
@@ -142,8 +142,8 @@ async function start(): Promise<void> {
 }
 
 async function registerCommands(commands: Command[]): Promise<void> {
-    let cmdDatas = commands.map(cmd => cmd.metadata);
-    let cmdNames = cmdDatas.map(cmdData => cmdData.name);
+    const cmdDatas = commands.map(cmd => cmd.metadata);
+    const cmdNames = cmdDatas.map(cmdData => cmdData.name);
 
     Logger.info(
         Logs.info.commandsRegistering.replaceAll(
@@ -153,7 +153,7 @@ async function registerCommands(commands: Command[]): Promise<void> {
     );
 
     try {
-        let rest = new REST({ version: '9' }).setToken(Config.client.token);
+        const rest = new REST({ version: '9' }).setToken(Config.client.token);
         await rest.put(Routes.applicationCommands(Config.client.id), { body: [] });
         await rest.put(Routes.applicationCommands(Config.client.id), { body: cmdDatas });
     } catch (error) {

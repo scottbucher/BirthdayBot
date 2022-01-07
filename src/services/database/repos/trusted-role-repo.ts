@@ -1,7 +1,7 @@
+import { TrustedRoles } from '../../../models/database/trusted-role-models';
+import { SqlUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
-import { SqlUtils } from '../../../utils';
-import { TrustedRoles } from '../../../models/database/trusted-role-models';
 
 export class TrustedRoleRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -19,11 +19,11 @@ export class TrustedRoleRepo {
     }
 
     public async getTrustedRoles(discordId: string): Promise<TrustedRoles> {
-        let results = await this.dataAccess.executeProcedure(Procedure.TrustedRole_Get, [
+        const results = await this.dataAccess.executeProcedure(Procedure.TrustedRole_Get, [
             discordId,
         ]);
 
-        let trustedRoles = SqlUtils.getTable(results, 0);
+        const trustedRoles = SqlUtils.getTable(results, 0);
         return new TrustedRoles(trustedRoles, null);
     }
 
@@ -32,14 +32,14 @@ export class TrustedRoleRepo {
         pageSize: number,
         page: number
     ): Promise<TrustedRoles> {
-        let results = await this.dataAccess.executeProcedure(Procedure.TrustedRole_GetList, [
+        const results = await this.dataAccess.executeProcedure(Procedure.TrustedRole_GetList, [
             guildId,
             pageSize,
             page,
         ]);
 
-        let trustedRoleData = SqlUtils.getTable(results, 0);
-        let stats = SqlUtils.getRow(results, 1, 0);
+        const trustedRoleData = SqlUtils.getTable(results, 0);
+        const stats = SqlUtils.getRow(results, 1, 0);
         return new TrustedRoles(trustedRoleData, stats);
     }
 }

@@ -3,13 +3,13 @@ import { DMChannel, GuildChannel, GuildMember, Permissions, TextBasedChannel } f
 import { Command } from 'pm2';
 import { GuildData } from '../models/database';
 
-let Config = require('../../config/config.json');
+const Config = require('../../config/config.json');
 export class PermissionUtils {
     public static canSend(channel: TextBasedChannel, embedLinks: boolean = false): boolean {
         if (channel instanceof DMChannel) {
             return true;
         } else if (channel instanceof GuildChannel) {
-            let channelPerms = channel.permissionsFor(channel.client.user);
+            const channelPerms = channel.permissionsFor(channel.client.user);
             if (!channelPerms) {
                 // This can happen if the guild disconnected while a collector is running
                 return false;
@@ -32,7 +32,7 @@ export class PermissionUtils {
         if (channel instanceof DMChannel) {
             return true;
         } else if (channel instanceof GuildChannel) {
-            let channelPerms = channel.permissionsFor(channel.client.user);
+            const channelPerms = channel.permissionsFor(channel.client.user);
             if (!channelPerms) {
                 // This can happen if the guild disconnected while a collector is running
                 return false;
@@ -53,7 +53,7 @@ export class PermissionUtils {
         if (channel instanceof DMChannel) {
             return true;
         } else if (channel instanceof GuildChannel) {
-            let channelPerms = channel.permissionsFor(channel.client.user);
+            const channelPerms = channel.permissionsFor(channel.client.user);
             if (!channelPerms) {
                 // This can happen if the guild disconnected while a collector is running
                 return false;
@@ -79,7 +79,7 @@ export class PermissionUtils {
         if (channel instanceof DMChannel) {
             return true;
         } else if (channel instanceof GuildChannel) {
-            let channelPerms = channel.permissionsFor(channel.client.user);
+            const channelPerms = channel.permissionsFor(channel.client.user);
             if (!channelPerms) {
                 // This can happen if the guild disconnected while a collector is running
                 return false;
@@ -110,7 +110,7 @@ export class PermissionUtils {
 
         if (guildData) {
             // Check if member has a required role
-            let memberRoles = member.roles.cache.map(role => role.id);
+            const memberRoles = member.roles.cache.map(role => role.id);
             if (
                 guildData.BirthdayMasterRoleDiscordId &&
                 memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
@@ -126,7 +126,7 @@ export class PermissionUtils {
 
         if (guildData) {
             // Check if member has a required role
-            let memberRoles = member.roles.cache.map(role => role.id);
+            const memberRoles = member.roles.cache.map(role => role.id);
             if (
                 guildData.BirthdayMasterRoleDiscordId &&
                 memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)

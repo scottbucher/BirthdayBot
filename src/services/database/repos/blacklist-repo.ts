@@ -1,7 +1,7 @@
 import { Blacklisted } from '../../../models/database';
+import { SqlUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
-import { SqlUtils } from '../../../utils';
 
 export class BlacklistRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -19,9 +19,9 @@ export class BlacklistRepo {
     }
 
     public async getBlacklist(discordId: string): Promise<Blacklisted> {
-        let results = await this.dataAccess.executeProcedure(Procedure.Blacklist_Get, [discordId]);
+        const results = await this.dataAccess.executeProcedure(Procedure.Blacklist_Get, [discordId]);
 
-        let blacklist = SqlUtils.getTable(results, 0);
+        const blacklist = SqlUtils.getTable(results, 0);
         return new Blacklisted(blacklist, null);
     }
 
@@ -30,14 +30,14 @@ export class BlacklistRepo {
         pageSize: number,
         page: number
     ): Promise<Blacklisted> {
-        let results = await this.dataAccess.executeProcedure(Procedure.Blacklist_GetList, [
+        const results = await this.dataAccess.executeProcedure(Procedure.Blacklist_GetList, [
             guildId,
             pageSize,
             page,
         ]);
 
-        let blacklistData = SqlUtils.getTable(results, 0);
-        let stats = SqlUtils.getRow(results, 1, 0);
+        const blacklistData = SqlUtils.getTable(results, 0);
+        const stats = SqlUtils.getRow(results, 1, 0);
         return new Blacklisted(blacklistData, stats);
     }
 }

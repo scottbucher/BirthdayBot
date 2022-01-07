@@ -1,11 +1,11 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
+import { channel } from 'diagnostics_channel';
+import { LangCode } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { LangCode } from '../models/enums';
 import { MessageUtils } from '../utils';
-import { channel } from 'diagnostics_channel';
+import { Command } from './command';
 
 export class VoteCommand implements Command {
     public metadata: ApplicationCommandData = {

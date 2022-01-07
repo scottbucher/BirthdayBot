@@ -10,7 +10,7 @@ export class DataAccess {
     }
 
     public async executeProcedure(name: string, params: any[]): Promise<any> {
-        let sql = SqlUtils.createProcedureSql(name, params);
+        const sql = SqlUtils.createProcedureSql(name, params);
         return new Promise((resolve, reject) => {
             // let startTime = Date.now();
             this.pool.query(sql, (error, results) => {

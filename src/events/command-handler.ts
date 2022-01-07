@@ -1,16 +1,16 @@
 import { CommandInteraction, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
-import { CommandUtils, MessageUtils, PermissionUtils } from '../utils';
-import { GuildRepo, UserRepo } from '../services/database/repos';
 import { Lang, Logger, SubscriptionService } from '../services';
+import { GuildRepo, UserRepo } from '../services/database/repos';
+import { CommandUtils, MessageUtils, PermissionUtils } from '../utils';
 
-import { Command } from '../commands';
-import { EventData } from '../models/internal-models';
-import { EventHandler } from '.';
-import { PlanName } from '../models';
 import { RateLimiter } from 'discord.js-rate-limiter';
+import { EventHandler } from '.';
+import { Command } from '../commands';
+import { PlanName } from '../models';
+import { EventData } from '../models/internal-models';
 
-let Config = require('../../config/config.json');
-let Logs = require('../../lang/logs.json');
+const Config = require('../../config/config.json');
+const Logs = require('../../lang/logs.json');
 
 export class CommandHandler implements EventHandler {
     private rateLimiter = new RateLimiter(
@@ -27,7 +27,7 @@ export class CommandHandler implements EventHandler {
 
     public async process(intr: CommandInteraction): Promise<void> {
         // Check if user is rate limited
-        let limited = this.rateLimiter.take(intr.user.id);
+        const limited = this.rateLimiter.take(intr.user.id);
         if (limited) {
             return;
         }
@@ -38,7 +38,7 @@ export class CommandHandler implements EventHandler {
 
         // TODO: Get data from database
         // Get data from database
-        let data = new EventData(
+        const data = new EventData(
             intr.guild ? await this.guildRepo.getGuild(intr.guild?.id) : undefined,
             intr.guild && Config.payments.enabled
                 ? await this.subService.getSubscription(PlanName.premium1, intr.guild?.id)
@@ -47,7 +47,7 @@ export class CommandHandler implements EventHandler {
         );
 
         // Try to find the command the user wants
-        let command = this.commands.find(command => command.metadata.name === intr.commandName);
+        const command = this.commands.find(command => command.metadata.name === intr.commandName);
         if (!command) {
             await this.sendError(intr, data);
             Logger.error(
@@ -60,7 +60,7 @@ export class CommandHandler implements EventHandler {
 
         try {
             // Check if interaction passes command checks
-            let passesChecks = await CommandUtils.runChecks(command, intr, data);
+            const passesChecks = await CommandUtils.runChecks(command, intr, data);
             if (passesChecks) {
                 // Execute the command
                 await command.execute(intr, data);

@@ -8,16 +8,16 @@ import { Manager } from './manager';
 import { HttpService, JobService, Logger, MasterApiService } from './services';
 import { MathUtils, ShardUtils } from './utils';
 
-let Config = require('../config/config.json');
-let Debug = require('../config/debug.json');
-let Logs = require('../lang/logs.json');
+const Config = require('../config/config.json');
+const Debug = require('../config/debug.json');
+const Logs = require('../lang/logs.json');
 
 async function start(): Promise<void> {
     Logger.info(Logs.info.appStarted);
 
     // Dependencies
-    let httpService = new HttpService();
-    let masterApiService = new MasterApiService(httpService);
+    const httpService = new HttpService();
+    const masterApiService = new MasterApiService(httpService);
     if (Config.clustering.enabled) {
         await masterApiService.register();
     }
@@ -27,12 +27,12 @@ async function start(): Promise<void> {
     let totalShards: number;
     try {
         if (Config.clustering.enabled) {
-            let resBody = await masterApiService.login();
+            const resBody = await masterApiService.login();
             shardList = resBody.shardList;
-            let requiredShards = await ShardUtils.requiredShardCount(Config.client.token);
+            const requiredShards = await ShardUtils.requiredShardCount(Config.client.token);
             totalShards = Math.max(requiredShards, resBody.totalShards);
         } else {
-            let recommendedShards = await ShardUtils.recommendedShardCount(
+            const recommendedShards = await ShardUtils.recommendedShardCount(
                 Config.client.token,
                 Config.sharding.serversPerShard
             );
@@ -49,7 +49,7 @@ async function start(): Promise<void> {
         return;
     }
 
-    let shardManager = new ShardingManager('dist/start.js', {
+    const shardManager = new ShardingManager('dist/start.js', {
         token: Config.client.token,
         mode: Debug.override.shardMode.enabled ? Debug.override.shardMode.value : 'worker',
         respawn: true,
@@ -58,18 +58,18 @@ async function start(): Promise<void> {
     });
 
     // Jobs
-    let jobs = [
+    const jobs = [
         Config.clustering.enabled ? undefined : new UpdateServerCountJob(shardManager, httpService),
     ].filter(Boolean);
-    let jobService = new JobService(jobs);
+    const jobService = new JobService(jobs);
 
-    let manager = new Manager(shardManager, jobService);
+    const manager = new Manager(shardManager, jobService);
 
     // API
-    let guildsController = new GuildsController(shardManager);
-    let shardsController = new ShardsController(shardManager);
-    let rootController = new RootController();
-    let api = new Api([guildsController, shardsController, rootController]);
+    const guildsController = new GuildsController(shardManager);
+    const shardsController = new ShardsController(shardManager);
+    const rootController = new RootController();
+    const api = new Api([guildsController, shardsController, rootController]);
 
     // Start
     await manager.start();

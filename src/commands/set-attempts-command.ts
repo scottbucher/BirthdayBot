@@ -1,13 +1,13 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString, User } from 'discord.js';
 import { GuildUtils, MathUtils, MessageUtils, ParseUtils } from '../utils';
 
+import { channel } from 'diagnostics_channel';
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { Command } from './command';
+import { LangCode } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { LangCode } from '../models/enums';
 import { UserRepo } from '../services/database/repos';
-import { channel } from 'diagnostics_channel';
+import { Command } from './command';
 
 export class SetAttemptsCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -41,10 +41,10 @@ export class SetAttemptsCommand implements Command {
     constructor(private userRepo: UserRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let target = intr.options.getUser('arguments.user');
-        let amount = intr.options.getNumber('arguments.number');
+        const target = intr.options.getUser('arguments.user');
+        const amount = intr.options.getNumber('arguments.number');
 
-        let userData = await this.userRepo.getUser(target.id);
+        const userData = await this.userRepo.getUser(target.id);
 
         if (!userData) {
             await MessageUtils.sendIntr(

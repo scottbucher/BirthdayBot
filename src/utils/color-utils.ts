@@ -1,4 +1,4 @@
-let colors: { name: string; hex: string }[] = require('color-name-list');
+const colors: { name: string; hex: string }[] = require('color-name-list');
 
 const COLOR_HEX_REGEX = /#?[0-9A-F]{6}/i;
 
@@ -12,7 +12,7 @@ export class ColorUtils {
             return this.formatHexOutput(input);
         }
 
-        let color =
+        const color =
             colors.find(color => color.name.toLowerCase() === input.toLowerCase()) ??
             colors.find(color => color.name.toLowerCase().includes(input.toLowerCase()));
         if (!color) {
