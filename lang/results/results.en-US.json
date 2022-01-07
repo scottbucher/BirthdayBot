@@ -69,8 +69,8 @@
                 "Names will now appear in this format: **{{FORMAT}}**"
             ],
             "defaultTimeZoneSet": "Successfully set your server's default timezone to **{{TIMEZONE}}**!",
-            "useTimeZoneSettingSet": "Birthdays will now be celebrated based on the {{OPTION}}'s timezone!",
             "defaultTimeCleared": "Successfully cleared your server's default timezone!",
+            "useTimeZoneSettingSet": "Birthdays will now be celebrated based on the {{OPTION}}'s timezone!",
             "trustedPreventsMessageYes": "Trusted Role is now required for the birthday message!",
             "trustedPreventsMessageNo": "Trusted Role is now not required for the birthday message!",
             "trustedPreventsRoleYes": "Trusted Role is now required for the birthday role!",
