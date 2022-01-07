@@ -8,6 +8,7 @@ import {
     DateFormatSubCommand,
     NameFormatSubCommand,
     TimezoneSubCommand,
+    TrustedSettingsCommand,
     UseTimezoneSubCommand,
 } from './config-settings';
 
@@ -80,7 +81,8 @@ export class ConfigCommand implements Command {
         public nameFormatSubCommand: NameFormatSubCommand,
         public timezoneSubCommand: TimezoneSubCommand,
         public useTimezoneSubCommand: UseTimezoneSubCommand,
-        public dateFormatSubCommand: DateFormatSubCommand
+        public dateFormatSubCommand: DateFormatSubCommand,
+        public trustedSettingsCommand: TrustedSettingsCommand
     ) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
@@ -103,7 +105,7 @@ export class ConfigCommand implements Command {
             case 'TRUSTED_PREVENTS_MESSAGE':
             case 'TRUSTED_PREVENTS_ROLE':
             case 'REQUIRE_ALL_TRUSTED_ROLES':
-                // Code here
+                await this.trustedSettingsCommand.execute(intr, data, reset);
                 break;
             case 'CHANNEL':
                 // Code here

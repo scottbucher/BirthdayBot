@@ -5,10 +5,10 @@ import { GuildRepo } from '../../services/database/repos';
 import { FormatUtils, MessageUtils } from '../../utils';
 import { CollectorUtils } from '../../utils/collector-utils';
 
-let Config = require('../../config/config.json');
+let Config = require('../../../config/config.json');
 
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
-export class DateFormatSubCommand {
+export class TrustedSettingsCommand {
     constructor(public guildRepo: GuildRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData, reset: boolean): Promise<void> {

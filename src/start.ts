@@ -49,6 +49,7 @@ import {
     DateFormatSubCommand,
     NameFormatSubCommand,
     TimezoneSubCommand,
+    TrustedSettingsCommand,
     UseTimezoneSubCommand,
 } from './commands/config-settings';
 import { CustomClient } from './extensions';
@@ -90,6 +91,7 @@ async function start(): Promise<void> {
     let timezoneSubCommand = new TimezoneSubCommand(guildRepo);
     let useTimezoneSubCommand = new UseTimezoneSubCommand(guildRepo);
     let dateFormatSubCommand = new DateFormatSubCommand(guildRepo);
+    let trustedSettingsCommand = new TrustedSettingsCommand(guildRepo);
 
     // Commands
     let commands: Command[] = [
@@ -102,7 +104,8 @@ async function start(): Promise<void> {
             nameFormatSubCommand,
             timezoneSubCommand,
             useTimezoneSubCommand,
-            dateFormatSubCommand
+            dateFormatSubCommand,
+            trustedSettingsCommand
         ),
         new MessageCommand(),
         new MemberAnniversaryRoleCommand(),
