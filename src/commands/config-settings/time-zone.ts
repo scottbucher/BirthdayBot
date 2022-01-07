@@ -61,8 +61,8 @@ export class TimezoneSubCommand {
         await MessageUtils.sendIntr(
             intr,
             timezone === '0'
-                ? Lang.getEmbed('results', 'success.defaultTimeCleared', data.lang())
-                : Lang.getEmbed('results', 'success.defaultTimeZoneSet', data.lang(), {
+                ? Lang.getSuccessEmbed('results', 'successEmbeds.defaultTimeCleared', data.lang())
+                : Lang.getSuccessEmbed('results', 'successEmbeds.defaultTimeZoneSet', data.lang(), {
                       TIMEZONE: timezone,
                   })
         );

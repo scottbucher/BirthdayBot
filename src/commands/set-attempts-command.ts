@@ -62,7 +62,7 @@ export class SetAttemptsCommand implements Command {
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getEmbed('results', 'success.setAttempts', LangCode.EN_US, {
+            Lang.getSuccessEmbed('results', 'successEmbeds.setAttempts', LangCode.EN_US, {
                 USER: target.toString(),
                 AMOUNT: amount.toString(),
             })

@@ -47,36 +47,6 @@
                 },
                 "color": "{{COM:colors.success}}",
                 "timestamp": true
-            },
-            "setAttempts": {
-                "description": "Successfully set {{USER}}'s birthday attempts to {{AMOUNT}}!",
-                "color": "{{COM:colors.success}}"
-            },
-            "nameFormatSet": {
-                "description": [
-                    "Successfully updated the server's name format setting to `{{SETTING}}`!",
-                    "Names will now appear in this format: **{{FORMAT}}**"
-                ],
-                "color": "{{COM:colors.success}}"
-            },
-            "dateFormatSet": {
-                "description": [
-                    "Successfully updated the server's date format setting to `{{SETTING}}`!",
-                    "This is how birthdays will be detected in this server!"
-                ],
-                "color": "{{COM:colors.success}}"
-            },
-            "defaultTimeZoneSet": {
-                "description": "Successfully set your server's default timezone to **{{TIMEZONE}}**!",
-                "color": "{{COM:colors.success}}"
-            },
-            "useTimeZoneSettingSet": {
-                "description": "Birthdays will now be celebrated based on the {{OPTION}}'s timezone!",
-                "color": "{{COM:colors.success}}"
-            },
-            "defaultTimeCleared": {
-                "description": "Successfully cleared your server's default timezone!",
-                "color": "{{COM:colors.success}}"
             }
         },
         "fail": {
@@ -88,6 +58,26 @@
                 "description": "{{COM:emotes.deny}} Action canceled.",
                 "color": "{{COM:colors.error}}"
             }
+        },
+        "successEmbeds": {
+            "dateFormatSet": [
+                "Successfully updated the server's date format setting to `{{SETTING}}`!",
+                "This is how birthdays will be detected in this server!"
+            ],
+            "nameFormatSet": [
+                "Successfully updated the server's name format setting to `{{SETTING}}`!",
+                "Names will now appear in this format: **{{FORMAT}}**"
+            ],
+            "defaultTimeZoneSet": "Successfully set your server's default timezone to **{{TIMEZONE}}**!",
+            "useTimeZoneSettingSet": "Birthdays will now be celebrated based on the {{OPTION}}'s timezone!",
+            "defaultTimeCleared": "Successfully cleared your server's default timezone!",
+            "trustedPreventsMessageYes": "Trusted Role is now required for the birthday message!",
+            "trustedPreventsMessageNo": "Trusted Role is now not required for the birthday message!",
+            "trustedPreventsRoleYes": "Trusted Role is now required for the birthday role!",
+            "trustedPreventsRoleNo": "Trusted Role is now not required for the birthday role!",
+            "requireAllTrustedYes": "To have their birthday celebrated users now require all the trusted roles!",
+            "requireAllTrustedNo": "To have their birthday celebrated users now require only one of the trusted roles!",
+            "setAttempts": "Successfully set {{USER}}'s birthday attempts to {{AMOUNT}}!"
         }
     },
     "refs": {

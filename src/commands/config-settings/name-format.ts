@@ -51,7 +51,7 @@ export class NameFormatSubCommand {
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getEmbed('results', 'success.nameFormatSet', data.lang(), {
+            Lang.getSuccessEmbed('results', 'successEmbeds.nameFormatSet', data.lang(), {
                 SETTING: nameFormat,
                 FORMAT:
                     nameFormat === 'mention'

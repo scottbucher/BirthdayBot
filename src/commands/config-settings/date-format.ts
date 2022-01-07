@@ -44,7 +44,7 @@ export class DateFormatSubCommand {
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getEmbed('results', 'success.dateFormatSet', data.lang(), {
+            Lang.getSuccessEmbed('results', 'successEmbeds.dateFormatSet', data.lang(), {
                 SETTING: Lang.getRef(
                     'info',
                     `types.${dateFormat === 'month_day' ? 'monthDay' : 'dayMonth'}`,

@@ -44,7 +44,7 @@ export class UseTimezoneSubCommand {
         await this.guildRepo.updateUseTimezone(intr.guild.id, useTimezone);
         await MessageUtils.sendIntr(
             intr,
-            Lang.getEmbed('results', 'success.useTimeZoneSettingSet', data.lang(), {
+            Lang.getSuccessEmbed('results', 'successEmbeds.useTimeZoneSettingSet', data.lang(), {
                 OPTION: useTimezone,
             })
         );

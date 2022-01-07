@@ -37,6 +37,18 @@ export class Lang {
         );
     }
 
+    public static getSuccessEmbed(
+        type: string,
+        location: string,
+        langCode: LangCode,
+        variables?: { [name: string]: string }
+    ): MessageEmbed {
+        return (
+            this.linguiniObjects[type].get(location, langCode, this.successEmbedTm, variables) ??
+            this.linguiniObjects[type].get(location, this.Default, this.successEmbedTm, variables)
+        );
+    }
+
     public static getEmbed(
         type: string,
         location: string,
@@ -71,6 +83,12 @@ export class Lang {
     public static getCom(location: string, variables?: { [name: string]: string }): string {
         return this.linguiniObjects.info.getCom(location, variables);
     }
+    private static successEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
+        return new MessageEmbed({
+            description: jsonValue,
+            color: Lang.getCom('colors.success') as ColorResolvable,
+        });
+    };
 
     private static errorEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
         return new MessageEmbed({

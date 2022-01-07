@@ -61,24 +61,27 @@ export class DateFormatSubCommand {
         switch (setting) {
             case 'TRUSTED_PREVENTS_MESSAGE':
                 successEmbed = choice
-                    ? 'success.trustedPreventsRoleYes'
-                    : 'success.trustedPreventsRoleNo';
+                    ? 'successEmbeds.trustedPreventsRoleYes'
+                    : 'successEmbeds.trustedPreventsRoleNo';
                 await this.guildRepo.updateTrustedPreventsMessage(intr.guild.id, choice);
                 break;
             case 'TRUSTED_PREVENTS_ROLE':
                 successEmbed = choice
-                    ? 'success.trustedPreventsMessageYes'
-                    : 'success.trustedPreventsMessageNo';
+                    ? 'successEmbeds.trustedPreventsMessageYes'
+                    : 'successEmbeds.trustedPreventsMessageNo';
                 await this.guildRepo.updateTrustedPreventsRole(intr.guild.id, choice);
                 break;
             case 'TRUSTED_REQUIRE_ALL':
                 successEmbed = choice
-                    ? 'success.requireAllTrustedYes'
-                    : 'success.requireAllTrustedNo';
+                    ? 'successEmbeds.requireAllTrustedYes'
+                    : 'successEmbeds.requireAllTrustedNo';
                 await this.guildRepo.updateRequireAllTrustedRoles(intr.guild.id, choice);
                 break;
         }
 
-        await MessageUtils.sendIntr(intr, Lang.getEmbed('results', successEmbed, data.lang()));
+        await MessageUtils.sendIntr(
+            intr,
+            Lang.getSuccessEmbed('results', successEmbed, data.lang())
+        );
     }
 }
