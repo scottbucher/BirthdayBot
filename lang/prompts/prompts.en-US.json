@@ -260,6 +260,44 @@
                     "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
+            },
+            "channelType": {
+                "title": "Channel Type",
+                "description": [
+                    "Which type of channel are you setting?",
+                    "",
+                    "Please enter one of the options listed below:",
+                    "",
+                    "`Birthday` - Where birthday messages will be sent.",
+                    "`Member Anniversary` - Where member anniversary messages will be sent.",
+                    "`Server Anniversary` - Where server anniversary messages will be sent."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
+            },
+            "channel": {
+                "title": "Configure the {{TYPE}} Channel",
+                "description": [
+                    "This setting will decide where the {{TYPE_LOWERCASE}} messages will be sent. [(?)]({{DOC_LINK}})",
+                    "",
+                    "Please select an option"
+                ],
+                "fields": [
+                    {
+                        "name": [
+                            "Create New Channel {{COM:emotes.create}}",
+                            "Select Pre-Existing Channel {{COM:emotes.select}}",
+                            "No {{TYPE}} Channel {{COM:emotes.deny}}"
+                        ],
+                        "value": "\u200b"
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}"
+                },
+                "timestamp": true
             }
         }
     },

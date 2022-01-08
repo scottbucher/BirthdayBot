@@ -920,13 +920,7 @@
             "trustedPreventsMessage": "trustedPreventsMessage",
             "requireAllTrustedRoles": "requireAllTrustedRoles",
             "dateFormat": "dateFormat",
-            "alternatives": {
-                "birthday": ["birthdays"],
-                "memberAnniversary": ["member"],
-                "serverAnniversary": ["server"], 
-                "userSpecificBirthday": ["specificBirthday", "userBirthday"],
-                "userSpecificMemberAnniversary": ["specificAnniversary", "userAnniversary"]
-            },
+            "member": "member",
             "monthDay": "month/day",
             "dayMonth": "day/month",
             "mention": "mention",

@@ -46,6 +46,7 @@ import { Routes } from 'discord-api-types/rest/v9';
 import { Options } from 'discord.js';
 import { Bot } from './bot';
 import {
+    ChannelSubCommand,
     DateFormatSubCommand,
     NameFormatSubCommand,
     TimezoneSubCommand,
@@ -92,6 +93,7 @@ async function start(): Promise<void> {
     let useTimezoneSubCommand = new UseTimezoneSubCommand(guildRepo);
     let dateFormatSubCommand = new DateFormatSubCommand(guildRepo);
     let trustedSettingsSubCommand = new TrustedSettingsSubCommand(guildRepo);
+    let channelSubCommand = new ChannelSubCommand(guildRepo);
 
     // Commands
     let commands: Command[] = [
@@ -105,7 +107,8 @@ async function start(): Promise<void> {
             timezoneSubCommand,
             useTimezoneSubCommand,
             dateFormatSubCommand,
-            trustedSettingsSubCommand
+            trustedSettingsSubCommand,
+            channelSubCommand
         ),
         new MessageCommand(),
         new MemberAnniversaryRoleCommand(),

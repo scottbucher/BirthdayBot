@@ -55,17 +55,6 @@ export class SetupCommand implements Command {
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
-        let stopFilter: MessageFilter = (nextMsg: Message) =>
-            nextMsg.author.id === intr.user.id &&
-            [Config.prefix, ...Config.stopCommands].includes(
-                nextMsg.content.split(/\s+/)[0].toLowerCase()
-            );
-        let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.sendIntr(
-                intr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-            );
-        };
 
         let birthdayChannel: string;
         let birthdayRole: string;

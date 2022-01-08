@@ -5,6 +5,7 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { Command } from './command';
 import {
+    ChannelSubCommand,
     DateFormatSubCommand,
     NameFormatSubCommand,
     TimezoneSubCommand,
@@ -82,7 +83,8 @@ export class ConfigCommand implements Command {
         public timezoneSubCommand: TimezoneSubCommand,
         public useTimezoneSubCommand: UseTimezoneSubCommand,
         public dateFormatSubCommand: DateFormatSubCommand,
-        public trustedSettingsCommand: TrustedSettingsSubCommand
+        public trustedSettingsCommand: TrustedSettingsSubCommand,
+        public channelSubCommand: ChannelSubCommand
     ) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
@@ -108,7 +110,7 @@ export class ConfigCommand implements Command {
                 await this.trustedSettingsCommand.execute(intr, data, reset);
                 break;
             case 'CHANNEL':
-                // Code here
+                await this.channelSubCommand.execute(intr, data, reset);
                 break;
             case 'ROLE':
                 // Code here

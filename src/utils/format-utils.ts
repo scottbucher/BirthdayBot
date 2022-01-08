@@ -197,44 +197,28 @@ export class FormatUtils {
     // ALTERNATIVES ARE SUPPOSED TO BE ARRAYS BUT LANG SYSTEM DOESN'T SUPPORT IT
     public static extractCelebrationType(type: string): string {
         switch (type) {
-            case Lang.getRef('info', 'types.birthday', LangCode.EN_US).toLowerCase() ||
-                Lang.getRef('info', 'types.alternatives.birthday', LangCode.EN_US).toLowerCase():
+            case Lang.getRef('info', 'types.birthday', LangCode.EN_US).toLowerCase():
                 return 'birthday';
-            case Lang.getRef('info', 'types.memberAnniversary', LangCode.EN_US).toLowerCase() ||
-                Lang.getRef(
-                    'info',
-                    'types.alternatives.memberAnniversary',
-                    LangCode.EN_US
-                ).toLowerCase():
-                return 'memberanniversary';
 
-            case Lang.getRef('info', 'types.serverAnniversary', LangCode.EN_US).toLowerCase() ||
-                Lang.getRef(
-                    'info',
-                    'types.alternatives.serverAnniversary',
-                    LangCode.EN_US
-                ).toLowerCase():
-                return 'serveranniversary';
+            case Lang.getRef('info', 'types.memberAnniversary', LangCode.EN_US).toLowerCase():
+            case Lang.getRef('info', 'terms.memberAnniversary', LangCode.EN_US).toLowerCase():
+            case Lang.getRef('info', 'types.member', LangCode.EN_US).toLowerCase():
+                return 'memberAnniversary';
 
-            case Lang.getRef('info', 'types.userSpecificBirthday', LangCode.EN_US).toLowerCase() ||
-                Lang.getRef(
-                    'info',
-                    'types.alternatives.userSpecificBirthday',
-                    LangCode.EN_US
-                ).toLowerCase():
-                return 'userspecificbirthday';
+            case Lang.getRef('info', 'types.serverAnniversary', LangCode.EN_US).toLowerCase():
+            case Lang.getRef('info', 'terms.serverAnniversary', LangCode.EN_US).toLowerCase():
+            case Lang.getRef('info', 'types.server', LangCode.EN_US).toLowerCase():
+                return 'serverAnniversary';
+
+            case Lang.getRef('info', 'types.userSpecificBirthday', LangCode.EN_US).toLowerCase():
+                return 'userSpecificBirthday';
 
             case Lang.getRef(
                 'info',
                 'types.userSpecificMemberAnniversary',
                 LangCode.EN_US
-            ).toLowerCase() ||
-                Lang.getRef(
-                    'info',
-                    'types.alternatives.userSpecificMemberAnniversary',
-                    LangCode.EN_US
-                ).toLowerCase():
-                return 'userspecificmemberanniversary';
+            ).toLowerCase():
+                return 'userSpecificMemberAnniversary';
             default:
                 return null;
         }
