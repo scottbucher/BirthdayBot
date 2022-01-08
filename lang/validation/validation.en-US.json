@@ -123,7 +123,7 @@
             },
             "birthdayRoleUsedWarning": {
                 "title": "Warning",
-                "description": "We have detected that __**{{AMOUNT}}**__ user{{S_VALUE}} already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
+                "description": "We have detected that __**{{AMOUNT}}**__ user(s) already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
                 "footer": {
                     "text": "The Bot removes the Birthday Role from users whose birthday it isn't!",
                     "icon": "{{ICON}}"
