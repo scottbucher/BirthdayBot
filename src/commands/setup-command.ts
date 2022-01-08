@@ -151,8 +151,6 @@ export class SetupCommand implements Command {
                     return channelInput?.id;
                 });
 
-                MessageUtils.delete(selectMessage);
-
                 if (birthdayChannel === undefined) {
                     return;
                 }
@@ -287,8 +285,6 @@ export class SetupCommand implements Command {
 
                     return roleInput?.id;
                 });
-
-                MessageUtils.delete(selectMessage);
 
                 if (birthdayRole === undefined) {
                     return;

@@ -172,8 +172,6 @@ export class ChannelSubCommand {
                         return channelInput?.id;
                     });
 
-                    MessageUtils.delete(selectMessage);
-
                     if (channel === undefined) {
                         return;
                     }

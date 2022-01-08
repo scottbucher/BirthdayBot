@@ -208,8 +208,6 @@ export class RoleSubCommand {
                         return roleInput?.id;
                     });
 
-                    MessageUtils.delete(selectMessage);
-
                     if (role === undefined) {
                         return;
                     }
