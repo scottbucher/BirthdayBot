@@ -8,7 +8,6 @@ import {
     TextBasedChannel,
     User,
 } from 'discord.js';
-import { ExpireFunction, MessageFilter } from 'discord.js-collector-utils';
 import { GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 
 import { EventData } from '../models/internal-models';
