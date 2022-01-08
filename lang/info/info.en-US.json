@@ -793,7 +793,8 @@
             "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",
             "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
             "serverAnniversaryChannelName": "{{COM:emotes.party}} server anniversaries",
-            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
+            "birthdayMasterRoleName": "Birthday Master"
         },
         "BREAK": {
             "BELLOW HERE WILL ALL BE MOVED TO GOL WHEN LINGUINI IS UPDATED": "----------------------------------------------------------------------------------------------------------------------------------"
@@ -906,6 +907,7 @@
         },
         "types": {
             "birthday": "birthday",
+            "birthdayMaster": "birthdayMaster",
             "memberAnniversary": "memberAnniversary",
             "serverAnniversary": "serverAnniversary",
             "userSpecificBirthday": "userSpecificBirthday",
@@ -1046,7 +1048,9 @@
             "serverLanguage": "Server Language",
             "never": "Never",
             "mmdd": "MM/DD",
-            "ddmm": "DD/MM"
+            "ddmm": "DD/MM",
+            "birthdayMaster": "Birthday Master",
+            "master": "Master"
         }
     }
 }

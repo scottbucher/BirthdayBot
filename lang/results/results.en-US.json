@@ -80,7 +80,10 @@
             "setAttempts": "Successfully set {{USER}}'s birthday attempts to {{AMOUNT}}!",
             "channelCreated": "Successfully created the {{CHANNEL}} channel!",
             "channelCleared": "Successfully cleared the {{TYPE}} channel!",
-            "channelSet": "Successfully set the {{TYPE}} channel to {{CHANNEL}}"
+            "channelSet": "Successfully set the {{TYPE}} channel to {{CHANNEL}}",
+            "roleCreated": "Successfully created the {{ROLE}} role!",
+            "roleCleared": "Successfully cleared the {{TYPE}} role!",
+            "roleSet": "Successfully set the {{TYPE}} ole to {{ROLE}}"
         }
     },
     "refs": {

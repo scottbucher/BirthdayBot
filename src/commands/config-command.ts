@@ -8,6 +8,7 @@ import {
     ChannelSubCommand,
     DateFormatSubCommand,
     NameFormatSubCommand,
+    RoleSubCommand,
     TimezoneSubCommand,
     TrustedSettingsSubCommand,
     UseTimezoneSubCommand,
@@ -84,7 +85,8 @@ export class ConfigCommand implements Command {
         public useTimezoneSubCommand: UseTimezoneSubCommand,
         public dateFormatSubCommand: DateFormatSubCommand,
         public trustedSettingsCommand: TrustedSettingsSubCommand,
-        public channelSubCommand: ChannelSubCommand
+        public channelSubCommand: ChannelSubCommand,
+        public roleSubCommand: RoleSubCommand
     ) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
@@ -113,7 +115,7 @@ export class ConfigCommand implements Command {
                 await this.channelSubCommand.execute(intr, data, reset);
                 break;
             case 'ROLE':
-                // Code here
+                await this.roleSubCommand.execute(intr, data, reset);
                 break;
         }
     }

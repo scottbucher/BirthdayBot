@@ -223,6 +223,21 @@ export class FormatUtils {
                 return null;
         }
     }
+
+    public static extractRoleType(type: string): string {
+        switch (type) {
+            case Lang.getRef('info', 'types.birthday', LangCode.EN_US).toLowerCase():
+                return 'birthday';
+
+            case Lang.getRef('info', 'types.birthdayMaster', LangCode.EN_US).toLowerCase():
+            case Lang.getRef('info', 'terms.birthdayMaster', LangCode.EN_US).toLowerCase():
+            case Lang.getRef('info', 'terms.master', LangCode.EN_US).toLowerCase():
+                return 'birthdayMaster';
+            default:
+                return null;
+        }
+    }
+
     public static extractConfigType(type: string): string {
         switch (type) {
             case Lang.getRef('info', 'types.channel', LangCode.EN_US).toLowerCase():

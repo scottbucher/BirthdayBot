@@ -49,6 +49,7 @@ import {
     ChannelSubCommand,
     DateFormatSubCommand,
     NameFormatSubCommand,
+    RoleSubCommand,
     TimezoneSubCommand,
     TrustedSettingsSubCommand,
     UseTimezoneSubCommand,
@@ -94,6 +95,7 @@ async function start(): Promise<void> {
     let dateFormatSubCommand = new DateFormatSubCommand(guildRepo);
     let trustedSettingsSubCommand = new TrustedSettingsSubCommand(guildRepo);
     let channelSubCommand = new ChannelSubCommand(guildRepo);
+    let roleSubCommand = new RoleSubCommand(guildRepo);
 
     // Commands
     let commands: Command[] = [
@@ -108,7 +110,8 @@ async function start(): Promise<void> {
             useTimezoneSubCommand,
             dateFormatSubCommand,
             trustedSettingsSubCommand,
-            channelSubCommand
+            channelSubCommand,
+            roleSubCommand
         ),
         new MessageCommand(),
         new MemberAnniversaryRoleCommand(),
