@@ -1,3 +1,4 @@
+import { Chrono } from 'chrono-node';
 import { Guild, Message, Role, User } from 'discord.js';
 import moment from 'moment-timezone';
 
@@ -50,7 +51,7 @@ export class FormatUtils {
     }
 
     // TODO: take another look at this
-    public static getBirthday(input: string, parser: any, littleEndian: boolean): string {
+    public static getBirthday(input: string, parser: Chrono, littleEndian: boolean): string {
         // Try and get a date from the 3rd args
         if (
             (!littleEndian &&
