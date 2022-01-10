@@ -61,7 +61,7 @@ export class NextCommand implements Command {
         }
 
         switch (type) {
-            case 'BIRTHDAY':
+            case 'BIRTHDAY': {
                 // Next birthday
                 let users = [...intr.guild.members.cache.filter(member => !member.user.bot).keys()];
 
@@ -114,7 +114,8 @@ export class NextCommand implements Command {
                     })
                 );
                 break;
-            case 'MEMBER_ANNIVERSARY':
+            }
+            case 'MEMBER_ANNIVERSARY': {
                 // TODO: fetch members?
                 // Next member anniversary
                 let guildMembers = intr.guild.members.cache
@@ -186,7 +187,8 @@ export class NextCommand implements Command {
                     })
                 );
                 break;
-            case 'SERVER_ANNIVERSARY':
+            }
+            case 'SERVER_ANNIVERSARY': {
                 // Next server anniversary
                 let serverCreatedAt = moment(intr.guild.createdAt).tz(timezone);
                 let anniversaryFormatted = serverCreatedAt.format('MMMM Do');
@@ -214,6 +216,7 @@ export class NextCommand implements Command {
                     })
                 );
                 break;
+            }
         }
     }
 }
