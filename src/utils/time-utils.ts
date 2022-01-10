@@ -1,13 +1,12 @@
-import { Moment, tz } from 'moment-timezone';
-
 import moment from 'moment';
+import { Moment, tz } from 'moment-timezone';
 import { promisify } from 'util';
 
 let setTimeoutAsync = promisify(setTimeout);
 
 export class TimeUtils {
     public static async sleep(ms: number): Promise<void> {
-        return setTimeoutAsync(ms);
+        return await setTimeoutAsync(ms);
     }
 
     public static now(): Moment {

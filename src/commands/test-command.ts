@@ -1,6 +1,6 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { ApplicationCommandOptionType } from 'discord-api-types';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { Command } from './command';

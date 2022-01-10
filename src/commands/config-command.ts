@@ -1,6 +1,6 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { ApplicationCommandOptionType } from 'discord-api-types';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { Command } from './command';
@@ -21,7 +21,7 @@ export class ConfigCommand implements Command {
         options: [
             {
                 name: Lang.getCom('arguments.setting'),
-                description: `Change Birthday Bot's config settings.`,
+                description: 'Change Birthday Bot\'s config settings.',
                 type: ApplicationCommandOptionType.String.valueOf(),
                 required: true,
                 choices: [

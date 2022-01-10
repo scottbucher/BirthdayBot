@@ -1,12 +1,12 @@
 import { Guild, Message, Role, User } from 'discord.js';
-import { GuildUtils, ParseUtils } from '.';
-
 import moment from 'moment-timezone';
+
+import { GuildUtils, ParseUtils } from '.';
 import { LangCode } from '../models/enums';
 import { Lang } from '../services';
 
-let Config = require('../../config/config.json');
 let Abbreviations = require('../../config/abbreviations.json');
+let Config = require('../../config/config.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;
 let zoneNames = moment.tz
     .names()

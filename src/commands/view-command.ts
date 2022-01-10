@@ -1,12 +1,12 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import {
     ApplicationCommandData,
     CommandInteraction,
     DMChannel,
     PermissionString,
 } from 'discord.js';
-
-import { ApplicationCommandOptionType } from 'discord-api-types';
 import moment from 'moment';
+
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { UserRepo } from '../services/database/repos';
@@ -16,7 +16,8 @@ import { Command } from './command';
 export class ViewCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.view'),
-        description: `View your, or someone else's birthday or anniversary. Or view the server's anniversary.`,
+        description:
+            'View your, or someone else\'s birthday or anniversary. Or view the server\'s anniversary.',
         options: [
             {
                 name: Lang.getCom('arguments.type'),

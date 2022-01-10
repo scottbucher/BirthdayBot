@@ -1,11 +1,11 @@
+import { URL } from 'url';
+
+import { HttpService } from '.';
 import {
     LoginClusterResponse,
     RegisterClusterRequest,
     RegisterClusterResponse,
 } from '../models/master-api';
-
-import { URL } from 'url';
-import { HttpService } from '.';
 
 let Config = require('../../config/config.json');
 
@@ -47,7 +47,7 @@ export class MasterApiService {
             throw res;
         }
 
-        return res.json();
+        return await res.json();
     }
 
     public async ready(): Promise<void> {

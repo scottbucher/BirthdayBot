@@ -1,8 +1,8 @@
 import { Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
-import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database';
-import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils';
 
 import { Logger } from '.';
+import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database';
+import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -39,7 +39,7 @@ export class CelebrationService {
 
                 if (guildData.BirthdayRoleDiscordId !== '0') {
                     try {
-                        birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
+                        birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId);
                     } catch (error) {
                         // No Birthday Role
                     }

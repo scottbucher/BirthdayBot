@@ -1,6 +1,6 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { ApplicationCommandOptionType } from 'discord-api-types';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { Command } from './command';
@@ -13,7 +13,7 @@ export class MessageCommand implements Command {
         options: [
             {
                 name: Lang.getCom('subCommands.edit'),
-                description: `Edit a custom message's settings.`,
+                description: 'Edit a custom message\'s settings.',
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
                     {

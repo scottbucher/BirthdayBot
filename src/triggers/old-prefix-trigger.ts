@@ -1,4 +1,5 @@
 import { Message } from 'discord.js';
+
 import { Trigger } from '.';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';

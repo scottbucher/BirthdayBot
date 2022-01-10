@@ -1,3 +1,8 @@
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/rest/v9';
+import { Options } from 'discord.js';
+
+import { Bot } from './bot';
 import {
     BlacklistCommand,
     Command,
@@ -23,6 +28,15 @@ import {
     VoteCommand,
 } from './commands';
 import {
+    ChannelSubCommand,
+    DateFormatSubCommand,
+    NameFormatSubCommand,
+    RoleSubCommand,
+    TimezoneSubCommand,
+    TrustedSettingsSubCommand,
+    UseTimezoneSubCommand,
+} from './commands/config-settings';
+import {
     CommandHandler,
     GuildJoinHandler,
     GuildLeaveHandler,
@@ -30,7 +44,10 @@ import {
     ReactionHandler,
     TriggerHandler,
 } from './events';
+import { CustomClient } from './extensions';
+import { Reaction } from './reactions';
 import { HttpService, JobService, Logger, SubscriptionService } from './services';
+import { DataAccess } from './services/database/data-access';
 import {
     BlacklistRepo,
     CombinedRepo,
@@ -40,23 +57,6 @@ import {
     TrustedRoleRepo,
     UserRepo,
 } from './services/database/repos';
-
-import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/rest/v9';
-import { Options } from 'discord.js';
-import { Bot } from './bot';
-import {
-    ChannelSubCommand,
-    DateFormatSubCommand,
-    NameFormatSubCommand,
-    RoleSubCommand,
-    TimezoneSubCommand,
-    TrustedSettingsSubCommand,
-    UseTimezoneSubCommand,
-} from './commands/config-settings';
-import { CustomClient } from './extensions';
-import { Reaction } from './reactions';
-import { DataAccess } from './services/database/data-access';
 import { OldPrefixTrigger, Trigger } from './triggers';
 
 let Config = require('../config/config.json');
