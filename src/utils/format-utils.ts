@@ -403,7 +403,7 @@ export class FormatUtils {
         let pm = Lang.getRef('info', 'terms.pmTime', LangCode.EN_US);
         if (time === 0) return '12:00 ' + am;
         else if (time === 12) return '12:00 ' + pm;
-        else if (time < 12) return time + ':00 ' + am;
-        else return time - 12 + ':00 ' + pm;
+        else if (time < 12) return `${time}:00 ${am}`;
+        else return `${time - 12}:00 ${pm}`;
     }
 }
