@@ -17,7 +17,7 @@ export class ViewCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.view'),
         description:
-            'View your, or someone else\'s birthday or anniversary. Or view the server\'s anniversary.',
+            "View your, or someone else's birthday or anniversary. Or view the server's anniversary.",
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -66,7 +66,7 @@ export class ViewCommand implements Command {
         }
 
         switch (type) {
-            case 'BIRTHDAY':
+            case 'BIRTHDAY': {
                 let userData = await this.userRepo.getUser(target.id);
 
                 if (!userData || !userData.Birthday || !userData.TimeZone) {
@@ -93,7 +93,8 @@ export class ViewCommand implements Command {
                     })
                 );
                 break;
-            case 'MEMBER_ANNIVERSARY':
+            }
+            case 'MEMBER_ANNIVERSARY': {
                 if (intr.channel instanceof DMChannel) {
                     await MessageUtils.sendIntr(
                         intr,
@@ -116,6 +117,7 @@ export class ViewCommand implements Command {
                     })
                 );
                 break;
+            }
         }
     }
 }
