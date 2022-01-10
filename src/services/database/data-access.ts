@@ -32,7 +32,7 @@ export class DataAccess {
         });
     }
 
-    private typeCast(field: any, next: any): any {
+    private typeCast(field: any, next: any): unknown {
         if (field.type === 'TINY' && field.length === 1) {
             return field.string() === '1';
         } else {

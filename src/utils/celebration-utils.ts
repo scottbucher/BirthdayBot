@@ -55,10 +55,10 @@ export class CelebrationUtils {
         return {
             before: userDatas
                 .filter(user => moment(user.Birthday).format('MM-DD') < splitTime.format('MM-DD'))
-                .sort(this.compareUserDatas),
+                .sort((a, b) => this.compareUserDatas(a, b)),
             after: userDatas
                 .filter(user => moment(user.Birthday).format('MM-DD') > splitTime.format('MM-DD'))
-                .sort(this.compareUserDatas),
+                .sort((a, b) => this.compareUserDatas(a, b)),
         };
     }
 
