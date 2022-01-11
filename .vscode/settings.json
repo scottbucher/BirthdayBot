@@ -32,5 +32,7 @@
         "repos",
         "respawn",
         "varchar"
-    ]
+    ],
+    "todo-tree.general.tags": ["TODO", "YEET"],
+    "todo-tree.regex.regexCaseSensitive": false
 }
