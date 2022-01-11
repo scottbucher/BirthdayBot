@@ -87,6 +87,21 @@ export class BlacklistCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        // await MessageUtils.sendIntr(intr, Lang.getEmbed('embeds.help', data.lang()));
+        let subCommand = intr.options.getSubcommand();
+
+        switch (subCommand) {
+            case Lang.getCom('subCommands.add'):
+                // TODO: Add a role or user to the blacklist
+                break;
+            case Lang.getCom('subCommands.remove'):
+                //TODO: Remove a role or user from the blacklist
+                break;
+            case Lang.getCom('subCommands.clear'):
+                //TODO: Clear the blacklist
+                break;
+            case Lang.getCom('subCommands.list'):
+                //TODO: List the blacklist
+                break;
+        }
     }
 }
