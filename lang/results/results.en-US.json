@@ -121,7 +121,8 @@
             "channelSet": "Successfully set the {{TYPE}} channel to {{CHANNEL}}",
             "roleCreated": "Successfully created the {{ROLE}} role!",
             "roleCleared": "Successfully cleared the {{TYPE}} role!",
-            "roleSet": "Successfully set the {{TYPE}} ole to {{ROLE}}"
+            "roleSet": "Successfully set the {{TYPE}} ole to {{ROLE}}",
+            "blacklistAdd": "Successfully added {{TARGET}} to the birthday blacklist!"
         }
     },
     "refs": {
