@@ -59,6 +59,44 @@
                 "color": "{{COM:colors.error}}"
             }
         },
+        "test": {
+            "birthday": {
+                "title": "Birthday Event Test",
+                "description": [
+                    "Below are the checks to ensure your settings are correct for the birthday event."
+                ],
+                "footer": {
+                    "text": "This is the info from your birthday event test.",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.success}}",
+                "timestamp": true
+            },
+            "memberAnniversary": {
+                "title": "Member Anniversary Event Test",
+                "description": [
+                    "Below are the checks to ensure your settings are correct for the member anniversary event."
+                ],
+                "footer": {
+                    "text": "This is the info from your latest member anniversary event test.",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.success}}",
+                "timestamp": true
+            },
+            "serverAnniversary": {
+                "title": "Birthday Event Test",
+                "description": [
+                    "Below are the checks to ensure your settings are correct for the server anniversary event."
+                ],
+                "footer": {
+                    "text": "This is the info from your latest server anniversary event test.",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.success}}",
+                "timestamp": true
+            }
+        },
         "successEmbeds": {
             "dateFormatSet": [
                 "Successfully updated the server's date format setting to `{{SETTING}}`!",

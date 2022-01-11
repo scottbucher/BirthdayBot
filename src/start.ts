@@ -102,7 +102,13 @@ async function start(): Promise<void> {
         new HelpCommand(),
         new InfoCommand(),
         new LinkCommand(),
-        new TestCommand(),
+        new TestCommand(
+            userRepo,
+            blacklistRepo,
+            trustedRoleRepo,
+            customMessageRepo,
+            memberAnniversaryRoleRepo
+        ),
         new BlacklistCommand(),
         new ConfigCommand(
             nameFormatSubCommand,
