@@ -1,5 +1,4 @@
 import { Chrono, en } from 'chrono-node';
-import { channel } from 'diagnostics_channel';
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import {
     ApplicationCommandData,
@@ -107,7 +106,7 @@ export class SetCommand implements Command {
 
         let changesLeft = userData ? userData?.ChangesLeft : 5;
 
-        if (!(channel instanceof DMChannel) && !data.guild)
+        if (!(intr.channel instanceof DMChannel) && !data.guild)
             if (
                 data.guild &&
                 data.guild?.DefaultTimezone !== '0' &&
