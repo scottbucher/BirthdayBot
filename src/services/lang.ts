@@ -1,7 +1,7 @@
 import { ColorResolvable, MessageEmbed } from 'discord.js';
 import { Linguini, TypeMapper, TypeMappers, Utils } from 'linguini';
-
 import path from 'path';
+
 import { LangCode } from '../models/enums';
 
 export class Lang {

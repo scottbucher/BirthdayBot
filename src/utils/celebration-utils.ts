@@ -1,5 +1,10 @@
 import { Guild, GuildMember, MessageEmbed, Role } from 'discord.js';
+import moment from 'moment';
+import { Moment } from 'moment-timezone';
+
 import { ArrayUtils, ColorUtils, FormatUtils, TimeUtils } from '.';
+import { BirthdayMemberStatus } from '../models';
+import { AnniversaryMemberStatus } from '../models/celebration-job';
 import {
     CustomMessage,
     GuildCelebrationData,
@@ -9,11 +14,6 @@ import {
     TrustedRole,
     UserData,
 } from '../models/database';
-
-import moment from 'moment';
-import { Moment } from 'moment-timezone';
-import { BirthdayMemberStatus } from '../models';
-import { AnniversaryMemberStatus } from '../models/celebration-job';
 import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
 import { LangCode } from '../models/enums';
 import { Lang } from '../services';
@@ -55,10 +55,10 @@ export class CelebrationUtils {
         return {
             before: userDatas
                 .filter(user => moment(user.Birthday).format('MM-DD') < splitTime.format('MM-DD'))
-                .sort(this.compareUserDatas),
+                .sort((a, b) => this.compareUserDatas(a, b)),
             after: userDatas
                 .filter(user => moment(user.Birthday).format('MM-DD') > splitTime.format('MM-DD'))
-                .sort(this.compareUserDatas),
+                .sort((a, b) => this.compareUserDatas(a, b)),
         };
     }
 
@@ -194,7 +194,7 @@ export class CelebrationUtils {
                 try {
                     role = guildMember.guild.roles.resolve(
                         anniversaryRole.MemberAnniversaryRoleDiscordId
-                    ) as Role;
+                    );
                 } catch (error) {
                     // No Member Anniversary Role
                 }

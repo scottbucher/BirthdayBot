@@ -7,8 +7,8 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
-import { MessageUtils, TimeUtils } from '.';
 
+import { MessageUtils, TimeUtils } from '.';
 import { Command } from '../commands';
 import { Permission } from '../models/enums';
 import { EventData } from '../models/internal-models';

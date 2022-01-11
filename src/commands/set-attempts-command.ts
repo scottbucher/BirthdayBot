@@ -1,11 +1,11 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
-import { MessageUtils } from '../utils';
 
-import { ApplicationCommandOptionType } from 'discord-api-types';
 import { LangCode } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { UserRepo } from '../services/database/repos';
+import { MessageUtils } from '../utils';
 import { Command } from './command';
 
 export class SetAttemptsCommand implements Command {

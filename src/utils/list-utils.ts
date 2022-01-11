@@ -1,8 +1,8 @@
 import { Guild, GuildMember, MessageEmbed } from 'discord.js';
-import { Blacklisted, CustomMessages, GuildData, UserDataResults } from '../models/database';
-
 import moment from 'moment';
+
 import { CelebrationUtils } from '.';
+import { Blacklisted, CustomMessages, GuildData, UserDataResults } from '../models/database';
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
 import { TrustedRoles } from '../models/database/trusted-role-models';
 import { LangCode } from '../models/enums';
@@ -240,7 +240,7 @@ export class ListUtils {
                 trustedRole.Position <= Config.validation.trustedRoles.maxCount.free
             ) {
                 description += `**${i.toLocaleString()}.** ${
-                    role ? `${role.toString()} ` : `**** `
+                    role ? `${role.toString()} ` : '**** '
                 }\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ${
@@ -436,7 +436,7 @@ export class ListUtils {
                     Config.validation.memberAnniversaryRoles.maxCount.free
             ) {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
-                    role ? `${role.toString()} ` : `**** `
+                    role ? `${role.toString()} ` : '**** '
                 }\n\n`;
             } else {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${

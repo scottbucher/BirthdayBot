@@ -1,8 +1,8 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
-import { Lang, Logger } from '../services';
-import { MessageUtils, TimeUtils } from '../utils';
 
 import { EventData } from '../models/internal-models';
+import { Lang, Logger } from '../services';
+import { MessageUtils, TimeUtils } from '../utils';
 import { Command } from './command';
 
 let Config = require('../../config/config.json');

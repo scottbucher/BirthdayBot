@@ -1,7 +1,6 @@
-import { GuildData, Vote } from './database';
-
 import { SubscriptionStatus } from '.';
 import { Lang } from '../services';
+import { GuildData, Vote } from './database';
 import { LangCode } from './enums';
 
 // This class is used to store and pass data along in events

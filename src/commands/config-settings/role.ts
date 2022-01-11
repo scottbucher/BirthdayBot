@@ -1,4 +1,5 @@
 import { CommandInteraction, Message, MessageReaction, Role, User } from 'discord.js';
+
 import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { GuildRepo } from '../../services/database/repos';
@@ -56,7 +57,7 @@ export class RoleSubCommand {
                 );
             });
 
-            let promptEmbed = Lang.getEmbed('prompts', `config.role`, data.lang(), {
+            let promptEmbed = Lang.getEmbed('prompts', 'config.role', data.lang(), {
                 TYPE: displayType,
                 TYPE_LOWERCASE: displayType.toLowerCase(),
                 DOC_LINK: Lang.getCom(
@@ -89,7 +90,7 @@ export class RoleSubCommand {
                                     ? Config.emotes.birthday
                                     : Lang.getRef(
                                           'info',
-                                          `defaults.birthdayMasterRoleName`,
+                                          'defaults.birthdayMasterRoleName',
                                           data.lang()
                                       ),
                             color: Config.colors.role,

@@ -11,7 +11,7 @@ export class DataAccess {
 
     public async executeProcedure(name: string, params: any[]): Promise<any> {
         let sql = SqlUtils.createProcedureSql(name, params);
-        return new Promise((resolve, reject) => {
+        return await new Promise((resolve, reject) => {
             // let startTime = Date.now();
             this.pool.query(sql, (error, results) => {
                 if (error) reject(error);
@@ -32,7 +32,7 @@ export class DataAccess {
         });
     }
 
-    private typeCast(field: any, next: any): any {
+    private typeCast(field: any, next: any): unknown {
         if (field.type === 'TINY' && field.length === 1) {
             return field.string() === '1';
         } else {

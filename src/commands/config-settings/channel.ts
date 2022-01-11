@@ -1,4 +1,5 @@
 import { CommandInteraction, Message, MessageReaction, TextBasedChannel, User } from 'discord.js';
+
 import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { GuildRepo } from '../../services/database/repos';
@@ -60,7 +61,7 @@ export class ChannelSubCommand {
                 );
             });
 
-            let promptEmbed = Lang.getEmbed('prompts', `config.channel`, data.lang(), {
+            let promptEmbed = Lang.getEmbed('prompts', 'config.channel', data.lang(), {
                 TYPE: displayType,
                 TYPE_LOWERCASE: displayType.toLowerCase(),
                 DOC_LINK: Lang.getCom(

@@ -1,12 +1,12 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import {
     ApplicationCommandData,
     CommandInteraction,
     DMChannel,
     PermissionString,
 } from 'discord.js';
-
-import { ApplicationCommandOptionType } from 'discord-api-types';
 import moment from 'moment';
+
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { UserRepo } from '../services/database/repos';
@@ -65,7 +65,7 @@ export class ViewCommand implements Command {
         }
 
         switch (type) {
-            case 'BIRTHDAY':
+            case 'BIRTHDAY': {
                 let userData = await this.userRepo.getUser(target.id);
 
                 if (!userData || !userData.Birthday || !userData.TimeZone) {
@@ -92,7 +92,8 @@ export class ViewCommand implements Command {
                     })
                 );
                 break;
-            case 'MEMBER_ANNIVERSARY':
+            }
+            case 'MEMBER_ANNIVERSARY': {
                 if (intr.channel instanceof DMChannel) {
                     await MessageUtils.sendIntr(
                         intr,
@@ -115,6 +116,7 @@ export class ViewCommand implements Command {
                     })
                 );
                 break;
+            }
         }
     }
 }

@@ -8,11 +8,11 @@ import {
     TextBasedChannel,
     User,
 } from 'discord.js';
-import { GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { GuildRepo } from '../services/database/repos';
+import { GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
 

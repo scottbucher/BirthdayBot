@@ -41,7 +41,7 @@ export class GuildUtils {
     public static getMentionedTextChannel(msg: Message): TextBasedChannel {
         let textChannel = msg.mentions.channels
             .filter(c => c instanceof TextChannel || c instanceof NewsChannel)
-            .first() as TextBasedChannel;
+            .first();
 
         if (textChannel) return textChannel;
 

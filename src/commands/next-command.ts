@@ -1,12 +1,12 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
-import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils';
-
-import { ApplicationCommandOptionType } from 'discord-api-types';
 import moment from 'moment';
+
 import { LangCode } from '../models/enums';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { UserRepo } from '../services/database/repos';
+import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils';
 import { Command } from './command';
 
 export class NextCommand implements Command {
@@ -61,7 +61,7 @@ export class NextCommand implements Command {
         }
 
         switch (type) {
-            case 'BIRTHDAY':
+            case 'BIRTHDAY': {
                 // Next birthday
                 let users = [...intr.guild.members.cache.filter(member => !member.user.bot).keys()];
 
@@ -114,7 +114,8 @@ export class NextCommand implements Command {
                     })
                 );
                 break;
-            case 'MEMBER_ANNIVERSARY':
+            }
+            case 'MEMBER_ANNIVERSARY': {
                 // TODO: fetch members?
                 // Next member anniversary
                 let guildMembers = intr.guild.members.cache
@@ -186,7 +187,8 @@ export class NextCommand implements Command {
                     })
                 );
                 break;
-            case 'SERVER_ANNIVERSARY':
+            }
+            case 'SERVER_ANNIVERSARY': {
                 // Next server anniversary
                 let serverCreatedAt = moment(intr.guild.createdAt).tz(timezone);
                 let anniversaryFormatted = serverCreatedAt.format('MMMM Do');
@@ -214,6 +216,7 @@ export class NextCommand implements Command {
                     })
                 );
                 break;
+            }
         }
     }
 }

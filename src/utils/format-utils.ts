@@ -1,12 +1,13 @@
+import { Chrono } from 'chrono-node';
 import { Guild, Message, Role, User } from 'discord.js';
-import { GuildUtils, ParseUtils } from '.';
-
 import moment from 'moment-timezone';
+
+import { GuildUtils, ParseUtils } from '.';
 import { LangCode } from '../models/enums';
 import { Lang } from '../services';
 
-let Config = require('../../config/config.json');
 let Abbreviations = require('../../config/abbreviations.json');
+let Config = require('../../config/config.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;
 let zoneNames = moment.tz
     .names()
@@ -50,7 +51,7 @@ export class FormatUtils {
     }
 
     // TODO: take another look at this
-    public static getBirthday(input: string, parser: any, littleEndian: boolean): string {
+    public static getBirthday(input: string, parser: Chrono, littleEndian: boolean): string {
         // Try and get a date from the 3rd args
         if (
             (!littleEndian &&
@@ -403,7 +404,7 @@ export class FormatUtils {
         let pm = Lang.getRef('info', 'terms.pmTime', LangCode.EN_US);
         if (time === 0) return '12:00 ' + am;
         else if (time === 12) return '12:00 ' + pm;
-        else if (time < 12) return time + ':00 ' + am;
-        else return time - 12 + ':00 ' + pm;
+        else if (time < 12) return `${time}:00 ${am}`;
+        else return `${time - 12}:00 ${pm}`;
     }
 }

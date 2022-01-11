@@ -1,5 +1,4 @@
 import { UserData, UserDataResults, Vote } from '../../../models/database';
-
 import { SqlUtils } from '../../../utils';
 import { DataAccess } from '../data-access';
 import { Procedure } from '../procedure';
