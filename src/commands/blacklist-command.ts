@@ -3,6 +3,9 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { CommandUtils } from '../utils';
+import { BlacklistAddSubCommand } from './blacklist/add';
+import { BlacklistClearSubCommand } from './blacklist/clear';
 import { Command } from './command';
 
 export class BlacklistCommand implements Command {
@@ -86,22 +89,18 @@ export class BlacklistCommand implements Command {
     public requireVote = false;
     public requirePremium = false;
 
-    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let subCommand = intr.options.getSubcommand();
+    constructor(private commands: Command[]) {}
 
-        switch (subCommand) {
-            case Lang.getCom('subCommands.add'):
-                // TODO: Add a role or user to the blacklist
-                break;
-            case Lang.getCom('subCommands.remove'):
-                //TODO: Remove a role or user from the blacklist
-                break;
-            case Lang.getCom('subCommands.clear'):
-                //TODO: Clear the blacklist
-                break;
-            case Lang.getCom('subCommands.list'):
-                //TODO: List the blacklist
-                break;
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let command = CommandUtils.findCommand(this.commands, intr.options.getSubcommand());
+        if (!command) {
+            // TODO: Should we log error here?
+            return;
+        }
+
+        let passesChecks = await CommandUtils.runChecks(command, intr, data);
+        if (passesChecks) {
+            await command.execute(intr, data);
         }
     }
 }

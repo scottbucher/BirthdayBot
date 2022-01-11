@@ -1,31 +1,39 @@
 import { APIInteractionDataResolvedGuildMember, APIRole } from 'discord-api-types';
-import { CommandInteraction, GuildMember, Role, User } from 'discord.js';
+import { CommandInteraction, GuildMember, PermissionString, Role, User } from 'discord.js';
+import { Command } from '..';
 
 import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { BlacklistRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
 
-export class BlacklistAddSubCommand {
+export class BlacklistAddSubCommand implements Command {
     constructor(public blacklistRepo: BlacklistRepo) {}
+    public metadata = null;
 
-    public async execute(intr: CommandInteraction, data: EventData, reset: boolean): Promise<void> {
-        let mentionable:
-            | User
-            | GuildMember
-            | APIInteractionDataResolvedGuildMember
-            | Role
-            | APIRole = intr.options.getMentionable(Lang.getCom('arguements.roleOrUser'));
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireSetup = true;
+    public requireVote = false;
+    public requirePremium = false;
+
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let mentionable = intr.options.getMentionable(Lang.getCom('arguements.roleOrUser'));
 
         if (
             !(mentionable instanceof User) &&
             !(mentionable instanceof GuildMember) &&
             !(mentionable instanceof Role)
         ) {
-            Lang.getErrorEmbed(
-                'validation',
-                'errorEmbeds.rawAPIInteractionDataRecieved',
-                data.lang()
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getErrorEmbed(
+                    'validation',
+                    'errorEmbeds.rawAPIInteractionDataRecieved',
+                    data.lang()
+                )
             );
             return;
         }
