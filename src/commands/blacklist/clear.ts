@@ -43,7 +43,8 @@ export class BlacklistClearSubCommand implements Command {
             intr,
             data,
             Lang.getEmbed('prompts', 'clear.blacklist', data.lang(), {
-                AMOUNT: blacklistData.blacklist.length.toString(),
+                TOTAL: blacklistData.blacklist.length.toString(),
+                ICON: intr.client.user.displayAvatarURL(),
             })
         );
 

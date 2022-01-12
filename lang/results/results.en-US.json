@@ -131,6 +131,9 @@
             "languageDisplay": "English",
             "translators": "[Stqlth#0001](https://github.com/scottbucher)"
         },
+        "footers": {
+            "irreversible": "This action is irreversible!"
+        },
         "other": {
             "na": "N/A"
         }

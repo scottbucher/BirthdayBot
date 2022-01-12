@@ -242,7 +242,7 @@
                     "False: {{COM:emotes.deny}}"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.expire}}"
+                    "text": "{{COM:footers.expire}}"
                 },
                 "timestamp": true
             },
@@ -335,6 +335,16 @@
                     "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
+            }
+        },
+        "clear": {
+            "blacklist": {
+                "description": "Are you sure you want to clear __**{{TOTAL}}**__ blacklisted user(s)?",
+                "footer": {
+                    "text": "{{REF:footers.irreversible}}",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.warn}}"
             }
         }
     },
