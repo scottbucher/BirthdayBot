@@ -8,27 +8,18 @@ import {
     Role,
     TextChannel,
 } from 'discord.js';
-import { UserData, CustomMessage, MemberAnniversaryRole } from '../models/database';
-import { LangCode } from '../models/enums';
 
+import { UserData, CustomMessage, MemberAnniversaryRole } from '../models/database';
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import {
     BlacklistRepo,
     CustomMessageRepo,
-    GuildRepo,
     MemberAnniversaryRoleRepo,
     TrustedRoleRepo,
     UserRepo,
 } from '../services/database/repos';
-import {
-    GuildUtils,
-    ParseUtils,
-    CelebrationUtils,
-    PermissionUtils,
-    ActionUtils,
-    MessageUtils,
-} from '../utils';
+import { CelebrationUtils, PermissionUtils, ActionUtils, MessageUtils } from '../utils';
 import { Command } from './command';
 
 let Config = require('../../config/config.json');
@@ -156,7 +147,7 @@ export class TestCommand implements Command {
             // Get the birthday role for this guild
             let birthdayRole: Role;
             try {
-                birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
+                birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId);
             } catch (error) {
                 // No Birthday Role
             }

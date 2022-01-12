@@ -1,4 +1,6 @@
+import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/rest/v9';
 import {
+    AnyChannel,
     Client,
     NewsChannel,
     DiscordAPIError,
@@ -23,8 +25,10 @@ export class ClientUtils {
         try {
             return await client.users.fetch(discordId);
         } catch (error) {
-            // 10013: "Unknown User"
-            if (error instanceof DiscordAPIError && [10013].includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                [DiscordApiErrors.UnknownUser].includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;
@@ -48,9 +52,30 @@ export class ClientUtils {
 
             return (await guild.members.fetch({ query: input, limit: 1 })).first();
         } catch (error) {
-            // 10007: "Unknown Member"
-            // 10013: "Unknown User"
-            if (error instanceof DiscordAPIError && [10007, 10013].includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                [DiscordApiErrors.UnknownMember, DiscordApiErrors.UnknownUser].includes(error.code)
+            ) {
+                return;
+            } else {
+                throw error;
+            }
+        }
+    }
+
+    public static async getChannel(client: Client, discordId: string): Promise<AnyChannel> {
+        discordId = RegexUtils.discordId(discordId);
+        if (!discordId) {
+            return;
+        }
+
+        try {
+            return await client.channels.fetch(discordId);
+        } catch (error) {
+            if (
+                error instanceof DiscordAPIError &&
+                [DiscordApiErrors.UnknownChannel].includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;

@@ -1,5 +1,10 @@
-.git
-node_modules
-npm-debug.log
-dist
-docs
+# Folders
+/.cache
+/.git
+/dist
+/docs
+/misc
+/node_modules
+
+# Files
+/npm-debug.log
