@@ -53,7 +53,7 @@ export class DateFormatSubCommand implements Command {
                 return input.toLowerCase();
             });
             if (dateFormat === undefined) return;
-        } else dateFormat = 'day_month';
+        } else dateFormat = 'month_day';
 
         await this.guildRepo.updateDateFormat(intr.guild.id, dateFormat);
 
