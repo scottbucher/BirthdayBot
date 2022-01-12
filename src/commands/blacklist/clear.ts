@@ -42,7 +42,9 @@ export class BlacklistClearSubCommand implements Command {
         let confirmation = await CollectorUtils.getBooleanFromReact(
             intr,
             data,
-            Lang.getEmbed('prompts', 'clear.blacklist', data.lang(), { AMOUNT: '0' })
+            Lang.getEmbed('prompts', 'clear.blacklist', data.lang(), {
+                AMOUNT: blacklistData.stats.TotalItems.toString(),
+            })
         );
 
         if (confirmation === undefined) return;
