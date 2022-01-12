@@ -775,6 +775,7 @@
         "meta": {
             "language": "en-US",
             "languageDisplay": "English",
+            "locale": "en-US",
             "translators": "[Stqlth#0001](https://github.com/scottbucher)"
         },
         "footers": {

@@ -19,7 +19,7 @@ export class Language {
     }
 
     public static locale(langCode: LangCode): string {
-        return Lang.getRef('meta.locale', langCode);
+        return Lang.getRef('info', 'meta.locale', langCode);
     }
 
     public static translators(langCode: LangCode): string {

@@ -92,6 +92,7 @@ async function start(): Promise<void> {
     let blacklistRepo = new BlacklistRepo(dataAccess);
     let trustedRoleRepo = new TrustedRoleRepo(dataAccess);
     let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let combinedRepo = new CombinedRepo(dataAccess);
 
     // Config Sub Commands
@@ -215,7 +216,7 @@ async function registerCommands(commands: Command[]): Promise<void> {
     Logger.info(Logs.info.commandsRegistered);
 }
 
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason, _promise) => {
     Logger.error(Logs.error.unhandledRejection, reason);
 });
 

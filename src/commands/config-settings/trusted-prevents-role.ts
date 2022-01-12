@@ -1,22 +1,12 @@
-import {
-    ApplicationCommandData,
-    CommandInteraction,
-    Message,
-    MessageReaction,
-    PermissionString,
-    User,
-} from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { GuildRepo } from '../../services/database/repos';
-import { FormatUtils, MessageUtils } from '../../utils';
+import { MessageUtils } from '../../utils';
 import { CollectorUtils } from '../../utils/collector-utils';
 import { Command } from '../command';
 
-let Config = require('../../../config/config.json');
-
-const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 export class TrustedPreventsRoleSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
     public metadata: ApplicationCommandData = {
@@ -38,7 +28,6 @@ export class TrustedPreventsRoleSubCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let setting = intr.options.getString(Lang.getCom('arguments.setting'));
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
         let choice: number;
 
