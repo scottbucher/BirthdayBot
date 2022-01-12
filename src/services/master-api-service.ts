@@ -47,7 +47,7 @@ export class MasterApiService {
             throw res;
         }
 
-        return await res.json();
+        return (await res.json()) as LoginClusterResponse;
     }
 
     public async ready(): Promise<void> {
