@@ -52,7 +52,7 @@ export class BlacklistAddSubCommand implements Command {
         if (blaklistData.blacklist.map(b => b.DiscordId).includes(mentionable.id)) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.alreadyBlacklisted', data.lang(), {
+                Lang.getErrorEmbed('validation', 'errorEmbeds.alreadyInBlacklist', data.lang(), {
                     TYPE: Lang.getRef(
                         'info',
                         `types.${mentionable instanceof Role ? 'role' : 'user'}`,
