@@ -85,14 +85,14 @@ export class Lang {
     }
     private static successEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
         return new MessageEmbed({
-            description: jsonValue,
+            description: Utils.join(jsonValue, '\n'),
             color: Lang.getCom('colors.success') as ColorResolvable,
         });
     };
 
     private static errorEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
         return new MessageEmbed({
-            description: jsonValue,
+            description: Utils.join(jsonValue, '\n'),
             color: Lang.getCom('colors.error') as ColorResolvable,
         });
     };
