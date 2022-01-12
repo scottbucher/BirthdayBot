@@ -1,9 +1,10 @@
 import { Chrono } from 'chrono-node';
 import { Guild, Message, Role, User } from 'discord.js';
+import { Duration } from 'luxon'; // TODO: Missing types
 import moment from 'moment-timezone';
 
 import { GuildUtils, ParseUtils } from '.';
-import { LangCode } from '../models/enums';
+import { LangCode, Language } from '../models/enums';
 import { Lang } from '../services';
 
 let Abbreviations = require('../../config/abbreviations.json');
@@ -406,5 +407,25 @@ export class FormatUtils {
         else if (time === 12) return '12:00 ' + pm;
         else if (time < 12) return `${time}:00 ${am}`;
         else return `${time - 12}:00 ${pm}`;
+    }
+    public static duration(milliseconds: number, langCode: LangCode): string {
+        return Duration.fromObject(
+            Object.fromEntries(
+                Object.entries(
+                    Duration.fromMillis(milliseconds, { locale: Language.locale(langCode) })
+                        .shiftTo(
+                            'year',
+                            'quarter',
+                            'month',
+                            'week',
+                            'day',
+                            'hour',
+                            'minute',
+                            'second'
+                        )
+                        .toObject()
+                ).filter(([_, value]) => !!value) // Remove units that are 0
+            )
+        ).toHuman({ maximumFractionDigits: 0 });
     }
 }

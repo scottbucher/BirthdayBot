@@ -8,7 +8,7 @@ import {
     TextChannel,
 } from 'discord.js';
 
-import { MessageUtils, TimeUtils } from '.';
+import { FormatUtils, MessageUtils, TimeUtils } from '.';
 import { Command } from '../commands';
 import { Permission } from '../models/enums';
 import { EventData } from '../models/internal-models';
@@ -27,6 +27,20 @@ export class CommandUtils {
         intr: CommandInteraction,
         data: EventData
     ): Promise<boolean> {
+        if (command.cooldown) {
+            let limited = command.cooldown.take(intr.user.id);
+            if (limited) {
+                await MessageUtils.sendIntr(
+                    intr,
+                    Lang.getErrorEmbed('validation', 'errorEmbeds.cooldownHit', data.lang(), {
+                        AMOUNT: command.cooldown.amount.toLocaleString(),
+                        INTERVAL: FormatUtils.duration(command.cooldown.interval, data.lang()),
+                    })
+                );
+                return;
+            }
+        }
+
         // Check if this command is a developer only command
         if (command.requireDev && !Config.developers.includes(intr.user.id)) {
             await MessageUtils.sendIntr(

@@ -8,6 +8,7 @@ import {
     Role,
     TextChannel,
 } from 'discord.js';
+import { RateLimiter } from 'discord.js-rate-limiter';
 
 import { UserData, CustomMessage, MemberAnniversaryRole } from '../models/database';
 import { EventData } from '../models/internal-models';
@@ -65,6 +66,7 @@ export class TestCommand implements Command {
             },
         ],
     };
+    public cooldown = new RateLimiter(1, 5000);
     public requireDev = false;
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];

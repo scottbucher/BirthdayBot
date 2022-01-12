@@ -18,6 +18,10 @@ export class Language {
         return Lang.getRef('info', 'meta.languageDisplay', langCode);
     }
 
+    public static locale(langCode: LangCode): string {
+        return Lang.getRef('meta.locale', langCode);
+    }
+
     public static translators(langCode: LangCode): string {
         return Lang.getRef('info', 'meta.translators', langCode);
     }
