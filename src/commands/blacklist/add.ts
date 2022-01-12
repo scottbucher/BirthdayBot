@@ -29,7 +29,7 @@ export class BlacklistAddSubCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let mentionable = intr.options.getMentionable(Lang.getCom('arguements.roleOrUser'));
+        let mentionable = intr.options.getMentionable(Lang.getCom('arguments.roleOrUser'));
 
         if (
             !(mentionable instanceof User) &&
@@ -40,7 +40,7 @@ export class BlacklistAddSubCommand implements Command {
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
-                    'errorEmbeds.rawAPIInteractionDataRecieved',
+                    'errorEmbeds.rawAPIInteractionDataReceived',
                     data.lang()
                 )
             );
