@@ -48,6 +48,7 @@ import {
     TriggerHandler,
 } from './events';
 import { CustomClient } from './extensions';
+import { Job } from './jobs';
 import { Reaction } from './reactions';
 import { HttpService, JobService, Logger, SubscriptionService } from './services';
 import { DataAccess } from './services/database/data-access';
@@ -67,6 +68,8 @@ let Logs = require('../lang/logs.json');
 
 async function start(): Promise<void> {
     Logger.info('Starting Bot!');
+
+    // Client
     let client = new CustomClient({
         intents: Config.client.intents,
         partials: Config.client.partials,
@@ -163,6 +166,12 @@ async function start(): Promise<void> {
     let messageHandler = new MessageHandler(triggerHandler);
     let reactionHandler = new ReactionHandler(reactions);
 
+    // Jobs
+    let jobs: Job[] = [
+        // TODO: Add new jobs here
+    ];
+
+    // Bot
     let bot = new Bot(
         Config.client.token,
         client,
@@ -171,7 +180,7 @@ async function start(): Promise<void> {
         messageHandler,
         commandHandler,
         reactionHandler,
-        new JobService([])
+        new JobService(jobs)
     );
 
     if (process.argv[2] === '--register') {
