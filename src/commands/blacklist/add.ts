@@ -1,4 +1,3 @@
-import { APIInteractionDataResolvedGuildMember, APIRole } from 'discord-api-types';
 import {
     ApplicationCommandData,
     CommandInteraction,
@@ -7,8 +6,8 @@ import {
     Role,
     User,
 } from 'discord.js';
-import { Command } from '..';
 
+import { Command } from '..';
 import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { BlacklistRepo } from '../../services/database/repos';

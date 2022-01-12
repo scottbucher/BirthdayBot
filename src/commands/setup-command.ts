@@ -2,11 +2,9 @@ import {
     ApplicationCommandData,
     CommandInteraction,
     Message,
-    MessageReaction,
     PermissionString,
     Role,
     TextBasedChannel,
-    User,
 } from 'discord.js';
 
 import { EventData } from '../models/internal-models';

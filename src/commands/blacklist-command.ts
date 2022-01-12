@@ -4,8 +4,6 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { CommandUtils } from '../utils';
-import { BlacklistAddSubCommand } from './blacklist/add';
-import { BlacklistClearSubCommand } from './blacklist/clear';
 import { Command } from './command';
 
 export class BlacklistCommand implements Command {
