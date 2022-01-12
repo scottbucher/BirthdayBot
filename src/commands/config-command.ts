@@ -74,7 +74,10 @@ export class ConfigCommand implements Command {
     constructor(private commands: Command[]) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let command = CommandUtils.findCommand(this.commands, intr.options.getSubcommand());
+        let command = CommandUtils.findCommand(
+            this.commands,
+            intr.options.getString(Lang.getCom('arguments.setting'))
+        );
         if (!command) {
             // TODO: Should we log error here?
             return;
