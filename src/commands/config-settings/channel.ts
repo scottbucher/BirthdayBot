@@ -81,12 +81,6 @@ export class ChannelSubCommand implements Command {
 
         if (!reset) {
             let guild = intr.guild;
-            let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-                await MessageUtils.sendIntr(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            });
 
             let promptEmbed = Lang.getEmbed('prompts', 'config.channel', data.lang(), {
                 TYPE: displayType,
@@ -102,17 +96,10 @@ export class ChannelSubCommand implements Command {
                 ),
             });
 
-            let channelMessage = await MessageUtils.sendIntr(intr, promptEmbed);
-            for (let reactOption of reactOptions) {
-                await MessageUtils.react(channelMessage, reactOption);
-            }
-
-            let channelOption: boolean = await collectReact(
-                channelMessage,
-                async (msgReaction: MessageReaction, reactor: User) => {
-                    if (!reactOptions.includes(msgReaction.emoji.name)) return;
-                    return msgReaction.emoji.name;
-                }
+            let channelOption = await CollectorUtils.getSetupChoiceFromReact(
+                intr,
+                data,
+                promptEmbed
             );
 
             if (channelOption === undefined) return;

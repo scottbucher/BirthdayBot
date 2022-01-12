@@ -77,12 +77,6 @@ export class RoleSubCommand implements Command {
 
         if (!reset) {
             let guild = intr.guild;
-            let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-                await MessageUtils.sendIntr(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            });
 
             let promptEmbed = Lang.getEmbed('prompts', 'config.role', data.lang(), {
                 TYPE: displayType,
@@ -92,22 +86,11 @@ export class RoleSubCommand implements Command {
                 ),
             });
 
-            let channelMessage = await MessageUtils.sendIntr(intr, promptEmbed);
-            for (let reactOption of reactOptions) {
-                await MessageUtils.react(channelMessage, reactOption);
-            }
+            let roleOption = await CollectorUtils.getSetupChoiceFromReact(intr, data, promptEmbed);
 
-            let channelOption: boolean = await collectReact(
-                channelMessage,
-                async (msgReaction: MessageReaction, reactor: User) => {
-                    if (!reactOptions.includes(msgReaction.emoji.name)) return;
-                    return msgReaction.emoji.name;
-                }
-            );
+            if (roleOption === undefined) return;
 
-            if (channelOption === undefined) return;
-
-            switch (channelOption) {
+            switch (roleOption) {
                 case Config.emotes.create: {
                     // Create role with desired attributes
                     role = (

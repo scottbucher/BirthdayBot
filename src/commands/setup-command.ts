@@ -17,7 +17,7 @@ import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
 
 let Config = require('../../config/config.json');
-
+const reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 export class SetupCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.setup'),
@@ -42,12 +42,6 @@ export class SetupCommand implements Command {
         let guild = intr.guild;
         let botUser = guild.client.user;
         // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
-        let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-            await MessageUtils.sendIntr(
-                intr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-            );
-        });
         let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
             await MessageUtils.sendIntr(
                 intr,
@@ -62,20 +56,7 @@ export class SetupCommand implements Command {
             ICON: intr.client.user.displayAvatarURL(),
         }).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
 
-        let reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
-
-        let channelMessage = await MessageUtils.sendIntr(intr, channelEmbed);
-        for (let reactOption of reactOptions) {
-            await MessageUtils.react(channelMessage, reactOption);
-        }
-
-        let channelOption: boolean = await collectReact(
-            channelMessage,
-            async (msgReaction: MessageReaction, reactor: User) => {
-                if (!reactOptions.includes(msgReaction.emoji.name)) return;
-                return msgReaction.emoji.name;
-            }
-        );
+        let channelOption = await CollectorUtils.getSetupChoiceFromReact(intr, data, channelEmbed);
 
         if (channelOption === undefined) return;
 
@@ -166,18 +147,7 @@ export class SetupCommand implements Command {
             ICON: intr.client.user.displayAvatarURL(),
         }).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
 
-        let roleMessage = await MessageUtils.sendIntr(intr, roleEmbed);
-        for (let reactOption of reactOptions) {
-            await MessageUtils.react(roleMessage, reactOption);
-        }
-
-        let roleOptions: boolean = await collectReact(
-            roleMessage,
-            async (msgReaction: MessageReaction, reactor: User) => {
-                if (!reactOptions.includes(msgReaction.emoji.name)) return;
-                return msgReaction.emoji.name;
-            }
-        );
+        let roleOptions = await CollectorUtils.getSetupChoiceFromReact(intr, data, roleEmbed);
 
         if (roleOptions === undefined) return;
 

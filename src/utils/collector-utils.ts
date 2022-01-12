@@ -22,6 +22,7 @@ import { Lang } from '../services';
 let Config = require('../../config/config.json');
 
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
+let setupOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 export class CollectorUtils {
     public static createMsgCollect(
         channel: TextBasedChannel,
@@ -104,6 +105,32 @@ export class CollectorUtils {
             async (msgReaction: MessageReaction, reactor: User) => {
                 if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
                 return msgReaction.emoji.name === Config.emotes.confirm ? 1 : 0;
+            }
+        );
+    }
+
+    public static async getSetupChoiceFromReact(
+        intr: CommandInteraction,
+        data: EventData,
+        prompt: string | MessageEmbed
+    ): Promise<any> {
+        let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+            );
+        });
+        let confirmationMessage = await MessageUtils.sendIntr(intr, prompt);
+        // Send confirmation and emotes
+        for (let option of setupOptions) {
+            await MessageUtils.react(confirmationMessage, option);
+        }
+
+        return await collectReact(
+            confirmationMessage,
+            async (msgReaction: MessageReaction, reactor: User) => {
+                if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
+                return msgReaction.emoji.name;
             }
         );
     }
