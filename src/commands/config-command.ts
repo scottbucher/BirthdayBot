@@ -19,39 +19,39 @@ export class ConfigCommand implements Command {
                 choices: [
                     {
                         name: Lang.getCom('settingType.nameFormat'),
-                        value: 'NAME_FORMAT',
+                        value: Lang.getCom('settingType.nameFormat'),
                     },
                     {
                         name: Lang.getCom('settingType.timeZone'),
-                        value: 'TIME_ZONE',
+                        value: Lang.getCom('settingType.timeZone'),
                     },
                     {
                         name: Lang.getCom('settingType.useTimezone'),
-                        value: 'USE_TIMEZONE',
+                        value: Lang.getCom('settingType.useTimezone'),
                     },
                     {
                         name: Lang.getCom('settingType.dateFormat'),
-                        value: 'DATE_FORMAT',
+                        value: Lang.getCom('settingType.dateFormat'),
                     },
                     {
                         name: Lang.getCom('settingType.trustedPreventsMessage'),
-                        value: 'TRUSTED_PREVENTS_MESSAGE',
+                        value: Lang.getCom('settingType.trustedPreventsMessage'),
                     },
                     {
                         name: Lang.getCom('settingType.trustedPreventsRole'),
-                        value: 'TRUSTED_PREVENTS_ROLE',
+                        value: Lang.getCom('settingType.trustedPreventsRole'),
                     },
                     {
                         name: Lang.getCom('settingType.requireAllTrustedRoles'),
-                        value: 'REQUIRE_ALL_TRUSTED_ROLES',
+                        value: Lang.getCom('settingType.requireAllTrustedRoles'),
                     },
                     {
                         name: Lang.getCom('settingType.channel'),
-                        value: 'CHANNEL',
+                        value: Lang.getCom('settingType.channel'),
                     },
                     {
                         name: Lang.getCom('settingType.role'),
-                        value: 'ROLE',
+                        value: Lang.getCom('settingType.role'),
                     },
                 ],
             },
