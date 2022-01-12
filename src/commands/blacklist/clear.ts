@@ -30,7 +30,7 @@ export class BlacklistClearSubCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let blacklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
 
-        if (blacklistData?.blacklist.length === 0) {
+        if (!blacklistData || blacklistData.blacklist.length === 0) {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.emptyBlacklist', data.lang())
@@ -43,7 +43,7 @@ export class BlacklistClearSubCommand implements Command {
             intr,
             data,
             Lang.getEmbed('prompts', 'clear.blacklist', data.lang(), {
-                AMOUNT: blacklistData.stats.TotalItems.toString(),
+                AMOUNT: blacklistData.blacklist.length.toString(),
             })
         );
 
