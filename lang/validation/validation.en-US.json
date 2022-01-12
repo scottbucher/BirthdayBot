@@ -167,7 +167,7 @@
             "rawAPIInteractionDataRecieved": "Please reinvite the bot with the guild scope. Join the support server for more support.",
             "alreadyInBlacklist": "That {{TYPE}} is already in the blacklist!",
             "cooldownHit": "You can only run this command {{AMOUNT}} time(s) every {{INTERVAL}}. Please wait before attempting this command again.",
-            "": "",
+            "blacklistEmpty": "The birthday blacklist is empty!",
             "": "",
             "": "",
             "": ""

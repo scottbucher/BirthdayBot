@@ -5,6 +5,7 @@ import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { BlacklistRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
+import { CollectorUtils } from '../../utils/collector-utils';
 
 export class BlacklistClearSubCommand implements Command {
     constructor(public blacklistRepo: BlacklistRepo) {}
@@ -27,7 +28,32 @@ export class BlacklistClearSubCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let blacklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
+
+        if (!blacklistData || blacklistData.stats.TotalItems === 0) {
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.emptyBlacklist', data.lang())
+            );
+            return;
+        }
+
         // Confirm
+        let confirmation = await CollectorUtils.getBooleanFromReact(
+            intr,
+            data,
+            Lang.getEmbed('prompts', 'clear.blacklist', data.lang(), { AMOUNT: '0' })
+        );
+
+        if (confirmation === undefined) return;
+
+        if (!confirmation) {
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
+            );
+            return;
+        }
 
         await this.blacklistRepo.clearBlacklist(intr.guild.id);
 
