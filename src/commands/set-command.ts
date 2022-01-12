@@ -103,6 +103,7 @@ export class SetCommand implements Command {
 
         let changesLeft = userData ? userData?.ChangesLeft : 5;
 
+        // TODO: Default Timezone Suggestion is broken
         if (!(intr.channel instanceof DMChannel) && !data.guild)
             if (
                 data.guild &&
