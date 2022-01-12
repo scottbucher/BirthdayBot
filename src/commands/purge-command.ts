@@ -55,34 +55,13 @@ export class PurgeCommand implements Command {
             return;
         }
 
-        let collect = CollectorUtils.createReactCollect(intr.user, async () => {
-            await MessageUtils.sendIntr(
-                intr,
-                Lang.getEmbed('validation', 'embeds.promptExpired', data.lang())
-            );
-        });
-
-        let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
-
-        let confirmationMessage = await MessageUtils.sendIntr(
+        let confirmation = await CollectorUtils.getBooleanFromReact(
             intr,
+            data,
             Lang.getEmbed('prompts', 'embeds.birthdayConfirmPurge', data.lang(), {
                 ICON: intr.user.displayAvatarURL(),
             })
-        ); // Send confirmation and emotes
-        for (let option of trueFalseOptions) {
-            await MessageUtils.react(confirmationMessage, option);
-        }
-
-        let confirmation: boolean = await collect(
-            confirmationMessage,
-            async (msgReaction: MessageReaction, reactor: User) => {
-                if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
-                return msgReaction.emoji.name === Config.emotes.confirm;
-            }
         );
-
-        MessageUtils.delete(confirmationMessage);
 
         if (confirmation === undefined) return;
 
@@ -94,7 +73,7 @@ export class PurgeCommand implements Command {
                 intr,
                 Lang.getEmbed('results', 'success.purgeSuccessful', data.lang())
             );
-        } else if (confirmation === Config.emotes.deny) {
+        } else {
             // Cancel
             await MessageUtils.sendIntr(
                 intr,

@@ -46,26 +46,7 @@ export class TrustedPreventsRoleSubCommand implements Command {
         let promptEmbed = Lang.getEmbed('prompts', `config.trustedPreventsRole`, data.lang());
 
         if (!reset) {
-            // prompt them for a setting
-            let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-                await MessageUtils.sendIntr(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            });
-            let confirmationMessage = await MessageUtils.sendIntr(intr, promptEmbed);
-            // Send confirmation and emotes
-            for (let option of trueFalseOptions) {
-                await MessageUtils.react(confirmationMessage, option);
-            }
-
-            choice = await collectReact(
-                confirmationMessage,
-                async (msgReaction: MessageReaction, reactor: User) => {
-                    if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
-                    return msgReaction.emoji.name === Config.emotes.confirm ? 1 : 0;
-                }
-            );
+            choice = await CollectorUtils.getBooleanFromReact(intr, data, promptEmbed);
 
             if (choice === undefined) return;
         } else choice = 1;
