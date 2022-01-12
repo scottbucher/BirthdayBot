@@ -3,16 +3,8 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { CommandUtils } from '../utils';
 import { Command } from './command';
-import {
-    ChannelSubCommand,
-    DateFormatSubCommand,
-    NameFormatSubCommand,
-    RoleSubCommand,
-    TimezoneSubCommand,
-    TrustedSettingsSubCommand,
-    UseTimezoneSubCommand,
-} from './config-settings';
 
 export class ConfigCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -73,55 +65,24 @@ export class ConfigCommand implements Command {
     };
     public requireDev = false;
     public requireGuild = true;
-    public requireClientPerms: PermissionString[] = [
-        'ADD_REACTIONS',
-        'VIEW_CHANNEL',
-        'MANAGE_MESSAGES',
-        'READ_MESSAGE_HISTORY',
-    ];
+    public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;
 
-    constructor(
-        public nameFormatSubCommand: NameFormatSubCommand,
-        public timezoneSubCommand: TimezoneSubCommand,
-        public useTimezoneSubCommand: UseTimezoneSubCommand,
-        public dateFormatSubCommand: DateFormatSubCommand,
-        public trustedSettingsCommand: TrustedSettingsSubCommand,
-        public channelSubCommand: ChannelSubCommand,
-        public roleSubCommand: RoleSubCommand
-    ) {}
+    constructor(private commands: Command[]) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let setting = intr.options.getString(Lang.getCom('arguments.setting'));
-        let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
+        let command = CommandUtils.findCommand(this.commands, intr.options.getSubcommand());
+        if (!command) {
+            // TODO: Should we log error here?
+            return;
+        }
 
-        switch (setting) {
-            case 'NAME_FORMAT':
-                await this.nameFormatSubCommand.execute(intr, data, reset);
-                break;
-            case 'TIME_ZONE':
-                await this.timezoneSubCommand.execute(intr, data, reset);
-                break;
-            case 'USE_TIMEZONE':
-                await this.useTimezoneSubCommand.execute(intr, data, reset);
-                break;
-            case 'DATE_FORMAT':
-                await this.dateFormatSubCommand.execute(intr, data, reset);
-                break;
-            case 'TRUSTED_PREVENTS_MESSAGE':
-            case 'TRUSTED_PREVENTS_ROLE':
-            case 'REQUIRE_ALL_TRUSTED_ROLES':
-                await this.trustedSettingsCommand.execute(intr, data, reset);
-                break;
-            case 'CHANNEL':
-                await this.channelSubCommand.execute(intr, data, reset);
-                break;
-            case 'ROLE':
-                await this.roleSubCommand.execute(intr, data, reset);
-                break;
+        let passesChecks = await CommandUtils.runChecks(command, intr, data);
+        if (passesChecks) {
+            await command.execute(intr, data);
         }
     }
 }

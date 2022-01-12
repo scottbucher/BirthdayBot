@@ -32,9 +32,11 @@ import {
     ChannelSubCommand,
     DateFormatSubCommand,
     NameFormatSubCommand,
+    RequireAllTrustedRolesSubCommand,
     RoleSubCommand,
     TimezoneSubCommand,
-    TrustedSettingsSubCommand,
+    TrustedPreventsMsgSubCommand,
+    TrustedPreventsRoleSubCommand,
     UseTimezoneSubCommand,
 } from './commands/config-settings';
 import {
@@ -94,7 +96,9 @@ async function start(): Promise<void> {
     let timezoneSubCommand = new TimezoneSubCommand(guildRepo);
     let useTimezoneSubCommand = new UseTimezoneSubCommand(guildRepo);
     let dateFormatSubCommand = new DateFormatSubCommand(guildRepo);
-    let trustedSettingsSubCommand = new TrustedSettingsSubCommand(guildRepo);
+    let trustedPreventsMessageSubCommand = new TrustedPreventsMsgSubCommand(guildRepo);
+    let trustedPreventsRoleSubCommand = new TrustedPreventsRoleSubCommand(guildRepo);
+    let requireAllTrustedRolesSubCommand = new RequireAllTrustedRolesSubCommand(guildRepo);
     let channelSubCommand = new ChannelSubCommand(guildRepo);
     let roleSubCommand = new RoleSubCommand(guildRepo);
 
@@ -115,15 +119,17 @@ async function start(): Promise<void> {
             memberAnniversaryRoleRepo
         ),
         new BlacklistCommand([blacklistAddSubCommand, blacklistClearSubCommand]),
-        new ConfigCommand(
+        new ConfigCommand([
             nameFormatSubCommand,
             timezoneSubCommand,
             useTimezoneSubCommand,
             dateFormatSubCommand,
-            trustedSettingsSubCommand,
+            trustedPreventsMessageSubCommand,
+            trustedPreventsRoleSubCommand,
+            requireAllTrustedRolesSubCommand,
             channelSubCommand,
-            roleSubCommand
-        ),
+            roleSubCommand,
+        ]),
         new MessageCommand(),
         new MemberAnniversaryRoleCommand(),
         new TrustedRoleCommand(),

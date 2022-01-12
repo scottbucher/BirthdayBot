@@ -1,5 +1,12 @@
 import { APIInteractionDataResolvedGuildMember, APIRole } from 'discord-api-types';
-import { CommandInteraction, GuildMember, PermissionString, Role, User } from 'discord.js';
+import {
+    ApplicationCommandData,
+    CommandInteraction,
+    GuildMember,
+    PermissionString,
+    Role,
+    User,
+} from 'discord.js';
 import { Command } from '..';
 
 import { EventData } from '../../models';
@@ -9,7 +16,10 @@ import { MessageUtils } from '../../utils';
 
 export class BlacklistAddSubCommand implements Command {
     constructor(public blacklistRepo: BlacklistRepo) {}
-    public metadata = null;
+    public metadata: ApplicationCommandData = {
+        name: Lang.getCom('subCommands.add'),
+        description: undefined,
+    };
 
     public requireDev = false;
     public requireGuild = true;

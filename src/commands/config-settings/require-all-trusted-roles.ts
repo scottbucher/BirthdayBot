@@ -1,33 +1,49 @@
-import { CommandInteraction, Message, MessageReaction, User } from 'discord.js';
+import {
+    ApplicationCommandData,
+    CommandInteraction,
+    Message,
+    MessageReaction,
+    PermissionString,
+    User,
+} from 'discord.js';
 
 import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { GuildRepo } from '../../services/database/repos';
 import { FormatUtils, MessageUtils } from '../../utils';
 import { CollectorUtils } from '../../utils/collector-utils';
+import { Command } from '../command';
 
 let Config = require('../../../config/config.json');
 
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
-export class TrustedSettingsSubCommand {
+export class RequireAllTrustedRolesSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
+    public metadata: ApplicationCommandData = {
+        name: Lang.getCom('settingType.requireAllTrustedRoles'),
+        description: undefined,
+    };
 
-    public async execute(intr: CommandInteraction, data: EventData, reset: boolean): Promise<void> {
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [
+        'ADD_REACTIONS',
+        'VIEW_CHANNEL',
+        'MANAGE_MESSAGES',
+        'READ_MESSAGE_HISTORY',
+    ];
+    public requireUserPerms: PermissionString[] = [];
+    public requireSetup = true;
+    public requireVote = false;
+    public requirePremium = false;
+
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let setting = intr.options.getString(Lang.getCom('arguments.setting'));
+        let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
         let choice: number;
 
         // Get the prompt embed based on the setting, all are a true or false
-        let promptEmbed = Lang.getEmbed(
-            'prompts',
-            `config.${
-                setting === 'TRUSTED_PREVENTS_MESSAGE'
-                    ? 'trustedPreventsMessage'
-                    : setting === 'TRUSTED_PREVENTS_ROLE'
-                    ? 'trustedPreventsRole'
-                    : 'trustedRequireAll'
-            }`,
-            data.lang()
-        );
+        let promptEmbed = Lang.getEmbed('prompts', `config.trustedRequireAll`, data.lang());
 
         if (!reset) {
             // prompt them for a setting
@@ -54,32 +70,15 @@ export class TrustedSettingsSubCommand {
             if (choice === undefined) return;
         } else choice = 1;
 
-        let successEmbed: string;
-
-        switch (setting) {
-            case 'TRUSTED_PREVENTS_MESSAGE':
-                successEmbed = choice
-                    ? 'successEmbeds.trustedPreventsRoleYes'
-                    : 'successEmbeds.trustedPreventsRoleNo';
-                await this.guildRepo.updateTrustedPreventsMessage(intr.guild.id, choice);
-                break;
-            case 'TRUSTED_PREVENTS_ROLE':
-                successEmbed = choice
-                    ? 'successEmbeds.trustedPreventsMessageYes'
-                    : 'successEmbeds.trustedPreventsMessageNo';
-                await this.guildRepo.updateTrustedPreventsRole(intr.guild.id, choice);
-                break;
-            case 'REQUIRE_ALL_TRUSTED_ROLES':
-                successEmbed = choice
-                    ? 'successEmbeds.requireAllTrustedYes'
-                    : 'successEmbeds.requireAllTrustedNo';
-                await this.guildRepo.updateRequireAllTrustedRoles(intr.guild.id, choice);
-                break;
-        }
+        await this.guildRepo.updateRequireAllTrustedRoles(intr.guild.id, choice);
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getSuccessEmbed('results', successEmbed, data.lang())
+            Lang.getSuccessEmbed(
+                'results',
+                choice ? 'successEmbeds.requireAllTrustedYes' : 'successEmbeds.requireAllTrustedNo',
+                data.lang()
+            )
         );
     }
 }
