@@ -5,10 +5,7 @@ import {
     CommandInteraction,
     DMChannel,
     Message,
-    MessageEmbed,
-    MessageReaction,
     PermissionString,
-    User,
 } from 'discord.js';
 
 import { LangCode } from '../models/enums';

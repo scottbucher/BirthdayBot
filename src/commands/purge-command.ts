@@ -1,11 +1,4 @@
-import {
-    ApplicationCommandData,
-    CommandInteraction,
-    Message,
-    MessageReaction,
-    PermissionString,
-    User,
-} from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, Message, PermissionString } from 'discord.js';
 import { CollectOptions, MessageFilter } from 'discord.js-collector-utils';
 
 import { EventData } from '../models/internal-models';

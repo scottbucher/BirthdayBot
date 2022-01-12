@@ -14,9 +14,9 @@ import {
     ReactionFilter,
     ReactionRetriever,
 } from 'discord.js-collector-utils';
+
 import { MessageUtils } from '.';
 import { EventData } from '../models';
-
 import { Lang } from '../services';
 
 let Config = require('../../config/config.json');
