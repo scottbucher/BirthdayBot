@@ -242,7 +242,7 @@
                     "False: {{COM:emotes.deny}}"
                 ],
                 "footer": {
-                    "text": "{{COM:footers.expire}}"
+                    "text": "{{REF:footers.expire}}"
                 },
                 "timestamp": true
             },
