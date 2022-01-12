@@ -1,9 +1,9 @@
-import { CommandInteraction, Message, MessageReaction, User } from 'discord.js';
+import { CommandInteraction, MessageReaction, User } from 'discord.js';
 
 import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { GuildRepo } from '../../services/database/repos';
-import { FormatUtils, MessageUtils } from '../../utils';
+import { MessageUtils } from '../../utils';
 import { CollectorUtils } from '../../utils/collector-utils';
 
 let Config = require('../../../config/config.json');
