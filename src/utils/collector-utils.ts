@@ -100,13 +100,10 @@ export class CollectorUtils {
             await MessageUtils.react(confirmationMessage, option);
         }
 
-        return await collectReact(
-            confirmationMessage,
-            async (msgReaction: MessageReaction, reactor: User) => {
-                if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
-                return msgReaction.emoji.name === Config.emotes.confirm ? 1 : 0;
-            }
-        );
+        return await collectReact(confirmationMessage, async (msgReaction: MessageReaction) => {
+            if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
+            return msgReaction.emoji.name === Config.emotes.confirm ? 1 : 0;
+        });
     }
 
     public static async getSetupChoiceFromReact(
@@ -126,12 +123,9 @@ export class CollectorUtils {
             await MessageUtils.react(confirmationMessage, option);
         }
 
-        return await collectReact(
-            confirmationMessage,
-            async (msgReaction: MessageReaction, reactor: User) => {
-                if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
-                return msgReaction.emoji.name;
-            }
-        );
+        return await collectReact(confirmationMessage, async (msgReaction: MessageReaction) => {
+            if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
+            return msgReaction.emoji.name;
+        });
     }
 }
