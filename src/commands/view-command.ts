@@ -73,7 +73,7 @@ export class ViewCommand implements Command {
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
-                            'errorEmbeds.userBirthdayNotSet',
+                            'errorEmbeds.birthdayNotSet',
                             data.lang(),
                             {
                                 USER: target.toString(),
