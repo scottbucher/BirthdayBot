@@ -30,7 +30,7 @@ export class BlacklistClearSubCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let blacklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
 
-        if (!blacklistData.stats || blacklistData.stats.TotalItems === 0) {
+        if (blacklistData?.blacklist.length === 0) {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.emptyBlacklist', data.lang())
