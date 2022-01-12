@@ -47,7 +47,7 @@ export class NameFormatSubCommand implements Command {
             );
 
             nameFormat = await collect(async (nextMsg: Message) => {
-                let input = FormatUtils.extractNameFormatType(nextMsg.content);
+                let input = FormatUtils.extractNameFormatType(nextMsg.content.toLowerCase());
                 if (!input) {
                     await MessageUtils.sendIntr(
                         intr,
