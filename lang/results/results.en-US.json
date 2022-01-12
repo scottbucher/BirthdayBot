@@ -122,7 +122,8 @@
             "roleCreated": "Successfully created the {{ROLE}} role!",
             "roleCleared": "Successfully cleared the {{TYPE}} role!",
             "roleSet": "Successfully set the {{TYPE}} ole to {{ROLE}}",
-            "blacklistAdd": "Successfully added {{TARGET}} to the birthday blacklist!"
+            "blacklistAdd": "Successfully added {{TARGET}} to the birthday blacklist!",
+            "blacklistCleared": "Successfully cleared the birthday blacklist!"
         }
     },
     "refs": {
@@ -130,9 +131,6 @@
             "language": "en-US",
             "languageDisplay": "English",
             "translators": "[Stqlth#0001](https://github.com/scottbucher)"
-        },
-        "footers": {
-            "irreversible": "This action is irreversible!"
         },
         "other": {
             "na": "N/A"

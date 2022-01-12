@@ -339,7 +339,7 @@
         },
         "clear": {
             "blacklist": {
-                "description": "Are you sure you want to clear __**{{TOTAL}}**__ blacklisted user(s)?",
+                "description": "Are you sure you want to clear __**{{TOTAL}}**__ blacklisted user(s)/role(s)?",
                 "footer": {
                     "text": "{{REF:footers.irreversible}}",
                     "icon": "{{ICON}}"
@@ -355,7 +355,8 @@
             "translators": "[Stqlth#0001](https://github.com/scottbucher)"
         },
         "footers": {
-            "expire": "This message expires in 2 minutes!"
+            "expire": "This message expires in 2 minutes!",
+            "irreversible": "This action is irreversible!"
         },
         "other": {
             "na": "N/A"
