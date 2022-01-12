@@ -183,6 +183,7 @@ async function start(): Promise<void> {
         new JobService(jobs)
     );
 
+    // Register
     if (process.argv[2] === '--register') {
         await registerCommands(commands);
         process.exit();
