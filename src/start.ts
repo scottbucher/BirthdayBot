@@ -27,13 +27,16 @@ import {
     ViewCommand,
     VoteCommand,
 } from './commands';
+import { BlacklistAddSubCommand, BlacklistClearSubCommand } from './commands/blacklist';
 import {
     ChannelSubCommand,
     DateFormatSubCommand,
     NameFormatSubCommand,
+    RequireAllTrustedRolesSubCommand,
     RoleSubCommand,
     TimezoneSubCommand,
-    TrustedSettingsSubCommand,
+    TrustedPreventsMsgSubCommand,
+    TrustedPreventsRoleSubCommand,
     UseTimezoneSubCommand,
 } from './commands/config-settings';
 import {
@@ -88,14 +91,20 @@ async function start(): Promise<void> {
     let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
     let combinedRepo = new CombinedRepo(dataAccess);
 
-    // Sub Commands
+    // Config Sub Commands
     let nameFormatSubCommand = new NameFormatSubCommand(guildRepo);
     let timezoneSubCommand = new TimezoneSubCommand(guildRepo);
     let useTimezoneSubCommand = new UseTimezoneSubCommand(guildRepo);
     let dateFormatSubCommand = new DateFormatSubCommand(guildRepo);
-    let trustedSettingsSubCommand = new TrustedSettingsSubCommand(guildRepo);
+    let trustedPreventsMessageSubCommand = new TrustedPreventsMsgSubCommand(guildRepo);
+    let trustedPreventsRoleSubCommand = new TrustedPreventsRoleSubCommand(guildRepo);
+    let requireAllTrustedRolesSubCommand = new RequireAllTrustedRolesSubCommand(guildRepo);
     let channelSubCommand = new ChannelSubCommand(guildRepo);
     let roleSubCommand = new RoleSubCommand(guildRepo);
+
+    // Blacklist Sub Commands
+    let blacklistAddSubCommand = new BlacklistAddSubCommand(blacklistRepo);
+    let blacklistClearSubCommand = new BlacklistClearSubCommand(blacklistRepo);
 
     // Commands
     let commands: Command[] = [
@@ -109,16 +118,18 @@ async function start(): Promise<void> {
             customMessageRepo,
             memberAnniversaryRoleRepo
         ),
-        new BlacklistCommand(),
-        new ConfigCommand(
+        new BlacklistCommand([blacklistAddSubCommand, blacklistClearSubCommand]),
+        new ConfigCommand([
             nameFormatSubCommand,
             timezoneSubCommand,
             useTimezoneSubCommand,
             dateFormatSubCommand,
-            trustedSettingsSubCommand,
+            trustedPreventsMessageSubCommand,
+            trustedPreventsRoleSubCommand,
+            requireAllTrustedRolesSubCommand,
             channelSubCommand,
-            roleSubCommand
-        ),
+            roleSubCommand,
+        ]),
         new MessageCommand(),
         new MemberAnniversaryRoleCommand(),
         new TrustedRoleCommand(),

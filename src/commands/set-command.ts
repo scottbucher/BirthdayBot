@@ -113,14 +113,9 @@ export class SetCommand implements Command {
                 (!timeZone || timeZone !== data.guild?.DefaultTimezone)
             ) {
                 // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
-                let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-                    await MessageUtils.sendIntr(
-                        intr,
-                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                    );
-                });
-                let confirmationMessage = await MessageUtils.sendIntr(
+                let confirmation = await CollectorUtils.getBooleanFromReact(
                     intr,
+                    data,
                     Lang.getEmbed(
                         'prompts',
                         'settingBirthday.defaultTimeZoneAvailable' + (timeZone ? 'Override' : ''),
@@ -132,20 +127,6 @@ export class SetCommand implements Command {
                         }
                     )
                 );
-                // Send confirmation and emotes
-                for (let option of trueFalseOptions) {
-                    await MessageUtils.react(confirmationMessage, option);
-                }
-
-                let confirmation: boolean = await collectReact(
-                    confirmationMessage,
-                    async (msgReaction: MessageReaction, reactor: User) => {
-                        if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
-                        return msgReaction.emoji.name === Config.emotes.confirm;
-                    }
-                );
-
-                // MessageUtils.delete(confirmationMessage);
 
                 if (confirmation === undefined) return;
 
@@ -280,40 +261,15 @@ export class SetCommand implements Command {
         let month = birthDate.getMonth() + 1;
         let day = birthDate.getDate();
 
-        let confirmationEmbed: MessageEmbed;
-
-        let collectReact = CollectorUtils.createReactCollect(target, async () => {
-            await MessageUtils.sendIntr(
-                intr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-            );
-        });
-
-        confirmationEmbed = Lang.getEmbed(
-            'prompts',
-            'settingBirthday.confirmBirthday',
-            LangCode.EN_US,
-            {
+        let confirmation = await CollectorUtils.getBooleanFromReact(
+            intr,
+            data,
+            Lang.getEmbed('prompts', 'settingBirthday.confirmBirthday', LangCode.EN_US, {
                 TARGET: target.toString(),
                 BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                 TIMEZONE: timeZone,
-            }
+            })
         );
-
-        let confirmationMessage = await MessageUtils.sendIntr(intr, confirmationEmbed); // Send confirmation and emotes
-        for (let option of trueFalseOptions) {
-            await MessageUtils.react(confirmationMessage, option);
-        }
-
-        let confirmation: boolean = await collectReact(
-            confirmationMessage,
-            async (msgReaction: MessageReaction, reactor: User) => {
-                if (!trueFalseOptions.includes(msgReaction.emoji.name)) return;
-                return msgReaction.emoji.name === Config.emotes.confirm;
-            }
-        );
-
-        // MessageUtils.delete(confirmationMessage);
 
         if (confirmation === undefined) return;
 

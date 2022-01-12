@@ -1,19 +1,46 @@
-import { CommandInteraction, Message, MessageReaction, Role, User } from 'discord.js';
+import {
+    ApplicationCommandData,
+    CommandInteraction,
+    Message,
+    MessageReaction,
+    PermissionString,
+    Role,
+    User,
+} from 'discord.js';
 
 import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { GuildRepo } from '../../services/database/repos';
 import { FormatUtils, MessageUtils } from '../../utils';
 import { CollectorUtils } from '../../utils/collector-utils';
+import { Command } from '../command';
 
 let Config = require('../../../config/config.json');
 
 const reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 
-export class RoleSubCommand {
+export class RoleSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
+    public metadata: ApplicationCommandData = {
+        name: Lang.getCom('settingType.role'),
+        description: undefined,
+    };
 
-    public async execute(intr: CommandInteraction, data: EventData, reset: boolean): Promise<void> {
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [
+        'ADD_REACTIONS',
+        'VIEW_CHANNEL',
+        'MANAGE_MESSAGES',
+        'READ_MESSAGE_HISTORY',
+    ];
+    public requireUserPerms: PermissionString[] = [];
+    public requireSetup = true;
+    public requireVote = false;
+    public requirePremium = false;
+
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
         let type: string;
 
         // prompt them for a type
@@ -50,12 +77,6 @@ export class RoleSubCommand {
 
         if (!reset) {
             let guild = intr.guild;
-            let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-                await MessageUtils.sendIntr(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            });
 
             let promptEmbed = Lang.getEmbed('prompts', 'config.role', data.lang(), {
                 TYPE: displayType,
@@ -65,22 +86,11 @@ export class RoleSubCommand {
                 ),
             });
 
-            let channelMessage = await MessageUtils.sendIntr(intr, promptEmbed);
-            for (let reactOption of reactOptions) {
-                await MessageUtils.react(channelMessage, reactOption);
-            }
+            let roleOption = await CollectorUtils.getSetupChoiceFromReact(intr, data, promptEmbed);
 
-            let channelOption: boolean = await collectReact(
-                channelMessage,
-                async (msgReaction: MessageReaction, reactor: User) => {
-                    if (!reactOptions.includes(msgReaction.emoji.name)) return;
-                    return msgReaction.emoji.name;
-                }
-            );
+            if (roleOption === undefined) return;
 
-            if (channelOption === undefined) return;
-
-            switch (channelOption) {
+            switch (roleOption) {
                 case Config.emotes.create: {
                     // Create role with desired attributes
                     role = (

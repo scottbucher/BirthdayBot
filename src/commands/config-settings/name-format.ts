@@ -1,17 +1,32 @@
-import { CommandInteraction, Message } from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, Message, PermissionString } from 'discord.js';
 
 import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { GuildRepo } from '../../services/database/repos';
 import { FormatUtils, MessageUtils } from '../../utils';
 import { CollectorUtils } from '../../utils/collector-utils';
+import { Command } from '../command';
 
-export class NameFormatSubCommand {
+export class NameFormatSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
+    public metadata: ApplicationCommandData = {
+        name: Lang.getCom('settingType.nameFormat'),
+        description: undefined,
+    };
 
-    public async execute(intr: CommandInteraction, data: EventData, reset: boolean): Promise<void> {
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
+    public requireUserPerms: PermissionString[] = [];
+    public requireSetup = true;
+    public requireVote = false;
+    public requirePremium = false;
+
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let nameFormat: string;
         let guildMember = intr.guild.members.resolve(intr.user.id);
+        let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
+
         if (!reset) {
             // prompt them for a setting
             let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {

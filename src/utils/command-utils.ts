@@ -18,6 +18,10 @@ let Config = require('../../config/config.json');
 let Debug = require('../../config/debug.json');
 
 export class CommandUtils {
+    public static findCommand(commands: Command[], input: string): Command {
+        return commands.find(command => command.metadata.name === input);
+    }
+
     public static async runChecks(
         command: Command,
         intr: CommandInteraction,
