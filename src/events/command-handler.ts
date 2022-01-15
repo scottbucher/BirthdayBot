@@ -27,6 +27,11 @@ export class CommandHandler implements EventHandler {
     ) {}
 
     public async process(intr: CommandInteraction): Promise<void> {
+        // Don't respond to self, or other bots
+        if (intr.user.id === intr.client.user?.id || intr.user.bot) {
+            return;
+        }
+
         // Check if user is rate limited
         let limited = this.rateLimiter.take(intr.user.id);
         if (limited) {
