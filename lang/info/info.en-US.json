@@ -906,6 +906,10 @@
             "memberAnniversaryRoleFieldTitle": "Member Anniversary Roles Unavailable",
             "memberAnniversaryRoleFieldText": "Member anniversary roles are a premium feature **only**. Unlock up to **{{MAX_PAID}}** with `{{REF:bot.prefix}} premium`!"
         },
+        "conditionals": {
+            "needColorForPremium": "Customize the message color with `{{REF:bot.prefix}} premium`!",
+            "colorForPremium": "Color Hex: `{{COLOR_HEX}}`!"
+        },
         "types": {
             "birthday": "birthday",
             "birthdayMaster": "birthdayMaster",

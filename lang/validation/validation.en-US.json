@@ -155,6 +155,16 @@
                     "icon": "{{ICON}}"
                 },
                 "color": "{{COM:colors.warn}}"
+            },
+            "invalidColor": {
+                "title": "Invalid Color",
+                "description": [
+                    "Please provide a valid hex color! Find hex colors [here]({{COM:links.colors}}).",
+                    "",
+                    "Example: `Orange` or `Crimson`",
+                    "Example: `#4EEFFF` or `4EEFFF`"
+                ],
+                "color": "{{COM:colors.error}}"
             }
         },
         "errorEmbeds": {

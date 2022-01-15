@@ -246,75 +246,51 @@ export class MessageAddSubCommand implements Command {
         userId = target && type !== 'serveranniversary' ? target.id : '0';
 
         if (hasPremium) {
-            let selectMessage = await MessageUtils.sendIntr(
+            // prompt them for a type
+            let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
+                await MessageUtils.sendIntr(
+                    intr,
+                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                );
+            });
+
+            let colorSelectMessage = await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('prompts', 'customMessage.colorSelection', LangCode.EN_US, {
                     ICON: intr.client.user.displayAvatarURL(),
                 })
             );
 
-            colorHex = await CollectorUtils.collectByMessage(
-                msg.channel,
-                // Collect Filter
-                (nextMsg: Message) => nextMsg.author.id === msg.author.id,
-                stopFilter,
-                // Retrieve Result
-                async (nextMsg: Message) => {
-                    let check = ColorUtils.findHex(nextMsg.content);
+            colorHex = await collect(async (nextMsg: Message) => {
+                let check = ColorUtils.findHex(nextMsg.content);
 
-                    if (!check) {
-                        await MessageUtils.send(
-                            channel,
-                            Lang.getEmbed('validation.invalidColor', LangCode.EN_US)
-                        );
-                        return;
-                    }
+                if (!check) {
+                    await MessageUtils.sendIntr(
+                        intr,
+                        Lang.getEmbed('validation', 'embeds.invalidColor', LangCode.EN_US)
+                    );
+                    return;
+                }
 
-                    return check;
-                },
-                expireFunction,
-                COLLECT_OPTIONS
-            );
-
-            MessageUtils.delete(selectMessage);
-
-            if (colorHex === undefined) {
-                return;
-            }
+                return check;
+            });
+            if (colorHex === undefined) return;
         }
 
-        let settingRole = await MessageUtils.send(
-            channel,
-            Lang.getEmbed('serverPrompts.customMessageEmbedSelection', LangCode.EN_US, {
-                ICON: msg.client.user.displayAvatarURL(),
+        let option = await CollectorUtils.getBooleanFromReact(
+            intr,
+            data,
+            Lang.getEmbed('prompts', 'customMessage.embedSelection', LangCode.EN_US, {
+                ICON: intr.client.user.displayAvatarURL(),
             })
-        ); // Send confirmation and emotes
-        for (let option of trueFalseOptions) {
-            await settingRole.react(option);
-        }
-
-        let option: string = await CollectorUtils.collectByReaction(
-            settingRole,
-            // Collect Filter
-            (msgReaction: MessageReaction, reactor: User) =>
-                reactor.id === msg.author.id && trueFalseOptions.includes(msgReaction.emoji.name),
-            stopFilter,
-            // Retrieve Result
-            async (msgReaction: MessageReaction, reactor: User) => {
-                return msgReaction.emoji.name;
-            },
-            expireFunction,
-            COLLECT_OPTIONS
         );
-
-        MessageUtils.delete(settingRole);
 
         if (option === undefined) return;
 
         embedChoice = option === Config.emotes.confirm ? 1 : 0;
 
         await this.customMessageRepo.addCustomMessage(
-            msg.guild.id,
+            intr.guild.id,
             message,
             userId,
             type,
@@ -322,8 +298,8 @@ export class MessageAddSubCommand implements Command {
             embedChoice
         );
 
-        await MessageUtils.send(
-            channel,
+        await MessageUtils.sendIntr(
+            intr,
             userId === '0'
                 ? Lang.getEmbed('results.addCustomMessage', LangCode.EN_US, {
                       DISPLAY_TYPE: typeDisplayName,
@@ -335,8 +311,8 @@ export class MessageAddSubCommand implements Command {
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
                       HAS_PREMIUM: !hasPremium
-                          ? Lang.getRef('conditionals.needColorForPremium', LangCode.EN_US)
-                          : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
+                          ? Lang.getRef('info', 'conditionals.needColorForPremium', LangCode.EN_US)
+                          : Lang.getRef('info', 'conditionals.colorForPremium', LangCode.EN_US, {
                                 COLOR_HEX: colorHex,
                             }),
                       TYPE: type,
@@ -352,8 +328,8 @@ export class MessageAddSubCommand implements Command {
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
                       HAS_PREMIUM: !hasPremium
-                          ? Lang.getRef('conditionals.colorForPremium', LangCode.EN_US)
-                          : Lang.getRef('conditionals.colorForPremium', LangCode.EN_US, {
+                          ? Lang.getRef('info', 'conditionals.colorForPremium', LangCode.EN_US)
+                          : Lang.getRef('info', 'conditionals.colorForPremium', LangCode.EN_US, {
                                 COLOR_HEX: colorHex,
                             }),
                       TYPE:
