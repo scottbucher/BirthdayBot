@@ -25,7 +25,7 @@ export class MarAddSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let role = intr.options.getRole(Lang.getCom('arguments.role'));
-        let year = intr.options.getNumber(Lang.getCom('arguments.year'));
+        let year = intr.options.getInteger(Lang.getCom('arguments.year'));
 
         if (!(role instanceof Role)) {
             await MessageUtils.sendIntr(
