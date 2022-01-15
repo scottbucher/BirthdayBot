@@ -345,6 +345,22 @@
                     "icon": "{{ICON}}"
                 },
                 "color": "{{COM:colors.warn}}"
+            },
+            "trustedRole": {
+                "description": "Are you sure you want to clear __**{{TOTAL}}**__ trusted role(s)?",
+                "footer": {
+                    "text": "{{REF:footers.irreversible}}",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.warn}}"
+            },
+            "mar": {
+                "description": "Are you sure you want to clear __**{{TOTAL}}**__ member anniversary role(s)?",
+                "footer": {
+                    "text": "{{REF:footers.irreversible}}",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.warn}}"
             }
         }
     },

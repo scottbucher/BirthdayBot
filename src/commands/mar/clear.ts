@@ -5,6 +5,7 @@ import { EventData } from '../../models';
 import { Lang } from '../../services';
 import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
+import { CollectorUtils } from '../../utils/collector-utils';
 
 export class MarClearSubCommand implements Command {
     constructor(public memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
@@ -28,6 +29,26 @@ export class MarClearSubCommand implements Command {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.emptyMar', data.lang())
+            );
+            return;
+        }
+
+        // Confirm
+        let confirmation = await CollectorUtils.getBooleanFromReact(
+            intr,
+            data,
+            Lang.getEmbed('prompts', 'clear.mar', data.lang(), {
+                TOTAL: marData.memberAnniversaryRoles.length.toString(),
+                ICON: intr.client.user.displayAvatarURL(),
+            })
+        );
+
+        if (confirmation === undefined) return;
+
+        if (!confirmation) {
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
             return;
         }
