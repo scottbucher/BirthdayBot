@@ -130,7 +130,7 @@
             "trustedRoleRemove": "Successfully removed {{TARGET}} from the trusted role list!",
             "marAdd": "Successfully added {{TARGET}} to the member anniversary role list for year {{YEAR}}!",
             "marClear": "Successfully cleared all member anniversary roles!",
-            "marRemove": "Successfully removed {{TARGET}} from the member anniversary role list! (This removes the role/id from all years it was set at)"
+            "marRemove": "Successfully removed the member anniversary role for year {{YEAR}}!"
         }
     },
     "refs": {

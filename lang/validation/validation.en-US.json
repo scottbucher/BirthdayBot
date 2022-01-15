@@ -176,7 +176,7 @@
             "marDuplicateYear": "There is already a member anniversary role set for year {{YEAR}}!",
             "marMaxPaid": "Member anniverasry roles are capped at {{PAID_MAX}}!",
             "emptyMar": "The member anniversary role list is empty!",
-            "notInMar": "That {{TYPE}} is not in the member anniversary role list!"
+            "notInMar": "There isn't a member anniversary role for that year!"
         }
     },
     "refs": {

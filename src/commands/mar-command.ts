@@ -39,31 +39,10 @@ export class MemberAnniversaryRoleCommand implements Command {
                 type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
                 options: [
                     {
-                        name: Lang.getCom('subCommands.role'),
-                        description: 'Role to remove from the member anniversary list.',
-                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
-                        options: [
-                            {
-                                name: Lang.getCom('arguments.role'),
-                                description: 'The role to remove.',
-                                type: ApplicationCommandOptionType.Role.valueOf(),
-                                required: true,
-                            },
-                        ],
-                    },
-                    {
-                        name: Lang.getCom('subCommands.id'),
-                        description:
-                            '[Premium Feature] Remove a deleted role from the member anniversary role list using an id.',
-                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
-                        options: [
-                            {
-                                name: Lang.getCom('arguments.id'),
-                                description: 'The id to remove.',
-                                type: ApplicationCommandOptionType.String.valueOf(),
-                                required: true,
-                            },
-                        ],
+                        name: Lang.getCom('arguments.year'),
+                        description: 'The year to remove.',
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
+                        required: true,
                     },
                 ],
             },

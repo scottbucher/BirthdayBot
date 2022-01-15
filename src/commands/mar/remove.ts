@@ -6,7 +6,7 @@ import { Lang } from '../../services';
 import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
 
-export class MarRemoveIdSubCommand implements Command {
+export class MarRemoveSubCommand implements Command {
     constructor(public memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('subCommands.add'),
@@ -22,29 +22,24 @@ export class MarRemoveIdSubCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let id = intr.options.getString(Lang.getCom('arguments.id'));
+        let year = intr.options.getInteger(Lang.getCom('arguments.year'));
 
         let marData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(intr.guild.id);
 
-        if (
-            marData.memberAnniversaryRoles.map(b => b.MemberAnniversaryRoleDiscordId).includes(id)
-        ) {
+        if (marData.memberAnniversaryRoles.map(b => b.Year).includes(year)) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.notInMar', data.lang(), {
-                    TYPE: Lang.getRef('info', 'types.id', data.lang()),
-                })
+                Lang.getErrorEmbed('validation', 'errorEmbeds.notInMar', data.lang())
             );
             return;
         }
 
-        //TODO: Remove member anniversary roles based on id
-        // await this.memberAnniversaryRoleRepo.removeMemberAnniversaryRole(intr.guild.id, role.id);
+        await this.memberAnniversaryRoleRepo.removeMemberAnniversaryRole(intr.guild.id, year);
 
         await MessageUtils.sendIntr(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.marRemove', data.lang(), {
-                TARGET: id,
+                YEAR: year.toString(),
             })
         );
     }
