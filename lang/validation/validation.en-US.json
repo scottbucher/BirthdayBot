@@ -172,9 +172,11 @@
             "alreadyInTrustedRole": "That {{ROLE}} is already a trusted role!",
             "emptyTrustedRole": "The trusted role list is empty!",
             "notInTrustedRole": "That {{TYPE}} is not in the trusted role list!",
-            "": "",
-            "": "",
-            "": ""
+            "marManaged": "Member Anniversary Roles cannot be managed by an external service!",
+            "marDuplicateYear": "There is already a member anniversary role set for year {{YEAR}}!",
+            "marMaxPaid": "Member anniverasry roles are capped at {{PAID_MAX}}!",
+            "emptyMar": "The member anniversary role list is empty!",
+            "notInMar": "That {{TYPE}} is not in the member anniversary role list!"
         }
     },
     "refs": {

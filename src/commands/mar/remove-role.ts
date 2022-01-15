@@ -3,11 +3,11 @@ import { ApplicationCommandData, CommandInteraction, PermissionString, Role } fr
 import { Command } from '..';
 import { EventData } from '../../models';
 import { Lang } from '../../services';
-import { TrustedRoleRepo } from '../../services/database/repos';
+import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
 
-export class TrustedRoleRemoveRoleSubCommand implements Command {
-    constructor(public trustedRoleRepo: TrustedRoleRepo) {}
+export class MarRemoveRoleSubCommand implements Command {
+    constructor(public memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('subCommands.add'),
         description: undefined,
@@ -36,23 +36,28 @@ export class TrustedRoleRemoveRoleSubCommand implements Command {
             return;
         }
 
-        let trustedRoleData = await this.trustedRoleRepo.getTrustedRoles(intr.guild.id);
+        let marData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(intr.guild.id);
 
-        if (trustedRoleData.trustedRoles.map(b => b.TrustedRoleDiscordId).includes(role.id)) {
+        if (
+            marData.memberAnniversaryRoles
+                .map(b => b.MemberAnniversaryRoleDiscordId)
+                .includes(role.id)
+        ) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.notInTrustedRole', data.lang(), {
+                Lang.getErrorEmbed('validation', 'errorEmbeds.notInMar', data.lang(), {
                     TYPE: Lang.getRef('info', 'types.role', data.lang()),
                 })
             );
             return;
         }
 
-        await this.trustedRoleRepo.addTrustedRole(intr.guild.id, role.id);
+        //TODO: Remove member anniversary roles based on id
+        // await this.memberAnniversaryRoleRepo.removeMemberAnniversaryRole(intr.guild.id, role.id);
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getSuccessEmbed('results', 'successEmbeds.trustedRoleRemove', data.lang(), {
+            Lang.getSuccessEmbed('results', 'successEmbeds.marRemove', data.lang(), {
                 TARGET: role.toString(),
             })
         );

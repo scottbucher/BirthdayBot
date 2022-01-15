@@ -127,7 +127,10 @@
             "blacklistRemove": "Successfully removed {{TARGET}} from the birthday blacklist!",
             "trustedRoleAdd": "Successfully added {{TARGET}} to the trusted role list!",
             "trustedRoleCleared": "Successfully cleared all trusted roles!",
-            "trustedRoleRemove": "Successfully removed {{TARGET}} from the trusted role list!"
+            "trustedRoleRemove": "Successfully removed {{TARGET}} from the trusted role list!",
+            "marAdd": "Successfully added {{TARGET}} to the member anniversary role list for year {{YEAR}}!",
+            "marClear": "Successfully cleared all member anniversary roles!",
+            "marRemove": "Successfully removed {{TARGET}} from the member anniversary role list! (This removes the role/id from all years it was set at)"
         }
     },
     "refs": {

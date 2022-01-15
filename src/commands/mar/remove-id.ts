@@ -3,11 +3,11 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { Command } from '..';
 import { EventData } from '../../models';
 import { Lang } from '../../services';
-import { TrustedRoleRepo } from '../../services/database/repos';
+import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
 import { MessageUtils } from '../../utils';
 
-export class TrustedRoleRemoveIdSubCommand implements Command {
-    constructor(public trustedRoleRepo: TrustedRoleRepo) {}
+export class MarRemoveIdSubCommand implements Command {
+    constructor(public memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('subCommands.add'),
         description: undefined,
@@ -24,24 +24,26 @@ export class TrustedRoleRemoveIdSubCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let id = intr.options.getString(Lang.getCom('arguments.id'));
 
-        let trustedRoleData = await this.trustedRoleRepo.getTrustedRoles(intr.guild.id);
+        let marData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(intr.guild.id);
 
-        if (trustedRoleData.trustedRoles.map(b => b.TrustedRoleDiscordId).includes(id)) {
+        if (
+            marData.memberAnniversaryRoles.map(b => b.MemberAnniversaryRoleDiscordId).includes(id)
+        ) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.notInTrustedRole', data.lang(), {
+                Lang.getErrorEmbed('validation', 'errorEmbeds.notInMar', data.lang(), {
                     TYPE: Lang.getRef('info', 'types.id', data.lang()),
                 })
             );
             return;
         }
 
-        //TODO: update trusted role remove procedure to remove based on id and not position
-        // await this.trustedRoleRepo.removeTrustedRole(intr.guild.id, id);
+        //TODO: Remove member anniversary roles based on id
+        // await this.memberAnniversaryRoleRepo.removeMemberAnniversaryRole(intr.guild.id, role.id);
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getSuccessEmbed('results', 'successEmbeds.trustedRoleRemove', data.lang(), {
+            Lang.getSuccessEmbed('results', 'successEmbeds.marRemove', data.lang(), {
                 TARGET: id,
             })
         );
