@@ -6,6 +6,7 @@ import { EventData } from '../models/internal-models';
 export interface Command {
     metadata: ApplicationCommandData;
     cooldown?: RateLimiter;
+    deferType: CommandDeferType;
     requireDev: boolean;
     requireGuild: boolean;
     requireClientPerms: PermissionString[];
@@ -14,4 +15,10 @@ export interface Command {
     requireVote: boolean;
     requirePremium: boolean;
     execute(intr: CommandInteraction, data: EventData): Promise<void>;
+}
+
+export enum CommandDeferType {
+    PUBLIC = 'PUBLIC',
+    HIDDEN = 'HIDDEN',
+    NONE = 'NONE',
 }

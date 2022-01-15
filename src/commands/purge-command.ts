@@ -6,7 +6,7 @@ import { Lang } from '../services';
 import { UserRepo } from '../services/database/repos';
 import { MessageUtils } from '../utils';
 import { CollectorUtils } from '../utils/collector-utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 let Config = require('../../config/config.json');
 
@@ -19,6 +19,7 @@ export class PurgeCommand implements Command {
         name: Lang.getCom('commands.purge'),
         description: 'Remove your information from the database.',
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = false;
     public requireClientPerms: PermissionString[] = [

@@ -6,7 +6,7 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { UserRepo } from '../services/database/repos';
 import { MessageUtils } from '../utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 export class SetAttemptsCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -29,6 +29,7 @@ export class SetAttemptsCommand implements Command {
             },
         ],
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = true;
     public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];

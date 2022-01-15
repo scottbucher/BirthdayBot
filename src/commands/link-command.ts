@@ -9,7 +9,7 @@ import {
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { MessageUtils } from '../utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 export class LinkCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -54,6 +54,7 @@ export class LinkCommand implements Command {
             },
         ],
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];

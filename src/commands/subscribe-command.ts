@@ -4,7 +4,7 @@ import { PlanName } from '../models';
 import { EventData } from '../models/internal-models';
 import { Lang, Logger, SubscriptionService } from '../services';
 import { MessageUtils } from '../utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -13,6 +13,7 @@ export class SubscribeCommand implements Command {
         name: Lang.getCom('commands.subscribe'),
         description: 'Subscribe to Birthday Bot Premium.',
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];

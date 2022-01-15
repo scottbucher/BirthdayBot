@@ -14,7 +14,7 @@ import { Lang } from '../services';
 import { GuildRepo, UserRepo } from '../services/database/repos';
 import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
 import { CollectorUtils } from '../utils/collector-utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 let Config = require('../../config/config.json');
 
@@ -46,6 +46,7 @@ export class SetCommand implements Command {
         ],
     };
 
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = false;
     public requireClientPerms: PermissionString[] = [

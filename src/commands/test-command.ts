@@ -21,7 +21,7 @@ import {
     UserRepo,
 } from '../services/database/repos';
 import { CelebrationUtils, PermissionUtils, ActionUtils, MessageUtils } from '../utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 let Config = require('../../config/config.json');
 export class TestCommand implements Command {
@@ -67,6 +67,7 @@ export class TestCommand implements Command {
         ],
     };
     public cooldown = new RateLimiter(1, 5000);
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];

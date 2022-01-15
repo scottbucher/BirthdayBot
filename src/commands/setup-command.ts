@@ -12,7 +12,7 @@ import { Lang } from '../services';
 import { GuildRepo } from '../services/database/repos';
 import { GuildUtils, MessageUtils, PermissionUtils } from '../utils';
 import { CollectorUtils } from '../utils/collector-utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 let Config = require('../../config/config.json');
 export class SetupCommand implements Command {
@@ -20,6 +20,7 @@ export class SetupCommand implements Command {
         name: Lang.getCom('commands.setup'),
         description: 'Run the initial setup processes.',
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [

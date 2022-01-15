@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { EventData } from '../models/internal-models';
 import { Lang, Logger } from '../services';
 import { MessageUtils, TimeUtils } from '../utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
@@ -12,6 +12,7 @@ export class PremiumCommand implements Command {
         name: Lang.getCom('commands.premium'),
         description: 'View information about premium, or about your current premium subscription.',
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];

@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 export class ListCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -19,6 +19,7 @@ export class ListCommand implements Command {
             },
         ],
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];

@@ -24,6 +24,7 @@ export class RoleSubCommand implements Command {
         description: undefined,
     };
 
+    public deferType = undefined;
     public requireDev = false;
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [

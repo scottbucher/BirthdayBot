@@ -2,13 +2,15 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
-import { Command } from './command';
+import { MessageUtils } from '../utils';
+import { Command, CommandDeferType } from './command';
 
 export class HelpCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.help'),
         description: 'The help command.',
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];

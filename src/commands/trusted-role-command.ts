@@ -4,7 +4,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { CommandUtils } from '../utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 export class TrustedRoleCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -81,6 +81,7 @@ export class TrustedRoleCommand implements Command {
             },
         ],
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];

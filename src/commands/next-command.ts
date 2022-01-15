@@ -7,7 +7,7 @@ import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import { UserRepo } from '../services/database/repos';
 import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils';
-import { Command } from './command';
+import { Command, CommandDeferType } from './command';
 
 export class NextCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -36,6 +36,7 @@ export class NextCommand implements Command {
             },
         ],
     };
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];

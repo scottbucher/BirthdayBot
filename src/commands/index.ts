@@ -1,6 +1,6 @@
 export { BlacklistCommand } from './blacklist-command';
-export { Command } from './command';
 export { ConfigCommand } from './config-command';
+export { Command, CommandDeferType } from './command';
 export { HelpCommand } from './help-command';
 export { InfoCommand } from './info-command';
 export { LinkCommand } from './link-command';
