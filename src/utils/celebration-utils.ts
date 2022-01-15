@@ -297,7 +297,6 @@ export class CelebrationUtils {
         return `<@&${mentionSetting}>`;
     }
 
-    // TODO: Update with regex and new placeholders
     public static replacePlaceHolders(
         message: string,
         guild: Guild,
@@ -306,22 +305,26 @@ export class CelebrationUtils {
         year: number
     ): string {
         if (message) {
-            message = message.split('<Server>').join(guild.name).split('@Server').join(guild.name);
+            message = message.replace(
+                Lang.getRef('info', 'placeHolders.serverRegex', LangCode.EN_US),
+                '%Server%'
+            );
 
             if (type !== 'serveranniversary')
-                message = message.split('<Users>').join(userList).split('@Users').join(userList);
+                message = message.replace(
+                    Lang.getRef('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    userList
+                );
             if (type !== 'birthday')
-                message = message
-                    .split('<Year>')
-                    .join(year?.toString())
-                    .split('@Year')
-                    .join(year?.toString());
+                message = message.replace(
+                    Lang.getRef('info', 'placeHolders.yearRegex', LangCode.EN_US),
+                    year?.toString()
+                );
         }
 
         return message;
     }
 
-    // TODO: Update with regex and new placeholders
     public static replaceLangPlaceHolders(
         message: string,
         guild: Guild,
@@ -330,27 +333,24 @@ export class CelebrationUtils {
     ): string {
         if (message) {
             let serverPlaceholder = Lang.getRef('info', 'placeHolders.server', LangCode.EN_US);
-            message = message
-                .split('<Server>')
-                .join(serverPlaceholder)
-                .split('@Server')
-                .join(serverPlaceholder);
+            message = message.replace(
+                Lang.getRef('info', 'placeHolders.serverRegex', LangCode.EN_US),
+                serverPlaceholder
+            );
 
             if (type !== 'serveranniversary') {
                 let userPlaceholder = Lang.getRef('info', 'placeHolders.users', LangCode.EN_US);
-                message = message
-                    .split('<Users>')
-                    .join(userString ?? userPlaceholder)
-                    .split('@Users')
-                    .join(userString ?? userPlaceholder);
+                message = message.replace(
+                    Lang.getRef('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    userString ?? userPlaceholder
+                );
             }
             if (type !== 'birthday') {
                 let yearPlaceholder = Lang.getRef('info', 'placeHolders.year', LangCode.EN_US);
-                message = message
-                    .split('<Year>')
-                    .join(yearPlaceholder)
-                    .split('@Year')
-                    .join(yearPlaceholder);
+                message = message.replace(
+                    Lang.getRef('info', 'placeHolders.yearRegex', LangCode.EN_US),
+                    yearPlaceholder
+                );
             }
         }
 
