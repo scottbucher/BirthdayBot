@@ -79,7 +79,7 @@ export class MessageCommand implements Command {
                             {
                                 name: Lang.getCom('arguments.time'),
                                 description: 'The time setting for a message type.',
-                                type: ApplicationCommandOptionType.Number.valueOf(),
+                                type: ApplicationCommandOptionType.Integer.valueOf(),
                                 required: true,
                             },
                         ],
@@ -191,7 +191,7 @@ export class MessageCommand implements Command {
                         name: Lang.getCom('arguments.position'),
                         description:
                             'The position number of the message, found in /message list. Leave empty to test the default message.',
-                        type: ApplicationCommandOptionType.Number.valueOf(),
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
                         required: false,
                     },
                 ],
@@ -232,7 +232,7 @@ export class MessageCommand implements Command {
                     {
                         name: Lang.getCom('arguments.page'),
                         description: 'An optional page number to jump to.',
-                        type: ApplicationCommandOptionType.String.valueOf(),
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
                         required: false,
                         min_value: 1,
                     },

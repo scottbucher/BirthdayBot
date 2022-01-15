@@ -71,7 +71,7 @@ export class BlacklistCommand implements Command {
                     {
                         name: Lang.getCom('arguments.page'),
                         description: 'An optional page number to jump to.',
-                        type: ApplicationCommandOptionType.String.valueOf(),
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
                         required: false,
                         min_value: 1,
                     },

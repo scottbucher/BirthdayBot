@@ -59,7 +59,7 @@ export class TestCommand implements Command {
                 name: Lang.getCom('arguments.year'),
                 description:
                     'Optional year argument to test the event on. Member Anniversaries only',
-                type: ApplicationCommandOptionType.Number.valueOf(),
+                type: ApplicationCommandOptionType.Integer.valueOf(),
                 required: false,
                 min_value: 1,
                 max_value: 100,
@@ -86,7 +86,7 @@ export class TestCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let type = intr.options.getString(Lang.getCom('arguments.type'));
         let user = intr.options.getUser(Lang.getCom('arguments.user'));
-        let year = intr.options.getNumber(Lang.getCom('arguments.year'));
+        let year = intr.options.getInteger(Lang.getCom('arguments.year'));
 
         // bday test <type> [user] [year]
         let guild = intr.guild;

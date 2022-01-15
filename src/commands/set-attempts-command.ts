@@ -22,7 +22,7 @@ export class SetAttemptsCommand implements Command {
             {
                 name: Lang.getCom('arguments.number'),
                 description: 'The number of attempts you are setting their total to.',
-                type: ApplicationCommandOptionType.Number.valueOf(),
+                type: ApplicationCommandOptionType.Integer.valueOf(),
                 required: true,
                 min_value: 0,
                 max_value: 127,
@@ -41,7 +41,7 @@ export class SetAttemptsCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let target = intr.options.getUser('arguments.user');
-        let amount = intr.options.getNumber('arguments.number');
+        let amount = intr.options.getInteger('arguments.number');
 
         let userData = await this.userRepo.getUser(target.id);
 

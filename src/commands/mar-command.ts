@@ -26,7 +26,7 @@ export class MemberAnniversaryRoleCommand implements Command {
                         name: Lang.getCom('arguments.year'),
                         description:
                             'The year of the member anniversary the role should be given at.',
-                        type: ApplicationCommandOptionType.Number.valueOf(),
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
                         required: true,
                         min_value: 1,
                         max_value: 100,
@@ -80,7 +80,7 @@ export class MemberAnniversaryRoleCommand implements Command {
                     {
                         name: Lang.getCom('arguments.page'),
                         description: 'An optional page number to jump to.',
-                        type: ApplicationCommandOptionType.String.valueOf(),
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
                         required: false,
                         min_value: 1,
                     },
