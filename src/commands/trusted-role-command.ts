@@ -3,6 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { CommandUtils } from '../utils';
 import { Command } from './command';
 
 export class TrustedRoleCommand implements Command {
@@ -88,7 +89,18 @@ export class TrustedRoleCommand implements Command {
     public requireVote = false;
     public requirePremium = false;
 
+    constructor(private commands: Command[]) {}
+
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        // Yeet
+        let command = CommandUtils.findCommand(this.commands, intr.options.getSubcommand());
+        if (!command) {
+            // TODO: Should we log error here?
+            return;
+        }
+
+        let passesChecks = await CommandUtils.runChecks(command, intr, data);
+        if (passesChecks) {
+            await command.execute(intr, data);
+        }
     }
 }

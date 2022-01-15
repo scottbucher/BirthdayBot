@@ -45,6 +45,12 @@ import {
     UseTimezoneSubCommand,
 } from './commands/config-settings';
 import {
+    TrustedRoleAddSubCommand,
+    TrustedRoleClearSubCommand,
+    TrustedRoleRemoveIdSubCommand,
+    TrustedRoleRemoveRoleSubCommand,
+} from './commands/trusted-role';
+import {
     CommandHandler,
     GuildJoinHandler,
     GuildLeaveHandler,
@@ -119,6 +125,12 @@ async function start(): Promise<void> {
     );
     let blacklistRemoveIdSubCommand = new BlacklistRemoveIdSubCommand(blacklistRepo);
 
+    // Trusted Role Sub Commands
+    let trustedRoleAddSubCommand = new TrustedRoleAddSubCommand(trustedRoleRepo);
+    let trustedRoleClearSubCommand = new TrustedRoleClearSubCommand(trustedRoleRepo);
+    let trustedRoleRemoveRoleSubCommand = new TrustedRoleRemoveRoleSubCommand(trustedRoleRepo);
+    let trustedRoleRemoveIdSubCommand = new TrustedRoleRemoveIdSubCommand(trustedRoleRepo);
+
     // Commands
     let commands: Command[] = [
         new HelpCommand(),
@@ -150,7 +162,12 @@ async function start(): Promise<void> {
         ]),
         new MessageCommand(),
         new MemberAnniversaryRoleCommand(),
-        new TrustedRoleCommand(),
+        new TrustedRoleCommand([
+            trustedRoleAddSubCommand,
+            trustedRoleClearSubCommand,
+            trustedRoleRemoveRoleSubCommand,
+            trustedRoleRemoveIdSubCommand,
+        ]),
         new SetupCommand(guildRepo),
         new SettingsCommand(trustedRoleRepo),
         new SetAttemptsCommand(userRepo),

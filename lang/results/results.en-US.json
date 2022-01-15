@@ -124,7 +124,10 @@
             "roleSet": "Successfully set the {{TYPE}} ole to {{ROLE}}",
             "blacklistAdd": "Successfully added {{TARGET}} to the birthday blacklist!",
             "blacklistCleared": "Successfully cleared the birthday blacklist!",
-            "blacklistRemove": "Successfully removed {{TARGET}} from the birthday blacklist!"
+            "blacklistRemove": "Successfully removed {{TARGET}} from the birthday blacklist!",
+            "trustedRoleAdd": "Successfully added {{TARGET}} to the trusted role list!",
+            "trustedRoleCleared": "Successfully cleared all trusted roles!",
+            "trustedRoleRemove": "Successfully removed {{TARGET}} from the trusted role list!"
         }
     },
     "refs": {
