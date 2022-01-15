@@ -3,6 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 
 import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
+import { CommandUtils } from '../utils';
 import { Command } from './command';
 
 // did I not split this up correctly?
@@ -282,7 +283,18 @@ export class MessageCommand implements Command {
     public requireVote = false;
     public requirePremium = false;
 
+    constructor(public commands: Command[]) {}
+
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        // await MessageUtils.sendIntr(intr, Lang.getEmbed('embeds.help', data.lang()));
+        let command = CommandUtils.findCommand(this.commands, intr.options.getSubcommand());
+        if (!command) {
+            // TODO: Should we log error here?
+            return;
+        }
+
+        let passesChecks = await CommandUtils.runChecks(command, intr, data);
+        if (passesChecks) {
+            await command.execute(intr, data);
+        }
     }
 }

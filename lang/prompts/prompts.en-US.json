@@ -362,6 +362,20 @@
                 },
                 "color": "{{COM:colors.warn}}"
             }
+        },
+        "customMessage": {
+            "colorSelection": {
+                "title": "Custom Message Color Selection",
+                "description": [
+                    "Please input the color you would like your message. [(?)]({{COM:docLinks.whatIsMessageEmbedColor}})",
+                    "Both color names and hex values are accepted."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.expire}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            }
         }
     },
     "refs": {

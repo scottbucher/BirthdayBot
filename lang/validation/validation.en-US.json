@@ -140,6 +140,21 @@
                 },
                 "timestamp": true,
                 "color": "{{COM:colors.error}}"
+            },
+            "duplicateUserCustomMessage": {
+                "title": "Caution",
+                "description": [
+                    "There is already a {{TYPE}} custom message set for this user, would you like to overwrite it?",
+                    "",
+                    "**Current Message**: {{CURRENT_MESSAGE}}",
+                    "",
+                    "**New Message**: {{NEW_MESSAGE}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.irreversible}}",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.warn}}"
             }
         },
         "errorEmbeds": {
@@ -176,7 +191,8 @@
             "marDuplicateYear": "There is already a member anniversary role set for year {{YEAR}}!",
             "marMaxPaid": "Member anniverasry roles are capped at {{PAID_MAX}}!",
             "emptyMar": "The member anniversary role list is empty!",
-            "notInMar": "There isn't a member anniversary role for that year!"
+            "notInMar": "There isn't a member anniversary role for that year!",
+            "duplicateMessage": "Duplicate message found for this server!"
         }
     },
     "refs": {

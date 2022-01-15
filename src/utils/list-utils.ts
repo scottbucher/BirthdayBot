@@ -120,6 +120,7 @@ export class ListUtils {
         return embed.setThumbnail(guild.iconURL());
     }
 
+    // TODO: update placeholders with regex and test
     public static async getCustomUserMessageListEmbed(
         guild: Guild,
         customMessageResults: CustomMessages,

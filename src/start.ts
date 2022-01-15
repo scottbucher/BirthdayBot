@@ -43,7 +43,7 @@ import {
     TrustedPreventsMsgSubCommand,
     TrustedPreventsRoleSubCommand,
     UseTimezoneSubCommand,
-} from './commands/config-settings';
+} from './commands/config';
 import { MarAddSubCommand, MarClearSubCommand, MarRemoveSubCommand } from './commands/mar';
 import {
     TrustedRoleAddSubCommand,
@@ -166,7 +166,7 @@ async function start(): Promise<void> {
             channelSubCommand,
             roleSubCommand,
         ]),
-        new MessageCommand(),
+        new MessageCommand([]),
         new MemberAnniversaryRoleCommand([
             marAddSubCommand,
             marClearSubCommand,

@@ -297,6 +297,7 @@ export class CelebrationUtils {
         return `<@&${mentionSetting}>`;
     }
 
+    // TODO: Update with regex and new placeholders
     public static replacePlaceHolders(
         message: string,
         guild: Guild,
@@ -320,6 +321,7 @@ export class CelebrationUtils {
         return message;
     }
 
+    // TODO: Update with regex and new placeholders
     public static replaceLangPlaceHolders(
         message: string,
         guild: Guild,
