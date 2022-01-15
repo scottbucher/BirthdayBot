@@ -154,13 +154,19 @@ export class ListUtils {
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('info', 'terms.unknownMember', LangCode.EN_US)}** `
-                } ${customMessage.Message.replace('<Users>', member.toString())}\n`;
+                } ${customMessage.Message.replace(
+                    Lang.getRef('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    member.toString()
+                )}\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
                         : `**${Lang.getRef('info', 'terms.unknownMember', LangCode.EN_US)}** `
-                } ~~${customMessage.Message.replace('<Users>', member.toString())}~~\n`;
+                } ~~${customMessage.Message.replace(
+                    Lang.getRef('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    member.toString()
+                )}~~\n`;
             }
 
             // Added embedded part
