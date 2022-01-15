@@ -98,7 +98,7 @@
             }
         },
         "customMessage": {
-            "addCustomMessage": {
+            "add": {
                 "title": "Add Custom Message",
                 "description": [
                     "Successfully added the {{DISPLAY_TYPE}} message:",
@@ -123,7 +123,7 @@
                 },
                 "color": "{{COM:colors.success}}"
             },
-            "addCustomUserMessage": {
+            "addUserSpecific": {
                 "title": "Add Custom Message",
                 "description": [
                     "Successfully added the user {{DISPLAY_TYPE}} message for {{USER}}:",

@@ -165,6 +165,48 @@
                     "Example: `#4EEFFF` or `4EEFFF`"
                 ],
                 "color": "{{COM:colors.error}}"
+            },
+            "maxFreeCustomMessages": {
+                "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{FREE_MAX}}**)",
+                "footer": {
+                    "text": "To have up to {{PAID_MAX}} custom {{TYPE}} messages try {{REF:bot.name}} Premium!",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.error}}"
+            },
+            "maxPaidCustomMessages": {
+                "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{PAID_MAX}}**)",
+                "color": "{{COM:colors.error}}"
+            },
+            "maxCustomMessageSize": {
+                "description": "Custom Messages are maxed at {{MAX_SIZE}} characters!",
+                "color": "{{COM:colors.error}}"
+            },
+            "noUserPlaceholder": {
+                "description": [
+                    "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where the member names will appear.",
+                    "Ex: `/message {{REF:types.add}} {{TYPE}} {{EXAMPLE_MESSAGE}}`"
+                ],
+                "color": "{{COM:colors.error}}"
+            },
+            "noServerPlaceholder": {
+                "description": [
+                    "Please include the `{{REF:placeHolders.server}}` placeholder somewhere in the message. This indicates where the server name will appear.",
+                    "Ex: `/message {{REF:types.add}} {{REF:types.serverAnniversary}} {{REF:defaults.serverAnniversaryMessage}}`",
+                    "",
+                    "Tip: You can also use the `{{REF:placeHolders.year}}` placeholder for the anniversary year."
+                ],
+                "color": "{{COM:colors.error}}"
+            },
+            "userSpecificMessagesNeedsPremium": {
+                "title": "{{REF:terms.premiumRequired}}",
+                "description": "User-specific messages are a premium only feature! View information about **{{REF:bot.name}} Premium** using `/premium`!",
+                "footer": {
+                    "text": "{{REF:footers.whyPremium}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
             }
         },
         "errorEmbeds": {
@@ -219,6 +261,7 @@
         },
         "footers": {
             "tryAgain": "Please try again!",
+            "whyPremium": "Premium helps us support and maintain the bot!",
             "joinSupport": "Please join our support server if you have any questions."
         }
     }

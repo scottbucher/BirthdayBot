@@ -1,18 +1,13 @@
-import { channel } from 'diagnostics_channel';
 import {
     ApplicationCommandData,
     CommandInteraction,
     GuildMember,
     Message,
-    MessageReaction,
     PermissionString,
-    Role,
-    User,
 } from 'discord.js';
 
 import { Command } from '..';
 import { EventData } from '../../models';
-import { LangCode } from '../../models/enums';
 import { Lang } from '../../services';
 import { CustomMessageRepo } from '../../services/database/repos';
 import { CelebrationUtils, ColorUtils, MessageUtils } from '../../utils';
@@ -55,15 +50,20 @@ export class MessageAddSubCommand implements Command {
             if (target.user.bot) {
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('validation.noUserMessageForBot', LangCode.EN_US)
+                    Lang.getEmbed('validation', 'errorEmbeds.noUserMessageForBot', data.lang())
                 );
                 return;
             } else if (!hasPremium) {
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('premiumRequired.userSpecificMessages', LangCode.EN_US, {
-                        ICON: msg.client.user.displayAvatarURL(),
-                    })
+                    Lang.getEmbed(
+                        'validation',
+                        'embeds.userSpecificMessagesNeedsPremium',
+                        data.lang(),
+                        {
+                            ICON: intr.client.user.displayAvatarURL(),
+                        }
+                    )
                 );
                 return;
             }
@@ -81,22 +81,22 @@ export class MessageAddSubCommand implements Command {
             .replace(
                 target && type !== 'serveranniversary'
                     ? mentionWithNickNameFormat
-                    : Lang.getRef('placeHolders.usersRegex', LangCode.EN_US),
+                    : Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
                 '%Users%'
             )
             .replace(
                 target && type !== 'serveranniversary'
                     ? target?.toString()
-                    : Lang.getRef('placeHolders.usersRegex', LangCode.EN_US),
+                    : Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
                 '%Users%'
             )
-            .replace(Lang.getRef('placeHolders.serverRegex', LangCode.EN_US), '<Server>')
-            .replace(Lang.getRef('placeHolders.yearRegex', LangCode.EN_US), '<Year>');
+            .replace(Lang.getRef('info', 'placeHolders.serverRegex', data.lang()), '%Server%')
+            .replace(Lang.getRef('info', 'placeHolders.yearRegex', data.lang()), '%Year%');
 
         if (message.length > Config.validation.message.maxLength) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation.maxCustomMessageSize', LangCode.EN_US, {
+                Lang.getEmbed('validation', 'embeds.maxCustomMessageSize', data.lang(), {
                     MAX_SIZE: Config.validation.message.maxLength.toString(),
                 })
             );
@@ -105,41 +105,42 @@ export class MessageAddSubCommand implements Command {
 
         let typeDisplayName =
             type === 'birthday'
-                ? Lang.getRef('terms.birthday', LangCode.EN_US).toLowerCase()
+                ? Lang.getRef('info', 'terms.birthday', data.lang()).toLowerCase()
                 : type === 'memberanniversary'
-                ? Lang.getRef('terms.memberAnniversary', LangCode.EN_US).toLowerCase()
-                : Lang.getRef('terms.serverAnniversary', LangCode.EN_US).toLowerCase();
+                ? Lang.getRef('info', 'terms.memberAnniversary', data.lang()).toLowerCase()
+                : Lang.getRef('info', 'terms.serverAnniversary', data.lang()).toLowerCase();
 
         if (type === 'birthday' || type === 'memberanniversary') {
             // Can also use year and server name placeholder
             if (!message.includes('%Users%')) {
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('validation.noUserPlaceholder', LangCode.EN_US, {
+                    Lang.getEmbed('validation', 'embeds.noUserPlaceholder', data.lang(), {
                         TYPE: type,
                         EXAMPLE_MESSAGE: Lang.getRef(
+                            'info',
                             type === 'birthday'
                                 ? 'defaults.birthdayMessage'
                                 : 'defaults.memberAnniversaryMessage',
-                            LangCode.EN_US
+                            data.lang()
                         ),
                     })
                 );
                 return;
             }
         } else {
-            if (!message.includes('<Server>')) {
+            if (!message.includes('%Server%')) {
                 // NO SERVER PLACEHOLDER (can also use year placeholder)
                 // TODO: Should this be required?
                 await MessageUtils.sendIntr(
                     intr,
-                    Lang.getEmbed('validation.noServerPlaceholder', LangCode.EN_US)
+                    Lang.getEmbed('validation', 'embeds.noServerPlaceholder', data.lang())
                 );
                 return;
             }
         }
 
-        let customMessages = await this.customMessageRepo.getCustomMessages(msg.guild.id, type);
+        let customMessages = await this.customMessageRepo.getCustomMessages(intr.guild.id, type);
 
         let messages = customMessages.customMessages.filter(message => message.Type === type);
 
@@ -162,20 +163,20 @@ export class MessageAddSubCommand implements Command {
 
         if (customMessages) {
             if (globalMessageCount >= maxMessageCountFree && !hasPremium) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.maxFreeCustomMessages', LangCode.EN_US, {
+                await MessageUtils.sendIntr(
+                    intr,
+                    Lang.getEmbed('validation', 'embeds.maxFreeCustomMessages', data.lang(), {
                         TYPE: typeDisplayName,
                         FREE_MAX: maxMessageCountFree,
                         PAID_MAX: maxMessageCountPaid,
-                        ICON: msg.client.user.displayAvatarURL(),
+                        ICON: intr.client.user.displayAvatarURL(),
                     })
                 );
                 return;
             } else if (globalMessageCount >= maxMessageCountPaid) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.maxPaidCustomMessages', LangCode.EN_US, {
+                await MessageUtils.sendIntr(
+                    intr,
+                    Lang.getEmbed('validation', 'embeds.maxPaidCustomMessages', data.lang(), {
                         TYPE: typeDisplayName,
                         PAID_MAX: maxMessageCountPaid,
                     })
@@ -197,7 +198,7 @@ export class MessageAddSubCommand implements Command {
                         Lang.getEmbed(
                             'validation',
                             'embeds.duplicateUserCustomMessage',
-                            LangCode.EN_US,
+                            data.lang(),
                             {
                                 TYPE: typeDisplayName,
                                 CURRENT_MESSAGE: userMessage[0].Message.replace(
@@ -234,7 +235,7 @@ export class MessageAddSubCommand implements Command {
                         Lang.getErrorEmbed(
                             'validation',
                             'errorEmbeds.duplicateMessage',
-                            LangCode.EN_US
+                            data.lang()
                         )
                     );
                     return;
@@ -254,9 +255,9 @@ export class MessageAddSubCommand implements Command {
                 );
             });
 
-            let colorSelectMessage = await MessageUtils.sendIntr(
+            await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('prompts', 'customMessage.colorSelection', LangCode.EN_US, {
+                Lang.getEmbed('prompts', 'customMessage.colorSelection', data.lang(), {
                     ICON: intr.client.user.displayAvatarURL(),
                 })
             );
@@ -267,7 +268,7 @@ export class MessageAddSubCommand implements Command {
                 if (!check) {
                     await MessageUtils.sendIntr(
                         intr,
-                        Lang.getEmbed('validation', 'embeds.invalidColor', LangCode.EN_US)
+                        Lang.getEmbed('validation', 'embeds.invalidColor', data.lang())
                     );
                     return;
                 }
@@ -280,7 +281,7 @@ export class MessageAddSubCommand implements Command {
         let option = await CollectorUtils.getBooleanFromReact(
             intr,
             data,
-            Lang.getEmbed('prompts', 'customMessage.embedSelection', LangCode.EN_US, {
+            Lang.getEmbed('prompts', 'customMessage.embedSelection', data.lang(), {
                 ICON: intr.client.user.displayAvatarURL(),
             })
         );
@@ -301,35 +302,35 @@ export class MessageAddSubCommand implements Command {
         await MessageUtils.sendIntr(
             intr,
             userId === '0'
-                ? Lang.getEmbed('results.addCustomMessage', LangCode.EN_US, {
+                ? Lang.getEmbed('results', 'customMessage.add', data.lang(), {
                       DISPLAY_TYPE: typeDisplayName,
                       MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
                           message,
-                          msg.guild,
+                          intr.guild,
                           type,
                           null
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
                       HAS_PREMIUM: !hasPremium
-                          ? Lang.getRef('info', 'conditionals.needColorForPremium', LangCode.EN_US)
-                          : Lang.getRef('info', 'conditionals.colorForPremium', LangCode.EN_US, {
+                          ? Lang.getRef('info', 'conditionals.needColorForPremium', data.lang())
+                          : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
                                 COLOR_HEX: colorHex,
                             }),
                       TYPE: type,
-                      ICON: msg.client.user.displayAvatarURL(),
+                      ICON: intr.client.user.displayAvatarURL(),
                   })
-                : Lang.getEmbed('results.addCustomUserMessage', LangCode.EN_US, {
+                : Lang.getEmbed('results', 'customMessage.addUserSpecific', data.lang(), {
                       DISPLAY_TYPE: typeDisplayName,
                       MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
                           message,
-                          msg.guild,
+                          intr.guild,
                           type,
                           target?.toString()
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
                       HAS_PREMIUM: !hasPremium
-                          ? Lang.getRef('info', 'conditionals.colorForPremium', LangCode.EN_US)
-                          : Lang.getRef('info', 'conditionals.colorForPremium', LangCode.EN_US, {
+                          ? Lang.getRef('info', 'conditionals.colorForPremium', data.lang())
+                          : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
                                 COLOR_HEX: colorHex,
                             }),
                       TYPE:
@@ -337,7 +338,7 @@ export class MessageAddSubCommand implements Command {
                               ? 'userSpecificBirthday'
                               : 'userSpecificMemberAnniversary',
                       USER: target.toString(),
-                      ICON: msg.client.user.displayAvatarURL(),
+                      ICON: intr.client.user.displayAvatarURL(),
                   })
         );
     }
