@@ -27,7 +27,12 @@ import {
     ViewCommand,
     VoteCommand,
 } from './commands';
-import { BlacklistAddSubCommand, BlacklistClearSubCommand } from './commands/blacklist';
+import {
+    BlacklistAddSubCommand,
+    BlacklistClearSubCommand,
+    BlacklistRemoveIdSubCommand,
+    BlacklistRemoveRoleOrUserSubCommand,
+} from './commands/blacklist';
 import {
     ChannelSubCommand,
     DateFormatSubCommand,
@@ -109,6 +114,10 @@ async function start(): Promise<void> {
     // Blacklist Sub Commands
     let blacklistAddSubCommand = new BlacklistAddSubCommand(blacklistRepo);
     let blacklistClearSubCommand = new BlacklistClearSubCommand(blacklistRepo);
+    let blacklistRemoveRoleOrUserSubCommand = new BlacklistRemoveRoleOrUserSubCommand(
+        blacklistRepo
+    );
+    let blacklistRemoveIdSubCommand = new BlacklistRemoveIdSubCommand(blacklistRepo);
 
     // Commands
     let commands: Command[] = [
@@ -122,7 +131,12 @@ async function start(): Promise<void> {
             customMessageRepo,
             memberAnniversaryRoleRepo
         ),
-        new BlacklistCommand([blacklistAddSubCommand, blacklistClearSubCommand]),
+        new BlacklistCommand([
+            blacklistAddSubCommand,
+            blacklistClearSubCommand,
+            blacklistRemoveRoleOrUserSubCommand,
+            blacklistRemoveIdSubCommand,
+        ]),
         new ConfigCommand([
             nameFormatSubCommand,
             timezoneSubCommand,

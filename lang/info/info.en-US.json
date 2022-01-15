@@ -953,7 +953,8 @@
             "update": "update",
             "server": "server",
             "claim": "claim",
-            "role": "role"
+            "role": "role",
+            "id": "id"
         },
         "terms": {
             "timeZone": "Time Zone",
