@@ -1,9 +1,9 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { EventData } from '../models/internal-models';
+import { Command, CommandDeferType } from '.';
+import { EventData } from '../models';
 import { Lang } from '../services';
 import { MessageUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
 
 export class MapCommand implements Command {
     public metadata: ApplicationCommandData = {

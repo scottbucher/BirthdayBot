@@ -1,27 +1,27 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
+import { ApplicationCommandOptionType } from 'discord-api-types';
 import {
     ApplicationCommandData,
+    PermissionString,
     CommandInteraction,
     GuildMember,
-    MessageEmbed,
-    PermissionString,
-    Role,
     TextChannel,
+    Role,
+    MessageEmbed,
 } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
 
+import { Command, CommandDeferType } from '.';
+import { EventData } from '../models';
 import { UserData, CustomMessage, MemberAnniversaryRole } from '../models/database';
-import { EventData } from '../models/internal-models';
 import { Lang } from '../services';
 import {
+    UserRepo,
     BlacklistRepo,
+    TrustedRoleRepo,
     CustomMessageRepo,
     MemberAnniversaryRoleRepo,
-    TrustedRoleRepo,
-    UserRepo,
 } from '../services/database/repos';
 import { CelebrationUtils, PermissionUtils, ActionUtils, MessageUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
 
 let Config = require('../../config/config.json');
 export class TestCommand implements Command {
