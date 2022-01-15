@@ -97,6 +97,58 @@
                 "timestamp": true
             }
         },
+        "customMessage": {
+            "addCustomMessage": {
+                "title": "Add Custom Message",
+                "description": [
+                    "Successfully added the {{DISPLAY_TYPE}} message:",
+                    "",
+                    "{{MESSAGE}}",
+                    "",
+                    "{{HAS_PREMIUM}}",
+                    "Embedded: `{{IS_EMBED}}`"
+                ],
+                "fields": [
+                    {
+                        "name": "Actions",
+                        "value": [
+                            "`/message {{REF:types.list}} {{TYPE}} [page]` - List all custom {{DISPLAY_TYPE}} messages.",
+                            "`/message {{REF:types.test}} {{TYPE}} <position>` - Test a {{DISPLAY_TYPE}} message."
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "{{COM:colors.confirm}} Message added.",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.success}}"
+            },
+            "addCustomUserMessage": {
+                "title": "Add Custom Message",
+                "description": [
+                    "Successfully added the user {{DISPLAY_TYPE}} message for {{USER}}:",
+                    "",
+                    "{{MESSAGE}}",
+                    "",
+                    "{{HAS_PREMIUM}}",
+                    "Embedded: `{{IS_EMBED}}`"
+                ],
+                "fields": [
+                    {
+                        "name": "Actions",
+                        "value": [
+                            "`/message {{REF:types.list}} {{TYPE}} [page]` - List all custom user specific {{DISPLAY_TYPE}} messages.",
+                            "`/message {{REF:types.test}} {{TYPE}} <position>` - Test a user specific {{DISPLAY_TYPE}} message."
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "{{COM:colors.confirm}} Message added.",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.success}}"
+            }
+        },
         "successEmbeds": {
             "dateFormatSet": [
                 "Successfully updated the server's date format setting to `{{SETTING}}`!",
