@@ -207,6 +207,18 @@
                 },
                 "timestamp": true,
                 "color": "{{COM:colors.error}}"
+            },
+            "customMessageInvalidMessageNumber": {
+                "title": "Remove Custom Message",
+                "description": [
+                    "Message number does not exist!",
+                    "View your server's custom messages with `/message list <type>`!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.error}}"
             }
         },
         "errorEmbeds": {

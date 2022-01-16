@@ -147,6 +147,15 @@
                     "icon": "{{ICON}}"
                 },
                 "color": "{{COM:colors.success}}"
+            },
+            "remove": {
+                "title": "Remove Custom Message",
+                "description": "{{MESSAGE}}",
+                "footer": {
+                    "text": "{{COM:colors.confirm}} Message Removed",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.success}}"
             }
         },
         "successEmbeds": {

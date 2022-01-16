@@ -329,7 +329,7 @@ export class CelebrationUtils {
         message: string,
         guild: Guild,
         type: string,
-        userString: string
+        userId: string
     ): string {
         if (message) {
             let serverPlaceholder = Lang.getRef('info', 'placeHolders.server', LangCode.EN_US);
@@ -342,7 +342,7 @@ export class CelebrationUtils {
                 let userPlaceholder = Lang.getRef('info', 'placeHolders.users', LangCode.EN_US);
                 message = message.replace(
                     Lang.getRef('info', 'placeHolders.usersRegex', LangCode.EN_US),
-                    userString ?? userPlaceholder
+                    userId ? `<@${userId}>` : userPlaceholder
                 );
             }
             if (type !== 'birthday') {
