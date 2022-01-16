@@ -195,6 +195,13 @@ export class MessageCommand implements Command {
                         type: ApplicationCommandOptionType.Integer.valueOf(),
                         required: false,
                     },
+                    {
+                        name: Lang.getCom('arguments.user'),
+                        description:
+                            'The user to test the message on. This will default to the Bot.',
+                        type: ApplicationCommandOptionType.User.valueOf(),
+                        required: false,
+                    },
                 ],
             },
             {
