@@ -208,10 +208,10 @@
                 "timestamp": true,
                 "color": "{{COM:colors.error}}"
             },
-            "customMessageInvalidMessageNumber": {
-                "title": "Remove Custom Message",
+            "messageDoesNotExist": {
+                "title": "Test Custom Message",
                 "description": [
-                    "Message number does not exist!",
+                    "Message does not exist!",
                     "View your server's custom messages with `/message list <type>`!"
                 ],
                 "footer": {
@@ -257,7 +257,8 @@
             "emptyMar": "The member anniversary role list is empty!",
             "notInMar": "There isn't a member anniversary role for that year!",
             "duplicateMessage": "Duplicate message found for this server!",
-            "noCustomMessagesGeneric": "This server doesn't have any {{DISPLAY_TYPE}}!"
+            "noCustomMessagesGeneric": "This server doesn't have any {{DISPLAY_TYPE}}!",
+            "noDefaultUserSpecificMessages": "There aren't default user specific messages! Please specify once and trying again!"
         }
     },
     "refs": {

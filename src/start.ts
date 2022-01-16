@@ -49,6 +49,7 @@ import {
     MessageAddSubCommand,
     MessageClearSubCommand,
     MessageRemoveSubCommand,
+    MessageTestSubCommand,
 } from './commands/message';
 import {
     TrustedRoleAddSubCommand,
@@ -146,6 +147,7 @@ async function start(): Promise<void> {
     let messageAddSubCommand = new MessageAddSubCommand(customMessageRepo);
     let messageClearSubCommand = new MessageClearSubCommand(customMessageRepo);
     let messageRemoveSubCommand = new MessageRemoveSubCommand(customMessageRepo);
+    let messageTestSubCommand = new MessageTestSubCommand(customMessageRepo);
 
     // Commands
     let commands: Command[] = [
@@ -176,7 +178,12 @@ async function start(): Promise<void> {
             channelSubCommand,
             roleSubCommand,
         ]),
-        new MessageCommand([messageAddSubCommand, messageClearSubCommand, messageRemoveSubCommand]),
+        new MessageCommand([
+            messageAddSubCommand,
+            messageClearSubCommand,
+            messageRemoveSubCommand,
+            messageTestSubCommand,
+        ]),
         new MemberAnniversaryRoleCommand([
             marAddSubCommand,
             marClearSubCommand,

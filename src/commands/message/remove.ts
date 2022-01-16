@@ -66,9 +66,9 @@ export class MessageRemoveSubCommand implements Command {
         if (!message) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed(
+                Lang.getErrorEmbed(
                     'validation',
-                    'embeds.customMessageInvalidMessageNumber',
+                    'embeds.custommessageInvalidPosition',
                     LangCode.EN_US,
                     {
                         ICON: intr.client.user.displayAvatarURL(),
