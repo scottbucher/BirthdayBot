@@ -73,7 +73,8 @@
         "number": "number",
         "type": "type",
         "date": "date",
-        "timezone": "timezone"
+        "timezone": "timezone",
+        "userCount": "user_count"
     },
     "settingType": {
         "nameFormat": "nameFormat",

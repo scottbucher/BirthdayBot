@@ -196,11 +196,13 @@ export class MessageCommand implements Command {
                         required: false,
                     },
                     {
-                        name: Lang.getCom('arguments.user'),
+                        name: Lang.getCom('arguments.userCount'),
                         description:
-                            'The user to test the message on. This will default to the Bot.',
-                        type: ApplicationCommandOptionType.User.valueOf(),
+                            'The number of users to place in this message to imitate multiple birthdays in one message. Defaults to 1.',
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
                         required: false,
+                        min_value: 1,
+                        max_value: 5,
                     },
                 ],
             },
