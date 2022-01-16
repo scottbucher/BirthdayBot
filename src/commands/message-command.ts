@@ -273,6 +273,48 @@ export class MessageCommand implements Command {
                     },
                 ],
             },
+            {
+                name: Lang.getCom('subCommands.remove'),
+                description: 'Remove a custom message of a certain type.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: 'type',
+                        description: 'What type of message is being removed.',
+                        required: true,
+                        type: ApplicationCommandOptionType.String.valueOf(),
+                        choices: [
+                            {
+                                name: 'birthday',
+                                value: 'BIRTHDAY',
+                            },
+                            {
+                                name: 'memberAnniversary',
+                                value: 'MEMBER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'serverAnniversary',
+                                value: 'SERVER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'userSpecificBirthday',
+                                value: 'USER_SPECIFIC_BIRTHDAY',
+                            },
+                            {
+                                name: 'userSpecificMemberAnniversary',
+                                value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                            },
+                        ],
+                    },
+                    {
+                        name: Lang.getCom('arguments.position'),
+                        description:
+                            'The message to remove. Find the position with /message list <type>',
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
+                        required: true,
+                    },
+                ],
+            },
         ],
     };
     public requireDev = false;
