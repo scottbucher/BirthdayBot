@@ -361,6 +361,14 @@
                     "icon": "{{ICON}}"
                 },
                 "color": "{{COM:colors.warn}}"
+            },
+            "customMessage": {
+                "description": "Are you sure you want to clear __**{{MESSAGE_COUNT}}**__ {{DISPLAY_TYPE}}?",
+                "footer": {
+                    "text": "This action is irreversible!",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.warn}}"
             }
         },
         "customMessage": {

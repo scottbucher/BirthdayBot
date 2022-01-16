@@ -244,7 +244,8 @@
             "marMaxPaid": "Member anniverasry roles are capped at {{PAID_MAX}}!",
             "emptyMar": "The member anniversary role list is empty!",
             "notInMar": "There isn't a member anniversary role for that year!",
-            "duplicateMessage": "Duplicate message found for this server!"
+            "duplicateMessage": "Duplicate message found for this server!",
+            "noCustomMessagesGeneric": "This server doesn't have any {{DISPLAY_TYPE}}!"
         }
     },
     "refs": {

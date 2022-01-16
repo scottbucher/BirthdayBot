@@ -45,7 +45,7 @@ import {
     UseTimezoneSubCommand,
 } from './commands/config';
 import { MarAddSubCommand, MarClearSubCommand, MarRemoveSubCommand } from './commands/mar';
-import { MessageAddSubCommand } from './commands/message';
+import { MessageAddSubCommand, MessageClearSubCommand } from './commands/message';
 import {
     TrustedRoleAddSubCommand,
     TrustedRoleClearSubCommand,
@@ -140,6 +140,7 @@ async function start(): Promise<void> {
 
     // Message Sub Commands
     let messageAddSubCommand = new MessageAddSubCommand(customMessageRepo);
+    let messageClearSubCommand = new MessageClearSubCommand(customMessageRepo);
 
     // Commands
     let commands: Command[] = [
@@ -170,7 +171,7 @@ async function start(): Promise<void> {
             channelSubCommand,
             roleSubCommand,
         ]),
-        new MessageCommand([messageAddSubCommand]),
+        new MessageCommand([messageAddSubCommand, messageClearSubCommand]),
         new MemberAnniversaryRoleCommand([
             marAddSubCommand,
             marClearSubCommand,
