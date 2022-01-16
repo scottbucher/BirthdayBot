@@ -15,7 +15,6 @@ import { CollectorUtils } from '../utils/collector-utils';
 import { Command } from './command';
 
 let Config = require('../../config/config.json');
-const reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 export class SetupCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.setup'),
@@ -95,7 +94,7 @@ export class SetupCommand implements Command {
                 break;
             }
             case Config.emotes.select: {
-                let selectMessage = await MessageUtils.sendIntr(
+                let _selectMessage = await MessageUtils.sendIntr(
                     intr,
                     Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())
                 );
@@ -163,7 +162,7 @@ export class SetupCommand implements Command {
                 break;
             }
             case Config.emotes.select: {
-                let selectMessage = await MessageUtils.sendIntr(
+                let _selectMessage = await MessageUtils.sendIntr(
                     intr,
                     Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
                 );

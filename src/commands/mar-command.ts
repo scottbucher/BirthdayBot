@@ -36,7 +36,7 @@ export class MemberAnniversaryRoleCommand implements Command {
             {
                 name: Lang.getCom('subCommands.remove'),
                 description: '[Premium Feature] Remove a member anniversary role.',
-                type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
                         name: Lang.getCom('arguments.year'),

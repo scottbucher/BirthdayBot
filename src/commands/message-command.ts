@@ -198,7 +198,7 @@ export class MessageCommand implements Command {
                     {
                         name: Lang.getCom('arguments.userCount'),
                         description:
-                            'The number of users to place in this message to imitate multiple birthdays in one message. Defaults to 1.',
+                            'The number of users to put in this message to imitate multiple birthdays. Defaults to 1.',
                         type: ApplicationCommandOptionType.Integer.valueOf(),
                         required: false,
                         min_value: 1,

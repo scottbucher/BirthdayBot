@@ -1,9 +1,9 @@
 import {
     ApplicationCommandData,
+    PermissionString,
     CommandInteraction,
     GuildMember,
     Message,
-    PermissionString,
 } from 'discord.js';
 
 import { Command } from '..';
@@ -31,7 +31,7 @@ export class MessageAddSubCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let type = intr.options.getString(Lang.getCom('arguments.type'));
+        let type = intr.options.getString(Lang.getCom('arguments.type')).toLowerCase();
         let message = intr.options.getString(Lang.getCom('arguments.message'));
 
         let colorHex = '0';
