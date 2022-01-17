@@ -253,7 +253,7 @@
             "notInTrustedRole": "That {{TYPE}} is not in the trusted role list!",
             "marManaged": "Member Anniversary Roles cannot be managed by an external service!",
             "marDuplicateYear": "There is already a member anniversary role set for year {{YEAR}}!",
-            "marMaxPaid": "Member anniverasry roles are capped at {{PAID_MAX}}!",
+            "marMaxPaid": "Member anniversary roles are capped at {{PAID_MAX}}!",
             "emptyMar": "The member anniversary role list is empty!",
             "notInMar": "There isn't a member anniversary role for that year!",
             "duplicateMessage": "Duplicate message found for this server!",
