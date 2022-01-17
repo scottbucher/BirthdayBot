@@ -267,8 +267,13 @@
             "languageDisplay": "English",
             "translators": "[Stqlth#0001](https://github.com/scottbucher)"
         },
-        "other": {
-            "na": "N/A"
+        "placeHolders": {
+            "users": "%Users%",
+            "usersRegex": "/@users?|<users?>|{users?}|%users?%/gi",
+            "year": "%Year%",
+            "yearRegex": "/@year?|<year?>|{year?}|%year?%/gi",
+            "server": "%Server%",
+            "serverRegex": "/@server?|<server?>|{server?}|%server?%/gi"
         },
         "links": {
             "voteImage": "https://i.imgur.com/wak8g4V.png"
@@ -277,6 +282,9 @@
             "tryAgain": "Please try again!",
             "whyPremium": "Premium helps us support and maintain the bot!",
             "joinSupport": "Please join our support server if you have any questions."
+        },
+        "other": {
+            "na": "N/A"
         }
     }
 }
