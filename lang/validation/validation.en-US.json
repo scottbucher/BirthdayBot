@@ -34,7 +34,7 @@
                     {
                         "name": "Premium Commands",
                         "value": [
-                            "Subscribe to **{{REF:bot.name}} Premium** for access to our premium features!",
+                            "Subscribe to **{{COM:bot.name}} Premium** for access to our premium features!",
                             "See `/premium` for more information."
                         ]
                     }
@@ -62,7 +62,7 @@
                     }
                 ],
                 "footer": {
-                    "text": "Don't want to vote? Disable voting for the whole server with {{REF:bot.name}} Premium!",
+                    "text": "Don't want to vote? Disable voting for the whole server with {{COM:bot.name}} Premium!",
                     "icon": "{{ICON}}"
                 },
                 "timestamp": true,
@@ -169,7 +169,7 @@
             "maxFreeCustomMessages": {
                 "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{FREE_MAX}}**)",
                 "footer": {
-                    "text": "To have up to {{PAID_MAX}} custom {{TYPE}} messages try {{REF:bot.name}} Premium!",
+                    "text": "To have up to {{PAID_MAX}} custom {{TYPE}} messages try {{COM:bot.name}} Premium!",
                     "icon": "{{ICON}}"
                 },
                 "color": "{{COM:colors.error}}"
@@ -200,7 +200,7 @@
             },
             "userSpecificMessagesNeedsPremium": {
                 "title": "{{REF:terms.premiumRequired}}",
-                "description": "User-specific messages are a premium only feature! View information about **{{REF:bot.name}} Premium** using `/premium`!",
+                "description": "User-specific messages are a premium only feature! View information about **{{COM:bot.name}} Premium** using `/premium`!",
                 "footer": {
                     "text": "{{REF:footers.whyPremium}}",
                     "icon": "{{ICON}}"
