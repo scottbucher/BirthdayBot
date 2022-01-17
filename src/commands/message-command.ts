@@ -276,7 +276,7 @@ export class MessageCommand implements Command {
                     {
                         name: Lang.getCom('arguments.message'),
                         description:
-                            'The message to add. Available placeholders: %Users% or @User, %Server%, %Year% (Anniversaries only).',
+                            'The message to add. Available placeholders: {Users} or @User, {Server}, {Year} (Anniversaries only).',
                         type: ApplicationCommandOptionType.String.valueOf(),
                         required: true,
                     },

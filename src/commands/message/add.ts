@@ -83,16 +83,16 @@ export class MessageAddSubCommand implements Command {
                 target && type !== 'serveranniversary'
                     ? mentionWithNickNameFormat
                     : Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
-                '%Users%'
+                '{Users}'
             )
             .replace(
                 target && type !== 'serveranniversary'
                     ? target?.toString()
                     : Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
-                '%Users%'
+                '{Users}'
             )
-            .replace(Lang.getRef('info', 'placeHolders.serverRegex', data.lang()), '%Server%')
-            .replace(Lang.getRef('info', 'placeHolders.yearRegex', data.lang()), '%Year%');
+            .replace(Lang.getRef('info', 'placeHolders.serverRegex', data.lang()), '{Server}')
+            .replace(Lang.getRef('info', 'placeHolders.yearRegex', data.lang()), '{Year}');
 
         if (message.length > Config.validation.message.maxLength) {
             await MessageUtils.sendIntr(
@@ -113,7 +113,7 @@ export class MessageAddSubCommand implements Command {
 
         if (type === 'birthday' || type === 'memberanniversary') {
             // Can also use year and server name placeholder
-            if (!message.includes('%Users%')) {
+            if (!message.includes('{Users}')) {
                 await MessageUtils.sendIntr(
                     intr,
                     Lang.getEmbed('validation', 'embeds.noUserPlaceholder', data.lang(), {
@@ -130,7 +130,7 @@ export class MessageAddSubCommand implements Command {
                 return;
             }
         } else {
-            if (!message.includes('%Server%')) {
+            if (!message.includes('{Server}')) {
                 // NO SERVER PLACEHOLDER (can also use year placeholder)
                 // TODO: Should this be required?
                 await MessageUtils.sendIntr(
@@ -203,7 +203,7 @@ export class MessageAddSubCommand implements Command {
                             {
                                 TYPE: typeDisplayName,
                                 CURRENT_MESSAGE: userMessage[0].Message.replace(
-                                    '%Users%',
+                                    '{Users}',
                                     target.toString()
                                 ),
                                 NEW_MESSAGE: CelebrationUtils.replaceLangPlaceHolders(

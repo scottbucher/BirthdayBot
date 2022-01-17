@@ -268,12 +268,12 @@
             "translators": "[Stqlth#0001](https://github.com/scottbucher)"
         },
         "placeHolders": {
-            "users": "%Users%",
-            "usersRegex": "/@users?|<users?>|{users?}|%users?%/gi",
-            "year": "%Year%",
-            "yearRegex": "/@year?|<year?>|{year?}|%year?%/gi",
-            "server": "%Server%",
-            "serverRegex": "/@server?|<server?>|{server?}|%server?%/gi"
+            "users": "{Users}",
+            "usersRegex": "/@users?|<users?>|{users?}|{users?}/gi",
+            "year": "{Year}",
+            "yearRegex": "/@year?|<year?>|{year?}|{year?}/gi",
+            "server": "{Server}",
+            "serverRegex": "/@server?|<server?>|{server?}|{server?}/gi"
         },
         "defaults": {
             "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",

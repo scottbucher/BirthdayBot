@@ -307,7 +307,7 @@ export class CelebrationUtils {
         if (message) {
             message = message.replace(
                 Lang.getRef('info', 'placeHolders.serverRegex', LangCode.EN_US),
-                '%Server%'
+                '{Server}'
             );
 
             if (type !== 'serveranniversary')

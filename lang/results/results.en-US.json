@@ -112,8 +112,8 @@
                     {
                         "name": "Actions",
                         "value": [
-                            "`/message {{REF:types.list}} {{TYPE}} [page]` - List all custom {{DISPLAY_TYPE}} messages.",
-                            "`/message {{REF:types.test}} {{TYPE}} <position>` - Test a {{DISPLAY_TYPE}} message."
+                            "`/message list {{TYPE}} [page]` - List all custom {{DISPLAY_TYPE}} messages.",
+                            "`/message test {{TYPE}} <position>` - Test a {{DISPLAY_TYPE}} message."
                         ]
                     }
                 ],
@@ -137,8 +137,8 @@
                     {
                         "name": "Actions",
                         "value": [
-                            "`/message {{REF:types.list}} {{TYPE}} [page]` - List all custom user specific {{DISPLAY_TYPE}} messages.",
-                            "`/message {{REF:types.test}} {{TYPE}} <position>` - Test a user specific {{DISPLAY_TYPE}} message."
+                            "`/message list {{TYPE}} [page]` - List all custom user specific {{DISPLAY_TYPE}} messages.",
+                            "`/message test {{TYPE}} <position>` - Test a user specific {{DISPLAY_TYPE}} message."
                         ]
                     }
                 ],
