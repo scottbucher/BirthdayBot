@@ -622,7 +622,7 @@
             "blacklist": {
                 "title": "{{REF:terms.blacklistList}} | {{REF:list.pageTitle}}",
                 "description": [
-                    "*Users on this list or who have roles on this list will not have their birthdays celebrated no matter what. Edit this list with `/blacklist <{{REF:types.add}}/{{REF:types.remove}}> <User/Role>`!*",
+                    "*Users on this list or who have roles on this list will not have their birthdays celebrated no matter what. Edit this list with `/blacklist <add/remove> <User/Role>`!*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -785,6 +785,9 @@
         "other": {
             "na": "N/A"
         },
+        "BREAK": {
+            "BELLOW HERE WILL ALL BE MOVED TO GOL WHEN LINGUINI IS UPDATED": "----------------------------------------------------------------------------------------------------------------------------------"
+        },
         "defaults": {
             "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
             "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.year}} year(s) in the server {{REF:placeHolders.users}}!",
@@ -796,9 +799,6 @@
             "serverAnniversaryChannelName": "{{COM:emotes.party}} server anniversaries",
             "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
             "birthdayMasterRoleName": "Birthday Master"
-        },
-        "BREAK": {
-            "BELLOW HERE WILL ALL BE MOVED TO GOL WHEN LINGUINI IS UPDATED": "----------------------------------------------------------------------------------------------------------------------------------"
         },
         "permissions": {
             "ADD_REACTIONS": "Add Reactions",

@@ -185,14 +185,14 @@
             "noUserPlaceholder": {
                 "description": [
                     "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where the member names will appear.",
-                    "Ex: `/message {{REF:types.add}} {{TYPE}} {{EXAMPLE_MESSAGE}}`"
+                    "Ex: `/message add {{TYPE}} {{EXAMPLE_MESSAGE}}`"
                 ],
                 "color": "{{COM:colors.error}}"
             },
             "noServerPlaceholder": {
                 "description": [
                     "Please include the `{{REF:placeHolders.server}}` placeholder somewhere in the message. This indicates where the server name will appear.",
-                    "Ex: `/message {{REF:types.add}} {{REF:types.serverAnniversary}} {{REF:defaults.serverAnniversaryMessage}}`",
+                    "Ex: `/message add serverAnniversary {{REF:defaults.serverAnniversaryMessage}}`",
                     "",
                     "Tip: You can also use the `{{REF:placeHolders.year}}` placeholder for the anniversary year."
                 ],
@@ -274,6 +274,18 @@
             "yearRegex": "/@year?|<year?>|{year?}|%year?%/gi",
             "server": "%Server%",
             "serverRegex": "/@server?|<server?>|{server?}|%server?%/gi"
+        },
+        "defaults": {
+            "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
+            "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.year}} year(s) in the server {{REF:placeHolders.users}}!",
+            "serverAnniversaryMessage": "{{COM:placeHolders.server}} is now {{REF:placeHolders.year}} year(s) old!",
+            "birthdayChannelName": "{{COM:emotes.birthdayEmote}} birthdays",
+            "birthdayChannelTopic": "Birthdays Announcements!",
+            "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",
+            "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
+            "serverAnniversaryChannelName": "{{COM:emotes.party}} server anniversaries",
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
+            "birthdayMasterRoleName": "Birthday Master"
         },
         "links": {
             "voteImage": "https://i.imgur.com/wak8g4V.png"
