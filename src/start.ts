@@ -202,7 +202,7 @@ async function start(): Promise<void> {
         new SetupCommand(guildRepo),
         new SettingsCommand(trustedRoleRepo),
         new SetAttemptsCommand(userRepo),
-        new ListCommand(),
+        new ListCommand(userRepo),
         new NextCommand(userRepo),
         new ViewCommand(userRepo),
         new SetCommand(guildRepo, userRepo),
