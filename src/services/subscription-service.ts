@@ -23,7 +23,7 @@ export class SubscriptionService {
 
         if (!res.ok) return;
 
-        return await res.json();
+        (await res.json()) as SubscriptionLink;
     }
 
     public async getSubscription(
@@ -39,7 +39,7 @@ export class SubscriptionService {
 
         if (!res.ok) return;
 
-        return await res.json();
+        (await res.json()) as SubscriptionStatus;
     }
 
     public async getAllSubscription(planName: string): Promise<SubscriptionStatus[]> {
@@ -52,7 +52,7 @@ export class SubscriptionService {
 
         if (!res.ok) return;
 
-        return await res.json();
+        (await res.json()) as SubscriptionStatus[];
     }
 
     public async hasService(planName: string, subscriberId: string): Promise<boolean> {
