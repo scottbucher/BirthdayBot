@@ -1,11 +1,12 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { PlanName } from '../models';
-import { EventData } from '../models/internal-models';
-import { Lang, Logger, SubscriptionService } from '../services';
-import { MessageUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
+import { PlanName, EventData } from '../models/index.js';
+import { Lang, Logger, SubscriptionService } from '../services/index.js';
+import { MessageUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 export class SubscribeCommand implements Command {

@@ -1,11 +1,10 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { EventData } from '../../models';
-import { Lang } from '../../services';
-import { GuildRepo } from '../../services/database/repos';
-import { MessageUtils } from '../../utils';
-import { CollectorUtils } from '../../utils/collector-utils';
-import { Command } from '../command';
+import { EventData } from '../../models/index.js';
+import { GuildRepo } from '../../services/database/repos/index.js';
+import { Lang } from '../../services/index.js';
+import { CollectorUtils, MessageUtils } from '../../utils/index.js';
+import { Command } from '../index.js';
 
 export class TrustedPreventsMsgSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}

@@ -1,9 +1,9 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { Command, CommandDeferType } from './command';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class ListCommand implements Command {
     public metadata: ApplicationCommandData = {

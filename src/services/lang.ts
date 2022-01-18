@@ -1,28 +1,64 @@
 import { ColorResolvable, MessageEmbed } from 'discord.js';
 import { Linguini, TypeMapper, TypeMappers, Utils } from 'linguini';
-import path from 'path';
+import path, { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { LangCode } from '../models/enums';
+import { LangCode } from '../models/enums/index.js';
 
 export class Lang {
     public static Default = LangCode.EN_US;
 
     private static linguiniObjects: { [key: string]: Linguini } = {
-        prompts: new Linguini(path.resolve(__dirname, '../../lang/prompts'), 'prompts', {
-            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
-        }),
-        info: new Linguini(path.resolve(__dirname, '../../lang/info'), 'info', {
-            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
-        }),
-        results: new Linguini(path.resolve(__dirname, '../../lang/results'), 'results', {
-            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
-        }),
-        validation: new Linguini(path.resolve(__dirname, '../../lang/validation'), 'validation', {
-            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
-        }),
-        errors: new Linguini(path.resolve(__dirname, '../../lang/errors'), 'errors', {
-            customCommonFile: path.resolve(__dirname, '../../lang/lang.common.json'),
-        }),
+        prompts: new Linguini(
+            path.resolve(dirname(fileURLToPath(import.meta.url)), '../../lang/prompts'),
+            'prompts',
+            {
+                customCommonFile: path.resolve(
+                    dirname(fileURLToPath(import.meta.url)),
+                    '../../lang/lang.common.json'
+                ),
+            }
+        ),
+        info: new Linguini(
+            path.resolve(dirname(fileURLToPath(import.meta.url)), '../../lang/info'),
+            'info',
+            {
+                customCommonFile: path.resolve(
+                    dirname(fileURLToPath(import.meta.url)),
+                    '../../lang/lang.common.json'
+                ),
+            }
+        ),
+        results: new Linguini(
+            path.resolve(dirname(fileURLToPath(import.meta.url)), '../../lang/results'),
+            'results',
+            {
+                customCommonFile: path.resolve(
+                    dirname(fileURLToPath(import.meta.url)),
+                    '../../lang/lang.common.json'
+                ),
+            }
+        ),
+        validation: new Linguini(
+            path.resolve(dirname(fileURLToPath(import.meta.url)), '../../lang/validation'),
+            'validation',
+            {
+                customCommonFile: path.resolve(
+                    dirname(fileURLToPath(import.meta.url)),
+                    '../../lang/lang.common.json'
+                ),
+            }
+        ),
+        errors: new Linguini(
+            path.resolve(dirname(fileURLToPath(import.meta.url)), '../../lang/errors'),
+            'errors',
+            {
+                customCommonFile: path.resolve(
+                    dirname(fileURLToPath(import.meta.url)),
+                    '../../lang/lang.common.json'
+                ),
+            }
+        ),
     };
 
     public static getErrorEmbed(

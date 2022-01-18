@@ -1,7 +1,6 @@
-import { TrustedRoles } from '../../../models/database/trusted-role-models';
-import { SqlUtils } from '../../../utils';
-import { DataAccess } from '../data-access';
-import { Procedure } from '../procedure';
+import { TrustedRoles } from '../../../models/database/trusted-role-models.js';
+import { SqlUtils } from '../../../utils/index.js';
+import { DataAccess, Procedure } from '../index.js';
 
 export class TrustedRoleRepo {
     constructor(private dataAccess: DataAccess) {}

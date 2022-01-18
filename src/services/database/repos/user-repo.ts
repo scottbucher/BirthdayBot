@@ -1,7 +1,6 @@
-import { UserData, UserDataResults, Vote } from '../../../models/database';
-import { SqlUtils } from '../../../utils';
-import { DataAccess } from '../data-access';
-import { Procedure } from '../procedure';
+import { UserData, UserDataResults, Vote } from '../../../models/database/index.js';
+import { SqlUtils } from '../../../utils/index.js';
+import { DataAccess, Procedure } from '../index.js';
 
 export class UserRepo {
     constructor(private dataAccess: DataAccess) {}

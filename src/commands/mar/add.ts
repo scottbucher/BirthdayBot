@@ -1,11 +1,13 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString, Role } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { Command } from '..';
-import { EventData } from '../../models';
-import { Lang } from '../../services';
-import { MemberAnniversaryRoleRepo } from '../../services/database/repos';
-import { MessageUtils } from '../../utils';
+import { EventData } from '../../models/index.js';
+import { MemberAnniversaryRoleRepo } from '../../services/database/repos/index.js';
+import { Lang } from '../../services/index.js';
+import { MessageUtils } from '../../utils/index.js';
+import { Command } from '../index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../../config/config.json');
 
 export class MarAddSubCommand implements Command {

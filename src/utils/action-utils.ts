@@ -1,7 +1,9 @@
 import { DiscordAPIError, GuildMember, Role } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { TimeUtils } from './time-utils';
+import { TimeUtils } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class ActionUtils {

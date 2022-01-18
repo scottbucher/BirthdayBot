@@ -12,18 +12,18 @@ import {
     RateLimitData,
     User,
 } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import {
-    ButtonHandler,
-    CommandHandler,
-    GuildJoinHandler,
-    GuildLeaveHandler,
-    MessageHandler,
-    ReactionHandler,
-} from './events';
-import { JobService, Logger } from './services';
-import { PartialUtils } from './utils';
+import { ButtonHandler } from './events/button-handler.js';
+import { CommandHandler } from './events/command-handler.js';
+import { GuildJoinHandler } from './events/guild-join-handler.js';
+import { GuildLeaveHandler } from './events/guild-leave-handler.js';
+import { MessageHandler } from './events/message-handler.js';
+import { ReactionHandler } from './events/reaction-handler.js';
+import { JobService, Logger } from './services/index.js';
+import { PartialUtils } from './utils/index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../config/config.json');
 let Debug = require('../config/debug.json');
 let Logs = require('../lang/logs.json');

@@ -1,2 +1,2 @@
-export { OldPrefixTrigger } from './old-prefix-trigger';
-export { Trigger } from './trigger';
+export { OldPrefixTrigger } from './old-prefix-trigger.js';
+export { Trigger } from './trigger.js';

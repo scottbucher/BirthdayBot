@@ -6,14 +6,16 @@ import {
     Role,
     TextBasedChannel,
 } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { GuildRepo } from '../services/database/repos';
-import { GuildUtils, MessageUtils, PermissionUtils } from '../utils';
-import { CollectorUtils } from '../utils/collector-utils';
-import { Command, CommandDeferType } from './command';
+import { EventData } from '../models/index.js';
+import { GuildRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { CollectorUtils } from '../utils/collector-utils.js';
+import { GuildUtils, MessageUtils, PermissionUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class SetupCommand implements Command {
     public metadata: ApplicationCommandData = {

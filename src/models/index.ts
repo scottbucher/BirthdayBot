@@ -1,13 +1,13 @@
-export { BotSite } from './config-models';
+export { BotSite } from './config-models.js';
 export {
     SubscriptionLink,
     SubscriptionStatus,
     PlanName,
     SubscriptionStatusName,
-} from './subscription-models';
+} from './subscription-models.js';
 export {
     BirthdayMemberRoleStatus,
     BirthdayMemberStatus,
     AnniversaryMemberStatus,
-} from './celebration-job';
-export { EventData } from './internal-models';
+} from './celebration-job.js';
+export { EventData } from './internal-models.js';

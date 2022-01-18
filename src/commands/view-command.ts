@@ -7,11 +7,11 @@ import {
 } from 'discord.js';
 import moment from 'moment';
 
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { UserRepo } from '../services/database/repos';
-import { MessageUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
+import { EventData } from '../models/index.js';
+import { UserRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { MessageUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class ViewCommand implements Command {
     public metadata: ApplicationCommandData = {

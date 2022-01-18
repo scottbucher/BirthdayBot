@@ -1,19 +1,12 @@
-import { ApplicationCommandData, CommandInteraction, Message, PermissionString } from 'discord.js';
-import { CollectOptions, MessageFilter } from 'discord.js-collector-utils';
+import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { UserRepo } from '../services/database/repos';
-import { MessageUtils } from '../utils';
-import { CollectorUtils } from '../utils/collector-utils';
-import { Command, CommandDeferType } from './command';
+import { EventData } from '../models/index.js';
+import { UserRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { CollectorUtils } from '../utils/collector-utils.js';
+import { MessageUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
-let Config = require('../../config/config.json');
-
-const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.experience.promptExpireTime * 1000,
-    reset: true,
-};
 export class PurgeCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.purge'),
@@ -38,7 +31,6 @@ export class PurgeCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let target = intr.user;
         let userData = await this.userRepo.getUser(target.id);
-        let stopFilter: MessageFilter = (nextMsg: Message) => nextMsg.author.id === intr.user.id;
 
         if (!userData || !(userData.Birthday && userData.TimeZone)) {
             // Are they in the database?

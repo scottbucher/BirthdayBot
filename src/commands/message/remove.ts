@@ -1,12 +1,12 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from '..';
-import { EventData } from '../../models';
-import { CustomMessage } from '../../models/database';
-import { LangCode } from '../../models/enums';
-import { Lang } from '../../services';
-import { CustomMessageRepo } from '../../services/database/repos';
-import { CelebrationUtils, FormatUtils, MessageUtils } from '../../utils';
+import { CustomMessage } from '../../models/database/index.js';
+import { LangCode } from '../../models/enums/index.js';
+import { EventData } from '../../models/index.js';
+import { CustomMessageRepo } from '../../services/database/repos/index.js';
+import { Lang } from '../../services/index.js';
+import { CelebrationUtils, FormatUtils, MessageUtils } from '../../utils/index.js';
+import { Command } from '../index.js';
 
 export class MessageRemoveSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}

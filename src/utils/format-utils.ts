@@ -2,11 +2,13 @@ import { Chrono } from 'chrono-node';
 import { Guild, Message, Role, User } from 'discord.js';
 import { Duration } from 'luxon'; // TODO: Missing types
 import moment from 'moment-timezone';
+import { createRequire } from 'node:module';
 
-import { GuildUtils, ParseUtils } from '.';
-import { LangCode, Language } from '../models/enums';
-import { Lang } from '../services';
+import { LangCode, Language } from '../models/enums/index.js';
+import { Lang } from '../services/index.js';
+import { GuildUtils, ParseUtils } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Abbreviations = require('../../config/abbreviations.json');
 let Config = require('../../config/config.json');
 const PAGE_REGEX = /Page (\d+)\/(\d+)/;

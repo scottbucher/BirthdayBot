@@ -1,8 +1,6 @@
-import { GuildData } from '../../../models/database';
-import { SqlUtils } from '../../../utils';
-import { Logger } from '../../logger';
-import { DataAccess } from '../data-access';
-import { Procedure } from '../procedure';
+import { GuildData } from '../../../models/database/index.js';
+import { SqlUtils } from '../../../utils/index.js';
+import { DataAccess, Procedure } from '../index.js';
 
 export class GuildRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -158,9 +156,6 @@ export class GuildRepo {
     }
 
     public async updateTrustedPreventsMessage(discordId: string, value: number): Promise<void> {
-        if (discordId === '250678721466466305') {
-            Logger.info('Guild 250678721466466305 changed the trusted prevents message.');
-        }
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateTrustedPreventsMessage, [
             discordId,
             value,
@@ -168,9 +163,6 @@ export class GuildRepo {
     }
 
     public async updateTrustedPreventsRole(discordId: string, value: number): Promise<void> {
-        if (discordId === '250678721466466305') {
-            Logger.info('Guild 250678721466466305 changed the trusted prevents role.');
-        }
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateTrustedPreventsRole, [
             discordId,
             value,
@@ -178,9 +170,6 @@ export class GuildRepo {
     }
 
     public async updateRequireAllTrustedRoles(discordId: string, value: number): Promise<void> {
-        if (discordId === '250678721466466305') {
-            Logger.info('Guild 250678721466466305 changed the require all trusted roles.');
-        }
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateRequireAllTrustedRoles, [
             discordId,
             value,
@@ -200,9 +189,6 @@ export class GuildRepo {
         preventRole: number,
         preventMessage: number
     ): Promise<void> {
-        if (discordId === '250678721466466305') {
-            Logger.info('Guild 250678721466466305 ran trusted setup.');
-        }
         await this.dataAccess.executeProcedure(Procedure.Guild_SetupTrusted, [
             discordId,
             requireAllTrustedRoles,

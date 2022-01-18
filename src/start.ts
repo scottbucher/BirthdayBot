@@ -1,9 +1,27 @@
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/rest/v9';
 import { Options } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { Bot } from './bot';
-import { Button } from './buttons';
+import { Bot } from './bot.js';
+import { Button } from './buttons/index.js';
+import {
+    BlacklistAddSubCommand,
+    BlacklistClearSubCommand,
+    BlacklistRemoveIdSubCommand,
+    BlacklistRemoveRoleOrUserSubCommand,
+} from './commands/blacklist/index.js';
+import {
+    ChannelSubCommand,
+    DateFormatSubCommand,
+    NameFormatSubCommand,
+    RequireAllTrustedRolesSubCommand,
+    RoleSubCommand,
+    TimezoneSubCommand,
+    TrustedPreventsMsgSubCommand,
+    TrustedPreventsRoleSubCommand,
+    UseTimezoneSubCommand,
+} from './commands/config/index.js';
 import {
     BlacklistCommand,
     Command,
@@ -13,8 +31,6 @@ import {
     LinkCommand,
     ListCommand,
     MapCommand,
-    MemberAnniversaryRoleCommand,
-    MessageCommand,
     NextCommand,
     PremiumCommand,
     PurgeCommand,
@@ -27,37 +43,22 @@ import {
     TrustedRoleCommand,
     ViewCommand,
     VoteCommand,
-} from './commands';
-import {
-    BlacklistAddSubCommand,
-    BlacklistClearSubCommand,
-    BlacklistRemoveIdSubCommand,
-    BlacklistRemoveRoleOrUserSubCommand,
-} from './commands/blacklist';
-import {
-    ChannelSubCommand,
-    DateFormatSubCommand,
-    NameFormatSubCommand,
-    RequireAllTrustedRolesSubCommand,
-    RoleSubCommand,
-    TimezoneSubCommand,
-    TrustedPreventsMsgSubCommand,
-    TrustedPreventsRoleSubCommand,
-    UseTimezoneSubCommand,
-} from './commands/config';
-import { MarAddSubCommand, MarClearSubCommand, MarRemoveSubCommand } from './commands/mar';
+} from './commands/index.js';
+import { MemberAnniversaryRoleCommand } from './commands/mar-command.js';
+import { MarAddSubCommand, MarClearSubCommand, MarRemoveSubCommand } from './commands/mar/index.js';
+import { MessageCommand } from './commands/message-command.js';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
     MessageRemoveSubCommand,
     MessageTestSubCommand,
-} from './commands/message';
+} from './commands/message/index.js';
 import {
     TrustedRoleAddSubCommand,
     TrustedRoleClearSubCommand,
     TrustedRoleRemoveIdSubCommand,
     TrustedRoleRemoveRoleSubCommand,
-} from './commands/trusted-role';
+} from './commands/trusted-role/index.js';
 import {
     ButtonHandler,
     CommandHandler,
@@ -66,12 +67,11 @@ import {
     MessageHandler,
     ReactionHandler,
     TriggerHandler,
-} from './events';
-import { CustomClient } from './extensions';
-import { Job } from './jobs';
-import { Reaction } from './reactions';
-import { HttpService, JobService, Logger, SubscriptionService } from './services';
-import { DataAccess } from './services/database/data-access';
+} from './events/index.js';
+import { CustomClient } from './extensions/index.js';
+import { Job } from './jobs/index.js';
+import { Reaction } from './reactions/index.js';
+import { DataAccess } from './services/database/index.js';
 import {
     BlacklistRepo,
     CombinedRepo,
@@ -80,9 +80,11 @@ import {
     MemberAnniversaryRoleRepo,
     TrustedRoleRepo,
     UserRepo,
-} from './services/database/repos';
-import { OldPrefixTrigger, Trigger } from './triggers';
+} from './services/database/repos/index.js';
+import { HttpService, JobService, Logger, SubscriptionService } from './services/index.js';
+import { OldPrefixTrigger, Trigger } from './triggers/index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
 

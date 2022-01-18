@@ -1,9 +1,9 @@
 import { Message } from 'discord.js';
 
-import { Trigger } from '.';
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { MessageUtils } from '../utils';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { MessageUtils } from '../utils/index.js';
+import { Trigger } from './index.js';
 
 export class OldPrefixTrigger implements Trigger {
     public requireGuild = false;

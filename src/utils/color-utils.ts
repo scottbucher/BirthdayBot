@@ -1,3 +1,6 @@
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
 let colors: { name: string; hex: string }[] = require('color-name-list');
 
 const COLOR_HEX_REGEX = /#?[0-9A-F]{6}/i;

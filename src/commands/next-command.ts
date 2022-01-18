@@ -2,12 +2,12 @@ import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import moment from 'moment';
 
-import { LangCode } from '../models/enums';
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { UserRepo } from '../services/database/repos';
-import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
+import { LangCode } from '../models/enums/index.js';
+import { EventData } from '../models/index.js';
+import { UserRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class NextCommand implements Command {
     public metadata: ApplicationCommandData = {

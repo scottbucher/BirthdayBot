@@ -1,4 +1,4 @@
-export { TrustedRoleAddSubCommand } from './add';
-export { TrustedRoleClearSubCommand } from './clear';
-export { TrustedRoleRemoveRoleSubCommand } from './remove-role';
-export { TrustedRoleRemoveIdSubCommand } from './remove-id';
+export { TrustedRoleAddSubCommand } from './add.js';
+export { TrustedRoleClearSubCommand } from './clear.js';
+export { TrustedRoleRemoveRoleSubCommand } from './remove-role.js';
+export { TrustedRoleRemoveIdSubCommand } from './remove-id.js';

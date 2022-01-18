@@ -1,15 +1,17 @@
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
 import moment from 'moment';
 import schedule from 'node-schedule';
-import { performance } from 'perf_hooks';
+import { createRequire } from 'node:module';
+import { performance } from 'node:perf_hooks';
 
-import { SubscriptionStatus } from '../models';
-import { UserData } from '../models/database';
-import { CelebrationService, Logger, SubscriptionService } from '../services';
-import { CombinedRepo, UserRepo } from '../services/database/repos';
-import { CelebrationUtils, TimeUtils } from '../utils';
-import { Job } from './job';
+import { UserData } from '../models/database/index.js';
+import { SubscriptionStatus } from '../models/index.js';
+import { CombinedRepo, UserRepo } from '../services/database/repos/index.js';
+import { CelebrationService, Logger, SubscriptionService } from '../services/index.js';
+import { CelebrationUtils, TimeUtils } from '../utils/index.js';
+import { Job } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 

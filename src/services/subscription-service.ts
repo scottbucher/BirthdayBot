@@ -1,6 +1,9 @@
-import { SubscriptionLink, SubscriptionStatus } from '../models/subscription-models';
-import { HttpService } from './http-service';
+import { createRequire } from 'node:module';
 
+import { SubscriptionLink, SubscriptionStatus } from '../models/index.js';
+import { HttpService } from './index.js';
+
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class SubscriptionService {

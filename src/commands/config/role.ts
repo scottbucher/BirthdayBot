@@ -5,17 +5,16 @@ import {
     PermissionString,
     Role,
 } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { EventData } from '../../models';
-import { Lang } from '../../services';
-import { GuildRepo } from '../../services/database/repos';
-import { FormatUtils, MessageUtils } from '../../utils';
-import { CollectorUtils } from '../../utils/collector-utils';
-import { Command } from '../command';
+import { EventData } from '../../models/index.js';
+import { GuildRepo } from '../../services/database/repos/index.js';
+import { Lang } from '../../services/index.js';
+import { CollectorUtils, FormatUtils, MessageUtils } from '../../utils/index.js';
+import { Command } from '../index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../../config/config.json');
-
-const reactOptions = [Config.emotes.create, Config.emotes.select, Config.emotes.deny];
 
 export class RoleSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
@@ -50,7 +49,7 @@ export class RoleSubCommand implements Command {
             );
         });
 
-        let prompt = await MessageUtils.sendIntr(
+        let _prompt = await MessageUtils.sendIntr(
             intr,
             Lang.getEmbed('prompts', 'config.roleType', data.lang())
         );
@@ -117,7 +116,7 @@ export class RoleSubCommand implements Command {
                     break;
                 }
                 case Config.emotes.select: {
-                    let selectMessage = await MessageUtils.sendIntr(
+                    let _selectMessage = await MessageUtils.sendIntr(
                         intr,
                         Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
                     );

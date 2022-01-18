@@ -8,17 +8,14 @@ import {
     PermissionString,
 } from 'discord.js';
 
-import { LangCode } from '../models/enums';
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
-import { CollectorUtils } from '../utils/collector-utils';
-import { Command, CommandDeferType } from './command';
+import { LangCode } from '../models/enums/index.js';
+import { EventData } from '../models/index.js';
+import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { CollectorUtils } from '../utils/collector-utils.js';
+import { FormatUtils, MessageUtils, PermissionUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
-let Config = require('../../config/config.json');
-
-const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
 export class SetCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.set'),
@@ -146,7 +143,7 @@ export class SetCommand implements Command {
         });
 
         if (!timeZone) {
-            let timezoneMessage = await MessageUtils.sendIntr(
+            let _timezoneMessage = await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', LangCode.EN_US, {
                     TARGET: target.username,
@@ -212,7 +209,7 @@ export class SetCommand implements Command {
             : undefined;
 
         if (!birthday) {
-            let birthdayMessage = await MessageUtils.sendIntr(
+            let _birthdayMessage = await MessageUtils.sendIntr(
                 intr,
                 Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupBirthday', LangCode.EN_US, {
                     TARGET: target.username,

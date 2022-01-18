@@ -6,14 +6,16 @@ import {
     PermissionString,
 } from 'discord.js';
 import moment from 'moment';
+import { createRequire } from 'node:module';
 
-import { Command } from '..';
-import { EventData } from '../../models';
-import { CustomMessage } from '../../models/database';
-import { Lang } from '../../services';
-import { CustomMessageRepo } from '../../services/database/repos';
-import { CelebrationUtils, MessageUtils } from '../../utils';
+import { CustomMessage } from '../../models/database/index.js';
+import { EventData } from '../../models/index.js';
+import { CustomMessageRepo } from '../../services/database/repos/index.js';
+import { Lang } from '../../services/index.js';
+import { CelebrationUtils, MessageUtils } from '../../utils/index.js';
+import { Command } from '../index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../../config/config.json');
 
 export class MessageTestSubCommand implements Command {

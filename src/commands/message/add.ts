@@ -5,14 +5,15 @@ import {
     GuildMember,
     Message,
 } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { Command } from '..';
-import { EventData } from '../../models';
-import { Lang } from '../../services';
-import { CustomMessageRepo } from '../../services/database/repos';
-import { CelebrationUtils, ColorUtils, MessageUtils } from '../../utils';
-import { CollectorUtils } from '../../utils/collector-utils';
+import { EventData } from '../../models/index.js';
+import { CustomMessageRepo } from '../../services/database/repos/index.js';
+import { Lang } from '../../services/index.js';
+import { CelebrationUtils, CollectorUtils, ColorUtils, MessageUtils } from '../../utils/index.js';
+import { Command } from '../index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../../config/config.json');
 
 export class MessageAddSubCommand implements Command {

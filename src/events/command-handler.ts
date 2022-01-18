@@ -1,14 +1,15 @@
 import { CommandInteraction, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
+import { createRequire } from 'node:module';
 
-import { EventHandler } from '.';
-import { Command, CommandDeferType } from '../commands';
-import { PlanName } from '../models';
-import { EventData } from '../models/internal-models';
-import { Lang, Logger, SubscriptionService } from '../services';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { CommandUtils, MessageUtils } from '../utils';
+import { Command, CommandDeferType } from '../commands/index.js';
+import { PlanName, EventData } from '../models/index.js';
+import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
+import { Lang, Logger, SubscriptionService } from '../services/index.js';
+import { CommandUtils, MessageUtils } from '../utils/index.js';
+import { EventHandler } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 

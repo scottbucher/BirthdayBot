@@ -1,6 +1,6 @@
 import mysql, { ConnectionConfig, Pool } from 'mysql';
 
-import { SqlUtils } from '../../utils';
+import { SqlUtils } from '../../utils/index.js';
 
 export class DataAccess {
     private pool: Pool;

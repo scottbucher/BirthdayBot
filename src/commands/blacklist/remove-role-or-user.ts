@@ -7,11 +7,11 @@ import {
     User,
 } from 'discord.js';
 
-import { Command } from '..';
-import { EventData } from '../../models';
-import { Lang } from '../../services';
-import { BlacklistRepo } from '../../services/database/repos';
-import { MessageUtils } from '../../utils';
+import { EventData } from '../../models/index.js';
+import { BlacklistRepo } from '../../services/database/repos/index.js';
+import { Lang } from '../../services/index.js';
+import { MessageUtils } from '../../utils/index.js';
+import { Command } from '../index.js';
 
 export class BlacklistRemoveRoleOrUserSubCommand implements Command {
     constructor(public blacklistRepo: BlacklistRepo) {}
@@ -49,9 +49,9 @@ export class BlacklistRemoveRoleOrUserSubCommand implements Command {
             return;
         }
 
-        let blaklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
+        let blacklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
 
-        if (!blaklistData.blacklist.map(b => b.DiscordId).includes(mentionable.id)) {
+        if (!blacklistData.blacklist.map(b => b.DiscordId).includes(mentionable.id)) {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.notInBlacklist', data.lang(), {

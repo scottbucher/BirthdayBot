@@ -1,6 +1,6 @@
 import { Message, MessageReaction, User } from 'discord.js';
 
-import { EventData } from '../models/internal-models';
+import { EventData } from '../models/index.js';
 
 export interface Reaction {
     emoji: string;

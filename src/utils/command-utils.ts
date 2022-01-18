@@ -7,13 +7,15 @@ import {
     Permissions,
     TextChannel,
 } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { FormatUtils, MessageUtils, TimeUtils } from '.';
-import { Command } from '../commands';
-import { Permission } from '../models/enums';
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
+import { Command } from '../commands/index.js';
+import { Permission } from '../models/enums/index.js';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { FormatUtils, MessageUtils, TimeUtils } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Debug = require('../../config/debug.json');
 

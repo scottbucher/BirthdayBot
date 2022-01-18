@@ -1,23 +1,24 @@
 import { Guild, GuildMember, MessageEmbed, Role } from 'discord.js';
 import moment from 'moment';
 import { Moment } from 'moment-timezone';
+import { createRequire } from 'node:module';
 
-import { ArrayUtils, ColorUtils, FormatUtils, TimeUtils } from '.';
-import { BirthdayMemberStatus } from '../models';
-import { AnniversaryMemberStatus } from '../models/celebration-job';
 import {
     CustomMessage,
     GuildCelebrationData,
     GuildData,
+    MemberAnniversaryRole,
     RawGuildCelebrationData,
     SplitUsers,
     TrustedRole,
     UserData,
-} from '../models/database';
-import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
-import { LangCode } from '../models/enums';
-import { Lang } from '../services';
+} from '../models/database/index.js';
+import { LangCode } from '../models/enums/index.js';
+import { AnniversaryMemberStatus, BirthdayMemberStatus } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { ArrayUtils, ColorUtils, FormatUtils, TimeUtils } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class CelebrationUtils {

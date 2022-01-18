@@ -1,7 +1,6 @@
-import { CustomMessages } from '../../../models/database';
-import { SqlUtils } from '../../../utils';
-import { DataAccess } from '../data-access';
-import { Procedure } from '../procedure';
+import { CustomMessages } from '../../../models/database/index.js';
+import { SqlUtils } from '../../../utils/index.js';
+import { DataAccess, Procedure } from '../index.js';
 
 export class CustomMessageRepo {
     constructor(private dataAccess: DataAccess) {}

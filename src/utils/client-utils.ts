@@ -10,8 +10,8 @@ import {
     User,
 } from 'discord.js';
 
-import { PermissionUtils, RegexUtils } from '.';
-import { LangCode } from '../models/enums';
+import { LangCode } from '../models/enums/index.js';
+import { PermissionUtils, RegexUtils } from './index.js';
 
 const FETCH_MEMBER_LIMIT = 20;
 

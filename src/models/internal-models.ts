@@ -1,7 +1,7 @@
-import { SubscriptionStatus } from '.';
-import { Lang } from '../services';
-import { GuildData, Vote } from './database';
-import { LangCode } from './enums';
+import { Lang } from '../services/index.js';
+import { GuildData, Vote } from './database/index.js';
+import { LangCode } from './enums/index.js';
+import { SubscriptionStatus } from './index.js';
 
 // This class is used to store and pass data along in events
 export class EventData {

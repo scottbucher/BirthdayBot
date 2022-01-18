@@ -8,8 +8,8 @@ import {
     Util,
 } from 'discord.js';
 
-import { LangCode } from '../models/enums';
-import { Lang } from '../services';
+import { LangCode } from '../models/enums/index.js';
+import { Lang } from '../services/index.js';
 
 export class GuildUtils {
     public static findMember(guild: Guild, input: string): GuildMember {

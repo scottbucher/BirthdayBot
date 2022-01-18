@@ -1,8 +1,6 @@
-import { MemberAnniversaryRoles } from '../../../models/database/member-anniversary-role-models';
-import { SqlUtils } from '../../../utils';
-import { DataAccess } from '../data-access';
-import { Procedure } from '../procedure';
-
+import { MemberAnniversaryRoles } from '../../../models/database/member-anniversary-role-models.js';
+import { SqlUtils } from '../../../utils/index.js';
+import { DataAccess, Procedure } from '../index.js';
 export class MemberAnniversaryRoleRepo {
     constructor(private dataAccess: DataAccess) {}
 

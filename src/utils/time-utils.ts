@@ -1,6 +1,5 @@
-import moment from 'moment';
-import { Moment, tz } from 'moment-timezone';
-import { promisify } from 'util';
+import moment, { Moment } from 'moment-timezone';
+import { promisify } from 'node:util';
 
 let setTimeoutAsync = promisify(setTimeout);
 
@@ -22,7 +21,7 @@ export class TimeUtils {
     }
 
     public static getMomentInZone(zone: string): Moment {
-        return tz(zone);
+        return moment.tz(zone);
     }
 
     public static isLeap(year: number): boolean {

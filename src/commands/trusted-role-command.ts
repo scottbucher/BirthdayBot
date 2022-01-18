@@ -1,10 +1,10 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { CommandUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { CommandUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class TrustedRoleCommand implements Command {
     public metadata: ApplicationCommandData = {

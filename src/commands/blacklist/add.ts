@@ -7,11 +7,11 @@ import {
     User,
 } from 'discord.js';
 
-import { Command } from '..';
-import { EventData } from '../../models';
-import { Lang } from '../../services';
-import { BlacklistRepo } from '../../services/database/repos';
-import { MessageUtils } from '../../utils';
+import { EventData } from '../../models/index.js';
+import { BlacklistRepo } from '../../services/database/repos/index.js';
+import { Lang } from '../../services/index.js';
+import { MessageUtils } from '../../utils/index.js';
+import { Command } from '../index.js';
 
 export class BlacklistAddSubCommand implements Command {
     constructor(public blacklistRepo: BlacklistRepo) {}

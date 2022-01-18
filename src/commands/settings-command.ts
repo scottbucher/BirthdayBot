@@ -1,12 +1,12 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Language } from '../models/enums';
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { TrustedRoleRepo } from '../services/database/repos';
-import { FormatUtils, MessageUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
+import { Language } from '../models/enums/index.js';
+import { EventData } from '../models/index.js';
+import { TrustedRoleRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { FormatUtils, MessageUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class SettingsCommand implements Command {
     public metadata: ApplicationCommandData = {

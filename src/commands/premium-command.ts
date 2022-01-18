@@ -1,10 +1,12 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { EventData } from '../models/internal-models';
-import { Lang, Logger } from '../services';
-import { MessageUtils, TimeUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
+import { EventData } from '../models/index.js';
+import { Lang, Logger } from '../services/index.js';
+import { MessageUtils, TimeUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 export class PremiumCommand implements Command {

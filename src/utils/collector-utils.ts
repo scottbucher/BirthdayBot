@@ -14,11 +14,13 @@ import {
     ReactionFilter,
     ReactionRetriever,
 } from 'discord.js-collector-utils';
+import { createRequire } from 'node:module';
 
-import { MessageUtils } from '.';
-import { EventData } from '../models';
-import { Lang } from '../services';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { MessageUtils } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];

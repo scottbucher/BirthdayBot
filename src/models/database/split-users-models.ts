@@ -1,4 +1,4 @@
-import { UserData } from './user-models';
+import { UserData } from './index.js';
 
 export interface SplitUsers {
     before: UserData[];

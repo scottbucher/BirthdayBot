@@ -1,12 +1,12 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { LangCode } from '../models/enums';
-import { EventData } from '../models/internal-models';
-import { Lang } from '../services';
-import { UserRepo } from '../services/database/repos';
-import { MessageUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
+import { LangCode } from '../models/enums/index.js';
+import { EventData } from '../models/index.js';
+import { UserRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { MessageUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class SetAttemptsCommand implements Command {
     public metadata: ApplicationCommandData = {
@@ -40,7 +40,7 @@ export class SetAttemptsCommand implements Command {
 
     constructor(private userRepo: UserRepo) {}
 
-    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+    public async execute(intr: CommandInteraction, _data: EventData): Promise<void> {
         let target = intr.options.getUser('arguments.user');
         let amount = intr.options.getInteger('arguments.number');
 

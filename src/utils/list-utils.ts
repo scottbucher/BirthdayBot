@@ -1,13 +1,20 @@
 import { Guild, GuildMember, MessageEmbed } from 'discord.js';
 import moment from 'moment';
+import { createRequire } from 'node:module';
 
-import { CelebrationUtils } from '.';
-import { Blacklisted, CustomMessages, GuildData, UserDataResults } from '../models/database';
-import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models';
-import { TrustedRoles } from '../models/database/trusted-role-models';
-import { LangCode } from '../models/enums';
-import { Lang } from '../services';
+import {
+    Blacklisted,
+    CustomMessages,
+    GuildData,
+    UserDataResults,
+} from '../models/database/index.js';
+import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models.js';
+import { TrustedRoles } from '../models/database/trusted-role-models.js';
+import { LangCode } from '../models/enums/index.js';
+import { Lang } from '../services/index.js';
+import { CelebrationUtils } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 // Class which handles list embed generation
 export class ListUtils {
@@ -382,7 +389,7 @@ export class ListUtils {
         guild: Guild,
         blacklistResults: Blacklisted,
         page: number,
-        pageSize: number
+        _pageSize: number
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
 

@@ -1,4 +1,4 @@
-export { MessageAddSubCommand } from './add';
-export { MessageClearSubCommand } from './clear';
-export { MessageRemoveSubCommand } from './remove';
-export { MessageTestSubCommand } from './test';
+export { MessageAddSubCommand } from './add.js';
+export { MessageClearSubCommand } from './clear.js';
+export { MessageRemoveSubCommand } from './remove.js';
+export { MessageTestSubCommand } from './test.js';

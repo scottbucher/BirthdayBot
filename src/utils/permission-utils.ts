@@ -1,7 +1,9 @@
 import { AnyChannel, DMChannel, GuildChannel, GuildMember, Permissions } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { GuildData } from '../models/database';
+import { GuildData } from '../models/database/index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class PermissionUtils {
     public static canSend(channel: AnyChannel, embedLinks: boolean = false): boolean {

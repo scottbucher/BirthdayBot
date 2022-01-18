@@ -1,9 +1,11 @@
 import { Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { Logger } from '.';
-import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database';
-import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils';
+import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database/index.js';
+import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils/index.js';
+import { Logger } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 
