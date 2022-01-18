@@ -10,7 +10,7 @@ import {
 } from '../models/database/index.js';
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models.js';
 import { TrustedRoles } from '../models/database/trusted-role-models.js';
-import { LangCode } from '../models/enums/index.js';
+import { EventData } from '../models/internal-models.js';
 import { Lang } from '../services/index.js';
 import { CelebrationUtils } from './index.js';
 
@@ -24,7 +24,8 @@ export class ListUtils {
         page: number,
         pageSize: number,
         hasPremium: boolean,
-        type: string
+        type: string,
+        data: EventData
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
 
@@ -41,7 +42,7 @@ export class ListUtils {
                             : type === 'memberanniversary'
                             ? 'list.noCustomMemberAnniversaryMessages'
                             : 'list.noCustomServerAnniversaryMessages',
-                        LangCode.EN_US
+                        data.lang()
                     )
                 );
             return embed;
@@ -70,15 +71,15 @@ export class ListUtils {
             }
 
             // Added embedded part
-            description += ` - **${Lang.getRef('info', 'terms.embedded', LangCode.EN_US)}**: ${
+            description += ` - **${Lang.getRef('info', 'terms.embedded', data.lang())}**: ${
                 customMessage.Embed
-                    ? Lang.getRef('info', 'boolean.true', LangCode.EN_US)
-                    : Lang.getRef('info', 'boolean.false', LangCode.EN_US)
+                    ? Lang.getRef('info', 'boolean.true', data.lang())
+                    : Lang.getRef('info', 'boolean.false', data.lang())
             }\n`;
 
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
             // Added color part
-            description += ` - **${Lang.getRef('info', 'terms.color', LangCode.EN_US)}**: #${
+            description += ` - **${Lang.getRef('info', 'terms.color', data.lang())}**: #${
                 customMessage.Color === '0'
                     ? Config.colors.default.substring(1).toUpperCase()
                     : customMessage.Color
@@ -97,7 +98,7 @@ export class ListUtils {
                     : type === 'serveranniversary'
                     ? 'serverAnniversaryMessageLocked'
                     : 'birthdayMessageLocked';
-            embed = Lang.getEmbed('info', listEmbed, LangCode.EN_US, {
+            embed = Lang.getEmbed('info', listEmbed, data.lang(), {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
@@ -114,7 +115,7 @@ export class ListUtils {
                     : type === 'serveranniversary'
                     ? 'serverAnniversaryMessageUnLocked'
                     : 'birthdayMessageUnLocked';
-            embed = Lang.getEmbed('info', listEmbed, LangCode.EN_US, {
+            embed = Lang.getEmbed('info', listEmbed, data.lang(), {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
@@ -134,7 +135,8 @@ export class ListUtils {
         page: number,
         pageSize: number,
         hasPremium: boolean,
-        type: string
+        type: string,
+        data: EventData
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
 
@@ -146,7 +148,7 @@ export class ListUtils {
                         type === 'birthday'
                             ? 'list.noCustomUserSpecificBirthdayMessages'
                             : 'list.noCustomUserSpecificMemberAnnivesaryMessages',
-                        LangCode.EN_US
+                        data.lang()
                     )
                 )
                 .setColor(Config.colors.default);
@@ -160,32 +162,32 @@ export class ListUtils {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
-                        : `**${Lang.getRef('info', 'terms.unknownMember', LangCode.EN_US)}** `
+                        : `**${Lang.getRef('info', 'terms.unknownMember', data.lang())}** `
                 } ${customMessage.Message.replace(
-                    Lang.getRef('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
                     member.toString()
                 )}\n`;
             } else {
                 description += `${
                     member
                         ? `**${member.displayName}**: `
-                        : `**${Lang.getRef('info', 'terms.unknownMember', LangCode.EN_US)}** `
+                        : `**${Lang.getRef('info', 'terms.unknownMember', data.lang())}** `
                 } ~~${customMessage.Message.replace(
-                    Lang.getRef('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
                     member.toString()
                 )}~~\n`;
             }
 
             // Added embedded part
-            description += ` - **${Lang.getRef('info', 'terms.embedded', LangCode.EN_US)}**: ${
+            description += ` - **${Lang.getRef('info', 'terms.embedded', data.lang())}**: ${
                 customMessage.Embed
-                    ? Lang.getRef('info', 'boolean.true', LangCode.EN_US)
-                    : Lang.getRef('info', 'boolean.false', LangCode.EN_US)
+                    ? Lang.getRef('info', 'boolean.true', data.lang())
+                    : Lang.getRef('info', 'boolean.false', data.lang())
             }\n`;
 
             if (!hasPremium && customMessage.Color !== '0') description += '~~';
             // Added color part
-            description += ` - **${Lang.getRef('info', 'terms.color', LangCode.EN_US)}**: #${
+            description += ` - **${Lang.getRef('info', 'terms.color', data.lang())}**: #${
                 customMessage.Color === '0'
                     ? Config.colors.default.substring(1).toUpperCase()
                     : customMessage.Color
@@ -201,7 +203,7 @@ export class ListUtils {
                 type === 'memberanniversary'
                     ? 'userSpecificMemberAnniversaryMessageLocked'
                     : 'userSpecificBirthdayMessageLocked';
-            embed = Lang.getEmbed('info', listEmbed, LangCode.EN_US, {
+            embed = Lang.getEmbed('info', listEmbed, data.lang(), {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
@@ -214,7 +216,7 @@ export class ListUtils {
                 type === 'memberanniversary'
                     ? 'userSpecificMemberAnniversaryMessageUnLocked'
                     : 'userSpecificBirthdayMessageUnLocked';
-            embed = Lang.getEmbed('info', listEmbed, LangCode.EN_US, {
+            embed = Lang.getEmbed('info', listEmbed, data.lang(), {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: customMessageResults.stats.TotalPages.toString(),
@@ -232,7 +234,8 @@ export class ListUtils {
         trustedRoleResults: TrustedRoles,
         page: number,
         pageSize: number,
-        hasPremium: boolean
+        hasPremium: boolean,
+        data: EventData
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
 
@@ -240,7 +243,7 @@ export class ListUtils {
 
         if (trustedRoleResults.trustedRoles.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription(Lang.getRef('info', 'list.noTrustedRoles', LangCode.EN_US))
+                .setDescription(Lang.getRef('info', 'list.noTrustedRoles', data.lang()))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -260,7 +263,7 @@ export class ListUtils {
                 description += `**${i.toLocaleString()}.** ${
                     role
                         ? `~~${role.toString()}~~ `
-                        : `**${Lang.getRef('info', 'terms.deletedRole', LangCode.EN_US)}** `
+                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}** `
                 }\n\n`;
             }
             i++;
@@ -270,7 +273,7 @@ export class ListUtils {
             !hasPremium &&
             trustedRoleResults.stats.TotalItems > Config.validation.trustedRoles.maxCount.free
         ) {
-            embed = Lang.getEmbed('info', 'list.trustedRolePaid', LangCode.EN_US, {
+            embed = Lang.getEmbed('info', 'list.trustedRolePaid', data.lang(), {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
@@ -281,7 +284,7 @@ export class ListUtils {
                 ICON: guild.client.user.displayAvatarURL(),
             });
         } else {
-            embed = Lang.getEmbed('info', 'list.trustedRoleFree', LangCode.EN_US, {
+            embed = Lang.getEmbed('info', 'list.trustedRoleFree', data.lang(), {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: trustedRoleResults.stats.TotalPages.toString(),
@@ -299,12 +302,13 @@ export class ListUtils {
         userDataResults: UserDataResults,
         guildData: GuildData,
         page: number,
-        pageSize: number
+        pageSize: number,
+        data: EventData
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
         if (userDataResults.userData.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription(Lang.getRef('info', 'list.noBirthdays', LangCode.EN_US))
+                .setDescription(Lang.getRef('info', 'list.noBirthdays', data.lang()))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -329,7 +333,7 @@ export class ListUtils {
             description += `__**${birthday}**__: ${userList}\n`; // Append the description
         }
 
-        embed = Lang.getEmbed('info', 'list.birthday', LangCode.EN_US, {
+        embed = Lang.getEmbed('info', 'list.birthday', data.lang(), {
             PAGE: page.toString(),
             LIST_DATA: description,
             TOTAL_PAGES: userDataResults.stats.TotalPages.toString(),
@@ -348,13 +352,14 @@ export class ListUtils {
         page: number,
         pageSize: number,
         totalPages: number,
-        totalMembers: number
+        totalMembers: number,
+        data: EventData
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
         if (guildMembers.length === 0) {
             // Not implemented
             let embed = new MessageEmbed()
-                .setDescription(Lang.getRef('info', 'list.noMemberAnniversaries', LangCode.EN_US))
+                .setDescription(Lang.getRef('info', 'list.noMemberAnniversaries', data.lang()))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -373,7 +378,7 @@ export class ListUtils {
         }
 
         // Update config variables and add member anniversary list message
-        embed = Lang.getEmbed('info', 'list.memberAnniversary', LangCode.EN_US, {
+        embed = Lang.getEmbed('info', 'list.memberAnniversary', data.lang(), {
             PAGE: page.toString(),
             LIST_DATA: description,
             TOTAL_PAGES: totalPages.toString(),
@@ -389,13 +394,14 @@ export class ListUtils {
         guild: Guild,
         blacklistResults: Blacklisted,
         page: number,
-        _pageSize: number
+        _pageSize: number,
+        data: EventData
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
 
         if (blacklistResults.blacklist.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription(Lang.getRef('info', 'list.emptyBlacklist', LangCode.EN_US))
+                .setDescription(Lang.getRef('info', 'list.emptyBlacklist', data.lang()))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -406,11 +412,11 @@ export class ListUtils {
             description += `**${
                 guild.members.resolve(target)?.displayName ||
                 guild.roles.resolve(target)?.toString() ||
-                `**${Lang.getRef('info', 'terms.unknownTarget', LangCode.EN_US)}**`
+                `**${Lang.getRef('info', 'terms.unknownTarget', data.lang())}**`
             }**: (ID: ${target})\n`; // Append the description
         }
 
-        embed = Lang.getEmbed('info', 'list.blacklist', LangCode.EN_US, {
+        embed = Lang.getEmbed('info', 'list.blacklist', data.lang(), {
             PAGE: page.toString(),
             LIST_DATA: description,
             TOTAL_PAGES: blacklistResults.stats.TotalPages.toString(),
@@ -427,15 +433,14 @@ export class ListUtils {
         memberAnniversaryRoleResults: MemberAnniversaryRoles,
         page: number,
         pageSize: number,
-        hasPremium: boolean
+        hasPremium: boolean,
+        data: EventData
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
 
         if (memberAnniversaryRoleResults.memberAnniversaryRoles.length === 0) {
             let embed = new MessageEmbed()
-                .setDescription(
-                    Lang.getRef('info', 'list.noMemberAnniversaryRoles', LangCode.EN_US)
-                )
+                .setDescription(Lang.getRef('info', 'list.noMemberAnniversaryRoles', data.lang()))
                 .setColor(Config.colors.default);
             return embed;
         }
@@ -456,7 +461,7 @@ export class ListUtils {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role
                         ? `~~${role.toString()}~~ `
-                        : `**${Lang.getRef('info', 'terms.deletedRole', LangCode.EN_US)}** `
+                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}** `
                 }\n\n`;
             }
         }
@@ -466,7 +471,7 @@ export class ListUtils {
             memberAnniversaryRoleResults.stats.TotalItems >
                 Config.validation.memberAnniversaryRoles.maxCount.free
         ) {
-            embed = Lang.getEmbed('info', 'list.memberAnniversaryRolePaid', LangCode.EN_US, {
+            embed = Lang.getEmbed('info', 'list.memberAnniversaryRolePaid', data.lang(), {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: memberAnniversaryRoleResults.stats.TotalPages.toString(),
@@ -476,7 +481,7 @@ export class ListUtils {
                 ICON: guild.client.user.displayAvatarURL(),
             });
         } else {
-            embed = Lang.getEmbed('info', 'list.memberAnniversaryRoleFree', LangCode.EN_US, {
+            embed = Lang.getEmbed('info', 'list.memberAnniversaryRoleFree', data.lang(), {
                 PAGE: page.toString(),
                 LIST_DATA: description,
                 TOTAL_PAGES: memberAnniversaryRoleResults.stats.TotalPages.toString(),
