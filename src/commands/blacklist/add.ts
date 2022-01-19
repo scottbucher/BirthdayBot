@@ -48,9 +48,9 @@ export class BlacklistAddSubCommand implements Command {
             return;
         }
 
-        let blaklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
+        let blacklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
 
-        if (blaklistData.blacklist.map(b => b.DiscordId).includes(mentionable.id)) {
+        if (blacklistData.blacklist.map(b => b.DiscordId).includes(mentionable.id)) {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.alreadyInBlacklist', data.lang(), {
