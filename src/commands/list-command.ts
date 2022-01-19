@@ -63,7 +63,7 @@ export class ListCommand implements Command {
         let guildData = data.guild;
 
         let type =
-            intr.options.getString(Lang.getCom('arguments.type')).toLowerCase() ?? 'birthday';
+            intr.options.getString(Lang.getCom('arguments.type'))?.toLowerCase() ?? 'birthday';
         let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1;
 
         let date: moment.MomentInput;
@@ -158,31 +158,31 @@ export class ListCommand implements Command {
                         {
                             type: 'BUTTON',
                             customId: 'queue_previous_more',
-                            emoji: Config.emojis.previousMore,
+                            emoji: Config.emotes.previousMore,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'queue_previous',
-                            emoji: Config.emojis.previous,
+                            emoji: Config.emotes.previous,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'queue_refresh',
-                            emoji: Config.emojis.refresh,
+                            emoji: Config.emotes.refresh,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'queue_next',
-                            emoji: Config.emojis.next,
+                            emoji: Config.emotes.next,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'queue_next_more',
-                            emoji: Config.emojis.nextMore,
+                            emoji: Config.emotes.nextMore,
                             style: 'PRIMARY',
                         },
                     ],
