@@ -39,7 +39,7 @@ export class ListUtils {
                         'info',
                         type === 'birthday'
                             ? 'list.noCustomBirthdayMessages'
-                            : type === 'memberanniversary'
+                            : type === 'member_anniversary'
                             ? 'list.noCustomMemberAnniversaryMessages'
                             : 'list.noCustomServerAnniversaryMessages',
                         data.lang()
@@ -50,15 +50,15 @@ export class ListUtils {
         let description = '';
 
         let maxMessagesFree: number =
-            type === 'memberanniversary'
+            type === 'member_anniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.free
-                : type === 'serveranniversary'
+                : type === 'server_anniversary'
                 ? Config.validation.message.maxCount.serverAnniversary.free
                 : Config.validation.message.maxCount.birthday.free;
         let maxMessagesPaid: number =
-            type === 'memberanniversary'
+            type === 'member_anniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.paid
-                : type === 'serveranniversary'
+                : type === 'server_anniversary'
                 ? Config.validation.message.maxCount.serverAnniversary.paid
                 : Config.validation.message.maxCount.birthday.paid;
 
@@ -93,9 +93,9 @@ export class ListUtils {
 
         if (!hasPremium && customMessageResults.stats.TotalItems > maxMessagesFree) {
             listEmbed +=
-                type === 'memberanniversary'
+                type === 'member_anniversary'
                     ? 'memberAnniversaryMessageLocked'
-                    : type === 'serveranniversary'
+                    : type === 'server_anniversary'
                     ? 'serverAnniversaryMessageLocked'
                     : 'birthdayMessageLocked';
             embed = Lang.getEmbed('info', listEmbed, data.lang(), {
@@ -110,9 +110,9 @@ export class ListUtils {
             });
         } else {
             listEmbed +=
-                type === 'memberanniversary'
+                type === 'member_anniversary'
                     ? 'memberAnniversaryMessageUnLocked'
-                    : type === 'serveranniversary'
+                    : type === 'server_anniversary'
                     ? 'serverAnniversaryMessageUnLocked'
                     : 'birthdayMessageUnLocked';
             embed = Lang.getEmbed('info', listEmbed, data.lang(), {
@@ -147,7 +147,7 @@ export class ListUtils {
                         'info',
                         type === 'birthday'
                             ? 'list.noCustomUserSpecificBirthdayMessages'
-                            : 'list.noCustomUserSpecificMemberAnnivesaryMessages',
+                            : 'list.noCustomUserSpecificMemberAnniversaryMessages',
                         data.lang()
                     )
                 )
@@ -200,7 +200,7 @@ export class ListUtils {
 
         if (!hasPremium) {
             listEmbed +=
-                type === 'memberanniversary'
+                type === 'member_anniversary'
                     ? 'userSpecificMemberAnniversaryMessageLocked'
                     : 'userSpecificBirthdayMessageLocked';
             embed = Lang.getEmbed('info', listEmbed, data.lang(), {
@@ -213,7 +213,7 @@ export class ListUtils {
             });
         } else {
             listEmbed +=
-                type === 'memberanniversary'
+                type === 'member_anniversary'
                     ? 'userSpecificMemberAnniversaryMessageUnLocked'
                     : 'userSpecificBirthdayMessageUnLocked';
             embed = Lang.getEmbed('info', listEmbed, data.lang(), {
@@ -229,7 +229,7 @@ export class ListUtils {
         return embed;
     }
 
-    public static async getTrustedRoleList(
+    public static async getTrustedRoleListEmbed(
         guild: Guild,
         trustedRoleResults: TrustedRoles,
         page: number,

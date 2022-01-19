@@ -8,6 +8,7 @@ import { Button } from './buttons/index.js';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
+    BlacklistListSubCommand,
     BlacklistRemoveIdSubCommand,
     BlacklistRemoveRoleOrUserSubCommand,
 } from './commands/blacklist/index.js';
@@ -45,17 +46,24 @@ import {
     VoteCommand,
 } from './commands/index.js';
 import { MemberAnniversaryRoleCommand } from './commands/mar-command.js';
-import { MarAddSubCommand, MarClearSubCommand, MarRemoveSubCommand } from './commands/mar/index.js';
+import {
+    MarAddSubCommand,
+    MarClearSubCommand,
+    MarListSubCommand,
+    MarRemoveSubCommand,
+} from './commands/mar/index.js';
 import { MessageCommand } from './commands/message-command.js';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
+    MessageListSubCommand,
     MessageRemoveSubCommand,
     MessageTestSubCommand,
 } from './commands/message/index.js';
 import {
     TrustedRoleAddSubCommand,
     TrustedRoleClearSubCommand,
+    TrustedRoleListSubCommand,
     TrustedRoleRemoveIdSubCommand,
     TrustedRoleRemoveRoleSubCommand,
 } from './commands/trusted-role/index.js';
@@ -135,23 +143,27 @@ async function start(): Promise<void> {
         blacklistRepo
     );
     let blacklistRemoveIdSubCommand = new BlacklistRemoveIdSubCommand(blacklistRepo);
+    let blacklistListSubCommand = new BlacklistListSubCommand(blacklistRepo);
 
     // Trusted Role Sub Commands
     let trustedRoleAddSubCommand = new TrustedRoleAddSubCommand(trustedRoleRepo);
     let trustedRoleClearSubCommand = new TrustedRoleClearSubCommand(trustedRoleRepo);
     let trustedRoleRemoveRoleSubCommand = new TrustedRoleRemoveRoleSubCommand(trustedRoleRepo);
     let trustedRoleRemoveIdSubCommand = new TrustedRoleRemoveIdSubCommand(trustedRoleRepo);
+    let trustedRoleListSubCommand = new TrustedRoleListSubCommand(trustedRoleRepo);
 
     //  Mar Sub Commands
     let marAddSubCommand = new MarAddSubCommand(memberAnniversaryRoleRepo);
     let marClearSubCommand = new MarClearSubCommand(memberAnniversaryRoleRepo);
     let marRemoveSubCommand = new MarRemoveSubCommand(memberAnniversaryRoleRepo);
+    let marListSubCommand = new MarListSubCommand(memberAnniversaryRoleRepo);
 
     // Message Sub Commands
     let messageAddSubCommand = new MessageAddSubCommand(customMessageRepo);
     let messageClearSubCommand = new MessageClearSubCommand(customMessageRepo);
     let messageRemoveSubCommand = new MessageRemoveSubCommand(customMessageRepo);
     let messageTestSubCommand = new MessageTestSubCommand(customMessageRepo);
+    let messageListSubCommand = new MessageListSubCommand(customMessageRepo);
 
     // Commands
     let commands: Command[] = [
@@ -170,6 +182,7 @@ async function start(): Promise<void> {
             blacklistClearSubCommand,
             blacklistRemoveRoleOrUserSubCommand,
             blacklistRemoveIdSubCommand,
+            blacklistListSubCommand,
         ]),
         new ConfigCommand([
             nameFormatSubCommand,
@@ -187,17 +200,20 @@ async function start(): Promise<void> {
             messageClearSubCommand,
             messageRemoveSubCommand,
             messageTestSubCommand,
+            messageListSubCommand,
         ]),
         new MemberAnniversaryRoleCommand([
             marAddSubCommand,
             marClearSubCommand,
             marRemoveSubCommand,
+            marListSubCommand,
         ]),
         new TrustedRoleCommand([
             trustedRoleAddSubCommand,
             trustedRoleClearSubCommand,
             trustedRoleRemoveRoleSubCommand,
             trustedRoleRemoveIdSubCommand,
+            trustedRoleListSubCommand,
         ]),
         new SetupCommand(guildRepo),
         new SettingsCommand(trustedRoleRepo),

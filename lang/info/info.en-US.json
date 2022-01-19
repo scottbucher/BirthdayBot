@@ -892,7 +892,7 @@
             "emptyBlacklist": "**The Birthday Blacklist is empty!**",
             "noCustomBirthdayMessages": "**No Custom Birthday Messages!**",
             "noCustomUserSpecificBirthdayMessages": "**No User-Specific Birthday Messages!**",
-            "noCustomUserSpecificMemberAnnivesaryMessages": "**No User-Specific Member Anniversary Messages!**",
+            "noCustomUserSpecificMemberAnniversaryMessages": "**No User-Specific Member Anniversary Messages!**",
             "noCustomMemberAnniversaryMessages": "**No Custom Member Anniversary Messages!**",
             "noCustomServerAnniversaryMessages": "**No Custom Server Anniversary Messages!**",
             "messagePaidFieldTitle": "Message Limit",
