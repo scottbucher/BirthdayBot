@@ -614,7 +614,7 @@
                 "fields": [
                     {
                         "name": "{{REF:list.memberAnniversaryRoleFieldTitle}}",
-                        "value": "{{REF:list.memberAnniversaryFieldText}}"
+                        "value": "{{REF:list.memberAnniversaryRoleFieldText}}"
                     }
                 ],
                 "timestamp": true
