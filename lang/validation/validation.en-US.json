@@ -258,7 +258,8 @@
             "notInMar": "There isn't a member anniversary role for that year!",
             "duplicateMessage": "Duplicate message found for this server!",
             "noCustomMessagesGeneric": "This server doesn't have any {{DISPLAY_TYPE}}!",
-            "noDefaultUserSpecificMessages": "There aren't default user specific messages! Please specify once and trying again!"
+            "noDefaultUserSpecificMessages": "There aren't default user specific messages! Please specify once and trying again!",
+            "cantBlacklistBots": "You can't blacklist bots!"
         }
     },
     "refs": {

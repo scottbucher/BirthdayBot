@@ -48,6 +48,14 @@ export class BlacklistAddSubCommand implements Command {
             return;
         }
 
+        if (mentionable instanceof User && mentionable.bot) {
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.cantBlacklistBots', data.lang())
+            );
+            return;
+        }
+
         let blacklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
 
         if (blacklistData.blacklist.map(b => b.DiscordId).includes(mentionable.id)) {
