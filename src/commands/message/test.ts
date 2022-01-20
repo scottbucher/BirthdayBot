@@ -41,7 +41,8 @@ export class MessageTestSubCommand implements Command {
 
         let isUserSpecific = type.includes('user');
         let color = Config.colors.default;
-        let hasPremium = data.subscription && data.subscription.service;
+        let hasPremium =
+            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         let messageData = type.includes('user')
             ? await this.customMessageRepo.getCustomUserMessages(

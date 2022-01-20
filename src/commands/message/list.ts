@@ -29,7 +29,8 @@ export class MessageListSubCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1;
         let type = intr.options.getString(Lang.getCom('arguments.type'))?.toLowerCase();
-        let hasPremium = data.subscription ? data.subscription.service : false;
+        let hasPremium =
+            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         let pageSize = Config.experience.birthdayMessageListSize;
 

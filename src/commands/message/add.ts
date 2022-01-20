@@ -40,7 +40,8 @@ export class MessageAddSubCommand implements Command {
         let embedChoice: number;
         let target: GuildMember;
         let userId = '0';
-        let hasPremium = data.subscription && data.subscription.service;
+        let hasPremium =
+            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

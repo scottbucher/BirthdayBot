@@ -28,7 +28,8 @@ export class TrustedRoleAddSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let role = intr.options.getRole(Lang.getCom('arguments.role'));
-        let hasPremium = data.subscription && data.subscription.service;
+        let hasPremium =
+            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         if (!(role instanceof Role)) {
             await MessageUtils.sendIntr(

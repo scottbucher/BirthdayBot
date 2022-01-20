@@ -91,7 +91,8 @@ export class TestCommand implements Command {
 
         // bday test <type> [user] [year]
         let guild = intr.guild;
-        let hasPremium = data.subscription ? data.subscription.service : false;
+        let hasPremium =
+            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         let target: GuildMember = guild.members.resolve(user);
         let userData: UserData;

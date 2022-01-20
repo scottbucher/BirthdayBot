@@ -104,7 +104,7 @@ export class CelebrationJob implements Job {
             try {
                 let members: Collection<string, GuildMember> = guild.members.cache;
 
-                let hasPremium = premiumGuildIds.includes(guild.id);
+                let hasPremium = !Config.payments.enabled || premiumGuildIds.includes(guild.id);
 
                 promises.push(
                     this.celebrationService
