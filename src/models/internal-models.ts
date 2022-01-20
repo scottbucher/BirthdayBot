@@ -15,8 +15,4 @@ export class EventData {
         // TODO: Calculate language based on event data
         return Lang.Default;
     }
-
-    public setSubscriptionStatus(subscription: SubscriptionStatus): void {
-        this.subscription = subscription;
-    }
 }

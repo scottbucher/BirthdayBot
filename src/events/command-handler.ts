@@ -1,6 +1,5 @@
 import { CommandInteraction, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
-import { FetchError } from 'node-fetch';
 import { createRequire } from 'node:module';
 
 import { Command, CommandDeferType } from '../commands/index.js';
@@ -63,37 +62,14 @@ export class CommandHandler implements EventHandler {
             }
         }
 
+        // Get data from database
         let data = new EventData(
             intr.guild ? await this.guildRepo.getGuild(intr.guild?.id) : undefined,
-            null,
+            intr.guild && Config.payments.enabled
+                ? await this.subService.getSubscription(PlanName.premium1, intr.guild?.id)
+                : undefined,
             Config.payments.enabled ? await this.userRepo.getUserVote(intr.user.id) : undefined
         );
-
-        // Get data from database
-        if (intr.guild) {
-            try {
-                data.setSubscriptionStatus(
-                    intr.guild && Config.payments.enabled
-                        ? await this.subService.getSubscription(PlanName.premium1, intr.guild?.id)
-                        : undefined
-                );
-            } catch (error) {
-                if (error instanceof FetchError) {
-                    Logger.error(
-                        Logs.error.subscriptionServiceConnection
-                            .replaceAll('{GUILD_NAME}', intr.guild?.name)
-                            .replaceAll('{GUILD_ID}', intr.guild?.id)
-                    );
-                    data.setSubscriptionStatus({
-                        app: 'birthday-bot',
-                        plan: null,
-                        subscriber: null,
-                        service: true,
-                        time: null,
-                    });
-                }
-            }
-        }
 
         try {
             // Check if interaction passes command checks
