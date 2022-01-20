@@ -9,7 +9,7 @@ import { Command } from '../index.js';
 export class MarRemoveSubCommand implements Command {
     constructor(public memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
     public metadata: ApplicationCommandData = {
-        name: Lang.getCom('subCommands.add'),
+        name: Lang.getCom('subCommands.remove'),
         description: undefined,
     };
 
