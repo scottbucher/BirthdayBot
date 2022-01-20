@@ -9,7 +9,7 @@ import { Command } from '../index.js';
 export class TrustedRoleRemoveIdSubCommand implements Command {
     constructor(public trustedRoleRepo: TrustedRoleRepo) {}
     public metadata: ApplicationCommandData = {
-        name: Lang.getCom('subCommands.remove'),
+        name: Lang.getCom('subCommands.id'),
         description: undefined,
     };
 
@@ -27,7 +27,7 @@ export class TrustedRoleRemoveIdSubCommand implements Command {
 
         let trustedRoleData = await this.trustedRoleRepo.getTrustedRoles(intr.guild.id);
 
-        if (trustedRoleData.trustedRoles.map(b => b.TrustedRoleDiscordId).includes(id)) {
+        if (!trustedRoleData.trustedRoles.map(b => b.TrustedRoleDiscordId).includes(id)) {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.notInTrustedRole', data.lang(), {
