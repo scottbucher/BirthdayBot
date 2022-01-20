@@ -16,6 +16,11 @@ import { Command } from '../index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../../config/config.json');
 
+/**
+ * Reminder on how types vs display types should work.
+ * type comes in as either birthday, member_anniversary, or server_anniversary
+ * display types are gotten from the Lang system
+ */
 export class MessageAddSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}
     public metadata: ApplicationCommandData = {
@@ -33,8 +38,18 @@ export class MessageAddSubCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let type = intr.options.getString(Lang.getCom('arguments.type')).toLowerCase();
+        let type = intr.options.getString(Lang.getCom('arguments.type')).toLowerCase(); // How the type comes in, for instance, MEMBER_ANNIVERSARY
+        let databaseType = type.replaceAll('_', ''); // How we store the type in the database, for instance, memberanniversary
+        let commandDisplayType: string; // How we display the type when using it in an example, for instance "/message list memberAnniversary"
+        let typeDisplayName: string; // How we display the type when talking about it, for instance "A Member Anniversary is..."
         let message = intr.options.getString(Lang.getCom('arguments.message'));
+
+        /**
+         * In the database there are only three types, birthday, member anniversary, and server anniversary.
+         * We determine if they are user specific by the UserDiscordId field in the message table
+         */
+        if (databaseType.includes('users'))
+            databaseType = databaseType.includes('birthday') ? 'birthday' : 'memberanniversary';
 
         let colorHex = '0';
         let embedChoice: number;
@@ -43,9 +58,8 @@ export class MessageAddSubCommand implements Command {
         let hasPremium =
             !Config.payments.enabled || (data.subscription && data.subscription.service);
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         // TODO: Use regex to parse a user input
+        // Target needs to be the determining factor of if this is a user specific message or not
         target = null;
 
         // Did we find a user?
@@ -71,6 +85,20 @@ export class MessageAddSubCommand implements Command {
                 return;
             }
         }
+
+        // Build our command display type based on if there was a user or not
+        if (target) {
+            commandDisplayType = type.includes('birthday')
+                ? 'userSpecificBirthday'
+                : 'userSpecificMemberAnniversary';
+        } else {
+            commandDisplayType = type.includes('member')
+                ? 'memberAnniversary'
+                : type.includes('server')
+                ? 'serverAnniversary'
+                : 'birthday';
+        }
+
         /**
          * The reason for this ugly code is due to the fact that in a message, if a user mentions someone
          * who either has or has had a nickname, their string format of the mention is <@!USERID>
@@ -80,15 +108,23 @@ export class MessageAddSubCommand implements Command {
         let mentionWithNickNameFormat =
             target?.toString().substring(0, 2) + '!' + target?.toString().substring(2);
         // Compile the message
+
+        /**
+         * Replace all of the placeholders (using the regex in the lang files to
+         * account for all the old versions of the placeholders) and add in the
+         * new version of the placeholders. If it is a user specific message,
+         * we replace the mentionWithNickNameFormat with the placeholder otherwise
+         * just use the regex
+         */
         message = message
             .replace(
-                target && type !== 'serveranniversary'
+                target && type !== 'server_anniversary'
                     ? mentionWithNickNameFormat
                     : Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
                 '{Users}'
             )
             .replace(
-                target && type !== 'serveranniversary'
+                target && type !== 'server_anniversary'
                     ? target?.toString()
                     : Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
                 '{Users}'
@@ -106,14 +142,8 @@ export class MessageAddSubCommand implements Command {
             return;
         }
 
-        let typeDisplayName =
-            type === 'birthday'
-                ? Lang.getRef('info', 'terms.birthday', data.lang()).toLowerCase()
-                : type === 'memberanniversary'
-                ? Lang.getRef('info', 'terms.memberAnniversary', data.lang()).toLowerCase()
-                : Lang.getRef('info', 'terms.serverAnniversary', data.lang()).toLowerCase();
-
-        if (type === 'birthday' || type === 'memberanniversary') {
+        // Ensure the required placeholders are in the message
+        if (type === 'birthday' || type === 'member_anniversary') {
             // Can also use year and server name placeholder
             if (!message.includes('{Users}')) {
                 await MessageUtils.sendIntr(
@@ -143,9 +173,21 @@ export class MessageAddSubCommand implements Command {
             }
         }
 
-        let customMessages = await this.customMessageRepo.getCustomMessages(intr.guild.id, type);
+        typeDisplayName =
+            type === 'birthday'
+                ? Lang.getRef('info', 'terms.birthday', data.lang()).toLowerCase()
+                : type === 'member_anniversary'
+                ? Lang.getRef('info', 'terms.memberAnniversary', data.lang()).toLowerCase()
+                : Lang.getRef('info', 'terms.serverAnniversary', data.lang()).toLowerCase();
 
-        let messages = customMessages.customMessages.filter(message => message.Type === type);
+        let customMessages = await this.customMessageRepo.getCustomMessages(
+            intr.guild.id,
+            databaseType
+        );
+
+        let messages = customMessages.customMessages.filter(
+            message => message.Type === databaseType
+        );
 
         let globalMessageCount = messages.filter(
             message => message.UserDiscordId === '0' && message.Type === type
@@ -154,16 +196,17 @@ export class MessageAddSubCommand implements Command {
         let maxMessageCountFree =
             type === 'birthday'
                 ? Config.validation.message.maxCount.birthday.free
-                : type === 'memberanniversary'
+                : type === 'member_anniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.free
                 : Config.validation.message.maxCount.serverAnniversary.free;
         let maxMessageCountPaid =
             type === 'birthday'
                 ? Config.validation.message.maxCount.birthday.paid
-                : type === 'memberanniversary'
+                : type === 'member_anniversary'
                 ? Config.validation.message.maxCount.memberAnniversary.paid
                 : Config.validation.message.maxCount.serverAnniversary.paid;
 
+        // Check if they have reached the max custom messages for this type
         if (customMessages) {
             if (globalMessageCount >= maxMessageCountFree && !hasPremium) {
                 await MessageUtils.sendIntr(
@@ -186,71 +229,63 @@ export class MessageAddSubCommand implements Command {
                 );
                 return;
             }
+        }
 
-            // If there is a target, begin the checks if there is a user custom message already for the target
-            if (target && type !== 'serveranniversary') {
-                let userMessage = messages.filter(message => message.UserDiscordId === target.id);
+        // If there is a target, begin the checks if there is a user custom message already for the target
+        if (target && type !== 'server_anniversary') {
+            let userMessage = messages.filter(message => message.UserDiscordId === target.id);
 
-                // if it found a message for this user
-                if (userMessage.length > 0) {
-                    // There is already a message for this user should they overwrite it?
+            // if it found a message for this user
+            if (userMessage.length > 0) {
+                // There is already a message for this user should they overwrite it?
 
-                    let confirmation = await CollectorUtils.getBooleanFromReact(
-                        intr,
-                        data,
-                        Lang.getEmbed(
-                            'validation',
-                            'embeds.duplicateUserCustomMessage',
-                            data.lang(),
-                            {
-                                TYPE: typeDisplayName,
-                                CURRENT_MESSAGE: userMessage[0].Message.replace(
-                                    '{Users}',
-                                    target.toString()
-                                ),
-                                NEW_MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
-                                    message,
-                                    intr.guild,
-                                    type,
-                                    target?.toString()
-                                ),
-                                ICON: intr.client.user.displayAvatarURL(),
-                            }
-                        )
-                    );
+                let confirmation = await CollectorUtils.getBooleanFromReact(
+                    intr,
+                    data,
+                    Lang.getEmbed('validation', 'embeds.duplicateUserCustomMessage', data.lang(), {
+                        TYPE: typeDisplayName,
+                        CURRENT_MESSAGE: userMessage[0].Message.replace(
+                            '{Users}',
+                            target.toString()
+                        ),
+                        NEW_MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
+                            message,
+                            intr.guild,
+                            type,
+                            target?.toString()
+                        ),
+                        ICON: intr.client.user.displayAvatarURL(),
+                    })
+                );
 
-                    if (confirmation === undefined) return;
+                if (confirmation === undefined) return;
 
-                    if (!confirmation) {
-                        await MessageUtils.sendIntr(
-                            intr,
-                            Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
-                        );
-                        return;
-                    }
-                }
-            } else {
-                // Don't allow duplicate birthday messages for non user messages
-                let duplicateMessage = messages.map(message => message.Message).includes(message);
-                if (duplicateMessage) {
+                if (!confirmation) {
                     await MessageUtils.sendIntr(
                         intr,
-                        Lang.getErrorEmbed(
-                            'validation',
-                            'errorEmbeds.duplicateMessage',
-                            data.lang()
-                        )
+                        Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
                     );
                     return;
                 }
             }
+        } else {
+            // Don't allow duplicate birthday messages for non user messages
+            let duplicateMessage = messages.map(message => message.Message).includes(message);
+            if (duplicateMessage) {
+                await MessageUtils.sendIntr(
+                    intr,
+                    Lang.getErrorEmbed('validation', 'errorEmbeds.duplicateMessage', data.lang())
+                );
+                return;
+            }
         }
 
         // we can let there be an @ in the server anniversary message we just won't consider it a user specific messages
-        userId = target && type !== 'serveranniversary' ? target.id : '0';
+        userId = target && type !== 'server_anniversary' ? target.id : '0';
 
+        // Only premium servers can have a custom color
         if (hasPremium) {
-            // prompt them for a type
+            // prompt them for a color
             let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
                 await MessageUtils.sendIntr(
                     intr,
@@ -281,6 +316,7 @@ export class MessageAddSubCommand implements Command {
             if (colorHex === undefined) return;
         }
 
+        // Check if this message should be an embed or not
         let option = await CollectorUtils.getBooleanFromReact(
             intr,
             data,
@@ -310,7 +346,7 @@ export class MessageAddSubCommand implements Command {
                       MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
                           message,
                           intr.guild,
-                          type,
+                          commandDisplayType,
                           null
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
@@ -319,7 +355,7 @@ export class MessageAddSubCommand implements Command {
                           : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
                                 COLOR_HEX: colorHex,
                             }),
-                      TYPE: type,
+                      TYPE: commandDisplayType,
                       ICON: intr.client.user.displayAvatarURL(),
                   })
                 : Lang.getEmbed('results', 'customMessage.addUserSpecific', data.lang(), {
@@ -327,7 +363,7 @@ export class MessageAddSubCommand implements Command {
                       MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
                           message,
                           intr.guild,
-                          type,
+                          commandDisplayType,
                           target?.toString()
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
@@ -336,10 +372,7 @@ export class MessageAddSubCommand implements Command {
                           : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
                                 COLOR_HEX: colorHex,
                             }),
-                      TYPE:
-                          type === 'birthday'
-                              ? 'userSpecificBirthday'
-                              : 'userSpecificMemberAnniversary',
+                      TYPE: commandDisplayType,
                       USER: target.toString(),
                       ICON: intr.client.user.displayAvatarURL(),
                   })
