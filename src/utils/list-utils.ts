@@ -250,13 +250,13 @@ export class ListUtils {
             ) {
                 description += `**${i.toLocaleString()}.** ${
                     role
-                        ? `${role.toString()} `
-                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}** `
+                        ? `${role.toString()}`
+                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`
                 }: (ID: ${trustedRole.TrustedRoleDiscordId})\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ${
                     role
-                        ? `~~${role.toString()}~~ `
+                        ? `~~${role.toString()}~~`
                         : `~~**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**~~`
                 }: (ID: ${trustedRole.TrustedRoleDiscordId})\n\n`;
             }
@@ -460,14 +460,14 @@ export class ListUtils {
             ) {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role
-                        ? `${role.toString()} `
-                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}** `
+                        ? `${role.toString()}`
+                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`
                 }: (ID: ${memberAnniversaryRole.MemberAnniversaryRoleDiscordId})\n\n`;
             } else {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role
-                        ? `~~${role.toString()}~~ `
-                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}** `
+                        ? `~~${role.toString()}~~`
+                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`
                 }: (ID: ${memberAnniversaryRole.MemberAnniversaryRoleDiscordId})\n\n`;
             }
         }
