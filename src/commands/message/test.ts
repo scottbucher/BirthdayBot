@@ -21,7 +21,7 @@ let Config = require('../../../config/config.json');
 export class MessageTestSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}
     public metadata: ApplicationCommandData = {
-        name: Lang.getCom('subCommands.clear'),
+        name: Lang.getCom('subCommands.test'),
         description: undefined,
     };
 
@@ -67,7 +67,7 @@ export class MessageTestSubCommand implements Command {
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
-                    'embeds.custommessageInvalidPosition',
+                    'errorEmbeds.customMessageInvalidPosition',
                     data.lang(),
                     {
                         ICON: intr.client.user.displayAvatarURL(),

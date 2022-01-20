@@ -261,6 +261,7 @@
             "duplicateMessage": "Duplicate message found for this server!",
             "noCustomMessagesGeneric": "This server doesn't have any {{DISPLAY_TYPE}}!",
             "noDefaultUserSpecificMessages": "There aren't default user specific messages! Please specify once and trying again!",
+            "customMessageInvalidPosition": "Invalid position! Please try again.",
             "cantBlacklistBots": "You can't blacklist bots!",
             "cantBlacklistNotInServer": "Only users in this server can be added to the blacklist!"
         }
@@ -282,7 +283,7 @@
         "defaults": {
             "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
             "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.year}} year(s) in the server {{REF:placeHolders.users}}!",
-            "serverAnniversaryMessage": "{{COM:placeHolders.server}} is now {{REF:placeHolders.year}} year(s) old!",
+            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeHolders.year}} year(s) old!",
             "birthdayChannelName": "{{COM:emotes.birthdayEmote}} birthdays",
             "birthdayChannelTopic": "Birthdays Announcements!",
             "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",

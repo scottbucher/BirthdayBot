@@ -390,8 +390,8 @@
                     "Should this message be embedded? [(?)]({{COM:docLinks.whatIsAnEmbed}})",
                     "Hint: This message is embed! Non-embedded messages are just plain text.",
                     "",
-                    "True {{COM:colors.confirm}}",
-                    "False {{COM:colors.deny}}"
+                    "True {{COM:emotes.confirm}}",
+                    "False {{COM:emotes.deny}}"
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}",

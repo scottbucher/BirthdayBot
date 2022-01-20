@@ -11,7 +11,7 @@ import { Command } from '../index.js';
 export class MessageRemoveSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}
     public metadata: ApplicationCommandData = {
-        name: Lang.getCom('subCommands.clear'),
+        name: Lang.getCom('subCommands.remove'),
         description: undefined,
     };
 
@@ -29,12 +29,15 @@ export class MessageRemoveSubCommand implements Command {
         let position = intr.options.getInteger(Lang.getCom('arguments.position'));
         let isUserSpecific = type.includes('user');
 
-        let messageData = type.includes('user')
+        // TODO: change database types to use underscores as the commands do
+        let databaseType = type.replaceAll('_', '');
+
+        let messageData = databaseType.includes('user')
             ? await this.customMessageRepo.getCustomUserMessages(
                   intr.guild.id,
-                  type.includes('birthday') ? 'birthday' : 'memberanniversary'
+                  databaseType.includes('birthday') ? 'birthday' : 'member_anniversary'
               )
-            : await this.customMessageRepo.getCustomMessages(intr.guild.id, type);
+            : await this.customMessageRepo.getCustomMessages(intr.guild.id, databaseType);
 
         let totalMessages = messageData.customMessages.length;
         // If it is a 0 the custom message technically needs a plural
@@ -69,7 +72,7 @@ export class MessageRemoveSubCommand implements Command {
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
-                    'embeds.custommessageInvalidPosition',
+                    'errorEmbeds.customMessageInvalidPosition',
                     LangCode.EN_US,
                     {
                         ICON: intr.client.user.displayAvatarURL(),
