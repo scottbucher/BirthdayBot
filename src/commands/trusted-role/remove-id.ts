@@ -37,8 +37,7 @@ export class TrustedRoleRemoveIdSubCommand implements Command {
             return;
         }
 
-        //TODO: update trusted role remove procedure to remove based on id and not position
-        // await this.trustedRoleRepo.removeTrustedRole(intr.guild.id, id);
+        await this.trustedRoleRepo.removeTrustedRole(intr.guild.id, id);
 
         await MessageUtils.sendIntr(
             intr,

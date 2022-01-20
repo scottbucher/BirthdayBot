@@ -9,8 +9,8 @@ export class TrustedRoleRepo {
         await this.dataAccess.executeProcedure(Procedure.TrustedRole_Add, [discordId, roleId]);
     }
 
-    public async removeTrustedRole(discordId: string, position: number): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.TrustedRole_Remove, [discordId, position]);
+    public async removeTrustedRole(discordId: string, id: string): Promise<void> {
+        await this.dataAccess.executeProcedure(Procedure.TrustedRole_Remove, [discordId, id]);
     }
 
     public async clearTrustedRoles(discordId: string): Promise<void> {

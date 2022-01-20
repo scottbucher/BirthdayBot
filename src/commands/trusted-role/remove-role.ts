@@ -49,7 +49,7 @@ export class TrustedRoleRemoveRoleSubCommand implements Command {
             return;
         }
 
-        await this.trustedRoleRepo.addTrustedRole(intr.guild.id, role.id);
+        await this.trustedRoleRepo.removeTrustedRole(intr.guild.id, role.id);
 
         await MessageUtils.sendIntr(
             intr,

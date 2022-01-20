@@ -88,7 +88,7 @@ export class MessageClearSubCommand implements Command {
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getEmbed('results', 'successEmbeds.customMessagesCleared', LangCode.EN_US, {
+            Lang.getEmbed('results', 'successEmbeds.customMessagesClear', LangCode.EN_US, {
                 DISPLAY_TYPE: displayType,
             })
         );

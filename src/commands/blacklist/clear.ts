@@ -62,7 +62,7 @@ export class BlacklistClearSubCommand implements Command {
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getSuccessEmbed('results', 'successEmbeds.blacklistCleared', data.lang())
+            Lang.getSuccessEmbed('results', 'successEmbeds.blacklistClear', data.lang())
         );
     }
 }

@@ -141,7 +141,7 @@ export class ChannelSubCommand implements Command {
                         intr,
                         Lang.getSuccessEmbed(
                             'results',
-                            'successEmbeds.channelCreated',
+                            'successEmbeds.channelCreate',
                             data.lang(),
                             {
                                 CHANNEL: `<#${channel}>`,
@@ -213,7 +213,7 @@ export class ChannelSubCommand implements Command {
         if (channel === '0') {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getSuccessEmbed('results', 'successEmbeds.channelCleared', data.lang(), {
+                Lang.getSuccessEmbed('results', 'successEmbeds.channelClear', data.lang(), {
                     TYPE: displayType.toLowerCase(),
                 })
             );

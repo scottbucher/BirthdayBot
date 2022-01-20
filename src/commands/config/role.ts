@@ -108,7 +108,7 @@ export class RoleSubCommand implements Command {
                     )?.id;
                     await MessageUtils.sendIntr(
                         intr,
-                        Lang.getSuccessEmbed('results', 'successEmbeds.roleCreated', data.lang(), {
+                        Lang.getSuccessEmbed('results', 'successEmbeds.roleCreate', data.lang(), {
                             ROLE: `<@&${role}>`,
                         })
                     );
@@ -239,7 +239,7 @@ export class RoleSubCommand implements Command {
         if (role === '0') {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getSuccessEmbed('results', 'successEmbeds.roleCleared', data.lang(), {
+                Lang.getSuccessEmbed('results', 'successEmbeds.roleClear', data.lang(), {
                     TYPE: displayType.toLowerCase(),
                 })
             );
