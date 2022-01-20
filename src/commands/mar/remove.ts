@@ -27,7 +27,7 @@ export class MarRemoveSubCommand implements Command {
 
         let marData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(intr.guild.id);
 
-        if (marData.memberAnniversaryRoles.map(b => b.Year).includes(year)) {
+        if (!marData.memberAnniversaryRoles.map(b => b.Year).includes(year)) {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.notInMar', data.lang())
