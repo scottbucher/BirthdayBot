@@ -74,16 +74,7 @@ export class CommandHandler implements EventHandler {
             try {
                 data.setSubscriptionStatus(
                     intr.guild && Config.payments.enabled
-                        ? (await this.subService.getSubscription(
-                              PlanName.premium1,
-                              intr.guild?.id
-                          )) ?? {
-                              app: 'birthday-bot',
-                              plan: null,
-                              subscriber: null,
-                              service: true,
-                              time: null,
-                          }
+                        ? await this.subService.getSubscription(PlanName.premium1, intr.guild?.id)
                         : undefined
                 );
             } catch (error) {
@@ -93,6 +84,13 @@ export class CommandHandler implements EventHandler {
                             .replaceAll('{GUILD_NAME}', intr.guild?.name)
                             .replaceAll('{GUILD_ID}', intr.guild?.id)
                     );
+                    data.setSubscriptionStatus({
+                        app: 'birthday-bot',
+                        plan: null,
+                        subscriber: null,
+                        service: true,
+                        time: null,
+                    });
                 }
             }
         }
