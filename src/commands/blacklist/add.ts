@@ -48,7 +48,7 @@ export class BlacklistAddSubCommand implements Command {
             return;
         }
 
-        if (mentionable instanceof User && mentionable.bot) {
+        if (!(mentionable instanceof Role || mentionable instanceof User) && mentionable.user.bot) {
             await MessageUtils.sendIntr(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.cantBlacklistBots', data.lang())
