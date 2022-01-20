@@ -9,7 +9,7 @@ import { Command } from '../index.js';
 export class TrustedRoleRemoveRoleSubCommand implements Command {
     constructor(public trustedRoleRepo: TrustedRoleRepo) {}
     public metadata: ApplicationCommandData = {
-        name: Lang.getCom('subCommands.add'),
+        name: Lang.getCom('subCommands.remove'),
         description: undefined,
     };
 

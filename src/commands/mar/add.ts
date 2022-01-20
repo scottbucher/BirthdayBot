@@ -62,7 +62,6 @@ export class MarAddSubCommand implements Command {
                 })
             );
             return;
-            return;
         }
 
         if (

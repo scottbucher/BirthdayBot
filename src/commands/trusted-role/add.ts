@@ -1,11 +1,15 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString, Role } from 'discord.js';
+import { createRequire } from 'node:module';
 
+import { LangCode } from '../../models/enums/language.js';
 import { EventData } from '../../models/index.js';
 import { TrustedRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
 import { MessageUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
+const require = createRequire(import.meta.url);
+let Config = require('../../../config/config.json');
 export class TrustedRoleAddSubCommand implements Command {
     constructor(public trustedRoleRepo: TrustedRoleRepo) {}
     public metadata: ApplicationCommandData = {
@@ -24,6 +28,7 @@ export class TrustedRoleAddSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let role = intr.options.getRole(Lang.getCom('arguments.role'));
+        let hasPremium = data.subscription && data.subscription.service;
 
         if (!(role instanceof Role)) {
             await MessageUtils.sendIntr(
@@ -49,11 +54,37 @@ export class TrustedRoleAddSubCommand implements Command {
             return;
         }
 
+        if (
+            trustedRoleData &&
+            trustedRoleData.trustedRoles.length >= Config.validation.trustedRoles.maxCount.free &&
+            !hasPremium
+        ) {
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.trustedRoleMaxFree', LangCode.EN_US, {
+                    FREE_MAX: Config.validation.trustedRoles.maxCount.free.toString(),
+                    PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
+                })
+            );
+            return;
+        } else if (
+            trustedRoleData &&
+            trustedRoleData.trustedRoles.length >= Config.validation.trustedRoles.maxCount.paid
+        ) {
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getEmbed('validation', 'errorEmbeds.trustedRoleMaxPaid', LangCode.EN_US, {
+                    PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
+                })
+            );
+            return;
+        }
+
         await this.trustedRoleRepo.addTrustedRole(intr.guild.id, role.id);
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getSuccessEmbed('results', 'successEmbeds.trustedRoleAdded', data.lang(), {
+            Lang.getSuccessEmbed('results', 'successEmbeds.trustedRoleAdd', data.lang(), {
                 TARGET: role.toString(),
             })
         );

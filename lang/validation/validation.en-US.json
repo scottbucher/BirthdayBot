@@ -248,18 +248,21 @@
             "alreadyInBlacklist": "That {{TYPE}} is already in the blacklist!",
             "emptyBlacklist": "The birthday blacklist is empty!",
             "notInBlacklist": "That {{TYPE}} is not in the blacklist!",
-            "alreadyInTrustedRole": "That {{ROLE}} is already a trusted role!",
+            "alreadyInTrustedRole": "{{ROLE}} is already a trusted role!",
             "emptyTrustedRole": "The trusted role list is empty!",
             "notInTrustedRole": "That {{TYPE}} is not in the trusted role list!",
             "marManaged": "Member Anniversary Roles cannot be managed by an external service!",
             "marDuplicateYear": "There is already a member anniversary role set for year {{YEAR}}!",
-            "marMaxPaid": "Member anniversary roles are capped at {{PAID_MAX}}!",
+            "trustedRoleMaxFree": "You can only have **{{FREE_MAX}}** trusted role!\nUnlock up to **{{PAID_MAX}}** trusted roles with {{COM:bot.name}} Premium!",
+            "trustedRoleMaxPaid": "trusted roles are capped at **{{PAID_MAX}}**!",
+            "marMaxPaid": "Member anniversary roles are capped at **{{PAID_MAX}}**!",
             "emptyMar": "The member anniversary role list is empty!",
             "notInMar": "There isn't a member anniversary role for that year!",
             "duplicateMessage": "Duplicate message found for this server!",
             "noCustomMessagesGeneric": "This server doesn't have any {{DISPLAY_TYPE}}!",
             "noDefaultUserSpecificMessages": "There aren't default user specific messages! Please specify once and trying again!",
-            "cantBlacklistBots": "You can't blacklist bots!"
+            "cantBlacklistBots": "You can't blacklist bots!",
+            "cantBlacklistNotInServer": "Only users in this server can be added to the blacklist!"
         }
     },
     "refs": {
