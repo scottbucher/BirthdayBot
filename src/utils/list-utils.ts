@@ -434,7 +434,7 @@ export class ListUtils {
         return embed.setThumbnail(guild.iconURL());
     }
 
-    public static async getMemberAnniversaryRoleList(
+    public static async getMemberAnniversaryRoleListEmbed(
         guild: Guild,
         memberAnniversaryRoleResults: MemberAnniversaryRoles,
         page: number,
@@ -459,14 +459,16 @@ export class ListUtils {
                     Config.validation.memberAnniversaryRoles.maxCount.free
             ) {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
-                    role ? `${role.toString()} ` : '**** '
-                }\n\n`;
+                    role
+                        ? `${role.toString()} `
+                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}** `
+                }: (ID: ${memberAnniversaryRole.MemberAnniversaryRoleDiscordId})\n\n`;
             } else {
                 description += `**Year ${memberAnniversaryRole.Year}:** ${
                     role
                         ? `~~${role.toString()}~~ `
                         : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}** `
-                }\n\n`;
+                }: (ID: ${memberAnniversaryRole.MemberAnniversaryRoleDiscordId})\n\n`;
             }
         }
 

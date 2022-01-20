@@ -45,7 +45,7 @@ export class MarAddSubCommand implements Command {
         if (role.managed) {
             MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'errorEmbeds.marManaged', data.lang())
+                Lang.getErrorEmbed('validation', 'errorEmbeds.marManaged', data.lang())
             );
             return;
         }
@@ -87,8 +87,8 @@ export class MarAddSubCommand implements Command {
         await MessageUtils.sendIntr(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.marAdd', data.lang(), {
-                TARGET: role.toString(),
-                ROLE: year.toString(),
+                ROLE: role.toString(),
+                YEAR: year.toString(),
             })
         );
     }

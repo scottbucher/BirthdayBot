@@ -28,7 +28,8 @@ export class MarListSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1;
-        let hasPremium = data.subscription ? data.subscription.service : false;
+        let hasPremium =
+            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         let pageSize = Config.experience.memberAnniversaryRoleListSize;
 
@@ -40,7 +41,7 @@ export class MarListSubCommand implements Command {
 
         if (page > marResults.stats.TotalPages) page = marResults.stats.TotalPages;
 
-        let embed = await ListUtils.getMemberAnniversaryRoleList(
+        let embed = await ListUtils.getMemberAnniversaryRoleListEmbed(
             intr.guild,
             marResults,
             page,

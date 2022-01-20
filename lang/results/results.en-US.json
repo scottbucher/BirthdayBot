@@ -189,7 +189,7 @@
             "trustedRoleAdd": "Successfully added {{TARGET}} to the trusted role list!",
             "trustedRoleClear": "Successfully cleared all trusted roles!",
             "trustedRoleRemove": "Successfully removed {{TARGET}} from the trusted role list!",
-            "marAdd": "Successfully added {{TARGET}} to the member anniversary role list for year {{YEAR}}!",
+            "marAdd": "Successfully added {{ROLE}} to the member anniversary role list for year {{YEAR}}!",
             "marClear": "Successfully cleared all member anniversary roles!",
             "marRemove": "Successfully removed the member anniversary role for year {{YEAR}}!",
             "customMessagesClear": "Successfully cleared all {{DISPLAY_TYPE}} from the database!"
