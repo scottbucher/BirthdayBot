@@ -249,14 +249,16 @@ export class ListUtils {
                 trustedRole.Position <= Config.validation.trustedRoles.maxCount.free
             ) {
                 description += `**${i.toLocaleString()}.** ${
-                    role ? `${role.toString()} ` : '**** '
-                }\n\n`;
+                    role
+                        ? `${role.toString()} `
+                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}** `
+                }: (ID: ${trustedRole.TrustedRoleDiscordId})\n\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ${
                     role
                         ? `~~${role.toString()}~~ `
-                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}** `
-                }\n\n`;
+                        : `~~**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**~~`
+                }: (ID: ${trustedRole.TrustedRoleDiscordId})\n\n`;
             }
             i++;
         }
