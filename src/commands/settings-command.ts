@@ -10,7 +10,7 @@ import { FormatUtils, MessageUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
-let Config = require('../../../config/config.json');
+let Config = require('../../config/config.json');
 export class SettingsCommand implements Command {
     public metadata: ApplicationCommandData = {
         name: Lang.getCom('commands.settings'),
