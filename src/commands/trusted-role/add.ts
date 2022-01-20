@@ -74,7 +74,7 @@ export class TrustedRoleAddSubCommand implements Command {
         ) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'errorEmbeds.trustedRoleMaxPaid', LangCode.EN_US, {
+                Lang.getErrorEmbed('validation', 'errorEmbeds.trustedRoleMaxPaid', LangCode.EN_US, {
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
                 })
             );

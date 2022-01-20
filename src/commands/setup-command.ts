@@ -123,7 +123,7 @@ export class SetupCommand implements Command {
                     if (!PermissionUtils.canSend(channelInput)) {
                         await MessageUtils.sendIntr(
                             intr,
-                            Lang.getEmbed('validation', 'embeds..noAccessToChannel', data.lang(), {
+                            Lang.getEmbed('validation', 'embeds.noAccessToChannel', data.lang(), {
                                 CHANNEL: channelInput.toString(),
                             })
                         );

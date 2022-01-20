@@ -57,7 +57,7 @@ export class MarAddSubCommand implements Command {
         if (memberAnniversaryRoles.memberAnniversaryRoles.find(role => role.Year === year)) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'errorEmbeds.marDuplicateYear', data.lang(), {
+                Lang.getErrorEmbed('validation', 'errorEmbeds.marDuplicateYear', data.lang(), {
                     YEAR: year.toString(),
                 })
             );
@@ -71,7 +71,7 @@ export class MarAddSubCommand implements Command {
         ) {
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getEmbed('validation', 'errorEmbeds.marMaxPaid', data.lang(), {
+                Lang.getErrorEmbed('validation', 'errorEmbeds.marMaxPaid', data.lang(), {
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
                 })
             );
@@ -86,7 +86,7 @@ export class MarAddSubCommand implements Command {
 
         await MessageUtils.sendIntr(
             intr,
-            Lang.getEmbed('results', 'successEmbeds.marAdd', data.lang(), {
+            Lang.getSuccessEmbed('results', 'successEmbeds.marAdd', data.lang(), {
                 TARGET: role.toString(),
                 ROLE: year.toString(),
             })
