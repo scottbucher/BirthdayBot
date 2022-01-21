@@ -36,6 +36,7 @@ export class MessageTestSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let type = intr.options.getString(Lang.getCom('arguments.type')).toLowerCase();
+        let databaseType = type.replaceAll('_', ''); // How we store the type in the database, for instance, memberanniversary
         let position = intr.options.getInteger(Lang.getCom('arguments.position')) ?? 0;
         let userCount = intr.options.getUser(Lang.getCom('arguments.userCount')) ?? 1;
 
@@ -44,12 +45,16 @@ export class MessageTestSubCommand implements Command {
         let hasPremium =
             !Config.payments.enabled || (data.subscription && data.subscription.service);
 
+        /**
+         * In the database there are only three types, birthday, member anniversary, and server anniversary.
+         * We determine if they are user specific by the UserDiscordId field in the message table
+         */
+        if (databaseType.includes('users'))
+            databaseType = databaseType.includes('birthday') ? 'birthday' : 'memberanniversary';
+
         let messageData = type.includes('user')
-            ? await this.customMessageRepo.getCustomUserMessages(
-                  intr.guild.id,
-                  type.includes('birthday') ? 'birthday' : 'memberanniversary'
-              )
-            : await this.customMessageRepo.getCustomMessages(intr.guild.id, type);
+            ? await this.customMessageRepo.getCustomUserMessages(intr.guild.id, databaseType)
+            : await this.customMessageRepo.getCustomMessages(intr.guild.id, databaseType);
 
         let message: CustomMessage;
 
@@ -95,14 +100,14 @@ export class MessageTestSubCommand implements Command {
             : await this.customMessageRepo.getCustomMessages(intr.guild.id, type);
 
         let year =
-            type === 'memberanniversary'
+            type === 'member_anniversary'
                 ? moment().diff(
                       target
                           ? target.joinedAt
                           : intr.guild.members.resolve(intr.client.user).joinedAt,
                       'years'
                   ) + 1
-                : type === 'serveranniversary'
+                : type === 'server_anniversary'
                 ? moment().diff(intr.guild.createdAt, 'years') + 1
                 : null;
 
@@ -120,9 +125,9 @@ export class MessageTestSubCommand implements Command {
 
         if (messages.customMessages.length === 0 || position === 0) {
             let defaultMessage =
-                type === 'memberanniversary'
+                type === 'member_anniversary'
                     ? Lang.getRef('info', 'defaults.memberAnniversaryMessage', data.lang())
-                    : type === 'serveranniversary'
+                    : type === 'server_anniversary'
                     ? Lang.getRef('info', 'defaults.serverAnniversaryMessage', data.lang())
                     : Lang.getRef('info', 'defaults.birthdayMessage', data.lang());
 
@@ -133,7 +138,7 @@ export class MessageTestSubCommand implements Command {
                         CelebrationUtils.replacePlaceHolders(
                             defaultMessage,
                             intr.guild,
-                            type,
+                            databaseType,
                             userList,
                             year
                         )
@@ -150,7 +155,7 @@ export class MessageTestSubCommand implements Command {
         let customMessage = CelebrationUtils.replacePlaceHolders(
             chosenMessage?.Message,
             intr.guild,
-            type,
+            databaseType,
             userList,
             year
         );
