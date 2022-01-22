@@ -36,7 +36,7 @@
         "filesize": "8.0.0",
         "moment-timezone": "0.5.33",
         "mysql": "2.18.1",
-        "node-fetch": "2.6.1",
+        "node-fetch": "3.1.1",
         "node-schedule": "2.0.0",
         "pino": "7.0.5",
         "pino-pretty": "7.1.0",
