@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import {
-    ApplicationCommandData,
+    ChatInputApplicationCommandData,
     CommandInteraction,
     MessageEmbed,
     PermissionString,
@@ -19,7 +19,7 @@ import { Command, CommandDeferType } from './index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class ListCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.list'),
         description: 'View the birthday list.',
         options: [

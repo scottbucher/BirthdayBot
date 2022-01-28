@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
@@ -7,7 +7,7 @@ import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 export class RequireAllTrustedRolesSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('settingType.requireAllTrustedRoles'),
         description: undefined,
     };

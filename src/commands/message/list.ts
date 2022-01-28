@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { EventData } from '../../models/index.js';
@@ -12,7 +12,7 @@ let Config = require('../../../config/config.json');
 
 export class MessageListSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('subCommands.list'),
         description: undefined,
     };

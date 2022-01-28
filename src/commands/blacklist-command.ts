@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
@@ -7,7 +7,7 @@ import { CommandUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class BlacklistCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.blacklist'),
         description: 'Manage the blacklist.',
         options: [

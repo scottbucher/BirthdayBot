@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { EventData } from '../../models/index.js';
 import { MemberAnniversaryRoleRepo } from '../../services/database/repos/index.js';
@@ -8,7 +8,7 @@ import { Command } from '../index.js';
 
 export class MarClearSubCommand implements Command {
     constructor(public memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('subCommands.clear'),
         description: undefined,
     };

@@ -1,5 +1,5 @@
 import {
-    ApplicationCommandData,
+    ChatInputApplicationCommandData,
     CommandInteraction,
     GuildMember,
     Message,
@@ -29,7 +29,7 @@ let Config = require('../../../config/config.json');
  */
 export class MessageAddSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('subCommands.add'),
         description: undefined,
     };

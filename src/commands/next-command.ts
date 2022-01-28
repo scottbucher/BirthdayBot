@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import moment from 'moment';
 
 import { LangCode } from '../models/enums/index.js';
@@ -10,7 +10,7 @@ import { CelebrationUtils, InteractionUtils, TimeUtils } from '../utils/index.js
 import { Command, CommandDeferType } from './index.js';
 
 export class NextCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.next'),
         description: 'View the next event date. Defaults to birthday.',
         options: [

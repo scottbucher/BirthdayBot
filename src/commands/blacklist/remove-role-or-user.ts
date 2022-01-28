@@ -1,5 +1,5 @@
 import {
-    ApplicationCommandData,
+    ChatInputApplicationCommandData,
     CommandInteraction,
     GuildMember,
     PermissionString,
@@ -15,7 +15,7 @@ import { Command } from '../index.js';
 
 export class BlacklistRemoveRoleOrUserSubCommand implements Command {
     constructor(public blacklistRepo: BlacklistRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('subCommands.roleOrUser'),
         description: undefined,
     };

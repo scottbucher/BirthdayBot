@@ -1,4 +1,9 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString, Role } from 'discord.js';
+import {
+    ChatInputApplicationCommandData,
+    CommandInteraction,
+    PermissionString,
+    Role,
+} from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { EventData } from '../../models/index.js';
@@ -12,7 +17,7 @@ let Config = require('../../../config/config.json');
 
 export class MarAddSubCommand implements Command {
     constructor(public memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('subCommands.add'),
         description: undefined,
     };

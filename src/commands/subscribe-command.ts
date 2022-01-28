@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { EventData, PlanName } from '../models/index.js';
@@ -10,7 +10,7 @@ const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 export class SubscribeCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.subscribe'),
         description: 'Subscribe to Birthday Bot Premium.',
     };

@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { LangCode } from '../../models/enums/index.js';
 import { EventData } from '../../models/index.js';
@@ -10,7 +10,7 @@ import { Command } from '../index.js';
 
 export class MessageClearSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('subCommands.clear'),
         description: undefined,
     };

@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { Language } from '../models/enums/index.js';
@@ -12,7 +12,7 @@ import { Command, CommandDeferType } from './index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class SettingsCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.settings'),
         description: 'View the settings for this server.',
         options: [

@@ -1,4 +1,9 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString, Role } from 'discord.js';
+import {
+    ChatInputApplicationCommandData,
+    CommandInteraction,
+    PermissionString,
+    Role,
+} from 'discord.js';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
@@ -10,7 +15,7 @@ import { Command } from '../index.js';
 
 export class MessageSettingMentionSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('subCommands.add'),
         description: undefined,
     };

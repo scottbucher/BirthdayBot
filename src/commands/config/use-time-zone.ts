@@ -1,4 +1,9 @@
-import { ApplicationCommandData, CommandInteraction, Message, PermissionString } from 'discord.js';
+import {
+    ChatInputApplicationCommandData,
+    CommandInteraction,
+    Message,
+    PermissionString,
+} from 'discord.js';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
@@ -8,7 +13,7 @@ import { Command } from '../index.js';
 
 export class UseTimezoneSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('settingType.useTimezone'),
         description: undefined,
     };

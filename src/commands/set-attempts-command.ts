@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { LangCode } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
@@ -9,7 +9,7 @@ import { InteractionUtils } from '../utils/interaction-utils.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class SetAttemptsCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.setAttempts'),
         description: 'Set the attempts for a user. (Birthday bot staff only command)',
         options: [

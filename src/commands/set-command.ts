@@ -1,7 +1,7 @@
 import { Chrono, en } from 'chrono-node';
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import {
-    ApplicationCommandData,
+    ChatInputApplicationCommandData,
     CommandInteraction,
     DMChannel,
     Message,
@@ -17,7 +17,7 @@ import { FormatUtils, InteractionUtils, PermissionUtils } from '../utils/index.j
 import { Command, CommandDeferType } from './index.js';
 
 export class SetCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.set'),
         description: 'Set your birthday',
         options: [

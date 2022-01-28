@@ -1,11 +1,11 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class HelpCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.help'),
         description: 'The help command.',
     };

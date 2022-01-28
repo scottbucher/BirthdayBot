@@ -1,4 +1,9 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString, Role } from 'discord.js';
+import {
+    ChatInputApplicationCommandData,
+    CommandInteraction,
+    PermissionString,
+    Role,
+} from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { LangCode } from '../../models/enums/language.js';
@@ -12,7 +17,7 @@ const require = createRequire(import.meta.url);
 let Config = require('../../../config/config.json');
 export class TrustedRoleAddSubCommand implements Command {
     constructor(public trustedRoleRepo: TrustedRoleRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('subCommands.add'),
         description: undefined,
     };

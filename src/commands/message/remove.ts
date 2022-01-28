@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { CustomMessage } from '../../models/database/index.js';
 import { LangCode } from '../../models/enums/index.js';
@@ -10,7 +10,7 @@ import { Command } from '../index.js';
 
 export class MessageRemoveSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('subCommands.remove'),
         description: undefined,
     };

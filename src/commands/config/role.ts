@@ -1,5 +1,5 @@
 import {
-    ApplicationCommandData,
+    ChatInputApplicationCommandData,
     CommandInteraction,
     Message,
     PermissionString,
@@ -18,7 +18,7 @@ let Config = require('../../../config/config.json');
 
 export class RoleSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('settingType.role'),
         description: undefined,
     };

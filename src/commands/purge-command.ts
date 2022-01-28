@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/index.js';
@@ -8,7 +8,7 @@ import { InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class PurgeCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.purge'),
         description: 'Remove your information from the database.',
     };

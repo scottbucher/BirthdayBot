@@ -1,5 +1,5 @@
 import {
-    ApplicationCommandData,
+    ChatInputApplicationCommandData,
     CommandInteraction,
     Message,
     PermissionString,
@@ -18,7 +18,7 @@ import { Command, CommandDeferType } from './index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class SetupCommand implements Command {
-    public metadata: ApplicationCommandData = {
+    public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.setup'),
         description: 'Run the initial setup processes.',
     };
