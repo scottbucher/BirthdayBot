@@ -22,6 +22,41 @@ export class MessageCommand implements Command {
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
+                                name: 'type',
+                                description: 'What type of message is being removed.',
+                                required: true,
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                choices: [
+                                    {
+                                        name: 'birthday',
+                                        value: 'BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'memberAnniversary',
+                                        value: 'MEMBER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'serverAnniversary',
+                                        value: 'SERVER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'userSpecificBirthday',
+                                        value: 'USER_SPECIFIC_BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'userSpecificMemberAnniversary',
+                                        value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                    },
+                                ],
+                            },
+                            {
+                                name: Lang.getCom('arguments.position'),
+                                description:
+                                    'The position number of the message, found in /message list. Leave empty to test the default message.',
+                                type: ApplicationCommandOptionType.Integer.valueOf(),
+                                required: true,
+                            },
+                            {
                                 name: Lang.getCom('arguments.embed'),
                                 description:
                                     'Whether or not this custom message should be displayed as an embed.',
@@ -36,6 +71,41 @@ export class MessageCommand implements Command {
                             '[Premium Feature] Change the color of a message. Only works if embed is enabled for this message.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
+                            {
+                                name: 'type',
+                                description: 'What type of message is being removed.',
+                                required: true,
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                choices: [
+                                    {
+                                        name: 'birthday',
+                                        value: 'BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'memberAnniversary',
+                                        value: 'MEMBER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'serverAnniversary',
+                                        value: 'SERVER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'userSpecificBirthday',
+                                        value: 'USER_SPECIFIC_BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'userSpecificMemberAnniversary',
+                                        value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                    },
+                                ],
+                            },
+                            {
+                                name: Lang.getCom('arguments.position'),
+                                description:
+                                    'The position number of the message, found in /message list. Leave empty to test the default message.',
+                                type: ApplicationCommandOptionType.Integer.valueOf(),
+                                required: true,
+                            },
                             {
                                 name: Lang.getCom('arguments.color'),
                                 description: 'The color the embed should be.',
