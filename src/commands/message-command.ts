@@ -78,7 +78,7 @@ export class MessageCommand implements Command {
                             },
                             {
                                 name: Lang.getCom('arguments.time'),
-                                description: 'The time setting for a message type.',
+                                description: 'The time setting for a message type. Values: 0-23.',
                                 type: ApplicationCommandOptionType.Integer.valueOf(),
                                 required: true,
                                 min_value: 0,
@@ -88,7 +88,8 @@ export class MessageCommand implements Command {
                     },
                     {
                         name: Lang.getCom('subCommands.mention'),
-                        description: 'Change the role mention setting for a message type.',
+                        description:
+                            'Change the role mention setting for a message type. Values: everyone, here, @role/role-name, none.',
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
