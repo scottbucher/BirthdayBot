@@ -58,6 +58,8 @@ import {
     MessageClearSubCommand,
     MessageListSubCommand,
     MessageRemoveSubCommand,
+    MessageSettingMentionSubCommand,
+    MessageSettingTimeSubCommand,
     MessageTestSubCommand,
 } from './commands/message/index.js';
 import {
@@ -165,6 +167,10 @@ async function start(): Promise<void> {
     let messageTestSubCommand = new MessageTestSubCommand(customMessageRepo);
     let messageListSubCommand = new MessageListSubCommand(customMessageRepo);
 
+    // Message Setting Sub Commands
+    let messageSettingMentionSubCommand = new MessageSettingMentionSubCommand(guildRepo);
+    let messageSettingTimeSubCommand = new MessageSettingTimeSubCommand(guildRepo);
+
     // Commands
     let commands: Command[] = [
         new HelpCommand(),
@@ -201,6 +207,8 @@ async function start(): Promise<void> {
             messageRemoveSubCommand,
             messageTestSubCommand,
             messageListSubCommand,
+            messageSettingMentionSubCommand,
+            messageSettingTimeSubCommand,
         ]),
         new MemberAnniversaryRoleCommand([
             marAddSubCommand,
