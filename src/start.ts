@@ -27,6 +27,7 @@ import {
     BlacklistCommand,
     Command,
     ConfigCommand,
+    DonateCommand,
     HelpCommand,
     InfoCommand,
     LinkCommand,

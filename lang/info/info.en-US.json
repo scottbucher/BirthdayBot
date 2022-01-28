@@ -91,25 +91,174 @@
             }
         },
         "help": {
-            "title": "{{COM:bot.name}} - Help",
-            "description": "{{REF:bot.description}}",
-            "fields": [
-                {
-                    "name": "{{REF:fields.commands}}",
-                    "value": [
-                        "**/{{COM:commands.test}}** - {{REF:commandDescs.test}}",
-                        "**/{{COM:commands.info}}** - {{REF:commandDescs.info}}"
-                    ]
+            "general": {
+                "author": {
+                    "name": "{{COM:bot.name}} General Help",
+                    "icon": "{{ICON}}",
+                    "url": "{{COM:docLinks.faq}}"
                 },
-                {
-                    "name": "{{REF:fields.links}}",
-                    "value": [
-                        "{{REF:links.docsEmbed}}",
-                        "{{REF:links.supportEmbed}}",
-                        "{{REF:links.inviteEmbed}}"
-                    ]
-                }
-            ]
+                "title": "{{COM:bot.name}} General Help",
+                "description": [
+                    "{{COM:bot.name}} helps your server celebrate birthdays with automatic birthday roles and announcements.",
+                    "",
+                    "**/premium** - See information about {{COM:bot.name}} Premium.",
+                    "**/subscribe** - Subscribe to {{COM:bot.name}} Premium!",
+                    "**/help {{REF:types.premium}}** - Help for {{COM:bot.name}} Premium.",
+                    "",
+                    "**/set [date] [timeZone] [user]** - Set your birthday.",
+                    "**/view [type] [user]** - View your information or a user's information.",
+                    "**/next [type]**** - View next birthday(s) in the server.",
+                    "**/list [type] [page]**** - View the server birthday list.",
+                    "**/map** - View the time zone map.",
+                    "**/vote** - Vote for {{COM:bot.name}}!",
+                    "**/link** - View import links like faq, support, docs, etc.",
+                    "**/purge** - Remove your birthday data.",
+                    "**/help [type]** - Help for specific systems.",
+                    "**/premium** - See information about {{COM:bot.name}} Premium.",
+                    "**/settings [type]**** - View server's settings.",
+                    "**/test <type> [user] [anniversary year]**** - Test the birthday event.",
+                    "",
+                    "**/donate** - Support developments by donating!",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ],
+                "fields": [
+                    {
+                        "name": "Legend",
+                        "value": "** = Server Only Command"
+                    }
+                ]
+            },
+            "blacklist": {
+                "author": {
+                    "name": "{{COM:bot.name}} Blacklist Help",
+                    "icon": "{{ICON}}",
+                    "url": "{{COM:docLinks.faq}}"
+                },
+                "title": "{{COM:bot.name}} Blacklist Help - Guild Only",
+                "description": [
+                    "**/blacklist add <user/role>** - Add user/role to the blacklist.",
+                    "**/blacklist remove role_or_user <user/role>** - Remove a user/role from the blacklist.",
+                    "**/blacklist remove id <id>** - Remove an id from the blacklist.",
+                    "**/blacklist clear** - Clear the birthday blacklist.",
+                    "**/blacklist list [page]** - View all blacklisted users/roles in your server.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ]
+            },
+            "config": {
+                "author": {
+                    "name": "{{COM:bot.name}} Setup Help",
+                    "icon": "{{ICON}}",
+                    "url": "{{COM:docLinks.faq}}"
+                },
+                "title": "{{COM:bot.name}} Setup Help - Guild Only",
+                "description": [
+                    "The [reset] option for all commands resets that setting to it's default value.",
+                    "",
+                    "**/setup** - Interactive guide for the basic server setup.",
+                    "",
+                    "**/config nameFormat [reset]** - Decide how {{COM:bot.name}} displays names.",
+                    "**/config timeZone [reset]** - Set the default timezone for your server.",
+                    "**/config useTimezone [reset]** - Decide if the bot uses the server's or user's timezone for celebrating birthdays.",
+                    "**/config dateFormat [reset]** - Decide the format {{COM:bot.name}} detects dates.",
+                    "**/config trustedPreventsMessage [reset]** - Decide if the trusted role should prevent the birthday message.",
+                    "**/config trustedPreventsRole [reset]** - Decide if the trusted role should prevent the birthday role.",
+                    "**/config requireAllTrustedRoles [reset]** - Decided if a user need all of the trusted roles.",
+                    "**/config channel [reset]** - Configure the channels {{COM:bot.name}} will use.",
+                    "**/config role [reset]** - Configure the roles {{COM:bot.name}} will use.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ]
+            },
+            "message": {
+                "author": {
+                    "name": "{{COM:bot.name}} Message Help",
+                    "icon": "{{ICON}}",
+                    "url": "{{COM:docLinks.faq}}"
+                },
+                "title": "{{COM:bot.name}} Message Help - Guild Only",
+                "description": [
+                    "**/message list <type> [page]** - List all messages for that type.",
+                    "**/message add <type> <message>** - Add a message for that type.",
+                    " - Example Usage: `/message add type:memberAnniversary message:<Users> have been in <Server> for <Year>(s)!`",
+                    " - Placeholder for users: `{{REF:placeHolders.users}}`",
+                    " - Placeholder for year: `{{REF:placeHolders.year}}` (Anniversaries only)",
+                    " - Placeholder for server name: `{{REF:placeHolders.server}}`",
+                    " - Placeholder for a user specific message: `@User` (Premium only)",
+                    "**/message remove <type> <position>** - Remove a certain message for that type.",
+                    "**/message clear <type>** - Clear all messages for that type.",
+                    "**/message setting time <type> <0-23>** - Set the message time for that type",
+                    "**/message setting mention <type> <role/group>** - Set the message mention setting for that type.",
+                    "**/message edit embed <type> <position> <T/F>** - Update a message's embed setting.",
+                    "**/message edit color <type> <position> <color/hex>** - Update a message's color setting.",
+                    "**/message {{REF:types.test}} <type> <position> [user count]** - Test a custom message.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ]
+            },
+            "trusted": {
+                "author": {
+                    "name": "{{COM:bot.name}} Trusted Help",
+                    "icon": "{{ICON}}",
+                    "url": "{{COM:docLinks.faq}}"
+                },
+                "title": "{{COM:bot.name}} Trusted System Help - Guild Only",
+                "description": [
+                    "**/setup {{REF:types.trusted}}** - Interactive guide for trusted system settings setup.",
+                    "",
+                    "**/trustedRole add <role>** - Add a trusted role.",
+                    "**/trustedRole remove role <role>** - Remove a trusted role.",
+                    "**/trustedRole remove id <id>** - Remove a trusted role by id.",
+                    "**/trustedRole clear** - Clear all trusted roles.",
+                    "**/trustedRole list [page]** - List all trusted roles",
+                    "**/config {{REF:types.requireAllTrustedRoles}} <T/F>** - If a user should need all the trusted roles.",
+                    "**/config {{REF:types.trustedPreventsMessage}} <T/F>** - If trusted role is required for a birthday message.",
+                    "**/config {{REF:types.trustedPreventsRole}} <T/F>** - If trusted role is required to get the birthday role.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ]
+            },
+            "mar": {
+                "author": {
+                    "name": "{{COM:bot.name}} Member Anniversary Role Help",
+                    "icon": "{{ICON}}",
+                    "url": "{{COM:docLinks.faq}}"
+                },
+                "title": "{{COM:bot.name}} Member Anniversary Role Help - Guild Only",
+                "description": [
+                    "**/memberAnniversaryRole add <year> <role>** - Add a member anniversary role.",
+                    "**/memberAnniversaryRole remove <year>** - Remove the member anniversary role of the given year.",
+                    "**/memberAnniversaryRole clear** - Clear all member anniversary roles.",
+                    "**/memberAnniversaryRole list [page]** - List all member anniversary roles.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ]
+            },
+            "premium": {
+                "author": {
+                    "name": "Birthday Bot Premium Help",
+                    "icon": "{{ICON}}",
+                    "url": "{{COM:docLinks.faq}}"
+                },
+                "title": "{{COM:bot.name}} Premium Help - Guild Only",
+                "description": [
+                    "**/premium** - View information about your server's premium.",
+                    "**/message {{REF:types.add}} <type> <message>** - Add a user specific message for that type.",
+                    " - Example Usage: `/message add type:birthday Happy Birthday @Stqlth!`",
+                    " - Placeholder for year: `{{REF:placeHolders.year}}`",
+                    " - Placeholder for server name: `{{REF:placeHolders.server}}`",
+                    "**/message edit color <type> <position> <color/hex>** - Update a message's color setting.",
+                    "**/message list userSpecificBirthday [page]** - List all user-specific birthday messages.",
+                    "**/message list userSpecificMemberAnniversary [page]** - List all user-specific member anniversary messages.",
+                    "**/memberAnniversaryRole add <year> <role>** - Add a member anniversary role.",
+                    "**/memberAnniversaryRole remove <year>** - Remove the member anniversary role of the given year.",
+                    "**/memberAnniversaryRole clear** - Clear all member anniversary roles.",
+                    "**/memberAnniversaryRole list [page]** - List all member anniversary roles.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ]
+            }
         },
         "info": {
             "title": "{{COM:bot.name}} - Info",
