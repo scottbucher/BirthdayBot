@@ -19,7 +19,7 @@ export class HelpCommand implements Command {
             {
                 name: Lang.getCom('arguments.category'),
                 description: 'Help category to display.',
-                required: true,
+                required: false,
                 type: ApplicationCommandOptionType.String.valueOf(),
                 choices: [
                     {
