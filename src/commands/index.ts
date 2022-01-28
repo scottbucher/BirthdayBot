@@ -20,3 +20,4 @@ export { TestCommand } from './test-command.js';
 export { TrustedRoleCommand } from './trusted-role-command.js';
 export { ViewCommand } from './view-command.js';
 export { VoteCommand } from './vote-command.js';
+export { DonateCommand } from './donate-command.js';

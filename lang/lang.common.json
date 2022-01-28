@@ -28,7 +28,8 @@
         "view": "view",
         "vote": "vote",
         "list": "list",
-        "map": "map"
+        "map": "map",
+        "donate": "donate"
     },
     "subCommands": {
         "add": "add",

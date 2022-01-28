@@ -243,6 +243,7 @@ async function start(): Promise<void> {
         new PremiumCommand(),
         new SubscribeCommand(subService),
         new VoteCommand(),
+        new DonateCommand(),
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Buttons
