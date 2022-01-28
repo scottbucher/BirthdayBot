@@ -20,6 +20,6 @@ export class InfoCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        await await InteractionUtils.send(intr, Lang.getEmbed('info', 'embeds.info', data.lang()));
+        await InteractionUtils.send(intr, Lang.getEmbed('info', 'embeds.info', data.lang()));
     }
 }

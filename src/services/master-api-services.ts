@@ -2,9 +2,9 @@ import { createRequire } from 'node:module';
 import { URL } from 'node:url';
 
 import {
+    LoginClusterResponse,
     RegisterClusterRequest,
     RegisterClusterResponse,
-    LoginClusterResponse,
 } from '../models/master-api/clusters.js';
 import { HttpService } from './index.js';
 

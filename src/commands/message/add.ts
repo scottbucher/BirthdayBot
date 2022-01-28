@@ -1,9 +1,9 @@
 import {
     ApplicationCommandData,
-    PermissionString,
     CommandInteraction,
     GuildMember,
     Message,
+    PermissionString,
 } from 'discord.js';
 import { createRequire } from 'node:module';
 

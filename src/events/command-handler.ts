@@ -3,7 +3,7 @@ import { RateLimiter } from 'discord.js-rate-limiter';
 import { createRequire } from 'node:module';
 
 import { Command, CommandDeferType } from '../commands/index.js';
-import { PlanName, EventData } from '../models/index.js';
+import { EventData, PlanName } from '../models/index.js';
 import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang, Logger, SubscriptionService } from '../services/index.js';
 import { CommandUtils } from '../utils/index.js';

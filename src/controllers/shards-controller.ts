@@ -6,10 +6,10 @@ import { createRequire } from 'node:module';
 import { CustomClient } from '../extensions/index.js';
 import { mapClass } from '../middleware/index.js';
 import {
+    GetShardsResponse,
     SetShardPresencesRequest,
     ShardInfo,
     ShardStats,
-    GetShardsResponse,
 } from '../models/cluster-api/shards.js';
 import { Logger } from '../services/index.js';
 import { Controller } from './index.js';

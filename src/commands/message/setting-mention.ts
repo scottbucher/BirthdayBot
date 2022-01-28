@@ -1,4 +1,4 @@
-import { ApplicationCommandData, PermissionString, CommandInteraction, Role } from 'discord.js';
+import { ApplicationCommandData, CommandInteraction, PermissionString, Role } from 'discord.js';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';

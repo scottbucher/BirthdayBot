@@ -1,7 +1,7 @@
 import { ApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import { createRequire } from 'node:module';
 
-import { PlanName, EventData } from '../models/index.js';
+import { EventData, PlanName } from '../models/index.js';
 import { Lang, Logger, SubscriptionService } from '../services/index.js';
 import { InteractionUtils, MessageUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
