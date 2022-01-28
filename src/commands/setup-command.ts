@@ -12,7 +12,7 @@ import { EventData } from '../models/index.js';
 import { GuildRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
 import { CollectorUtils } from '../utils/collector-utils.js';
-import { GuildUtils, MessageUtils, PermissionUtils } from '../utils/index.js';
+import { ClientUtils, MessageUtils, PermissionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -104,8 +104,10 @@ export class SetupCommand implements Command {
 
                 birthdayChannel = await collect(async (nextMsg: Message) => {
                     // Find mentioned channel
-                    let channelInput: TextBasedChannel =
-                        GuildUtils.getMentionedTextChannel(nextMsg);
+                    let channelInput: TextBasedChannel = await ClientUtils.findTextChannel(
+                        intr.guild,
+                        nextMsg.content
+                    );
 
                     if (!channelInput) {
                         await MessageUtils.sendIntr(

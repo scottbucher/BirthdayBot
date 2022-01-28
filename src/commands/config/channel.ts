@@ -11,9 +11,9 @@ import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
 import {
+    ClientUtils,
     CollectorUtils,
     FormatUtils,
-    GuildUtils,
     MessageUtils,
     PermissionUtils,
 } from '../../utils/index.js';
@@ -158,8 +158,10 @@ export class ChannelSubCommand implements Command {
 
                     channel = await collect(async (nextMsg: Message) => {
                         // Find mentioned channel
-                        let channelInput: TextBasedChannel =
-                            GuildUtils.getMentionedTextChannel(nextMsg);
+                        let channelInput: TextBasedChannel = await ClientUtils.findTextChannel(
+                            intr.guild,
+                            nextMsg.content
+                        );
 
                         if (!channelInput) {
                             await MessageUtils.sendIntr(
