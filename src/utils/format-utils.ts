@@ -6,6 +6,7 @@ import { createRequire } from 'node:module';
 
 import { LangCode, Language } from '../models/enums/index.js';
 import { Lang } from '../services/index.js';
+import { ClientUtils } from './client-utils.js';
 import { GuildUtils, ParseUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -97,10 +98,10 @@ export class FormatUtils {
         return doubleCheck ? temp : null;
     }
 
-    public static getUser(msg: Message, input: string): User {
+    public static async getUser(msg: Message, input: string): Promise<User> {
         return (
             msg.mentions.members.first()?.user ||
-            GuildUtils.findMember(msg.guild, input)?.user ||
+            (await ClientUtils.findMember(msg.guild, input))?.user ||
             null
         );
     }
