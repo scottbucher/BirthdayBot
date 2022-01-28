@@ -81,31 +81,31 @@ export class HelpCommand implements Command {
                 break;
             }
             case 'config': {
-                embed = Lang.getEmbed('info', 'embeds.config', data.lang(), {
+                embed = Lang.getEmbed('info', 'help.config', data.lang(), {
                     BOT: intr.client.user.toString(),
                 });
                 break;
             }
             case 'message': {
-                embed = Lang.getEmbed('info', 'embeds.message', data.lang(), {
+                embed = Lang.getEmbed('info', 'help.message', data.lang(), {
                     BOT: intr.client.user.toString(),
                 });
                 break;
             }
             case 'trusted_role': {
-                embed = Lang.getEmbed('info', 'embeds.trusted', data.lang(), {
+                embed = Lang.getEmbed('info', 'help.trusted', data.lang(), {
                     BOT: intr.client.user.toString(),
                 });
                 break;
             }
             case 'member_anniversary_role': {
-                embed = Lang.getEmbed('info', 'embeds.mar', data.lang(), {
+                embed = Lang.getEmbed('info', 'help.mar', data.lang(), {
                     BOT: intr.client.user.toString(),
                 });
                 break;
             }
             case 'premium': {
-                embed = Lang.getEmbed('info', 'embeds.premium', data.lang(), {
+                embed = Lang.getEmbed('info', 'help.premium', data.lang(), {
                     BOT: intr.client.user.toString(),
                 });
                 break;
