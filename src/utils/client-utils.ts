@@ -8,6 +8,7 @@ import {
     GuildMember,
     TextChannel,
     User,
+    Role,
 } from 'discord.js';
 
 import { LangCode } from '../models/enums/index.js';
@@ -75,6 +76,26 @@ export class ClientUtils {
             if (
                 error instanceof DiscordAPIError &&
                 [DiscordApiErrors.UnknownChannel].includes(error.code)
+            ) {
+                return;
+            } else {
+                throw error;
+            }
+        }
+    }
+
+    public static async findRole(guild: Guild, input: string): Promise<Role> {
+        try {
+            let discordId = RegexUtils.discordId(input);
+            if (discordId) {
+                return await guild.roles.fetch(discordId);
+            }
+
+            return guild.roles.cache.find(r => r.name.toLowerCase().includes(input));
+        } catch (error) {
+            if (
+                error instanceof DiscordAPIError &&
+                [DiscordApiErrors.UnknownRole].includes(error.code)
             ) {
                 return;
             } else {
