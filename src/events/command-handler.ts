@@ -63,6 +63,14 @@ export class CommandHandler implements EventHandler {
             }
         }
 
+        // Return if defer was unsuccessful
+        if (
+            [CommandDeferType.PUBLIC, CommandDeferType.HIDDEN].includes(command.deferType) &&
+            !intr.deferred
+        ) {
+            return;
+        }
+
         // Get data from database
         let data = new EventData(
             intr.guild ? await this.guildRepo.getGuild(intr.guild?.id) : undefined,
