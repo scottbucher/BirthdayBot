@@ -178,10 +178,7 @@ export class SetupCommand implements Command {
 
                     // Search guild for role
                     if (!roleInput) {
-                        roleInput = await ClientUtils.findRole(
-                            intr.guild,
-                            nextMsg?.content.toLowerCase()
-                        );
+                        roleInput = await ClientUtils.findRole(intr.guild, nextMsg?.content);
                     }
 
                     // If it couldn't find the role, the role was in another guild, or the role the everyone role
