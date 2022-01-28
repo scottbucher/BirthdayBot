@@ -7,7 +7,7 @@ import { createRequire } from 'node:module';
 import { LangCode, Language } from '../models/enums/index.js';
 import { Lang } from '../services/index.js';
 import { ClientUtils } from './client-utils.js';
-import { GuildUtils, ParseUtils } from './index.js';
+import { ParseUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Abbreviations = require('../../config/abbreviations.json');

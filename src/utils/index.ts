@@ -5,7 +5,6 @@ export { ClientUtils } from './client-utils.js';
 export { ColorUtils } from './color-utils.js';
 export { CommandUtils } from './command-utils.js';
 export { FormatUtils } from './format-utils.js';
-export { GuildUtils } from './guild-utils.js';
 export { ListUtils } from './list-utils.js';
 export { MathUtils } from './math-utils.js';
 export { MessageUtils } from './message-utils.js';
