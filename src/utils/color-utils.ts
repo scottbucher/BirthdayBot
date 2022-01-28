@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 let colors: { name: string; hex: string }[] = require('color-name-list');
 
-const COLOR_HEX_REGEX = /#?[0-9A-F]{6}/i;
+const COLOR_HEX_REGEX = /#?([0-9A-F]{6})/i;
 
 export class ColorUtils {
     public static isHex(input: string): boolean {
@@ -39,6 +39,7 @@ export class ColorUtils {
     }
 
     private static formatHexOutput(hex: string): string {
+        hex = COLOR_HEX_REGEX.exec(hex)[0];
         hex = hex.toUpperCase();
         if (hex.startsWith('#')) {
             hex = hex.substring(1);

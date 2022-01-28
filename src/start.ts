@@ -56,6 +56,7 @@ import { MessageCommand } from './commands/message-command.js';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
+    MessageEditColorSubCommand,
     MessageEditEmbedSubCommand,
     MessageListSubCommand,
     MessageRemoveSubCommand,
@@ -174,6 +175,7 @@ async function start(): Promise<void> {
 
     // Message Edit Sub Commands
     let messageEditEmbedSubCommand = new MessageEditEmbedSubCommand(customMessageRepo);
+    let messageEditColorSubCommand = new MessageEditColorSubCommand(customMessageRepo);
 
     // Commands
     let commands: Command[] = [
@@ -214,6 +216,7 @@ async function start(): Promise<void> {
             messageSettingMentionSubCommand,
             messageSettingTimeSubCommand,
             messageEditEmbedSubCommand,
+            messageEditColorSubCommand,
         ]),
         new MemberAnniversaryRoleCommand([
             marAddSubCommand,

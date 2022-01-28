@@ -195,7 +195,8 @@
             "customMessagesClear": "Successfully cleared all {{DISPLAY_TYPE}} from the database!",
             "setMessageTime": "Successfully set the {{DISPLAY_TYPE}} to send at **{{TIME}}**",
             "setMessageMention": "{{BOT}} will now mention {{MENTION}} with the {{DISPLAY_TYPE}}!",
-            "updateMessageEmbed": "Successfully updated the message's embed setting to {{EMBED}}!"
+            "updateMessageEmbed": "Successfully updated the message's embed setting to {{EMBED}}!",
+            "updateMessageColor": "Successfully updated the message's color to {{COLOR}}!"
         }
     },
     "refs": {
