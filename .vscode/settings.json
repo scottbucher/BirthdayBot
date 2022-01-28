@@ -40,5 +40,6 @@
         "varchar"
     ],
     "todo-tree.general.tags": ["TODO", "YEET"],
-    "todo-tree.regex.regexCaseSensitive": false
+    "todo-tree.regex.regexCaseSensitive": false,
+    "typescript.preferences.importModuleSpecifierEnding": "js"
 }

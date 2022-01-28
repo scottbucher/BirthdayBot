@@ -64,10 +64,7 @@ export class CommandHandler implements EventHandler {
         }
 
         // Return if defer was unsuccessful
-        if (
-            [CommandDeferType.PUBLIC, CommandDeferType.HIDDEN].includes(command.deferType) &&
-            !intr.deferred
-        ) {
+        if (command.deferType !== CommandDeferType.NONE && !intr.deferred) {
             return;
         }
 
