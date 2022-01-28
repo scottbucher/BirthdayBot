@@ -31,27 +31,35 @@ export class MessageRemoveSubCommand implements Command {
 
         // TODO: change database types to use underscores as the commands do
         let databaseType = type.replaceAll('_', '');
+        /**
+         * In the database there are only three types, birthday, member anniversary, and server anniversary.
+         * We determine if they are user specific by the UserDiscordId field in the message table
+         */
+        if (databaseType.includes('specific'))
+            databaseType = databaseType.includes('birthday') ? 'birthday' : 'memberanniversary';
 
-        let messageData = databaseType.includes('user')
-            ? await this.customMessageRepo.getCustomUserMessages(
-                  intr.guild.id,
-                  databaseType.includes('birthday') ? 'birthday' : 'member_anniversary'
-              )
+        let messageData = type.includes('specific')
+            ? await this.customMessageRepo.getCustomUserMessages(intr.guild.id, databaseType)
             : await this.customMessageRepo.getCustomMessages(intr.guild.id, databaseType);
 
         let totalMessages = messageData.customMessages.length;
         // If it is a 0 the custom message technically needs a plural
         let displayType: string = FormatUtils.getCelebrationDisplayType(
-            type,
+            type.replaceAll('_', ''),
             totalMessages !== 1
         ).toLowerCase();
 
         if (totalMessages === 0) {
             await InteractionUtils.send(
                 intr,
-                Lang.getEmbed('validation', 'errorEmbeds.noCustomMessagesGeneric', data.lang(), {
-                    DISPLAY_TYPE: displayType,
-                })
+                Lang.getErrorEmbed(
+                    'validation',
+                    'errorEmbeds.noCustomMessagesGeneric',
+                    data.lang(),
+                    {
+                        DISPLAY_TYPE: displayType,
+                    }
+                )
             );
             return;
         }
@@ -84,8 +92,16 @@ export class MessageRemoveSubCommand implements Command {
 
         // Remove the question base on if it is a user or global message
         isUserSpecific
-            ? await this.customMessageRepo.removeCustomMessageUser(intr.guild.id, position, type)
-            : await this.customMessageRepo.removeCustomMessage(intr.guild.id, position, type);
+            ? await this.customMessageRepo.removeCustomMessageUser(
+                  intr.guild.id,
+                  position,
+                  databaseType
+              )
+            : await this.customMessageRepo.removeCustomMessage(
+                  intr.guild.id,
+                  position,
+                  databaseType
+              );
 
         await InteractionUtils.send(
             intr,
@@ -93,8 +109,8 @@ export class MessageRemoveSubCommand implements Command {
                 MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
                     message.Message,
                     intr.guild,
-                    type,
-                    message.UserDiscordId ?? null
+                    databaseType,
+                    message.UserDiscordId ? `<@${message.UserDiscordId}>` : null
                 ),
                 ICON: intr.client.user.displayAvatarURL(),
             })

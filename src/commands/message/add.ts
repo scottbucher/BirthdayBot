@@ -54,7 +54,7 @@ export class MessageAddSubCommand implements Command {
          * In the database there are only three types, birthday, member anniversary, and server anniversary.
          * We determine if they are user specific by the UserDiscordId field in the message table
          */
-        if (databaseType.includes('users'))
+        if (databaseType.includes('specific'))
             databaseType = databaseType.includes('birthday') ? 'birthday' : 'memberanniversary';
 
         let colorHex = '0';
@@ -123,20 +123,20 @@ export class MessageAddSubCommand implements Command {
          * just use the regex
          */
         message = message
-            .replace(
+            .replaceAll(
                 target && type !== 'server_anniversary'
                     ? mentionWithNickNameFormat
                     : Lang.getRegex('info', 'placeHolders.usersRegex', data.lang()),
                 '{Users}'
             )
-            .replace(
+            .replaceAll(
                 target && type !== 'server_anniversary'
                     ? target?.toString()
                     : Lang.getRegex('info', 'placeHolders.usersRegex', data.lang()),
                 '{Users}'
             )
-            .replace(Lang.getRegex('info', 'placeHolders.serverRegex', data.lang()), '{Server}')
-            .replace(Lang.getRegex('info', 'placeHolders.yearRegex', data.lang()), '{Year}');
+            .replaceAll(Lang.getRegex('info', 'placeHolders.serverRegex', data.lang()), '{Server}')
+            .replaceAll(Lang.getRegex('info', 'placeHolders.yearRegex', data.lang()), '{Year}');
 
         if (message.length > Config.validation.message.maxLength) {
             await InteractionUtils.send(
@@ -250,14 +250,14 @@ export class MessageAddSubCommand implements Command {
                     data,
                     Lang.getEmbed('validation', 'embeds.duplicateUserCustomMessage', data.lang(), {
                         TYPE: typeDisplayName,
-                        CURRENT_MESSAGE: userMessage[0].Message.replace(
+                        CURRENT_MESSAGE: userMessage[0].Message.replaceAll(
                             '{Users}',
                             target.toString()
                         ),
                         NEW_MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
                             message,
                             intr.guild,
-                            type,
+                            databaseType,
                             target?.toString()
                         ),
                         ICON: intr.client.user.displayAvatarURL(),
@@ -323,7 +323,7 @@ export class MessageAddSubCommand implements Command {
         }
 
         // Check if this message should be an embed or not
-        let option = await CollectorUtils.getBooleanFromReact(
+        embedChoice = await CollectorUtils.getBooleanFromReact(
             intr,
             data,
             Lang.getEmbed('prompts', 'customMessage.embedSelection', data.lang(), {
@@ -331,15 +331,13 @@ export class MessageAddSubCommand implements Command {
             })
         );
 
-        if (option === undefined) return;
-
-        embedChoice = option === Config.emotes.confirm ? 1 : 0;
+        if (embedChoice === undefined) return;
 
         await this.customMessageRepo.addCustomMessage(
             intr.guild.id,
             message,
             userId,
-            type,
+            databaseType,
             colorHex,
             embedChoice
         );
@@ -352,7 +350,7 @@ export class MessageAddSubCommand implements Command {
                       MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
                           message,
                           intr.guild,
-                          commandDisplayType,
+                          databaseType,
                           null
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
@@ -369,7 +367,7 @@ export class MessageAddSubCommand implements Command {
                       MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
                           message,
                           intr.guild,
-                          commandDisplayType,
+                          databaseType,
                           target?.toString()
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',

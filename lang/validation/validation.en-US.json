@@ -274,7 +274,9 @@
             "customMessageInvalidPosition": "Invalid position! Please try again.",
             "cantBlacklistBots": "You can't blacklist bots!",
             "cantBlacklistNotInServer": "Only users in this server can be added to the blacklist!",
-            "everyoneIsNotAValidRole": "{{EVERYONE}} is not a valid role!"
+            "everyoneIsNotAValidRole": "{{EVERYONE}} is not a valid role!",
+            "noUserSpecificBirthdayMessages": "This server doesn't have any user specific custom birthday messages!",
+            "noUserSpecificMemberAnniversaryMessages": "This server doesn't have any user specific custom birthday messages!"
         }
     },
     "refs": {
@@ -310,7 +312,8 @@
             "tryAgain": "Please try again!",
             "whyPremium": "Premium helps us support and maintain the bot!",
             "joinSupport": "Please join our support server if you have any questions.",
-            "actionFailed": "{{COM:emotes.deny}} Action Failed."
+            "actionFailed": "{{COM:emotes.deny}} Action Failed.",
+            "irreversible": "This action is irreversible!"
         },
         "other": {
             "na": "N/A"

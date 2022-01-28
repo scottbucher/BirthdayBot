@@ -56,6 +56,7 @@ import { MessageCommand } from './commands/message-command.js';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
+    MessageEditEmbedSubCommand,
     MessageListSubCommand,
     MessageRemoveSubCommand,
     MessageSettingMentionSubCommand,
@@ -171,6 +172,9 @@ async function start(): Promise<void> {
     let messageSettingMentionSubCommand = new MessageSettingMentionSubCommand(guildRepo);
     let messageSettingTimeSubCommand = new MessageSettingTimeSubCommand(guildRepo);
 
+    // Message Edit Sub Commands
+    let messageEditEmbedSubCommand = new MessageEditEmbedSubCommand(customMessageRepo);
+
     // Commands
     let commands: Command[] = [
         new HelpCommand(),
@@ -209,6 +213,7 @@ async function start(): Promise<void> {
             messageListSubCommand,
             messageSettingMentionSubCommand,
             messageSettingTimeSubCommand,
+            messageEditEmbedSubCommand,
         ]),
         new MemberAnniversaryRoleCommand([
             marAddSubCommand,

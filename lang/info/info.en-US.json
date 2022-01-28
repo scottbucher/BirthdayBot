@@ -772,6 +772,11 @@
         },
         "channelRegexes": {
             "bot": "/bot|command|cmd/i"
+        },
+        "placeHolders": {
+            "usersRegex": "/@users?|<users?>|{users?}|{users?}/gi",
+            "yearRegex": "/@year?|<year?>|{year?}|{year?}/gi",
+            "serverRegex": "/@server?|<server?>|{server?}|{server?}/gi"
         }
     },
     "refs": {
@@ -795,7 +800,7 @@
         "defaults": {
             "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
             "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.year}} year(s) in the server {{REF:placeHolders.users}}!",
-            "serverAnniversaryMessage": "{{COM:placeHolders.server}} is now {{REF:placeHolders.year}} year(s) old!",
+            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeHolders.year}} year(s) old!",
             "birthdayChannelName": "{{COM:emotes.birthdayEmote}} birthdays",
             "birthdayChannelTopic": "Birthdays Announcements!",
             "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",
@@ -851,11 +856,8 @@
         },
         "placeHolders": {
             "users": "{Users}",
-            "usersRegex": "/@users?|<users?>|{users?}|{users?}/gi",
             "year": "{Year}",
-            "yearRegex": "/@year?|<year?>|{year?}|{year?}/gi",
-            "server": "{Server}",
-            "serverRegex": "/@server?|<server?>|{server?}|{server?}/gi"
+            "server": "{Server}"
         },
         "boolean": {
             "yes": "Yes",

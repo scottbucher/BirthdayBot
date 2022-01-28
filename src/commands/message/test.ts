@@ -38,7 +38,7 @@ export class MessageTestSubCommand implements Command {
         let type = intr.options.getString(Lang.getCom('arguments.type')).toLowerCase();
         let databaseType = type.replaceAll('_', ''); // How we store the type in the database, for instance, memberanniversary
         let position = intr.options.getInteger(Lang.getCom('arguments.position')) ?? 0;
-        let userCount = intr.options.getUser(Lang.getCom('arguments.userCount')) ?? 1;
+        let userCount = intr.options.getInteger(Lang.getCom('arguments.userCount')) ?? 1;
 
         let isUserSpecific = type.includes('user');
         let color = Config.colors.default;
@@ -49,7 +49,7 @@ export class MessageTestSubCommand implements Command {
          * In the database there are only three types, birthday, member anniversary, and server anniversary.
          * We determine if they are user specific by the UserDiscordId field in the message table
          */
-        if (databaseType.includes('users'))
+        if (databaseType.includes('specific'))
             databaseType = databaseType.includes('birthday') ? 'birthday' : 'memberanniversary';
 
         let messageData = type.includes('user')
@@ -67,7 +67,7 @@ export class MessageTestSubCommand implements Command {
                   question => question.Position === position
               ));
 
-        if (!message) {
+        if (!message && position !== 0) {
             await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
@@ -86,7 +86,7 @@ export class MessageTestSubCommand implements Command {
 
         let memberList: GuildMember[] = [];
 
-        let target = intr.guild.members.resolve(message.UserDiscordId) ?? botMember;
+        let target = intr.guild.members.resolve(message?.UserDiscordId) ?? botMember;
 
         for (let i = 0; i < userCount; i++) {
             memberList.push(isUserSpecific ? target : botMember);
@@ -94,22 +94,16 @@ export class MessageTestSubCommand implements Command {
 
         let userList = CelebrationUtils.getUserListString(data.guild, memberList);
 
-        // Retrieve message to remove
-        let messages = target
-            ? await this.customMessageRepo.getCustomUserMessages(intr.guild.id, type)
-            : await this.customMessageRepo.getCustomMessages(intr.guild.id, type);
-
-        let year =
-            type === 'member_anniversary'
-                ? moment().diff(
-                      target
-                          ? target.joinedAt
-                          : intr.guild.members.resolve(intr.client.user).joinedAt,
-                      'years'
-                  ) + 1
-                : type === 'server_anniversary'
-                ? moment().diff(intr.guild.createdAt, 'years') + 1
-                : null;
+        let year = type.includes('member')
+            ? moment().diff(
+                  isUserSpecific
+                      ? target.joinedAt
+                      : intr.guild.members.resolve(intr.client.user).joinedAt,
+                  'years'
+              ) + 1
+            : type === 'server_anniversary'
+            ? moment().diff(intr.guild.createdAt, 'years') + 1
+            : null;
 
         if (isUserSpecific && position === 0) {
             // There isn't a default user specific messages
@@ -121,9 +115,10 @@ export class MessageTestSubCommand implements Command {
                     data.lang()
                 )
             );
+            return;
         }
 
-        if (messages.customMessages.length === 0 || position === 0) {
+        if (messageData.customMessages.length === 0 || position === 0) {
             let defaultMessage =
                 type === 'member_anniversary'
                     ? Lang.getRef('info', 'defaults.memberAnniversaryMessage', data.lang())
@@ -148,9 +143,9 @@ export class MessageTestSubCommand implements Command {
             return;
         }
 
-        let chosenMessage = target
-            ? messages.customMessages.find(message => message.UserDiscordId === target.id)
-            : messages.customMessages.find(message => message.Position === position);
+        let chosenMessage = isUserSpecific
+            ? messageData.customMessages.find(message => message.UserDiscordId === target.id)
+            : messageData.customMessages.find(message => message.Position === position);
 
         let customMessage = CelebrationUtils.replacePlaceHolders(
             chosenMessage?.Message,

@@ -145,7 +145,7 @@ export class ListUtils {
         for (let customMessage of customMessageResults.customMessages) {
             let member = await ClientUtils.findMember(guild, customMessage.UserDiscordId);
             let regex = Lang.getRegex('info', 'placeHolders.usersRegex', data.lang());
-            let messageDisplay = customMessage.Message.replace(
+            let messageDisplay = customMessage.Message.replaceAll(
                 regex,
                 member
                     ? member.toString()

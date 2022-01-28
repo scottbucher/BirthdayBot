@@ -33,7 +33,7 @@ export class MessageListSubCommand implements Command {
             !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         let databaseType = type.replaceAll('_', ''); // How we store the type in the database, for instance, memberanniversary
-        if (databaseType.includes('users'))
+        if (databaseType.includes('specific'))
             databaseType = databaseType.includes('birthday') ? 'birthday' : 'memberanniversary';
 
         let pageSize = Config.experience.birthdayMessageListSize;
