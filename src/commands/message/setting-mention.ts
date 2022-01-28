@@ -16,7 +16,7 @@ import { Command } from '../index.js';
 export class MessageSettingMentionSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
     public metadata: ChatInputApplicationCommandData = {
-        name: Lang.getCom('subCommands.add'),
+        name: Lang.getCom('subCommands.mention'),
         description: undefined,
     };
 
