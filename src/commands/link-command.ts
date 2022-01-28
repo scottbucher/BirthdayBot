@@ -64,7 +64,7 @@ export class LinkCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let link = intr.options.getString('link');
+        let link = intr.options.getString(Lang.getCom('arguments.link'));
         let embed: MessageEmbed;
         switch (link) {
             case 'docs': {

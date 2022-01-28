@@ -41,8 +41,8 @@ export class SetAttemptsCommand implements Command {
     constructor(private userRepo: UserRepo) {}
 
     public async execute(intr: CommandInteraction, _data: EventData): Promise<void> {
-        let target = intr.options.getUser('arguments.user');
-        let amount = intr.options.getInteger('arguments.number');
+        let target = intr.options.getUser(Lang.getCom('arguments.user'));
+        let amount = intr.options.getInteger(Lang.getCom('arguments.number'));
 
         let userData = await this.userRepo.getUser(target.id);
 

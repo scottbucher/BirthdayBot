@@ -64,7 +64,8 @@ export class HelpCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let link = intr.options.getString('link').toLowerCase() ?? 'general';
+        let link =
+            intr.options.getString(Lang.getCom('arguments.category'))?.toLowerCase() ?? 'general';
         let embed: MessageEmbed;
         switch (link) {
             case 'general': {
