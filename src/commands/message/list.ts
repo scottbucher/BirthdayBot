@@ -32,6 +32,10 @@ export class MessageListSubCommand implements Command {
         let hasPremium =
             !Config.payments.enabled || (data.subscription && data.subscription.service);
 
+        let databaseType = type.replaceAll('_', ''); // How we store the type in the database, for instance, memberanniversary
+        if (databaseType.includes('users'))
+            databaseType = databaseType.includes('birthday') ? 'birthday' : 'memberanniversary';
+
         let pageSize = Config.experience.birthdayMessageListSize;
 
         // Get the correct message list using logic based on the given type
@@ -41,13 +45,13 @@ export class MessageListSubCommand implements Command {
                       intr.guild.id,
                       pageSize,
                       page,
-                      type === 'user_specific_birthday' ? 'birthday' : 'member_anniversary'
+                      databaseType
                   )
                 : await this.customMessageRepo.getCustomMessageList(
                       intr.guild.id,
                       pageSize,
                       page,
-                      type
+                      databaseType
                   );
 
         if (page > customMessageResults.stats.TotalPages)

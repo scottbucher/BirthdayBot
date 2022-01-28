@@ -307,18 +307,18 @@ export class CelebrationUtils {
     ): string {
         if (message) {
             message = message.replace(
-                Lang.getRef('info', 'placeHolders.serverRegex', LangCode.EN_US),
+                Lang.getRegex('info', 'placeHolders.serverRegex', LangCode.EN_US),
                 '{Server}'
             );
 
             if (type !== 'serveranniversary')
                 message = message.replace(
-                    Lang.getRef('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    Lang.getRegex('info', 'placeHolders.usersRegex', LangCode.EN_US),
                     userList
                 );
             if (type !== 'birthday')
                 message = message.replace(
-                    Lang.getRef('info', 'placeHolders.yearRegex', LangCode.EN_US),
+                    Lang.getRegex('info', 'placeHolders.yearRegex', LangCode.EN_US),
                     year?.toString()
                 );
         }
@@ -335,21 +335,21 @@ export class CelebrationUtils {
         if (message) {
             let serverPlaceholder = Lang.getRef('info', 'placeHolders.server', LangCode.EN_US);
             message = message.replace(
-                Lang.getRef('info', 'placeHolders.serverRegex', LangCode.EN_US),
+                Lang.getRegex('info', 'placeHolders.serverRegex', LangCode.EN_US),
                 serverPlaceholder
             );
 
             if (type !== 'serveranniversary') {
                 let userPlaceholder = Lang.getRef('info', 'placeHolders.users', LangCode.EN_US);
                 message = message.replace(
-                    Lang.getRef('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    Lang.getRegex('info', 'placeHolders.usersRegex', LangCode.EN_US),
                     userId ? `<@${userId}>` : userPlaceholder
                 );
             }
             if (type !== 'birthday') {
                 let yearPlaceholder = Lang.getRef('info', 'placeHolders.year', LangCode.EN_US);
                 message = message.replace(
-                    Lang.getRef('info', 'placeHolders.yearRegex', LangCode.EN_US),
+                    Lang.getRegex('info', 'placeHolders.yearRegex', LangCode.EN_US),
                     yearPlaceholder
                 );
             }

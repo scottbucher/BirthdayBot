@@ -12,7 +12,7 @@ import { MemberAnniversaryRoles } from '../models/database/member-anniversary-ro
 import { TrustedRoles } from '../models/database/trusted-role-models.js';
 import { EventData } from '../models/internal-models.js';
 import { Lang } from '../services/index.js';
-import { CelebrationUtils } from './index.js';
+import { CelebrationUtils, ClientUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
@@ -143,25 +143,18 @@ export class ListUtils {
         }
 
         for (let customMessage of customMessageResults.customMessages) {
-            let member = guild.members.resolve(customMessage.UserDiscordId);
+            let member = await ClientUtils.findMember(guild, customMessage.UserDiscordId);
+            let regex = Lang.getRegex('info', 'placeHolders.usersRegex', data.lang());
+            let messageDisplay = customMessage.Message.replace(
+                regex,
+                member
+                    ? member.toString()
+                    : `**${Lang.getRef('info', 'terms.unknownMember', data.lang())}** `
+            );
             if (hasPremium) {
-                description += `${
-                    member
-                        ? `**${member.displayName}**: `
-                        : `**${Lang.getRef('info', 'terms.unknownMember', data.lang())}** `
-                } ${customMessage.Message.replace(
-                    Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
-                    member.toString()
-                )}\n`;
+                description += `**${customMessage.Position.toLocaleString()}.** ${messageDisplay}\n`;
             } else {
-                description += `${
-                    member
-                        ? `**${member.displayName}**: `
-                        : `**${Lang.getRef('info', 'terms.unknownMember', data.lang())}** `
-                } ~~${customMessage.Message.replace(
-                    Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
-                    member.toString()
-                )}~~\n`;
+                description += `**${customMessage.Position.toLocaleString()}.** ~~${messageDisplay}~~\n`;
             }
 
             // Added embedded part
@@ -244,21 +237,20 @@ export class ListUtils {
         for (let trustedRole of trustedRoleResults.trustedRoles) {
             // dynamically check which ones to cross out due to the server not having premium anymore
             let role = guild.roles.resolve(trustedRole.TrustedRoleDiscordId);
+            let roleDisplay = role
+                ? `${role.toString()}`
+                : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
             if (
                 hasPremium ||
                 trustedRole.Position <= Config.validation.trustedRoles.maxCount.free
             ) {
-                description += `**${i.toLocaleString()}.** ${
-                    role
-                        ? `${role.toString()}`
-                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`
-                }: (ID: ${trustedRole.TrustedRoleDiscordId})\n\n`;
+                description += `**${i.toLocaleString()}.** ${roleDisplay}: (ID: ${
+                    trustedRole.TrustedRoleDiscordId
+                })\n\n`;
             } else {
-                description += `**${i.toLocaleString()}.** ${
-                    role
-                        ? `~~${role.toString()}~~`
-                        : `~~**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**~~`
-                }: (ID: ${trustedRole.TrustedRoleDiscordId})\n\n`;
+                description += `**${i.toLocaleString()}.** ~~${roleDisplay}~~: (ID: ${
+                    trustedRole.TrustedRoleDiscordId
+                })\n\n`;
             }
             i++;
         }
@@ -453,22 +445,17 @@ export class ListUtils {
         for (let memberAnniversaryRole of memberAnniversaryRoleResults.memberAnniversaryRoles) {
             // dynamically check which ones to cross out due to the server not having premium anymore
             let role = guild.roles.resolve(memberAnniversaryRole.MemberAnniversaryRoleDiscordId);
+            let displayRole = role
+                ? `${role.toString()}`
+                : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
             if (
                 hasPremium ||
                 memberAnniversaryRole.Position <=
                     Config.validation.memberAnniversaryRoles.maxCount.free
             ) {
-                description += `**Year ${memberAnniversaryRole.Year}:** ${
-                    role
-                        ? `${role.toString()}`
-                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`
-                }: (ID: ${memberAnniversaryRole.MemberAnniversaryRoleDiscordId})\n\n`;
+                description += `**Year ${memberAnniversaryRole.Year}:** ${displayRole}: (ID: ${memberAnniversaryRole.MemberAnniversaryRoleDiscordId})\n\n`;
             } else {
-                description += `**Year ${memberAnniversaryRole.Year}:** ${
-                    role
-                        ? `~~${role.toString()}~~`
-                        : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`
-                }: (ID: ${memberAnniversaryRole.MemberAnniversaryRoleDiscordId})\n\n`;
+                description += `**Year ${memberAnniversaryRole.Year}:** ~~${displayRole}~~: (ID: ${memberAnniversaryRole.MemberAnniversaryRoleDiscordId})\n\n`;
             }
         }
 

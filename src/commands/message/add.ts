@@ -126,17 +126,17 @@ export class MessageAddSubCommand implements Command {
             .replace(
                 target && type !== 'server_anniversary'
                     ? mentionWithNickNameFormat
-                    : Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
+                    : Lang.getRegex('info', 'placeHolders.usersRegex', data.lang()),
                 '{Users}'
             )
             .replace(
                 target && type !== 'server_anniversary'
                     ? target?.toString()
-                    : Lang.getRef('info', 'placeHolders.usersRegex', data.lang()),
+                    : Lang.getRegex('info', 'placeHolders.usersRegex', data.lang()),
                 '{Users}'
             )
-            .replace(Lang.getRef('info', 'placeHolders.serverRegex', data.lang()), '{Server}')
-            .replace(Lang.getRef('info', 'placeHolders.yearRegex', data.lang()), '{Year}');
+            .replace(Lang.getRegex('info', 'placeHolders.serverRegex', data.lang()), '{Server}')
+            .replace(Lang.getRegex('info', 'placeHolders.yearRegex', data.lang()), '{Year}');
 
         if (message.length > Config.validation.message.maxLength) {
             await InteractionUtils.send(
