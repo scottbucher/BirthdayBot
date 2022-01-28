@@ -57,7 +57,7 @@ export class MessageCommand implements Command {
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
-                                name: 'type',
+                                name: Lang.getCom('arguments.type'),
                                 description: 'What type of message this setting should apply to.',
                                 required: true,
                                 type: ApplicationCommandOptionType.String.valueOf(),
@@ -81,6 +81,8 @@ export class MessageCommand implements Command {
                                 description: 'The time setting for a message type.',
                                 type: ApplicationCommandOptionType.Integer.valueOf(),
                                 required: true,
+                                min_value: 0,
+                                maxValue: 23,
                             },
                         ],
                     },
@@ -90,7 +92,7 @@ export class MessageCommand implements Command {
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
-                                name: 'type',
+                                name: Lang.getCom('arguments.type'),
                                 description: 'What type of message this setting should apply to.',
                                 required: true,
                                 type: ApplicationCommandOptionType.String.valueOf(),
@@ -111,8 +113,9 @@ export class MessageCommand implements Command {
                             },
                             {
                                 name: Lang.getCom('arguments.mention'),
-                                description: 'A role or group to mention.',
-                                type: ApplicationCommandOptionType.Mentionable.valueOf(),
+                                description:
+                                    'A role, @everyone, or @here. The selected group will be mentioned with the birthday message.',
+                                type: ApplicationCommandOptionType.String.valueOf(),
                                 required: true,
                             },
                         ],
