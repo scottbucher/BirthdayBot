@@ -8,7 +8,7 @@ import { Command, CommandDeferType } from './index.js';
 export class DonateCommand implements Command {
     public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.donate'),
-        description: 'View the timezone map.',
+        description: 'Donate to support Birthday Bot!',
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
