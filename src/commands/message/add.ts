@@ -10,7 +10,13 @@ import { createRequire } from 'node:module';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CelebrationUtils, CollectorUtils, ColorUtils, MessageUtils } from '../../utils/index.js';
+import {
+    CelebrationUtils,
+    ClientUtils,
+    CollectorUtils,
+    ColorUtils,
+    MessageUtils,
+} from '../../utils/index.js';
 import { Command } from '../index.js';
 
 const require = createRequire(import.meta.url);
@@ -60,7 +66,7 @@ export class MessageAddSubCommand implements Command {
 
         // TODO: Use regex to parse a user input
         // Target needs to be the determining factor of if this is a user specific message or not
-        target = null;
+        target = await ClientUtils.findMember(intr.guild, message);
 
         // Did we find a user?
         if (target) {
