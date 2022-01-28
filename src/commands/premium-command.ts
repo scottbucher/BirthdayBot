@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 
 import { EventData } from '../models/index.js';
 import { Lang, Logger } from '../services/index.js';
-import { MessageUtils, TimeUtils } from '../utils/index.js';
+import { InteractionUtils, TimeUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -25,7 +25,7 @@ export class PremiumCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         if (!Config.payments.enabled) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('info', 'premium.premiumDisabled', data.lang())
             );
@@ -35,7 +35,7 @@ export class PremiumCommand implements Command {
         let subStatus = data.subscription;
 
         if (!subStatus || !subStatus.service) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('info', 'premium.noSubscription', data.lang(), {
                     BIRTHDAY_MESSAGE_MAX_FREE:
@@ -70,7 +70,7 @@ export class PremiumCommand implements Command {
         let paidUntil = TimeUtils.getMoment(subStatus.subscription.times.paidUntil);
 
         let na = Lang.getRef('info', 'terms.na', data.lang());
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getEmbed('info', 'premium.subscription', data.lang(), {
                 IS_ACTIVE: Lang.getRef(

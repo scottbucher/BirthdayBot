@@ -5,7 +5,7 @@ import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
 import { ClientUtils } from '../../utils/client-utils.js';
 import { FormatUtils } from '../../utils/format-utils.js';
-import { MessageUtils } from '../../utils/message-utils.js';
+import { InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class MessageSettingMentionSubCommand implements Command {
@@ -41,7 +41,7 @@ export class MessageSettingMentionSubCommand implements Command {
                 mention !== '@here' &&
                 mention !== 'none'
             ) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('validation', 'embeds.invalidMentionSetting', data.lang(), {
                         ICON: intr.client.user.displayAvatarURL(),
@@ -80,7 +80,7 @@ export class MessageSettingMentionSubCommand implements Command {
             ? await this.guildRepo.updateMemberAnniversaryMentionSetting(intr.guild.id, mention)
             : await this.guildRepo.updateServerAnniversaryMentionSetting(intr.guild.id, mention);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.setMessageMention', data.lang(), {
                 BOT: intr.client.user.toString(),

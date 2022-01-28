@@ -10,7 +10,7 @@ import {
 import { EventData } from '../../models/index.js';
 import { BlacklistRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { MessageUtils } from '../../utils/index.js';
+import { InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class BlacklistAddSubCommand implements Command {
@@ -37,7 +37,7 @@ export class BlacklistAddSubCommand implements Command {
             !(mentionable instanceof GuildMember) &&
             !(mentionable instanceof Role)
         ) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -49,7 +49,7 @@ export class BlacklistAddSubCommand implements Command {
         }
 
         if (mentionable instanceof User) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -61,7 +61,7 @@ export class BlacklistAddSubCommand implements Command {
         }
 
         if (!(mentionable instanceof Role) && mentionable.user.bot) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.cantBlacklistBots', data.lang())
             );
@@ -70,7 +70,7 @@ export class BlacklistAddSubCommand implements Command {
 
         if (mentionable instanceof Role && mentionable.id === intr.guild.id) {
             // can't blacklist everyone
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -87,7 +87,7 @@ export class BlacklistAddSubCommand implements Command {
         let blacklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
 
         if (blacklistData.blacklist.map(b => b.DiscordId).includes(mentionable.id)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.alreadyInBlacklist', data.lang(), {
                     TYPE: Lang.getRef(
@@ -102,7 +102,7 @@ export class BlacklistAddSubCommand implements Command {
 
         await this.blacklistRepo.addBlacklist(intr.guild.id, mentionable.id);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.blacklistAdd', data.lang(), {
                 TARGET: mentionable.toString(),

@@ -2,7 +2,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
-import { MessageUtils } from '../utils/index.js';
+import { InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class InfoCommand implements Command {
@@ -20,6 +20,6 @@ export class InfoCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        await MessageUtils.sendIntr(intr, Lang.getEmbed('info', 'embeds.info', data.lang()));
+        await await InteractionUtils.send(intr, Lang.getEmbed('info', 'embeds.info', data.lang()));
     }
 }

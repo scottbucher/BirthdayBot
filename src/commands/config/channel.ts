@@ -14,7 +14,7 @@ import {
     ClientUtils,
     CollectorUtils,
     FormatUtils,
-    MessageUtils,
+    InteractionUtils,
     PermissionUtils,
 } from '../../utils/index.js';
 import { Command } from '../index.js';
@@ -49,13 +49,13 @@ export class ChannelSubCommand implements Command {
 
         // prompt them for a type
         let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
 
-        let _prompt = await MessageUtils.sendIntr(
+        let _prompt = await InteractionUtils.send(
             intr,
             Lang.getEmbed('prompts', 'config.channelType', data.lang())
         );
@@ -68,7 +68,7 @@ export class ChannelSubCommand implements Command {
                 input === 'userSpecificMemberAnniversary'
             ) {
                 console.log(input);
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
                 );
@@ -137,7 +137,7 @@ export class ChannelSubCommand implements Command {
                             ],
                         })
                     )?.id;
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getSuccessEmbed(
                             'results',
@@ -151,7 +151,7 @@ export class ChannelSubCommand implements Command {
                     break;
                 }
                 case Config.emotes.select: {
-                    let _selectMessage = await MessageUtils.sendIntr(
+                    let _selectMessage = await InteractionUtils.send(
                         intr,
                         Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())
                     );
@@ -164,7 +164,7 @@ export class ChannelSubCommand implements Command {
                         );
 
                         if (!channelInput) {
-                            await MessageUtils.sendIntr(
+                            await InteractionUtils.send(
                                 intr,
                                 Lang.getErrorEmbed(
                                     'validation',
@@ -177,7 +177,7 @@ export class ChannelSubCommand implements Command {
 
                         // Bot needs to be able to message in the desired channel
                         if (!PermissionUtils.canSend(channelInput)) {
-                            await MessageUtils.sendIntr(
+                            await InteractionUtils.send(
                                 intr,
                                 Lang.getEmbed(
                                     'validation',
@@ -196,7 +196,7 @@ export class ChannelSubCommand implements Command {
                     if (channel === undefined) {
                         return;
                     }
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getSuccessEmbed('results', 'successEmbeds.channelSet', data.lang(), {
                             CHANNEL: `<#${channel}>`,
@@ -213,7 +213,7 @@ export class ChannelSubCommand implements Command {
         } else channel = '0';
 
         if (channel === '0') {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getSuccessEmbed('results', 'successEmbeds.channelClear', data.lang(), {
                     TYPE: displayType.toLowerCase(),

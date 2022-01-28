@@ -4,7 +4,7 @@ import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
 import { FormatUtils } from '../../utils/format-utils.js';
-import { MessageUtils } from '../../utils/message-utils.js';
+import { InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class MessageSettingTimeSubCommand implements Command {
@@ -48,7 +48,7 @@ export class MessageSettingTimeSubCommand implements Command {
             : type === 'member_anniversary'
             ? await this.guildRepo.updateMemberAnniversaryMessageTime(intr.guild.id, messageTime)
             : await this.guildRepo.updateServerAnniversaryMessageTime(intr.guild.id, messageTime);
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.setMessageTime', data.lang(), {
                 DISPLAY_TYPE: displayType,

@@ -15,7 +15,7 @@ import {
     ClientUtils,
     CollectorUtils,
     ColorUtils,
-    MessageUtils,
+    InteractionUtils,
 } from '../../utils/index.js';
 import { Command } from '../index.js';
 
@@ -71,13 +71,13 @@ export class MessageAddSubCommand implements Command {
         // Did we find a user?
         if (target) {
             if (target.user.bot) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('validation', 'errorEmbeds.noUserMessageForBot', data.lang())
                 );
                 return;
             } else if (!hasPremium) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed(
                         'validation',
@@ -139,7 +139,7 @@ export class MessageAddSubCommand implements Command {
             .replace(Lang.getRef('info', 'placeHolders.yearRegex', data.lang()), '{Year}');
 
         if (message.length > Config.validation.message.maxLength) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('validation', 'embeds.maxCustomMessageSize', data.lang(), {
                     MAX_SIZE: Config.validation.message.maxLength.toString(),
@@ -152,7 +152,7 @@ export class MessageAddSubCommand implements Command {
         if (type === 'birthday' || type === 'member_anniversary') {
             // Can also use year and server name placeholder
             if (!message.includes('{Users}')) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('validation', 'embeds.noUserPlaceholder', data.lang(), {
                         TYPE: type,
@@ -171,7 +171,7 @@ export class MessageAddSubCommand implements Command {
             if (!message.includes('{Server}')) {
                 // NO SERVER PLACEHOLDER (can also use year placeholder)
                 // TODO: Should this be required?
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('validation', 'embeds.noServerPlaceholder', data.lang())
                 );
@@ -215,7 +215,7 @@ export class MessageAddSubCommand implements Command {
         // Check if they have reached the max custom messages for this type
         if (customMessages) {
             if (globalMessageCount >= maxMessageCountFree && !hasPremium) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('validation', 'embeds.maxFreeCustomMessages', data.lang(), {
                         TYPE: typeDisplayName,
@@ -226,7 +226,7 @@ export class MessageAddSubCommand implements Command {
                 );
                 return;
             } else if (globalMessageCount >= maxMessageCountPaid) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('validation', 'embeds.maxPaidCustomMessages', data.lang(), {
                         TYPE: typeDisplayName,
@@ -267,7 +267,7 @@ export class MessageAddSubCommand implements Command {
                 if (confirmation === undefined) return;
 
                 if (!confirmation) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
                     );
@@ -278,7 +278,7 @@ export class MessageAddSubCommand implements Command {
             // Don't allow duplicate birthday messages for non user messages
             let duplicateMessage = messages.map(message => message.Message).includes(message);
             if (duplicateMessage) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getErrorEmbed('validation', 'errorEmbeds.duplicateMessage', data.lang())
                 );
@@ -293,13 +293,13 @@ export class MessageAddSubCommand implements Command {
         if (hasPremium) {
             // prompt them for a color
             let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                 );
             });
 
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('prompts', 'customMessage.colorSelection', data.lang(), {
                     ICON: intr.client.user.displayAvatarURL(),
@@ -310,7 +310,7 @@ export class MessageAddSubCommand implements Command {
                 let check = ColorUtils.findHex(nextMsg.content);
 
                 if (!check) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getEmbed('validation', 'embeds.invalidColor', data.lang())
                     );
@@ -344,7 +344,7 @@ export class MessageAddSubCommand implements Command {
             embedChoice
         );
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             userId === '0'
                 ? Lang.getEmbed('results', 'customMessage.add', data.lang(), {

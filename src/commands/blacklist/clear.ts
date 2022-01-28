@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { EventData } from '../../models/index.js';
 import { BlacklistRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, MessageUtils } from '../../utils/index.js';
+import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class BlacklistClearSubCommand implements Command {
@@ -31,7 +31,7 @@ export class BlacklistClearSubCommand implements Command {
         let blacklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
 
         if (!blacklistData || blacklistData.blacklist.length === 0) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.emptyBlacklist', data.lang())
             );
@@ -51,7 +51,7 @@ export class BlacklistClearSubCommand implements Command {
         if (confirmation === undefined) return;
 
         if (!confirmation) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
@@ -60,7 +60,7 @@ export class BlacklistClearSubCommand implements Command {
 
         await this.blacklistRepo.clearBlacklist(intr.guild.id);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.blacklistClear', data.lang())
         );

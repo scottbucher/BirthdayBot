@@ -6,7 +6,7 @@ import { Language } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { TrustedRoleRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
-import { FormatUtils, MessageUtils } from '../utils/index.js';
+import { FormatUtils, InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -115,7 +115,7 @@ export class SettingsCommand implements Command {
                 data.guild.ServerAnniversaryMessageTime
             );
 
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('info', 'settings.message', data.lang(), {
                     SERVER_NAME: guild.name,
@@ -168,7 +168,7 @@ export class SettingsCommand implements Command {
             let trustedRoleCount =
                 (await this.trustedRoleRepo.getTrustedRoles(guild.id))?.trustedRoles.length ?? 0;
 
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('info', 'settings.advanced', data.lang(), {
                     SERVER_NAME: guild.name,
@@ -206,7 +206,7 @@ export class SettingsCommand implements Command {
                     : data.guild.DefaultTimezone;
             let serverLanguage = Language.displayName(data.lang());
 
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('info', 'settings.general', data.lang(), {
                     SERVER_NAME: guild.name,

@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { EventData } from '../../models/index.js';
 import { TrustedRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, MessageUtils } from '../../utils/index.js';
+import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class TrustedRoleClearSubCommand implements Command {
@@ -26,7 +26,7 @@ export class TrustedRoleClearSubCommand implements Command {
         let trustedRoleData = await this.trustedRoleRepo.getTrustedRoles(intr.guild.id);
 
         if (!trustedRoleData || trustedRoleData.trustedRoles.length === 0) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.emptyTrustedRole', data.lang())
             );
@@ -46,7 +46,7 @@ export class TrustedRoleClearSubCommand implements Command {
         if (confirmation === undefined) return;
 
         if (!confirmation) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
@@ -55,7 +55,7 @@ export class TrustedRoleClearSubCommand implements Command {
 
         await this.trustedRoleRepo.clearTrustedRoles(intr.guild.id);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.trustedRoleClear', data.lang())
         );

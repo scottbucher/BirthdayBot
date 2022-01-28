@@ -12,7 +12,7 @@ import { EventData } from '../models/index.js';
 import { GuildRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
 import { CollectorUtils } from '../utils/collector-utils.js';
-import { ClientUtils, MessageUtils, PermissionUtils } from '../utils/index.js';
+import { ClientUtils, InteractionUtils, PermissionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -43,7 +43,7 @@ export class SetupCommand implements Command {
         let botUser = guild.client.user;
         // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
         let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
@@ -97,7 +97,7 @@ export class SetupCommand implements Command {
                 break;
             }
             case Config.emotes.select: {
-                let _selectMessage = await MessageUtils.sendIntr(
+                let _selectMessage = await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())
                 );
@@ -110,7 +110,7 @@ export class SetupCommand implements Command {
                     );
 
                     if (!channelInput) {
-                        await MessageUtils.sendIntr(
+                        await InteractionUtils.send(
                             intr,
                             Lang.getErrorEmbed(
                                 'validation',
@@ -123,7 +123,7 @@ export class SetupCommand implements Command {
 
                     // Bot needs to be able to message in the desired channel
                     if (!PermissionUtils.canSend(channelInput)) {
-                        await MessageUtils.sendIntr(
+                        await InteractionUtils.send(
                             intr,
                             Lang.getEmbed('validation', 'embeds.noAccessToChannel', data.lang(), {
                                 CHANNEL: channelInput.toString(),
@@ -167,7 +167,7 @@ export class SetupCommand implements Command {
                 break;
             }
             case Config.emotes.select: {
-                let _selectMessage = await MessageUtils.sendIntr(
+                let _selectMessage = await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
                 );
@@ -189,7 +189,7 @@ export class SetupCommand implements Command {
                         roleInput.id === guild.id ||
                         nextMsg?.content.toLowerCase() === 'everyone'
                     ) {
-                        MessageUtils.sendIntr(
+                        InteractionUtils.send(
                             intr,
                             Lang.getErrorEmbed('validation', 'errorEmbeds.invalidRole', data.lang())
                         );
@@ -200,7 +200,7 @@ export class SetupCommand implements Command {
                     if (
                         roleInput.position > guild.members.resolve(botUser).roles.highest.position
                     ) {
-                        await MessageUtils.sendIntr(
+                        await InteractionUtils.send(
                             intr,
                             Lang.getEmbed('validation', 'embeds.roleHierarchyError', data.lang(), {
                                 BOT: intr.client.user.toString(),
@@ -212,7 +212,7 @@ export class SetupCommand implements Command {
 
                     // Check if the role is managed
                     if (roleInput.managed) {
-                        MessageUtils.sendIntr(
+                        InteractionUtils.send(
                             intr,
                             Lang.getErrorEmbed(
                                 'validation',
@@ -226,7 +226,7 @@ export class SetupCommand implements Command {
                     let membersWithRole = roleInput.members.size;
 
                     if (membersWithRole > 0 && membersWithRole < 100) {
-                        await MessageUtils.sendIntr(
+                        await InteractionUtils.send(
                             intr,
                             Lang.getEmbed(
                                 'validation',
@@ -240,7 +240,7 @@ export class SetupCommand implements Command {
                             )
                         );
                     } else if (membersWithRole > 100) {
-                        await MessageUtils.sendIntr(
+                        await InteractionUtils.send(
                             intr,
                             Lang.getEmbed(
                                 'validation',
@@ -280,7 +280,7 @@ export class SetupCommand implements Command {
                 : guild.roles.resolve(birthdayRole)?.toString() ||
                   `**${Lang.getRef('info', 'terms.unknownRole', data.lang())}**`;
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getEmbed('results', 'success.requiredSetup', data.lang(), {
                 CHANNEL: channelOutput,

@@ -13,7 +13,7 @@ import { Command } from '../commands/index.js';
 import { Permission } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
-import { FormatUtils, MessageUtils, TimeUtils } from './index.js';
+import { FormatUtils, InteractionUtils, TimeUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
@@ -32,7 +32,7 @@ export class CommandUtils {
         if (command.cooldown) {
             let limited = command.cooldown.take(intr.user.id);
             if (limited) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getErrorEmbed('validation', 'errorEmbeds.cooldownHit', data.lang(), {
                         AMOUNT: command.cooldown.amount.toLocaleString(),
@@ -45,7 +45,7 @@ export class CommandUtils {
 
         // Check if this command is a developer only command
         if (command.requireDev && !Config.developers.includes(intr.user.id)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.devOnlyCommand', data.lang())
             );
@@ -54,7 +54,7 @@ export class CommandUtils {
 
         // Check if this command is a guild only command
         if (command.requireGuild && !intr.guild) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.serverOnlyCommand', data.lang())
             );
@@ -68,7 +68,7 @@ export class CommandUtils {
             case intr.channel instanceof TextChannel || intr.channel instanceof NewsChannel: {
                 // Check if command requires guild setup
                 if (command.requireSetup && !data.guild) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getEmbed('validation', 'embeds.setupRequired', data.lang())
                     );
@@ -80,7 +80,7 @@ export class CommandUtils {
                     intr.channel instanceof GuildChannel &&
                     !intr.channel.permissionsFor(intr.client.user).has(command.requireClientPerms)
                 ) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getEmbed('validation', 'embeds.missingClientPerms', data.lang(), {
                             PERMISSIONS: command.requireClientPerms
@@ -96,7 +96,7 @@ export class CommandUtils {
                 // Check if the member has all the required user permissions for this command
                 // TODO: Remove "as GuildMember",  why does discord.js have intr.member as a "APIInteractionGuildMember"?
                 if (intr.member && !this.hasPermission(intr.member as GuildMember, command)) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
@@ -113,7 +113,7 @@ export class CommandUtils {
                     command.requirePremium &&
                     !data.subscription?.service
                 ) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getEmbed('validation', 'embeds.premiumRequired', data.lang())
                     );
@@ -129,7 +129,7 @@ export class CommandUtils {
                     ) {
                         let voteTimeAgo = voteTime?.fromNow() ?? 'Never';
 
-                        await MessageUtils.sendIntr(
+                        await InteractionUtils.send(
                             intr,
                             Lang.getEmbed('validation', 'embeds.voteRequired', data.lang(), {
                                 LAST_VOTE: voteTimeAgo,

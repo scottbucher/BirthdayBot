@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, Message, PermissionString }
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, FormatUtils, MessageUtils } from '../../utils/index.js';
+import { CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class NameFormatSubCommand implements Command {
@@ -30,13 +30,13 @@ export class NameFormatSubCommand implements Command {
         if (!reset) {
             // prompt them for a setting
             let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                 );
             });
 
-            let _prompt = await MessageUtils.sendIntr(
+            let _prompt = await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('prompts', 'config.nameFormat', data.lang(), {
                     MENTION: intr.user.toString(),
@@ -49,7 +49,7 @@ export class NameFormatSubCommand implements Command {
             nameFormat = await collect(async (nextMsg: Message) => {
                 let input = FormatUtils.extractNameFormatType(nextMsg.content.toLowerCase());
                 if (!input) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
                     );
@@ -65,7 +65,7 @@ export class NameFormatSubCommand implements Command {
 
         await this.guildRepo.updateNameFormat(intr.guild.id, nameFormat);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.nameFormatSet', data.lang(), {
                 SETTING: nameFormat,

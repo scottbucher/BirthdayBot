@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString, Role } fr
 import { EventData } from '../../models/index.js';
 import { TrustedRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { MessageUtils } from '../../utils/index.js';
+import { InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class TrustedRoleRemoveRoleSubCommand implements Command {
@@ -26,7 +26,7 @@ export class TrustedRoleRemoveRoleSubCommand implements Command {
         let role = intr.options.getRole(Lang.getCom('arguments.role'));
 
         if (!(role instanceof Role)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -40,7 +40,7 @@ export class TrustedRoleRemoveRoleSubCommand implements Command {
         let trustedRoleData = await this.trustedRoleRepo.getTrustedRoles(intr.guild.id);
 
         if (!trustedRoleData.trustedRoles.map(b => b.TrustedRoleDiscordId).includes(role.id)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.notInTrustedRole', data.lang(), {
                     TYPE: Lang.getRef('info', 'types.role', data.lang()),
@@ -51,7 +51,7 @@ export class TrustedRoleRemoveRoleSubCommand implements Command {
 
         await this.trustedRoleRepo.removeTrustedRole(intr.guild.id, role.id);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.trustedRoleRemove', data.lang(), {
                 TARGET: role.toString(),

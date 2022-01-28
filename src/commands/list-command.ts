@@ -12,8 +12,8 @@ import { UserDataResults } from '../models/database/user-data-results-models.js'
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/user-repo.js';
 import { Lang } from '../services/index.js';
+import { InteractionUtils } from '../utils/index.js';
 import { ListUtils } from '../utils/list-utils.js';
-import { MessageUtils } from '../utils/message-utils.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -149,7 +149,7 @@ export class ListCommand implements Command {
             );
         }
 
-        await MessageUtils.sendIntr(intr, {
+        await InteractionUtils.send(intr, {
             embeds: [embed],
             components: [
                 {

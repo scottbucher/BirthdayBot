@@ -10,7 +10,7 @@ import { createRequire } from 'node:module';
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, FormatUtils, MessageUtils } from '../../utils/index.js';
+import { CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 const require = createRequire(import.meta.url);
@@ -43,13 +43,13 @@ export class RoleSubCommand implements Command {
 
         // prompt them for a type
         let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
 
-        let _prompt = await MessageUtils.sendIntr(
+        let _prompt = await InteractionUtils.send(
             intr,
             Lang.getEmbed('prompts', 'config.roleType', data.lang())
         );
@@ -58,7 +58,7 @@ export class RoleSubCommand implements Command {
             let input = FormatUtils.extractRoleType(nextMsg.content.toLowerCase());
             if (!input) {
                 console.log(input);
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
                 );
@@ -106,7 +106,7 @@ export class RoleSubCommand implements Command {
                             mentionable: true,
                         })
                     )?.id;
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getSuccessEmbed('results', 'successEmbeds.roleCreate', data.lang(), {
                             ROLE: `<@&${role}>`,
@@ -115,7 +115,7 @@ export class RoleSubCommand implements Command {
                     break;
                 }
                 case Config.emotes.select: {
-                    let _selectMessage = await MessageUtils.sendIntr(
+                    let _selectMessage = await InteractionUtils.send(
                         intr,
                         Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
                     );
@@ -137,7 +137,7 @@ export class RoleSubCommand implements Command {
                             roleInput.id === guild.id ||
                             nextMsg?.content.toLowerCase() === 'everyone'
                         ) {
-                            MessageUtils.sendIntr(
+                            InteractionUtils.send(
                                 intr,
                                 Lang.getErrorEmbed(
                                     'validation',
@@ -153,7 +153,7 @@ export class RoleSubCommand implements Command {
                             roleInput.position >
                             guild.members.resolve(intr.client.user).roles.highest.position
                         ) {
-                            await MessageUtils.sendIntr(
+                            await InteractionUtils.send(
                                 intr,
                                 Lang.getEmbed(
                                     'validation',
@@ -170,7 +170,7 @@ export class RoleSubCommand implements Command {
 
                         // Check if the role is managed
                         if (roleInput.managed) {
-                            MessageUtils.sendIntr(
+                            InteractionUtils.send(
                                 intr,
                                 Lang.getErrorEmbed(
                                     'validation',
@@ -184,7 +184,7 @@ export class RoleSubCommand implements Command {
                         let membersWithRole = roleInput.members.size;
 
                         if (membersWithRole > 0 && membersWithRole < 100) {
-                            await MessageUtils.sendIntr(
+                            await InteractionUtils.send(
                                 intr,
                                 Lang.getEmbed(
                                     'validation',
@@ -198,7 +198,7 @@ export class RoleSubCommand implements Command {
                                 )
                             );
                         } else if (membersWithRole > 100) {
-                            await MessageUtils.sendIntr(
+                            await InteractionUtils.send(
                                 intr,
                                 Lang.getEmbed(
                                     'validation',
@@ -219,7 +219,7 @@ export class RoleSubCommand implements Command {
                     if (role === undefined) {
                         return;
                     }
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getSuccessEmbed('results', 'successEmbeds.roleSet', data.lang(), {
                             ROLE: `<@&${role}>`,
@@ -236,7 +236,7 @@ export class RoleSubCommand implements Command {
         } else role = '0';
 
         if (role === '0') {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getSuccessEmbed('results', 'successEmbeds.roleClear', data.lang(), {
                     TYPE: displayType.toLowerCase(),

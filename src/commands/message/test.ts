@@ -12,7 +12,7 @@ import { CustomMessage } from '../../models/database/index.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CelebrationUtils, MessageUtils } from '../../utils/index.js';
+import { CelebrationUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 const require = createRequire(import.meta.url);
@@ -68,7 +68,7 @@ export class MessageTestSubCommand implements Command {
               ));
 
         if (!message) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -113,7 +113,7 @@ export class MessageTestSubCommand implements Command {
 
         if (isUserSpecific && position === 0) {
             // There isn't a default user specific messages
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -131,7 +131,7 @@ export class MessageTestSubCommand implements Command {
                     ? Lang.getRef('info', 'defaults.serverAnniversaryMessage', data.lang())
                     : Lang.getRef('info', 'defaults.birthdayMessage', data.lang());
 
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 new MessageEmbed()
                     .setDescription(
@@ -162,7 +162,7 @@ export class MessageTestSubCommand implements Command {
 
         // TODO: recheck this color logic
         if (!customMessage) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('validation', 'embeds.messageDoesNotExist', data.lang(), {
                     ICON: intr.client.user.displayAvatarURL(),
@@ -175,9 +175,9 @@ export class MessageTestSubCommand implements Command {
 
         if (chosenMessage.Embed) {
             let embed = new MessageEmbed().setDescription(customMessage).setColor(color);
-            await MessageUtils.sendIntr(intr, embed);
+            await InteractionUtils.send(intr, embed);
         } else {
-            await MessageUtils.sendIntr(intr, customMessage);
+            await InteractionUtils.send(intr, customMessage);
         }
     }
 }

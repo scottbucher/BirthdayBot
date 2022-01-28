@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { EventData } from '../../models/index.js';
 import { MemberAnniversaryRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, MessageUtils } from '../../utils/index.js';
+import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class MarClearSubCommand implements Command {
@@ -26,7 +26,7 @@ export class MarClearSubCommand implements Command {
         let marData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(intr.guild.id);
 
         if (!marData || marData.memberAnniversaryRoles.length === 0) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.emptyMar', data.lang())
             );
@@ -46,7 +46,7 @@ export class MarClearSubCommand implements Command {
         if (confirmation === undefined) return;
 
         if (!confirmation) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
@@ -55,7 +55,7 @@ export class MarClearSubCommand implements Command {
 
         await this.memberAnniversaryRoleRepo.clearMemberAnniversaryRoles(intr.guild.id);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.marClear', data.lang())
         );

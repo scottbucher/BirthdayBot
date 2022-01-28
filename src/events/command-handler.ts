@@ -6,7 +6,8 @@ import { Command, CommandDeferType } from '../commands/index.js';
 import { PlanName, EventData } from '../models/index.js';
 import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang, Logger, SubscriptionService } from '../services/index.js';
-import { CommandUtils, MessageUtils } from '../utils/index.js';
+import { CommandUtils } from '../utils/index.js';
+import { InteractionUtils } from '../utils/interaction-utils.js';
 import { EventHandler } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -53,11 +54,11 @@ export class CommandHandler implements EventHandler {
         // NOTE: Anything after this point we should be responding to the interaction
         switch (command.deferType) {
             case CommandDeferType.PUBLIC: {
-                await MessageUtils.deferReply(intr, false);
+                await InteractionUtils.deferReply(intr, false);
                 break;
             }
             case CommandDeferType.HIDDEN: {
-                await MessageUtils.deferReply(intr, true);
+                await InteractionUtils.deferReply(intr, true);
                 break;
             }
         }
@@ -107,7 +108,7 @@ export class CommandHandler implements EventHandler {
 
     private async sendError(intr: CommandInteraction, data: EventData): Promise<void> {
         try {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('errors', 'embeds.command', data.lang(), {
                     ERROR_CODE: intr.id,

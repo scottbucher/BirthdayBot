@@ -5,7 +5,7 @@ import { LangCode } from '../../models/enums/language.js';
 import { EventData } from '../../models/index.js';
 import { TrustedRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { MessageUtils } from '../../utils/index.js';
+import { InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 const require = createRequire(import.meta.url);
@@ -32,7 +32,7 @@ export class TrustedRoleAddSubCommand implements Command {
             !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         if (!(role instanceof Role)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -45,7 +45,7 @@ export class TrustedRoleAddSubCommand implements Command {
 
         if (role.id === intr.guild.id) {
             // can't blacklist everyone
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -62,7 +62,7 @@ export class TrustedRoleAddSubCommand implements Command {
         let trustedRoleData = await this.trustedRoleRepo.getTrustedRoles(intr.guild.id);
 
         if (trustedRoleData.trustedRoles.map(b => b.TrustedRoleDiscordId).includes(role.id)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.alreadyInTrustedRole', data.lang(), {
                     ROLE: role.toString(),
@@ -76,7 +76,7 @@ export class TrustedRoleAddSubCommand implements Command {
             trustedRoleData.trustedRoles.length >= Config.validation.trustedRoles.maxCount.free &&
             !hasPremium
         ) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.trustedRoleMaxFree', LangCode.EN_US, {
                     FREE_MAX: Config.validation.trustedRoles.maxCount.free.toString(),
@@ -88,7 +88,7 @@ export class TrustedRoleAddSubCommand implements Command {
             trustedRoleData &&
             trustedRoleData.trustedRoles.length >= Config.validation.trustedRoles.maxCount.paid
         ) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.trustedRoleMaxPaid', LangCode.EN_US, {
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
@@ -99,7 +99,7 @@ export class TrustedRoleAddSubCommand implements Command {
 
         await this.trustedRoleRepo.addTrustedRole(intr.guild.id, role.id);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.trustedRoleAdd', data.lang(), {
                 TARGET: role.toString(),

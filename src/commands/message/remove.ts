@@ -5,7 +5,7 @@ import { LangCode } from '../../models/enums/index.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CelebrationUtils, FormatUtils, MessageUtils } from '../../utils/index.js';
+import { CelebrationUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class MessageRemoveSubCommand implements Command {
@@ -47,7 +47,7 @@ export class MessageRemoveSubCommand implements Command {
         ).toLowerCase();
 
         if (totalMessages === 0) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('validation', 'errorEmbeds.noCustomMessagesGeneric', data.lang(), {
                     DISPLAY_TYPE: displayType,
@@ -68,7 +68,7 @@ export class MessageRemoveSubCommand implements Command {
               ));
 
         if (!message) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -87,7 +87,7 @@ export class MessageRemoveSubCommand implements Command {
             ? await this.customMessageRepo.removeCustomMessageUser(intr.guild.id, position, type)
             : await this.customMessageRepo.removeCustomMessage(intr.guild.id, position, type);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getEmbed('results', 'customMessage.remove', LangCode.EN_US, {
                 MESSAGE: CelebrationUtils.replaceLangPlaceHolders(

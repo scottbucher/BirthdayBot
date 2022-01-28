@@ -18,7 +18,7 @@ import { createRequire } from 'node:module';
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
-import { MessageUtils } from './index.js';
+import { InteractionUtils, MessageUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
@@ -91,12 +91,12 @@ export class CollectorUtils {
         prompt: string | MessageEmbed
     ): Promise<number> {
         let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
-        let confirmationMessage = await MessageUtils.sendIntr(intr, prompt);
+        let confirmationMessage = await InteractionUtils.send(intr, prompt);
         // Send confirmation and emotes
         for (let option of trueFalseOptions) {
             await MessageUtils.react(confirmationMessage, option);
@@ -114,12 +114,12 @@ export class CollectorUtils {
         prompt: string | MessageEmbed
     ): Promise<any> {
         let collectReact = CollectorUtils.createReactCollect(intr.user, async () => {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
-        let confirmationMessage = await MessageUtils.sendIntr(intr, prompt);
+        let confirmationMessage = await InteractionUtils.send(intr, prompt);
         // Send confirmation and emotes
         for (let option of setupOptions) {
             await MessageUtils.react(confirmationMessage, option);

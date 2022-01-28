@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, Message, PermissionString }
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, FormatUtils, MessageUtils } from '../../utils/index.js';
+import { CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class TimezoneSubCommand implements Command {
@@ -29,13 +29,13 @@ export class TimezoneSubCommand implements Command {
         if (!reset) {
             // prompt them for a setting
             let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                 );
             });
 
-            let _prompt = await MessageUtils.sendIntr(
+            let _prompt = await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('prompts', 'config.timezone', data.lang(), {
                     MENTION: intr.user.toString(),
@@ -44,7 +44,7 @@ export class TimezoneSubCommand implements Command {
 
             timezone = await collect(async (nextMsg: Message) => {
                 if (FormatUtils.checkAbbreviation(nextMsg.content)) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
@@ -57,7 +57,7 @@ export class TimezoneSubCommand implements Command {
 
                 let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
                 if (!input) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed('validation', 'errorEmbeds.invalidTimezone', data.lang())
                     );
@@ -73,7 +73,7 @@ export class TimezoneSubCommand implements Command {
 
         await this.guildRepo.updateDefaultTimezone(intr.guild.id, timezone);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             timezone === '0'
                 ? Lang.getSuccessEmbed('results', 'successEmbeds.defaultTimeCleared', data.lang())

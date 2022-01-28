@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import { EventData } from '../../models/index.js';
 import { MemberAnniversaryRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { MessageUtils } from '../../utils/index.js';
+import { InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 const require = createRequire(import.meta.url);
@@ -31,7 +31,7 @@ export class MarAddSubCommand implements Command {
         let year = intr.options.getInteger(Lang.getCom('arguments.year'));
 
         if (!(role instanceof Role)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -43,7 +43,7 @@ export class MarAddSubCommand implements Command {
         }
 
         if (role.managed) {
-            MessageUtils.sendIntr(
+            InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.marManaged', data.lang())
             );
@@ -52,7 +52,7 @@ export class MarAddSubCommand implements Command {
 
         if (role.id === intr.guild.id) {
             // can't blacklist everyone
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed(
                     'validation',
@@ -71,7 +71,7 @@ export class MarAddSubCommand implements Command {
         );
 
         if (memberAnniversaryRoles.memberAnniversaryRoles.find(role => role.Year === year)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.marDuplicateYear', data.lang(), {
                     YEAR: year.toString(),
@@ -85,7 +85,7 @@ export class MarAddSubCommand implements Command {
             memberAnniversaryRoles.memberAnniversaryRoles.length >=
                 Config.validation.memberAnniversaryRoles.maxCount.paid
         ) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.marMaxPaid', data.lang(), {
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
@@ -100,7 +100,7 @@ export class MarAddSubCommand implements Command {
             year
         );
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.marAdd', data.lang(), {
                 ROLE: role.toString(),

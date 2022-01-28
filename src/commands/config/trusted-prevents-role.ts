@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, MessageUtils } from '../../utils/index.js';
+import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class TrustedPreventsRoleSubCommand implements Command {
@@ -42,7 +42,7 @@ export class TrustedPreventsRoleSubCommand implements Command {
 
         await this.guildRepo.updateTrustedPreventsRole(intr.guild.id, choice);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed(
                 'results',

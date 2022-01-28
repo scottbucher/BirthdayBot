@@ -4,7 +4,7 @@ import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
 import { CollectorUtils } from '../utils/collector-utils.js';
-import { MessageUtils } from '../utils/index.js';
+import { InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class PurgeCommand implements Command {
@@ -34,7 +34,7 @@ export class PurgeCommand implements Command {
 
         if (!userData || !(userData.Birthday && userData.TimeZone)) {
             // Are they in the database?
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.birthdayNotSet', data.lang())
             );
@@ -55,13 +55,13 @@ export class PurgeCommand implements Command {
             // Confirm
             await this.userRepo.addOrUpdateUser(target.id, null, null, userData.ChangesLeft); // Add or update user
 
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'success.purgeSuccessful', data.lang())
             );
         } else {
             // Cancel
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );

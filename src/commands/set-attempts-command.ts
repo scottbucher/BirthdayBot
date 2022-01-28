@@ -5,7 +5,7 @@ import { LangCode } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
-import { MessageUtils } from '../utils/index.js';
+import { InteractionUtils } from '../utils/interaction-utils.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class SetAttemptsCommand implements Command {
@@ -47,7 +47,7 @@ export class SetAttemptsCommand implements Command {
         let userData = await this.userRepo.getUser(target.id);
 
         if (!userData) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.attemptsLeft', LangCode.EN_US)
             );
@@ -61,7 +61,7 @@ export class SetAttemptsCommand implements Command {
             amount
         );
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.setAttempts', LangCode.EN_US, {
                 USER: target.toString(),

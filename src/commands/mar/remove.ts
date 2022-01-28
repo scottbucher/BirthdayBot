@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { EventData } from '../../models/index.js';
 import { MemberAnniversaryRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { MessageUtils } from '../../utils/index.js';
+import { InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class MarRemoveSubCommand implements Command {
@@ -28,7 +28,7 @@ export class MarRemoveSubCommand implements Command {
         let marData = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(intr.guild.id);
 
         if (!marData.memberAnniversaryRoles.map(b => b.Year).includes(year)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.notInMar', data.lang())
             );
@@ -37,7 +37,7 @@ export class MarRemoveSubCommand implements Command {
 
         await this.memberAnniversaryRoleRepo.removeMemberAnniversaryRole(intr.guild.id, year);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.marRemove', data.lang(), {
                 YEAR: year.toString(),

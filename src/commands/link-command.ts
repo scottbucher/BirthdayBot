@@ -8,7 +8,7 @@ import {
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
-import { MessageUtils } from '../utils/index.js';
+import { InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class LinkCommand implements Command {
@@ -114,6 +114,6 @@ export class LinkCommand implements Command {
             }
         }
 
-        await MessageUtils.sendIntr(intr, embed);
+        await InteractionUtils.send(intr, embed);
     }
 }

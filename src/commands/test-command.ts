@@ -19,7 +19,13 @@ import { MemberAnniversaryRoleRepo } from '../services/database/repos/member-ann
 import { TrustedRoleRepo } from '../services/database/repos/trusted-role-repo.js';
 import { UserRepo } from '../services/database/repos/user-repo.js';
 import { Lang } from '../services/index.js';
-import { CelebrationUtils, PermissionUtils, ActionUtils, MessageUtils } from '../utils/index.js';
+import {
+    CelebrationUtils,
+    PermissionUtils,
+    ActionUtils,
+    MessageUtils,
+    InteractionUtils,
+} from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -339,7 +345,7 @@ export class TestCommand implements Command {
                     true
                 );
             }
-            await MessageUtils.sendIntr(intr, testingEmbed);
+            await InteractionUtils.send(intr, testingEmbed);
             return;
         } else if (type === 'MEMBER_ANNIVERSARY') {
             // run the member anniversary test
@@ -499,7 +505,7 @@ export class TestCommand implements Command {
                     true
                 );
             }
-            await MessageUtils.sendIntr(intr, testingEmbed);
+            await InteractionUtils.send(intr, testingEmbed);
             return;
         } else {
             // run the server anniversary test
@@ -586,7 +592,7 @@ export class TestCommand implements Command {
                           )}`,
                     true
                 );
-            await MessageUtils.sendIntr(intr, testingEmbed);
+            await InteractionUtils.send(intr, testingEmbed);
             return;
         }
     }

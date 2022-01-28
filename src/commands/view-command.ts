@@ -10,7 +10,7 @@ import moment from 'moment';
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
-import { MessageUtils } from '../utils/index.js';
+import { InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class ViewCommand implements Command {
@@ -58,7 +58,7 @@ export class ViewCommand implements Command {
         let target = intr.options.getUser(Lang.getCom('arguments.user')) ?? intr.user;
 
         if (target !== intr.user && intr.channel instanceof DMChannel) {
-            MessageUtils.sendIntr(
+            InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.viewUserInDm', data.lang())
             );
@@ -70,7 +70,7 @@ export class ViewCommand implements Command {
                 let userData = await this.userRepo.getUser(target.id);
 
                 if (!userData || !userData.Birthday || !userData.TimeZone) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
@@ -84,7 +84,7 @@ export class ViewCommand implements Command {
                     return;
                 }
 
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('results', 'success.viewBirthday', data.lang(), {
                         USER: target.toString(),
@@ -96,7 +96,7 @@ export class ViewCommand implements Command {
             }
             case 'MEMBER_ANNIVERSARY': {
                 if (intr.channel instanceof DMChannel) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
@@ -109,7 +109,7 @@ export class ViewCommand implements Command {
                 let guildMember = intr.guild.members.resolve(target.id);
                 let memberAnniversary = moment(guildMember.joinedAt).format('MMMM Do');
 
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('results', 'success.viewMemberAnniversary', data.lang(), {
                         USER: target.toString(),

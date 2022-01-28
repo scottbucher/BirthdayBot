@@ -5,7 +5,7 @@ import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
 import { CollectorUtils } from '../../utils/collector-utils.js';
-import { FormatUtils, MessageUtils } from '../../utils/index.js';
+import { FormatUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class MessageClearSubCommand implements Command {
@@ -42,7 +42,7 @@ export class MessageClearSubCommand implements Command {
         ).toLowerCase();
 
         if (totalMessages === 0) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('validation', 'errorEmbeds.noCustomMessagesGeneric', data.lang(), {
                     DISPLAY_TYPE: displayType,
@@ -65,7 +65,7 @@ export class MessageClearSubCommand implements Command {
         if (confirmation === undefined) return;
 
         if (!confirmation) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
@@ -86,7 +86,7 @@ export class MessageClearSubCommand implements Command {
                       : 'birthday'
               );
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.customMessagesClear', LangCode.EN_US, {
                 DISPLAY_TYPE: displayType,

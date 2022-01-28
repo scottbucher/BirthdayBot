@@ -2,7 +2,6 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
-import { MessageUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class HelpCommand implements Command {
@@ -20,6 +19,6 @@ export class HelpCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        // await MessageUtils.sendIntr(intr, Lang.getEmbed('embeds.help', data.lang()));
+        // await InteractionUtils.send(intr, Lang.getEmbed('embeds.help', data.lang()));
     }
 }

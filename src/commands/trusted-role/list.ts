@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import { EventData } from '../../models/index.js';
 import { TrustedRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { ListUtils, MessageUtils } from '../../utils/index.js';
+import { InteractionUtils, ListUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 const require = createRequire(import.meta.url);
@@ -50,7 +50,7 @@ export class TrustedRoleListSubCommand implements Command {
             data
         );
 
-        await MessageUtils.sendIntr(intr, {
+        await InteractionUtils.send(intr, {
             embeds: [embed],
             components: [
                 {

@@ -3,7 +3,7 @@ import { ApplicationCommandData, CommandInteraction, PermissionString } from 'di
 import { EventData } from '../../models/index.js';
 import { TrustedRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { MessageUtils } from '../../utils/index.js';
+import { InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class TrustedRoleRemoveIdSubCommand implements Command {
@@ -28,7 +28,7 @@ export class TrustedRoleRemoveIdSubCommand implements Command {
         let trustedRoleData = await this.trustedRoleRepo.getTrustedRoles(intr.guild.id);
 
         if (!trustedRoleData.trustedRoles.map(b => b.TrustedRoleDiscordId).includes(id)) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.notInTrustedRole', data.lang(), {
                     TYPE: Lang.getRef('info', 'types.id', data.lang()),
@@ -39,7 +39,7 @@ export class TrustedRoleRemoveIdSubCommand implements Command {
 
         await this.trustedRoleRepo.removeTrustedRole(intr.guild.id, id);
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.trustedRoleRemove', data.lang(), {
                 TARGET: id,

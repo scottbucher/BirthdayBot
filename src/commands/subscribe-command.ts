@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 
 import { PlanName, EventData } from '../models/index.js';
 import { Lang, Logger, SubscriptionService } from '../services/index.js';
-import { MessageUtils } from '../utils/index.js';
+import { InteractionUtils, MessageUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -28,7 +28,7 @@ export class SubscribeCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         // These are currently under info, maybe they should be moved to validation?
         if (!Config.payments.enabled) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('info', 'premium.premiumDisabled', data.lang())
             );
@@ -36,7 +36,7 @@ export class SubscribeCommand implements Command {
         }
 
         if (!Config.payments.allowNewTransactions) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('info', 'premium.refuseNewTransactions', data.lang())
             );
@@ -49,7 +49,7 @@ export class SubscribeCommand implements Command {
         );
 
         if (!subLink) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('info', 'premium.premiumAlreadyActive', data.lang())
             );
@@ -78,7 +78,7 @@ export class SubscribeCommand implements Command {
             })
         );
 
-        await MessageUtils.sendIntr(
+        await InteractionUtils.send(
             intr,
             Lang.getEmbed('info', 'premium.subscriptionDMPrompt', data.lang())
         );

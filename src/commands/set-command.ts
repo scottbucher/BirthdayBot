@@ -13,7 +13,7 @@ import { EventData } from '../models/index.js';
 import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
 import { CollectorUtils } from '../utils/collector-utils.js';
-import { FormatUtils, MessageUtils, PermissionUtils } from '../utils/index.js';
+import { FormatUtils, InteractionUtils, PermissionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class SetCommand implements Command {
@@ -70,7 +70,7 @@ export class SetCommand implements Command {
 
         if (suggest) {
             if (dm) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getErrorEmbed('validation', 'errorEmbeds.suggestBirthdayInDM', data.lang())
                 );
@@ -78,7 +78,7 @@ export class SetCommand implements Command {
             }
 
             if (target.bot) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggestForBot', data.lang())
                 );
@@ -89,7 +89,7 @@ export class SetCommand implements Command {
                 data.guild &&
                 !PermissionUtils.hasPermission(intr.guild.members.resolve(intr.user.id), data.guild)
             ) {
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggest', data.lang())
                 );
@@ -136,14 +136,14 @@ export class SetCommand implements Command {
             }
 
         let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         });
 
         if (!timeZone) {
-            let _timezoneMessage = await MessageUtils.sendIntr(
+            let _timezoneMessage = await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', LangCode.EN_US, {
                     TARGET: target.username,
@@ -155,7 +155,7 @@ export class SetCommand implements Command {
 
             timeZone = await collect(async (nextMsg: Message) => {
                 if (FormatUtils.checkAbbreviation(nextMsg.content)) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getEmbed(
                             'validation',
@@ -172,7 +172,7 @@ export class SetCommand implements Command {
 
                 let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
                 if (!input) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
@@ -209,7 +209,7 @@ export class SetCommand implements Command {
             : undefined;
 
         if (!birthday) {
-            let _birthdayMessage = await MessageUtils.sendIntr(
+            let _birthdayMessage = await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupBirthday', LangCode.EN_US, {
                     TARGET: target.username,
@@ -228,7 +228,7 @@ export class SetCommand implements Command {
 
                 // Don't laugh at my double check it prevents the dates chrono misses on the first input
                 if (!result) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
@@ -273,7 +273,7 @@ export class SetCommand implements Command {
             // Confirm
             await this.userRepo.addOrUpdateUser(target.id, birthday, timeZone, changesLeft); // Add or update user
 
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'success.setBirthday', LangCode.EN_US, {
                     USER: target.toString(),
@@ -284,7 +284,7 @@ export class SetCommand implements Command {
             return;
         } else {
             // Cancel
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', LangCode.EN_US)
             );

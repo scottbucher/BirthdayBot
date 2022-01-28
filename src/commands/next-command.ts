@@ -6,7 +6,7 @@ import { LangCode } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
-import { CelebrationUtils, MessageUtils, TimeUtils } from '../utils/index.js';
+import { CelebrationUtils, InteractionUtils, TimeUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class NextCommand implements Command {
@@ -54,7 +54,7 @@ export class NextCommand implements Command {
         let now = moment.tz(timezone);
 
         if (type !== 'BIRTHDAY' && (!timezone || timezone === '0')) {
-            await MessageUtils.sendIntr(
+            await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.serverTimezoneNotSet', LangCode.EN_US)
             );
@@ -69,7 +69,7 @@ export class NextCommand implements Command {
                 let userDatas = await this.userRepo.getAllUsers(users);
 
                 if (!userDatas) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
@@ -90,7 +90,7 @@ export class NextCommand implements Command {
                 let nextBirthdayUsers = CelebrationUtils.getNextUsers(userDatas, timezone);
 
                 if (!nextBirthdayUsers) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
@@ -107,7 +107,7 @@ export class NextCommand implements Command {
                 );
                 let nextBirthday = moment(nextBirthdayUsers[0].Birthday).format('MMMM Do');
 
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('results', 'success.nextBirthday', LangCode.EN_US, {
                         USERS: userList,
@@ -167,7 +167,7 @@ export class NextCommand implements Command {
                 );
 
                 if (guildMembers?.length === 0) {
-                    await MessageUtils.sendIntr(
+                    await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
                             'validation',
@@ -180,7 +180,7 @@ export class NextCommand implements Command {
 
                 userList = CelebrationUtils.getUserListString(data.guild, guildMembers);
 
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('results', 'success.nextMemberAnniversary', LangCode.EN_US, {
                         USERS: userList,
@@ -208,7 +208,7 @@ export class NextCommand implements Command {
                 )
                     yearsOldRoundedUp++;
 
-                await MessageUtils.sendIntr(
+                await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('results', 'success.nextServerAnniversary', LangCode.EN_US, {
                         SERVER: intr.guild.name,

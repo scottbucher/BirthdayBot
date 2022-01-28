@@ -6,6 +6,7 @@ export { ColorUtils } from './color-utils.js';
 export { CommandUtils } from './command-utils.js';
 export { FormatUtils } from './format-utils.js';
 export { ListUtils } from './list-utils.js';
+export { InteractionUtils } from './interaction-utils.js';
 export { MathUtils } from './math-utils.js';
 export { MessageUtils } from './message-utils.js';
 export { ParseUtils } from './parse-utils.js';
