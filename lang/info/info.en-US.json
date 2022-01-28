@@ -769,6 +769,9 @@
                     }
                 ]
             }
+        },
+        "channelRegexes": {
+            "bot": "/bot|command|cmd/i"
         }
     },
     "refs": {
@@ -778,6 +781,7 @@
             "locale": "en-US",
             "translators": "[Stqlth#0001](https://github.com/scottbucher)"
         },
+
         "footers": {
             "whyPremium": "Premium helps us support and maintain the bot!",
             "joinSupport": "Please join our support server if you have any questions."
