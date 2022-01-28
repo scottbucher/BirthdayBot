@@ -219,6 +219,16 @@
                     "icon": "{{ICON}}"
                 },
                 "color": "{{COM:colors.error}}"
+            },
+            "invalidMentionSetting": {
+                "title": "Invalid Group/Role",
+                "description": "Accepted Values: `everyone`, `here`, `@role/role-name`, `none`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
             }
         },
         "errorEmbeds": {
@@ -263,7 +273,8 @@
             "noDefaultUserSpecificMessages": "There aren't default user specific messages! Please specify once and trying again!",
             "customMessageInvalidPosition": "Invalid position! Please try again.",
             "cantBlacklistBots": "You can't blacklist bots!",
-            "cantBlacklistNotInServer": "Only users in this server can be added to the blacklist!"
+            "cantBlacklistNotInServer": "Only users in this server can be added to the blacklist!",
+            "everyoneIsNotAValidRole": "{{EVERYONE}} is not a valid role!"
         }
     },
     "refs": {
