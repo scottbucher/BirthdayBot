@@ -113,7 +113,6 @@ export class RoleSubCommand implements Command {
                         })
                     );
                     break;
-                    break;
                 }
                 case Config.emotes.select: {
                     let _selectMessage = await MessageUtils.sendIntr(

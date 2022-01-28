@@ -68,6 +68,15 @@ export class BlacklistAddSubCommand implements Command {
             return;
         }
 
+        if (mentionable instanceof Role && mentionable.id === intr.guild.id) {
+            // can't blacklist everyone
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.everyoneIsNotAValidRole', data.lang())
+            );
+            return;
+        }
+
         let blacklistData = await this.blacklistRepo.getBlacklist(intr.guild.id);
 
         if (blacklistData.blacklist.map(b => b.DiscordId).includes(mentionable.id)) {

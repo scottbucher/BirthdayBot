@@ -50,6 +50,15 @@ export class MarAddSubCommand implements Command {
             return;
         }
 
+        if (role.id === intr.guild.id) {
+            // can't blacklist everyone
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.everyoneIsNotAValidRole', data.lang())
+            );
+            return;
+        }
+
         let memberAnniversaryRoles = await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(
             intr.guild.id
         );

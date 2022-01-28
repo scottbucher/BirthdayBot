@@ -43,6 +43,15 @@ export class TrustedRoleAddSubCommand implements Command {
             return;
         }
 
+        if (role.id === intr.guild.id) {
+            // can't blacklist everyone
+            await MessageUtils.sendIntr(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.everyoneIsNotAValidRole', data.lang())
+            );
+            return;
+        }
+
         let trustedRoleData = await this.trustedRoleRepo.getTrustedRoles(intr.guild.id);
 
         if (trustedRoleData.trustedRoles.map(b => b.TrustedRoleDiscordId).includes(role.id)) {
