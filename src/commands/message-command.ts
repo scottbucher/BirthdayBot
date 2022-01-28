@@ -55,6 +55,8 @@ export class MessageCommand implements Command {
                                     'The position number of the message, found in /message list. Leave empty to test the default message.',
                                 type: ApplicationCommandOptionType.Integer.valueOf(),
                                 required: true,
+                                min_value: 0,
+                                max_value: 500,
                             },
                             {
                                 name: Lang.getCom('arguments.embed'),
@@ -105,6 +107,8 @@ export class MessageCommand implements Command {
                                     'The position number of the message, found in /message list. Leave empty to test the default message.',
                                 type: ApplicationCommandOptionType.Integer.valueOf(),
                                 required: true,
+                                min_value: 0,
+                                max_value: 500,
                             },
                             {
                                 name: Lang.getCom('arguments.color'),
