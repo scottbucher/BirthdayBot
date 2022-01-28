@@ -17,7 +17,7 @@ export class LinkCommand implements Command {
         description: 'Useful links for the bot.',
         options: [
             {
-                name: 'link',
+                name: Lang.getCom('commands.link'),
                 description: 'Link to display.',
                 required: true,
                 type: ApplicationCommandOptionType.String.valueOf(),

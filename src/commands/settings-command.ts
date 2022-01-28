@@ -17,7 +17,7 @@ export class SettingsCommand implements Command {
         description: 'View the settings for this server.',
         options: [
             {
-                name: 'setting',
+                name: Lang.getCom('arguments.setting'),
                 description: 'The settings to view. Defaults to general.',
                 required: false,
                 type: ApplicationCommandOptionType.String.valueOf(),

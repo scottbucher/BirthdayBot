@@ -22,7 +22,7 @@ export class MessageCommand implements Command {
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
-                                name: 'type',
+                                name: Lang.getCom('arguments.type'),
                                 description: 'What type of message is being removed.',
                                 required: true,
                                 type: ApplicationCommandOptionType.String.valueOf(),
@@ -74,7 +74,7 @@ export class MessageCommand implements Command {
                         type: ApplicationCommandOptionType.Subcommand.valueOf(),
                         options: [
                             {
-                                name: 'type',
+                                name: Lang.getCom('arguments.type'),
                                 description: 'What type of message is being removed.',
                                 required: true,
                                 type: ApplicationCommandOptionType.String.valueOf(),
@@ -203,7 +203,7 @@ export class MessageCommand implements Command {
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
-                        name: 'type',
+                        name: Lang.getCom('arguments.type'),
                         description: 'What type of messages to permanently delete.',
                         required: true,
                         type: ApplicationCommandOptionType.String.valueOf(),
@@ -238,7 +238,7 @@ export class MessageCommand implements Command {
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
-                        name: 'type',
+                        name: Lang.getCom('arguments.type'),
                         description: 'What type of message is being tested.',
                         required: true,
                         type: ApplicationCommandOptionType.String.valueOf(),
@@ -289,7 +289,7 @@ export class MessageCommand implements Command {
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
-                        name: 'type',
+                        name: Lang.getCom('arguments.type'),
                         description: 'What type of messages to list.',
                         required: true,
                         type: ApplicationCommandOptionType.String.valueOf(),
@@ -331,7 +331,7 @@ export class MessageCommand implements Command {
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
-                        name: 'type',
+                        name: Lang.getCom('arguments.type'),
                         description: 'What type of message is being added.',
                         required: true,
                         type: ApplicationCommandOptionType.String.valueOf(),
@@ -365,7 +365,7 @@ export class MessageCommand implements Command {
                 type: ApplicationCommandOptionType.Subcommand.valueOf(),
                 options: [
                     {
-                        name: 'type',
+                        name: Lang.getCom('arguments.type'),
                         description: 'What type of message is being removed.',
                         required: true,
                         type: ApplicationCommandOptionType.String.valueOf(),
