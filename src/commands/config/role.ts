@@ -10,7 +10,7 @@ import { createRequire } from 'node:module';
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
+import { ClientUtils, CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 const require = createRequire(import.meta.url);
@@ -126,8 +126,9 @@ export class RoleSubCommand implements Command {
 
                         // Search guild for role
                         if (!roleInput) {
-                            roleInput = guild.roles.cache.find(role =>
-                                role.name.toLowerCase().includes(nextMsg?.content.toLowerCase())
+                            roleInput = await ClientUtils.findRole(
+                                intr.guild,
+                                nextMsg?.content.toLowerCase()
                             );
                         }
 

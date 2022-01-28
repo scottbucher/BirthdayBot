@@ -178,8 +178,9 @@ export class SetupCommand implements Command {
 
                     // Search guild for role
                     if (!roleInput) {
-                        roleInput = guild.roles.cache.find(role =>
-                            role.name.toLowerCase().includes(nextMsg?.content.toLowerCase())
+                        roleInput = await ClientUtils.findRole(
+                            intr.guild,
+                            nextMsg?.content.toLowerCase()
                         );
                     }
 
