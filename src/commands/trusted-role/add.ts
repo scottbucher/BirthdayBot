@@ -47,7 +47,14 @@ export class TrustedRoleAddSubCommand implements Command {
             // can't blacklist everyone
             await MessageUtils.sendIntr(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.everyoneIsNotAValidRole', data.lang())
+                Lang.getErrorEmbed(
+                    'validation',
+                    'errorEmbeds.everyoneIsNotAValidRole',
+                    data.lang(),
+                    {
+                        EVERYONE: role.toString(),
+                    }
+                )
             );
             return;
         }
