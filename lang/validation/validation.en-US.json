@@ -309,7 +309,8 @@
         "footers": {
             "tryAgain": "Please try again!",
             "whyPremium": "Premium helps us support and maintain the bot!",
-            "joinSupport": "Please join our support server if you have any questions."
+            "joinSupport": "Please join our support server if you have any questions.",
+            "actionFailed": "{{COM:emotes.deny}} Action Failed."
         },
         "other": {
             "na": "N/A"

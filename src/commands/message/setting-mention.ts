@@ -75,7 +75,7 @@ export class MessageSettingMentionSubCommand implements Command {
             mentionOutput = roleInput.toString();
         }
 
-        let displayType = FormatUtils.getCelebrationDisplayType(type, false);
+        let displayType = FormatUtils.getCelebrationDisplayType(type.replaceAll('_', ''), false);
 
         if (mention === 'none') mention = '0';
 

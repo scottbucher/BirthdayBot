@@ -10,7 +10,7 @@ import { Command } from '../index.js';
 export class MessageSettingTimeSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
     public metadata: ChatInputApplicationCommandData = {
-        name: Lang.getCom('subCommands.add'),
+        name: Lang.getCom('subCommands.time'),
         description: undefined,
     };
 
@@ -41,7 +41,10 @@ export class MessageSettingTimeSubCommand implements Command {
             timeOutput =
                 `${messageTime - 12}` + ':00 ' + Lang.getRef('info', 'terms.pmTime', data.lang());
 
-        let displayType = FormatUtils.getCelebrationDisplayType(type, false).toLowerCase();
+        let displayType = FormatUtils.getCelebrationDisplayType(
+            type.replaceAll('_', ''),
+            false
+        ).toLowerCase();
 
         type === 'birthday'
             ? await this.guildRepo.updateBirthdayMessageTime(intr.guild.id, messageTime)

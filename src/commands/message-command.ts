@@ -82,7 +82,7 @@ export class MessageCommand implements Command {
                                 type: ApplicationCommandOptionType.Integer.valueOf(),
                                 required: true,
                                 min_value: 0,
-                                maxValue: 23,
+                                max_value: 23,
                             },
                         ],
                     },
