@@ -86,31 +86,31 @@ export class MessageListSubCommand implements Command {
                     components: [
                         {
                             type: 'BUTTON',
-                            customId: 'queue_previous_more',
+                            customId: 'message_previous_more',
                             emoji: Config.emotes.previousMore,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_previous',
+                            customId: 'message_previous',
                             emoji: Config.emotes.previous,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_refresh',
+                            customId: 'message_refresh',
                             emoji: Config.emotes.refresh,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_next',
+                            customId: 'message_next',
                             emoji: Config.emotes.next,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_next_more',
+                            customId: 'message_next_more',
                             emoji: Config.emotes.nextMore,
                             style: 'PRIMARY',
                         },

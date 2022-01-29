@@ -58,31 +58,31 @@ export class MarListSubCommand implements Command {
                     components: [
                         {
                             type: 'BUTTON',
-                            customId: 'queue_previous_more',
+                            customId: 'mar_previous_more',
                             emoji: Config.emotes.previousMore,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_previous',
+                            customId: 'mar_previous',
                             emoji: Config.emotes.previous,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_refresh',
+                            customId: 'mar_refresh',
                             emoji: Config.emotes.refresh,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_next',
+                            customId: 'mar_next',
                             emoji: Config.emotes.next,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_next_more',
+                            customId: 'mar_next_more',
                             emoji: Config.emotes.nextMore,
                             style: 'PRIMARY',
                         },

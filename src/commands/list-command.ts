@@ -157,31 +157,31 @@ export class ListCommand implements Command {
                     components: [
                         {
                             type: 'BUTTON',
-                            customId: 'queue_previous_more',
+                            customId: 'list_previous_more',
                             emoji: Config.emotes.previousMore,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_previous',
+                            customId: 'list_previous',
                             emoji: Config.emotes.previous,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_refresh',
+                            customId: 'list_refresh',
                             emoji: Config.emotes.refresh,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_next',
+                            customId: 'list_next',
                             emoji: Config.emotes.next,
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
-                            customId: 'queue_next_more',
+                            customId: 'list_next_more',
                             emoji: Config.emotes.nextMore,
                             style: 'PRIMARY',
                         },
