@@ -99,8 +99,7 @@
     },
     "experience": {
         "promptExpireTime": 120,
-        "fastForwardAmount": "5",
-        "fastRewindAmount": "5",
+        "morePageCount": "5",
         "birthdayListSize": "60",
         "memberAnniversaryListSize": "60",
         "blacklistSize": "60",

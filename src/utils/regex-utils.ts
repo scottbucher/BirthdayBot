@@ -1,3 +1,5 @@
+import { ParseUtils } from './index.js';
+
 export class RegexUtils {
     public static regex(input: string): RegExp {
         let match = input.match(/^\/(.*)\/([^/]*)$/);
@@ -23,5 +25,22 @@ export class RegexUtils {
             username: match[1],
             discriminator: match[2],
         };
+    }
+
+    public static pageNumber(input: string): number {
+        let match = this.findMatch(input, /Page (\d+)\/(\d+)/);
+        if (!match) {
+            return;
+        }
+
+        // Remove commas
+        return ParseUtils.parseInt(match);
+    }
+
+    private static findMatch(input: string, regex: RegExp): string {
+        let match = regex.exec(input);
+        if (match) {
+            return match[1];
+        }
     }
 }

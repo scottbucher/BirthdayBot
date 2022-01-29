@@ -6,7 +6,6 @@ export interface Button {
     ids: string[];
     deferType: ButtonDeferType;
     requireGuild: boolean;
-    requireEmbedAuthorTag: boolean;
     execute(intr: ButtonInteraction, msg: Message, data: EventData): Promise<void>;
 }
 

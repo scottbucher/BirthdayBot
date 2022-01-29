@@ -41,9 +41,9 @@ export class ButtonHandler implements EventHandler {
         }
 
         // Check if the embeds author equals the users tag
-        if (button.requireEmbedAuthorTag && msg.embeds[0]?.author?.name !== intr.user.tag) {
-            return;
-        }
+        // if (button.requireEmbedAuthorTag && msg.embeds[0]?.author?.name !== intr.user.tag) {
+        //     return;
+        // }
 
         // Defer interaction
         // NOTE: Anything after this point we should be responding to the interaction

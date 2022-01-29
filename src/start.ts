@@ -4,7 +4,7 @@ import { Options } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { Bot } from './bot.js';
-import { Button } from './buttons/index.js';
+import { BlacklistButton, Button } from './buttons/index.js';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
@@ -248,9 +248,7 @@ async function start(): Promise<void> {
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Buttons
-    let buttons: Button[] = [
-        // TODO: Add new buttons here
-    ];
+    let buttons: Button[] = [new BlacklistButton(blacklistRepo)];
 
     // Reactions
     let reactions: Reaction[] = [
