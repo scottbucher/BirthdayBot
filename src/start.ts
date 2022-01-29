@@ -261,7 +261,13 @@ async function start(): Promise<void> {
     // Event handlers
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
-    let commandHandler = new CommandHandler(commands, subService, guildRepo, userRepo);
+    let commandHandler = new CommandHandler(
+        commands,
+        subService,
+        guildRepo,
+        userRepo,
+        combinedRepo
+    );
     let buttonHandler = new ButtonHandler(buttons);
     let triggerHandler = new TriggerHandler(triggers);
     let messageHandler = new MessageHandler(triggerHandler);

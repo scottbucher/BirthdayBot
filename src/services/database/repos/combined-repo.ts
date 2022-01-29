@@ -1,4 +1,4 @@
-import { RawGuildCelebrationData } from '../../../models/database/index.js';
+import { GuildDataAndVote, RawGuildCelebrationData } from '../../../models/database/index.js';
 import { SqlUtils } from '../../../utils/index.js';
 import { DataAccess, Procedure } from '../index.js';
 
@@ -22,5 +22,18 @@ export class CombinedRepo {
             trustedRoles,
             anniversaryRoles
         );
+    }
+
+    public async GetGuildDataAndUserVote(
+        guildDiscordId: string,
+        userDiscordId: string
+    ): Promise<GuildDataAndVote> {
+        let results = await this.dataAccess.executeProcedure(
+            Procedure.Combined_GetGuildAndUserVote,
+            [guildDiscordId, userDiscordId]
+        );
+        let guildData = SqlUtils.getTable(results, 0);
+        let voteData = SqlUtils.getTable(results, 1);
+        return new GuildDataAndVote(guildData, voteData);
     }
 }

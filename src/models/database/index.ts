@@ -10,3 +10,4 @@ export { TrustedRole } from './trusted-role-models.js';
 export { MemberAnniversaryRole } from './member-anniversary-role-models.js';
 export { RawGuildCelebrationData } from './raw-guild-celebration-models.js';
 export { GuildCelebrationData } from './guild-celebration-models.js';
+export { GuildDataAndVote } from './guild-and-vote-models.js';

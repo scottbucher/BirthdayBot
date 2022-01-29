@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 
 import { Command, CommandDeferType } from '../commands/index.js';
 import { EventData, PlanName } from '../models/index.js';
-import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
+import { CombinedRepo, GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang, Logger, SubscriptionService } from '../services/index.js';
 import { CommandUtils } from '../utils/index.js';
 import { InteractionUtils } from '../utils/interaction-utils.js';
@@ -24,7 +24,8 @@ export class CommandHandler implements EventHandler {
         public commands: Command[],
         public subService: SubscriptionService,
         public guildRepo: GuildRepo,
-        public userRepo: UserRepo
+        public userRepo: UserRepo,
+        public combinedRepo: CombinedRepo
     ) {}
 
     public async process(intr: CommandInteraction): Promise<void> {
@@ -73,11 +74,15 @@ export class CommandHandler implements EventHandler {
                 ? await this.subService.getSubscription(PlanName.premium1, intr.guild.id)
                 : undefined;
 
+        let guildDataAndVote = intr.guild
+            ? await this.combinedRepo.GetGuildDataAndUserVote(intr.guild.id, intr.user.id)
+            : undefined;
+
         // Get data from database
         let data = new EventData(
-            intr.guild ? await this.guildRepo.getGuild(intr.guild.id) : undefined,
+            guildDataAndVote?.guildData,
             subData,
-            Config.voting.enabled ? await this.userRepo.getUserVote(intr.user.id) : undefined,
+            guildDataAndVote?.voteData,
             !Config.payments.enabled || (subData.subscription && subData.subscription.service)
         );
 
