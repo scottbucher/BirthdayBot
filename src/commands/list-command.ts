@@ -42,7 +42,7 @@ export class ListCommand implements Command {
             {
                 name: Lang.getCom('arguments.page'),
                 description: 'An optional page number to jump to.',
-                type: ApplicationCommandOptionType.String.valueOf(),
+                type: ApplicationCommandOptionType.Integer.valueOf(),
                 required: false,
                 min_value: 1,
             },
@@ -64,7 +64,7 @@ export class ListCommand implements Command {
 
         let type =
             intr.options.getString(Lang.getCom('arguments.type'))?.toLowerCase() ?? 'birthday';
-        let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1;
+        let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1000;
 
         let date: moment.MomentInput;
 
@@ -122,6 +122,8 @@ export class ListCommand implements Command {
             );
 
             let totalPages = Math.ceil(memberList.length / pageSize);
+
+            if (page > totalPages) page = totalPages;
 
             let startMember: number;
 

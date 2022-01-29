@@ -4,7 +4,14 @@ import { Options } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { Bot } from './bot.js';
-import { BlacklistButton, Button } from './buttons/index.js';
+import {
+    BirthdayListButton,
+    BlacklistButton,
+    Button,
+    MarButton,
+    MemberAnniversaryListButton,
+    TrustedRoleButton,
+} from './buttons/index.js';
 import { BirthdayMessageButton } from './buttons/message/birthday-button.js';
 import { MemberAnniversaryMessageButton } from './buttons/message/member-anniversary-button.js';
 import { ServerAnniversaryMessageButton } from './buttons/message/server-anniversary-button.js';
@@ -260,6 +267,10 @@ async function start(): Promise<void> {
         new ServerAnniversaryMessageButton(customMessageRepo),
         new UserSpecificBirthdayMessageButton(customMessageRepo),
         new UserSpecificMemberAnniversaryMessageButton(customMessageRepo),
+        new BirthdayListButton(userRepo),
+        new MemberAnniversaryListButton(),
+        new TrustedRoleButton(trustedRoleRepo),
+        new MarButton(memberAnniversaryRoleRepo),
     ];
 
     // Reactions
