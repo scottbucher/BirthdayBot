@@ -291,7 +291,7 @@ async function start(): Promise<void> {
         userRepo,
         combinedRepo
     );
-    let buttonHandler = new ButtonHandler(buttons);
+    let buttonHandler = new ButtonHandler(buttons, subService, combinedRepo);
     let triggerHandler = new TriggerHandler(triggers);
     let messageHandler = new MessageHandler(triggerHandler);
     let reactionHandler = new ReactionHandler(reactions);

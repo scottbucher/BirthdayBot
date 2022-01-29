@@ -3,7 +3,9 @@ import { RateLimiter } from 'discord.js-rate-limiter';
 import { createRequire } from 'node:module';
 
 import { Button, ButtonDeferType } from '../buttons/index.js';
-import { EventData } from '../models/index.js';
+import { EventData, PlanName } from '../models/index.js';
+import { CombinedRepo } from '../services/database/repos/combined-repo.js';
+import { SubscriptionService } from '../services/subscription-service.js';
 import { InteractionUtils } from '../utils/interaction-utils.js';
 import { EventHandler } from './index.js';
 
@@ -16,7 +18,11 @@ export class ButtonHandler implements EventHandler {
         Config.rateLimiting.buttons.interval * 1000
     );
 
-    constructor(private buttons: Button[]) {}
+    constructor(
+        private buttons: Button[],
+        public subService: SubscriptionService,
+        public combinedRepo: CombinedRepo
+    ) {}
 
     public async process(intr: ButtonInteraction, msg: Message): Promise<void> {
         // Don't respond to self, or other bots
@@ -63,8 +69,22 @@ export class ButtonHandler implements EventHandler {
             return;
         }
 
-        // TODO: Get data from database for the button
-        let data = new EventData();
+        let subData =
+            intr.guild && Config.payments.enabled
+                ? await this.subService.getSubscription(PlanName.premium1, intr.guild.id)
+                : undefined;
+
+        let guildDataAndVote = intr.guild
+            ? await this.combinedRepo.GetGuildDataAndUserVote(intr.guild.id, intr.user.id)
+            : undefined;
+
+        // Get data from database
+        let data = new EventData(
+            guildDataAndVote?.guildData,
+            subData,
+            guildDataAndVote?.voteData,
+            !Config.payments.enabled || (subData.subscription && subData.subscription.service)
+        );
 
         // Execute the button
         await button.execute(intr, msg, data);
