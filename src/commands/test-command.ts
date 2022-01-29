@@ -97,8 +97,6 @@ export class TestCommand implements Command {
 
         // bday test <type> [user] [year]
         let guild = intr.guild;
-        let hasPremium =
-            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         let target: GuildMember = guild.members.resolve(user);
         let userData: UserData;
@@ -179,14 +177,14 @@ export class TestCommand implements Command {
                 trustedRoleList,
                 guildMember,
                 trustedPreventsRole,
-                hasPremium
+                data.hasPremium
             );
             trustedCheckMessage = CelebrationUtils.passesTrustedCheck(
                 guildData.RequireAllTrustedRoles,
                 trustedRoleList,
                 guildMember,
                 trustedPreventsMessage,
-                hasPremium
+                data.hasPremium
             );
 
             // Check for user specific messages
@@ -214,11 +212,11 @@ export class TestCommand implements Command {
                         // Get our custom message
                         let customMessage = CelebrationUtils.randomMessage(
                             customMessages,
-                            hasPremium,
+                            data.hasPremium,
                             'birthday'
                         );
                         // Find the color of the embed
-                        color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
+                        color = CelebrationUtils.getMessageColor(customMessage, data.hasPremium);
 
                         useEmbed = customMessage.Embed ? true : false;
 
@@ -365,7 +363,7 @@ export class TestCommand implements Command {
             let timezoneCheck = guildData?.DefaultTimezone !== '0';
 
             // Only premium guilds get anniversary roles
-            if (hasPremium) {
+            if (data.hasPremium) {
                 memberAnniversaryRoles = (
                     await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(guild.id)
                 ).memberAnniversaryRoles;
@@ -424,11 +422,11 @@ export class TestCommand implements Command {
                     // Get our custom message
                     let customMessage = CelebrationUtils.randomMessage(
                         customMessages,
-                        hasPremium,
+                        data.hasPremium,
                         'memberanniversary'
                     );
                     // Find the color of the embed
-                    color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
+                    color = CelebrationUtils.getMessageColor(customMessage, data.hasPremium);
                     useEmbed = customMessage.Embed ? true : false;
 
                     message = customMessage.Message;
@@ -488,7 +486,7 @@ export class TestCommand implements Command {
                     true
                 );
 
-            if (hasPremium && memberAnniversaryRoles.length > 0) {
+            if (data.hasPremium && memberAnniversaryRoles.length > 0) {
                 testingEmbed.addField(
                     Lang.getRef('info', 'terms.memberAnniversaryRoles', data.lang()),
                     memberAnniversaryRolesCheck
@@ -529,11 +527,11 @@ export class TestCommand implements Command {
                     // Get our custom message
                     let customMessage = CelebrationUtils.randomMessage(
                         customMessages,
-                        hasPremium,
+                        data.hasPremium,
                         'serveranniversary'
                     );
                     // Find the color of the embed
-                    color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
+                    color = CelebrationUtils.getMessageColor(customMessage, data.hasPremium);
                     useEmbed = customMessage.Embed ? true : false;
 
                     message = customMessage.Message;

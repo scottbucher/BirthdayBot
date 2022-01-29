@@ -28,8 +28,6 @@ export class TrustedRoleListSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1;
-        let hasPremium =
-            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         let pageSize = Config.experience.trustedRoleListSize;
 
@@ -46,7 +44,6 @@ export class TrustedRoleListSubCommand implements Command {
             trustedRoleResults,
             page,
             pageSize,
-            hasPremium,
             data
         );
 

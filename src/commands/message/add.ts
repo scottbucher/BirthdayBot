@@ -61,8 +61,6 @@ export class MessageAddSubCommand implements Command {
         let embedChoice: number;
         let target: GuildMember;
         let userId = '0';
-        let hasPremium =
-            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         // TODO: Use regex to parse a user input
         // Target needs to be the determining factor of if this is a user specific message or not
@@ -76,7 +74,7 @@ export class MessageAddSubCommand implements Command {
                     Lang.getEmbed('validation', 'errorEmbeds.noUserMessageForBot', data.lang())
                 );
                 return;
-            } else if (!hasPremium) {
+            } else if (!data.hasPremium) {
                 await InteractionUtils.send(
                     intr,
                     Lang.getEmbed(
@@ -214,7 +212,7 @@ export class MessageAddSubCommand implements Command {
 
         // Check if they have reached the max custom messages for this type
         if (customMessages) {
-            if (globalMessageCount >= maxMessageCountFree && !hasPremium) {
+            if (globalMessageCount >= maxMessageCountFree && !data.hasPremium) {
                 await InteractionUtils.send(
                     intr,
                     Lang.getEmbed('validation', 'embeds.maxFreeCustomMessages', data.lang(), {
@@ -290,7 +288,7 @@ export class MessageAddSubCommand implements Command {
         userId = target && type !== 'server_anniversary' ? target.id : '0';
 
         // Only premium servers can have a custom color
-        if (hasPremium) {
+        if (data.hasPremium) {
             // prompt them for a color
             let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
                 await InteractionUtils.send(
@@ -354,7 +352,7 @@ export class MessageAddSubCommand implements Command {
                           null
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
-                      HAS_PREMIUM: !hasPremium
+                      HAS_PREMIUM: !data.hasPremium
                           ? Lang.getRef('info', 'conditionals.needColorForPremium', data.lang())
                           : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
                                 COLOR_HEX: colorHex,
@@ -371,7 +369,7 @@ export class MessageAddSubCommand implements Command {
                           target?.toString()
                       ),
                       IS_EMBED: embedChoice === 1 ? 'True' : 'False',
-                      HAS_PREMIUM: !hasPremium
+                      HAS_PREMIUM: !data.hasPremium
                           ? Lang.getRef('info', 'conditionals.colorForPremium', data.lang())
                           : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
                                 COLOR_HEX: colorHex,

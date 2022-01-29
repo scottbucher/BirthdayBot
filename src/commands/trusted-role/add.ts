@@ -33,8 +33,6 @@ export class TrustedRoleAddSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let role = intr.options.getRole(Lang.getCom('arguments.role'));
-        let hasPremium =
-            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         if (!(role instanceof Role)) {
             await InteractionUtils.send(
@@ -79,7 +77,7 @@ export class TrustedRoleAddSubCommand implements Command {
         if (
             trustedRoleData &&
             trustedRoleData.trustedRoles.length >= Config.validation.trustedRoles.maxCount.free &&
-            !hasPremium
+            !data.hasPremium
         ) {
             await InteractionUtils.send(
                 intr,

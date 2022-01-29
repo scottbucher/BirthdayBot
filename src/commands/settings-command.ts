@@ -1,6 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
-import { createRequire } from 'node:module';
 
 import { Language } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
@@ -9,8 +8,6 @@ import { Lang } from '../services/index.js';
 import { FormatUtils, InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
-const require = createRequire(import.meta.url);
-let Config = require('../../config/config.json');
 export class SettingsCommand implements Command {
     public metadata: ChatInputApplicationCommandData = {
         name: Lang.getCom('commands.settings'),
@@ -52,8 +49,6 @@ export class SettingsCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let type = intr.options.getString(Lang.getCom('arguments.setting')) ?? 'GENERAL';
         let guild = intr.guild;
-        let hasPremium =
-            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         if (type === 'MESSAGE') {
             // message settings
@@ -131,7 +126,7 @@ export class SettingsCommand implements Command {
                     GUILD_ID: guild.id,
                     HAS_PREMIUM: Lang.getRef(
                         'info',
-                        'terms.' + (hasPremium ? 'active' : 'notActive'),
+                        'terms.' + (data.hasPremium ? 'active' : 'notActive'),
                         data.lang()
                     ),
                     DATE: new Date().getFullYear().toString(),
@@ -182,7 +177,7 @@ export class SettingsCommand implements Command {
                     GUILD_ID: guild.id,
                     HAS_PREMIUM: Lang.getRef(
                         'info',
-                        'terms.' + (hasPremium ? 'active' : 'notActive'),
+                        'terms.' + (data.hasPremium ? 'active' : 'notActive'),
                         data.lang()
                     ),
                     DATE: new Date().getFullYear().toString(),
@@ -217,7 +212,7 @@ export class SettingsCommand implements Command {
                     GUILD_ID: guild.id,
                     HAS_PREMIUM: Lang.getRef(
                         'info',
-                        'terms.' + (hasPremium ? 'active' : 'notActive'),
+                        'terms.' + (data.hasPremium ? 'active' : 'notActive'),
                         data.lang()
                     ),
                     DATE: new Date().getFullYear().toString(),

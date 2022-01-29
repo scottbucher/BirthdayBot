@@ -8,7 +8,8 @@ export class EventData {
     constructor(
         public guild?: GuildData,
         public subscription?: SubscriptionStatus,
-        public vote?: Vote
+        public vote?: Vote,
+        public hasPremium?: boolean
     ) {}
 
     public lang(): LangCode {

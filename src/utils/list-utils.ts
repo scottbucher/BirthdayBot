@@ -23,7 +23,6 @@ export class ListUtils {
         customMessageResults: CustomMessages,
         page: number,
         pageSize: number,
-        hasPremium: boolean,
         type: string,
         data: EventData
     ): Promise<MessageEmbed> {
@@ -52,7 +51,7 @@ export class ListUtils {
 
         for (let customMessage of customMessageResults.customMessages) {
             // dynamically check which ones to cross out due to the server not having premium anymore
-            if (hasPremium || customMessage.Position <= maxMessagesFree) {
+            if (data.hasPremium || customMessage.Position <= maxMessagesFree) {
                 description += `**${i.toLocaleString()}.** ${customMessage.Message}\n`;
             } else {
                 description += `**${i.toLocaleString()}.** ~~${customMessage.Message}~~\n`;
@@ -65,21 +64,21 @@ export class ListUtils {
                     : Lang.getRef('info', 'boolean.false', data.lang())
             }\n`;
 
-            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            if (!data.hasPremium && customMessage.Color !== '0') description += '~~';
             // Added color part
             description += ` - **${Lang.getRef('info', 'terms.color', data.lang())}**: #${
                 customMessage.Color === '0'
                     ? Config.colors.default.substring(1).toUpperCase()
                     : customMessage.Color
             }`;
-            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            if (!data.hasPremium && customMessage.Color !== '0') description += '~~';
             description += '\n\n';
             i++;
         }
 
         let listEmbed = 'list.';
 
-        if (!hasPremium && customMessageResults.stats.TotalItems > maxMessagesFree) {
+        if (!data.hasPremium && customMessageResults.stats.TotalItems > maxMessagesFree) {
             listEmbed +=
                 type === 'member_anniversary'
                     ? 'memberAnniversaryMessageLocked'
@@ -95,7 +94,7 @@ export class ListUtils {
                         : '1'
                 }`,
                 TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
-                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                PER_PAGE: Config.experience.messageListSize.toString(),
                 MAX_FREE: maxMessagesFree.toString(),
                 MAX_PAID: maxMessagesPaid.toString(),
                 ICON: guild.client.user.displayAvatarURL(),
@@ -116,7 +115,7 @@ export class ListUtils {
                         : '1'
                 }`,
                 TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
-                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                PER_PAGE: Config.experience.messageListSize.toString(),
                 ICON: guild.client.user.displayAvatarURL(),
             });
         }
@@ -130,7 +129,6 @@ export class ListUtils {
         customMessageResults: CustomMessages,
         page: number,
         pageSize: number,
-        hasPremium: boolean,
         type: string,
         data: EventData
     ): Promise<MessageEmbed> {
@@ -151,7 +149,7 @@ export class ListUtils {
                     ? member.toString()
                     : `**${Lang.getRef('info', 'terms.unknownMember', data.lang())}** `
             );
-            if (hasPremium) {
+            if (data.hasPremium) {
                 description += `**${customMessage.Position.toLocaleString()}.** ${messageDisplay}\n`;
             } else {
                 description += `**${customMessage.Position.toLocaleString()}.** ~~${messageDisplay}~~\n`;
@@ -164,20 +162,20 @@ export class ListUtils {
                     : Lang.getRef('info', 'boolean.false', data.lang())
             }\n`;
 
-            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            if (!data.hasPremium && customMessage.Color !== '0') description += '~~';
             // Added color part
             description += ` - **${Lang.getRef('info', 'terms.color', data.lang())}**: #${
                 customMessage.Color === '0'
                     ? Config.colors.default.substring(1).toUpperCase()
                     : customMessage.Color
             }`;
-            if (!hasPremium && customMessage.Color !== '0') description += '~~';
+            if (!data.hasPremium && customMessage.Color !== '0') description += '~~';
             description += '\n\n';
         }
 
         let listEmbed = 'list.';
 
-        if (!hasPremium) {
+        if (!data.hasPremium) {
             listEmbed +=
                 type === 'member_anniversary'
                     ? 'userSpecificMemberAnniversaryMessageLocked'
@@ -191,7 +189,7 @@ export class ListUtils {
                         : '1'
                 }`,
                 TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
-                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                PER_PAGE: Config.experience.messageListSize.toString(),
                 ICON: guild.client.user.displayAvatarURL(),
             });
         } else {
@@ -208,7 +206,7 @@ export class ListUtils {
                         : '1'
                 }`,
                 TOTAL_MESSAGES: customMessageResults.stats.TotalItems.toString(),
-                PER_PAGE: Config.experience.birthdayMessageListSize.toString(),
+                PER_PAGE: Config.experience.messageListSize.toString(),
                 ICON: guild.client.user.displayAvatarURL(),
             });
         }
@@ -221,7 +219,6 @@ export class ListUtils {
         trustedRoleResults: TrustedRoles,
         page: number,
         pageSize: number,
-        hasPremium: boolean,
         data: EventData
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
@@ -241,7 +238,7 @@ export class ListUtils {
                 ? `${role.toString()}`
                 : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
             if (
-                hasPremium ||
+                data.hasPremium ||
                 trustedRole.Position <= Config.validation.trustedRoles.maxCount.free
             ) {
                 description += `**${i.toLocaleString()}.** ${roleDisplay}: (ID: ${
@@ -256,7 +253,7 @@ export class ListUtils {
         }
 
         if (
-            !hasPremium &&
+            !data.hasPremium &&
             trustedRoleResults.stats.TotalItems > Config.validation.trustedRoles.maxCount.free
         ) {
             embed = Lang.getEmbed('info', 'list.trustedRolePaid', data.lang(), {
@@ -431,7 +428,6 @@ export class ListUtils {
         memberAnniversaryRoleResults: MemberAnniversaryRoles,
         page: number,
         pageSize: number,
-        hasPremium: boolean,
         data: EventData
     ): Promise<MessageEmbed> {
         let embed: MessageEmbed;
@@ -449,7 +445,7 @@ export class ListUtils {
                 ? `${role.toString()}`
                 : `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
             if (
-                hasPremium ||
+                data.hasPremium ||
                 memberAnniversaryRole.Position <=
                     Config.validation.memberAnniversaryRoles.maxCount.free
             ) {
@@ -460,7 +456,7 @@ export class ListUtils {
         }
 
         if (
-            !hasPremium &&
+            !data.hasPremium &&
             memberAnniversaryRoleResults.stats.TotalItems >
                 Config.validation.memberAnniversaryRoles.maxCount.free
         ) {

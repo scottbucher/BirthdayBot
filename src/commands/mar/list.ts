@@ -28,8 +28,6 @@ export class MarListSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1;
-        let hasPremium =
-            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         let pageSize = Config.experience.memberAnniversaryRoleListSize;
 
@@ -46,7 +44,6 @@ export class MarListSubCommand implements Command {
             marResults,
             page,
             pageSize,
-            hasPremium,
             data
         );
 

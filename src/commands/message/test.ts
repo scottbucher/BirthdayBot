@@ -42,8 +42,6 @@ export class MessageTestSubCommand implements Command {
 
         let isUserSpecific = type.includes('user');
         let color = Config.colors.default;
-        let hasPremium =
-            !Config.payments.enabled || (data.subscription && data.subscription.service);
 
         /**
          * In the database there are only three types, birthday, member anniversary, and server anniversary.
@@ -164,7 +162,7 @@ export class MessageTestSubCommand implements Command {
                 })
             );
             return;
-        } else if (hasPremium) {
+        } else if (data.hasPremium) {
             color = chosenMessage?.Color ?? color;
         }
 
