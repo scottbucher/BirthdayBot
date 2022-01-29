@@ -35,7 +35,7 @@ export class UserSpecificBirthdayMessageButton implements Button {
 
         let newPageNum = ButtonUtils.getNewPageNum(
             pageNum,
-            intr.customId.replace(/^user_specific_birthday_/, '')
+            intr.customId.replace(/^user_specific_birthday_message_/, '')
         );
         if (newPageNum === undefined) {
             return;

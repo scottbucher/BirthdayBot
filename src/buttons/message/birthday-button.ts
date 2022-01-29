@@ -35,7 +35,7 @@ export class BirthdayMessageButton implements Button {
 
         let newPageNum = ButtonUtils.getNewPageNum(
             pageNum,
-            intr.customId.replace(/^birthday_/, '')
+            intr.customId.replace(/^birthday_message_/, '')
         );
         if (newPageNum === undefined) {
             return;

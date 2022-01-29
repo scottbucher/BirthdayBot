@@ -35,7 +35,7 @@ export class UserSpecificMemberAnniversaryMessageButton implements Button {
 
         let newPageNum = ButtonUtils.getNewPageNum(
             pageNum,
-            intr.customId.replace(/^user_specific_member_anniversary_/, '')
+            intr.customId.replace(/^user_specific_member_anniversary_message_/, '')
         );
         if (newPageNum === undefined) {
             return;

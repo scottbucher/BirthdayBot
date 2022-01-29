@@ -35,7 +35,7 @@ export class ServerAnniversaryMessageButton implements Button {
 
         let newPageNum = ButtonUtils.getNewPageNum(
             pageNum,
-            intr.customId.replace(/^server_anniversary_/, '')
+            intr.customId.replace(/^server_anniversary_message_/, '')
         );
         if (newPageNum === undefined) {
             return;
