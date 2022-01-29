@@ -5,6 +5,11 @@ import { createRequire } from 'node:module';
 
 import { Bot } from './bot.js';
 import { BlacklistButton, Button } from './buttons/index.js';
+import { BirthdayMessageButton } from './buttons/message/birthday-button.js';
+import { MemberAnniversaryMessageButton } from './buttons/message/member-anniversary-button.js';
+import { ServerAnniversaryMessageButton } from './buttons/message/server-anniversary-button.js';
+import { UserSpecificBirthdayMessageButton } from './buttons/message/user-specific-birthday-button.js';
+import { UserSpecificMemberAnniversaryMessageButton } from './buttons/message/user-specific-member-anniversary-button.js';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
@@ -248,7 +253,14 @@ async function start(): Promise<void> {
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Buttons
-    let buttons: Button[] = [new BlacklistButton(blacklistRepo)];
+    let buttons: Button[] = [
+        new BlacklistButton(blacklistRepo),
+        new BirthdayMessageButton(customMessageRepo),
+        new MemberAnniversaryMessageButton(customMessageRepo),
+        new ServerAnniversaryMessageButton(customMessageRepo),
+        new UserSpecificBirthdayMessageButton(customMessageRepo),
+        new UserSpecificMemberAnniversaryMessageButton(customMessageRepo),
+    ];
 
     // Reactions
     let reactions: Reaction[] = [

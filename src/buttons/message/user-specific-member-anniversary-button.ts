@@ -12,13 +12,13 @@ import { Button, ButtonDeferType } from '../button.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
-export class BirthdayMessageButton implements Button {
+export class UserSpecificMemberAnniversaryMessageButton implements Button {
     public ids = [
-        'birthday_message_previous',
-        'birthday_message_next',
-        'birthday_message_previous_more',
-        'birthday_message_next_more',
-        'birthday_message_refresh',
+        'user_specific_member_anniversary_message_previous',
+        'user_specific_member_anniversary_message_next',
+        'user_specific_member_anniversary_message_previous_more',
+        'user_specific_member_anniversary_message_next_more',
+        'user_specific_member_anniversary_message_refresh',
     ];
     public deferType = ButtonDeferType.NONE;
     public requireGuild = true;
@@ -35,25 +35,25 @@ export class BirthdayMessageButton implements Button {
 
         let newPageNum = ButtonUtils.getNewPageNum(
             pageNum,
-            intr.customId.replace(/^birthday_/, '')
+            intr.customId.replace(/^user_specific_member_anniversary_/, '')
         );
         if (newPageNum === undefined) {
             return;
         }
 
-        let customMessageData = await this.customMessageRepo.getCustomMessageList(
+        let customMessageData = await this.customMessageRepo.getCustomMessageUserList(
             intr.guild.id,
             Config.experience.messageListSize,
             newPageNum,
-            'birthday'
+            'memberanniversary'
         );
 
-        let newEmbed = await ListUtils.getCustomMessageListEmbed(
+        let newEmbed = await ListUtils.getCustomUserMessageListEmbed(
             intr.guild,
             customMessageData,
             customMessageData.stats.Page,
             Config.experience.messageListSize,
-            'birthday',
+            'memberanniversary',
             data
         );
 

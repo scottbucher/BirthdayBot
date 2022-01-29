@@ -12,13 +12,13 @@ import { Button, ButtonDeferType } from '../button.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
-export class BirthdayMessageButton implements Button {
+export class ServerAnniversaryMessageButton implements Button {
     public ids = [
-        'birthday_message_previous',
-        'birthday_message_next',
-        'birthday_message_previous_more',
-        'birthday_message_next_more',
-        'birthday_message_refresh',
+        'server_anniversary_message_previous',
+        'server_anniversary_message_next',
+        'server_anniversary_message_previous_more',
+        'server_anniversary_message_next_more',
+        'server_anniversary_message_refresh',
     ];
     public deferType = ButtonDeferType.NONE;
     public requireGuild = true;
@@ -35,7 +35,7 @@ export class BirthdayMessageButton implements Button {
 
         let newPageNum = ButtonUtils.getNewPageNum(
             pageNum,
-            intr.customId.replace(/^birthday_/, '')
+            intr.customId.replace(/^server_anniversary_/, '')
         );
         if (newPageNum === undefined) {
             return;
@@ -45,7 +45,7 @@ export class BirthdayMessageButton implements Button {
             intr.guild.id,
             Config.experience.messageListSize,
             newPageNum,
-            'birthday'
+            'serveranniversary'
         );
 
         let newEmbed = await ListUtils.getCustomMessageListEmbed(
@@ -53,7 +53,7 @@ export class BirthdayMessageButton implements Button {
             customMessageData,
             customMessageData.stats.Page,
             Config.experience.messageListSize,
-            'birthday',
+            'serveranniversary',
             data
         );
 
