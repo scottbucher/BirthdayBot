@@ -10,7 +10,7 @@ import { RegexUtils } from '../../utils/regex-utils.js';
 import { Button, ButtonDeferType } from '../button.js';
 
 const require = createRequire(import.meta.url);
-let Config = require('../../config/config.json');
+let Config = require('../../../config/config.json');
 
 export class MemberAnniversaryMessageButton implements Button {
     public ids = [
