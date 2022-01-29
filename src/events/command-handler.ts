@@ -70,14 +70,14 @@ export class CommandHandler implements EventHandler {
 
         let subData =
             intr.guild && Config.payments.enabled
-                ? await this.subService.getSubscription(PlanName.premium1, intr.guild?.id)
+                ? await this.subService.getSubscription(PlanName.premium1, intr.guild.id)
                 : undefined;
 
         // Get data from database
         let data = new EventData(
-            intr.guild ? await this.guildRepo.getGuild(intr.guild?.id) : undefined,
+            intr.guild ? await this.guildRepo.getGuild(intr.guild.id) : undefined,
             subData,
-            Config.payments.enabled ? await this.userRepo.getUserVote(intr.user.id) : undefined,
+            Config.voting.enabled ? await this.userRepo.getUserVote(intr.user.id) : undefined,
             !Config.payments.enabled || (subData.subscription && subData.subscription.service)
         );
 
