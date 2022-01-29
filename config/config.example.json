@@ -103,7 +103,7 @@
         "birthdayListSize": "60",
         "memberAnniversaryListSize": "60",
         "blacklistSize": "60",
-        "birthdayMessageListSize": "6",
+        "messageListSize": "6",
         "trustedRoleListSize": "20",
         "memberAnniversaryRoleListSize": "20"
     },

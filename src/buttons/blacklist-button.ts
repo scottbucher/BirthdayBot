@@ -11,13 +11,13 @@ let Config = require('../../config/config.json');
 
 export class BlacklistButton implements Button {
     public ids = [
-        'custom_previous',
-        'custom_next',
-        'custom_previous_more',
-        'custom_next_more',
-        'custom_refresh',
+        'blacklist_previous',
+        'blacklist_next',
+        'blacklist_previous_more',
+        'blacklist_next_more',
+        'blacklist_refresh',
     ];
-    public deferType = ButtonDeferType.UPDATE;
+    public deferType = ButtonDeferType.NONE;
     public requireGuild = true;
 
     constructor(private blacklistRepo: BlacklistRepo) {}
@@ -47,10 +47,11 @@ export class BlacklistButton implements Button {
         let newEmbed = await ListUtils.getBlacklistFullEmbed(
             intr.guild,
             blacklistData,
-            newPageNum,
+            blacklistData.stats.Page,
             Config.experience.blacklistSize,
             data
         );
+
         await InteractionUtils.update(intr, newEmbed);
         return;
     }
