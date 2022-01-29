@@ -53,7 +53,7 @@ export class MemberAnniversaryMessageButton implements Button {
             customMessageData,
             customMessageData.stats.Page,
             Config.experience.messageListSize,
-            'memberanniversary',
+            'member_anniversary',
             data
         );
 

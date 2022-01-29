@@ -63,7 +63,7 @@ export class ButtonHandler implements EventHandler {
             return;
         }
 
-        // TODO: Get data from database
+        // TODO: Get data from database for the button
         let data = new EventData();
 
         // Execute the button
