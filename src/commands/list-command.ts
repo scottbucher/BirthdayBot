@@ -64,7 +64,7 @@ export class ListCommand implements Command {
 
         let type =
             intr.options.getString(Lang.getCom('arguments.type'))?.toLowerCase() ?? 'birthday';
-        let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1000;
+        let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1;
 
         let date: moment.MomentInput;
 
