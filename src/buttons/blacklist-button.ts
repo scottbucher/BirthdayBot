@@ -30,7 +30,10 @@ export class BlacklistButton implements Button {
             return;
         }
 
-        let newPageNum = ButtonUtils.getNewPageNum(pageNum, intr.customId.replace(/^custom_/, ''));
+        let newPageNum = ButtonUtils.getNewPageNum(
+            pageNum,
+            intr.customId.replace(/^blacklist_/, '')
+        );
         if (newPageNum === undefined) {
             return;
         }
