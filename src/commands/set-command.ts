@@ -1,6 +1,7 @@
 import { Chrono, en } from 'chrono-node';
 import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
 import {
+    ButtonInteraction,
     ChatInputApplicationCommandData,
     CommandInteraction,
     DMChannel,
@@ -101,6 +102,8 @@ export class SetCommand implements Command {
 
         let changesLeft = userData ? userData?.ChangesLeft : 5;
 
+        let nextIntr: CommandInteraction | ButtonInteraction = intr;
+
         // TODO: Default Timezone Suggestion is broken
         if (!(intr.channel instanceof DMChannel) && !data.guild)
             if (
@@ -109,7 +112,7 @@ export class SetCommand implements Command {
                 (!timeZone || timeZone !== data.guild?.DefaultTimezone)
             ) {
                 // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
-                let confirmation = await CollectorUtils.getBooleanFromReact(
+                let defaultTimezoneResult = await CollectorUtils.getBooleanFromButton(
                     intr,
                     data,
                     Lang.getEmbed(
@@ -124,27 +127,21 @@ export class SetCommand implements Command {
                     )
                 );
 
-                if (confirmation === undefined) return;
+                if (defaultTimezoneResult === undefined) return;
 
-                if (confirmation) {
+                if (defaultTimezoneResult.value) {
                     // Confirm
                     timeZone = timeZone ?? data.guild.DefaultTimezone;
                 } else {
                     // deny
                     timeZone = timeZone ? data.guild.DefaultTimezone : null;
                 }
+                nextIntr = defaultTimezoneResult.intr;
             }
-
-        let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-            await InteractionUtils.send(
-                intr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-            );
-        });
 
         if (!timeZone) {
             let _timezoneMessage = await InteractionUtils.send(
-                intr,
+                nextIntr,
                 Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', LangCode.EN_US, {
                     TARGET: target.username,
                     AUTHOR_ICON: target.displayAvatarURL(),
@@ -153,42 +150,52 @@ export class SetCommand implements Command {
                 })
             );
 
-            timeZone = await collect(async (nextMsg: Message) => {
-                if (FormatUtils.checkAbbreviation(nextMsg.content)) {
+            timeZone = await CollectorUtils.collectByMessage(
+                intr.channel,
+                intr.user,
+                async (nextMsg: Message) => {
+                    if (FormatUtils.checkAbbreviation(nextMsg.content)) {
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getEmbed(
+                                'validation',
+                                'embeds.invalidTimeZoneAbbreviation',
+                                LangCode.EN_US,
+                                {
+                                    TARGET: target.username,
+                                    ICON: intr.client.user.displayAvatarURL(),
+                                }
+                            )
+                        );
+                        return;
+                    }
+
+                    let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
+                    if (!input) {
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getErrorEmbed(
+                                'validation',
+                                'errorEmbeds.invalidTimezone',
+                                LangCode.EN_US,
+                                {
+                                    TARGET: target.username,
+                                    ICON: intr.client.user.displayAvatarURL(),
+                                }
+                            )
+                        );
+                        return;
+                    }
+
+                    return input;
+                },
+                async () => {
                     await InteractionUtils.send(
                         intr,
-                        Lang.getEmbed(
-                            'validation',
-                            'embeds.invalidTimeZoneAbbreviation',
-                            LangCode.EN_US,
-                            {
-                                TARGET: target.username,
-                                ICON: intr.client.user.displayAvatarURL(),
-                            }
-                        )
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                     );
-                    return;
                 }
-
-                let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
-                if (!input) {
-                    await InteractionUtils.send(
-                        intr,
-                        Lang.getErrorEmbed(
-                            'validation',
-                            'errorEmbeds.invalidTimezone',
-                            LangCode.EN_US,
-                            {
-                                TARGET: target.username,
-                                ICON: intr.client.user.displayAvatarURL(),
-                            }
-                        )
-                    );
-                    return;
-                }
-
-                return input;
-            });
+            );
 
             // MessageUtils.delete(timezoneMessage);
         }
@@ -223,27 +230,38 @@ export class SetCommand implements Command {
                 }).setAuthor({ name: target.tag, url: target.displayAvatarURL() })
             );
 
-            birthday = await collect(async (nextMsg: Message) => {
-                let result = FormatUtils.getBirthday(nextMsg.content, parser, littleEndian);
+            birthday = await CollectorUtils.collectByMessage(
+                intr.channel,
+                intr.user,
+                async (nextMsg: Message) => {
+                    let result = FormatUtils.getBirthday(nextMsg.content, parser, littleEndian);
 
-                // Don't laugh at my double check it prevents the dates chrono misses on the first input
-                if (!result) {
+                    // Don't laugh at my double check it prevents the dates chrono misses on the first input
+                    if (!result) {
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getErrorEmbed(
+                                'validation',
+                                'errorEmbeds.invalidBirthday',
+                                LangCode.EN_US,
+                                {
+                                    TARGET: target.username,
+                                }
+                            )
+                        );
+                        return;
+                    }
+
+                    return result;
+                },
+                async () => {
                     await InteractionUtils.send(
                         intr,
-                        Lang.getErrorEmbed(
-                            'validation',
-                            'errorEmbeds.invalidBirthday',
-                            LangCode.EN_US,
-                            {
-                                TARGET: target.username,
-                            }
-                        )
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                     );
-                    return;
                 }
+            );
 
-                return result;
-            });
             // MessageUtils.delete(birthdayMessage);
         }
 
@@ -257,7 +275,7 @@ export class SetCommand implements Command {
         let month = birthDate.getMonth() + 1;
         let day = birthDate.getDate();
 
-        let confirmation = await CollectorUtils.getBooleanFromReact(
+        let result = await CollectorUtils.getBooleanFromButton(
             intr,
             data,
             Lang.getEmbed('prompts', 'settingBirthday.confirmBirthday', LangCode.EN_US, {
@@ -267,14 +285,14 @@ export class SetCommand implements Command {
             })
         );
 
-        if (confirmation === undefined) return;
+        if (result === undefined) return;
 
-        if (confirmation) {
+        if (result.value) {
             // Confirm
             await this.userRepo.addOrUpdateUser(target.id, birthday, timeZone, changesLeft); // Add or update user
 
             await InteractionUtils.send(
-                intr,
+                result.intr,
                 Lang.getEmbed('results', 'success.setBirthday', LangCode.EN_US, {
                     USER: target.toString(),
                     BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
@@ -285,7 +303,7 @@ export class SetCommand implements Command {
         } else {
             // Cancel
             await InteractionUtils.send(
-                intr,
+                result.intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', LangCode.EN_US)
             );
             return;

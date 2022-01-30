@@ -41,7 +41,7 @@ export class PurgeCommand implements Command {
             return;
         }
 
-        let confirmation = await CollectorUtils.getBooleanFromReact(
+        let result = await CollectorUtils.getBooleanFromButton(
             intr,
             data,
             Lang.getEmbed('prompts', 'embeds.birthdayConfirmPurge', data.lang(), {
@@ -49,20 +49,20 @@ export class PurgeCommand implements Command {
             })
         );
 
-        if (confirmation === undefined) return;
+        if (result === undefined) return;
 
-        if (confirmation) {
+        if (result.value) {
             // Confirm
             await this.userRepo.addOrUpdateUser(target.id, null, null, userData.ChangesLeft); // Add or update user
 
             await InteractionUtils.send(
-                intr,
+                result.intr,
                 Lang.getEmbed('results', 'success.purgeSuccessful', data.lang())
             );
         } else {
             // Cancel
             await InteractionUtils.send(
-                intr,
+                result.intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
         }

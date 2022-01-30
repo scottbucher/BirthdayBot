@@ -1,4 +1,5 @@
 import {
+    ButtonInteraction,
     ChatInputApplicationCommandData,
     CommandInteraction,
     GuildMember,
@@ -57,8 +58,8 @@ export class MessageAddSubCommand implements Command {
         if (databaseType.includes('specific'))
             databaseType = databaseType.includes('birthday') ? 'birthday' : 'memberanniversary';
 
-        let colorHex = '0';
-        let embedChoice: number;
+        let colorResult = '0';
+        let embedResult: { intr: ButtonInteraction; value: boolean };
         let target: GuildMember;
         let userId = '0';
 
@@ -235,6 +236,8 @@ export class MessageAddSubCommand implements Command {
             }
         }
 
+        let nextIntr: CommandInteraction | ButtonInteraction = intr;
+
         // If there is a target, begin the checks if there is a user custom message already for the target
         if (target && type !== 'server_anniversary') {
             let userMessage = messages.filter(message => message.UserDiscordId === target.id);
@@ -243,7 +246,7 @@ export class MessageAddSubCommand implements Command {
             if (userMessage.length > 0) {
                 // There is already a message for this user should they overwrite it?
 
-                let confirmation = await CollectorUtils.getBooleanFromReact(
+                let replaceResult = await CollectorUtils.getBooleanFromButton(
                     intr,
                     data,
                     Lang.getEmbed('validation', 'embeds.duplicateUserCustomMessage', data.lang(), {
@@ -262,15 +265,16 @@ export class MessageAddSubCommand implements Command {
                     })
                 );
 
-                if (confirmation === undefined) return;
+                if (replaceResult === undefined) return;
 
-                if (!confirmation) {
+                if (!replaceResult.value) {
                     await InteractionUtils.send(
-                        intr,
+                        replaceResult.intr,
                         Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
                     );
                     return;
                 }
+                nextIntr = replaceResult.intr;
             }
         } else {
             // Don't allow duplicate birthday messages for non user messages
@@ -290,38 +294,42 @@ export class MessageAddSubCommand implements Command {
         // Only premium servers can have a custom color
         if (data.hasPremium) {
             // prompt them for a color
-            let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-                await InteractionUtils.send(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            });
-
             await InteractionUtils.send(
-                intr,
+                nextIntr,
                 Lang.getEmbed('prompts', 'customMessage.colorSelection', data.lang(), {
                     ICON: intr.client.user.displayAvatarURL(),
                 })
             );
 
-            colorHex = await collect(async (nextMsg: Message) => {
-                let check = ColorUtils.findHex(nextMsg.content);
+            colorResult = await CollectorUtils.collectByMessage(
+                intr.channel,
+                intr.user,
+                async (nextMsg: Message) => {
+                    let check = ColorUtils.findHex(nextMsg.content);
 
-                if (!check) {
+                    if (!check) {
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getEmbed('validation', 'embeds.invalidColor', data.lang())
+                        );
+                        return;
+                    }
+
+                    return check;
+                },
+                async () => {
                     await InteractionUtils.send(
                         intr,
-                        Lang.getEmbed('validation', 'embeds.invalidColor', data.lang())
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                     );
-                    return;
                 }
+            );
 
-                return check;
-            });
-            if (colorHex === undefined) return;
+            if (colorResult === undefined) return;
         }
 
         // Check if this message should be an embed or not
-        embedChoice = await CollectorUtils.getBooleanFromReact(
+        embedResult = await CollectorUtils.getBooleanFromButton(
             intr,
             data,
             Lang.getEmbed('prompts', 'customMessage.embedSelection', data.lang(), {
@@ -329,19 +337,19 @@ export class MessageAddSubCommand implements Command {
             })
         );
 
-        if (embedChoice === undefined) return;
+        if (embedResult === undefined) return;
 
         await this.customMessageRepo.addCustomMessage(
             intr.guild.id,
             message,
             userId,
             databaseType,
-            colorHex,
-            embedChoice
+            colorResult,
+            embedResult.value ? 1 : 0
         );
 
         await InteractionUtils.send(
-            intr,
+            embedResult.intr,
             userId === '0'
                 ? Lang.getEmbed('results', 'customMessage.add', data.lang(), {
                       DISPLAY_TYPE: typeDisplayName,
@@ -351,11 +359,11 @@ export class MessageAddSubCommand implements Command {
                           databaseType,
                           null
                       ),
-                      IS_EMBED: embedChoice === 1 ? 'True' : 'False',
+                      IS_EMBED: embedResult.value ? 'True' : 'False',
                       HAS_PREMIUM: !data.hasPremium
                           ? Lang.getRef('info', 'conditionals.needColorForPremium', data.lang())
                           : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
-                                COLOR_HEX: colorHex,
+                                COLOR_HEX: colorResult,
                             }),
                       TYPE: commandDisplayType,
                       ICON: intr.client.user.displayAvatarURL(),
@@ -368,11 +376,11 @@ export class MessageAddSubCommand implements Command {
                           databaseType,
                           target?.toString()
                       ),
-                      IS_EMBED: embedChoice === 1 ? 'True' : 'False',
+                      IS_EMBED: embedResult.value ? 'True' : 'False',
                       HAS_PREMIUM: !data.hasPremium
                           ? Lang.getRef('info', 'conditionals.colorForPremium', data.lang())
                           : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
-                                COLOR_HEX: colorHex,
+                                COLOR_HEX: colorResult,
                             }),
                       TYPE: commandDisplayType,
                       USER: target.toString(),

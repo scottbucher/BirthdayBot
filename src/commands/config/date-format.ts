@@ -33,30 +33,38 @@ export class DateFormatSubCommand implements Command {
 
         if (!reset) {
             // prompt them for a setting
-            let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-                await InteractionUtils.send(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            });
-
             let _prompt = await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('prompts', 'config.dateFormat', data.lang())
             );
 
-            dateFormat = await collect(async (nextMsg: Message) => {
-                let input = FormatUtils.extractDateFormatType(nextMsg.content)?.toLowerCase();
-                if (!input) {
+            dateFormat = await CollectorUtils.collectByMessage(
+                intr.channel,
+                intr.user,
+                async (nextMsg: Message) => {
+                    let input = FormatUtils.extractDateFormatType(nextMsg.content)?.toLowerCase();
+                    if (!input) {
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getErrorEmbed(
+                                'validation',
+                                'errorEmbeds.invalidSetting',
+                                data.lang()
+                            )
+                        );
+                        return;
+                    }
+
+                    return input.toLowerCase();
+                },
+                async () => {
                     await InteractionUtils.send(
                         intr,
-                        Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                     );
-                    return;
                 }
+            );
 
-                return input.toLowerCase();
-            });
             if (dateFormat === undefined) return;
         } else dateFormat = 'month_day';
 

@@ -1,4 +1,9 @@
-import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import {
+    ButtonInteraction,
+    ChatInputApplicationCommandData,
+    CommandInteraction,
+    PermissionString,
+} from 'discord.js';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
@@ -29,24 +34,24 @@ export class TrustedPreventsRoleSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
-        let choice: number;
+        let result: { intr: ButtonInteraction; value: boolean };
 
         // Get the prompt embed based on the setting, all are a true or false
         let promptEmbed = Lang.getEmbed('prompts', `config.trustedPreventsRole`, data.lang());
 
         if (!reset) {
-            choice = await CollectorUtils.getBooleanFromReact(intr, data, promptEmbed);
+            result = await CollectorUtils.getBooleanFromButton(intr, data, promptEmbed);
 
-            if (choice === undefined) return;
-        } else choice = 1;
+            if (result === undefined) return;
+        } else result = { intr: null, value: true };
 
-        await this.guildRepo.updateTrustedPreventsRole(intr.guild.id, choice);
+        await this.guildRepo.updateTrustedPreventsRole(intr.guild.id, result.value ? 1 : 0);
 
         await InteractionUtils.send(
-            intr,
+            result.intr,
             Lang.getSuccessEmbed(
                 'results',
-                choice
+                result
                     ? 'successEmbeds.trustedPreventsRoleYes'
                     : 'successEmbeds.trustedPreventsRoleNo',
                 data.lang()

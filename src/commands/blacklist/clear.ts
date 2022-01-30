@@ -39,7 +39,7 @@ export class BlacklistClearSubCommand implements Command {
         }
 
         // Confirm
-        let confirmation = await CollectorUtils.getBooleanFromReact(
+        let result = await CollectorUtils.getBooleanFromButton(
             intr,
             data,
             Lang.getEmbed('prompts', 'clear.blacklist', data.lang(), {
@@ -48,9 +48,9 @@ export class BlacklistClearSubCommand implements Command {
             })
         );
 
-        if (confirmation === undefined) return;
+        if (result === undefined) return;
 
-        if (!confirmation) {
+        if (!result.value) {
             await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
@@ -61,7 +61,7 @@ export class BlacklistClearSubCommand implements Command {
         await this.blacklistRepo.clearBlacklist(intr.guild.id);
 
         await InteractionUtils.send(
-            intr,
+            result.intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.blacklistClear', data.lang())
         );
     }

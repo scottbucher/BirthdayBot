@@ -52,7 +52,7 @@ export class MessageClearSubCommand implements Command {
         }
 
         // Confirm
-        let confirmation = await CollectorUtils.getBooleanFromReact(
+        let result = await CollectorUtils.getBooleanFromButton(
             intr,
             data,
             Lang.getEmbed('prompts', 'clear.customMessage', LangCode.EN_US, {
@@ -62,9 +62,9 @@ export class MessageClearSubCommand implements Command {
             })
         );
 
-        if (confirmation === undefined) return;
+        if (result === undefined) return;
 
-        if (!confirmation) {
+        if (!result.value) {
             await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
@@ -87,7 +87,7 @@ export class MessageClearSubCommand implements Command {
               );
 
         await InteractionUtils.send(
-            intr,
+            result.intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.customMessagesClear', LangCode.EN_US, {
                 DISPLAY_TYPE: displayType,
             })

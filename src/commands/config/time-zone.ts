@@ -33,13 +33,6 @@ export class TimezoneSubCommand implements Command {
 
         if (!reset) {
             // prompt them for a setting
-            let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-                await InteractionUtils.send(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            });
-
             let _prompt = await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('prompts', 'config.timezone', data.lang(), {
@@ -47,30 +40,45 @@ export class TimezoneSubCommand implements Command {
                 })
             );
 
-            timezone = await collect(async (nextMsg: Message) => {
-                if (FormatUtils.checkAbbreviation(nextMsg.content)) {
+            timezone = await CollectorUtils.collectByMessage(
+                intr.channel,
+                intr.user,
+                async (nextMsg: Message) => {
+                    if (FormatUtils.checkAbbreviation(nextMsg.content)) {
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getErrorEmbed(
+                                'validation',
+                                'errorEmbeds.timezoneAbbreviation',
+                                data.lang()
+                            )
+                        );
+                        return;
+                    }
+
+                    let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
+                    if (!input) {
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getErrorEmbed(
+                                'validation',
+                                'errorEmbeds.invalidTimezone',
+                                data.lang()
+                            )
+                        );
+                        return;
+                    }
+
+                    return input;
+                },
+                async () => {
                     await InteractionUtils.send(
                         intr,
-                        Lang.getErrorEmbed(
-                            'validation',
-                            'errorEmbeds.timezoneAbbreviation',
-                            data.lang()
-                        )
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                     );
-                    return;
                 }
+            );
 
-                let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
-                if (!input) {
-                    await InteractionUtils.send(
-                        intr,
-                        Lang.getErrorEmbed('validation', 'errorEmbeds.invalidTimezone', data.lang())
-                    );
-                    return;
-                }
-
-                return input;
-            });
             if (timezone === undefined) return;
         } else timezone = '0';
 

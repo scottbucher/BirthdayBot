@@ -34,7 +34,7 @@ export class TrustedRoleClearSubCommand implements Command {
         }
 
         // Confirm
-        let confirmation = await CollectorUtils.getBooleanFromReact(
+        let result = await CollectorUtils.getBooleanFromButton(
             intr,
             data,
             Lang.getEmbed('prompts', 'clear.trustedRole', data.lang(), {
@@ -43,11 +43,11 @@ export class TrustedRoleClearSubCommand implements Command {
             })
         );
 
-        if (confirmation === undefined) return;
+        if (result === undefined) return;
 
-        if (!confirmation) {
+        if (!result.value) {
             await InteractionUtils.send(
-                intr,
+                result.intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
             return;
@@ -56,7 +56,7 @@ export class TrustedRoleClearSubCommand implements Command {
         await this.trustedRoleRepo.clearTrustedRoles(intr.guild.id);
 
         await InteractionUtils.send(
-            intr,
+            result.intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.trustedRoleClear', data.lang())
         );
     }

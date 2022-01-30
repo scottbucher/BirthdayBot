@@ -1,11 +1,11 @@
 import {
+    ButtonInteraction,
     ChatInputApplicationCommandData,
     CommandInteraction,
     Message,
     PermissionString,
     TextBasedChannel,
 } from 'discord.js';
-import { createRequire } from 'node:module';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
@@ -18,9 +18,6 @@ import {
     PermissionUtils,
 } from '../../utils/index.js';
 import { Command } from '../index.js';
-
-const require = createRequire(import.meta.url);
-let Config = require('../../../config/config.json');
 
 export class ChannelSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
@@ -48,40 +45,46 @@ export class ChannelSubCommand implements Command {
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
 
         // prompt them for a type
-        let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-            await InteractionUtils.send(
-                intr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-            );
-        });
-
         let _prompt = await InteractionUtils.send(
             intr,
             Lang.getEmbed('prompts', 'config.channelType', data.lang())
         );
 
-        type = await collect(async (nextMsg: Message) => {
-            let input = FormatUtils.extractCelebrationType(nextMsg.content.toLowerCase());
-            if (
-                !input ||
-                input === 'userSpecificBirthday' ||
-                input === 'userSpecificMemberAnniversary'
-            ) {
-                console.log(input);
+        type = await CollectorUtils.collectByMessage(
+            intr.channel,
+            intr.user,
+            async (nextMsg: Message) => {
+                let input = FormatUtils.extractCelebrationType(nextMsg.content.toLowerCase());
+                if (
+                    !input ||
+                    input === 'userSpecificBirthday' ||
+                    input === 'userSpecificMemberAnniversary'
+                ) {
+                    console.log(input);
+                    await InteractionUtils.send(
+                        intr,
+                        Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
+                    );
+                    return;
+                }
+
+                return input;
+            },
+            async () => {
                 await InteractionUtils.send(
                     intr,
-                    Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
+                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                 );
-                return;
             }
+        );
 
-            return input;
-        });
         if (type === undefined) return;
 
         let displayType = Lang.getRef('info', `terms.${type}`, data.lang());
 
         let channel: string;
+
+        let nextIntr: ButtonInteraction;
 
         if (!reset) {
             let guild = intr.guild;
@@ -100,16 +103,16 @@ export class ChannelSubCommand implements Command {
                 ),
             });
 
-            let channelOption = await CollectorUtils.getSetupChoiceFromReact(
+            let channelResult = await CollectorUtils.getSetupChoiceFromButton(
                 intr,
                 data,
                 promptEmbed
             );
 
-            if (channelOption === undefined) return;
+            if (channelResult === undefined) return;
 
-            switch (channelOption) {
-                case Config.emotes.create: {
+            switch (channelResult.value) {
+                case 'create': {
                     let title = Lang.getRef('info', `defaults.${type}ChannelName`, data.lang());
                     let topic = Lang.getRef('info', `defaults.${type}ChannelTopic`, data.lang());
                     // Create channel with desired attributes
@@ -150,48 +153,58 @@ export class ChannelSubCommand implements Command {
                     );
                     break;
                 }
-                case Config.emotes.select: {
+                case 'select': {
                     let _selectMessage = await InteractionUtils.send(
                         intr,
                         Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())
                     );
 
-                    channel = await collect(async (nextMsg: Message) => {
-                        // Find mentioned channel
-                        let channelInput: TextBasedChannel = await ClientUtils.findTextChannel(
-                            intr.guild,
-                            nextMsg.content
-                        );
+                    channel = await CollectorUtils.collectByMessage(
+                        intr.channel,
+                        intr.user,
+                        async (nextMsg: Message) => {
+                            // Find mentioned channel
+                            let channelInput: TextBasedChannel = await ClientUtils.findTextChannel(
+                                intr.guild,
+                                nextMsg.content
+                            );
 
-                        if (!channelInput) {
+                            if (!channelInput) {
+                                await InteractionUtils.send(
+                                    intr,
+                                    Lang.getErrorEmbed(
+                                        'validation',
+                                        'errorEmbeds.invalidChannel',
+                                        data.lang()
+                                    )
+                                );
+                                return;
+                            }
+
+                            // Bot needs to be able to message in the desired channel
+                            if (!PermissionUtils.canSend(channelInput)) {
+                                await InteractionUtils.send(
+                                    intr,
+                                    Lang.getEmbed(
+                                        'validation',
+                                        'embeds..noAccessToChannel',
+                                        data.lang(),
+                                        {
+                                            CHANNEL: channelInput.toString(),
+                                        }
+                                    )
+                                );
+                                return;
+                            }
+                            return channelInput?.id;
+                        },
+                        async () => {
                             await InteractionUtils.send(
                                 intr,
-                                Lang.getErrorEmbed(
-                                    'validation',
-                                    'errprEmbeds.invalidChannel',
-                                    data.lang()
-                                )
+                                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                             );
-                            return;
                         }
-
-                        // Bot needs to be able to message in the desired channel
-                        if (!PermissionUtils.canSend(channelInput)) {
-                            await InteractionUtils.send(
-                                intr,
-                                Lang.getEmbed(
-                                    'validation',
-                                    'embeds..noAccessToChannel',
-                                    data.lang(),
-                                    {
-                                        CHANNEL: channelInput.toString(),
-                                    }
-                                )
-                            );
-                            return;
-                        }
-                        return channelInput?.id;
-                    });
+                    );
 
                     if (channel === undefined) {
                         return;
@@ -205,16 +218,18 @@ export class ChannelSubCommand implements Command {
                     );
                     break;
                 }
-                case Config.emotes.deny: {
-                    channel = '0';
-                    break;
-                }
+                case 'deny':
+                    {
+                        channel = '0';
+                        break;
+                    }
+                    nextIntr = channelResult.intr;
             }
         } else channel = '0';
 
         if (channel === '0') {
             await InteractionUtils.send(
-                intr,
+                nextIntr,
                 Lang.getSuccessEmbed('results', 'successEmbeds.channelClear', data.lang(), {
                     TYPE: displayType.toLowerCase(),
                 })

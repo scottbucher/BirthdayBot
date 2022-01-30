@@ -34,7 +34,7 @@ export class MarClearSubCommand implements Command {
         }
 
         // Confirm
-        let confirmation = await CollectorUtils.getBooleanFromReact(
+        let result = await CollectorUtils.getBooleanFromButton(
             intr,
             data,
             Lang.getEmbed('prompts', 'clear.mar', data.lang(), {
@@ -43,9 +43,9 @@ export class MarClearSubCommand implements Command {
             })
         );
 
-        if (confirmation === undefined) return;
+        if (result === undefined) return;
 
-        if (!confirmation) {
+        if (!result.value) {
             await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
@@ -56,7 +56,7 @@ export class MarClearSubCommand implements Command {
         await this.memberAnniversaryRoleRepo.clearMemberAnniversaryRoles(intr.guild.id);
 
         await InteractionUtils.send(
-            intr,
+            result.intr,
             Lang.getSuccessEmbed('results', 'successEmbeds.marClear', data.lang())
         );
     }

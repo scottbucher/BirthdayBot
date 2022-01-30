@@ -1,4 +1,5 @@
 import {
+    ButtonInteraction,
     ChatInputApplicationCommandData,
     CommandInteraction,
     Message,
@@ -41,37 +42,40 @@ export class RoleSubCommand implements Command {
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
         let type: string;
 
-        // prompt them for a type
-        let collect = CollectorUtils.createMsgCollect(intr.channel, intr.user, async () => {
-            await InteractionUtils.send(
-                intr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-            );
-        });
-
         let _prompt = await InteractionUtils.send(
             intr,
             Lang.getEmbed('prompts', 'config.roleType', data.lang())
         );
 
-        type = await collect(async (nextMsg: Message) => {
-            let input = FormatUtils.extractRoleType(nextMsg.content.toLowerCase());
-            if (!input) {
-                console.log(input);
+        type = await CollectorUtils.collectByMessage(
+            intr.channel,
+            intr.user,
+            async (nextMsg: Message) => {
+                let input = FormatUtils.extractRoleType(nextMsg.content.toLowerCase());
+                if (!input) {
+                    console.log(input);
+                    await InteractionUtils.send(
+                        intr,
+                        Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
+                    );
+                    return;
+                }
+
+                return input;
+            },
+            async () => {
                 await InteractionUtils.send(
                     intr,
-                    Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
+                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                 );
-                return;
             }
-
-            return input;
-        });
-        if (type === undefined) return;
+        );
 
         let displayType = Lang.getRef('info', `terms.${type}`, data.lang());
 
         let role: string;
+
+        let nextIntr: ButtonInteraction;
 
         if (!reset) {
             let guild = intr.guild;
@@ -84,12 +88,12 @@ export class RoleSubCommand implements Command {
                 ),
             });
 
-            let roleOption = await CollectorUtils.getSetupChoiceFromReact(intr, data, promptEmbed);
+            let roleResult = await CollectorUtils.getSetupChoiceFromButton(intr, data, promptEmbed);
 
-            if (roleOption === undefined) return;
+            if (roleResult === undefined) return;
 
-            switch (roleOption) {
-                case Config.emotes.create: {
+            switch (roleResult.value) {
+                case 'create': {
                     // Create role with desired attributes
                     role = (
                         await guild.roles.create({
@@ -114,105 +118,118 @@ export class RoleSubCommand implements Command {
                     );
                     break;
                 }
-                case Config.emotes.select: {
+                case 'select': {
                     let _selectMessage = await InteractionUtils.send(
                         intr,
                         Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
                     );
 
-                    role = await collect(async (nextMsg: Message) => {
-                        // Find mentioned role
-                        let roleInput: Role = nextMsg.mentions.roles.first();
+                    role = await CollectorUtils.collectByMessage(
+                        intr.channel,
+                        intr.user,
+                        async (nextMsg: Message) => {
+                            // Find mentioned role
+                            let roleInput: Role = nextMsg.mentions.roles.first();
 
-                        // Search guild for role
-                        if (!roleInput) {
-                            roleInput = await ClientUtils.findRole(intr.guild, nextMsg?.content);
-                        }
+                            // Search guild for role
+                            if (!roleInput) {
+                                roleInput = await ClientUtils.findRole(
+                                    intr.guild,
+                                    nextMsg?.content
+                                );
+                            }
 
-                        // If it couldn't find the role, the role was in another guild, or the role the everyone role
-                        if (
-                            !roleInput ||
-                            roleInput.id === guild.id ||
-                            nextMsg?.content.toLowerCase() === 'everyone'
-                        ) {
-                            InteractionUtils.send(
-                                intr,
-                                Lang.getErrorEmbed(
-                                    'validation',
-                                    'errorEmbeds.invalidRole',
-                                    data.lang()
-                                )
-                            );
-                            return;
-                        }
+                            // If it couldn't find the role, the role was in another guild, or the role the everyone role
+                            if (
+                                !roleInput ||
+                                roleInput.id === guild.id ||
+                                nextMsg?.content.toLowerCase() === 'everyone'
+                            ) {
+                                InteractionUtils.send(
+                                    intr,
+                                    Lang.getErrorEmbed(
+                                        'validation',
+                                        'errorEmbeds.invalidRole',
+                                        data.lang()
+                                    )
+                                );
+                                return;
+                            }
 
-                        // Check the role's position
-                        if (
-                            roleInput.position >
-                            guild.members.resolve(intr.client.user).roles.highest.position
-                        ) {
+                            // Check the role's position
+                            if (
+                                roleInput.position >
+                                guild.members.resolve(intr.client.user).roles.highest.position
+                            ) {
+                                await InteractionUtils.send(
+                                    intr,
+                                    Lang.getEmbed(
+                                        'validation',
+                                        'embeds.roleHierarchyError',
+                                        data.lang(),
+                                        {
+                                            BOT: intr.client.user.toString(),
+                                            ICON: intr.client.user.displayAvatarURL(),
+                                        }
+                                    )
+                                );
+                                return;
+                            }
+
+                            // Check if the role is managed
+                            if (roleInput.managed) {
+                                InteractionUtils.send(
+                                    intr,
+                                    Lang.getErrorEmbed(
+                                        'validation',
+                                        'errorEmbeds.birthdayRoleManaged',
+                                        data.lang()
+                                    )
+                                );
+                                return;
+                            }
+
+                            let membersWithRole = roleInput.members.size;
+
+                            if (membersWithRole > 0 && membersWithRole < 100) {
+                                await InteractionUtils.send(
+                                    intr,
+                                    Lang.getEmbed(
+                                        'validation',
+                                        'embeds.birthdayRoleUsedWarning',
+                                        data.lang(),
+                                        {
+                                            AMOUNT: membersWithRole.toString(),
+                                            S_Value: membersWithRole > 1 ? 's' : '',
+                                            ICON: intr.client.user.displayAvatarURL(),
+                                        }
+                                    )
+                                );
+                            } else if (membersWithRole > 100) {
+                                await InteractionUtils.send(
+                                    intr,
+                                    Lang.getEmbed(
+                                        'validation',
+                                        'embeds.birthdayRoleUsedError',
+                                        data.lang(),
+                                        {
+                                            AMOUNT: membersWithRole.toString(),
+                                            ICON: intr.client.user.displayAvatarURL(),
+                                        }
+                                    )
+                                );
+                                return;
+                            }
+
+                            return roleInput?.id;
+                        },
+                        async () => {
                             await InteractionUtils.send(
                                 intr,
-                                Lang.getEmbed(
-                                    'validation',
-                                    'embeds.roleHierarchyError',
-                                    data.lang(),
-                                    {
-                                        BOT: intr.client.user.toString(),
-                                        ICON: intr.client.user.displayAvatarURL(),
-                                    }
-                                )
+                                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                             );
-                            return;
                         }
-
-                        // Check if the role is managed
-                        if (roleInput.managed) {
-                            InteractionUtils.send(
-                                intr,
-                                Lang.getErrorEmbed(
-                                    'validation',
-                                    'errorEmbeds.birthdayRoleManaged',
-                                    data.lang()
-                                )
-                            );
-                            return;
-                        }
-
-                        let membersWithRole = roleInput.members.size;
-
-                        if (membersWithRole > 0 && membersWithRole < 100) {
-                            await InteractionUtils.send(
-                                intr,
-                                Lang.getEmbed(
-                                    'validation',
-                                    'embeds.birthdayRoleUsedWarning',
-                                    data.lang(),
-                                    {
-                                        AMOUNT: membersWithRole.toString(),
-                                        S_Value: membersWithRole > 1 ? 's' : '',
-                                        ICON: intr.client.user.displayAvatarURL(),
-                                    }
-                                )
-                            );
-                        } else if (membersWithRole > 100) {
-                            await InteractionUtils.send(
-                                intr,
-                                Lang.getEmbed(
-                                    'validation',
-                                    'embeds.birthdayRoleUsedError',
-                                    data.lang(),
-                                    {
-                                        AMOUNT: membersWithRole.toString(),
-                                        ICON: intr.client.user.displayAvatarURL(),
-                                    }
-                                )
-                            );
-                            return;
-                        }
-
-                        return roleInput?.id;
-                    });
+                    );
 
                     if (role === undefined) {
                         return;
@@ -226,16 +243,18 @@ export class RoleSubCommand implements Command {
                     );
                     break;
                 }
-                case Config.emotes.deny: {
+                case 'deny': {
                     role = '0';
                     break;
                 }
             }
+
+            nextIntr = roleResult.intr;
         } else role = '0';
 
         if (role === '0') {
             await InteractionUtils.send(
-                intr,
+                nextIntr,
                 Lang.getSuccessEmbed('results', 'successEmbeds.roleClear', data.lang(), {
                     TYPE: displayType.toLowerCase(),
                 })
