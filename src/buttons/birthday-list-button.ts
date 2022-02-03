@@ -24,7 +24,6 @@ export class BirthdayListButton implements Button {
 
     public async execute(intr: ButtonInteraction, msg: Message, data: EventData): Promise<void> {
         let embed = msg.embeds[0];
-        embed.description = 'Processing request...';
 
         let components = msg.components;
         components[0].components = components[0].components.map(c => c.setDisabled(true));
