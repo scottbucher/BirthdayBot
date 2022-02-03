@@ -17,7 +17,7 @@ export class MemberAnniversaryListButton implements Button {
         'member_anniversary_list_next_more',
         'member_anniversary_list_refresh',
     ];
-    public deferType = ButtonDeferType.NONE;
+    public deferType = ButtonDeferType.UPDATE;
     public requireGuild = true;
 
     public async execute(intr: ButtonInteraction, msg: Message, data: EventData): Promise<void> {
@@ -82,7 +82,7 @@ export class MemberAnniversaryListButton implements Button {
             data
         );
 
-        await InteractionUtils.update(intr, newEmbed);
+        await InteractionUtils.editReply(intr, newEmbed);
         return;
     }
 }

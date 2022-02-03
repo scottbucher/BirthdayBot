@@ -20,7 +20,7 @@ export class ServerAnniversaryMessageButton implements Button {
         'server_anniversary_message_next_more',
         'server_anniversary_message_refresh',
     ];
-    public deferType = ButtonDeferType.NONE;
+    public deferType = ButtonDeferType.UPDATE;
     public requireGuild = true;
 
     constructor(private customMessageRepo: CustomMessageRepo) {}
@@ -57,7 +57,7 @@ export class ServerAnniversaryMessageButton implements Button {
             data
         );
 
-        await InteractionUtils.update(intr, newEmbed);
+        await InteractionUtils.editReply(intr, newEmbed);
         return;
     }
 }

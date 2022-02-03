@@ -17,7 +17,7 @@ export class TrustedRoleButton implements Button {
         'trusted_next_more',
         'trusted_refresh',
     ];
-    public deferType = ButtonDeferType.NONE;
+    public deferType = ButtonDeferType.UPDATE;
     public requireGuild = true;
 
     constructor(private trustedRoleRepo: TrustedRoleRepo) {}
@@ -49,7 +49,7 @@ export class TrustedRoleButton implements Button {
             data
         );
 
-        await InteractionUtils.update(intr, newEmbed);
+        await InteractionUtils.editReply(intr, newEmbed);
         return;
     }
 }

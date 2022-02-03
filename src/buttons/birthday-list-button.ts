@@ -17,7 +17,7 @@ export class BirthdayListButton implements Button {
         'birthday_list_next_more',
         'birthday_list_refresh',
     ];
-    public deferType = ButtonDeferType.NONE;
+    public deferType = ButtonDeferType.UPDATE;
     public requireGuild = true;
 
     constructor(private userRepo: UserRepo) {}
@@ -61,7 +61,7 @@ export class BirthdayListButton implements Button {
             data
         );
 
-        await InteractionUtils.update(intr, newEmbed);
+        await InteractionUtils.editReply(intr, newEmbed);
         return;
     }
 }

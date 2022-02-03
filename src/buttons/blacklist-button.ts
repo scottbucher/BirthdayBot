@@ -17,7 +17,7 @@ export class BlacklistButton implements Button {
         'blacklist_next_more',
         'blacklist_refresh',
     ];
-    public deferType = ButtonDeferType.NONE;
+    public deferType = ButtonDeferType.UPDATE;
     public requireGuild = true;
 
     constructor(private blacklistRepo: BlacklistRepo) {}
@@ -52,7 +52,7 @@ export class BlacklistButton implements Button {
             data
         );
 
-        await InteractionUtils.update(intr, newEmbed);
+        await InteractionUtils.editReply(intr, newEmbed);
         return;
     }
 }

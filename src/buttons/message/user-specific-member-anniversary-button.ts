@@ -20,7 +20,7 @@ export class UserSpecificMemberAnniversaryMessageButton implements Button {
         'user_specific_member_anniversary_message_next_more',
         'user_specific_member_anniversary_message_refresh',
     ];
-    public deferType = ButtonDeferType.NONE;
+    public deferType = ButtonDeferType.UPDATE;
     public requireGuild = true;
 
     constructor(private customMessageRepo: CustomMessageRepo) {}
@@ -57,7 +57,7 @@ export class UserSpecificMemberAnniversaryMessageButton implements Button {
             data
         );
 
-        await InteractionUtils.update(intr, newEmbed);
+        await InteractionUtils.editReply(intr, newEmbed);
         return;
     }
 }
