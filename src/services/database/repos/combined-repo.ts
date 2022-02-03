@@ -32,8 +32,8 @@ export class CombinedRepo {
             Procedure.Combined_GetGuildAndUserVote,
             [guildDiscordId, userDiscordId]
         );
-        let guildData = SqlUtils.getTable(results, 0);
-        let voteData = SqlUtils.getTable(results, 1);
+        let guildData = SqlUtils.getRow(results, 0, 0);
+        let voteData = SqlUtils.getRow(results, 1, 0);
         return new GuildDataAndVote(guildData, voteData);
     }
 }

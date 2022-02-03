@@ -392,13 +392,13 @@ export class FormatUtils {
 
         if (!roleInput || roleInput.guild.id !== guild.id) {
             if (
-                mentionSetting.toLowerCase() === 'everyone' ||
-                mentionSetting.toLowerCase() === 'here'
+                mentionSetting?.toLowerCase() === 'everyone' ||
+                mentionSetting?.toLowerCase() === 'here'
             ) {
                 return '@' + mentionSetting;
             }
         } else {
-            return roleInput.toString();
+            return roleInput?.toString();
         }
         return 'none';
     }
