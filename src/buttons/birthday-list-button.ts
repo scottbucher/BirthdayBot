@@ -24,6 +24,15 @@ export class BirthdayListButton implements Button {
 
     public async execute(intr: ButtonInteraction, msg: Message, data: EventData): Promise<void> {
         let embed = msg.embeds[0];
+        embed.description = 'Processing request...';
+
+        let components = msg.components;
+        components[0].components = components[0].components.map(c => c.setDisabled(true));
+
+        await InteractionUtils.editReply(intr, {
+            embeds: [embed],
+            components: components,
+        });
 
         let pageNum = RegexUtils.pageNumber(embed.title);
         if (pageNum === undefined) {
@@ -61,7 +70,12 @@ export class BirthdayListButton implements Button {
             data
         );
 
-        await InteractionUtils.editReply(intr, newEmbed);
+        components[0].components = components[0].components.map(c => c.setDisabled(false));
+
+        await InteractionUtils.editReply(intr, {
+            embeds: [newEmbed],
+            components: components,
+        });
         return;
     }
 }
