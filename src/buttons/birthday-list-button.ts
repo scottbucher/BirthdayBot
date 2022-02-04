@@ -42,9 +42,8 @@ export class BirthdayListButton implements Button {
             pageNum,
             intr.customId.replace(/^birthday_list_/, '')
         );
-        if (newPageNum === undefined) {
-            return;
-        }
+        if (newPageNum === undefined) return;
+        if (newPageNum <= 0) newPageNum = 1;
 
         let guildMembers = intr.guild.members.cache;
 

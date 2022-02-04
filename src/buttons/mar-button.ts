@@ -25,9 +25,8 @@ export class MarButton implements Button {
         }
 
         let newPageNum = ButtonUtils.getNewPageNum(pageNum, intr.customId.replace(/^mar_/, ''));
-        if (newPageNum === undefined) {
-            return;
-        }
+        if (newPageNum === undefined) return;
+        if (newPageNum <= 0) newPageNum = 1;
 
         let marData = await this.marRepo.getMemberAnniversaryRoleList(
             intr.guild.id,

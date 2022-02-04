@@ -34,9 +34,8 @@ export class BlacklistButton implements Button {
             pageNum,
             intr.customId.replace(/^blacklist_/, '')
         );
-        if (newPageNum === undefined) {
-            return;
-        }
+        if (newPageNum === undefined) return;
+        if (newPageNum <= 0) newPageNum = 1;
 
         let blacklistData = await this.blacklistRepo.getBlacklistList(
             intr.guild.id,

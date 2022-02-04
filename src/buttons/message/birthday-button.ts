@@ -37,9 +37,8 @@ export class BirthdayMessageButton implements Button {
             pageNum,
             intr.customId.replace(/^birthday_message_/, '')
         );
-        if (newPageNum === undefined) {
-            return;
-        }
+        if (newPageNum === undefined) return;
+        if (newPageNum <= 0) newPageNum = 1;
 
         let customMessageData = await this.customMessageRepo.getCustomMessageList(
             intr.guild.id,

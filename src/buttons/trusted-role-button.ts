@@ -31,9 +31,8 @@ export class TrustedRoleButton implements Button {
         }
 
         let newPageNum = ButtonUtils.getNewPageNum(pageNum, intr.customId.replace(/^trusted_/, ''));
-        if (newPageNum === undefined) {
-            return;
-        }
+        if (newPageNum === undefined) return;
+        if (newPageNum <= 0) newPageNum = 1;
 
         let trustedRoleData = await this.trustedRoleRepo.getTrustedRoleList(
             intr.guild.id,

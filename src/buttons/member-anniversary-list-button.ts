@@ -33,9 +33,8 @@ export class MemberAnniversaryListButton implements Button {
             intr.customId.replace(/^member_anniversary_list_/, '')
         );
 
-        if (newPageNum === undefined) {
-            return;
-        }
+        if (newPageNum === undefined) return;
+        if (newPageNum <= 0) newPageNum = 1;
 
         let date: moment.MomentInput;
 
