@@ -94,7 +94,7 @@ import {
     TriggerHandler,
 } from './events/index.js';
 import { CustomClient } from './extensions/index.js';
-import { Job } from './jobs/index.js';
+import { CelebrationJob, Job, UpdateMemberCacheJob } from './jobs/index.js';
 import { Reaction } from './reactions/index.js';
 import { DataAccess } from './services/database/index.js';
 import {
@@ -106,7 +106,13 @@ import {
     TrustedRoleRepo,
     UserRepo,
 } from './services/database/repos/index.js';
-import { HttpService, JobService, Logger, SubscriptionService } from './services/index.js';
+import {
+    CelebrationService,
+    HttpService,
+    JobService,
+    Logger,
+    SubscriptionService,
+} from './services/index.js';
 import { OldPrefixTrigger, Trigger } from './triggers/index.js';
 
 const require = createRequire(import.meta.url);
@@ -131,6 +137,7 @@ async function start(): Promise<void> {
     let dataAccess = new DataAccess(Config.mysql);
     let httpService = new HttpService();
     let subService = new SubscriptionService(httpService);
+    let celebrationService = new CelebrationService();
 
     // Repos
     let guildRepo = new GuildRepo(dataAccess);
@@ -298,7 +305,8 @@ async function start(): Promise<void> {
 
     // Jobs
     let jobs: Job[] = [
-        // TODO: Add new jobs here
+        new CelebrationJob(client, userRepo, combinedRepo, celebrationService, subService),
+        new UpdateMemberCacheJob(client),
     ];
 
     // Bot
