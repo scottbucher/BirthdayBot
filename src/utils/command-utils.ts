@@ -115,7 +115,9 @@ export class CommandUtils {
                 ) {
                     await InteractionUtils.send(
                         intr,
-                        Lang.getEmbed('validation', 'embeds.premiumRequired', data.lang())
+                        Lang.getEmbed('validation', 'embeds.premiumRequired', data.lang(), {
+                            ICON: intr.client.user.displayAvatarURL(),
+                        })
                     );
                     return false;
                 }
@@ -133,6 +135,7 @@ export class CommandUtils {
                             intr,
                             Lang.getEmbed('validation', 'embeds.voteRequired', data.lang(), {
                                 LAST_VOTE: voteTimeAgo,
+                                ICON: intr.client.user.displayAvatarURL(),
                             })
                         );
                         return false;
