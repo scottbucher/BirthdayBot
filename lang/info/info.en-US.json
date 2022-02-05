@@ -14,8 +14,7 @@
                     "For more support join the {{COM:bot.name}} support server [here]({{COM:links.support}})!"
                 ],
                 "footer": {
-                    "text": "{{REF:footers.joinSupport}}",
-                    "icon": "{{ICON}}"
+                    "text": "{{REF:footers.joinSupport}}"
                 },
                 "timestamp": true
             },
