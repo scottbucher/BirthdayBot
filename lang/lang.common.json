@@ -1,6 +1,7 @@
 {
     "bot": {
         "name": "Birthday Bot",
+        "id": "<BOT_ID>",
         "author": "Scott Bucher"
     },
     "commands": {
@@ -109,7 +110,7 @@
         "party": "🎉"
     },
     "links": {
-        "invite": "https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268921936&scope=bot%20applications.commands",
+        "invite": "https://discord.com/api/oauth2/authorize?client_id={{COM:bot.id}}&permissions=268921936&scope=bot%20applications.commands",
         "support": "https://discord.gg/9gUQFtz",
         "docs": "https://birthdaybot.scottbucher.dev",
         "vote": "https://top.gg/bot/656621136808902656/vote",
