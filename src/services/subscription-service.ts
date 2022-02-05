@@ -39,7 +39,7 @@ export class SubscriptionService {
 
         if (!res.ok) return;
 
-        (await res.json()) as SubscriptionStatus;
+        return (await res.json()) as SubscriptionStatus;
     }
 
     public async getAllSubscription(planName: string): Promise<SubscriptionStatus[]> {
