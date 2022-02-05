@@ -76,7 +76,8 @@
         "date": "date",
         "timezone": "timezone",
         "userCount": "user_count",
-        "category": "category"
+        "category": "category",
+        "link": "link"
     },
     "settingType": {
         "nameFormat": "nameFormat",
