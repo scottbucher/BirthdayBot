@@ -125,19 +125,20 @@
                             "- You can make multiple submissions!"
                         ]
                     }
-                ]
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Logo Competition ● Join The support server for more information!",
+                    "icon": "{{ICON}}"
+                }
             }
         },
         "help": {
             "general": {
-                "author": {
-                    "name": "{{COM:bot.name}} General Help",
-                    "icon": "{{ICON}}",
-                    "url": "{{COM:docLinks.faq}}"
-                },
                 "title": "{{COM:bot.name}} General Help",
                 "description": [
                     "{{COM:bot.name}} helps your server celebrate birthdays with automatic birthday roles and announcements.",
+                    "",
+                    "**/logo** - Learn about the Birthday Bot Logo Competition! (Win prizes!)",
                     "",
                     "**/premium** - See information about {{COM:bot.name}} Premium.",
                     "**/subscribe** - Subscribe to {{COM:bot.name}} Premium!",
@@ -165,14 +166,13 @@
                         "name": "Legend",
                         "value": "** = Server Only Command"
                     }
-                ]
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} General Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
             },
             "blacklist": {
-                "author": {
-                    "name": "{{COM:bot.name}} Blacklist Help",
-                    "icon": "{{ICON}}",
-                    "url": "{{COM:docLinks.faq}}"
-                },
                 "title": "{{COM:bot.name}} Blacklist Help - Guild Only",
                 "description": [
                     "**/blacklist add <user/role>** - Add user/role to the blacklist.",
@@ -182,15 +182,14 @@
                     "**/blacklist list [page]** - View all blacklisted users/roles in your server.",
                     "",
                     "If you have any question/problems please join our support server [here]({{COM:links.support}})."
-                ]
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Blacklist Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
             },
             "config": {
-                "author": {
-                    "name": "{{COM:bot.name}} Setup Help",
-                    "icon": "{{ICON}}",
-                    "url": "{{COM:docLinks.faq}}"
-                },
-                "title": "{{COM:bot.name}} Setup Help - Guild Only",
+                "title": "{{COM:bot.name}} Config Help - Guild Only",
                 "description": [
                     "The [reset] option for all commands resets that setting to it's default value.",
                     "",
@@ -207,14 +206,13 @@
                     "**/config role [reset]** - Configure the roles {{COM:bot.name}} will use.",
                     "",
                     "If you have any question/problems please join our support server [here]({{COM:links.support}})."
-                ]
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Config Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
             },
             "message": {
-                "author": {
-                    "name": "{{COM:bot.name}} Message Help",
-                    "icon": "{{ICON}}",
-                    "url": "{{COM:docLinks.faq}}"
-                },
                 "title": "{{COM:bot.name}} Message Help - Guild Only",
                 "description": [
                     "**/message list <type> [page]** - List all messages for that type.",
@@ -233,14 +231,13 @@
                     "**/message {{REF:types.test}} <type> <position> [user count]** - Test a custom message.",
                     "",
                     "If you have any question/problems please join our support server [here]({{COM:links.support}})."
-                ]
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Message Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
             },
             "trusted": {
-                "author": {
-                    "name": "{{COM:bot.name}} Trusted Help",
-                    "icon": "{{ICON}}",
-                    "url": "{{COM:docLinks.faq}}"
-                },
                 "title": "{{COM:bot.name}} Trusted System Help - Guild Only",
                 "description": [
                     "**/setup {{REF:types.trusted}}** - Interactive guide for trusted system settings setup.",
@@ -255,14 +252,13 @@
                     "**/config {{REF:types.trustedPreventsRole}} <T/F>** - If trusted role is required to get the birthday role.",
                     "",
                     "If you have any question/problems please join our support server [here]({{COM:links.support}})."
-                ]
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Trusted System Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
             },
             "mar": {
-                "author": {
-                    "name": "{{COM:bot.name}} Member Anniversary Role Help",
-                    "icon": "{{ICON}}",
-                    "url": "{{COM:docLinks.faq}}"
-                },
                 "title": "{{COM:bot.name}} Member Anniversary Role Help - Guild Only",
                 "description": [
                     "**/memberAnniversaryRole add <year> <role>** - Add a member anniversary role.",
@@ -271,14 +267,13 @@
                     "**/memberAnniversaryRole list [page]** - List all member anniversary roles.",
                     "",
                     "If you have any question/problems please join our support server [here]({{COM:links.support}})."
-                ]
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Member Anniversary Role Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
             },
             "premium": {
-                "author": {
-                    "name": "Birthday Bot Premium Help",
-                    "icon": "{{ICON}}",
-                    "url": "{{COM:docLinks.faq}}"
-                },
                 "title": "{{COM:bot.name}} Premium Help - Guild Only",
                 "description": [
                     "**/premium** - View information about your server's premium.",
@@ -295,7 +290,11 @@
                     "**/memberAnniversaryRole list [page]** - List all member anniversary roles.",
                     "",
                     "If you have any question/problems please join our support server [here]({{COM:links.support}})."
-                ]
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Premium Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
             }
         },
         "info": {

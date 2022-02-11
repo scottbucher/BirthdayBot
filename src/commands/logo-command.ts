@@ -22,7 +22,9 @@ export class LogoCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         await InteractionUtils.send(
             intr,
-            Lang.getEmbed('info', 'embeds.logoCompetition', data.lang())
+            Lang.getEmbed('info', 'embeds.logoCompetition', data.lang(), {
+                ICON: intr.client.user.displayAvatarURL(),
+            })
         );
     }
 }

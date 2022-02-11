@@ -71,42 +71,49 @@ export class HelpCommand implements Command {
             case 'general': {
                 embed = Lang.getEmbed('info', 'help.general', data.lang(), {
                     BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 });
                 break;
             }
             case 'blacklist': {
                 embed = Lang.getEmbed('info', 'help.blacklist', data.lang(), {
                     BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 });
                 break;
             }
             case 'config': {
                 embed = Lang.getEmbed('info', 'help.config', data.lang(), {
                     BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 });
                 break;
             }
             case 'message': {
                 embed = Lang.getEmbed('info', 'help.message', data.lang(), {
                     BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 });
                 break;
             }
             case 'trusted_role': {
                 embed = Lang.getEmbed('info', 'help.trusted', data.lang(), {
                     BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 });
                 break;
             }
             case 'member_anniversary_role': {
                 embed = Lang.getEmbed('info', 'help.mar', data.lang(), {
                     BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 });
                 break;
             }
             case 'premium': {
                 embed = Lang.getEmbed('info', 'help.premium', data.lang(), {
                     BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 });
                 break;
             }
