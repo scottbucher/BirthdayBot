@@ -1,4 +1,5 @@
 import { ActivityType, ShardingManager } from 'discord.js';
+import moment from 'moment';
 import { createRequire } from 'node:module';
 
 import { CustomClient } from '../extensions/index.js';
@@ -26,8 +27,13 @@ export class UpdateServerCountJob implements Job {
     public async run(): Promise<void> {
         let serverCount = await ShardUtils.serverCount(this.shardManager);
 
+        let minute = moment().minute();
+
         let type: ActivityType = 'STREAMING';
-        let name = `to ${serverCount.toLocaleString()} servers`;
+        let name =
+            (minute / 5) % 2 === 0
+                ? `to ${serverCount.toLocaleString()} servers`
+                : `Check out /logo!`;
         let url = Lang.getCom('links.stream');
 
         await this.shardManager.broadcastEval(
