@@ -104,10 +104,8 @@ export class SetCommand implements Command {
 
         let nextIntr: CommandInteraction | ButtonInteraction = intr;
 
-        // TODO: Default Timezone Suggestion is broken
-        if (!(intr.channel instanceof DMChannel) && !data.guild)
+        if (!(intr.channel instanceof DMChannel) && data.guild)
             if (
-                data.guild &&
                 data.guild?.DefaultTimezone !== '0' &&
                 (!timeZone || timeZone !== data.guild?.DefaultTimezone)
             ) {
