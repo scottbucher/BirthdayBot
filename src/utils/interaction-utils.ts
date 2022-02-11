@@ -55,28 +55,28 @@ export class InteractionUtils {
         content: string | MessageEmbed | MessageOptions,
         hidden: boolean = false
     ): Promise<Message> {
-        try {
-            let msgOptions = MessageUtils.messageOptions(content);
+        // try {
+        let msgOptions = MessageUtils.messageOptions(content);
 
-            if (intr.deferred || intr.replied) {
-                return (await intr.followUp({
-                    ...msgOptions,
-                    ephemeral: hidden,
-                })) as Message;
-            } else {
-                return (await intr.reply({
-                    ...msgOptions,
-                    ephemeral: hidden,
-                    fetchReply: true,
-                })) as Message;
-            }
-        } catch (error) {
-            if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
-                return;
-            } else {
-                throw error;
-            }
+        if (intr.deferred || intr.replied) {
+            return (await intr.followUp({
+                ...msgOptions,
+                ephemeral: hidden,
+            })) as Message;
+        } else {
+            return (await intr.reply({
+                ...msgOptions,
+                ephemeral: hidden,
+                fetchReply: true,
+            })) as Message;
         }
+        // } catch (error) {
+        //     if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
+        //         return;
+        //     } else {
+        //         throw error;
+        //     }
+        // }
     }
 
     public static async editReply(
