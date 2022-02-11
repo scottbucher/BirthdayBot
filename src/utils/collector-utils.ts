@@ -127,6 +127,10 @@ export class CollectorUtils {
             ],
         });
 
+        if (!prompt) {
+            return;
+        }
+
         return await CollectorUtils.collectByButton(
             prompt,
             commandIntr.user,
