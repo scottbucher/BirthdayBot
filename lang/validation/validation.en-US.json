@@ -185,14 +185,14 @@
             "noUserPlaceholder": {
                 "description": [
                     "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where the member names will appear.",
-                    "Ex: `/message add {{TYPE}} {{EXAMPLE_MESSAGE}}`"
+                    "Ex: `/message add type:{{TYPE}} message:{{EXAMPLE_MESSAGE}}`"
                 ],
                 "color": "{{COM:colors.error}}"
             },
             "noServerPlaceholder": {
                 "description": [
                     "Please include the `{{REF:placeHolders.server}}` placeholder somewhere in the message. This indicates where the server name will appear.",
-                    "Ex: `/message add serverAnniversary {{REF:defaults.serverAnniversaryMessage}}`",
+                    "Ex: `/message add type:serverAnniversary message:{{REF:defaults.serverAnniversaryMessage}}`",
                     "",
                     "Tip: You can also use the `{{REF:placeHolders.year}}` placeholder for the anniversary year."
                 ],
@@ -212,7 +212,7 @@
                 "title": "Test Custom Message",
                 "description": [
                     "Message does not exist!",
-                    "View your server's custom messages with `/message list <type>`!"
+                    "View your server's custom messages with `/message list`!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.actionFailed}}",

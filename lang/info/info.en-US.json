@@ -278,7 +278,7 @@
                 "description": [
                     "**/premium** - View information about your server's premium.",
                     "**/message {{REF:types.add}} <type> <message>** - Add a user specific message for that type.",
-                    " - Example Usage: `/message add type:birthday Happy Birthday @Stqlth!`",
+                    " - Example Usage: `/message add type:birthday message:Happy Birthday @Stqlth!`",
                     " - Placeholder for year: `{{REF:placeHolders.year}}`",
                     " - Placeholder for server name: `{{REF:placeHolders.server}}`",
                     "**/message edit color <type> <position> <color/hex>** - Update a message's color setting.",
@@ -808,7 +808,7 @@
             "blacklist": {
                 "title": "{{REF:terms.blacklistList}} | {{REF:list.pageTitle}}",
                 "description": [
-                    "*Users on this list or who have roles on this list will not have their birthdays celebrated no matter what. Edit this list with `/blacklist <add/remove> <User/Role>`!*",
+                    "*Users on this list or who have roles on this list will not have their birthdays celebrated no matter what. Edit this list with `/blacklist`!*",
                     "",
                     "{{LIST_DATA}}"
                 ],
