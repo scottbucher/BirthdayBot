@@ -30,7 +30,8 @@
         "vote": "vote",
         "list": "list",
         "map": "map",
-        "donate": "donate"
+        "donate": "donate",
+        "logo": "logo"
     },
     "subCommands": {
         "add": "add",
@@ -126,7 +127,11 @@
         "template": "https://github.com/KevinNovak/Discord-Bot-TypeScript-Template",
         "templateEmbed": "[Discord Bot TypeScript Template]({{COM:links.template}})",
         "timeZonePicker": "https://kevinnovak.github.io/Time-Zone-Picker/",
-        "voteImage": "https://i.imgur.com/wak8g4V.png"
+        "voteImage": "https://i.imgur.com/wak8g4V.png",
+        "source": "https://www.github.com/scottbucher/birthdaybot",
+        "sourceEmbed": "[View Source Code]({{COM:links.source}})",
+        "docsEmbed": "[View Documentation]({{COM:links.docs}})",
+        "donateEmbed": "[Donate via PayPal]({{COM:links.donate}})"
     },
     "docLinks": {
         "faq": "{{COM:links.docs}}/faq-1/general",

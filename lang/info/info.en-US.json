@@ -27,11 +27,11 @@
                         "value": ["**/{{COM:commands.help}}** - {{REF:commandDescs.help}}"]
                     },
                     {
-                        "name": "{{REF:fields.links}}",
+                        "name": "Links",
                         "value": [
-                            "{{REF:links.docsEmbed}}",
-                            "{{REF:links.supportEmbed}}",
-                            "{{REF:links.inviteEmbed}}"
+                            "{{COM:links.docsEmbed}}",
+                            "{{COM:links.supportEmbed}}",
+                            "{{COM:links.inviteEmbed}}"
                         ]
                     }
                 ]
@@ -39,20 +39,20 @@
             "info": {
                 "title": "{{COM:bot.name}} - Info",
                 "fields": [
-                    { "name": "Author", "value": "{{REF:links.authorEmbed}}" },
+                    { "name": "Author", "value": "{{COM:links.authorEmbed}}" },
                     {
-                        "name": "{{REF:fields.links}}",
+                        "name": "Links",
                         "value": [
-                            "{{REF:links.sourceEmbed}}",
-                            "{{REF:links.docsEmbed}}",
-                            "{{REF:links.donateEmbed}}",
-                            "{{REF:links.supportEmbed}}",
-                            "{{REF:links.inviteEmbed}}"
+                            "{{COM:links.sourceEmbed}}",
+                            "{{COM:links.docsEmbed}}",
+                            "{{COM:links.donateEmbed}}",
+                            "{{COM:links.supportEmbed}}",
+                            "{{COM:links.inviteEmbed}}"
                         ]
                     },
                     {
                         "name": "Created With",
-                        "value": ["{{REF:links.templateEmbed}}"]
+                        "value": ["{{COM:links.templateEmbed}}"]
                     }
                 ]
             },
@@ -87,6 +87,45 @@
             "support": {
                 "description": "For support join our discord server [here]({{COM:links.support}})!",
                 "color": "{{COM:colors.default}}"
+            },
+            "logoCompetition": {
+                "title": "{{COM:bot.name}} Logo Competition",
+                "description": [
+                    "{{COM:bot.name}} is looking for a new logo! From now until TBD we are accepting submissions for the new logo!",
+                    "",
+                    "The winning logo will be used by the bot and the artist will be credited and linked in the bot!",
+                    "",
+                    "[Submit your logo designs here!](https://forms.gle/PFGsh4Wsp2BUYucdA)"
+                ],
+                "fields": [
+                    {
+                        "name": "Prizes",
+                        "value": [
+                            "__1st Place__",
+                            "- Will be the new logo of Birthday Bot!",
+                            "- Credited and linked in the bot!",
+                            "- 1 Year of Birthday Bot Premium. ($36 value)",
+                            "",
+                            "__2nd Place__",
+                            "- 4 Months of Birthday Bot Premium. ($12 value)",
+                            "",
+                            "__3rd Place__",
+                            "- 2 Months of Birthday Bot Premium. ($6 value)"
+                        ]
+                    },
+                    {
+                        "name": "Specifications/Tips",
+                        "value": [
+                            "- Ensure the logo looks good when used in Discord.",
+                            "",
+                            "- The logo should relate to birthdays/celebrations (the theme of the bot)!",
+                            "",
+                            "- Discord limits profile pictures to a maximum of 128x128 pixels, however, it is preferred that you use a larger image so it can be used in other areas such as the website, GitHub, etc. with a scaled down version for the Discord profile picture.",
+                            "",
+                            "- You can make multiple submissions!"
+                        ]
+                    }
+                ]
             }
         },
         "help": {
@@ -264,13 +303,13 @@
             "fields": [
                 { "name": "Author", "value": "{{REF:links.authorEmbed}}" },
                 {
-                    "name": "{{REF:fields.links}}",
+                    "name": "Links",
                     "value": [
-                        "{{REF:links.sourceEmbed}}",
-                        "{{REF:links.docsEmbed}}",
-                        "{{REF:links.donateEmbed}}",
-                        "{{REF:links.supportEmbed}}",
-                        "{{REF:links.inviteEmbed}}"
+                        "{{COM:links.sourceEmbed}}",
+                        "{{COM:links.docsEmbed}}",
+                        "{{COM:links.donateEmbed}}",
+                        "{{COM:links.supportEmbed}}",
+                        "{{COM:links.inviteEmbed}}"
                     ]
                 },
                 {

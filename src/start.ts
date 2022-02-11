@@ -44,6 +44,7 @@ import {
     InfoCommand,
     LinkCommand,
     ListCommand,
+    LogoCommand,
     MapCommand,
     NextCommand,
     PremiumCommand,
@@ -264,6 +265,7 @@ async function start(): Promise<void> {
         new SubscribeCommand(subService),
         new VoteCommand(),
         new DonateCommand(),
+        new LogoCommand(),
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Buttons
