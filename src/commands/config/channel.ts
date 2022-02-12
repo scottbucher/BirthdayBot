@@ -220,13 +220,12 @@ export class ChannelSubCommand implements Command {
                     );
                     break;
                 }
-                case 'deny':
-                    {
-                        channel = '0';
-                        break;
-                    }
-                    nextIntr = channelResult.intr;
+                case 'deny': {
+                    channel = '0';
+                    break;
+                }
             }
+            nextIntr = channelResult.intr;
         } else channel = '0';
 
         if (channel === '0') {

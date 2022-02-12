@@ -94,6 +94,8 @@ export class RoleSubCommand implements Command {
 
             if (roleResult === undefined) return;
 
+            nextIntr = roleResult.intr;
+
             switch (roleResult.value) {
                 case 'create': {
                     // Create role with desired attributes
@@ -113,7 +115,7 @@ export class RoleSubCommand implements Command {
                         })
                     )?.id;
                     await InteractionUtils.send(
-                        intr,
+                        nextIntr,
                         Lang.getSuccessEmbed('results', 'successEmbeds.roleCreate', data.lang(), {
                             ROLE: `<@&${role}>`,
                         })
@@ -209,7 +211,7 @@ export class RoleSubCommand implements Command {
                                 );
                             } else if (membersWithRole > 100) {
                                 await InteractionUtils.send(
-                                    intr,
+                                    nextIntr,
                                     Lang.getEmbed(
                                         'validation',
                                         'embeds.birthdayRoleUsedError',
@@ -227,7 +229,7 @@ export class RoleSubCommand implements Command {
                         },
                         async () => {
                             await InteractionUtils.send(
-                                intr,
+                                nextIntr,
                                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                             );
                         }
@@ -237,7 +239,7 @@ export class RoleSubCommand implements Command {
                         return;
                     }
                     await InteractionUtils.send(
-                        intr,
+                        nextIntr,
                         Lang.getSuccessEmbed('results', 'successEmbeds.roleSet', data.lang(), {
                             ROLE: `<@&${role}>`,
                             TYPE: displayType.toLowerCase(),
@@ -250,8 +252,6 @@ export class RoleSubCommand implements Command {
                     break;
                 }
             }
-
-            nextIntr = roleResult.intr;
         } else role = '0';
 
         if (role === '0') {
