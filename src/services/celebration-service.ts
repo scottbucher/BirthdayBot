@@ -600,6 +600,20 @@ export class CelebrationService {
                         );
 
                         if (message) {
+                            let mentionString =
+                                guildCelebrationData.guildData.ServerAnniversaryMentionSetting !==
+                                'none'
+                                    ? CelebrationUtils.getMentionString(
+                                          guildCelebrationData.guildData,
+                                          guild,
+                                          'serveranniversary'
+                                      )
+                                    : '';
+
+                            // Only send one mention string per celebration message type
+                            if (mentionString && mentionString !== '')
+                                await MessageUtils.send(serverAnniversaryChannel, mentionString);
+
                             await MessageUtils.sendWithDelay(
                                 serverAnniversaryChannel,
                                 message,
