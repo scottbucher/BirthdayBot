@@ -15,6 +15,7 @@ export class VoteCommand implements Command {
     public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

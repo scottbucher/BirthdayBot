@@ -86,6 +86,7 @@ export class TrustedRoleCommand implements Command {
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

@@ -23,6 +23,7 @@ export class NameFormatSubCommand implements Command {
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
     public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

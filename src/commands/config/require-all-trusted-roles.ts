@@ -27,6 +27,7 @@ export class RequireAllTrustedRolesSubCommand implements Command {
         'READ_MESSAGE_HISTORY',
     ];
     public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

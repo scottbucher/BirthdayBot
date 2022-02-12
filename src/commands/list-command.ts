@@ -53,6 +53,7 @@ export class ListCommand implements Command {
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
     public requireVote = true;
     public requirePremium = false;

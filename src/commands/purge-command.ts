@@ -22,6 +22,7 @@ export class PurgeCommand implements Command {
         'READ_MESSAGE_HISTORY',
     ];
     public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

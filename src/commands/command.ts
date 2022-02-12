@@ -2,6 +2,7 @@ import { ChatInputApplicationCommandData, CommandInteraction, PermissionString }
 import { RateLimiter } from 'discord.js-rate-limiter';
 
 import { EventData } from '../models/index.js';
+import { CustomRole } from '../services/validation/index.js';
 
 export interface Command {
     metadata: ChatInputApplicationCommandData;
@@ -11,6 +12,7 @@ export interface Command {
     requireGuild: boolean;
     requireClientPerms: PermissionString[];
     requireUserPerms: PermissionString[];
+    requireRole: CustomRole[];
     requireSetup: boolean;
     requireVote: boolean;
     requirePremium: boolean;
