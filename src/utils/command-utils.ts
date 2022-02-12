@@ -1,6 +1,5 @@
 import {
     CommandInteraction,
-    DMChannel,
     GuildChannel,
     GuildMember,
     NewsChannel,
