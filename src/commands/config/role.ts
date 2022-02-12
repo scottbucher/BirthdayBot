@@ -77,7 +77,7 @@ export class RoleSubCommand implements Command {
 
         let role: string;
 
-        let nextIntr: ButtonInteraction;
+        let nextIntr: CommandInteraction | ButtonInteraction = intr;
 
         if (!reset) {
             let guild = intr.guild;

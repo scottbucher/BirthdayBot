@@ -86,7 +86,7 @@ export class ChannelSubCommand implements Command {
 
         let channel: string;
 
-        let nextIntr: ButtonInteraction;
+        let nextIntr: CommandInteraction | ButtonInteraction = intr;
 
         if (!reset) {
             let guild = intr.guild;
