@@ -32,7 +32,7 @@ export class UpdateServerCountJob implements Job {
         let type: ActivityType = 'STREAMING';
         let name =
             (minute / 5) % 2 === 0
-                ? `to ${serverCount.toLocaleString()} servers`
+                ? `bdays to ${serverCount.toLocaleString()} servers`
                 : `Check out /logo!`;
         let url = Lang.getCom('links.stream');
 
