@@ -7,6 +7,7 @@ import {
     User,
 } from 'discord.js';
 
+import { CustomRole } from '../../models/enums/index.js';
 import { EventData } from '../../models/index.js';
 import { BlacklistRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -25,7 +26,7 @@ export class BlacklistRemoveRoleOrUserSubCommand implements Command {
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
+    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

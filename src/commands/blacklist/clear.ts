@@ -1,5 +1,6 @@
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
+import { CustomRole } from '../../models/enums/index.js';
 import { EventData } from '../../models/index.js';
 import { BlacklistRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -23,7 +24,7 @@ export class BlacklistClearSubCommand implements Command {
         'READ_MESSAGE_HISTORY',
     ];
     public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
+    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

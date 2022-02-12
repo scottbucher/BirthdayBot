@@ -8,6 +8,7 @@ import {
 } from 'discord.js';
 import { createRequire } from 'node:module';
 
+import { CustomRole } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { GuildRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
@@ -32,7 +33,7 @@ export class SetupCommand implements Command {
         'READ_MESSAGE_HISTORY',
     ];
     public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
+    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

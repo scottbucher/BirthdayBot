@@ -6,6 +6,7 @@ import {
 } from 'discord.js';
 import { createRequire } from 'node:module';
 
+import { CustomRole } from '../../models/enums/index.js';
 import { LangCode } from '../../models/enums/language.js';
 import { EventData } from '../../models/index.js';
 import { TrustedRoleRepo } from '../../services/database/repos/index.js';
@@ -27,7 +28,7 @@ export class TrustedRoleAddSubCommand implements Command {
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
+    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

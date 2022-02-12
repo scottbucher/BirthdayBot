@@ -1,7 +1,7 @@
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { CustomMessage } from '../../models/database/index.js';
-import { LangCode } from '../../models/enums/index.js';
+import { CustomRole, LangCode } from '../../models/enums/index.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -20,7 +20,7 @@ export class MessageRemoveSubCommand implements Command {
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
+    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

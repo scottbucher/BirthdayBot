@@ -1,6 +1,7 @@
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { CustomMessage, CustomMessages } from '../../models/database/custom-messages-models.js';
+import { CustomRole } from '../../models/enums/index.js';
 import { LangCode } from '../../models/enums/language.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
@@ -20,7 +21,7 @@ export class MessageEditColorSubCommand implements Command {
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
+    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

@@ -12,6 +12,7 @@ import { RateLimiter } from 'discord.js-rate-limiter';
 import { createRequire } from 'node:module';
 
 import { CustomMessage, MemberAnniversaryRole, UserData } from '../models/database/index.js';
+import { CustomRole } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { BlacklistRepo } from '../services/database/repos/blacklist-repo.js';
 import { CustomMessageRepo } from '../services/database/repos/custom-message-repo.js';
@@ -78,7 +79,7 @@ export class TestCommand implements Command {
     public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
+    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

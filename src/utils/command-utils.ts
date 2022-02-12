@@ -9,6 +9,7 @@ import {
 import { createRequire } from 'node:module';
 
 import { Command } from '../commands/index.js';
+import { GuildData } from '../models/database/index.js';
 import { Permission } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
@@ -94,7 +95,10 @@ export class CommandUtils {
 
                 // Check if the member has all the required user permissions for this command
                 // TODO: Remove "as GuildMember",  why does discord.js have intr.member as a "APIInteractionGuildMember"?
-                if (intr.member && !this.hasPermission(intr.member as GuildMember, command)) {
+                if (
+                    intr.member &&
+                    !this.hasPermission(intr.member as GuildMember, command, data.guild)
+                ) {
                     await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
@@ -149,7 +153,11 @@ export class CommandUtils {
         }
     }
 
-    private static hasPermission(member: GuildMember, command: Command): boolean {
+    private static hasPermission(
+        member: GuildMember,
+        command: Command,
+        guildData: GuildData
+    ): boolean {
         // Debug option to bypass permission checks
         if (Debug.skip.checkPerms) {
             return true;
@@ -167,6 +175,19 @@ export class CommandUtils {
         // Check if member has required permissions for command
         if (!member.permissions.has(command.requireUserPerms)) {
             return false;
+        }
+
+        // Check if command requires a role
+        if (command.requireRole.length === 0) {
+            return true;
+        }
+
+        // Check if member has one of the required roles
+        let memberRoles = member.roles.cache.map(role => role.id);
+        for (let role of command.requireRole) {
+            if (guildData[role] && memberRoles.includes(guildData[role])) {
+                return true;
+            }
         }
 
         return true;
