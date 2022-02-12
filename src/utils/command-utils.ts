@@ -62,7 +62,7 @@ export class CommandUtils {
         }
 
         switch (true) {
-            case intr.channel instanceof DMChannel: {
+            case !intr.inGuild(): {
                 return true;
             }
             case intr.channel instanceof TextChannel || intr.channel instanceof NewsChannel: {
