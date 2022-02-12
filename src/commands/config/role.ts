@@ -124,7 +124,7 @@ export class RoleSubCommand implements Command {
                 }
                 case 'select': {
                     let _selectMessage = await InteractionUtils.send(
-                        intr,
+                        nextIntr,
                         Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
                     );
 
@@ -211,7 +211,7 @@ export class RoleSubCommand implements Command {
                                 );
                             } else if (membersWithRole > 100) {
                                 await InteractionUtils.send(
-                                    nextIntr,
+                                    intr,
                                     Lang.getEmbed(
                                         'validation',
                                         'embeds.birthdayRoleUsedError',
@@ -229,7 +229,7 @@ export class RoleSubCommand implements Command {
                         },
                         async () => {
                             await InteractionUtils.send(
-                                nextIntr,
+                                intr,
                                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                             );
                         }
@@ -239,7 +239,7 @@ export class RoleSubCommand implements Command {
                         return;
                     }
                     await InteractionUtils.send(
-                        nextIntr,
+                        intr,
                         Lang.getSuccessEmbed('results', 'successEmbeds.roleSet', data.lang(), {
                             ROLE: `<@&${role}>`,
                             TYPE: displayType.toLowerCase(),
