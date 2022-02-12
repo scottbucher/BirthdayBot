@@ -12,7 +12,7 @@
             "DIRECT_MESSAGES",
             "DIRECT_MESSAGE_REACTIONS"
         ],
-        "partials": ["MESSAGE", "REACTION"],
+        "partials": ["MESSAGE", "CHANNEL", "REACTION"],
         "caches": {
             "BaseGuildEmojiManager": 0,
             "GuildBanManager": 0,
