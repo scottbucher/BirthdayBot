@@ -47,7 +47,7 @@ export class SetCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = false;
-    public requireClientPerms: PermissionString[] = [];
+    public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
