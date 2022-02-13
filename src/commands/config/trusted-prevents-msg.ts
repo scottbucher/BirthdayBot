@@ -22,12 +22,7 @@ export class TrustedPreventsMsgSubCommand implements Command {
     public deferType = undefined;
     public requireDev = false;
     public requireGuild = true;
-    public requireClientPerms: PermissionString[] = [
-        'ADD_REACTIONS',
-        'VIEW_CHANNEL',
-        'MANAGE_MESSAGES',
-        'READ_MESSAGE_HISTORY',
-    ];
+    public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
