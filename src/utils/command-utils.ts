@@ -182,14 +182,16 @@ export class CommandUtils {
             return true;
         }
 
-        // Check if member has one of the required roles
-        let memberRoles = member.roles.cache.map(role => role.id);
-        for (let role of command.requireRole) {
-            if (guildData[role] && memberRoles.includes(guildData[role])) {
-                return true;
+        if (guildData) {
+            // Check if member has one of the required roles
+            let memberRoles = member.roles.cache.map(role => role.id);
+            for (let role of command.requireRole) {
+                if (guildData[role] && memberRoles.includes(guildData[role])) {
+                    return true;
+                }
             }
         }
 
-        return true;
+        return false;
     }
 }
