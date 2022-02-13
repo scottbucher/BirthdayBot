@@ -26,7 +26,11 @@ export class SetupCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireGuild = true;
-    public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
+    public requireClientPerms: PermissionString[] = [
+        'VIEW_CHANNEL',
+        'MANAGE_CHANNELS',
+        'MANAGE_ROLES',
+    ];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = false;

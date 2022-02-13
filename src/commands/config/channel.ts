@@ -30,7 +30,7 @@ export class ChannelSubCommand implements Command {
     public deferType = undefined;
     public requireDev = false;
     public requireGuild = true;
-    public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
+    public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL', 'MANAGE_CHANNELS'];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
