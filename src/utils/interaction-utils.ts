@@ -1,8 +1,10 @@
 import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v9';
 import {
+    ButtonInteraction,
     CommandInteraction,
     DiscordAPIError,
     Message,
+    MessageActionRow,
     MessageComponentInteraction,
     MessageEmbed,
     MessageOptions,
@@ -48,6 +50,28 @@ export class InteractionUtils {
                 throw error;
             }
         }
+    }
+
+    public static async deferAndDisableButtons(intr: ButtonInteraction): Promise<void> {
+        await intr.deferUpdate();
+
+        await InteractionUtils.editReply(intr, {
+            components: this.setComponentsStatus(
+                intr.message.components as MessageActionRow[],
+                false
+            ),
+        });
+    }
+
+    public static setComponentsStatus(
+        rowComponents: MessageActionRow[],
+        enabled: boolean
+    ): MessageActionRow[] {
+        rowComponents.forEach(r => {
+            r.components = r.components.map(c => c.setDisabled(!enabled));
+        });
+
+        return rowComponents;
     }
 
     public static async send(

@@ -2,6 +2,7 @@ import {
     ButtonInteraction,
     CommandInteraction,
     Message,
+    MessageActionRow,
     MessageEmbed,
     MessageReaction,
     TextBasedChannel,
@@ -135,6 +136,22 @@ export class CollectorUtils {
             prompt,
             commandIntr.user,
             async (intr: ButtonInteraction) => {
+                try {
+                    await InteractionUtils.deferAndDisableButtons(intr);
+                } catch (error) {
+                    try {
+                        await InteractionUtils.editReply(intr, {
+                            components: InteractionUtils.setComponentsStatus(
+                                intr.message.components as MessageActionRow[],
+                                true
+                            ),
+                        });
+                    } catch (error) {
+                        return;
+                    }
+                    return;
+                }
+
                 return {
                     intr,
                     value: intr.customId === 'true',
@@ -187,6 +204,22 @@ export class CollectorUtils {
             prompt,
             prevIntr.user,
             async (intr: ButtonInteraction) => {
+                try {
+                    await InteractionUtils.deferAndDisableButtons(intr);
+                } catch (error) {
+                    try {
+                        await InteractionUtils.editReply(intr, {
+                            components: InteractionUtils.setComponentsStatus(
+                                intr.message.components as MessageActionRow[],
+                                true
+                            ),
+                        });
+                    } catch (error) {
+                        return;
+                    }
+                    return;
+                }
+
                 return {
                     intr,
                     value: intr.customId,
