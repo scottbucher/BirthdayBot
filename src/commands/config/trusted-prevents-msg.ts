@@ -31,7 +31,7 @@ export class TrustedPreventsMsgSubCommand implements Command {
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
-        let result: { intr: ButtonInteraction; value: boolean };
+        let result: { intr: ButtonInteraction | CommandInteraction; value: boolean };
 
         // Get the prompt embed based on the setting, all are a true or false
         let promptEmbed = Lang.getEmbed('prompts', `config.trustedPreventsMessage`, data.lang());
@@ -40,7 +40,7 @@ export class TrustedPreventsMsgSubCommand implements Command {
             result = await CollectorUtils.getBooleanFromButton(intr, data, promptEmbed);
 
             if (result === undefined) return;
-        } else result = { intr: null, value: true };
+        } else result = { intr: intr, value: true };
 
         await this.guildRepo.updateTrustedPreventsMessage(intr.guild.id, result.value ? 1 : 0);
 
