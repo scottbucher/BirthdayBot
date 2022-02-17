@@ -176,7 +176,7 @@ export class CelebrationUtils {
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
             anniversaryFormatted = '03-01';
 
-        if (currentDateFormatted !== anniversaryFormatted)
+        if (currentDateFormatted !== anniversaryFormatted || guildMember.user.bot)
             return new AnniversaryMemberStatus(guildMember, false, null);
 
         let needsAnniversaryMessage = currentDate.hour() === guildData.MemberAnniversaryMessageTime;
