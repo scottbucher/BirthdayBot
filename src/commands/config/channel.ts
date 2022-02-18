@@ -57,7 +57,6 @@ export class ChannelSubCommand implements Command {
                     input === 'userSpecificBirthday' ||
                     input === 'userSpecificMemberAnniversary'
                 ) {
-                    console.log(input);
                     await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())

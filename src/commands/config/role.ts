@@ -50,7 +50,6 @@ export class RoleSubCommand implements Command {
             async (nextMsg: Message) => {
                 let input = FormatUtils.extractRoleType(nextMsg.content.toLowerCase());
                 if (!input) {
-                    console.log(input);
                     await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
