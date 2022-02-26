@@ -32,7 +32,9 @@ export class PurgeCommand implements Command {
             // Are they in the database?
             await InteractionUtils.send(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.birthdayNotSet', data.lang())
+                Lang.getErrorEmbed('validation', 'errorEmbeds.birthdayNotSet', data.lang(), {
+                    USER: target.toString(),
+                })
             );
             return;
         }
