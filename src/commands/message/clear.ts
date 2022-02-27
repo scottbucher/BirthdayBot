@@ -1,6 +1,6 @@
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { CustomRole, LangCode } from '../../models/enums/index.js';
+import { CustomRole } from '../../models/enums/index.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -56,7 +56,7 @@ export class MessageClearSubCommand implements Command {
         let result = await CollectorUtils.getBooleanFromButton(
             intr,
             data,
-            Lang.getEmbed('prompts', 'clear.customMessage', LangCode.EN_US, {
+            Lang.getEmbed('prompts', 'clear.customMessage', data.lang(), {
                 MESSAGE_COUNT: totalMessages.toString(),
                 DISPLAY_TYPE: displayType,
                 ICON: intr.client.user.displayAvatarURL(),
@@ -89,7 +89,7 @@ export class MessageClearSubCommand implements Command {
 
         await InteractionUtils.send(
             result.intr,
-            Lang.getSuccessEmbed('results', 'successEmbeds.customMessagesClear', LangCode.EN_US, {
+            Lang.getSuccessEmbed('results', 'successEmbeds.customMessagesClear', data.lang(), {
                 DISPLAY_TYPE: displayType,
             })
         );

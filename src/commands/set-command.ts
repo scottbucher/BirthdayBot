@@ -1,5 +1,5 @@
 import { Chrono, en } from 'chrono-node';
-import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import {
     ButtonInteraction,
     ChatInputApplicationCommandData,
@@ -9,7 +9,6 @@ import {
     PermissionString,
 } from 'discord.js';
 
-import { LangCode } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
@@ -136,7 +135,7 @@ export class SetCommand implements Command {
         if (!timeZone) {
             let _timezoneMessage = await InteractionUtils.send(
                 nextIntr,
-                Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', LangCode.EN_US, {
+                Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', data.lang(), {
                     TARGET: target.username,
                     AUTHOR_ICON: target.displayAvatarURL(),
                     ICON: intr.client.user.displayAvatarURL(),
@@ -154,7 +153,7 @@ export class SetCommand implements Command {
                             Lang.getEmbed(
                                 'validation',
                                 'embeds.invalidTimeZoneAbbreviation',
-                                LangCode.EN_US,
+                                data.lang(),
                                 {
                                     TARGET: target.username,
                                     ICON: intr.client.user.displayAvatarURL(),
@@ -171,7 +170,7 @@ export class SetCommand implements Command {
                             Lang.getErrorEmbed(
                                 'validation',
                                 'errorEmbeds.invalidTimezone',
-                                LangCode.EN_US,
+                                data.lang(),
                                 {
                                     TARGET: target.username,
                                     ICON: intr.client.user.displayAvatarURL(),
@@ -212,15 +211,15 @@ export class SetCommand implements Command {
         if (!birthday) {
             let _birthdayMessage = await InteractionUtils.send(
                 intr,
-                Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupBirthday', LangCode.EN_US, {
+                Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupBirthday', data.lang(), {
                     TARGET: target.username,
                     AUTHOR_ICON: target.displayAvatarURL(),
                     ICON: intr.client.user.displayAvatarURL(),
                     TAG: target.tag,
                     DATE_EXAMPLE: littleEndian ? '28/08' : '08/28',
                     DATE_FORMAT: littleEndian
-                        ? Lang.getRef('info', 'terms.ddmm', LangCode.EN_US)
-                        : Lang.getRef('info', 'terms.mmdd', LangCode.EN_US),
+                        ? Lang.getRef('info', 'terms.ddmm', data.lang())
+                        : Lang.getRef('info', 'terms.mmdd', data.lang()),
                 }).setAuthor({ name: target.tag, url: target.displayAvatarURL() })
             );
 
@@ -237,7 +236,7 @@ export class SetCommand implements Command {
                             Lang.getErrorEmbed(
                                 'validation',
                                 'errorEmbeds.invalidBirthday',
-                                LangCode.EN_US,
+                                data.lang(),
                                 {
                                     TARGET: target.username,
                                 }
@@ -272,7 +271,7 @@ export class SetCommand implements Command {
         let result = await CollectorUtils.getBooleanFromButton(
             intr,
             data,
-            Lang.getEmbed('prompts', 'settingBirthday.confirmBirthday', LangCode.EN_US, {
+            Lang.getEmbed('prompts', 'settingBirthday.confirmBirthday', data.lang(), {
                 TARGET: target.toString(),
                 BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                 TIMEZONE: timeZone,
@@ -287,7 +286,7 @@ export class SetCommand implements Command {
 
             await InteractionUtils.send(
                 result.intr,
-                Lang.getEmbed('results', 'success.setBirthday', LangCode.EN_US, {
+                Lang.getEmbed('results', 'success.setBirthday', data.lang(), {
                     USER: target.toString(),
                     BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                     TIMEZONE: timeZone,
@@ -298,7 +297,7 @@ export class SetCommand implements Command {
             // Cancel
             await InteractionUtils.send(
                 result.intr,
-                Lang.getEmbed('results', 'fail.actionCanceled', LangCode.EN_US)
+                Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
             return;
         }

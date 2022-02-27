@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';

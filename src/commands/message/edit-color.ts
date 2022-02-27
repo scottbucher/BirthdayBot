@@ -2,7 +2,6 @@ import { ChatInputApplicationCommandData, CommandInteraction, PermissionString }
 
 import { CustomMessage, CustomMessages } from '../../models/database/custom-messages-models.js';
 import { CustomRole } from '../../models/enums/index.js';
-import { LangCode } from '../../models/enums/language.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -104,7 +103,7 @@ export class MessageEditColorSubCommand implements Command {
         if (!colorHex) {
             await InteractionUtils.send(
                 intr,
-                Lang.getEmbed('validation', 'embeds.invalidColor', LangCode.EN_US)
+                Lang.getEmbed('validation', 'embeds.invalidColor', data.lang())
             );
             return;
         }
@@ -126,7 +125,7 @@ export class MessageEditColorSubCommand implements Command {
 
         await InteractionUtils.send(
             intr,
-            Lang.getSuccessEmbed('results', 'successEmbeds.updateMessageColor', LangCode.EN_US, {
+            Lang.getSuccessEmbed('results', 'successEmbeds.updateMessageColor', data.lang(), {
                 COLOR: `${color} (#${colorHex})`,
                 ICON: intr.client.user.displayAvatarURL(),
             })

@@ -4,7 +4,8 @@ import { Duration } from 'luxon'; // TODO: Missing types
 import moment from 'moment-timezone';
 import { createRequire } from 'node:module';
 
-import { LangCode, Language } from '../models/enums/index.js';
+import { LangCode } from '../enums/index.js';
+import { Language } from '../models/enums/index.js';
 import { Lang } from '../services/index.js';
 import { ClientUtils } from './client-utils.js';
 import { ParseUtils } from './index.js';

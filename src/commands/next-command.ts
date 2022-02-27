@@ -1,8 +1,7 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import moment from 'moment';
 
-import { LangCode } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
@@ -57,7 +56,7 @@ export class NextCommand implements Command {
         if (type !== 'BIRTHDAY' && (!timezone || timezone === '0')) {
             await InteractionUtils.send(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.serverTimezoneNotSet', LangCode.EN_US)
+                Lang.getErrorEmbed('validation', 'errorEmbeds.serverTimezoneNotSet', data.lang())
             );
             return;
         }
@@ -75,7 +74,7 @@ export class NextCommand implements Command {
                         Lang.getErrorEmbed(
                             'validation',
                             'errorEmbeds.noBirthdaysInServer',
-                            LangCode.EN_US
+                            data.lang()
                         )
                     );
                     return;
@@ -96,7 +95,7 @@ export class NextCommand implements Command {
                         Lang.getErrorEmbed(
                             'validation',
                             'errorEmbeds.noUpcomingBirthdays',
-                            LangCode.EN_US
+                            data.lang()
                         )
                     );
                     return;
@@ -110,7 +109,7 @@ export class NextCommand implements Command {
 
                 await InteractionUtils.send(
                     intr,
-                    Lang.getEmbed('results', 'success.nextBirthday', LangCode.EN_US, {
+                    Lang.getEmbed('results', 'success.nextBirthday', data.lang(), {
                         USERS: userList,
                         BIRTHDAY: nextBirthday,
                     })
@@ -173,7 +172,7 @@ export class NextCommand implements Command {
                         Lang.getErrorEmbed(
                             'validation',
                             'errorEmbeds.noUpcomingMemberAnniversaries',
-                            LangCode.EN_US
+                            data.lang()
                         )
                     );
                     return;
@@ -183,7 +182,7 @@ export class NextCommand implements Command {
 
                 await InteractionUtils.send(
                     intr,
-                    Lang.getEmbed('results', 'success.nextMemberAnniversary', LangCode.EN_US, {
+                    Lang.getEmbed('results', 'success.nextMemberAnniversary', data.lang(), {
                         USERS: userList,
                         DATE: moment(closestMonthDay, 'MM-DD').format('MMMM Do'),
                     })
@@ -211,7 +210,7 @@ export class NextCommand implements Command {
 
                 await InteractionUtils.send(
                     intr,
-                    Lang.getEmbed('results', 'success.nextServerAnniversary', LangCode.EN_US, {
+                    Lang.getEmbed('results', 'success.nextServerAnniversary', data.lang(), {
                         SERVER: intr.guild.name,
                         DATE: anniversaryFormatted,
                         YEARS: yearsOldRoundedUp.toString(),

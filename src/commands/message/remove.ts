@@ -1,7 +1,7 @@
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
 import { CustomMessage } from '../../models/database/index.js';
-import { CustomRole, LangCode } from '../../models/enums/index.js';
+import { CustomRole } from '../../models/enums/index.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -82,7 +82,7 @@ export class MessageRemoveSubCommand implements Command {
                 Lang.getErrorEmbed(
                     'validation',
                     'errorEmbeds.customMessageInvalidPosition',
-                    LangCode.EN_US,
+                    data.lang(),
                     {
                         ICON: intr.client.user.displayAvatarURL(),
                     }
@@ -106,7 +106,7 @@ export class MessageRemoveSubCommand implements Command {
 
         await InteractionUtils.send(
             intr,
-            Lang.getEmbed('results', 'customMessage.remove', LangCode.EN_US, {
+            Lang.getEmbed('results', 'customMessage.remove', data.lang(), {
                 MESSAGE: CelebrationUtils.replaceLangPlaceHolders(
                     message.Message,
                     intr.guild,

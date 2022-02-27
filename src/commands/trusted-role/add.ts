@@ -7,7 +7,6 @@ import {
 import { createRequire } from 'node:module';
 
 import { CustomRole } from '../../models/enums/index.js';
-import { LangCode } from '../../models/enums/language.js';
 import { EventData } from '../../models/index.js';
 import { TrustedRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -83,7 +82,7 @@ export class TrustedRoleAddSubCommand implements Command {
         ) {
             await InteractionUtils.send(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.trustedRoleMaxFree', LangCode.EN_US, {
+                Lang.getErrorEmbed('validation', 'errorEmbeds.trustedRoleMaxFree', data.lang(), {
                     FREE_MAX: Config.validation.trustedRoles.maxCount.free.toString(),
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
                 })
@@ -95,7 +94,7 @@ export class TrustedRoleAddSubCommand implements Command {
         ) {
             await InteractionUtils.send(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.trustedRoleMaxPaid', LangCode.EN_US, {
+                Lang.getErrorEmbed('validation', 'errorEmbeds.trustedRoleMaxPaid', data.lang(), {
                     PAID_MAX: Config.validation.trustedRoles.maxCount.paid.toString(),
                 })
             );

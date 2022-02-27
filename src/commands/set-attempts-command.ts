@@ -1,7 +1,6 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/payloads/v9';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { LangCode } from '../models/enums/index.js';
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
@@ -41,7 +40,7 @@ export class SetAttemptsCommand implements Command {
 
     constructor(private userRepo: UserRepo) {}
 
-    public async execute(intr: CommandInteraction, _data: EventData): Promise<void> {
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let target = intr.options.getUser(Lang.getCom('arguments.user'));
         let amount = intr.options.getInteger(Lang.getCom('arguments.number'));
 
@@ -50,7 +49,7 @@ export class SetAttemptsCommand implements Command {
         if (!userData) {
             await InteractionUtils.send(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.attemptsLeft', LangCode.EN_US)
+                Lang.getErrorEmbed('validation', 'errorEmbeds.attemptsLeft', data.lang())
             );
             return;
         }
@@ -64,7 +63,7 @@ export class SetAttemptsCommand implements Command {
 
         await InteractionUtils.send(
             intr,
-            Lang.getSuccessEmbed('results', 'successEmbeds.setAttempts', LangCode.EN_US, {
+            Lang.getSuccessEmbed('results', 'successEmbeds.setAttempts', data.lang(), {
                 USER: target.toString(),
                 AMOUNT: amount.toString(),
             })
