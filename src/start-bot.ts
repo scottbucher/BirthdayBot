@@ -3,7 +3,6 @@ import { Routes } from 'discord-api-types/v9';
 import { Options } from 'discord.js';
 import { createRequire } from 'node:module';
 
-import { Bot } from './bot.js';
 import {
     BirthdayListButton,
     BlacklistButton,
@@ -96,6 +95,7 @@ import {
 } from './events/index.js';
 import { CustomClient } from './extensions/index.js';
 import { CelebrationJob, Job, UpdateMemberCacheJob } from './jobs/index.js';
+import { Bot } from './models/bot.js';
 import { Reaction } from './reactions/index.js';
 import { DataAccess } from './services/database/index.js';
 import {

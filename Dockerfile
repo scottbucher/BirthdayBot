@@ -16,4 +16,4 @@ COPY . .
 RUN npm run build
 
 # Run the application
-CMD [ "node", "dist/app.js" ]
+CMD [ "node", "dist/start-manager.js" ]
