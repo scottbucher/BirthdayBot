@@ -1,7 +1,7 @@
 {
     "apps": [
         {
-            "name": "my-bot",
+            "name": "birthday-bot",
             "script": "dist/start-manager.js",
             "node_args": ["--enable-source-maps"],
             "restart_delay": 10000

@@ -1,8 +1,8 @@
 {
     "name": "my-bot",
-    "version": "1.0.0",
-    "author": "Kevin Novak",
-    "description": "A discord.js bot template written with TypeScript",
+    "version": "4.3.0",
+    "author": "Scott Bucher",
+    "description": "Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and easy to use!",
     "license": "MIT",
     "private": true,
     "engines": {
