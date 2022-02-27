@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Moment } from 'moment-timezone';
 import { createRequire } from 'node:module';
 
-import { LangCode } from '../enums/lang-code.js';
+import { LangCode } from '../enums/index.js';
 import {
     CustomMessage,
     GuildCelebrationData,
