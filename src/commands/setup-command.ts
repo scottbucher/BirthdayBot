@@ -57,6 +57,14 @@ export class SetupCommand implements Command {
         switch (channelResult.value) {
             case 'create': {
                 // Create channel with desired attributes
+                let botRoleId = guild.me.roles.cache.filter(role => role.managed)?.first()?.id;
+                if (!botRoleId) {
+                    await InteractionUtils.send(
+                        intr,
+                        Lang.getErrorEmbed('validation', 'errorEmbeds.noBotRole', data.lang())
+                    );
+                    return;
+                }
                 birthdayChannel = (
                     await guild.channels.create(
                         Lang.getRef('info', 'defaults.birthdayChannelName', data.lang()),
@@ -74,8 +82,7 @@ export class SetupCommand implements Command {
                                     allow: ['VIEW_CHANNEL'],
                                 },
                                 {
-                                    id: guild.me.roles.cache.filter(role => role.managed)?.first()
-                                        ?.id,
+                                    id: botRoleId,
                                     allow: [
                                         'VIEW_CHANNEL',
                                         'SEND_MESSAGES',
