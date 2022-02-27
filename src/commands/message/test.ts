@@ -9,7 +9,7 @@ import moment from 'moment';
 import { createRequire } from 'node:module';
 
 import { CustomMessage } from '../../models/database/index.js';
-import { CustomRole } from '../../enums/role.js';
+import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';

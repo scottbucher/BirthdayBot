@@ -11,7 +11,7 @@ import {
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../enums/role.js';
+import { CustomRole } from '../enums/index.js';
 import { CustomMessage, MemberAnniversaryRole, UserData } from '../models/database/index.js';
 import { EventData } from '../models/index.js';
 import { BlacklistRepo } from '../services/database/repos/blacklist-repo.js';
