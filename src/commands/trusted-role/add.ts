@@ -6,7 +6,7 @@ import {
 } from 'discord.js';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../../models/enums/index.js';
+import { CustomRole } from '../../enums/role.js';
 import { EventData } from '../../models/index.js';
 import { TrustedRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';

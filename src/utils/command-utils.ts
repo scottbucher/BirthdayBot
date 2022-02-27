@@ -10,8 +10,8 @@ import { createRequire } from 'node:module';
 
 import { Command } from '../commands/index.js';
 import { GuildData } from '../models/database/index.js';
-import { Permission } from '../models/enums/index.js';
-import { EventData } from '../models/index.js';
+import { Permission } from '../models/enum-helpers/index.js';
+import { EventData } from '../models/internal-models.js';
 import { Lang } from '../services/index.js';
 import { FormatUtils, InteractionUtils, TimeUtils } from './index.js';
 

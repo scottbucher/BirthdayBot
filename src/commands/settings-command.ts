@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Language } from '../models/enums/index.js';
+import { Language } from '../models/enum-helpers/language.js';
 import { EventData } from '../models/index.js';
 import { TrustedRoleRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';

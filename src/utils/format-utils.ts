@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import { createRequire } from 'node:module';
 
 import { LangCode } from '../enums/index.js';
-import { Language } from '../models/enums/index.js';
+import { Language } from '../models/enum-helpers/index.js';
 import { Lang } from '../services/index.js';
 import { ClientUtils } from './client-utils.js';
 import { ParseUtils } from './index.js';
