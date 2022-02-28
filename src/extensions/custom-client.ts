@@ -11,7 +11,7 @@ import { MessageUtils } from '../utils/message-utils.js';
 import { PermissionUtils } from '../utils/permission-utils.js';
 
 const require = createRequire(import.meta.url);
-let Logs = require('../lang/logs.json');
+let Logs = require('../../lang/logs.json');
 export class CustomClient extends Client {
     constructor(clientOptions: ClientOptions, private guildRepo: GuildRepo) {
         super(clientOptions);
