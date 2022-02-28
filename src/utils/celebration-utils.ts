@@ -206,11 +206,6 @@ export class CelebrationUtils {
     }
 
     public static isServerAnniversaryMessage(guild: Guild, guildData: GuildData): boolean {
-        // TODO: add debug mode for server anniversary
-        // if (Debug.alwaysGiveBirthdayRole) {
-        //     return true;
-        // }
-
         if (!guild || !guildData || guildData.DefaultTimezone === '0') return false;
         let currentDate = moment().tz(guildData.DefaultTimezone);
         let serverAnniversary = moment(guild.createdAt);
