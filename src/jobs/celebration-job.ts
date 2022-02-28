@@ -58,7 +58,6 @@ export class CelebrationJob implements Job {
         let discordIds = guildCache.map(guild => guild.id);
 
         // String of guild ids who have an active subscription to birthday bot premium
-        // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
         let subStatuses: SubscriptionStatus[];
 
         try {

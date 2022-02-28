@@ -16,9 +16,6 @@ export class GuildJoinHandler implements EventHandler {
                 .replaceAll('{GUILD_ID}', guild.id)
         );
 
-        // TODO: Get data from database
-        // let data = new EventData();
-
         // Send welcome message to the server's notify channel
         // TODO: Replace "Lang.Default" here with the server's language
         let guildLang = Lang.Default;
