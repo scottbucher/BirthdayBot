@@ -5,9 +5,5 @@ export {
     PlanName,
     SubscriptionStatusName,
 } from './subscription-models.js';
-export {
-    BirthdayMemberRoleStatus,
-    BirthdayMemberStatus,
-    AnniversaryMemberStatus,
-} from './celebration-job.js';
+export { BirthdayMemberStatus, AnniversaryMemberStatus } from './celebration-job.js';
 export { EventData } from './internal-models.js';
