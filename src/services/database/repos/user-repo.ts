@@ -1,4 +1,4 @@
-import { UserData, UserDataResults, Vote } from '../../../models/database/index.js';
+import { UserData, UserDataResults } from '../../../models/database/index.js';
 import { SqlUtils } from '../../../utils/index.js';
 import { DataAccess, Procedure } from '../index.js';
 
@@ -7,13 +7,6 @@ export class UserRepo {
 
     public async getUser(discordId: string): Promise<UserData> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_Get, [discordId]);
-        return SqlUtils.getRow(results, 0, 0);
-    }
-
-    public async getUserVote(discordId: string): Promise<Vote> {
-        let results = await this.dataAccess.executeProcedure(Procedure.User_GetLastVote, [
-            discordId,
-        ]);
         return SqlUtils.getRow(results, 0, 0);
     }
 
@@ -84,22 +77,6 @@ export class UserRepo {
 
     public async getUserCount(): Promise<number> {
         let results = await this.dataAccess.executeProcedure(Procedure.User_GetTotalCount, []);
-        return SqlUtils.getRow(results, 0, 0).Total;
-    }
-
-    public async getUserBirthdaysTodayCount(birthday: string): Promise<number> {
-        let results = await this.dataAccess.executeProcedure(
-            Procedure.User_GetBirthdaysTodayCount,
-            [birthday]
-        );
-        return SqlUtils.getRow(results, 0, 0).Total;
-    }
-
-    public async getUserBirthdaysThisMonthCount(birthday: string): Promise<number> {
-        let results = await this.dataAccess.executeProcedure(
-            Procedure.User_GetBirthdaysThisMonthCount,
-            [birthday]
-        );
         return SqlUtils.getRow(results, 0, 0).Total;
     }
 }

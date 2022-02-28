@@ -10,13 +10,6 @@ export class GuildRepo {
         return SqlUtils.getRow(results, 0, 0);
     }
 
-    public async getGuilds(discordIds: string[]): Promise<GuildData[]> {
-        let results = await this.dataAccess.executeProcedure(Procedure.Guild_GetAll, [
-            discordIds.join(','),
-        ]);
-        return SqlUtils.getTable(results, 0);
-    }
-
     public async addOrUpdateGuild(
         discordId: string,
         birthdayChannelId: string,
@@ -70,13 +63,6 @@ export class GuildRepo {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateBirthdayMasterRole, [
             discordId,
             birthdayMasterRoleId,
-        ]);
-    }
-
-    public async updateMessageEmbedColor(discordId: string, hexColor: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateMessageEmbedColor, [
-            discordId,
-            hexColor,
         ]);
     }
 
@@ -180,32 +166,6 @@ export class GuildRepo {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateDateFormat, [
             discordId,
             value,
-        ]);
-    }
-
-    public async guildSetupTrusted(
-        discordId: string,
-        requireAllTrustedRoles: number,
-        preventRole: number,
-        preventMessage: number
-    ): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_SetupTrusted, [
-            discordId,
-            requireAllTrustedRoles,
-            preventRole,
-            preventMessage,
-        ]);
-    }
-
-    public async guildSetupAnniversary(
-        discordId: string,
-        memberAnniversaryChannelId: string,
-        serverAnniversaryChannelId: string
-    ): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_SetupAnniversary, [
-            discordId,
-            memberAnniversaryChannelId,
-            serverAnniversaryChannelId,
         ]);
     }
 }

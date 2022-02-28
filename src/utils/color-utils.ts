@@ -25,11 +25,6 @@ export class ColorUtils {
         return this.formatHexOutput(color.hex);
     }
 
-    public static findName(hex: string): string {
-        hex = this.formatHexForLibrary(hex);
-        return colors.find(color => color.hex === hex)?.name;
-    }
-
     private static formatHexForLibrary(hex: string): string {
         hex = hex.toLowerCase();
         if (!hex.startsWith('#')) {

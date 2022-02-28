@@ -1,5 +1,5 @@
 import { Chrono } from 'chrono-node';
-import { Guild, Message, Role, User } from 'discord.js';
+import { Guild, Role } from 'discord.js';
 import { Duration } from 'luxon'; // TODO: Missing types
 import moment from 'moment-timezone';
 import { createRequire } from 'node:module';
@@ -7,13 +7,11 @@ import { createRequire } from 'node:module';
 import { LangCode } from '../enums/index.js';
 import { Language } from '../models/enum-helpers/index.js';
 import { Lang } from '../services/index.js';
-import { ClientUtils } from './client-utils.js';
-import { ParseUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Abbreviations = require('../../config/abbreviations.json');
 let Config = require('../../config/config.json');
-const PAGE_REGEX = /Page (\d+)\/(\d+)/;
+
 let zoneNames = moment.tz
     .names()
     .filter(name => Config.validation.regions.some((region: any) => name.startsWith(`${region}/`)));
@@ -99,42 +97,6 @@ export class FormatUtils {
         return doubleCheck ? temp : null;
     }
 
-    public static async getUser(msg: Message, input: string): Promise<User> {
-        return (
-            msg.mentions.members.first()?.user ||
-            (await ClientUtils.findMember(msg.guild, input))?.user ||
-            null
-        );
-    }
-
-    public static checkIfMonth(month: string): boolean {
-        return (
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.jan', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.feb', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.mar', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.apr', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.may', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.jun', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.jul', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.aug', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.sep', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.oct', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() ===
-                Lang.getRef('info', 'months.nov', LangCode.EN_US).toLowerCase() ||
-            month.toLowerCase() === Lang.getRef('info', 'months.dec', LangCode.EN_US).toLowerCase()
-        );
-    }
-
     public static getMonth(month: number): string {
         switch (month) {
             case 1:
@@ -164,39 +126,6 @@ export class FormatUtils {
             default:
                 return Lang.getRef('info', 'months.invalid', LangCode.EN_US);
         }
-    }
-
-    // TODO: add usage of arrays in lang system
-    public static findBoolean(input: string): boolean {
-        switch (input.toLowerCase()) {
-            case 'enabled':
-            case 'enable':
-            case 'e':
-            case 'yes':
-            case 'y':
-            case 'true':
-            case 't':
-            case 'on':
-            case '1':
-                return true;
-            case 'disabled':
-            case 'disable':
-            case 'd':
-            case 'no':
-            case 'n':
-            case 'false':
-            case 'f':
-            case 'off':
-            case '0':
-                return false;
-            default:
-                return null;
-        }
-    }
-
-    public static extractPageNumber(input: string): number {
-        let match = PAGE_REGEX.exec(input);
-        return match ? ParseUtils.parseInt(match[1]) : null;
     }
 
     // THIS IS WRONG
@@ -239,33 +168,6 @@ export class FormatUtils {
             case Lang.getRef('info', 'terms.birthdayMaster', LangCode.EN_US).toLowerCase():
             case Lang.getRef('info', 'terms.master', LangCode.EN_US).toLowerCase():
                 return 'birthdayMaster';
-            default:
-                return null;
-        }
-    }
-
-    public static extractConfigType(type: string): string {
-        switch (type) {
-            case Lang.getRef('info', 'types.channel', LangCode.EN_US).toLowerCase():
-                return 'channel';
-            case Lang.getRef('info', 'types.birthdayRole', LangCode.EN_US).toLowerCase():
-                return 'role';
-            case Lang.getRef('info', 'types.birthdayMasterRole', LangCode.EN_US).toLowerCase():
-                return 'birthdayMasterRole';
-            case Lang.getRef('info', 'types.nameFormat', LangCode.EN_US).toLowerCase():
-                return 'nameFormat';
-            case Lang.getRef('info', 'types.timezone', LangCode.EN_US).toLowerCase():
-                return 'timezone';
-            case Lang.getRef('info', 'types.useTimezone', LangCode.EN_US).toLowerCase():
-                return 'useTimezone';
-            case Lang.getRef('info', 'types.trustedPreventsRole', LangCode.EN_US).toLowerCase():
-                return 'trustedPreventsRole';
-            case Lang.getRef('info', 'types.trustedPreventsMessage', LangCode.EN_US).toLowerCase():
-                return 'trustedPreventsMessage';
-            case Lang.getRef('info', 'types.requireAllTrustedRoles', LangCode.EN_US).toLowerCase():
-                return 'requireAllTrustedRoles';
-            case Lang.getRef('info', 'types.dateFormat', LangCode.EN_US).toLowerCase():
-                return 'dateFormat';
             default:
                 return null;
         }
