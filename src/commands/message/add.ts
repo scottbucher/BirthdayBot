@@ -65,7 +65,6 @@ export class MessageAddSubCommand implements Command {
         let target: GuildMember;
         let userId = '0';
 
-        // TODO: Use regex to parse a user input
         // Target needs to be the determining factor of if this is a user specific message or not
         target = await ClientUtils.findMember(intr.guild, message);
 
