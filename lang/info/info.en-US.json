@@ -954,6 +954,63 @@
                         ]
                     }
                 ]
+            },
+            "subscriptionAdded": {
+                "title": "{{REF:bot.name}} Premium",
+                "description": "{{COM:colors.party}} {{SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{COM:colors.party}}",
+                "fields": [
+                    {
+                        "name": "{{REF:bot.prefix}} premium",
+                        "value": [
+                            "View details about your subscription.",
+                            "",
+                            "[Join Support Server]({{COM:links.support}})"
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "Thanks for support {{REF:bot.name}}!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "subscriptionCanceled": {
+                "title": "{{REF:bot.name}} Premium",
+                "description": "{[SERVER_NAME}}'s premium has been canceled! :(",
+                "fields": [
+                    {
+                        "name": "{{REF:bot.prefix}} premium",
+                        "value": [
+                            "View details about your subscription.",
+                            "",
+                            "[Join Support Server]({{COM:links.support}})"
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "Consider letting us know how to improve premium!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "subscriptionExpired": {
+                "title": "{{REF:bot.name}} Premium",
+                "description": "{[SERVER_NAME}}'s premium has expired! :(",
+                "fields": [
+                    {
+                        "name": "{{REF:bot.prefix}} premium",
+                        "value": [
+                            "Resubscribe to premium!",
+                            "",
+                            "[Join Support Server]({{COM:links.support}})"
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "Consider letting us know how to improve premium!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
             }
         },
         "channelRegexes": {

@@ -123,18 +123,6 @@ let Logs = require('../lang/logs.json');
 async function start(): Promise<void> {
     Logger.info('Starting Bot!');
 
-    // Client
-    let client = new CustomClient({
-        intents: Config.client.intents,
-        partials: Config.client.partials,
-        makeCache: Options.cacheWithLimits({
-            // Keep default caching behavior
-            ...Options.defaultMakeCacheSettings,
-            // Override specific options from config
-            ...Config.client.caches,
-        }),
-    });
-
     let dataAccess = new DataAccess(Config.mysql);
     let httpService = new HttpService();
     let subService = new SubscriptionService(httpService);
@@ -147,8 +135,22 @@ async function start(): Promise<void> {
     let blacklistRepo = new BlacklistRepo(dataAccess);
     let trustedRoleRepo = new TrustedRoleRepo(dataAccess);
     let memberAnniversaryRoleRepo = new MemberAnniversaryRoleRepo(dataAccess);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let combinedRepo = new CombinedRepo(dataAccess);
+
+    // Client
+    let client = new CustomClient(
+        {
+            intents: Config.client.intents,
+            partials: Config.client.partials,
+            makeCache: Options.cacheWithLimits({
+                // Keep default caching behavior
+                ...Options.defaultMakeCacheSettings,
+                // Override specific options from config
+                ...Config.client.caches,
+            }),
+        },
+        guildRepo
+    );
 
     // Config Sub Commands
     let nameFormatSubCommand = new NameFormatSubCommand(guildRepo);
