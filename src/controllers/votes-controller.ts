@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import router from 'express-promise-router';
 
 import { mapClass } from '../middleware/map-class.js';
-import { SendVoteRequest } from '../models/cluster-api/votes.js';
+import { SendVoteRequest } from '../models/cluster-api/index.js';
 import { UserRepo } from '../services/database/repos/user-repo.js';
 import { Controller } from './controller.js';
 

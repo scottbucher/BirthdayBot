@@ -11,11 +11,13 @@ import {
     MemberAnniversaryListButton,
     TrustedRoleButton,
 } from './buttons/index.js';
-import { BirthdayMessageButton } from './buttons/message/birthday-button.js';
-import { MemberAnniversaryMessageButton } from './buttons/message/member-anniversary-button.js';
-import { ServerAnniversaryMessageButton } from './buttons/message/server-anniversary-button.js';
-import { UserSpecificBirthdayMessageButton } from './buttons/message/user-specific-birthday-button.js';
-import { UserSpecificMemberAnniversaryMessageButton } from './buttons/message/user-specific-member-anniversary-button.js';
+import {
+    BirthdayMessageButton,
+    MemberAnniversaryMessageButton,
+    ServerAnniversaryMessageButton,
+    UserSpecificBirthdayMessageButton,
+    UserSpecificMemberAnniversaryMessageButton,
+} from './buttons/message/index.js';
 import {
     BlacklistAddSubCommand,
     BlacklistClearSubCommand,
@@ -45,6 +47,8 @@ import {
     ListCommand,
     LogoCommand,
     MapCommand,
+    MemberAnniversaryRoleCommand,
+    MessageCommand,
     NextCommand,
     PremiumCommand,
     PurgeCommand,
@@ -58,14 +62,12 @@ import {
     ViewCommand,
     VoteCommand,
 } from './commands/index.js';
-import { MemberAnniversaryRoleCommand } from './commands/mar-command.js';
 import {
     MarAddSubCommand,
     MarClearSubCommand,
     MarListSubCommand,
     MarRemoveSubCommand,
 } from './commands/mar/index.js';
-import { MessageCommand } from './commands/message-command.js';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
