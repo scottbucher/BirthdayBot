@@ -89,10 +89,10 @@ export class CustomClient extends Client {
 
                 Logger.info(
                     Logs.info.guildSubStatus
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{GUILD_ID}', guild.id)
-                        .replace('{PLAN_NAME}', plan)
-                        .replace('{SUBSCRIPTION_STATUS}', status)
+                        .replaceAll('{GUILD_NAME}', guild.name)
+                        .replaceAll('{GUILD_ID}', guild.id)
+                        .replaceAll('{PLAN_NAME}', plan)
+                        .replaceAll('{SUBSCRIPTION_STATUS}', status)
                 );
             }
         }

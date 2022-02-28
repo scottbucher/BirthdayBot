@@ -260,10 +260,13 @@ export class CelebrationService {
                 // Error when running the birthday system for this guild
                 Logger.error(
                     Logs.error.birthdaySystemFailedForGuild
-                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                        .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                        .replaceAll('{GUILD_ID}', guildData.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild.name)
+                        .replaceAll('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                        .replaceAll(
+                            '{MEMBER_CACHE_COUNT}',
+                            guild.members.cache.size.toLocaleString()
+                        ),
                     error
                 );
             }
@@ -552,10 +555,13 @@ export class CelebrationService {
                 // Error when running the member anniversary system for this guild
                 Logger.error(
                     Logs.error.memberAnniversarySystemFailedForGuild
-                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                        .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                        .replaceAll('{GUILD_ID}', guildData.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild.name)
+                        .replaceAll('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                        .replaceAll(
+                            '{MEMBER_CACHE_COUNT}',
+                            guild.members.cache.size.toLocaleString()
+                        ),
                     error
                 );
             }
@@ -629,10 +635,13 @@ export class CelebrationService {
                 // Error when running the server anniversary system
                 Logger.error(
                     Logs.error.serverAnniversarySystemFailedForGuild
-                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                        .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                        .replaceAll('{GUILD_ID}', guildData.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild.name)
+                        .replaceAll('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                        .replaceAll(
+                            '{MEMBER_CACHE_COUNT}',
+                            guild.members.cache.size.toLocaleString()
+                        ),
                     error
                 );
             }

@@ -93,8 +93,8 @@ export class CelebrationJob implements Job {
             } catch (error) {
                 Logger.error(
                     Logs.error.resolveGuild
-                        .replace('{GUILD_ID}', guildData?.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild?.name),
+                        .replaceAll('{GUILD_ID}', guildData?.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild?.name),
                     error
                 );
                 continue;
@@ -117,8 +117,8 @@ export class CelebrationJob implements Job {
                         .catch(error => {
                             Logger.error(
                                 Logs.error.celebrateBirthday
-                                    .replace('{GUILD_NAME}', guild?.name)
-                                    .replace('{GUILD_ID}', guild?.id),
+                                    .replaceAll('{GUILD_NAME}', guild?.name)
+                                    .replaceAll('{GUILD_ID}', guild?.id),
                                 error
                             );
                         })
@@ -126,10 +126,10 @@ export class CelebrationJob implements Job {
             } catch (error) {
                 Logger.error(
                     Logs.error.birthdayService
-                        .replace('{GUILD_ID}', guildData?.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild?.name)
-                        .replace('{MEMBER_COUNT}', guild?.memberCount.toLocaleString())
-                        .replace(
+                        .replaceAll('{GUILD_ID}', guildData?.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild?.name)
+                        .replaceAll('{MEMBER_COUNT}', guild?.memberCount.toLocaleString())
+                        .replaceAll(
                             '{MEMBER_CACHE_COUNT}',
                             guild?.members.cache.size.toLocaleString()
                         ),
