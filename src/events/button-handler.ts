@@ -83,7 +83,9 @@ export class ButtonHandler implements EventHandler {
             guildDataAndVote?.guildData,
             subData,
             guildDataAndVote?.voteData,
-            !Config.payments.enabled || (subData?.subscription && subData.subscription?.service)
+            !Config.payments.enabled ||
+                (subData?.subscription && subData.subscription?.service) ||
+                (subData?.override && subData.override.service)
         );
 
         // Execute the button
