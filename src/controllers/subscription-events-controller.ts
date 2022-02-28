@@ -33,9 +33,8 @@ export class SubscriptionEventsController implements Controller {
             case SubscriptionStatusName.CANCELLED:
             case SubscriptionStatusName.EXPIRED: {
                 await this.shardManager.broadcastEval(
-                    async (client, context) => {
-                        let customClient = client as CustomClient;
-                        return await customClient.notifySubscription(
+                    async (client: CustomClient, context) => {
+                        return await client.notifySubscription(
                             context.subscriber,
                             context.plan,
                             context.status
