@@ -3,7 +3,7 @@ import moment from 'moment';
 import { createRequire } from 'node:module';
 
 import { CustomClient } from '../extensions/index.js';
-import { BotSite } from '../models/config-models.js';
+import { BotSite } from '../models/index.js';
 import { HttpService, Lang, Logger } from '../services/index.js';
 import { ShardUtils } from '../utils/index.js';
 import { Job } from './job.js';

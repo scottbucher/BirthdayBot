@@ -4,7 +4,7 @@ import router from 'express-promise-router';
 
 import { CustomClient } from '../extensions/custom-client.js';
 import { mapClass } from '../middleware/map-class.js';
-import { SendSubscriptionEventRequest } from '../models/cluster-api/subscription-events.js';
+import { SendSubscriptionEventRequest } from '../models/cluster-api/index.js';
 import { SubscriptionStatusName } from '../models/subscription-models.js';
 import { Controller } from './controller.js';
 

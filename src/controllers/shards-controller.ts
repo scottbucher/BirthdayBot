@@ -10,7 +10,7 @@ import {
     SetShardPresencesRequest,
     ShardInfo,
     ShardStats,
-} from '../models/cluster-api/shards.js';
+} from '../models/cluster-api/index.js';
 import { Logger } from '../services/index.js';
 import { Controller } from './index.js';
 
