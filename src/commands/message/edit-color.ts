@@ -1,7 +1,7 @@
 import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { CustomMessage, CustomMessages } from '../../models/database/custom-messages-models.js';
 import { CustomRole } from '../../enums/index.js';
+import { CustomMessage, CustomMessages } from '../../models/database/custom-messages-models.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
