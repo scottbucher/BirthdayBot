@@ -69,7 +69,7 @@
             "interval": 600
         },
         "updateMemberCacheJob": {
-            "schedule": "0 30 */2 * * *",
+            "schedule": "0 30 */4 * * *",
             "log": false,
             "interval": 1500
         }
