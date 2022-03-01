@@ -25,14 +25,6 @@ export class ColorUtils {
         return this.formatHexOutput(color.hex);
     }
 
-    private static formatHexForLibrary(hex: string): string {
-        hex = hex.toLowerCase();
-        if (!hex.startsWith('#')) {
-            hex = `#${hex}`;
-        }
-        return hex;
-    }
-
     private static formatHexOutput(hex: string): string {
         hex = COLOR_HEX_REGEX.exec(hex)[0];
         hex = hex.toUpperCase();
