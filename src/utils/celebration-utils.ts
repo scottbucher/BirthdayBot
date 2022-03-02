@@ -99,7 +99,7 @@ export class CelebrationUtils {
         let birthdayFormatted = birthday.format('MM-DD');
 
         if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            birthdayFormatted = '03-01';
+            birthdayFormatted = '02-28';
 
         // The date is correct, now check the time
         return (
@@ -131,7 +131,7 @@ export class CelebrationUtils {
         let birthdayFormatted = birthday.format('MM-DD');
 
         if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            birthdayFormatted = '03-01';
+            birthdayFormatted = '02-28';
 
         let currentHour = currentDate.hour();
         let needsBirthdayMessage: boolean;
@@ -174,7 +174,7 @@ export class CelebrationUtils {
         let anniversaryFormatted = memberAnniversary.format('MM-DD');
 
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            anniversaryFormatted = '03-01';
+            anniversaryFormatted = '02-28';
 
         if (currentDateFormatted !== anniversaryFormatted || guildMember.user.bot)
             return new AnniversaryMemberStatus(guildMember, false, null);
@@ -214,7 +214,7 @@ export class CelebrationUtils {
         let anniversaryFormatted = serverAnniversary.format('MM-DD');
 
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            anniversaryFormatted = '03-01';
+            anniversaryFormatted = '02-28';
 
         // The date is correct, now check the time
         return currentDateFormatted !== anniversaryFormatted
