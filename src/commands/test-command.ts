@@ -454,7 +454,7 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let testingEmbed = Lang.getEmbed('results', 'test.memberAnniversaryTest', data.lang(), {
+            let testingEmbed = Lang.getEmbed('results', 'test.memberAnniversary', data.lang(), {
                 ICON: intr.client.user.displayAvatarURL(),
             })
                 .addField(
@@ -559,7 +559,7 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let testingEmbed = Lang.getEmbed('results', 'test.serverAnniversaryTest', data.lang(), {
+            let testingEmbed = Lang.getEmbed('results', 'test.serverAnniversary', data.lang(), {
                 ICON: intr.client.user.displayAvatarURL(),
             })
                 .addField(
