@@ -1,6 +1,7 @@
 import { ShardingManager } from 'discord.js';
 import { Request, Response, Router } from 'express';
 import router from 'express-promise-router';
+import { createRequire } from 'node:module';
 
 import { CustomClient } from '../extensions/custom-client.js';
 import { mapClass } from '../middleware/map-class.js';
@@ -8,6 +9,7 @@ import { SendSubscriptionEventRequest } from '../models/cluster-api/index.js';
 import { SubscriptionStatusName } from '../models/subscription-models.js';
 import { Controller } from './controller.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class SubscriptionEventsController implements Controller {

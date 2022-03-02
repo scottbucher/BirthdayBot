@@ -1,11 +1,13 @@
 import { Request, Response, Router } from 'express';
 import router from 'express-promise-router';
+import { createRequire } from 'node:module';
 
 import { mapClass } from '../middleware/map-class.js';
 import { SendVoteRequest } from '../models/cluster-api/index.js';
 import { UserRepo } from '../services/database/repos/user-repo.js';
 import { Controller } from './controller.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class VotesController implements Controller {
