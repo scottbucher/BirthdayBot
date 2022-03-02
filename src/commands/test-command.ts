@@ -125,6 +125,7 @@ export class TestCommand implements Command {
 
         let customMessages: CustomMessage[];
         let mentionString = CelebrationUtils.getMentionString(guildData, guild, type);
+        let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
 
         if (type === 'BIRTHDAY') {
             // run the birthday test
@@ -132,7 +133,6 @@ export class TestCommand implements Command {
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
             let roleCheck = false;
-            let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
             let trustedCheckMessage = false;
             let trustedCheckRole = false;
             let trustedPreventsMessage = guildData.TrustedPreventsMessage;
@@ -512,7 +512,6 @@ export class TestCommand implements Command {
 
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
-            let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
 
             let message = Lang.getRef('info', 'defaults.serverAnniversaryMessage', data.lang());
             let color = Config.colors.default;
@@ -579,7 +578,7 @@ export class TestCommand implements Command {
                 )
                 .addField(
                     Lang.getRef('info', 'terms.serverAnniversaryChannel', data.lang()),
-                    timezoneCheck
+                    messageCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
                               'info',
                               'terms.correctlySet',
