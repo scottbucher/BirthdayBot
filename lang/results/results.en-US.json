@@ -69,7 +69,7 @@
                     "text": "This is the info from your birthday event test.",
                     "icon": "{{ICON}}"
                 },
-                "color": "{{COM:colors.success}}",
+                "color": "{{COM:colors.default}}",
                 "timestamp": true
             },
             "memberAnniversary": {
@@ -81,7 +81,7 @@
                     "text": "This is the info from your latest member anniversary event test.",
                     "icon": "{{ICON}}"
                 },
-                "color": "{{COM:colors.success}}",
+                "color": "{{COM:colors.default}}",
                 "timestamp": true
             },
             "serverAnniversary": {
@@ -93,7 +93,7 @@
                     "text": "This is the info from your latest server anniversary event test.",
                     "icon": "{{ICON}}"
                 },
-                "color": "{{COM:colors.success}}",
+                "color": "{{COM:colors.default}}",
                 "timestamp": true
             }
         },

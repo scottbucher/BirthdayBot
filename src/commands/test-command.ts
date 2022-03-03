@@ -249,7 +249,6 @@ export class TestCommand implements Command {
             let testingEmbed = Lang.getEmbed('results', 'test.birthday', data.lang(), {
                 ICON: intr.client.user.displayAvatarURL(),
             })
-                .setColor(Config.colors.default)
                 .addField(
                     Lang.getRef('info', 'terms.birthdayChannel', data.lang()),
                     messageCheck
