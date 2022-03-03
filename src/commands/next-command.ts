@@ -51,7 +51,7 @@ export class NextCommand implements Command {
         let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
         let timezone = data.guild?.DefaultTimezone;
         let userList: string;
-        let now = moment.tz(timezone);
+        let now = timezone ? moment.tz(timezone) : moment();
 
         if (type !== 'BIRTHDAY' && (!timezone || timezone === '0')) {
             await InteractionUtils.send(
