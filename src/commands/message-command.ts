@@ -1,84 +1,430 @@
-import { Message, TextChannel } from 'discord.js';
-import {
-    MessageAddSubCommand,
-    MessageClearSubCommand,
-    MessageColorSubCommand,
-    MessageEmbedSubCommand,
-    MessageListSubCommand,
-    MessageMentionSubCommand,
-    MessageRemoveSubCommand,
-    MessageTestSubCommand,
-    MessageTimeSubCommand,
-} from './message';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { MessageUtils, FormatUtils } from '../utils';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { CommandUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class MessageCommand implements Command {
-    public name: string = 'message';
-    public aliases = ['msg'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.message'),
+        description: 'Manage message settings and specific custom messages.',
+        options: [
+            {
+                name: Lang.getCom('subCommands.edit'),
+                description: `Edit a custom message's settings.`,
+                type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('subCommands.embed'),
+                        description: 'Change the embed setting of a message.',
+                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                        options: [
+                            {
+                                name: Lang.getCom('arguments.type'),
+                                description: 'What type of message is being removed.',
+                                required: true,
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                choices: [
+                                    {
+                                        name: 'birthday',
+                                        value: 'BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'memberAnniversary',
+                                        value: 'MEMBER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'serverAnniversary',
+                                        value: 'SERVER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'userSpecificBirthday',
+                                        value: 'USER_SPECIFIC_BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'userSpecificMemberAnniversary',
+                                        value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                    },
+                                ],
+                            },
+                            {
+                                name: Lang.getCom('arguments.position'),
+                                description:
+                                    'The position number of the message, found in /message list. Leave empty to test the default message.',
+                                type: ApplicationCommandOptionType.Integer.valueOf(),
+                                required: true,
+                                min_value: 0,
+                                max_value: 500,
+                            },
+                            {
+                                name: Lang.getCom('arguments.embed'),
+                                description:
+                                    'Whether or not this custom message should be displayed as an embed.',
+                                type: ApplicationCommandOptionType.Boolean.valueOf(),
+                                required: true,
+                            },
+                        ],
+                    },
+                    {
+                        name: Lang.getCom('subCommands.color'),
+                        description:
+                            '[Premium Feature] Change the color of a message. Only works if embed is enabled for this message.',
+                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                        options: [
+                            {
+                                name: Lang.getCom('arguments.type'),
+                                description: 'What type of message is being removed.',
+                                required: true,
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                choices: [
+                                    {
+                                        name: 'birthday',
+                                        value: 'BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'memberAnniversary',
+                                        value: 'MEMBER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'serverAnniversary',
+                                        value: 'SERVER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'userSpecificBirthday',
+                                        value: 'USER_SPECIFIC_BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'userSpecificMemberAnniversary',
+                                        value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                    },
+                                ],
+                            },
+                            {
+                                name: Lang.getCom('arguments.position'),
+                                description:
+                                    'The position number of the message, found in /message list. Leave empty to test the default message.',
+                                type: ApplicationCommandOptionType.Integer.valueOf(),
+                                required: true,
+                                min_value: 0,
+                                max_value: 500,
+                            },
+                            {
+                                name: Lang.getCom('arguments.color'),
+                                description: 'The color the embed should be.',
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                required: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.setting'),
+                description: 'Edit the global message settings for each type.',
+                type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('subCommands.time'),
+                        description: 'Change the time a message type should be sent.',
+                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                        options: [
+                            {
+                                name: Lang.getCom('arguments.type'),
+                                description: 'What type of message this setting should apply to.',
+                                required: true,
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                choices: [
+                                    {
+                                        name: 'birthday',
+                                        value: 'BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'memberAnniversary',
+                                        value: 'MEMBER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'serverAnniversary',
+                                        value: 'SERVER_ANNIVERSARY',
+                                    },
+                                ],
+                            },
+                            {
+                                name: Lang.getCom('arguments.time'),
+                                description: 'The time setting for a message type. Values: 0-23.',
+                                type: ApplicationCommandOptionType.Integer.valueOf(),
+                                required: true,
+                                min_value: 0,
+                                max_value: 23,
+                            },
+                        ],
+                    },
+                    {
+                        name: Lang.getCom('subCommands.mention'),
+                        description:
+                            'Change the role mention setting for a message type. Values: everyone, here, @role/role-name, none.',
+                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                        options: [
+                            {
+                                name: Lang.getCom('arguments.type'),
+                                description: 'What type of message this setting should apply to.',
+                                required: true,
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                choices: [
+                                    {
+                                        name: 'birthday',
+                                        value: 'BIRTHDAY',
+                                    },
+                                    {
+                                        name: 'memberAnniversary',
+                                        value: 'MEMBER_ANNIVERSARY',
+                                    },
+                                    {
+                                        name: 'serverAnniversary',
+                                        value: 'SERVER_ANNIVERSARY',
+                                    },
+                                ],
+                            },
+                            {
+                                name: Lang.getCom('arguments.mention'),
+                                description:
+                                    'A role, @everyone, or @here. The selected group will be mentioned with the birthday message.',
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                required: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.clear'),
+                description: 'Clear all custom messages of a certain type.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('arguments.type'),
+                        description: 'What type of messages to permanently delete.',
+                        required: true,
+                        type: ApplicationCommandOptionType.String.valueOf(),
+                        choices: [
+                            {
+                                name: 'birthday',
+                                value: 'BIRTHDAY',
+                            },
+                            {
+                                name: 'memberAnniversary',
+                                value: 'MEMBER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'serverAnniversary',
+                                value: 'SERVER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'userSpecificBirthday',
+                                value: 'USER_SPECIFIC_BIRTHDAY',
+                            },
+                            {
+                                name: 'userSpecificMemberAnniversary',
+                                value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.test'),
+                description: 'Test a custom message.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('arguments.type'),
+                        description: 'What type of message is being tested.',
+                        required: true,
+                        type: ApplicationCommandOptionType.String.valueOf(),
+                        choices: [
+                            {
+                                name: 'birthday',
+                                value: 'BIRTHDAY',
+                            },
+                            {
+                                name: 'memberAnniversary',
+                                value: 'MEMBER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'serverAnniversary',
+                                value: 'SERVER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'userSpecificBirthday',
+                                value: 'USER_SPECIFIC_BIRTHDAY',
+                            },
+                            {
+                                name: 'userSpecificMemberAnniversary',
+                                value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                            },
+                        ],
+                    },
+                    {
+                        name: Lang.getCom('arguments.position'),
+                        description:
+                            'The position number of the message, found in /message list. Leave empty to test the default message.',
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
+                        required: false,
+                    },
+                    {
+                        name: Lang.getCom('arguments.userCount'),
+                        description:
+                            'The number of users to put in this message to imitate multiple birthdays. Defaults to 1.',
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
+                        required: false,
+                        min_value: 1,
+                        max_value: 5,
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.list'),
+                description: 'List the messages of a certain type.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('arguments.type'),
+                        description: 'What type of messages to list.',
+                        required: true,
+                        type: ApplicationCommandOptionType.String.valueOf(),
+                        choices: [
+                            {
+                                name: 'birthday',
+                                value: 'BIRTHDAY',
+                            },
+                            {
+                                name: 'memberAnniversary',
+                                value: 'MEMBER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'serverAnniversary',
+                                value: 'SERVER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'userSpecificBirthday',
+                                value: 'USER_SPECIFIC_BIRTHDAY',
+                            },
+                            {
+                                name: 'userSpecificMemberAnniversary',
+                                value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                            },
+                        ],
+                    },
+                    {
+                        name: Lang.getCom('arguments.page'),
+                        description: 'An optional page number to jump to.',
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
+                        required: false,
+                        min_value: 1,
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.add'),
+                description: 'Add a custom message of a certain type.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('arguments.type'),
+                        description: 'What type of message is being added.',
+                        required: true,
+                        type: ApplicationCommandOptionType.String.valueOf(),
+                        choices: [
+                            {
+                                name: 'birthday',
+                                value: 'BIRTHDAY',
+                            },
+                            {
+                                name: 'memberAnniversary',
+                                value: 'MEMBER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'serverAnniversary',
+                                value: 'SERVER_ANNIVERSARY',
+                            },
+                        ],
+                    },
+                    {
+                        name: Lang.getCom('arguments.message'),
+                        description:
+                            'The message to add. Available placeholders: {Users} or @User, {Server}, {Year} (Anniversaries only).',
+                        type: ApplicationCommandOptionType.String.valueOf(),
+                        required: true,
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.remove'),
+                description: 'Remove a custom message of a certain type.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('arguments.type'),
+                        description: 'What type of message is being removed.',
+                        required: true,
+                        type: ApplicationCommandOptionType.String.valueOf(),
+                        choices: [
+                            {
+                                name: 'birthday',
+                                value: 'BIRTHDAY',
+                            },
+                            {
+                                name: 'memberAnniversary',
+                                value: 'MEMBER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'serverAnniversary',
+                                value: 'SERVER_ANNIVERSARY',
+                            },
+                            {
+                                name: 'userSpecificBirthday',
+                                value: 'USER_SPECIFIC_BIRTHDAY',
+                            },
+                            {
+                                name: 'userSpecificMemberAnniversary',
+                                value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                            },
+                        ],
+                    },
+                    {
+                        name: Lang.getCom('arguments.position'),
+                        description:
+                            'The message to remove. Find the position with /message list <type>',
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
+                        required: true,
+                    },
+                ],
+            },
+        ],
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = true;
-    public guildOnly = true;
-    public adminOnly = true;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = true;
 
-    constructor(
-        private messageListSubCommand: MessageListSubCommand,
-        private messageClearSubCommand: MessageClearSubCommand,
-        private messageAddSubCommand: MessageAddSubCommand,
-        private messageRemoveSubCommand: MessageRemoveSubCommand,
-        private messageTimeSubCommand: MessageTimeSubCommand,
-        private messageMentionSubCommand: MessageMentionSubCommand,
-        private messageTestSubCommand: MessageTestSubCommand,
-        private messageEmbedSubCommand: MessageEmbedSubCommand,
-        private messageColorSubCommand: MessageColorSubCommand
-    ) {}
+    constructor(public commands: Command[]) {}
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel,
-        hasPremium: boolean
-    ): Promise<void> {
-        if (args.length === 2) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US)
-            );
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let command = CommandUtils.findCommand(this.commands, intr.options.getSubcommand());
+        if (!command) {
+            // TODO: Should we log error here?
             return;
         }
 
-        let type = FormatUtils.extractMiscActionType(args[2]?.toLowerCase())?.toLowerCase() ?? '';
-
-        if (type === 'list') {
-            this.messageListSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (type === 'clear') {
-            this.messageClearSubCommand.execute(args, msg, channel);
-        } else if (type === 'add' || args[2].toLowerCase() === 'create') {
-            this.messageAddSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (type === 'remove' || args[2].toLowerCase() === 'delete') {
-            this.messageRemoveSubCommand.execute(args, msg, channel);
-        } else if (type === 'time') {
-            this.messageTimeSubCommand.execute(args, msg, channel);
-        } else if (type === 'mention' || args[2].toLowerCase() === 'role') {
-            this.messageMentionSubCommand.execute(args, msg, channel);
-        } else if (type === 'test') {
-            this.messageTestSubCommand.execute(args, msg, channel);
-        } else if (type === 'embed') {
-            this.messageEmbedSubCommand.execute(args, msg, channel);
-        } else if (type === 'color') {
-            this.messageColorSubCommand.execute(args, msg, channel, hasPremium);
-        } else {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noCustomMessageArgs', LangCode.EN_US)
-            );
-            return;
+        let passesChecks = await CommandUtils.runChecks(command, intr, data);
+        if (passesChecks) {
+            await command.execute(intr, data);
         }
     }
 }

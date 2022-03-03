@@ -1,74 +1,85 @@
-import * as Chrono from 'chrono-node';
-
-import { FormatUtils, MessageUtils, ParseUtils } from '../utils';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
-
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { UserDataResults } from '../models/database';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import {
+    ChatInputApplicationCommandData,
+    CommandInteraction,
+    MessageEmbed,
+    PermissionString,
+} from 'discord.js';
 import moment from 'moment';
+import { createRequire } from 'node:module';
 
+import { UserDataResults } from '../models/database/user-data-results-models.js';
+import { EventData } from '../models/index.js';
+import { UserRepo } from '../services/database/repos/user-repo.js';
+import { Lang } from '../services/index.js';
+import { InteractionUtils } from '../utils/index.js';
+import { ListUtils } from '../utils/list-utils.js';
+import { Command, CommandDeferType } from './index.js';
+
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
-
 export class ListCommand implements Command {
-    public name: string = 'list';
-    public aliases = ['viewall'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.list'),
+        description: 'View the birthday list.',
+        options: [
+            {
+                name: Lang.getCom('arguments.type'),
+                description: 'What type of list you would like to view, defaults to birthday.',
+                type: ApplicationCommandOptionType.String.valueOf(),
+                required: false,
+                choices: [
+                    {
+                        name: 'birthday',
+                        value: 'BIRTHDAY',
+                    },
+                    {
+                        name: 'memberAnniversary',
+                        value: 'MEMBER_ANNIVERSARY',
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('arguments.page'),
+                description: 'An optional page number to jump to.',
+                type: ApplicationCommandOptionType.Integer.valueOf(),
+                required: false,
+                min_value: 1,
+            },
+        ],
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
-    public guildOnly = true;
-    public adminOnly = false;
-    public ownerOnly = false;
-    public voteOnly = true;
+    public requireVote = true;
     public requirePremium = false;
-    public getPremium = false;
 
-    constructor(private userRepo: UserRepo, private guildRepo: GuildRepo) {}
+    constructor(public userRepo: UserRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
-        let guildData = await this.guildRepo.getGuild(msg.guild.id);
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let guildData = data.guild;
 
-        let type: string;
+        let type =
+            intr.options.getString(Lang.getCom('arguments.type'))?.toLowerCase() ?? 'birthday';
+        let page = intr.options.getInteger(Lang.getCom('arguments.page')) ?? 1;
 
-        if (args.length > 2) {
-            type = FormatUtils.extractCelebrationType(args[2].toLowerCase())?.toLowerCase() ?? '';
-            if (type !== 'birthday' && type !== 'memberanniversary') {
-                // Lang part not implemented
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.invalidListArgs', LangCode.EN_US)
-                );
-                return;
-            }
-        } else {
-            type = 'birthday';
-        }
-
-        let page = 1;
         let date: moment.MomentInput;
 
-        let input = args.length > 3 ? args.slice(3).join(' ') : args.slice(2).join(' ');
-
-        if (input) {
-            page = ParseUtils.parseInt(input);
-
-            if (!page) date = Chrono.parseDate(input); // Try an parse a date
-
-            if (!page || page <= 0 || page > 100000) page = 1;
-        }
-
-        // TODO: Add config option for the size of the memberAnniversaryList
         let pageSize =
             type === 'birthday'
-                ? Config.experience.birthdayListSize
-                : Config.experience.birthdayListSize;
+                ? (Config.experience.birthdayListSize as number)
+                : (Config.experience.memberAnniversaryListSize as number);
 
         let embed: MessageEmbed;
 
-        let guildMembers = msg.guild.members.cache;
+        let guildMembers = intr.guild.members.cache;
 
-        if (msg.guild.memberCount - guildMembers.size > 5) {
-            guildMembers = await msg.guild.members.fetch();
+        if (intr.guild.memberCount - guildMembers.size > 5) {
+            guildMembers = await intr.guild.members.fetch();
         }
 
         if (type === 'birthday') {
@@ -88,12 +99,13 @@ export class ListCommand implements Command {
                 userDataResults = await this.userRepo.getBirthdayListFull(users, pageSize, page);
             }
 
-            embed = await FormatUtils.getBirthdayListFullEmbed(
-                msg.guild,
+            embed = await ListUtils.getBirthdayListFullEmbed(
+                intr.guild,
                 userDataResults,
                 guildData,
                 userDataResults.stats.Page,
-                pageSize
+                pageSize,
+                data
             );
         } else {
             // Member Anniversary List
@@ -112,6 +124,8 @@ export class ListCommand implements Command {
 
             let totalPages = Math.ceil(memberList.length / pageSize);
 
+            if (page > totalPages) page = totalPages;
+
             let startMember: number;
 
             if (date) {
@@ -126,27 +140,57 @@ export class ListCommand implements Command {
 
             memberList = memberList.slice(startMember, startMember + pageSize);
 
-            embed = await FormatUtils.getMemberAnniversaryListFullEmbed(
-                msg.guild,
+            embed = await ListUtils.getMemberAnniversaryListFullEmbed(
+                intr.guild,
                 memberList,
                 guildData,
                 page,
                 pageSize,
                 totalPages,
-                totalMembers
+                totalMembers,
+                data
             );
         }
 
-        let message = await MessageUtils.send(channel, embed);
-
-        if (
-            embed.description === Lang.getRef('list.noBirthdays', LangCode.EN_US) ||
-            embed.description === Lang.getRef('list.noMemberAnniversaries', LangCode.EN_US)
-        )
-            return;
-
-        await MessageUtils.react(message, Config.emotes.previousPage);
-        await MessageUtils.react(message, Config.emotes.jumpToPage);
-        await MessageUtils.react(message, Config.emotes.nextPage);
+        await InteractionUtils.send(intr, {
+            embeds: [embed],
+            components: [
+                {
+                    type: 'ACTION_ROW',
+                    components: [
+                        {
+                            type: 'BUTTON',
+                            customId: type + '_list_previous_more',
+                            emoji: Config.emotes.previousMore,
+                            style: 'PRIMARY',
+                        },
+                        {
+                            type: 'BUTTON',
+                            customId: type + '_list_previous',
+                            emoji: Config.emotes.previous,
+                            style: 'PRIMARY',
+                        },
+                        {
+                            type: 'BUTTON',
+                            customId: type + '_list_refresh',
+                            emoji: Config.emotes.refresh,
+                            style: 'PRIMARY',
+                        },
+                        {
+                            type: 'BUTTON',
+                            customId: type + '_list_next',
+                            emoji: Config.emotes.next,
+                            style: 'PRIMARY',
+                        },
+                        {
+                            type: 'BUTTON',
+                            customId: type + '_list_next_more',
+                            emoji: Config.emotes.nextMore,
+                            style: 'PRIMARY',
+                        },
+                    ],
+                },
+            ],
+        });
     }
 }

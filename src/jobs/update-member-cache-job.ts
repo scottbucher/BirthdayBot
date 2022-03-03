@@ -1,9 +1,12 @@
 import { Client } from 'discord.js';
-import { Job } from './job';
-import { Logger } from '../services';
-import { TimeUtils } from '../utils';
 import schedule from 'node-schedule';
+import { createRequire } from 'node:module';
 
+import { Logger } from '../services/index.js';
+import { TimeUtils } from '../utils/index.js';
+import { Job } from './index.js';
+
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 

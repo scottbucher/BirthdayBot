@@ -1,64 +1,108 @@
-import { FormatUtils, MessageUtils } from '../utils';
-import { Message, TextChannel } from 'discord.js';
-import {
-    TrustedRoleAddSubCommand,
-    TrustedRoleClearSubCommand,
-    TrustedRoleListSubCommand,
-    TrustedRoleRemoveSubCommand,
-} from './trusted';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { CommandUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class TrustedRoleCommand implements Command {
-    public name: string = 'trustedrole';
-    public aliases = ['tr', 'trusted'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.trustedRole'),
+        description: 'Manage the Trusted Roles. (Premium servers can have multiple trusted roles)',
+        options: [
+            {
+                name: Lang.getCom('subCommands.add'),
+                description:
+                    'Add a trusted role. (Premium servers can have multiple trusted roles)',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('arguments.role'),
+                        description: 'The role to add.',
+                        type: ApplicationCommandOptionType.Role.valueOf(),
+                        required: true,
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.remove'),
+                description: 'Remove a trusted role',
+                type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('subCommands.role'),
+                        description: 'Role to remove from the trusted role list.',
+                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                        options: [
+                            {
+                                name: Lang.getCom('arguments.role'),
+                                description: 'The role to remove.',
+                                type: ApplicationCommandOptionType.Role.valueOf(),
+                                required: true,
+                            },
+                        ],
+                    },
+                    {
+                        name: Lang.getCom('subCommands.id'),
+                        description:
+                            'Remove an ID from the trusted role list. Used when a role has been deleted.',
+                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                        options: [
+                            {
+                                name: Lang.getCom('arguments.id'),
+                                description: 'The id to remove.',
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                required: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.clear'),
+                description: 'Clear all trusted roles.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+            },
+            {
+                name: Lang.getCom('subCommands.list'),
+                description:
+                    'List the trusted roles. (Premium servers can have multiple trusted roles)',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('arguments.page'),
+                        description: 'An optional page number to jump to.',
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
+                        required: false,
+                        min_value: 1,
+                    },
+                ],
+            },
+        ],
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = true;
-    public guildOnly = true;
-    public adminOnly = true;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = true;
 
-    constructor(
-        private trustedRoleAddSubCommand: TrustedRoleAddSubCommand,
-        private trustedRoleRemoveSubCommand: TrustedRoleRemoveSubCommand,
-        private trustedRoleClearSubCommand: TrustedRoleClearSubCommand,
-        private trustedRoleListSubCommand: TrustedRoleListSubCommand
-    ) {}
+    constructor(private commands: Command[]) {}
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel,
-        hasPremium: boolean
-    ): Promise<void> {
-        if (args.length === 2) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noTrustedRoleArgs', LangCode.EN_US)
-            );
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let command = CommandUtils.findCommand(this.commands, intr.options.getSubcommand());
+        if (!command) {
+            // TODO: Should we log error here?
             return;
         }
 
-        let action = FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ?? '';
-
-        if (action === 'add') {
-            this.trustedRoleAddSubCommand.execute(args, msg, channel, hasPremium);
-        } else if (action === 'remove') {
-            this.trustedRoleRemoveSubCommand.execute(args, msg, channel);
-        } else if (action === 'clear') {
-            this.trustedRoleClearSubCommand.execute(args, msg, channel);
-        } else if (action === 'list') {
-            this.trustedRoleListSubCommand.execute(args, msg, channel, hasPremium);
-        } else {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noTrustedRoleArgs', LangCode.EN_US)
-            );
-            return;
+        let passesChecks = await CommandUtils.runChecks(command, intr, data);
+        if (passesChecks) {
+            await command.execute(intr, data);
         }
     }
 }

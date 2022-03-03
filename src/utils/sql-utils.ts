@@ -3,11 +3,11 @@ import mysql from 'mysql';
 export class SqlUtils {
     public static createProcedureSql(name: string, params: any[]): string {
         let sql = `Call ${name}(${new Array(params.length).fill('?').join(',')});`;
-        params = params.map(this.typeCast);
+        params = params.map(param => this.typeCast(param));
         return mysql.format(sql, params);
     }
 
-    public static typeCast(param: any): any {
+    public static typeCast(param: any): unknown {
         return typeof param === 'boolean' ? +param : param;
     }
 

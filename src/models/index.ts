@@ -1,12 +1,9 @@
-export { BotSite } from './config-models';
+export { BotSite } from './config-models.js';
 export {
     SubscriptionLink,
     SubscriptionStatus,
     PlanName,
     SubscriptionStatusName,
-} from './subscription-models';
-export {
-    BirthdayMemberRoleStatus,
-    BirthdayMemberStatus,
-    AnniversaryMemberStatus,
-} from './celebration-job';
+} from './subscription-models.js';
+export { BirthdayMemberStatus, AnniversaryMemberStatus } from './celebration-job.js';
+export { EventData } from './internal-models.js';

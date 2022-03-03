@@ -1,8 +1,7 @@
 {
-    "alwaysSendBirthdayMessage": false,
-    "alwaysGiveBirthdayRole": false,
-    "alwaysMemberAnniversary": false,
-    "alwaysServerAnniversary": false,
+    "skip": {
+        "checkPerms": false
+    },
     "override": {
         "shardMode": {
             "enabled": false,

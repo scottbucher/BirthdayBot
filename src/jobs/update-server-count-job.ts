@@ -1,21 +1,23 @@
 import { ActivityType, ShardingManager } from 'discord.js';
-import { HttpService, Lang, Logger } from '../services';
+import moment from 'moment';
+import { createRequire } from 'node:module';
 
-import { BotSite } from '../models/config-models';
-import { CustomClient } from '../extensions';
-import { Job } from './job';
-import { LangCode } from '../models/enums';
-import { ShardUtils } from '../utils';
-import schedule from 'node-schedule';
+import { CustomClient } from '../extensions/index.js';
+import { BotSite } from '../models/index.js';
+import { HttpService, Lang, Logger } from '../services/index.js';
+import { ShardUtils } from '../utils/index.js';
+import { Job } from './job.js';
 
-let Config = require('../../config/config.json');
+const require = createRequire(import.meta.url);
 let BotSites: BotSite[] = require('../../config/bot-sites.json');
+let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 
 export class UpdateServerCountJob implements Job {
     public name = 'Update Server Count';
     public schedule: string = Config.jobs.updateServerCount.schedule;
     public log: boolean = Config.jobs.updateServerCount.log;
+
     private botSites: BotSite[];
 
     constructor(private shardManager: ShardingManager, private httpService: HttpService) {
@@ -25,26 +27,30 @@ export class UpdateServerCountJob implements Job {
     public async run(): Promise<void> {
         let serverCount = await ShardUtils.serverCount(this.shardManager);
 
+        let minute = moment().minute();
+
         let type: ActivityType = 'STREAMING';
-        let name = `to ${serverCount.toLocaleString()} servers`;
-        let url = Lang.getRef('links.stream', LangCode.EN_US);
+        let name =
+            (minute / 5) % 2 === 0
+                ? `bdays to ${serverCount.toLocaleString()} servers`
+                : `Check out /logo!`;
+        let url = Lang.getCom('links.stream');
 
         await this.shardManager.broadcastEval(
-            async (client, context) => {
-                let customClient = client as CustomClient;
-                return await customClient.setPresence(context.type, context.name, context.url);
+            (client: CustomClient, context) => {
+                return client.setPresence(context.type, context.name, context.url);
             },
             { context: { type, name, url } }
         );
 
         Logger.info(
-            Logs.info.updatedServerCount.replace('{SERVER_COUNT}', serverCount.toLocaleString())
+            Logs.info.updatedServerCount.replaceAll('{SERVER_COUNT}', serverCount.toLocaleString())
         );
 
         for (let botSite of this.botSites) {
             try {
                 let body = JSON.parse(
-                    botSite.body.replace('{{SERVER_COUNT}}', serverCount.toString())
+                    botSite.body.replaceAll('{{SERVER_COUNT}}', serverCount.toString())
                 );
                 let res = await this.httpService.post(botSite.url, botSite.authorization, body);
 
@@ -53,23 +59,13 @@ export class UpdateServerCountJob implements Job {
                 }
             } catch (error) {
                 Logger.error(
-                    Logs.error.updateServerCountSite.replace('{BOT_SITE}', botSite.name),
+                    Logs.error.updatedServerCountSite.replaceAll('{BOT_SITE}', botSite.name),
                     error
                 );
                 continue;
             }
 
-            Logger.info(Logs.info.updateServerCountSite.replace('{BOT_SITE}', botSite.name));
+            Logger.info(Logs.info.updatedServerCountSite.replaceAll('{BOT_SITE}', botSite.name));
         }
-    }
-
-    public start(): void {
-        schedule.scheduleJob(this.schedule, async () => {
-            try {
-                await this.run();
-            } catch (error) {
-                Logger.error(Logs.error.updateServerCount, error);
-            }
-        });
     }
 }

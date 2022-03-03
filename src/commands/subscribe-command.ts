@@ -1,63 +1,65 @@
-import { DMChannel, Message, TextChannel } from 'discord.js';
-import { Lang, Logger, SubscriptionService } from '../services';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { Command } from './command';
-import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
-import { PlanName } from '../models/subscription-models';
+import { EventData, PlanName } from '../models/index.js';
+import { Lang, Logger, SubscriptionService } from '../services/index.js';
+import { InteractionUtils, MessageUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
-
 export class SubscribeCommand implements Command {
-    public name: string = 'subscribe';
-    public aliases = ['buy', 'purchase', 'sub'];
-    public requireSetup = true;
-    public guildOnly = true;
-    public adminOnly = false;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.subscribe'),
+        description: 'Subscribe to Birthday Bot Premium.',
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
+    public requireSetup = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = false;
 
     constructor(private subscriptionService: SubscriptionService) {}
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel | DMChannel
-    ): Promise<void> {
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        // These are currently under info, maybe they should be moved to validation?
         if (!Config.payments.enabled) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('premiumPrompts.premiumDisabled', LangCode.EN_US)
+            await InteractionUtils.send(
+                intr,
+                Lang.getEmbed('info', 'premium.premiumDisabled', data.lang())
             );
             return;
         }
 
         if (!Config.payments.allowNewTransactions) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('premiumPrompts.refuseNewTransactions', LangCode.EN_US)
+            await InteractionUtils.send(
+                intr,
+                Lang.getEmbed('info', 'premium.refuseNewTransactions', data.lang())
             );
             return;
         }
 
         let subLink = await this.subscriptionService.createSubscription(
             PlanName.premium1,
-            msg.guild.id
+            intr.guild.id
         );
+
         if (!subLink) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('premiumPrompts.premiumAlreadyActive', LangCode.EN_US)
+            await InteractionUtils.send(
+                intr,
+                Lang.getEmbed('info', 'premium.premiumAlreadyActive', data.lang())
             );
             return;
         }
 
         await MessageUtils.send(
-            msg.author,
-            Lang.getEmbed('premiumPrompts.subscriptionPM', LangCode.EN_US, {
+            intr.user,
+            Lang.getEmbed('info', 'premium.subscriptionPM', data.lang(), {
                 SUB_LINK: subLink.link,
                 BIRTHDAY_MESSAGE_MAX_FREE:
                     Config.validation.message.maxCount.birthday.free.toString(),
@@ -77,17 +79,17 @@ export class SubscribeCommand implements Command {
             })
         );
 
-        await MessageUtils.send(
-            channel,
-            Lang.getEmbed('premiumPrompts.subscriptionDMPrompt', LangCode.EN_US)
+        await InteractionUtils.send(
+            intr,
+            Lang.getEmbed('info', 'premium.subscriptionDMPrompt', data.lang())
         );
 
         Logger.info(
             Logs.info.unsubRanSubCmd
-                .replace('{SENDER_TAG}', msg.author.tag)
-                .replace('{SENDER_ID}', msg.author.id)
-                .replace('{GUILD_NAME}', msg.guild.name)
-                .replace('{GUILD_ID}', msg.guild.id)
+                .replaceAll('{SENDER_TAG}', intr.user.tag)
+                .replaceAll('{SENDER_ID}', intr.user.id)
+                .replaceAll('{GUILD_NAME}', intr.guild.name)
+                .replaceAll('{GUILD_ID}', intr.guild.id)
         );
         return;
     }

@@ -1,8 +1,7 @@
-export { HttpService } from './http-service';
-export { Logger } from './logger';
-export { MasterApiService } from './master-api-services';
-export { SubscriptionService } from './subscription-service';
-export { Lang } from './lang';
-export { JobService } from './job-service';
-export { DiscordService } from './discord-service';
-export { CelebrationService } from './celebration-service';
+export { CelebrationService } from './celebration-service.js';
+export { HttpService } from './http-service.js';
+export { JobService } from './job-service.js';
+export { Lang } from './lang.js';
+export { Logger } from './logger.js';
+export { MasterApiService } from './master-api-service.js';
+export { SubscriptionService } from './subscription-service.js';

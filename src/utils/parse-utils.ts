@@ -2,7 +2,7 @@ export class ParseUtils {
     public static parseInt(input: string): number {
         let int: number;
         try {
-            int = parseInt(input.replace(/,/g, ''));
+            int = parseInt(input.replaceAll(',', ''));
         } catch {
             return;
         }

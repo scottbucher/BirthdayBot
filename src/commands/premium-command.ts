@@ -1,49 +1,44 @@
-import { DMChannel, Message, TextChannel } from 'discord.js';
-import { Lang, Logger, SubscriptionService } from '../services';
-import { MessageUtils, TimeUtils } from '../utils';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { Command } from './command';
-import { LangCode } from '../models/enums';
-import { PlanName } from '../models/subscription-models';
+import { EventData } from '../models/index.js';
+import { Lang, Logger } from '../services/index.js';
+import { InteractionUtils, TimeUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
-
 export class PremiumCommand implements Command {
-    public name: string = 'premium';
-    public aliases = ['inv'];
-    public requireSetup = true;
-    public guildOnly = true;
-    public adminOnly = false;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.premium'),
+        description: 'View information about premium, or about your current premium subscription.',
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = false;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
+    public requireSetup = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = false;
 
-    constructor(private subscriptionService: SubscriptionService) {}
-
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel | DMChannel
-    ): Promise<void> {
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         if (!Config.payments.enabled) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('premiumPrompts.premiumDisabled', LangCode.EN_US)
+            await InteractionUtils.send(
+                intr,
+                Lang.getEmbed('info', 'premium.premiumDisabled', data.lang())
             );
             return;
         }
 
-        let subStatus = await this.subscriptionService.getSubscription(
-            PlanName.premium1,
-            msg.guild.id
-        );
+        let subStatus = data.subscription;
 
         if (!subStatus || !subStatus.service) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('premiumPrompts.noSubscription', LangCode.EN_US, {
+            await InteractionUtils.send(
+                intr,
+                Lang.getEmbed('info', 'premium.noSubscription', data.lang(), {
                     BIRTHDAY_MESSAGE_MAX_FREE:
                         Config.validation.message.maxCount.birthday.free.toString(),
                     BIRTHDAY_MESSAGE_MAX_PAID:
@@ -64,10 +59,10 @@ export class PremiumCommand implements Command {
 
             Logger.info(
                 Logs.info.unsubRanPremiumCmd
-                    .replace('{SENDER_TAG}', msg.author.tag)
-                    .replace('{SENDER_ID}', msg.author.id)
-                    .replace('{GUILD_NAME}', msg.guild.name)
-                    .replace('{GUILD_ID}', msg.guild.id)
+                    .replaceAll('{SENDER_TAG}', intr.user.tag)
+                    .replaceAll('{SENDER_ID}', intr.user.id)
+                    .replaceAll('{GUILD_NAME}', intr.guild.name)
+                    .replaceAll('{GUILD_ID}', intr.guild.id)
             );
             return;
         }
@@ -75,19 +70,19 @@ export class PremiumCommand implements Command {
         let lastPayment = TimeUtils.getMoment(subStatus.subscription.times.lastPayment);
         let paidUntil = TimeUtils.getMoment(subStatus.subscription.times.paidUntil);
 
-        let na = Lang.getRef('terms.na', LangCode.EN_US);
-        await MessageUtils.send(
-            channel,
-            Lang.getEmbed('premiumPrompts.subscription', LangCode.EN_US, {
+        let na = Lang.getRef('info', 'terms.na', data.lang());
+        await InteractionUtils.send(
+            intr,
+            Lang.getEmbed('info', 'premium.subscription', data.lang(), {
                 IS_ACTIVE: Lang.getRef(
+                    'info',
                     'boolean.' + (subStatus.service ? 'yes' : 'no'),
-                    LangCode.EN_US
+                    data.lang()
                 ),
                 SUBSCRIPTION_ID: subStatus.subscription.id
-                    ? `[${subStatus.subscription.id}](${Lang.getRef(
-                          'links.autopay',
-                          LangCode.EN_US
-                      )}/connect/${subStatus.subscription.id})`
+                    ? `[${subStatus.subscription.id}](${Lang.getCom('links.autopay')}/connect/${
+                          subStatus.subscription.id
+                      })`
                     : na,
                 STATUS: subStatus.subscription.status ?? na,
                 LAST_PAYMENT: lastPayment?.format('MMMM DD, YYYY, HH:mm UTC') ?? na,

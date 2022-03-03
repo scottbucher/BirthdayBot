@@ -1,7 +1,9 @@
-import { SubscriptionLink, SubscriptionStatus } from '../models/subscription-models';
+import { createRequire } from 'node:module';
 
-import { HttpService } from './http-service';
+import { SubscriptionLink, SubscriptionStatus } from '../models/index.js';
+import { HttpService } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class SubscriptionService {
@@ -21,7 +23,7 @@ export class SubscriptionService {
 
         if (!res.ok) return;
 
-        return await res.json();
+        (await res.json()) as SubscriptionLink;
     }
 
     public async getSubscription(
@@ -37,7 +39,7 @@ export class SubscriptionService {
 
         if (!res.ok) return;
 
-        return await res.json();
+        return (await res.json()) as SubscriptionStatus;
     }
 
     public async getAllSubscription(planName: string): Promise<SubscriptionStatus[]> {
@@ -50,7 +52,7 @@ export class SubscriptionService {
 
         if (!res.ok) return;
 
-        return await res.json();
+        (await res.json()) as SubscriptionStatus[];
     }
 
     public async hasService(planName: string, subscriberId: string): Promise<boolean> {

@@ -1,18 +1,20 @@
+import { ShardingManager } from 'discord.js';
+import { Request, Response, Router } from 'express';
+import router from 'express-promise-router';
+import { createRequire } from 'node:module';
+
+import { CustomClient } from '../extensions/index.js';
+import { mapClass } from '../middleware/index.js';
 import {
     GetShardsResponse,
     SetShardPresencesRequest,
     ShardInfo,
     ShardStats,
-} from '../models/cluster-api';
-import { Request, Response, Router } from 'express';
+} from '../models/cluster-api/index.js';
+import { Logger } from '../services/index.js';
+import { Controller } from './index.js';
 
-import { Controller } from './controller';
-import { CustomClient } from '../extensions';
-import { Logger } from '../services';
-import { ShardingManager } from 'discord.js';
-import { mapClass } from '../middleware';
-import router from 'express-promise-router';
-
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 
@@ -43,7 +45,7 @@ export class ShardsController implements Controller {
                     let uptime = (await shard.fetchClientValue('uptime')) as number;
                     shardInfo.uptimeSecs = Math.floor(uptime / 1000);
                 } catch (error) {
-                    Logger.error(Logs.error.shardInfo, error);
+                    Logger.error(Logs.error.managerShardInfo, error);
                     shardInfo.error = true;
                 }
 
@@ -67,9 +69,8 @@ export class ShardsController implements Controller {
         let reqBody: SetShardPresencesRequest = res.locals.input;
 
         await this.shardManager.broadcastEval(
-            async (client, context) => {
-                let customClient = client as CustomClient;
-                return await customClient.setPresence(context.type, context.name, context.url);
+            (client: CustomClient, context) => {
+                return client.setPresence(context.type, context.name, context.url);
             },
             { context: { type: reqBody.type, name: reqBody.name, url: reqBody.url } }
         );

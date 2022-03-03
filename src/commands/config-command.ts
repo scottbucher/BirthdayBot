@@ -1,95 +1,93 @@
-import {
-    ConfigBirthdayMasterRoleSubCommand,
-    ConfigChannelSubCommand,
-    ConfigNameFormatSubCommand,
-    ConfigRequireAllTrustedRolesSubCommand,
-    ConfigRoleSubCommand,
-    ConfigTimezoneSubCommand,
-    ConfigTrustedPreventsMsgSubCommand,
-    ConfigTrustedPreventsRoleSubCommand,
-    ConfigUseTimezoneSubCommand,
-} from './config';
-import { Message, TextChannel } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { MessageUtils, FormatUtils } from '../utils';
-import { ConfigDateFormatSubCommand } from './config/config-date-format-sub-command';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { CommandUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class ConfigCommand implements Command {
-    public name: string = 'config';
-    public aliases = ['cf', 'setting'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.config'),
+        description: 'Manage config settings.',
+        options: [
+            {
+                name: Lang.getCom('arguments.setting'),
+                description: `Change Birthday Bot's config settings.`,
+                type: ApplicationCommandOptionType.String.valueOf(),
+                required: true,
+                choices: [
+                    {
+                        name: Lang.getCom('settingType.nameFormat'),
+                        value: Lang.getCom('settingType.nameFormat'),
+                    },
+                    {
+                        name: Lang.getCom('settingType.timeZone'),
+                        value: Lang.getCom('settingType.timeZone'),
+                    },
+                    {
+                        name: Lang.getCom('settingType.useTimezone'),
+                        value: Lang.getCom('settingType.useTimezone'),
+                    },
+                    {
+                        name: Lang.getCom('settingType.dateFormat'),
+                        value: Lang.getCom('settingType.dateFormat'),
+                    },
+                    {
+                        name: Lang.getCom('settingType.trustedPreventsMessage'),
+                        value: Lang.getCom('settingType.trustedPreventsMessage'),
+                    },
+                    {
+                        name: Lang.getCom('settingType.trustedPreventsRole'),
+                        value: Lang.getCom('settingType.trustedPreventsRole'),
+                    },
+                    {
+                        name: Lang.getCom('settingType.requireAllTrustedRoles'),
+                        value: Lang.getCom('settingType.requireAllTrustedRoles'),
+                    },
+                    {
+                        name: Lang.getCom('settingType.channel'),
+                        value: Lang.getCom('settingType.channel'),
+                    },
+                    {
+                        name: Lang.getCom('settingType.role'),
+                        value: Lang.getCom('settingType.role'),
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('arguments.reset'),
+                description: 'Reset this setting to the default value.',
+                type: ApplicationCommandOptionType.Boolean.valueOf(),
+                required: false,
+            },
+        ],
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = true;
-    public guildOnly = true;
-    public adminOnly = true;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = false;
 
-    constructor(
-        private configBirthdayMasterRole: ConfigBirthdayMasterRoleSubCommand,
-        private configChannelSubCommand: ConfigChannelSubCommand,
-        private configRoleSubCommand: ConfigRoleSubCommand,
-        private configNameFormatSubCommand: ConfigNameFormatSubCommand,
-        private configTrustedPreventsMsgSubCommand: ConfigTrustedPreventsMsgSubCommand,
-        private configTrustedPreventsRoleSubCommand: ConfigTrustedPreventsRoleSubCommand,
-        private configTimezoneSubCommand: ConfigTimezoneSubCommand,
-        private configUseTimezoneSubCommand: ConfigUseTimezoneSubCommand,
-        private configRequireAllTrustedRolesSubCommand: ConfigRequireAllTrustedRolesSubCommand,
-        private configDateFormatSubCommand: ConfigDateFormatSubCommand
-    ) {}
+    constructor(private commands: Command[]) {}
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel,
-        hasPremium: boolean
-    ): Promise<void> {
-        if (args.length === 2) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noConfigArgs', LangCode.EN_US)
-            );
-            return;
-        }
-        let subCommand = FormatUtils.extractConfigType(args[2].toLowerCase())?.toLowerCase();
-
-        if (!subCommand) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noConfigArgs', LangCode.EN_US)
-            );
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let command = CommandUtils.findCommand(
+            this.commands,
+            intr.options.getString(Lang.getCom('arguments.setting'))
+        );
+        if (!command) {
+            // TODO: Should we log error here?
             return;
         }
 
-        if (subCommand === 'birthdaymasterrole') {
-            this.configBirthdayMasterRole.execute(args, msg, channel);
-        } else if (subCommand === 'channel') {
-            this.configChannelSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'role') {
-            this.configRoleSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'nameformat') {
-            this.configNameFormatSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'timezone') {
-            this.configTimezoneSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'usetimezone') {
-            this.configUseTimezoneSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'trustedpreventsmessage') {
-            this.configTrustedPreventsMsgSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'trustedpreventsrole') {
-            this.configTrustedPreventsRoleSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'requirealltrustedroles') {
-            this.configRequireAllTrustedRolesSubCommand.execute(args, msg, channel);
-        } else if (subCommand === 'dateformat') {
-            this.configDateFormatSubCommand.execute(args, msg, channel);
-        } else {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noConfigArgs', LangCode.EN_US)
-            );
-            return;
+        let passesChecks = await CommandUtils.runChecks(command, intr, data);
+        if (passesChecks) {
+            await command.execute(intr, data);
         }
     }
 }

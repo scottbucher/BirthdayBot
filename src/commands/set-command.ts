@@ -1,216 +1,162 @@
-import { Chrono, ParsedComponents, ParsedResult, en } from 'chrono-node';
+import { Chrono, en } from 'chrono-node';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import {
-    CollectOptions,
-    CollectorUtils,
-    ExpireFunction,
-    MessageFilter,
-} from 'discord.js-collector-utils';
-import {
+    ButtonInteraction,
+    ChatInputApplicationCommandData,
+    CommandInteraction,
     DMChannel,
     Message,
-    MessageEmbed,
-    MessageReaction,
-    Permissions,
-    TextChannel,
-    User,
+    PermissionString,
 } from 'discord.js';
-import { FormatUtils, GuildUtils, MessageUtils, PermissionUtils } from '../utils';
-import { GuildRepo, UserRepo } from '../services/database/repos';
 
-import { Command } from './command';
-import { GuildData } from '../models/database';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-
-let Config = require('../../config/config.json');
-
-const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.experience.promptExpireTime * 1000,
-    reset: true,
-};
-
-const trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
+import { EventData } from '../models/index.js';
+import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { CollectorUtils } from '../utils/collector-utils.js';
+import { FormatUtils, InteractionUtils, PermissionUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class SetCommand implements Command {
-    public name: string = 'set';
-    public aliases = ['add', 'suggest'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.set'),
+        description: 'Set your birthday',
+        options: [
+            {
+                name: Lang.getCom('arguments.date'),
+                description: 'The date of the birthday you want to set.',
+                type: ApplicationCommandOptionType.String.valueOf(),
+                required: false,
+            },
+            {
+                name: Lang.getCom('arguments.timezone'),
+                description: 'The timezone the birthday will be celebrated in.',
+                type: ApplicationCommandOptionType.String.valueOf(),
+                required: false,
+            },
+            {
+                name: Lang.getCom('arguments.user'),
+                description:
+                    'The user whose birthday you are sett. They will have to confirm this.',
+                type: ApplicationCommandOptionType.User.valueOf(),
+                required: false,
+            },
+        ],
+    };
+
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = false;
+    public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
-    public guildOnly = false;
-    public adminOnly = false;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = false;
 
-    constructor(private guildRepo: GuildRepo, private userRepo: UserRepo) {}
+    constructor(public guildRepo: GuildRepo, public userRepo: UserRepo) {}
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel | DMChannel
-    ): Promise<void> {
-        let stopFilter: MessageFilter = (nextMsg: Message) =>
-            nextMsg.author.id === msg.author.id &&
-            [Config.prefix, ...Config.stopCommands].includes(
-                nextMsg.content.split(/\s+/)[0].toLowerCase()
-            );
-        let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
-        };
-        let target: User;
-        let timeZone: string;
-        let dm = channel instanceof DMChannel;
-        let guildData: GuildData;
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let birthdayInput = intr.options.getString(Lang.getCom('arguments.date'));
+        let timezoneInput = intr.options.getString(Lang.getCom('arguments.timezone'));
+        let target = intr.options.getUser(Lang.getCom('arguments.user')) ?? intr.user;
+        let dm = intr.channel instanceof DMChannel;
 
-        target = msg.mentions.members?.first()?.user;
+        let timeZone = timezoneInput ? FormatUtils.findZone(timezoneInput) : undefined;
+        let suggest = intr.user !== target;
 
-        for (let i = 2; i < args.length; i++) {
-            if (!FormatUtils.checkAbbreviation(args[i]) && !FormatUtils.checkIfMonth(args[i]))
-                timeZone = FormatUtils.findZone(args[i]);
-            if (timeZone) break;
-        }
-
-        if (!target || dm) {
-            target = msg.author;
-        } else {
-            guildData = await this.guildRepo.getGuild(msg.guild.id);
-
-            if (guildData && !PermissionUtils.hasPermission(msg.member, guildData)) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.cantSuggest', LangCode.EN_US)
+        if (suggest) {
+            if (dm) {
+                await InteractionUtils.send(
+                    intr,
+                    Lang.getErrorEmbed('validation', 'errorEmbeds.suggestBirthdayInDM', data.lang())
                 );
                 return;
             }
 
-            // Get who they are mentioning
-            let member =
-                msg.mentions.members?.first() ||
-                (args.length > 2 && GuildUtils.findMember(msg.guild, args[2])) ||
-                (args.length > 3 && GuildUtils.findMember(msg.guild, args[3])) ||
-                (args.length > 4 && GuildUtils.findMember(msg.guild, args[4]));
-
-            if (member.user.bot) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.cantSetBirthdayForBot', LangCode.EN_US)
+            if (target.bot) {
+                await InteractionUtils.send(
+                    intr,
+                    Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggestForBot', data.lang())
                 );
                 return;
             }
 
             if (
-                member &&
-                !(channel as TextChannel)
-                    .permissionsFor(member)
-                    .has([Permissions.FLAGS.READ_MESSAGE_HISTORY])
+                data.guild &&
+                !PermissionUtils.hasPermission(intr.guild.members.resolve(intr.user.id), data.guild)
             ) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.memberNeedsMessageHistory', LangCode.EN_US, {
-                        MEMBER: member.toString(),
-                    })
+                await InteractionUtils.send(
+                    intr,
+                    Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggest', data.lang())
                 );
                 return;
             }
         }
-        let suggest = target !== msg.author;
 
-        let userData = await this.userRepo.getUser(target.id); // Try and get their data
-        let changesLeft = 5; // Default # of changes
+        let userData = await this.userRepo.getUser(target.id);
 
-        if (userData) {
-            // Are they in the database?
-            if (userData.ChangesLeft === 0) {
-                // Out of changes?
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.outOfAttempts', LangCode.EN_US)
+        let changesLeft = userData ? userData?.ChangesLeft : 5;
+
+        let nextIntr: CommandInteraction | ButtonInteraction = intr;
+
+        if (!(intr.channel instanceof DMChannel) && data.guild)
+            if (
+                data.guild?.DefaultTimezone !== '0' &&
+                (!timeZone || timeZone !== data.guild?.DefaultTimezone)
+            ) {
+                // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
+                let defaultTimezoneResult = await CollectorUtils.getBooleanFromButton(
+                    intr,
+                    data,
+                    Lang.getEmbed(
+                        'prompts',
+                        'settingBirthday.defaultTimeZoneAvailable' + (timeZone ? 'Override' : ''),
+                        data.lang(),
+                        {
+                            SERVER_TIMEZONE: data.guild.DefaultTimezone,
+                            INPUTTED_TIMEZONE: timeZone,
+                            TARGET: target.username,
+                        }
+                    )
                 );
-                return;
-            } else {
-                changesLeft = userData.ChangesLeft;
+
+                if (defaultTimezoneResult === undefined) return;
+
+                if (defaultTimezoneResult.value) {
+                    // Confirm
+                    timeZone = timeZone ?? data.guild.DefaultTimezone;
+                } else {
+                    // deny
+                    timeZone = timeZone ? data.guild.DefaultTimezone : null;
+                }
+                nextIntr = defaultTimezoneResult.intr;
             }
-        }
-        if (!(channel instanceof DMChannel) && !guildData)
-            guildData = await this.guildRepo.getGuild(msg.guild.id);
-
-        // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone
-        if (
-            guildData &&
-            guildData?.DefaultTimezone !== '0' &&
-            (!timeZone || timeZone !== guildData?.DefaultTimezone)
-        ) {
-            let confirmationMessage = await MessageUtils.send(
-                channel,
-                Lang.getEmbed(
-                    'userPrompts.defaultTimeZoneAvailable' + (timeZone ? 'Override' : ''),
-                    LangCode.EN_US,
-                    {
-                        SERVER_TIMEZONE: guildData.DefaultTimezone,
-                        INPUTTED_TIMEZONE: timeZone,
-                        TARGET: target.username,
-                    }
-                )
-            ); // Send confirmation and emotes
-            for (let option of trueFalseOptions) {
-                await MessageUtils.react(confirmationMessage, option);
-            }
-
-            let confirmation: string = await CollectorUtils.collectByReaction(
-                confirmationMessage,
-                // Collect Filter
-                (msgReaction: MessageReaction, reactor: User) =>
-                    reactor.id === msg.author.id &&
-                    trueFalseOptions.includes(msgReaction.emoji.name),
-                stopFilter,
-                // Retrieve Result
-                async (msgReaction: MessageReaction, reactor: User) => {
-                    return msgReaction.emoji.name;
-                },
-                expireFunction,
-                COLLECT_OPTIONS
-            );
-
-            MessageUtils.delete(confirmationMessage);
-
-            if (confirmation === undefined) return;
-
-            if (confirmation === Config.emotes.deny) {
-                // deny
-                timeZone = timeZone ? guildData.DefaultTimezone : null;
-            } else {
-                // Confirm
-                timeZone = timeZone ?? guildData.DefaultTimezone;
-            }
-        }
 
         if (!timeZone) {
-            let timezoneMessage = await MessageUtils.send(
-                channel,
-                Lang.getEmbed('userPrompts.birthdaySetupTimeZone', LangCode.EN_US, {
+            let _timezoneMessage = await InteractionUtils.send(
+                nextIntr,
+                Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', data.lang(), {
                     TARGET: target.username,
                     AUTHOR_ICON: target.displayAvatarURL(),
-                    ICON: msg.client.user.displayAvatarURL(),
+                    ICON: intr.client.user.displayAvatarURL(),
                     TAG: target.tag,
                 })
             );
 
             timeZone = await CollectorUtils.collectByMessage(
-                msg.channel,
-                // Collect Filter
-                (nextMsg: Message) => nextMsg.author.id === msg.author.id,
-                stopFilter,
-                // Retrieve Result
+                intr.channel,
+                intr.user,
                 async (nextMsg: Message) => {
                     if (FormatUtils.checkAbbreviation(nextMsg.content)) {
-                        await MessageUtils.send(
-                            channel,
+                        await InteractionUtils.send(
+                            intr,
                             Lang.getEmbed(
-                                'validation.invalidTimeZoneAbbreviation',
-                                LangCode.EN_US,
+                                'validation',
+                                'embeds.invalidTimeZoneAbbreviation',
+                                data.lang(),
                                 {
                                     TARGET: target.username,
-                                    ICON: msg.client.user.displayAvatarURL(),
+                                    ICON: intr.client.user.displayAvatarURL(),
                                 }
                             )
                         );
@@ -219,76 +165,97 @@ export class SetCommand implements Command {
 
                     let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
                     if (!input) {
-                        await MessageUtils.send(
-                            channel,
-                            Lang.getEmbed('validation.invalidTimezone', LangCode.EN_US, {
-                                TARGET: target.username,
-                                ICON: msg.client.user.displayAvatarURL(),
-                            })
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getErrorEmbed(
+                                'validation',
+                                'errorEmbeds.invalidTimezone',
+                                data.lang(),
+                                {
+                                    TARGET: target.username,
+                                    ICON: intr.client.user.displayAvatarURL(),
+                                }
+                            )
                         );
                         return;
                     }
 
                     return input;
                 },
-                expireFunction,
-                COLLECT_OPTIONS
+                async () => {
+                    await InteractionUtils.send(
+                        intr,
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                    );
+                }
             );
 
-            MessageUtils.delete(timezoneMessage);
+            // MessageUtils.delete(timezoneMessage);
         }
 
         if (timeZone === undefined) {
             return;
         }
 
-        let littleEndian = !guildData ? false : guildData.DateFormat === 'month_day' ? false : true;
+        let littleEndian = !data.guild
+            ? false
+            : data.guild.DateFormat === 'month_day'
+            ? false
+            : true;
 
         let parser = new Chrono(en.createConfiguration(true, littleEndian));
-        let birthday = FormatUtils.getBirthday(args.slice(2).join(' '), parser, littleEndian);
+        let birthday = birthdayInput
+            ? FormatUtils.getBirthday(birthdayInput, parser, littleEndian)
+            : undefined;
 
         if (!birthday) {
-            let birthdayMessage = await MessageUtils.send(
-                channel,
-                Lang.getEmbed('userPrompts.birthdaySetupBirthday', LangCode.EN_US, {
+            let _birthdayMessage = await InteractionUtils.send(
+                intr,
+                Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupBirthday', data.lang(), {
                     TARGET: target.username,
                     AUTHOR_ICON: target.displayAvatarURL(),
-                    ICON: msg.client.user.displayAvatarURL(),
+                    ICON: intr.client.user.displayAvatarURL(),
                     TAG: target.tag,
                     DATE_EXAMPLE: littleEndian ? '28/08' : '08/28',
                     DATE_FORMAT: littleEndian
-                        ? Lang.getRef('terms.ddmm', LangCode.EN_US)
-                        : Lang.getRef('terms.mmdd', LangCode.EN_US),
-                }).setAuthor(target.tag, target.displayAvatarURL())
+                        ? Lang.getRef('info', 'terms.ddmm', data.lang())
+                        : Lang.getRef('info', 'terms.mmdd', data.lang()),
+                }).setAuthor({ name: target.tag, url: target.displayAvatarURL() })
             );
 
             birthday = await CollectorUtils.collectByMessage(
-                msg.channel,
-                // Collect Filter
-                (nextMsg: Message) => nextMsg.author.id === msg.author.id,
-                stopFilter,
-                // Retrieve Result
+                intr.channel,
+                intr.user,
                 async (nextMsg: Message) => {
                     let result = FormatUtils.getBirthday(nextMsg.content, parser, littleEndian);
 
                     // Don't laugh at my double check it prevents the dates chrono misses on the first input
                     if (!result) {
-                        await MessageUtils.send(
-                            channel,
-                            Lang.getEmbed('validation.invalidBirthday', LangCode.EN_US, {
-                                TARGET: target.username,
-                            })
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getErrorEmbed(
+                                'validation',
+                                'errorEmbeds.invalidBirthday',
+                                data.lang(),
+                                {
+                                    TARGET: target.username,
+                                }
+                            )
                         );
                         return;
                     }
 
                     return result;
                 },
-                expireFunction,
-                COLLECT_OPTIONS
+                async () => {
+                    await InteractionUtils.send(
+                        intr,
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                    );
+                }
             );
 
-            MessageUtils.delete(birthdayMessage);
+            // MessageUtils.delete(birthdayMessage);
         }
 
         if (birthday === undefined) {
@@ -301,65 +268,36 @@ export class SetCommand implements Command {
         let month = birthDate.getMonth() + 1;
         let day = birthDate.getDate();
 
-        let confirmationEmbed: MessageEmbed;
-
-        let confirmationEmbedChoice =
-            userData && userData.Birthday && userData.TimeZone
-                ? 'userPrompts.confirmChangeBirthday'
-                : 'userPrompts.confirmFirstBirthday';
-        confirmationEmbedChoice += suggest ? 'Suggest' : '';
-
-        confirmationEmbed = Lang.getEmbed(confirmationEmbedChoice, LangCode.EN_US, {
-            TARGET: target.toString(),
-            BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
-            TIMEZONE: timeZone,
-            TARGET_FOOTER: target.username,
-            CHANGES_LEFT: `${changesLeft}`,
-            ICON: msg.client.user.displayAvatarURL(),
-        });
-
-        let confirmationMessage = await MessageUtils.send(channel, confirmationEmbed); // Send confirmation and emotes
-        for (let option of trueFalseOptions) {
-            await MessageUtils.react(confirmationMessage, option);
-        }
-
-        let confirmation: string = await CollectorUtils.collectByReaction(
-            confirmationMessage,
-            // Collect Filter
-            (msgReaction: MessageReaction, reactor: User) =>
-                reactor.id === target.id && trueFalseOptions.includes(msgReaction.emoji.name),
-            stopFilter,
-            // Retrieve Result
-            async (msgReaction: MessageReaction, reactor: User) => {
-                return msgReaction.emoji.name;
-            },
-            expireFunction,
-            COLLECT_OPTIONS
+        let result = await CollectorUtils.getBooleanFromButton(
+            intr,
+            data,
+            Lang.getEmbed('prompts', 'settingBirthday.confirmBirthday', data.lang(), {
+                TARGET: target.toString(),
+                BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
+                TIMEZONE: timeZone,
+            })
         );
 
-        MessageUtils.delete(confirmationMessage);
+        if (result === undefined) return;
 
-        if (confirmation === undefined) return;
-
-        if (confirmation === Config.emotes.confirm) {
+        if (result.value) {
             // Confirm
-            await this.userRepo.addOrUpdateUser(target.id, birthday, timeZone, changesLeft - 1); // Add or update user
+            await this.userRepo.addOrUpdateUser(target.id, birthday, timeZone, changesLeft); // Add or update user
 
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.setBirthday', LangCode.EN_US, {
+            await InteractionUtils.send(
+                result.intr,
+                Lang.getEmbed('results', 'success.setBirthday', data.lang(), {
+                    USER: target.toString(),
                     BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                     TIMEZONE: timeZone,
-                    AMOUNT: `${changesLeft - 1}`,
-                    ICON: msg.client.user.displayAvatarURL(),
                 })
             );
             return;
-        } else if (confirmation === Config.emotes.deny) {
+        } else {
             // Cancel
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.actionCanceled', LangCode.EN_US)
+            await InteractionUtils.send(
+                result.intr,
+                Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
             return;
         }

@@ -1,15 +1,17 @@
-import { CelebrationService, Logger, SubscriptionService } from '../services';
-import { CelebrationUtils, TimeUtils } from '../utils';
 import { Client, Collection, Guild, GuildMember } from 'discord.js';
-import { CombinedRepo, UserRepo } from '../services/database/repos';
-
-import { Job } from './job';
-import { SubscriptionStatus } from '../models';
-import { UserData } from '../models/database';
 import moment from 'moment';
-import { performance } from 'perf_hooks';
 import schedule from 'node-schedule';
+import { createRequire } from 'node:module';
+import { performance } from 'node:perf_hooks';
 
+import { UserData } from '../models/database/index.js';
+import { SubscriptionStatus } from '../models/index.js';
+import { CombinedRepo, UserRepo } from '../services/database/repos/index.js';
+import { CelebrationService, Logger, SubscriptionService } from '../services/index.js';
+import { CelebrationUtils, TimeUtils } from '../utils/index.js';
+import { Job } from './index.js';
+
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 
@@ -45,7 +47,7 @@ export class CelebrationJob implements Job {
 
         if (
             !TimeUtils.isLeap(now.year()) &&
-            (today === '03-01' || tomorrow === '03-01' || yesterday === '03-01')
+            (today === '02-28' || tomorrow === '02-28' || yesterday === '02-28')
         ) {
             // Add leap year birthdays to list
             birthdayUserData.push(...(await this.userRepo.getUsersWithBirthday('02-29')));
@@ -56,7 +58,6 @@ export class CelebrationJob implements Job {
         let discordIds = guildCache.map(guild => guild.id);
 
         // String of guild ids who have an active subscription to birthday bot premium
-        // TODO: Update APS to allow us the get all active subscribers so we can initialize this array
         let subStatuses: SubscriptionStatus[];
 
         try {
@@ -92,8 +93,8 @@ export class CelebrationJob implements Job {
             } catch (error) {
                 Logger.error(
                     Logs.error.resolveGuild
-                        .replace('{GUILD_ID}', guildData?.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild?.name),
+                        .replaceAll('{GUILD_ID}', guildData?.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild?.name),
                     error
                 );
                 continue;
@@ -102,7 +103,7 @@ export class CelebrationJob implements Job {
             try {
                 let members: Collection<string, GuildMember> = guild.members.cache;
 
-                let hasPremium = premiumGuildIds.includes(guild.id);
+                let hasPremium = !Config.payments.enabled || premiumGuildIds.includes(guild.id);
 
                 promises.push(
                     this.celebrationService
@@ -116,8 +117,8 @@ export class CelebrationJob implements Job {
                         .catch(error => {
                             Logger.error(
                                 Logs.error.celebrateBirthday
-                                    .replace('{GUILD_NAME}', guild?.name)
-                                    .replace('{GUILD_ID}', guild?.id),
+                                    .replaceAll('{GUILD_NAME}', guild?.name)
+                                    .replaceAll('{GUILD_ID}', guild?.id),
                                 error
                             );
                         })
@@ -125,10 +126,10 @@ export class CelebrationJob implements Job {
             } catch (error) {
                 Logger.error(
                     Logs.error.birthdayService
-                        .replace('{GUILD_ID}', guildData?.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild?.name)
-                        .replace('{MEMBER_COUNT}', guild?.memberCount.toLocaleString())
-                        .replace(
+                        .replaceAll('{GUILD_ID}', guildData?.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild?.name)
+                        .replaceAll('{MEMBER_COUNT}', guild?.memberCount.toLocaleString())
+                        .replaceAll(
                             '{MEMBER_CACHE_COUNT}',
                             guild?.members.cache.size.toLocaleString()
                         ),

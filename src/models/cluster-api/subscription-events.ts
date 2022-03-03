@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsDefined, IsEnum, IsNumberString, Length, ValidateNested } from 'class-validator';
-import { PlanName, SubscriptionStatusName } from '../subscription-models';
+
+import { PlanName, SubscriptionStatusName } from '../index.js';
 
 export class Subscription {
     @IsDefined()

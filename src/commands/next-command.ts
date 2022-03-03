@@ -1,111 +1,128 @@
-import { CelebrationUtils, FormatUtils, MessageUtils, TimeUtils } from '../utils';
-import { DMChannel, Message, TextChannel } from 'discord.js';
-import { GuildRepo, UserRepo } from '../services/database/repos';
-
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 import moment from 'moment';
 
+import { EventData } from '../models/index.js';
+import { UserRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { CelebrationUtils, InteractionUtils, TimeUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
+
 export class NextCommand implements Command {
-    public name: string = 'next';
-    public aliases = ['upcoming'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.next'),
+        description: 'View the next event date. Defaults to birthday.',
+        options: [
+            {
+                name: Lang.getCom('arguments.type'),
+                description: 'What type of event to view the next of.',
+                type: ApplicationCommandOptionType.String.valueOf(),
+                required: false,
+                choices: [
+                    {
+                        name: 'birthday',
+                        value: 'BIRTHDAY',
+                    },
+                    {
+                        name: 'memberAnniversary',
+                        value: 'MEMBER_ANNIVERSARY',
+                    },
+                    {
+                        name: 'serverAnniversary',
+                        value: 'SERVER_ANNIVERSARY',
+                    },
+                ],
+            },
+        ],
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
-    public guildOnly = true;
-    public adminOnly = false;
-    public ownerOnly = false;
-    public voteOnly = true;
+    public requireVote = true;
     public requirePremium = false;
-    public getPremium = false;
 
-    constructor(private userRepo: UserRepo, private guildRepo: GuildRepo) {}
+    constructor(public userRepo: UserRepo) {}
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel | DMChannel
-    ): Promise<void> {
-        let guildData = await this.guildRepo.getGuild(msg.guild.id);
-        let timezone = guildData?.DefaultTimezone;
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
+        let timezone = data.guild?.DefaultTimezone;
+        let userList: string;
+        let now = moment.tz(timezone);
 
-        let type: string;
-
-        if (args.length > 2) {
-            type = FormatUtils.extractCelebrationType(args[2].toLowerCase())?.toLowerCase() ?? '';
-            if (
-                type !== 'birthday' &&
-                type !== 'memberanniversary' &&
-                type !== 'serveranniversary'
-            ) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.invalidNextArgs', LangCode.EN_US)
-                );
-                return;
-            }
+        if (type !== 'BIRTHDAY' && (!timezone || timezone === '0')) {
+            await InteractionUtils.send(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.serverTimezoneNotSet', data.lang())
+            );
+            return;
         }
 
-        if (args.length === 2 || type === 'birthday') {
-            // Next birthday
-            let users = [...msg.guild.members.cache.filter(member => !member.user.bot).keys()];
+        switch (type) {
+            case 'BIRTHDAY': {
+                // Next birthday
+                let users = [...intr.guild.members.cache.filter(member => !member.user.bot).keys()];
 
-            let userDatas = await this.userRepo.getAllUsers(users);
+                let userDatas = await this.userRepo.getAllUsers(users);
 
-            if (!userDatas) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.noBirthdaysInServer', LangCode.EN_US)
+                if (!userDatas) {
+                    await InteractionUtils.send(
+                        intr,
+                        Lang.getErrorEmbed(
+                            'validation',
+                            'errorEmbeds.noBirthdaysInServer',
+                            data.lang()
+                        )
+                    );
+                    return;
+                }
+
+                let commandUser = userDatas.find(user => user.UserDiscordId === intr.user.id);
+
+                timezone =
+                    timezone && timezone !== '0' && data.guild?.UseTimezone === 'server'
+                        ? timezone
+                        : commandUser?.TimeZone;
+
+                let nextBirthdayUsers = CelebrationUtils.getNextUsers(userDatas, timezone);
+
+                if (!nextBirthdayUsers) {
+                    await InteractionUtils.send(
+                        intr,
+                        Lang.getErrorEmbed(
+                            'validation',
+                            'errorEmbeds.noUpcomingBirthdays',
+                            data.lang()
+                        )
+                    );
+                    return;
+                }
+
+                userList = CelebrationUtils.getUserListString(
+                    data.guild,
+                    nextBirthdayUsers.map(user => intr.guild.members.resolve(user.UserDiscordId))
                 );
-                return;
-            }
+                let nextBirthday = moment(nextBirthdayUsers[0].Birthday).format('MMMM Do');
 
-            let commandUser = userDatas.find(user => user.UserDiscordId === msg.author.id);
-
-            timezone =
-                timezone && timezone !== '0' && guildData?.UseTimezone === 'server'
-                    ? timezone
-                    : commandUser?.TimeZone;
-
-            let nextBirthdayUsers = CelebrationUtils.getNextUsers(userDatas, timezone);
-
-            if (!nextBirthdayUsers) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.noUpcomingBirthdays', LangCode.EN_US)
+                await InteractionUtils.send(
+                    intr,
+                    Lang.getEmbed('results', 'success.nextBirthday', data.lang(), {
+                        USERS: userList,
+                        BIRTHDAY: nextBirthday,
+                    })
                 );
-                return;
+                break;
             }
-
-            let userList = nextBirthdayUsers.map(user =>
-                msg.guild.members.resolve(user.UserDiscordId)
-            );
-
-            let userStringList = CelebrationUtils.getUserListString(guildData, userList);
-            let nextBirthday = moment(nextBirthdayUsers[0].Birthday).format('MMMM Do');
-
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.nextBirthday', LangCode.EN_US, {
-                    USERS: userStringList,
-                    BIRTHDAY: nextBirthday,
-                })
-            );
-        } else {
-            if (!timezone || timezone === '0') {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.serverTimezoneNotSet', LangCode.EN_US)
-                );
-                return;
-            }
-            if (type === 'memberanniversary') {
+            case 'MEMBER_ANNIVERSARY': {
                 // TODO: fetch members?
                 // Next member anniversary
-                let guildMembers = msg.guild.members.cache
+                let guildMembers = intr.guild.members.cache
                     .filter(member => !member.user.bot)
                     .map(member => member);
                 let closestMonthDay: string;
-                let now = moment.tz(timezone);
                 let nowMonthDay = now.format('MM-DD');
 
                 for (let member of guildMembers) {
@@ -150,27 +167,32 @@ export class NextCommand implements Command {
                 );
 
                 if (guildMembers?.length === 0) {
-                    await MessageUtils.send(
-                        channel,
-                        Lang.getEmbed('validation.noUpcomingMemberAnniversaries', LangCode.EN_US)
+                    await InteractionUtils.send(
+                        intr,
+                        Lang.getErrorEmbed(
+                            'validation',
+                            'errorEmbeds.noUpcomingMemberAnniversaries',
+                            data.lang()
+                        )
                     );
                     return;
                 }
 
-                let userList = CelebrationUtils.getUserListString(guildData, guildMembers);
+                userList = CelebrationUtils.getUserListString(data.guild, guildMembers);
 
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('results.nextMemberAnniversary', LangCode.EN_US, {
+                await InteractionUtils.send(
+                    intr,
+                    Lang.getEmbed('results', 'success.nextMemberAnniversary', data.lang(), {
                         USERS: userList,
                         DATE: moment(closestMonthDay, 'MM-DD').format('MMMM Do'),
                     })
                 );
-            } else {
+                break;
+            }
+            case 'SERVER_ANNIVERSARY': {
                 // Next server anniversary
-                let serverCreatedAt = moment(msg.guild.createdAt).tz(timezone);
+                let serverCreatedAt = moment(intr.guild.createdAt).tz(timezone);
                 let anniversaryFormatted = serverCreatedAt.format('MMMM Do');
-                let now = moment.tz(timezone);
                 let yearsOldRoundedUp = now.year() - serverCreatedAt.year();
 
                 // If the diff is negative that date has already passed so we need to increase the year (this is how we round up)
@@ -186,14 +208,15 @@ export class NextCommand implements Command {
                 )
                     yearsOldRoundedUp++;
 
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('results.nextServerAnniversary', LangCode.EN_US, {
-                        SERVER: msg.guild.name,
+                await InteractionUtils.send(
+                    intr,
+                    Lang.getEmbed('results', 'success.nextServerAnniversary', data.lang(), {
+                        SERVER: intr.guild.name,
                         DATE: anniversaryFormatted,
                         YEARS: yearsOldRoundedUp.toString(),
                     })
                 );
+                break;
             }
         }
     }

@@ -1,0 +1,323 @@
+{
+    "data": {
+        "embeds": {
+            "oldPrefixUsed": {
+                "title": "Slash Commands Update",
+                "description": [
+                    "{{COM:bot.name}} now uses **Slash Commands**! Try it by typing `/{{COM:commands.help}}`!",
+                    "",
+                    "If you don't see any slash commands listed for {{COM:bot.name}}:",
+                    "",
+                    "  1. Check that you have the **Use Application Commands** permission in this channel.",
+                    "  2. Try kicking and [re-inviting {{COM:bot.name}}]({{COM:links.invite}}).",
+                    "  3. Join our [support server]({{COM:links.support}}) for help."
+                ],
+                "color": "{{COM:colors.warn}}"
+            },
+            "missingClientPerms": {
+                "description": [
+                    "I don't have all permissions required to run that command here! Please check the server and channel permissions to make sure I have the following permissions.",
+                    "",
+                    "Required permissions: {{PERMISSIONS}}"
+                ],
+                "color": "{{COM:colors.warn}}"
+            },
+            "setupRequired": {
+                "title": "Setup Required!",
+                "description": "Please run basic setup with `/setup` before using that command!",
+                "color": "{{COM:colors.error}}"
+            },
+            "premiumRequired": {
+                "title": "Premium Required!",
+                "description": ["This command requires this server to have premium!"],
+                "fields": [
+                    {
+                        "name": "Premium Commands",
+                        "value": [
+                            "Subscribe to **{{COM:bot.name}} Premium** for access to our premium features!",
+                            "See `/premium` for more information."
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "{{REF:footers.whyPremium}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "voteRequired": {
+                "title": "Vote Required!",
+                "thumbnail": "{{REF:links.voteImage}}",
+                "description": ["This command requires you to have voted in the past 24 hours!"],
+                "fields": [
+                    {
+                        "name": "Last Vote",
+                        "value": ["{{LAST_VOTE}}"],
+                        "inline": true
+                    },
+                    {
+                        "name": "Vote Here",
+                        "value": ["[Top.gg]({{REF:links.vote}})"],
+                        "inline": true
+                    }
+                ],
+                "footer": {
+                    "text": "Don't want to vote? Disable voting for the whole server with {{COM:bot.name}} Premium!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            },
+            "invalidTimezone": {
+                "title": "Time Zone Setup - {{TARGET}}",
+                "description": [
+                    "Invalid time zone!",
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            },
+            "invalidTimeZoneAbbreviation": {
+                "title": "Time Zone Setup - {{TARGET}}",
+                "description": [
+                    "Invalid time zone! Do not use timezone abbreviations!",
+                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.tryAgain}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            },
+            "noAccessToChannel": {
+                "description": [
+                    "I don't have permission to send messages in {{CHANNEL}}!",
+                    "Please allow me to **View Channel**, **Send Messages**, **Embed Links**, and **Add Reactions** in {{CHANNEL}}."
+                ],
+                "color": "{{COM:colors.error}}"
+            },
+            "roleHierarchyError": {
+                "title": "Role Hierarchy Error!",
+                "description": [
+                    "The birthday role must be below {{BOT}}'s role.",
+                    "Additional Note: {{BOT}}'s role must be higher than the users it is assigning the birthday role to.",
+                    "",
+                    "Example Role Hierarchy:",
+                    "`{{COM:bot.name}}'s Role`",
+                    "`Birthday Role`",
+                    "`Birthday User's Highest Role`",
+                    "",
+                    "Essentially the bot is unable to give a role to someone with a higher role than them or give a role that is higher than the bot's."
+                ],
+                "footer": {
+                    "text": "{{REF:footers.joinSupport}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            },
+            "birthdayRoleUsedWarning": {
+                "title": "Warning",
+                "description": "We have detected that __**{{AMOUNT}}**__ user(s) already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
+                "footer": {
+                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.warn}}"
+            },
+            "birthdayRoleUsedError": {
+                "title": "Error",
+                "description": "We have detected that __**{{AMOUNT}}**__ users already have that role!\nThe Birthday Role should ONLY be the role that users GET on their birthday!",
+                "footer": {
+                    "text": "The Bot removes the Birthday Role from users whose birthday it isn't!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            },
+            "duplicateUserCustomMessage": {
+                "title": "Caution",
+                "description": [
+                    "There is already a {{TYPE}} custom message set for this user, would you like to overwrite it?",
+                    "",
+                    "**Current Message**: {{CURRENT_MESSAGE}}",
+                    "",
+                    "**New Message**: {{NEW_MESSAGE}}"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.irreversible}}",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.warn}}"
+            },
+            "invalidColor": {
+                "title": "Invalid Color",
+                "description": [
+                    "Please provide a valid hex color! Find hex colors [here]({{COM:links.colors}}).",
+                    "",
+                    "Example: `Orange` or `Crimson`",
+                    "Example: `#4EEFFF` or `4EEFFF`"
+                ],
+                "color": "{{COM:colors.error}}"
+            },
+            "maxFreeCustomMessages": {
+                "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{FREE_MAX}}**)",
+                "footer": {
+                    "text": "To have up to {{PAID_MAX}} custom {{TYPE}} messages try {{COM:bot.name}} Premium!",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.error}}"
+            },
+            "maxPaidCustomMessages": {
+                "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{PAID_MAX}}**)",
+                "color": "{{COM:colors.error}}"
+            },
+            "maxCustomMessageSize": {
+                "description": "Custom Messages are maxed at {{MAX_SIZE}} characters!",
+                "color": "{{COM:colors.error}}"
+            },
+            "noUserPlaceholder": {
+                "description": [
+                    "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where the member names will appear.",
+                    "Ex: `/message add type:{{TYPE}} message:{{EXAMPLE_MESSAGE}}`"
+                ],
+                "color": "{{COM:colors.error}}"
+            },
+            "noServerPlaceholder": {
+                "description": [
+                    "Please include the `{{REF:placeHolders.server}}` placeholder somewhere in the message. This indicates where the server name will appear.",
+                    "Ex: `/message add type:serverAnniversary message:{{REF:defaults.serverAnniversaryMessage}}`",
+                    "",
+                    "Tip: You can also use the `{{REF:placeHolders.year}}` placeholder for the anniversary year."
+                ],
+                "color": "{{COM:colors.error}}"
+            },
+            "userSpecificMessagesNeedsPremium": {
+                "title": "{{REF:terms.premiumRequired}}",
+                "description": "User-specific messages are a premium only feature! View information about **{{COM:bot.name}} Premium** using `/premium`!",
+                "footer": {
+                    "text": "{{REF:footers.whyPremium}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            },
+            "messageDoesNotExist": {
+                "title": "Test Custom Message",
+                "description": [
+                    "Message does not exist!",
+                    "View your server's custom messages with `/message list`!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
+                },
+                "color": "{{COM:colors.error}}"
+            },
+            "invalidMentionSetting": {
+                "title": "Invalid Group/Role",
+                "description": "Accepted Values: `everyone`, `here`, `@role/role-name`, `none`",
+                "footer": {
+                    "text": "{{REF:footers.actionFailed}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true,
+                "color": "{{COM:colors.error}}"
+            }
+        },
+        "errorEmbeds": {
+            "devOnlyCommand": "This command can only be used by developers.",
+            "serverOnlyCommand": "This command can only be used in a server.",
+            "missingUserPerms": "You don't have permission to run that command!",
+            "birthdayNotSet": "{{USER}} hasn't set their birthday!",
+            "viewUserInDm": "You cannot request another user's information in a DM!",
+            "memberAnniversaryInDM": "You cannot view member anniversaries in a DM!",
+            "suggestBirthdayInDM": "You can't set another person's birthday in a DM!",
+            "cantSuggest": "You don't have permission to suggest another user's birthday!",
+            "cantSuggestForBot": "You can't suggest a birthday for a bot!",
+            "invalidBirthday": "Invalid birthday!",
+            "noBirthdaysInServer": "No one has set their birthday in this server! :(",
+            "noUpcomingBirthdays": "There are no upcoming birthdays!",
+            "noUpcomingMemberAnniversaries": "There are no upcoming member anniversaries!",
+            "serverTimezoneNotSet": "This server doesn't have a default timezone set! The anniversary system requires one to be set!",
+            "invalidChannel": "Invalid channel!",
+            "invalidRole": "Invalid role!",
+            "birthdayRoleManaged": "Birthday Role cannot be managed by an external service!",
+            "attemptsLeft": "That user has not used any attempts!",
+            "invalidSetting": "Invalid setting! Please try again",
+            "timezoneAbbreviation": "Please do not use timezone abbreviations! Please try again.",
+            "invalidTimezone": "Invalid Timezone! Please try again.",
+            "rawAPIInteractionDataReceived": "Please reinvite the bot with the guild scope. Join the support server for more support.",
+            "cooldownHit": "You can only run this command {{AMOUNT}} time(s) every {{INTERVAL}}. Please wait before attempting this command again.",
+            "alreadyInBlacklist": "That {{TYPE}} is already in the blacklist!",
+            "emptyBlacklist": "The birthday blacklist is empty!",
+            "notInBlacklist": "That {{TYPE}} is not in the blacklist!",
+            "alreadyInTrustedRole": "{{ROLE}} is already a trusted role!",
+            "emptyTrustedRole": "The trusted role list is empty!",
+            "notInTrustedRole": "That {{TYPE}} is not in the trusted role list!",
+            "marManaged": "Member Anniversary Roles cannot be managed by an external service!",
+            "marDuplicateYear": "There is already a member anniversary role set for year {{YEAR}}!",
+            "trustedRoleMaxFree": "You can only have **{{FREE_MAX}}** trusted role!\nUnlock up to **{{PAID_MAX}}** trusted roles with {{COM:bot.name}} Premium!",
+            "trustedRoleMaxPaid": "trusted roles are capped at **{{PAID_MAX}}**!",
+            "marMaxPaid": "Member anniversary roles are capped at **{{PAID_MAX}}**!",
+            "emptyMar": "The member anniversary role list is empty!",
+            "notInMar": "There isn't a member anniversary role for that year!",
+            "duplicateMessage": "Duplicate message found for this server!",
+            "noCustomMessagesGeneric": "This server doesn't have any {{DISPLAY_TYPE}}!",
+            "noDefaultUserSpecificMessages": "There aren't default user specific messages! Please specify once and trying again!",
+            "customMessageInvalidPosition": "Invalid position! Please try again.",
+            "cantBlacklistBots": "You can't blacklist bots!",
+            "cantBlacklistNotInServer": "Only users in this server can be added to the blacklist!",
+            "everyoneIsNotAValidRole": "{{EVERYONE}} is not a valid role!",
+            "noUserSpecificBirthdayMessages": "This server doesn't have any user specific custom birthday messages!",
+            "noUserSpecificMemberAnniversaryMessages": "This server doesn't have any user specific custom birthday messages!",
+            "noBotRole": "Could not find the bot's integration role!"
+        }
+    },
+    "refs": {
+        "meta": {
+            "language": "en-US",
+            "languageDisplay": "English",
+            "translators": "[Stqlth#0001](https://github.com/scottbucher)"
+        },
+        "placeHolders": {
+            "users": "{Users}",
+            "usersRegex": "/@users?|<users?>|{users?}|{users?}/gi",
+            "year": "{Year}",
+            "yearRegex": "/@year?|<year?>|{year?}|{year?}/gi",
+            "server": "{Server}",
+            "serverRegex": "/@server?|<server?>|{server?}|{server?}/gi"
+        },
+        "defaults": {
+            "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
+            "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.year}} year(s) in the server {{REF:placeHolders.users}}!",
+            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeHolders.year}} year(s) old!",
+            "birthdayChannelName": "{{COM:emotes.birthdayEmote}} birthdays",
+            "birthdayChannelTopic": "Birthdays Announcements!",
+            "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",
+            "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
+            "serverAnniversaryChannelName": "{{COM:emotes.party}} server anniversaries",
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
+            "birthdayMasterRoleName": "Birthday Master"
+        },
+        "links": {
+            "voteImage": "https://i.imgur.com/wak8g4V.png"
+        },
+        "footers": {
+            "tryAgain": "Please try again!",
+            "whyPremium": "Premium helps us support and maintain the bot!",
+            "joinSupport": "Please join our support server if you have any questions.",
+            "actionFailed": "{{COM:emotes.deny}} Action Failed.",
+            "irreversible": "This action is irreversible!"
+        },
+        "other": {
+            "na": "N/A"
+        }
+    }
+}

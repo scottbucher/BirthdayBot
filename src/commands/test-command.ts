@@ -1,126 +1,121 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import {
+    ChatInputApplicationCommandData,
+    CommandInteraction,
+    GuildMember,
+    MessageEmbed,
+    PermissionString,
+    Role,
+    TextChannel,
+} from 'discord.js';
+import { RateLimiter } from 'discord.js-rate-limiter';
+import { createRequire } from 'node:module';
+
+import { CustomRole } from '../enums/index.js';
+import { CustomMessage, MemberAnniversaryRole, UserData } from '../models/database/index.js';
+import { EventData } from '../models/index.js';
+import { BlacklistRepo } from '../services/database/repos/blacklist-repo.js';
+import { CustomMessageRepo } from '../services/database/repos/custom-message-repo.js';
+import { MemberAnniversaryRoleRepo } from '../services/database/repos/member-anniversary-role-repo.js';
+import { TrustedRoleRepo } from '../services/database/repos/trusted-role-repo.js';
+import { UserRepo } from '../services/database/repos/user-repo.js';
+import { Lang } from '../services/index.js';
 import {
     ActionUtils,
     CelebrationUtils,
-    FormatUtils,
-    GuildUtils,
+    InteractionUtils,
     MessageUtils,
-    ParseUtils,
     PermissionUtils,
-} from '../utils';
-import {
-    BlacklistRepo,
-    CustomMessageRepo,
-    GuildRepo,
-    MemberAnniversaryRoleRepo,
-    TrustedRoleRepo,
-    UserRepo,
-} from '../services/database/repos';
-import { CustomMessage, UserData } from '../models/database';
-import { GuildMember, Message, MessageEmbed, Role, TextChannel, User } from 'discord.js';
+} from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
-
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
-
 export class TestCommand implements Command {
-    public name: string = 'test';
-    public aliases = ['tst'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.test'),
+        description: 'View the next event date. Defaults to birthday.',
+        options: [
+            {
+                name: Lang.getCom('arguments.type'),
+                description: 'What type of event to test.',
+                type: ApplicationCommandOptionType.String.valueOf(),
+                required: false,
+                choices: [
+                    {
+                        name: 'birthday',
+                        value: 'BIRTHDAY',
+                    },
+                    {
+                        name: 'memberAnniversary',
+                        value: 'MEMBER_ANNIVERSARY',
+                    },
+                    {
+                        name: 'serverAnniversary',
+                        value: 'SERVER_ANNIVERSARY',
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('arguments.user'),
+                description: 'Optional user argument to test the event on.',
+                type: ApplicationCommandOptionType.User.valueOf(),
+                required: false,
+            },
+            {
+                name: Lang.getCom('arguments.year'),
+                description:
+                    'Optional year argument to test the event on. Member Anniversaries only',
+                type: ApplicationCommandOptionType.Integer.valueOf(),
+                required: false,
+                min_value: 1,
+                max_value: 100,
+            },
+        ],
+    };
+    public cooldown = new RateLimiter(1, 5000);
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
-    public guildOnly = true;
-    public adminOnly = true;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = true;
 
     constructor(
-        private guildRepo: GuildRepo,
-        private userRepo: UserRepo,
-        private customMessageRepo: CustomMessageRepo,
-        private trustedRoleRepo: TrustedRoleRepo,
-        private blacklistRepo: BlacklistRepo,
-        private memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo
+        public userRepo: UserRepo,
+        public blacklistRepo: BlacklistRepo,
+        public trustedRoleRepo: TrustedRoleRepo,
+        public customMessageRepo: CustomMessageRepo,
+        public memberAnniversaryRoleRepo: MemberAnniversaryRoleRepo
     ) {}
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel,
-        hasPremium: boolean
-    ): Promise<void> {
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let type = intr.options.getString(Lang.getCom('arguments.type'));
+        let user = intr.options.getUser(Lang.getCom('arguments.user'));
+        let year = intr.options.getInteger(Lang.getCom('arguments.year'));
+
         // bday test <type> [user] [year]
-        let guild = msg.guild;
+        let guild = intr.guild;
 
-        if (args.length < 3) {
-            MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US, {
-                    ICON: msg.client.user.displayAvatarURL(),
-                })
-            );
-            return;
-        }
-
-        let type = FormatUtils.extractCelebrationType(args[2].toLowerCase());
-
-        if (!type) {
-            MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.invalidCelebrationType', LangCode.EN_US, {
-                    ICON: msg.client.user.displayAvatarURL(),
-                })
-            );
-            return;
-        }
-
-        let target: GuildMember;
-        let year = 0;
+        let target: GuildMember = guild.members.resolve(user);
         let userData: UserData;
 
-        if (args.length >= 4) {
-            // Get who they are mentioning
-            target =
-                msg.mentions.members.first() ||
-                GuildUtils.findMember(msg.guild, args[3]) ||
-                (args.length >= 5 && GuildUtils.findMember(msg.guild, args[4]));
-
-            // Did we find a user?
-            if (!target) {
-                try {
-                    year = ParseUtils.parseInt(args[3]);
-                } catch (error) {
-                    // no year
-                }
-            } else {
-                if (args.length >= 5) {
-                    try {
-                        year = ParseUtils.parseInt(args[4]);
-                    } catch (error) {
-                        // no year
-                    }
-                }
-            }
-        }
-
         // If we have a target get their data otherwise use the client
-        if (!target) target = guild.members.resolve(msg.client.user);
+        if (!target) target = guild.members.resolve(intr.client.user);
         else if (!target.user.bot) userData = await this.userRepo.getUser(target.id);
 
-        // Default target to bot for the test
-        if (!target) target = guild.members.resolve(msg.client.user);
-
-        let guildData = await this.guildRepo.getGuild(msg.guild.id);
+        let guildData = data.guild;
 
         let messageChannel: TextChannel;
 
         try {
             messageChannel = guild.channels.resolve(
-                type === 'birthday'
+                type === 'BIRTHDAY'
                     ? guildData.BirthdayChannelDiscordId
-                    : type === 'memberanniversary'
+                    : type === 'MEMBER_ANNIVERSARY'
                     ? guildData.MemberAnniversaryChannelDiscordId
                     : guildData.ServerAnniversaryChannelDiscordId
             ) as TextChannel;
@@ -130,14 +125,14 @@ export class TestCommand implements Command {
 
         let customMessages: CustomMessage[];
         let mentionString = CelebrationUtils.getMentionString(guildData, guild, type);
+        let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
 
-        if (type === 'birthday') {
+        if (type === 'BIRTHDAY') {
             // run the birthday test
 
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
             let roleCheck = false;
-            let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
             let trustedCheckMessage = false;
             let trustedCheckRole = false;
             let trustedPreventsMessage = guildData.TrustedPreventsMessage;
@@ -145,7 +140,7 @@ export class TestCommand implements Command {
             let birthdayCheck = target.user.bot ? true : userData?.Birthday ? true : false;
             let blacklistCheck = false;
 
-            let message = Lang.getRef('defaults.birthdayMessage', LangCode.EN_US);
+            let message = Lang.getRef('info', 'defaults.birthdayMessage', data.lang());
             let color = Config.colors.default;
             let useEmbed = true;
 
@@ -162,7 +157,7 @@ export class TestCommand implements Command {
             // Get the birthday role for this guild
             let birthdayRole: Role;
             try {
-                birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
+                birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId);
             } catch (error) {
                 // No Birthday Role
             }
@@ -184,14 +179,14 @@ export class TestCommand implements Command {
                 trustedRoleList,
                 guildMember,
                 trustedPreventsRole,
-                hasPremium
+                data.hasPremium
             );
             trustedCheckMessage = CelebrationUtils.passesTrustedCheck(
                 guildData.RequireAllTrustedRoles,
                 trustedRoleList,
                 guildMember,
                 trustedPreventsMessage,
-                hasPremium
+                data.hasPremium
             );
 
             // Check for user specific messages
@@ -219,11 +214,11 @@ export class TestCommand implements Command {
                         // Get our custom message
                         let customMessage = CelebrationUtils.randomMessage(
                             customMessages,
-                            hasPremium,
+                            data.hasPremium,
                             'birthday'
                         );
                         // Find the color of the embed
-                        color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
+                        color = CelebrationUtils.getMessageColor(customMessage, data.hasPremium);
 
                         useEmbed = customMessage.Embed ? true : false;
 
@@ -251,58 +246,67 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let testingEmbed = Lang.getEmbed('results.birthdayTest', LangCode.EN_US, {
-                ICON: msg.client.user.displayAvatarURL(),
+            let testingEmbed = Lang.getEmbed('results', 'test.birthday', data.lang(), {
+                ICON: intr.client.user.displayAvatarURL(),
             })
-                .setColor(Config.colors.default)
                 .addField(
-                    Lang.getRef('terms.birthdayChannel', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.birthdayChannel', data.lang()),
                     messageCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.correctlySet',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
                               'terms.notSetOrIncorrect',
-                              LangCode.EN_US
+                              data.lang()
                           )}`,
                     true
                 )
                 .addField(
-                    Lang.getRef('terms.birthdayRole', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.birthdayRole', data.lang()),
                     roleCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.correctlySet',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
                               'terms.notSetOrIncorrect',
-                              LangCode.EN_US
+                              data.lang()
                           )}`,
                     true
                 );
 
             if (!target.user.bot) {
                 testingEmbed.addField(
-                    Lang.getRef('terms.hasBirthdaySet', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.hasBirthdaySet', data.lang()),
                     birthdayCheck
-                        ? `${Config.emotes.confirm} ${Lang.getRef('boolean.yes', LangCode.EN_US)}`
-                        : `${Config.emotes.deny} ${Lang.getRef('boolean.no', LangCode.EN_US)}`,
+                        ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
+                              'boolean.yes',
+                              data.lang()
+                          )}`
+                        : `${Config.emotes.deny} ${Lang.getRef('info', 'boolean.no', data.lang())}`,
                     true
                 );
             }
 
             if (blacklistData.blacklist.length > 0) {
                 testingEmbed.addField(
-                    Lang.getRef('terms.memberInBlacklist', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.memberInBlacklist', data.lang()),
                     blacklistCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.notInBlacklist',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
                               'terms.inBlacklist',
-                              LangCode.EN_US
+                              data.lang()
                           )}`,
                     true
                 );
@@ -310,35 +314,39 @@ export class TestCommand implements Command {
 
             if (trustedRoles.trustedRoles.length > 0) {
                 testingEmbed.addField(
-                    Lang.getRef('terms.trustedPreventMsg', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.trustedPreventMsg', data.lang()),
                     trustedCheckMessage
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.didntPreventMsg',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
                               'terms.didPreventMsg',
-                              LangCode.EN_US
+                              data.lang()
                           )}`,
                     true
                 );
                 testingEmbed.addField(
-                    Lang.getRef('terms.trustedPreventRole', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.trustedPreventRole', data.lang()),
                     trustedCheckRole
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.didntPreventRole',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
                               'terms.didPreventRole',
-                              LangCode.EN_US
+                              data.lang()
                           )}`,
                     true
                 );
             }
-            await MessageUtils.send(channel, testingEmbed);
+            await InteractionUtils.send(intr, testingEmbed);
             return;
-        } else if (type === 'memberanniversary') {
+        } else if (type === 'MEMBER_ANNIVERSARY') {
             // run the member anniversary test
 
             // If a check is true, it "passes" (we are trying to pass all checks)
@@ -348,7 +356,7 @@ export class TestCommand implements Command {
             let memberAnniversaryRoles: MemberAnniversaryRole[];
             let anniversaryResolvedRoles: Role[];
 
-            let message = Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US);
+            let message = Lang.getRef('info', 'defaults.memberAnniversaryMessage', data.lang());
             let color = Config.colors.default;
             let useEmbed = true;
             let guildMember = guild.members.resolve(target);
@@ -356,7 +364,7 @@ export class TestCommand implements Command {
             let timezoneCheck = guildData?.DefaultTimezone !== '0';
 
             // Only premium guilds get anniversary roles
-            if (hasPremium) {
+            if (data.hasPremium) {
                 memberAnniversaryRoles = (
                     await this.memberAnniversaryRoleRepo.getMemberAnniversaryRoles(guild.id)
                 ).memberAnniversaryRoles;
@@ -415,11 +423,11 @@ export class TestCommand implements Command {
                     // Get our custom message
                     let customMessage = CelebrationUtils.randomMessage(
                         customMessages,
-                        hasPremium,
+                        data.hasPremium,
                         'memberanniversary'
                     );
                     // Find the color of the embed
-                    color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
+                    color = CelebrationUtils.getMessageColor(customMessage, data.hasPremium);
                     useEmbed = customMessage.Embed ? true : false;
 
                     message = customMessage.Message;
@@ -445,58 +453,66 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let testingEmbed = Lang.getEmbed('results.memberAnniversaryTest', LangCode.EN_US, {
-                ICON: msg.client.user.displayAvatarURL(),
+            let testingEmbed = Lang.getEmbed('results', 'test.memberAnniversary', data.lang(), {
+                ICON: intr.client.user.displayAvatarURL(),
             })
                 .addField(
-                    Lang.getRef('terms.defaultTimezone', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.defaultTimezone', data.lang()),
                     timezoneCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.correctlySet',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.notSet', LangCode.EN_US)}`,
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
+                              'terms.notSet',
+                              data.lang()
+                          )}`,
                     true
                 )
                 .addField(
-                    Lang.getRef('terms.memberAnniversaryChannel', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.memberAnniversaryChannel', data.lang()),
                     messageCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.correctlySet',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
                               'terms.notSetOrIncorrect',
-                              LangCode.EN_US
+                              data.lang()
                           )}`,
                     true
                 );
 
-            if (hasPremium && memberAnniversaryRoles.length > 0) {
+            if (data.hasPremium && memberAnniversaryRoles.length > 0) {
                 testingEmbed.addField(
-                    Lang.getRef('terms.memberAnniversaryRoles', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.memberAnniversaryRoles', data.lang()),
                     memberAnniversaryRolesCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.canBeGiven',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
                               'terms.cantBeGivenPermIssue',
-                              LangCode.EN_US
+                              data.lang()
                           )}`,
                     true
                 );
             }
-            await MessageUtils.send(channel, testingEmbed);
+            await InteractionUtils.send(intr, testingEmbed);
             return;
         } else {
             // run the server anniversary test
 
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
-            let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
 
-            let message = Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US);
+            let message = Lang.getRef('info', 'defaults.serverAnniversaryMessage', data.lang());
             let color = Config.colors.default;
             let useEmbed = true;
 
@@ -511,11 +527,11 @@ export class TestCommand implements Command {
                     // Get our custom message
                     let customMessage = CelebrationUtils.randomMessage(
                         customMessages,
-                        hasPremium,
+                        data.hasPremium,
                         'serveranniversary'
                     );
                     // Find the color of the embed
-                    color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
+                    color = CelebrationUtils.getMessageColor(customMessage, data.hasPremium);
                     useEmbed = customMessage.Embed ? true : false;
 
                     message = customMessage.Message;
@@ -541,33 +557,40 @@ export class TestCommand implements Command {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Give Test Result Message
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let testingEmbed = Lang.getEmbed('results.serverAnniversaryTest', LangCode.EN_US, {
-                ICON: msg.client.user.displayAvatarURL(),
+            let testingEmbed = Lang.getEmbed('results', 'test.serverAnniversary', data.lang(), {
+                ICON: intr.client.user.displayAvatarURL(),
             })
                 .addField(
-                    Lang.getRef('terms.defaultTimezone', LangCode.EN_US),
+                    Lang.getRef('info', 'terms.defaultTimezone', data.lang()),
                     timezoneCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.correctlySet',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
-                        : `${Config.emotes.deny} ${Lang.getRef('terms.notSet', LangCode.EN_US)}`,
+                        : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
+                              'terms.notSet',
+                              data.lang()
+                          )}`,
                     true
                 )
                 .addField(
-                    Lang.getRef('terms.serverAnniversaryChannel', LangCode.EN_US),
-                    timezoneCheck
+                    Lang.getRef('info', 'terms.serverAnniversaryChannel', data.lang()),
+                    messageCheck
                         ? `${Config.emotes.confirm} ${Lang.getRef(
+                              'info',
                               'terms.correctlySet',
-                              LangCode.EN_US
+                              data.lang()
                           )}`
                         : `${Config.emotes.deny} ${Lang.getRef(
+                              'info',
                               'terms.notSetOrIncorrect',
-                              LangCode.EN_US
+                              data.lang()
                           )}`,
                     true
                 );
-            await MessageUtils.send(channel, testingEmbed);
+            await InteractionUtils.send(intr, testingEmbed);
             return;
         }
     }

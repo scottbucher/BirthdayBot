@@ -1,59 +1,106 @@
-import {
-    BlacklistAddSubCommand,
-    BlacklistClearSubCommand,
-    BlacklistListSubCommand,
-    BlacklistRemoveSubCommand,
-} from './blacklist';
-import { Message, TextChannel } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { MessageUtils, FormatUtils } from '../utils';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { CommandUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class BlacklistCommand implements Command {
-    public name: string = 'blacklist';
-    public aliases = ['bl', 'block', 'ban'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.blacklist'),
+        description: 'Manage the blacklist.',
+        options: [
+            {
+                name: Lang.getCom('subCommands.add'),
+                description: 'Add a role or user to the blacklist.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('arguments.roleOrUser'),
+                        description: 'The role or user to add to the blacklist.',
+                        type: ApplicationCommandOptionType.Mentionable.valueOf(),
+                        required: true,
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.remove'),
+                description: 'Remove something from the blacklist.',
+                type: ApplicationCommandOptionType.SubcommandGroup.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('subCommands.roleOrUser'),
+                        description: 'Remove a role or user from the blacklist.',
+                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                        options: [
+                            {
+                                name: Lang.getCom('arguments.roleOrUser'),
+                                description: 'The role or user to remove.',
+                                type: ApplicationCommandOptionType.Mentionable.valueOf(),
+                                required: true,
+                            },
+                        ],
+                    },
+                    {
+                        name: Lang.getCom('subCommands.id'),
+                        description:
+                            'Remove an ID from the blacklist. Used when a user has left or a role has been deleted.',
+                        type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                        options: [
+                            {
+                                name: Lang.getCom('arguments.id'),
+                                description: 'ID.',
+                                type: ApplicationCommandOptionType.String.valueOf(),
+                                required: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                name: Lang.getCom('subCommands.clear'),
+                description: 'Clear the blacklist.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+            },
+            {
+                name: Lang.getCom('subCommands.list'),
+                description: 'Show the blacklist.',
+                type: ApplicationCommandOptionType.Subcommand.valueOf(),
+                options: [
+                    {
+                        name: Lang.getCom('arguments.page'),
+                        description: 'An optional page number to jump to.',
+                        type: ApplicationCommandOptionType.Integer.valueOf(),
+                        required: false,
+                        min_value: 1,
+                    },
+                ],
+            },
+        ],
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = true;
-    public guildOnly = true;
-    public adminOnly = true;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = false;
 
-    constructor(
-        private blacklistAddSubCommand: BlacklistAddSubCommand,
-        private blacklistRemoveSubCommand: BlacklistRemoveSubCommand,
-        private blacklistClearSubCommand: BlacklistClearSubCommand,
-        private blacklistListSubCommand: BlacklistListSubCommand
-    ) {}
+    constructor(private commands: Command[]) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
-        if (args.length === 2) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noBlacklistArgs', LangCode.EN_US)
-            );
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let command = CommandUtils.findCommand(this.commands, intr.options.getSubcommand());
+        if (!command) {
+            // TODO: Should we log error here?
             return;
         }
 
-        let action = FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ?? '';
-
-        if (action === 'add') {
-            this.blacklistAddSubCommand.execute(args, msg, channel);
-        } else if (action === 'remove') {
-            this.blacklistRemoveSubCommand.execute(args, msg, channel);
-        } else if (action === 'list') {
-            this.blacklistListSubCommand.execute(args, msg, channel);
-        } else if (action === 'clear') {
-            this.blacklistClearSubCommand.execute(args, msg, channel);
-        } else {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noBlacklistArgs', LangCode.EN_US)
-            );
-            return;
+        let passesChecks = await CommandUtils.runChecks(command, intr, data);
+        if (passesChecks) {
+            await command.execute(intr, data);
         }
     }
 }

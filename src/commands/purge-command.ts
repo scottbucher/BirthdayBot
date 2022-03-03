@@ -1,105 +1,67 @@
-import {
-    CollectOptions,
-    CollectorUtils,
-    ExpireFunction,
-    MessageFilter,
-} from 'discord.js-collector-utils';
-import { DMChannel, Message, MessageReaction, TextChannel, User } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
-import { UserRepo } from '../services/database/repos';
-
-let Config = require('../../config/config.json');
-
-const COLLECT_OPTIONS: CollectOptions = {
-    time: Config.experience.promptExpireTime * 1000,
-    reset: true,
-};
+import { EventData } from '../models/index.js';
+import { UserRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { CollectorUtils } from '../utils/collector-utils.js';
+import { InteractionUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class PurgeCommand implements Command {
-    public name: string = 'purge';
-    public aliases = ['cleardata'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.purge'),
+        description: 'Remove your information from the database.',
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = false;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
-    public guildOnly = false;
-    public adminOnly = false;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = false;
 
     constructor(private userRepo: UserRepo) {}
 
-    async execute(args: string[], msg: Message, channel: TextChannel | DMChannel): Promise<void> {
-        let target = msg.author;
-        let userData = await this.userRepo.getUser(target.id); // Try and get their data
-        let changesLeft = 0;
-        let stopFilter: MessageFilter = (nextMsg: Message) =>
-            nextMsg.author.id === msg.author.id &&
-            nextMsg.content.split(/\s+/)[0].toLowerCase() === Config.prefix;
-        let expireFunction: ExpireFunction = async () => {
-            await MessageUtils.reply(msg, Lang.getEmbed('results.promptExpired', LangCode.EN_US));
-        };
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let target = intr.user;
+        let userData = await this.userRepo.getUser(target.id);
 
         if (!userData || !(userData.Birthday && userData.TimeZone)) {
             // Are they in the database?
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.birthdayNotSet', LangCode.EN_US)
+            await InteractionUtils.send(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.birthdayNotSet', data.lang(), {
+                    USER: target.toString(),
+                })
             );
             return;
-        } else {
-            changesLeft = userData.ChangesLeft;
         }
 
-        let trueFalseOptions = [Config.emotes.confirm, Config.emotes.deny];
-
-        let confirmationMessage = await MessageUtils.send(
-            channel,
-            Lang.getEmbed('userPrompts.birthdayConfirmPurge', LangCode.EN_US, {
-                CHANGES_LEFT: changesLeft.toString(),
-                APPEND:
-                    changesLeft === 0 ? Lang.getRef('prompts.outOfAttemtps', LangCode.EN_US) : '',
-                ICON: msg.client.user.displayAvatarURL(),
+        let result = await CollectorUtils.getBooleanFromButton(
+            intr,
+            data,
+            Lang.getEmbed('prompts', 'embeds.birthdayConfirmPurge', data.lang(), {
+                ICON: intr.user.displayAvatarURL(),
             })
-        ); // Send confirmation and emotes
-        for (let option of trueFalseOptions) {
-            await MessageUtils.react(confirmationMessage, option);
-        }
-
-        let confirmation: string = await CollectorUtils.collectByReaction(
-            confirmationMessage,
-            // Collect Filter
-            (msgReaction: MessageReaction, reactor: User) =>
-                reactor.id === target.id && trueFalseOptions.includes(msgReaction.emoji.name),
-            stopFilter,
-            // Retrieve Result
-            async (msgReaction: MessageReaction, reactor: User) => {
-                return msgReaction.emoji.name;
-            },
-            expireFunction,
-            COLLECT_OPTIONS
         );
 
-        MessageUtils.delete(confirmationMessage);
+        if (result === undefined) return;
 
-        if (confirmation === undefined) return;
-
-        if (confirmation === Config.emotes.confirm) {
+        if (result.value) {
             // Confirm
-            await this.userRepo.addOrUpdateUser(target.id, null, null, changesLeft); // Add or update user
+            await this.userRepo.addOrUpdateUser(target.id, null, null, userData.ChangesLeft); // Add or update user
 
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.purgeSuccessful', LangCode.EN_US)
+            await InteractionUtils.send(
+                result.intr,
+                Lang.getEmbed('results', 'success.purgeSuccessful', data.lang())
             );
-        } else if (confirmation === Config.emotes.deny) {
+        } else {
             // Cancel
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('results.actionCanceled', LangCode.EN_US)
+            await InteractionUtils.send(
+                result.intr,
+                Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
         }
     }

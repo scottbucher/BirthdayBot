@@ -1,29 +1,31 @@
-import { DMChannel, Message, TextChannel } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
+import { EventData } from '../models/internal-models.js';
+import { Lang } from '../services/index.js';
+import { InteractionUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class DonateCommand implements Command {
-    public name: string = 'donate';
-    public aliases = ['donations', 'contribute'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.donate'),
+        description: 'Donate to support Birthday Bot!',
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = false;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
-    public guildOnly = false;
-    public adminOnly = false;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = false;
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel | DMChannel
-    ): Promise<void> {
-        await MessageUtils.send(
-            channel,
-            Lang.getEmbed('info.donate', LangCode.EN_US, { BOT: msg.client.user.toString() })
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        await InteractionUtils.send(
+            intr,
+            Lang.getEmbed('info', 'embeds.donate', data.lang(), {
+                BOT: intr.client.user.toString(),
+            })
         );
     }
 }

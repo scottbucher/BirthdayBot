@@ -1,0 +1,1313 @@
+{
+    "data": {
+        "embeds": {
+            "guildJoin": {
+                "title": "Thank you for using {{COM:bot.name}}!",
+                "description": [
+                    "To support the bot and unlock special features use `/premium` in your server.",
+                    "",
+                    "To view the commands of this bow use `/help`.",
+                    "To setup the bot run `/setup` in your server.",
+                    "To set your birthday use `/set`.",
+                    "",
+                    "View the {{COM:bot.name}} [Documentation]({{COM:links.docs}}) or [FAQ]({{COM:docLinks.faq}}).",
+                    "For more support join the {{COM:bot.name}} support server [here]({{COM:links.support}})!"
+                ],
+                "footer": {
+                    "text": "{{REF:footers.joinSupport}}"
+                },
+                "timestamp": true
+            },
+            "welcome": {
+                "title": "Thank you for using {{COM:bot.name}}!",
+                "description": ["{{REF:bot.description}}"],
+                "fields": [
+                    {
+                        "name": "Important {{REF:fields.commands}}",
+                        "value": ["**/{{COM:commands.help}}** - {{REF:commandDescs.help}}"]
+                    },
+                    {
+                        "name": "Links",
+                        "value": [
+                            "{{COM:links.docsEmbed}}",
+                            "{{COM:links.supportEmbed}}",
+                            "{{COM:links.inviteEmbed}}"
+                        ]
+                    }
+                ]
+            },
+            "info": {
+                "title": "{{COM:bot.name}} - Info",
+                "fields": [
+                    { "name": "Author", "value": "{{COM:links.authorEmbed}}" },
+                    {
+                        "name": "Links",
+                        "value": [
+                            "{{COM:links.sourceEmbed}}",
+                            "{{COM:links.docsEmbed}}",
+                            "{{COM:links.donateEmbed}}",
+                            "{{COM:links.supportEmbed}}",
+                            "{{COM:links.inviteEmbed}}"
+                        ]
+                    },
+                    {
+                        "name": "Created With",
+                        "value": ["{{COM:links.templateEmbed}}"]
+                    }
+                ]
+            },
+            "vote": {
+                "description": "Support {{BOT}} by voting [here]({{COM:links.vote}})!",
+                "color": "{{COM:colors.default}}"
+            },
+            "donate": {
+                "description": "You can support {{BOT}} by donating [here]({{COM:links.donate}})!",
+                "color": "{{COM:colors.default}}"
+            },
+            "faq": {
+                "description": "View our FAQ for {{BOT}} [here]({{COM:links.docs}}/faq-1/general)!",
+                "color": "{{COM:colors.default}}"
+            },
+            "docs": {
+                "description": "View our documentation for {{BOT}} [here]({{COM:links.docs}})!",
+                "color": "{{COM:colors.default}}"
+            },
+            "map": {
+                "description": [
+                    "[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker]({{COM:links.map}})!",
+                    "",
+                    "Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `/set` command."
+                ],
+                "color": "{{COM:colors.default}}"
+            },
+            "invite": {
+                "description": "Invite {{BOT}} to your server [here]({{COM:links.invite}})!",
+                "color": "{{COM:colors.default}}"
+            },
+            "support": {
+                "description": "For support join our discord server [here]({{COM:links.support}})!",
+                "color": "{{COM:colors.default}}"
+            },
+            "logoCompetition": {
+                "title": "{{COM:bot.name}} Logo Competition",
+                "description": [
+                    "{{COM:bot.name}} is looking for a new logo! From now until April 30th we are accepting submissions for the new logo!",
+                    "",
+                    "The winning logo will be used by the bot and the artist will be credited and linked in the bot!",
+                    "",
+                    "[Submit your logo designs here!](https://forms.gle/PFGsh4Wsp2BUYucdA)"
+                ],
+                "fields": [
+                    {
+                        "name": "Prizes",
+                        "value": [
+                            "__1st Place__",
+                            "- Will be the new logo of Birthday Bot!",
+                            "- Credited and linked in the bot!",
+                            "- 1 Year of Birthday Bot Premium.",
+                            "",
+                            "__2nd Place__",
+                            "- 4 Months of Birthday Bot Premium.",
+                            "",
+                            "__3rd Place__",
+                            "- 2 Months of Birthday Bot Premium."
+                        ]
+                    },
+                    {
+                        "name": "Specifications/Tips",
+                        "value": [
+                            "- Ensure the logo looks good when used in a Discord profile picture.",
+                            "",
+                            "- The logo should relate to birthdays/celebrations (the theme of the bot)!",
+                            "",
+                            "- Discord limits profile pictures to a maximum of 128x128 pixels, however, it is preferred that you use a larger image so it can be used in other areas such as the website, GitHub, etc. with a scaled down version for the Discord profile picture.",
+                            "",
+                            "- You can make multiple submissions!"
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Logo Competition ● Join The support server for more information!",
+                    "icon": "{{ICON}}"
+                }
+            }
+        },
+        "help": {
+            "general": {
+                "title": "{{COM:bot.name}} General Help",
+                "description": [
+                    "{{COM:bot.name}} helps your server celebrate birthdays with automatic birthday roles and announcements.",
+                    "",
+                    "**/logo** - Learn about the Birthday Bot Logo Competition! (Win prizes!)",
+                    "",
+                    "**/premium** - See information about {{COM:bot.name}} Premium.",
+                    "**/subscribe** - Subscribe to {{COM:bot.name}} Premium!",
+                    "**/help {{REF:types.premium}}** - Help for {{COM:bot.name}} Premium.",
+                    "",
+                    "**/set [date] [timeZone] [user]** - Set your birthday.",
+                    "**/view [type] [user]** - View your information or a user's information.",
+                    "**/next [type]**** - View next birthday(s) in the server.",
+                    "**/list [type] [page]**** - View the server birthday list.",
+                    "**/map** - View the time zone map.",
+                    "**/vote** - Vote for {{COM:bot.name}}!",
+                    "**/link** - View import links like faq, support, docs, etc.",
+                    "**/purge** - Remove your birthday data.",
+                    "**/help [type]** - Help for specific systems.",
+                    "**/premium** - See information about {{COM:bot.name}} Premium.",
+                    "**/settings [type]**** - View server's settings.",
+                    "**/test <type> [user] [anniversary year]**** - Test the birthday event.",
+                    "",
+                    "**/donate** - Support developments by donating!",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ],
+                "fields": [
+                    {
+                        "name": "Legend",
+                        "value": "** = Server Only Command"
+                    }
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} General Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
+            },
+            "blacklist": {
+                "title": "{{COM:bot.name}} Blacklist Help - Guild Only",
+                "description": [
+                    "**/blacklist add <user/role>** - Add user/role to the blacklist.",
+                    "**/blacklist remove role_or_user <user/role>** - Remove a user/role from the blacklist.",
+                    "**/blacklist remove id <id>** - Remove an id from the blacklist.",
+                    "**/blacklist clear** - Clear the birthday blacklist.",
+                    "**/blacklist list [page]** - View all blacklisted users/roles in your server.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Blacklist Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
+            },
+            "config": {
+                "title": "{{COM:bot.name}} Config Help - Guild Only",
+                "description": [
+                    "The [reset] option for all commands resets that setting to it's default value.",
+                    "",
+                    "**/setup** - Interactive guide for the basic server setup.",
+                    "",
+                    "**/config nameFormat [reset]** - Decide how {{COM:bot.name}} displays names.",
+                    "**/config timeZone [reset]** - Set the default timezone for your server.",
+                    "**/config useTimezone [reset]** - Decide if the bot uses the server's or user's timezone for celebrating birthdays.",
+                    "**/config dateFormat [reset]** - Decide the format {{COM:bot.name}} detects dates.",
+                    "**/config trustedPreventsMessage [reset]** - Decide if the trusted role should prevent the birthday message.",
+                    "**/config trustedPreventsRole [reset]** - Decide if the trusted role should prevent the birthday role.",
+                    "**/config requireAllTrustedRoles [reset]** - Decided if a user need all of the trusted roles.",
+                    "**/config channel [reset]** - Configure the channels {{COM:bot.name}} will use.",
+                    "**/config role [reset]** - Configure the roles {{COM:bot.name}} will use.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Config Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
+            },
+            "message": {
+                "title": "{{COM:bot.name}} Message Help - Guild Only",
+                "description": [
+                    "**/message list <type> [page]** - List all messages for that type.",
+                    "**/message add <type> <message>** - Add a message for that type.",
+                    " - Example Usage: `/message add type:memberAnniversary message:<Users> have been in <Server> for <Year>(s)!`",
+                    " - Placeholder for users: `{{REF:placeHolders.users}}`",
+                    " - Placeholder for year: `{{REF:placeHolders.year}}` (Anniversaries only)",
+                    " - Placeholder for server name: `{{REF:placeHolders.server}}`",
+                    " - Placeholder for a user specific message: `@User` (Premium only)",
+                    "**/message remove <type> <position>** - Remove a certain message for that type.",
+                    "**/message clear <type>** - Clear all messages for that type.",
+                    "**/message setting time <type> <0-23>** - Set the message time for that type",
+                    "**/message setting mention <type> <role/group>** - Set the message mention setting for that type.",
+                    "**/message edit embed <type> <position> <T/F>** - Update a message's embed setting.",
+                    "**/message edit color <type> <position> <color/hex>** - Update a message's color setting.",
+                    "**/message {{REF:types.test}} <type> <position> [user count]** - Test a custom message.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Message Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
+            },
+            "trusted": {
+                "title": "{{COM:bot.name}} Trusted System Help - Guild Only",
+                "description": [
+                    "**/setup {{REF:types.trusted}}** - Interactive guide for trusted system settings setup.",
+                    "",
+                    "**/trustedRole add <role>** - Add a trusted role.",
+                    "**/trustedRole remove role <role>** - Remove a trusted role.",
+                    "**/trustedRole remove id <id>** - Remove a trusted role by id.",
+                    "**/trustedRole clear** - Clear all trusted roles.",
+                    "**/trustedRole list [page]** - List all trusted roles",
+                    "**/config {{REF:types.requireAllTrustedRoles}} <T/F>** - If a user should need all the trusted roles.",
+                    "**/config {{REF:types.trustedPreventsMessage}} <T/F>** - If trusted role is required for a birthday message.",
+                    "**/config {{REF:types.trustedPreventsRole}} <T/F>** - If trusted role is required to get the birthday role.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Trusted System Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
+            },
+            "mar": {
+                "title": "{{COM:bot.name}} Member Anniversary Role Help - Guild Only",
+                "description": [
+                    "**/memberAnniversaryRole add <year> <role>** - Add a member anniversary role.",
+                    "**/memberAnniversaryRole remove <year>** - Remove the member anniversary role of the given year.",
+                    "**/memberAnniversaryRole clear** - Clear all member anniversary roles.",
+                    "**/memberAnniversaryRole list [page]** - List all member anniversary roles.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Member Anniversary Role Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
+            },
+            "premium": {
+                "title": "{{COM:bot.name}} Premium Help - Guild Only",
+                "description": [
+                    "**/premium** - View information about your server's premium.",
+                    "**/message {{REF:types.add}} <type> <message>** - Add a user specific message for that type.",
+                    " - Example Usage: `/message add type:birthday message:Happy Birthday @Stqlth!`",
+                    " - Placeholder for year: `{{REF:placeHolders.year}}`",
+                    " - Placeholder for server name: `{{REF:placeHolders.server}}`",
+                    "**/message edit color <type> <position> <color/hex>** - Update a message's color setting.",
+                    "**/message list userSpecificBirthday [page]** - List all user-specific birthday messages.",
+                    "**/message list userSpecificMemberAnniversary [page]** - List all user-specific member anniversary messages.",
+                    "**/memberAnniversaryRole add <year> <role>** - Add a member anniversary role.",
+                    "**/memberAnniversaryRole remove <year>** - Remove the member anniversary role of the given year.",
+                    "**/memberAnniversaryRole clear** - Clear all member anniversary roles.",
+                    "**/memberAnniversaryRole list [page]** - List all member anniversary roles.",
+                    "",
+                    "If you have any question/problems please join our support server [here]({{COM:links.support}})."
+                ],
+                "footer": {
+                    "text": "{{COM:bot.name}} Premium Help ● Join the support server for assistance.",
+                    "icon": "{{ICON}}"
+                }
+            }
+        },
+        "info": {
+            "title": "{{COM:bot.name}} - Info",
+            "fields": [
+                { "name": "Author", "value": "{{REF:links.authorEmbed}}" },
+                {
+                    "name": "Links",
+                    "value": [
+                        "{{COM:links.sourceEmbed}}",
+                        "{{COM:links.docsEmbed}}",
+                        "{{COM:links.donateEmbed}}",
+                        "{{COM:links.supportEmbed}}",
+                        "{{COM:links.inviteEmbed}}"
+                    ]
+                },
+                {
+                    "name": "Created With",
+                    "value": ["{{REF:links.templateEmbed}}"]
+                }
+            ]
+        },
+        "stats": {
+            "fields": [
+                {
+                    "name": "Total Birthdays",
+                    "value": "{{TOTAL_BIRTHDAYS}}",
+                    "inline": true
+                },
+                {
+                    "name": "Total Servers",
+                    "value": "{{TOTAL_SERVERS}}",
+                    "inline": true
+                },
+                {
+                    "name": "Shard ID",
+                    "value": "{{SHARD_ID}}",
+                    "inline": true
+                },
+                {
+                    "name": "Birthdays Today",
+                    "value": "{{BIRTHDAYS_TODAY}}",
+                    "inline": true
+                },
+                {
+                    "name": "Birthdays This Month",
+                    "value": "{{BIRTHDAYS_THIS_MONTH}}",
+                    "inline": true
+                }
+            ]
+        },
+        "dev": {
+            "title": "{{COM:bot.name}} - Developer Info",
+            "fields": [
+                {
+                    "name": "Versions",
+                    "value": [
+                        "**Node.js**: {{NODE_VERSION}}",
+                        "**TypeScript**: {{TS_VERSION}}",
+                        "**ECMAScript**: {{ES_VERSION}}",
+                        "**discord.js**: {{DJS_VERSION}}"
+                    ]
+                },
+                {
+                    "name": "Stats",
+                    "value": [
+                        "**Shards**: {{SHARD_COUNT}}",
+                        "**Servers**: {{SERVER_COUNT}} ({{SERVER_COUNT_PER_SHARD}}/Shard)"
+                    ]
+                },
+                {
+                    "name": "Memory",
+                    "value": [
+                        "**RSS**: {{RSS_SIZE}} ({{RSS_SIZE_PER_SERVER}}/Server)",
+                        "**Heap**: {{HEAP_TOTAL_SIZE}} ({{HEAP_TOTAL_SIZE_PER_SERVER}}/Server)",
+                        "**Used**: {{HEAP_USED_SIZE}} ({{HEAP_USED_SIZE_PER_SERVER}}/Server)"
+                    ]
+                },
+                {
+                    "name": "IDs",
+                    "value": [
+                        "**Hostname**: {{HOSTNAME}}",
+                        "**Shard ID**: {{SHARD_ID}}",
+                        "**Server ID**: {{SERVER_ID}}",
+                        "**Bot ID**: {{BOT_ID}}",
+                        "**User ID**: {{USER_ID}}"
+                    ]
+                }
+            ]
+        },
+        "test": {
+            "description": "Test command works!"
+        },
+        "translate": {
+            "title": "{{COM:bot.name}} - Translations",
+            "description": "Thank you to our translators who have made it possible for {{COM:bot.name}} to be used in the following languages. If you are interested in providing a translation, please contact the staff in our [support server]({{COM:links.support}})."
+        },
+        "settings": {
+            "general": {
+                "title": "{{SERVER_NAME}}'s General Settings",
+                "fields": [
+                    {
+                        "name": "{{REF:terms.birthdayRole}}",
+                        "value": "{{BIRTHDAY_ROLE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.nameFormat}}",
+                        "value": "{{NAME_FORMAT}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.defaultTimezone}}",
+                        "value": "{{DEFAULT_TIMEZONE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.serverLanguage}}",
+                        "value": "{{SERVER_LANGUAGE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Guild Id",
+                        "value": "{{GUILD_ID}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Premium",
+                        "value": "{{HAS_PREMIUM}}",
+                        "inline": true
+                    }
+                ],
+                "footer": {
+                    "text": "© {{DATE}} {{COM:bot.name}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "advanced": {
+                "title": "{{SERVER_NAME}}'s Advanced Settings",
+                "fields": [
+                    {
+                        "name": "{{REF:terms.birthdayMasterRole}}",
+                        "value": "{{BIRTHDAY_MASTER_ROLE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.dateFormat}}",
+                        "value": "{{DATE_FORMAT}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.trustedPreventsRole}}",
+                        "value": "{{TRUSTED_PREVENTS_ROLE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.trustedPreventsMessage}}",
+                        "value": "{{TRUSTED_PREVENTS_MESSAGE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.requireAllTrustedRoles}}",
+                        "value": "{{REQUIRE_ALL_TRUSTED_ROLES}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.numberOfTrustedRoles}}",
+                        "value": "{{TRUSTED_ROLE_COUNT}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.useTimezone}}",
+                        "value": "{{USE_TIMEZONE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Guild Id",
+                        "value": "{{GUILD_ID}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Premium",
+                        "value": "{{HAS_PREMIUM}}",
+                        "inline": true
+                    }
+                ],
+                "footer": {
+                    "text": "© {{DATE}} {{COM:bot.name}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "message": {
+                "title": "{{SERVER_NAME}}'s Message Settings",
+                "fields": [
+                    {
+                        "name": "{{REF:terms.birthdayChannel}}",
+                        "value": "{{BIRTHDAY_CHANNEL}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryChannel}}",
+                        "value": "{{MEMBER_ANNIVERSARY_CHANNEL}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryChannel}}",
+                        "value": "{{SERVER_ANNIVERSARY_CHANNEL}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.birthdayMessageTime}}",
+                        "value": "{{BIRTHDAY_MESSAGE_TIME}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryMessageTime}}",
+                        "value": "{{MEMBER_ANNIVERSARY_MESSAGE_TIME}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryMessageTime}}",
+                        "value": "{{SERVER_ANNIVERSARY_MESSAGE_TIME}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.birthdayMention}}",
+                        "value": "{{BIRTHDAY_MENTION}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryMention}}",
+                        "value": "{{MEMBER_ANNIVERSARY_MENTION}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryMention}}",
+                        "value": "{{SERVER_ANNIVERSARY_MENTION}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Guild Id",
+                        "value": "{{GUILD_ID}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "Premium",
+                        "value": "{{HAS_PREMIUM}}",
+                        "inline": true
+                    }
+                ],
+                "footer": {
+                    "text": "© {{DATE}} {{COM:bot.name}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            }
+        },
+        "list": {
+            "birthday": {
+                "title": "{{REF:terms.birthdayList}} | {{REF:list.pageTitle}}",
+                "description": [
+                    "*Birthdays are celebrated on the day (and __time zone__) of the birthday user. To set your birthday use `/set`!*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "Total Birthdays: {{TOTAL_BIRTHDAYS}} • {{PER_PAGE}} per page",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "memberAnniversary": {
+                "title": "{{REF:terms.memberAnniversaryList}} | {{REF:list.pageTitle}}",
+                "description": [
+                    "*Member Anniversaries are celebrated on the day of the user's server join date (in the timezone of the __server__).*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "Total Member Anniversaries: {{TOTAL_ANNIVERSARIES}} • {{PER_PAGE}} per page",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "birthdayMessageUnLocked": {
+                "title": "{{REF:list.birthdayMessagesTitle}}",
+                "description": [
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "birthdayMessageLocked": {
+                "title": "{{REF:list.birthdayMessagesTitle}}",
+                "description": [
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.messagePaidFieldTitle}}",
+                        "value": "{{REF:list.birthdayMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "memberAnniversaryMessageUnLocked": {
+                "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "memberAnniversaryMessageLocked": {
+                "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.messagePaidFieldTitle}}",
+                        "value": "{{REF:list.memberAnniversaryMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "serverAnniversaryMessageUnLocked": {
+                "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "serverAnniversaryMessageLocked": {
+                "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.messagePaidFieldTitle}}",
+                        "value": "{{REF:list.serverAnniversaryMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "userSpecificBirthdayMessageUnLocked": {
+                "title": "{{REF:list.userBirthdayMessagesTitle}}",
+                "description": [
+                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "userSpecificBirthdayMessageLocked": {
+                "title": "{{REF:list.userBirthdayMessagesTitle}}",
+                "description": [
+                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.userSpecificMessageFieldTitle}}",
+                        "value": "{{REF:list.userSpecificMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "userSpecificMemberAnniversaryMessageUnLocked": {
+                "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "userSpecificMemberAnniversaryMessageLocked": {
+                "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
+                "description": [
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.messagesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.userSpecificMessageFieldTitle}}",
+                        "value": "{{REF:list.userSpecificMessageFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "trustedRoleFree": {
+                "title": "{{REF:list.trustedRolesTitle}}",
+                "description": [
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `/config` [(?)]({{REF:docLinks.whatIsTrustedRole}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "trustedRolePaid": {
+                "title": "{{REF:list.trustedRolesTitle}}",
+                "description": [
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `/config` [(?)]({{REF:docLinks.whatIsTrustedRole}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.trustedRoleFieldTitle}}",
+                        "value": "{{REF:list.trustedRoleFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "memberAnniversaryRoleFree": {
+                "title": "{{REF:list.memberAnniversaryRolesTitle}}",
+                "description": [
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{REF:docLinks.whatIsAnniversaryRole}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "memberAnniversaryRolePaid": {
+                "title": "{{REF:list.memberAnniversaryRolesTitle}}",
+                "description": [
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{REF:docLinks.whatIsAnniversaryRole}})*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "{{REF:list.rolesFooter}}",
+                    "icon": "{{ICON}}"
+                },
+                "fields": [
+                    {
+                        "name": "{{REF:list.memberAnniversaryRoleFieldTitle}}",
+                        "value": "{{REF:list.memberAnniversaryRoleFieldText}}"
+                    }
+                ],
+                "timestamp": true
+            },
+            "blacklist": {
+                "title": "{{REF:terms.blacklistList}} | {{REF:list.pageTitle}}",
+                "description": [
+                    "*Users on this list or who have roles on this list will not have their birthdays celebrated no matter what. Edit this list with `/blacklist`!*",
+                    "",
+                    "{{LIST_DATA}}"
+                ],
+                "footer": {
+                    "text": "Total Blacklisted Users/Roles: {{TOTAL_BLACKLIST}} • {{PER_PAGE}} per page",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            }
+        },
+        "premium": {
+            "premiumDisabled": {
+                "title": "{{COM:bot.name}} Premium",
+                "description": "Premium subscriptions are currently disabled. Enjoy premium features for free! Woohoo!",
+                "timestamp": true
+            },
+            "refuseNewTransactions": {
+                "title": "{{COM:bot.name}} Premium",
+                "description": [
+                    "New subscriptions are not being accept at this time. Please try again later.",
+                    "[Join Support Server]({{COM:links.support}})"
+                ],
+                "timestamp": true
+            },
+            "premiumAlreadyActive": {
+                "title": "{{COM:bot.name}} Premium",
+                "description": [
+                    "This server already has an active premium subscription or one that is currently processing.",
+                    "",
+                    "You cannot purchase premium for this server at this time. If you've recently checked out, you may need for the payment to be processed. If the subscriptions was recently cancelled you may need to wait until the paid time runs out before re-subscribing. As always, feel free to contact support at the link below with any questions.",
+                    "",
+                    "[Join Support Server]({{COM:links.support}})"
+                ],
+                "timestamp": true
+            },
+            "subscriptionDMPrompt": {
+                "title": "{{COM:bot.name}} Premium",
+                "description": [
+                    "I have private messaged you with a PayPal subscription link!",
+                    "If you did not receive a message, please make sure you have direct messages enabled for this server (under this servers Privacy Settings) and run this command again."
+                ],
+                "timestamp": true
+            },
+            "subscriptionPM": {
+                "title": "{{COM:bot.name}} Premium",
+                "description": "Complete your servers subscription by checking out with PayPal at the link below.",
+                "fields": [
+                    {
+                        "name": "Purchase Premium",
+                        "value": ["[Checkout with PayPal Here!]({{SUB_LINK}})"]
+                    },
+                    {
+                        "name": "Premium Features",
+                        "value": [
+                            "- No voting needed for **any** commands",
+                            "- Up to **{{BIRTHDAY_MESSAGE_MAX_PAID}}** custom birthday messages *(vs **{{BIRTHDAY_MESSAGE_MAX_FREE}}** free)*",
+                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID}}** custom member anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** free)*",
+                            "- Up to **{{SERVER_ANNIVERSARY_MESSAGE_MAX_PAID}}** custom server anniversary messages *(vs **{{SERVER_ANNIVERSARY_MESSAGE_MAX_FREE}}** free)*",
+                            "- Access to Member Anniversary Roles! (Up to {{MAX_ANNIVERSARY_ROLES}}!)",
+                            "- Access to multiple Trusted Roles! (Up to {{MAX_TRUSTED_ROLES}}!)",
+                            "- Access to user-specific custom birthday messages",
+                            "- Customize the color **each** birthday message embed",
+                            "- Premium support",
+                            "Features apply **server-wide** (this server only)."
+                        ]
+                    },
+                    {
+                        "name": "Price",
+                        "value": ["2.99 USD / Month"]
+                    },
+                    {
+                        "name": "Purchase Details",
+                        "value": [
+                            "Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{COM:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
+                            "",
+                            "[Join Support Server]({{COM:links.support}})"
+                        ]
+                    }
+                ]
+            },
+            "noSubscription": {
+                "title": "{{COM:bot.name}} Premium",
+                "description": "Subscribe to **{{COM:bot.name}} Premium** to give this server extra features!",
+                "fields": [
+                    {
+                        "name": "Premium Features",
+                        "value": [
+                            "- No voting needed for **any** commands",
+                            "- Up to **{{BIRTHDAY_MESSAGE_MAX_PAID}}** custom birthday messages *(vs **{{BIRTHDAY_MESSAGE_MAX_FREE}}** free)*",
+                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID}}** custom member anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** free)*",
+                            "- Up to **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_PAID}}** custom server anniversary messages *(vs **{{MEMBER_ANNIVERSARY_MESSAGE_MAX_FREE}}** free)*",
+                            "- Access to Member Anniversary Roles! (Up to {{MAX_ANNIVERSARY_ROLES}}!)",
+                            "- Access to multiple Trusted Roles! (Up to {{MAX_TRUSTED_ROLES}}!)",
+                            "- Access to user-specific custom birthday messages",
+                            "- Customize the color **each** birthday message embed",
+                            "- Premium support",
+                            "Features apply **server-wide** (this server only)."
+                        ]
+                    },
+                    {
+                        "name": "Price",
+                        "value": ["2.99 USD / Month"]
+                    },
+                    {
+                        "name": "Purchase Details",
+                        "value": [
+                            "Type `/subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{COM:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
+                            "",
+                            "[Join Support Server]({{COM:links.support}})"
+                        ]
+                    }
+                ]
+            },
+            "subscription": {
+                "title": "{{COM:bot.name}} Premium",
+                "description": "This servers subscription information.",
+                "fields": [
+                    {
+                        "name": "Active",
+                        "value": "{{IS_ACTIVE}}"
+                    },
+                    {
+                        "name": "Subscription ID",
+                        "value": "{{SUBSCRIPTION_ID}}"
+                    },
+                    {
+                        "name": "Status",
+                        "value": "{{STATUS}}"
+                    },
+                    {
+                        "name": "Last Payment",
+                        "value": "{{LAST_PAYMENT}}"
+                    },
+                    {
+                        "name": "Paid Until",
+                        "value": "{{PAID_UNTIL}}"
+                    },
+                    {
+                        "name": "Purchase Details",
+                        "value": [
+                            "Type `/subscribe` to purchase a subscription. You will then be direct messaged a PayPal link where you can checkout using your PayPal account or credit card. Your servers subscription will activate within 5 minutes of checking out with PayPal. You may cancel at any time on your [PayPal Automatic Payments]({{COM:links.autopay}}) page. Any paid time after cancelling will still count as premium service. As always, feel free to contact support at the link below with any questions.",
+                            "[Join Support Server]({{COM:links.support}})"
+                        ]
+                    }
+                ]
+            },
+            "subscriptionAdded": {
+                "title": "{{REF:bot.name}} Premium",
+                "description": "{{COM:colors.party}} {{SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{COM:colors.party}}",
+                "fields": [
+                    {
+                        "name": "{{REF:bot.prefix}} premium",
+                        "value": [
+                            "View details about your subscription.",
+                            "",
+                            "[Join Support Server]({{COM:links.support}})"
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "Thanks for support {{REF:bot.name}}!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "subscriptionCanceled": {
+                "title": "{{REF:bot.name}} Premium",
+                "description": "{[SERVER_NAME}}'s premium has been canceled! :(",
+                "fields": [
+                    {
+                        "name": "{{REF:bot.prefix}} premium",
+                        "value": [
+                            "View details about your subscription.",
+                            "",
+                            "[Join Support Server]({{COM:links.support}})"
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "Consider letting us know how to improve premium!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            },
+            "subscriptionExpired": {
+                "title": "{{REF:bot.name}} Premium",
+                "description": "{[SERVER_NAME}}'s premium has expired! :(",
+                "fields": [
+                    {
+                        "name": "{{REF:bot.prefix}} premium",
+                        "value": [
+                            "Resubscribe to premium!",
+                            "",
+                            "[Join Support Server]({{COM:links.support}})"
+                        ]
+                    }
+                ],
+                "footer": {
+                    "text": "Consider letting us know how to improve premium!",
+                    "icon": "{{ICON}}"
+                },
+                "timestamp": true
+            }
+        },
+        "channelRegexes": {
+            "bot": "/bot|command|cmd/i"
+        },
+        "placeHolders": {
+            "usersRegex": "/@users?|<users?>|{users?}|{users?}/gi",
+            "yearRegex": "/@year?|<year?>|{year?}|{year?}/gi",
+            "serverRegex": "/@server?|<server?>|{server?}|{server?}/gi"
+        }
+    },
+    "refs": {
+        "meta": {
+            "language": "en-US",
+            "languageDisplay": "English",
+            "locale": "en-US",
+            "translators": "[Stqlth#0001](https://github.com/scottbucher)"
+        },
+
+        "footers": {
+            "whyPremium": "Premium helps us support and maintain the bot!",
+            "joinSupport": "Please join our support server if you have any questions."
+        },
+        "other": {
+            "na": "N/A"
+        },
+        "BREAK": {
+            "BELLOW HERE WILL ALL BE MOVED TO GOL WHEN LINGUINI IS UPDATED": "----------------------------------------------------------------------------------------------------------------------------------"
+        },
+        "defaults": {
+            "birthdayMessage": "Happy Birthday {{REF:placeHolders.users}}!",
+            "memberAnniversaryMessage": "Congratulations on {{REF:placeHolders.year}} year(s) in the server {{REF:placeHolders.users}}!",
+            "serverAnniversaryMessage": "{{REF:placeHolders.server}} is now {{REF:placeHolders.year}} year(s) old!",
+            "birthdayChannelName": "{{COM:emotes.birthdayEmote}} birthdays",
+            "birthdayChannelTopic": "Birthdays Announcements!",
+            "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",
+            "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
+            "serverAnniversaryChannelName": "{{COM:emotes.party}} server anniversaries",
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
+            "birthdayMasterRoleName": "Birthday Master"
+        },
+        "permissions": {
+            "ADD_REACTIONS": "Add Reactions",
+            "ADMINISTRATOR": "Administrator",
+            "ATTACH_FILES": "Attach Files",
+            "BAN_MEMBERS": "Ban Members",
+            "CHANGE_NICKNAME": "Change Nickname",
+            "CONNECT": "Connect",
+            "CREATE_INSTANT_INVITE": "Create Invite",
+            "CREATE_PRIVATE_THREADS": "Create Private Threads",
+            "CREATE_PUBLIC_THREADS": "Create Public Threads",
+            "DEAFEN_MEMBERS": "Deafen Members",
+            "EMBED_LINKS": "Embed Links",
+            "KICK_MEMBERS": "Kick Members",
+            "MANAGE_CHANNELS": "Manage Channel(s)",
+            "MANAGE_EMOJIS_AND_STICKERS": "Manage Emojis and Stickers",
+            "MANAGE_EVENTS": "Manage Events",
+            "MANAGE_GUILD": "Manage Server",
+            "MANAGE_MESSAGES": "Manage Messages",
+            "MANAGE_NICKNAMES": "Manage Nicknames",
+            "MANAGE_ROLES": "Manage Roles / Permissions",
+            "MANAGE_THREADS": "Manage Threads",
+            "MANAGE_WEBHOOKS": "Manage Webhooks",
+            "MENTION_EVERYONE": "Mention Everyone, Here, and All Roles",
+            "MODERATE_MEMBERS": "Timeout Members",
+            "MOVE_MEMBERS": "Move Members",
+            "MUTE_MEMBERS": "Mute Members",
+            "PRIORITY_SPEAKER": "Priority Speaker",
+            "READ_MESSAGE_HISTORY": "Read Message History",
+            "REQUEST_TO_SPEAK": "Request to Speak",
+            "SEND_MESSAGES": "Send Messages",
+            "SEND_MESSAGES_IN_THREADS": "Send Messages in Threads",
+            "SEND_TTS_MESSAGES": "Send Text-to-Speech Messages",
+            "SPEAK": "Speak",
+            "START_EMBEDDED_ACTIVITIES": "Start Activities",
+            "STREAM": "Video",
+            "USE_APPLICATION_COMMANDS": "Use Application Commands",
+            "USE_EXTERNAL_EMOJIS": "Use External Emoji",
+            "USE_EXTERNAL_STICKERS": "Use External Stickers",
+            "USE_PRIVATE_THREADS": "Use Private Threads",
+            "USE_PUBLIC_THREADS": "Use Public Threads",
+            "USE_VAD": "Use Voice Activity",
+            "VIEW_AUDIT_LOG": "View Audit Log",
+            "VIEW_CHANNEL": "View Channel(s)",
+            "VIEW_GUILD_INSIGHTS": "View Server Insights"
+        },
+        "placeHolders": {
+            "users": "{Users}",
+            "year": "{Year}",
+            "server": "{Server}"
+        },
+        "boolean": {
+            "yes": "Yes",
+            "no": "No",
+            "true": "True",
+            "false": "False"
+        },
+        "months": {
+            "jan": "January",
+            "feb": "February",
+            "mar": "March",
+            "apr": "April",
+            "may": "May",
+            "jun": "June",
+            "jul": "July",
+            "aug": "August",
+            "sep": "September",
+            "oct": "October",
+            "nov": "November",
+            "dec": "December",
+            "invalid": "Invalid Month"
+        },
+        "list": {
+            "birthdayMessagesTitle": "{{REF:terms.birthdayMessages}} | {{REF:list.pageTitle}}",
+            "userBirthdayMessagesTitle": "{{REF:terms.userBirthdayMessages}} | {{REF:list.pageTitle}}",
+            "userMemberAnniversaryMessagesTitle": "{{REF:terms.userMemberAnniversaryMessages}} | {{REF:list.pageTitle}}",
+            "memberAnniversaryMessagesTitle": "{{REF:terms.memberAnniversaryMessages}} | {{REF:list.pageTitle}}",
+            "serverAnniversaryMessagesTitle": "{{REF:terms.serverAnniversaryMessages}} {{REF:terms.messages}} | {{REF:list.pageTitle}}",
+            "trustedRolesTitle": "{{REF:terms.trustedRoles}} | {{REF:list.pageTitle}}",
+            "memberAnniversaryRolesTitle": "{{REF:terms.memberAnniversaryRoles}} | {{REF:list.pageTitle}}",
+            "messagesFooter": "Total Message: {{TOTAL_MESSAGES}} • {{PER_PAGE}} per page",
+            "rolesFooter": "Total Roles: {{TOTAL_ROLES}} • {{PER_PAGE}} per page",
+            "pageTitle": "Page {{PAGE}}/{{TOTAL_PAGES}}",
+            "noTrustedRoles": "**No Trusted Roles!**",
+            "noMemberAnniversaryRoles": "**No MemberAnniversary Roles!**",
+            "noBirthdays": "**No Birthdays in this server!**",
+            "noMemberAnniversaries": "**No Member Anniversaries in this server!**",
+            "emptyBlacklist": "**The Birthday Blacklist is empty!**",
+            "noCustomBirthdayMessages": "**No Custom Birthday Messages!**",
+            "noCustomUserSpecificBirthdayMessages": "**No User-Specific Birthday Messages!**",
+            "noCustomUserSpecificMemberAnniversaryMessages": "**No User-Specific Member Anniversary Messages!**",
+            "noCustomMemberAnniversaryMessages": "**No Custom Member Anniversary Messages!**",
+            "noCustomServerAnniversaryMessages": "**No Custom Server Anniversary Messages!**",
+            "messagePaidFieldTitle": "Message Limit",
+            "birthdayMessageFieldText": "The free version of {{COM:bot.name}} can only have up to **{{MAX_FREE}}** custom birthday messages. Unlock up to **{{MAX_PAID}}** with `/premium`!",
+            "memberAnniversaryMessageFieldText": "The free version of {{COM:bot.name}} can only have up to **{{MAX_FREE}}** custom member anniversary messages. Unlock up to **{{MAX_PAID}}** with `/premium`!",
+            "serverAnniversaryMessageFieldText": "The free version of {{COM:bot.name}} can only have up to **{{MAX_FREE}}** custom server anniversary messages. Unlock up to **{{MAX_PAID}}** with `/premium`!",
+            "userSpecificMessageFieldTitle": "Locked Feature",
+            "userSpecificMessageFieldText": "User-specific messages are a premium only feature. Unlock them with `/premium`!",
+            "trustedRoleFieldTitle": "Trusted Role Limit",
+            "trustedRoleFieldText": "The free version of {{COM:bot.name}} can only have up to **{{MAX_FREE}}** trusted roles. Unlock up to **{{MAX_PAID}}** with `/premium`!",
+            "memberAnniversaryRoleFieldTitle": "Member Anniversary Roles Unavailable",
+            "memberAnniversaryRoleFieldText": "Member anniversary roles are a premium feature **only**. Unlock up to **{{MAX_PAID}}** with `/premium`!",
+            "noUserMessageForBot": "You cannot set a user-specific message for a bot!",
+            "emptyList": "**The list is empty!**"
+        },
+        "conditionals": {
+            "needColorForPremium": "Customize the message color with `/premium`!",
+            "colorForPremium": "Color Hex: `{{COLOR_HEX}}`!"
+        },
+        "types": {
+            "birthday": "birthday",
+            "birthdayMaster": "birthdayMaster",
+            "memberAnniversary": "memberAnniversary",
+            "serverAnniversary": "serverAnniversary",
+            "userSpecificBirthday": "userSpecificBirthday",
+            "userSpecificMemberAnniversary": "userSpecificMemberAnniversary",
+            "channel": "channel",
+            "birthdayRole": "role",
+            "birthdayMasterRole": "birthdayMasterRole",
+            "nameFormat": "nameFormat",
+            "timezone": "timezone",
+            "useTimezone": "useTimezone",
+            "trustedPreventsRole": "trustedPreventsRole",
+            "trustedPreventsMessage": "trustedPreventsMessage",
+            "requireAllTrustedRoles": "requireAllTrustedRoles",
+            "dateFormat": "dateFormat",
+            "member": "member",
+            "monthDay": "month/day",
+            "dayMonth": "day/month",
+            "mention": "mention",
+            "nickname": "nickname",
+            "username": "username",
+            "tag": "tag",
+            "default": "default",
+            "add": "add",
+            "remove": "remove",
+            "clear": "clear",
+            "list": "list",
+            "time": "time",
+            "useEmbed": "useEmbed",
+            "embed": "embed",
+            "color": "color",
+            "help": "help",
+            "setup": "setup",
+            "trusted": "trusted",
+            "anniversary": "anniversary",
+            "message": "message",
+            "blacklist": "blacklist",
+            "advanced": "advanced",
+            "premium": "premium",
+            "test": "test",
+            "create": "create",
+            "user": "user",
+            "update": "update",
+            "server": "server",
+            "claim": "claim",
+            "role": "role",
+            "id": "id"
+        },
+        "terms": {
+            "timeZone": "Time Zone",
+            "birthday": "Birthday",
+            "birthdays": "Birthdays",
+            "user": "User",
+            "users": "Users",
+            "list": "List",
+            "total": "Total",
+            "messages": "Messages",
+            "message": "Message",
+            "general": "General",
+            "advanced": "Advanced",
+            "memberAnniversary": "Member Anniversary",
+            "serverAnniversary": "Server Anniversary",
+            "blacklist": "Blacklist",
+            "blacklisted": "Blacklisted",
+            "correctlySet": "Correctly Set",
+            "notSet": "Not Set",
+            "notSetOrIncorrect": "Not Set (or Incorrectly Set)",
+            "memberInBlacklist": "Member In Birthday Blacklist",
+            "inBlacklist": "In Blacklist",
+            "notInBlacklist": "Not In Blacklist",
+            "trustedPreventMsg": "Trusted Prevented Message",
+            "trustedPreventRole": "Trusted Prevented Role",
+            "didPreventMsg": "Didn't Prevent Message",
+            "didntPreventMsg": "Prevented Message",
+            "didPreventRole": "Didn't Prevent Role",
+            "didntPreventRole": "Prevented Role",
+            "canBeGiven": "Can be given",
+            "cantBeGivenPermIssue": "Can't be given (Permission Issue)",
+            "unknownMember": "Unknown Member",
+            "unknownTarget": "Unknown Target",
+            "unknownChannel": "Unknown Channel",
+            "unknownRole": "Unknown Role",
+            "hasBirthdaySet": "User Has Their Birthday Set",
+            "none": "None",
+            "and": "and",
+            "deletedRole": "Deleted Role",
+            "deletedChannel": "Deleted Channel",
+            "birthdayList": "Birthday List",
+            "memberAnniversaryList": "Member Anniversary List",
+            "birthdayMessages": "Birthday Messages",
+            "userBirthdayMessages": "User-Specific Birthday Messages",
+            "userMemberAnniversaryMessages": "User-Specific Member Anniversary Messages",
+            "serverAnniversaryMessages": "Server Anniversary Messages",
+            "memberAnniversaryMessages": "Member Anniversary Messages",
+            "birthdayMessage": "Birthday Message",
+            "userBirthdayMessage": "User-Specific Birthday Message",
+            "userMemberAnniversaryMessage": "User-Specific Member Anniversary Message",
+            "serverAnniversaryMessage": "Server Anniversary Message",
+            "memberAnniversaryMessage": "Member Anniversary Message",
+            "trustedRoles": "Trusted Roles",
+            "memberAnniversaryRoles": "Member Anniversary Roles",
+            "blacklistList": "Blacklist List",
+            "birthdayChannelTitle": "{{COM:emotes.birthdayEmote}} birthdays",
+            "birthdayChannelTopic": "Birthday Announcements!",
+            "memberAnniversaryChannelTitle": "{{COM:emotes.party}} member anniversaries",
+            "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
+            "serverAnniversaryChannelTitle": "{{COM:emotes.party}} server anniversaries",
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
+            "premiumRequired": "Premium Required!",
+            "active": "Active",
+            "notActive": "Not Active",
+            "amTime": "AM",
+            "pmTime": "PM",
+            "noOne": "no one",
+            "color": "Color",
+            "embedded": "Embedded",
+            "na": "N/A",
+            "change": "Change",
+            "suggest": "Suggest",
+            "server": "Server",
+            "birthdayChannel": "Birthday Channel",
+            "birthdayRole": "Birthday Role",
+            "birthdayMasterRole": "Birthday Master Role",
+            "trustedPreventsRole": "Trusted Prevents Role",
+            "trustedPreventsMessage": "Trusted Prevents Message",
+            "requireAllTrustedRoles": "Require All Trusted Roles",
+            "defaultTimezone": "Default Timezone",
+            "numberOfTrustedRoles": "Number Of Trusted Roles",
+            "useTimezone": "Use Timezone",
+            "nameFormat": "Name Format",
+            "dateFormat": "Date Format",
+            "memberAnniversaryChannel": "Member Anniversary Channel",
+            "serverAnniversaryChannel": "Server Anniversary Channel",
+            "birthdayMessageTime": "Birthday Message Time",
+            "memberAnniversaryMessageTime": "Member Anniversary Time",
+            "serverAnniversaryMessageTime": "Server Anniversary Time",
+            "birthdayMention": "Birthday  Mention Setting",
+            "memberAnniversaryMention": "Member Anniversary Mention Setting",
+            "serverAnniversaryMention": "Server Anniversary Mention Setting",
+            "serverLanguage": "Server Language",
+            "never": "Never",
+            "mmdd": "MM/DD",
+            "ddmm": "DD/MM",
+            "birthdayMaster": "Birthday Master",
+            "master": "Master"
+        }
+    }
+}

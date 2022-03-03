@@ -1,96 +1,332 @@
-import { FormatUtils, MessageUtils, PermissionUtils } from '../utils';
-import { Message, TextChannel } from 'discord.js';
-import { SetupRequired, SetupTrusted } from './setup';
+import {
+    ChatInputApplicationCommandData,
+    CommandInteraction,
+    Message,
+    PermissionString,
+    Role,
+    TextBasedChannel,
+} from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { Command } from '.';
-import { GuildRepo } from '../services/database/repos';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { SetupAnniversary } from './setup/setup-anniversary';
+import { CustomRole } from '../enums/index.js';
+import { EventData } from '../models/index.js';
+import { GuildRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { CollectorUtils } from '../utils/collector-utils.js';
+import { ClientUtils, InteractionUtils, PermissionUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
+const require = createRequire(import.meta.url);
+let Config = require('../../config/config.json');
 export class SetupCommand implements Command {
-    public name: string = 'setup';
-    public aliases = ['configure', 'set-up'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.setup'),
+        description: 'Run the initial setup processes.',
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [
+        'VIEW_CHANNEL',
+        'MANAGE_CHANNELS',
+        'MANAGE_ROLES',
+    ];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = false;
-    public guildOnly = true;
-    public adminOnly = true;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = true;
 
-    constructor(
-        private guildRepo: GuildRepo,
-        private setupRequired: SetupRequired,
-        private setupTrusted: SetupTrusted,
-        private setupAnniversary: SetupAnniversary
-    ) {}
+    constructor(public guildRepo: GuildRepo) {}
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel,
-        hasPremium: boolean
-    ): Promise<void> {
-        // Check for permissions
-        if (!PermissionUtils.canReact(channel)) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.needReactAndMessageHistoryPerms', LangCode.EN_US)
-            );
-            return;
-        }
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let guild = intr.guild;
+        let botUser = guild.client.user;
 
-        // Run required setup if no arguments
-        if (args.length <= 2) {
-            if (
-                !msg.guild.me.permissions.has('MANAGE_CHANNELS') ||
-                !msg.guild.me.permissions.has('MANAGE_ROLES')
-            ) {
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.needManageChannelsAndRolesPerm', LangCode.EN_US)
-                );
-                return;
-            }
+        let birthdayChannel: string;
+        let birthdayRole: string;
 
-            await this.setupRequired.execute(args, msg, channel);
-            return;
-        }
+        let channelEmbed = Lang.getEmbed('prompts', 'setup.birthdayChannel', data.lang(), {
+            ICON: intr.client.user.displayAvatarURL(),
+        }).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
 
-        // Required setup is needed to run any specific setup
-        let guildData = await this.guildRepo.getGuild(msg.guild.id);
-        if (!guildData) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.setupRequired', LangCode.EN_US)
-            );
-            return;
-        }
+        let channelResult = await CollectorUtils.getSetupChoiceFromButton(intr, data, channelEmbed);
 
-        let type = FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ?? '';
+        if (channelResult === undefined) return;
 
-        // Run the appropriate setup
-        switch (type) {
-            case 'anniversary':
-                await this.setupAnniversary.execute(args, msg, channel);
-                return;
-            case 'trusted':
-                if (!msg.guild.me.permissions.has('MANAGE_ROLES')) {
-                    await MessageUtils.send(
-                        channel,
-                        Lang.getEmbed('validation.needManageRolesPerm', LangCode.EN_US)
+        switch (channelResult.value) {
+            case 'create': {
+                // Create channel with desired attributes
+                let botRoleId = guild.me.roles.cache.filter(role => role.managed)?.first()?.id;
+                if (!botRoleId) {
+                    await InteractionUtils.send(
+                        intr,
+                        Lang.getErrorEmbed('validation', 'errorEmbeds.noBotRole', data.lang())
                     );
                     return;
                 }
-                await this.setupTrusted.execute(args, msg, channel, hasPremium);
-                return;
-            default:
-                await MessageUtils.send(
-                    channel,
-                    Lang.getEmbed('validation.invalidSetupArgs', LangCode.EN_US)
+                birthdayChannel = (
+                    await guild.channels.create(
+                        Lang.getRef('info', 'defaults.birthdayChannelName', data.lang()),
+                        {
+                            type: 'GUILD_TEXT',
+                            topic: Lang.getRef(
+                                'info',
+                                'defaults.birthdayChannelTopic',
+                                data.lang()
+                            ),
+                            permissionOverwrites: [
+                                {
+                                    id: guild.id,
+                                    deny: ['SEND_MESSAGES'],
+                                    allow: ['VIEW_CHANNEL'],
+                                },
+                                {
+                                    id: botRoleId,
+                                    allow: [
+                                        'VIEW_CHANNEL',
+                                        'SEND_MESSAGES',
+                                        'EMBED_LINKS',
+                                        'ADD_REACTIONS',
+                                        'READ_MESSAGE_HISTORY',
+                                    ],
+                                },
+                            ],
+                        }
+                    )
+                )?.id;
+                break;
+            }
+            case 'select': {
+                let _selectMessage = await InteractionUtils.send(
+                    intr,
+                    Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())
                 );
-                return;
+
+                birthdayChannel = await CollectorUtils.collectByMessage(
+                    intr.channel,
+                    intr.user,
+                    async (nextMsg: Message) => {
+                        // Find mentioned channel
+                        let channelInput: TextBasedChannel = await ClientUtils.findTextChannel(
+                            intr.guild,
+                            nextMsg.content
+                        );
+
+                        if (!channelInput) {
+                            await InteractionUtils.send(
+                                intr,
+                                Lang.getErrorEmbed(
+                                    'validation',
+                                    'errorEmbeds.invalidChannel',
+                                    data.lang()
+                                )
+                            );
+                            return;
+                        }
+
+                        // Bot needs to be able to message in the desired channel
+                        if (!PermissionUtils.canSend(channelInput)) {
+                            await InteractionUtils.send(
+                                intr,
+                                Lang.getEmbed(
+                                    'validation',
+                                    'embeds.noAccessToChannel',
+                                    data.lang(),
+                                    {
+                                        CHANNEL: channelInput.toString(),
+                                    }
+                                )
+                            );
+                            return;
+                        }
+                        return channelInput?.id;
+                    },
+                    async () => {
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                        );
+                    }
+                );
+
+                if (birthdayChannel === undefined) {
+                    return;
+                }
+                break;
+            }
+            case 'deny': {
+                birthdayChannel = '0';
+                break;
+            }
         }
+
+        let roleEmbed = Lang.getEmbed('prompts', 'setup.birthdayRole', data.lang(), {
+            ICON: intr.client.user.displayAvatarURL(),
+        }).setAuthor({ name: `${guild.name}`, url: guild.iconURL() });
+
+        let roleResult = await CollectorUtils.getSetupChoiceFromButton(
+            channelResult.intr,
+            data,
+            roleEmbed
+        );
+
+        if (roleResult === undefined) return;
+
+        switch (roleResult.value) {
+            case 'create': {
+                // Create role with desired attributes
+                birthdayRole = (
+                    await guild.roles.create({
+                        name: Config.emotes.birthday,
+                        color: Config.colors.role,
+                        hoist: true,
+                        mentionable: true,
+                    })
+                )?.id;
+                break;
+            }
+            case 'select': {
+                let _selectMessage = await InteractionUtils.send(
+                    intr,
+                    Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
+                );
+
+                birthdayRole = await CollectorUtils.collectByMessage(
+                    intr.channel,
+                    intr.user,
+                    async (nextMsg: Message) => {
+                        // Find mentioned role
+                        let roleInput: Role = nextMsg.mentions.roles.first();
+
+                        // Search guild for role
+                        if (!roleInput) {
+                            roleInput = await ClientUtils.findRole(intr.guild, nextMsg?.content);
+                        }
+
+                        // If it couldn't find the role, the role was in another guild, or the role the everyone role
+                        if (
+                            !roleInput ||
+                            roleInput.id === guild.id ||
+                            nextMsg?.content.toLowerCase() === 'everyone'
+                        ) {
+                            InteractionUtils.send(
+                                intr,
+                                Lang.getErrorEmbed(
+                                    'validation',
+                                    'errorEmbeds.invalidRole',
+                                    data.lang()
+                                )
+                            );
+                            return;
+                        }
+
+                        // Check the role's position
+                        if (
+                            roleInput.position >
+                            guild.members.resolve(botUser).roles.highest.position
+                        ) {
+                            await InteractionUtils.send(
+                                intr,
+                                Lang.getEmbed(
+                                    'validation',
+                                    'embeds.roleHierarchyError',
+                                    data.lang(),
+                                    {
+                                        BOT: intr.client.user.toString(),
+                                        ICON: intr.client.user.displayAvatarURL(),
+                                    }
+                                )
+                            );
+                            return;
+                        }
+
+                        // Check if the role is managed
+                        if (roleInput.managed) {
+                            InteractionUtils.send(
+                                intr,
+                                Lang.getErrorEmbed(
+                                    'validation',
+                                    'errorEmbeds.birthdayRoleManaged',
+                                    data.lang()
+                                )
+                            );
+                            return;
+                        }
+
+                        let membersWithRole = roleInput.members.size;
+
+                        if (membersWithRole > 0 && membersWithRole < 100) {
+                            await InteractionUtils.send(
+                                intr,
+                                Lang.getEmbed(
+                                    'validation',
+                                    'embeds.birthdayRoleUsedWarning',
+                                    data.lang(),
+                                    {
+                                        AMOUNT: membersWithRole.toString(),
+                                        S_Value: membersWithRole > 1 ? 's' : '',
+                                        ICON: intr.client.user.displayAvatarURL(),
+                                    }
+                                )
+                            );
+                        } else if (membersWithRole > 100) {
+                            await InteractionUtils.send(
+                                intr,
+                                Lang.getEmbed(
+                                    'validation',
+                                    'embeds.birthdayRoleUsedError',
+                                    data.lang(),
+                                    {
+                                        AMOUNT: membersWithRole.toString(),
+                                        ICON: intr.client.user.displayAvatarURL(),
+                                    }
+                                )
+                            );
+                            return;
+                        }
+
+                        return roleInput?.id;
+                    },
+                    async () => {
+                        await InteractionUtils.send(
+                            intr,
+                            Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                        );
+                    }
+                );
+
+                if (birthdayRole === undefined) {
+                    return;
+                }
+                break;
+            }
+            case 'deny': {
+                birthdayRole = '0';
+                break;
+            }
+        }
+
+        let channelOutput =
+            birthdayChannel === '0'
+                ? `${Lang.getRef('info', 'terms.notSet', data.lang())}`
+                : guild.channels.resolve(birthdayChannel)?.toString() ||
+                  `**${Lang.getRef('info', 'terms.unknownChannel', data.lang())}**`;
+        let roleOutput =
+            birthdayRole === '0'
+                ? `${Lang.getRef('info', 'terms.notSet', data.lang())}`
+                : guild.roles.resolve(birthdayRole)?.toString() ||
+                  `**${Lang.getRef('info', 'terms.unknownRole', data.lang())}**`;
+
+        await InteractionUtils.send(
+            roleResult.intr,
+            Lang.getEmbed('results', 'success.requiredSetup', data.lang(), {
+                CHANNEL: channelOutput,
+                ROLE: roleOutput,
+                ICON: intr.client.user.displayAvatarURL(),
+            })
+        );
+
+        await this.guildRepo.addOrUpdateGuild(guild.id, birthdayChannel, birthdayRole);
     }
 }

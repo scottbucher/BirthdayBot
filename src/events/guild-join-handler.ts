@@ -1,34 +1,47 @@
-import { Guild, Permissions } from 'discord.js';
-import { Lang, Logger } from '../services';
+import { Guild } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { EventHandler } from './event-handler';
-import { LangCode } from '../models/enums';
-import { MessageUtils } from '../utils';
+import { Lang, Logger } from '../services/index.js';
+import { ClientUtils, MessageUtils } from '../utils/index.js';
+import { EventHandler } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Logs = require('../../lang/logs.json');
+
 export class GuildJoinHandler implements EventHandler {
     public async process(guild: Guild): Promise<void> {
         Logger.info(
             Logs.info.guildJoined
-                .replace('{GUILD_NAME}', guild.name)
-                .replace('{GUILD_ID}', guild.id)
+                .replaceAll('{GUILD_NAME}', guild.name)
+                .replaceAll('{GUILD_ID}', guild.id)
         );
-        // Get someone to message
-        let target = await guild.fetchOwner();
-        if (!target) {
-            target = guild.members.cache.find(member =>
-                member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+
+        // Send welcome message to the server's notify channel
+        // TODO: Replace "Lang.Default" here with the server's language
+        let guildLang = Lang.Default;
+        let notifyChannel = await ClientUtils.findNotifyChannel(guild, guildLang);
+        if (notifyChannel) {
+            await MessageUtils.send(
+                notifyChannel,
+                Lang.getEmbed('info', 'embeds.guildJoin', guildLang).setAuthor({
+                    name: guild.name,
+                    iconURL: guild.iconURL(),
+                })
             );
         }
 
-        if (!target) return;
-
-        let userChannel = await target.createDM();
-        await MessageUtils.send(
-            userChannel,
-            Lang.getEmbed('info.guildJoin', LangCode.EN_US, {
-                ICON: guild.client.user.displayAvatarURL(),
-            })
-        );
+        // Send welcome message to owner
+        // TODO: Replace "Lang.Default" here with the owner's language
+        let ownerLang = Lang.Default;
+        let owner = await guild.fetchOwner();
+        if (owner) {
+            await MessageUtils.send(
+                owner.user,
+                Lang.getEmbed('info', 'embeds.guildJoin', ownerLang).setAuthor({
+                    name: guild.name,
+                    iconURL: guild.iconURL(),
+                })
+            );
+        }
     }
 }

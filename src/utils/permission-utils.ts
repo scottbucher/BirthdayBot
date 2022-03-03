@@ -1,59 +1,15 @@
-import {
-    Channel,
-    DMChannel,
-    GuildMember,
-    NewsChannel,
-    Permissions,
-    TextBasedChannels,
-    TextChannel,
-    ThreadChannel,
-} from 'discord.js';
+import { AnyChannel, DMChannel, GuildChannel, GuildMember, Permissions } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { Command } from '../commands';
-import { GuildData } from '../models/database';
+import { GuildData } from '../models/database/index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class PermissionUtils {
-    public static canSend(channel: Channel, requireReaction = true): boolean {
-        if (channel instanceof DMChannel) return true;
-
-        if (
-            channel instanceof TextChannel ||
-            channel instanceof NewsChannel ||
-            channel instanceof ThreadChannel
-        ) {
-            let channelPerms = channel.permissionsFor(channel.client.user);
-            if (!channelPerms) {
-                // This can happen if the guild disconnected while a collector is running
-                return false;
-            }
-
-            // VIEW_CHANNEL - Needed to view the channel
-            // SEND_MESSAGES - Needed to send messages
-            // EMBED_LINKS - Needed to send embedded links
-            // ADD_REACTIONS - Needed to add new reactions to messages
-            // READ_MESSAGE_HISTORY - Needed to add new reactions to messages
-            //    https://discordjs.guide/popular-topics/permissions-extended.html#implicit-permissions
-            return (
-                channelPerms.has([
-                    Permissions.FLAGS.VIEW_CHANNEL,
-                    Permissions.FLAGS.SEND_MESSAGES,
-                    Permissions.FLAGS.EMBED_LINKS,
-                    Permissions.FLAGS.ADD_REACTIONS,
-                ]) &&
-                (!requireReaction || channelPerms.has(Permissions.FLAGS.READ_MESSAGE_HISTORY))
-            );
-        }
-    }
-
-    public static canSendEmbed(channel: TextBasedChannels): boolean {
+    public static canSend(channel: AnyChannel, embedLinks: boolean = false): boolean {
         if (channel instanceof DMChannel) {
             return true;
-        } else if (
-            channel instanceof TextChannel ||
-            channel instanceof NewsChannel ||
-            channel instanceof ThreadChannel
-        ) {
+        } else if (channel instanceof GuildChannel) {
             let channelPerms = channel.permissionsFor(channel.client.user);
             if (!channelPerms) {
                 // This can happen if the guild disconnected while a collector is running
@@ -66,21 +22,17 @@ export class PermissionUtils {
             return channelPerms.has([
                 Permissions.FLAGS.VIEW_CHANNEL,
                 Permissions.FLAGS.SEND_MESSAGES,
-                Permissions.FLAGS.EMBED_LINKS,
+                ...(embedLinks ? [Permissions.FLAGS.EMBED_LINKS] : []),
             ]);
         } else {
             return false;
         }
     }
 
-    public static canMention(channel: TextBasedChannels): boolean {
+    public static canMention(channel: AnyChannel): boolean {
         if (channel instanceof DMChannel) {
             return true;
-        } else if (
-            channel instanceof TextChannel ||
-            channel instanceof NewsChannel ||
-            channel instanceof ThreadChannel
-        ) {
+        } else if (channel instanceof GuildChannel) {
             let channelPerms = channel.permissionsFor(channel.client.user);
             if (!channelPerms) {
                 // This can happen if the guild disconnected while a collector is running
@@ -98,14 +50,10 @@ export class PermissionUtils {
         }
     }
 
-    public static canReact(channel: TextBasedChannels, removeOthers: boolean = false): boolean {
+    public static canReact(channel: AnyChannel, removeOthers: boolean = false): boolean {
         if (channel instanceof DMChannel) {
             return true;
-        } else if (
-            channel instanceof TextChannel ||
-            channel instanceof NewsChannel ||
-            channel instanceof ThreadChannel
-        ) {
+        } else if (channel instanceof GuildChannel) {
             let channelPerms = channel.permissionsFor(channel.client.user);
             if (!channelPerms) {
                 // This can happen if the guild disconnected while a collector is running
@@ -128,15 +76,10 @@ export class PermissionUtils {
         }
     }
 
-    public static canHandleReaction(channel: TextBasedChannels): boolean {
-        // Bot always has permission in direct message
+    public static canPin(channel: AnyChannel, unpinOld: boolean = false): boolean {
         if (channel instanceof DMChannel) {
             return true;
-        } else if (
-            channel instanceof TextChannel ||
-            channel instanceof NewsChannel ||
-            channel instanceof ThreadChannel
-        ) {
+        } else if (channel instanceof GuildChannel) {
             let channelPerms = channel.permissionsFor(channel.client.user);
             if (!channelPerms) {
                 // This can happen if the guild disconnected while a collector is running
@@ -144,40 +87,37 @@ export class PermissionUtils {
             }
 
             // VIEW_CHANNEL - Needed to view the channel
-            // READ_MESSAGE_HISTORY - Needed to react to old messages
+            // MANAGE_MESSAGES - Needed to pin messages
+            // READ_MESSAGE_HISTORY - Needed to find old pins to unpin
             return channelPerms.has([
                 Permissions.FLAGS.VIEW_CHANNEL,
-                Permissions.FLAGS.READ_MESSAGE_HISTORY,
+                Permissions.FLAGS.MANAGE_MESSAGES,
+                ...(unpinOld ? [Permissions.FLAGS.READ_MESSAGE_HISTORY] : []),
             ]);
+        } else {
+            return false;
         }
     }
 
-    public static hasPermission(
-        member: GuildMember,
-        guildData: GuildData,
-        command?: Command
-    ): boolean {
-        if (!command || command.adminOnly) {
-            // Developers, server owners, and members with "Manage Server" have permission for all commands
+    public static hasPermission(member: GuildMember, guildData: GuildData): boolean {
+        // Developers, server owners, and members with "Manage Server" have permission for all commands
+        if (
+            member.guild.ownerId === member.id ||
+            member.permissions.has(Permissions.FLAGS.MANAGE_GUILD) ||
+            Config.support.owners.includes(member.id)
+        ) {
+            return true;
+        }
+
+        if (guildData) {
+            // Check if member has a required role
+            let memberRoles = member.roles.cache.map(role => role.id);
             if (
-                member.guild.ownerId === member.id ||
-                member.permissions.has(Permissions.FLAGS.MANAGE_GUILD) ||
-                Config.support.owners.includes(member.id)
+                guildData.BirthdayMasterRoleDiscordId &&
+                memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
             ) {
                 return true;
             }
-
-            if (guildData) {
-                // Check if member has a required role
-                let memberRoles = member.roles.cache.map(role => role.id);
-                if (
-                    guildData.BirthdayMasterRoleDiscordId &&
-                    memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
-                ) {
-                    return true;
-                }
-            }
-            return false;
         }
         return true;
     }
@@ -196,5 +136,27 @@ export class PermissionUtils {
             }
         }
         return false;
+    }
+    public static canCreateThreads(channel: AnyChannel, manageThreads: boolean = false): boolean {
+        if (channel instanceof DMChannel) {
+            return false;
+        } else if (channel instanceof GuildChannel) {
+            let channelPerms = channel.permissionsFor(channel.client.user);
+            if (!channelPerms) {
+                // This can happen if the guild disconnected while a collector is running
+                return false;
+            }
+
+            // VIEW_CHANNEL - Needed to view the channel
+            // CREATE_PUBLIC_THREADS - Needed to create public threads
+            // MANAGE_THREADS - Needed to rename, delete, archive, unarchive, slow mode threads
+            return channelPerms.has([
+                Permissions.FLAGS.VIEW_CHANNEL,
+                Permissions.FLAGS.CREATE_PUBLIC_THREADS,
+                ...(manageThreads ? [Permissions.FLAGS.MANAGE_THREADS] : []),
+            ]);
+        } else {
+            return false;
+        }
     }
 }

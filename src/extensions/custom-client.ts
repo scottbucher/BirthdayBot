@@ -1,22 +1,23 @@
 import { ActivityType, Client, ClientOptions, Presence } from 'discord.js';
-import { DiscordService, Lang, Logger } from '../services';
-import { MessageUtils, PermissionUtils } from '../utils';
-import { PlanName, SubscriptionStatusName } from '../models/subscription-models';
+import { createRequire } from 'node:module';
 
-import { GuildRepo } from '../services/database/repos';
-import { LangCode } from '../models/enums';
+import { LangCode } from '../enums/lang-code.js';
+import { PlanName, SubscriptionStatusName } from '../models/subscription-models.js';
+import { GuildRepo } from '../services/database/repos/guild-repo.js';
+import { Lang } from '../services/lang.js';
+import { Logger } from '../services/logger.js';
+import { ClientUtils } from '../utils/client-utils.js';
+import { MessageUtils } from '../utils/message-utils.js';
+import { PermissionUtils } from '../utils/permission-utils.js';
 
+const require = createRequire(import.meta.url);
 let Logs = require('../../lang/logs.json');
-
 export class CustomClient extends Client {
-    private discordService: DiscordService;
-
     constructor(clientOptions: ClientOptions, private guildRepo: GuildRepo) {
         super(clientOptions);
-        this.discordService = new DiscordService(this);
     }
 
-    public async setPresence(type: ActivityType, name: string, url: string): Promise<Presence> {
+    public setPresence(type: ActivityType, name: string, url: string): Presence {
         return this.user?.setPresence({
             activities: [
                 {
@@ -29,7 +30,6 @@ export class CustomClient extends Client {
             ],
         });
     }
-
     public async notifySubscription(guildId: string, plan: string, status: string): Promise<void> {
         // Get the guild and ensure the bot is still in it
         let guild = this.guilds.cache.get(guildId);
@@ -40,10 +40,7 @@ export class CustomClient extends Client {
         if (!guildData) return;
 
         // Get the birthday channel so we can send the message about their subscription
-        let channel = await this.discordService.getTextChannel(
-            guildData.GuildDiscordId,
-            guildData.BirthdayChannelDiscordId
-        );
+        let channel = await ClientUtils.findTextChannel(guild, guildData.BirthdayChannelDiscordId);
         if (!channel) return;
 
         // Check to see if we can send a message in the channel
@@ -58,7 +55,7 @@ export class CustomClient extends Client {
                     case SubscriptionStatusName.ACTIVE: {
                         MessageUtils.send(
                             channel,
-                            Lang.getEmbed('premiumPrompts.subscriptionAdded', LangCode.EN_US, {
+                            Lang.getEmbed('info', 'premium.subscriptionAdded', LangCode.EN_US, {
                                 SERVER_NAME: guild.name,
                                 ICON: guild.client.user.displayAvatarURL(),
                             })
@@ -68,7 +65,7 @@ export class CustomClient extends Client {
                     case SubscriptionStatusName.CANCELLED: {
                         MessageUtils.send(
                             channel,
-                            Lang.getEmbed('premiumPrompts.subscriptionCanceled', LangCode.EN_US, {
+                            Lang.getEmbed('info', 'premium.subscriptionCanceled', LangCode.EN_US, {
                                 SERVER_NAME: guild.name,
                                 ICON: guild.client.user.displayAvatarURL(),
                             })
@@ -78,7 +75,7 @@ export class CustomClient extends Client {
                     case SubscriptionStatusName.EXPIRED: {
                         MessageUtils.send(
                             channel,
-                            Lang.getEmbed('premiumPrompts.subscriptionExpired', LangCode.EN_US, {
+                            Lang.getEmbed('info', 'premium.subscriptionExpired', LangCode.EN_US, {
                                 SERVER_NAME: guild.name,
                                 ICON: guild.client.user.displayAvatarURL(),
                             })
@@ -92,10 +89,10 @@ export class CustomClient extends Client {
 
                 Logger.info(
                     Logs.info.guildSubStatus
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{GUILD_ID}', guild.id)
-                        .replace('{PLAN_NAME}', plan)
-                        .replace('{SUBSCRIPTION_STATUS}', status)
+                        .replaceAll('{GUILD_NAME}', guild.name)
+                        .replaceAll('{GUILD_ID}', guild.id)
+                        .replaceAll('{PLAN_NAME}', plan)
+                        .replaceAll('{SUBSCRIPTION_STATUS}', status)
                 );
             }
         }

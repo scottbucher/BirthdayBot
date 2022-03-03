@@ -1,26 +1,24 @@
-import { ArrayUtils, ColorUtils, FormatUtils, TimeUtils } from '.';
+import { Guild, GuildMember, MessageEmbed, Role } from 'discord.js';
+import moment from 'moment';
+import { Moment } from 'moment-timezone';
+import { createRequire } from 'node:module';
+
+import { LangCode } from '../enums/index.js';
 import {
     CustomMessage,
     GuildCelebrationData,
     GuildData,
+    MemberAnniversaryRole,
     RawGuildCelebrationData,
     SplitUsers,
     TrustedRole,
     UserData,
-} from '../models/database';
-import { Guild, GuildMember, MessageEmbed, Role } from 'discord.js';
+} from '../models/database/index.js';
+import { AnniversaryMemberStatus, BirthdayMemberStatus } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { ArrayUtils, ColorUtils, FormatUtils, TimeUtils } from './index.js';
 
-import { AnniversaryMemberStatus } from '../models/celebration-job';
-import { BirthdayMemberStatus } from '../models';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { MemberAnniversaryRole } from '../models/database/member-anniversary-role-models';
-import { Moment } from 'moment-timezone';
-import { getPriority } from 'os';
-import moment from 'moment';
-
-let Debug = require('../../config/debug.json');
-
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class CelebrationUtils {
@@ -58,10 +56,10 @@ export class CelebrationUtils {
         return {
             before: userDatas
                 .filter(user => moment(user.Birthday).format('MM-DD') < splitTime.format('MM-DD'))
-                .sort(this.compareUserDatas),
+                .sort((a, b) => this.compareUserDatas(a, b)),
             after: userDatas
                 .filter(user => moment(user.Birthday).format('MM-DD') > splitTime.format('MM-DD'))
-                .sort(this.compareUserDatas),
+                .sort((a, b) => this.compareUserDatas(a, b)),
         };
     }
 
@@ -101,7 +99,7 @@ export class CelebrationUtils {
         let birthdayFormatted = birthday.format('MM-DD');
 
         if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            birthdayFormatted = '03-01';
+            birthdayFormatted = '02-28';
 
         // The date is correct, now check the time
         return (
@@ -133,7 +131,7 @@ export class CelebrationUtils {
         let birthdayFormatted = birthday.format('MM-DD');
 
         if (birthdayFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            birthdayFormatted = '03-01';
+            birthdayFormatted = '02-28';
 
         let currentHour = currentDate.hour();
         let needsBirthdayMessage: boolean;
@@ -176,9 +174,9 @@ export class CelebrationUtils {
         let anniversaryFormatted = memberAnniversary.format('MM-DD');
 
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            anniversaryFormatted = '03-01';
+            anniversaryFormatted = '02-28';
 
-        if (currentDateFormatted !== anniversaryFormatted)
+        if (currentDateFormatted !== anniversaryFormatted || guildMember.user.bot)
             return new AnniversaryMemberStatus(guildMember, false, null);
 
         let needsAnniversaryMessage = currentDate.hour() === guildData.MemberAnniversaryMessageTime;
@@ -197,7 +195,7 @@ export class CelebrationUtils {
                 try {
                     role = guildMember.guild.roles.resolve(
                         anniversaryRole.MemberAnniversaryRoleDiscordId
-                    ) as Role;
+                    );
                 } catch (error) {
                     // No Member Anniversary Role
                 }
@@ -208,11 +206,6 @@ export class CelebrationUtils {
     }
 
     public static isServerAnniversaryMessage(guild: Guild, guildData: GuildData): boolean {
-        // TODO: add debug mode for server anniversary
-        // if (Debug.alwaysGiveBirthdayRole) {
-        //     return true;
-        // }
-
         if (!guild || !guildData || guildData.DefaultTimezone === '0') return false;
         let currentDate = moment().tz(guildData.DefaultTimezone);
         let serverAnniversary = moment(guild.createdAt);
@@ -221,7 +214,7 @@ export class CelebrationUtils {
         let anniversaryFormatted = serverAnniversary.format('MM-DD');
 
         if (anniversaryFormatted === '02-29' && !TimeUtils.isLeap(moment().year()))
-            anniversaryFormatted = '03-01';
+            anniversaryFormatted = '02-28';
 
         // The date is correct, now check the time
         return currentDateFormatted !== anniversaryFormatted
@@ -308,16 +301,21 @@ export class CelebrationUtils {
         year: number
     ): string {
         if (message) {
-            message = message.split('<Server>').join(guild.name).split('@Server').join(guild.name);
+            message = message.replaceAll(
+                Lang.getRegex('info', 'placeHolders.serverRegex', LangCode.EN_US),
+                guild.name
+            );
 
             if (type !== 'serveranniversary')
-                message = message.split('<Users>').join(userList).split('@Users').join(userList);
+                message = message.replaceAll(
+                    Lang.getRegex('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    userList
+                );
             if (type !== 'birthday')
-                message = message
-                    .split('<Year>')
-                    .join(year?.toString())
-                    .split('@Year')
-                    .join(year?.toString());
+                message = message.replaceAll(
+                    Lang.getRegex('info', 'placeHolders.yearRegex', LangCode.EN_US),
+                    year?.toString()
+                );
         }
 
         return message;
@@ -327,31 +325,28 @@ export class CelebrationUtils {
         message: string,
         guild: Guild,
         type: string,
-        userString: string
+        userId: string
     ): string {
         if (message) {
-            let serverPlaceholder = Lang.getRef('placeHolders.server', LangCode.EN_US);
-            message = message
-                .split('<Server>')
-                .join(serverPlaceholder)
-                .split('@Server')
-                .join(serverPlaceholder);
+            let serverPlaceholder = Lang.getRef('info', 'placeHolders.server', LangCode.EN_US);
+            message = message.replaceAll(
+                Lang.getRegex('info', 'placeHolders.serverRegex', LangCode.EN_US),
+                serverPlaceholder
+            );
 
             if (type !== 'serveranniversary') {
-                let userPlaceholder = Lang.getRef('placeHolders.users', LangCode.EN_US);
-                message = message
-                    .split('<Users>')
-                    .join(userString ?? userPlaceholder)
-                    .split('@Users')
-                    .join(userString ?? userPlaceholder);
+                let userPlaceholder = Lang.getRef('info', 'placeHolders.users', LangCode.EN_US);
+                message = message.replaceAll(
+                    Lang.getRegex('info', 'placeHolders.usersRegex', LangCode.EN_US),
+                    userId ? `${userId}` : userPlaceholder
+                );
             }
             if (type !== 'birthday') {
-                let yearPlaceholder = Lang.getRef('placeHolders.year', LangCode.EN_US);
-                message = message
-                    .split('<Year>')
-                    .join(yearPlaceholder)
-                    .split('@Year')
-                    .join(yearPlaceholder);
+                let yearPlaceholder = Lang.getRef('info', 'placeHolders.year', LangCode.EN_US);
+                message = message.replaceAll(
+                    Lang.getRegex('info', 'placeHolders.yearRegex', LangCode.EN_US),
+                    yearPlaceholder
+                );
             }
         }
 
@@ -369,10 +364,10 @@ export class CelebrationUtils {
     ): MessageEmbed | string {
         let message =
             type === 'birthday'
-                ? Lang.getRef('defaults.birthdayMessage', LangCode.EN_US)
+                ? Lang.getRef('info', 'defaults.birthdayMessage', LangCode.EN_US)
                 : type === 'memberanniversary'
-                ? Lang.getRef('defaults.memberAnniversaryMessage', LangCode.EN_US)
-                : Lang.getRef('defaults.serverAnniversaryMessage', LangCode.EN_US);
+                ? Lang.getRef('info', 'defaults.memberAnniversaryMessage', LangCode.EN_US)
+                : Lang.getRef('info', 'defaults.serverAnniversaryMessage', LangCode.EN_US);
         let color = Config.colors.default;
         let useEmbed = true;
 

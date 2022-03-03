@@ -1,9 +1,11 @@
-import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils';
-import { Client, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
-import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database';
+import { Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { createRequire } from 'node:module';
 
-import { Logger } from '.';
+import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database/index.js';
+import { ActionUtils, CelebrationUtils, MessageUtils, PermissionUtils } from '../utils/index.js';
+import { Logger } from './index.js';
 
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 
@@ -39,7 +41,7 @@ export class CelebrationService {
 
                 if (guildData.BirthdayRoleDiscordId !== '0') {
                     try {
-                        birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId) as Role;
+                        birthdayRole = guild.roles.resolve(guildData.BirthdayRoleDiscordId);
                     } catch (error) {
                         // No Birthday Role
                     }
@@ -258,10 +260,13 @@ export class CelebrationService {
                 // Error when running the birthday system for this guild
                 Logger.error(
                     Logs.error.birthdaySystemFailedForGuild
-                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                        .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                        .replaceAll('{GUILD_ID}', guildData.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild.name)
+                        .replaceAll('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                        .replaceAll(
+                            '{MEMBER_CACHE_COUNT}',
+                            guild.members.cache.size.toLocaleString()
+                        ),
                     error
                 );
             }
@@ -550,10 +555,13 @@ export class CelebrationService {
                 // Error when running the member anniversary system for this guild
                 Logger.error(
                     Logs.error.memberAnniversarySystemFailedForGuild
-                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                        .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                        .replaceAll('{GUILD_ID}', guildData.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild.name)
+                        .replaceAll('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                        .replaceAll(
+                            '{MEMBER_CACHE_COUNT}',
+                            guild.members.cache.size.toLocaleString()
+                        ),
                     error
                 );
             }
@@ -598,6 +606,20 @@ export class CelebrationService {
                         );
 
                         if (message) {
+                            let mentionString =
+                                guildCelebrationData.guildData.ServerAnniversaryMentionSetting !==
+                                'none'
+                                    ? CelebrationUtils.getMentionString(
+                                          guildCelebrationData.guildData,
+                                          guild,
+                                          'serveranniversary'
+                                      )
+                                    : '';
+
+                            // Only send one mention string per celebration message type
+                            if (mentionString && mentionString !== '')
+                                await MessageUtils.send(serverAnniversaryChannel, mentionString);
+
                             await MessageUtils.sendWithDelay(
                                 serverAnniversaryChannel,
                                 message,
@@ -613,10 +635,13 @@ export class CelebrationService {
                 // Error when running the server anniversary system
                 Logger.error(
                     Logs.error.serverAnniversarySystemFailedForGuild
-                        .replace('{GUILD_ID}', guildData.GuildDiscordId)
-                        .replace('{GUILD_NAME}', guild.name)
-                        .replace('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
-                        .replace('{MEMBER_CACHE_COUNT}', guild.members.cache.size.toLocaleString()),
+                        .replaceAll('{GUILD_ID}', guildData.GuildDiscordId)
+                        .replaceAll('{GUILD_NAME}', guild.name)
+                        .replaceAll('{MEMBER_COUNT}', guild.memberCount.toLocaleString())
+                        .replaceAll(
+                            '{MEMBER_CACHE_COUNT}',
+                            guild.members.cache.size.toLocaleString()
+                        ),
                     error
                 );
             }

@@ -1,4 +1,5 @@
-export { BlacklistAddSubCommand } from './blacklist-add-sub-command';
-export { BlacklistRemoveSubCommand } from './blacklist-remove-sub-command';
-export { BlacklistClearSubCommand } from './blacklist-clear-sub-command';
-export { BlacklistListSubCommand } from './blacklist-list-sub-command';
+export { BlacklistAddSubCommand } from './add.js';
+export { BlacklistClearSubCommand } from './clear.js';
+export { BlacklistRemoveRoleOrUserSubCommand } from './remove-role-or-user.js';
+export { BlacklistRemoveIdSubCommand } from './remove-id.js';
+export { BlacklistListSubCommand } from './list.js';

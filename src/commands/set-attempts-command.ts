@@ -1,79 +1,55 @@
-import { GuildUtils, MathUtils, MessageUtils, ParseUtils } from '../utils';
-import { Message, TextChannel, User } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
-import { UserRepo } from '../services/database/repos';
+import { EventData } from '../models/index.js';
+import { UserRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { InteractionUtils } from '../utils/interaction-utils.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class SetAttemptsCommand implements Command {
-    public name: string = 'setattempts';
-    public aliases = ['setchangesleft'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.setAttempts'),
+        description: 'Set the attempts for a user. (Birthday bot staff only command)',
+        options: [
+            {
+                name: Lang.getCom('arguments.user'),
+                description: 'The user whose attempts you are changing.',
+                type: ApplicationCommandOptionType.User.valueOf(),
+                required: true,
+            },
+            {
+                name: Lang.getCom('arguments.number'),
+                description: 'The number of attempts you are setting their total to.',
+                type: ApplicationCommandOptionType.Integer.valueOf(),
+                required: true,
+                min_value: 0,
+                max_value: 127,
+            },
+        ],
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = true;
+    public requireGuild = false;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
-    public guildOnly = true;
-    public adminOnly = false;
-    public ownerOnly = true;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = false;
 
     constructor(private userRepo: UserRepo) {}
 
-    public async execute(args: string[], msg: Message, channel: TextChannel): Promise<void> {
-        let target: User;
-
-        if (args.length < 3) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noUserSpecified', LangCode.EN_US)
-            );
-            return;
-        }
-        // Get who they are mentioning
-        target =
-            msg.mentions.members.first()?.user || GuildUtils.findMember(msg.guild, args[2])?.user;
-
-        // Did we find a user?
-        if (!target) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noUserFound', LangCode.EN_US)
-            );
-            return;
-        }
-
-        if (args.length < 4) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.noAmountGiven', LangCode.EN_US)
-            );
-            return;
-        }
-
-        let amount = MathUtils.clamp(ParseUtils.parseInt(args[3]), 0, 127);
-
-        if (!(typeof amount === 'number') || !amount) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.invalidNumber', LangCode.EN_US)
-            );
-            return;
-        }
-
-        if (amount > 127) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.amountTooLarge', LangCode.EN_US)
-            );
-            return;
-        }
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let target = intr.options.getUser(Lang.getCom('arguments.user'));
+        let amount = intr.options.getInteger(Lang.getCom('arguments.number'));
 
         let userData = await this.userRepo.getUser(target.id);
 
         if (!userData) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('validation.attemptsLeft', LangCode.EN_US)
+            await InteractionUtils.send(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.attemptsLeft', data.lang())
             );
             return;
         }
@@ -85,9 +61,9 @@ export class SetAttemptsCommand implements Command {
             amount
         );
 
-        await MessageUtils.send(
-            channel,
-            Lang.getEmbed('results.setAttempts', LangCode.EN_US, {
+        await InteractionUtils.send(
+            intr,
+            Lang.getSuccessEmbed('results', 'successEmbeds.setAttempts', data.lang(), {
                 USER: target.toString(),
                 AMOUNT: amount.toString(),
             })

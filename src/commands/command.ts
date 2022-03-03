@@ -1,19 +1,26 @@
-import { DMChannel, Message, TextChannel } from 'discord.js';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import { RateLimiter } from 'discord.js-rate-limiter';
+
+import { CustomRole } from '../enums/index.js';
+import { EventData } from '../models/index.js';
 
 export interface Command {
-    name: string;
-    aliases: string[];
+    metadata: ChatInputApplicationCommandData;
+    cooldown?: RateLimiter;
+    deferType: CommandDeferType;
+    requireDev: boolean;
+    requireGuild: boolean;
+    requireClientPerms: PermissionString[];
+    requireUserPerms: PermissionString[];
+    requireRole: CustomRole[];
     requireSetup: boolean;
-    guildOnly: boolean;
-    adminOnly: boolean;
-    ownerOnly: boolean;
-    voteOnly: boolean;
+    requireVote: boolean;
     requirePremium: boolean;
-    getPremium: boolean;
-    execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel | DMChannel,
-        hasPremium?: boolean
-    ): Promise<void>;
+    execute(intr: CommandInteraction, data: EventData): Promise<void>;
+}
+
+export enum CommandDeferType {
+    PUBLIC = 'PUBLIC',
+    HIDDEN = 'HIDDEN',
+    NONE = 'NONE',
 }

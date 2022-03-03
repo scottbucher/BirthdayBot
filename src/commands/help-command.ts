@@ -1,85 +1,128 @@
-import { DMChannel, Message, TextChannel } from 'discord.js';
-import { FormatUtils, MessageUtils } from '../utils';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import {
+    ChatInputApplicationCommandData,
+    CommandInteraction,
+    MessageEmbed,
+    PermissionString,
+} from 'discord.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
-import { LangCode } from '../models/enums';
+import { EventData } from '../models/index.js';
+import { Lang } from '../services/index.js';
+import { InteractionUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class HelpCommand implements Command {
-    public name: string = 'help';
-    public aliases = ['?'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.help'),
+        description: 'The help command.',
+        options: [
+            {
+                name: Lang.getCom('arguments.category'),
+                description: 'Help category to display.',
+                required: false,
+                type: ApplicationCommandOptionType.String.valueOf(),
+                choices: [
+                    {
+                        name: 'general',
+                        value: 'GENERAL',
+                    },
+                    {
+                        name: 'blacklist',
+                        value: 'BLACKLIST',
+                    },
+                    {
+                        name: 'config',
+                        value: 'CONFIG',
+                    },
+                    {
+                        name: 'message',
+                        value: 'MESSAGE',
+                    },
+                    {
+                        name: 'trusted_role',
+                        value: 'TRUSTED_ROLE',
+                    },
+                    {
+                        name: 'member_anniversary_role',
+                        value: 'MEMBER_ANNIVERSARY_ROLE',
+                    },
+                    {
+                        name: 'premium',
+                        value: 'PREMIUM',
+                    },
+                ],
+            },
+        ],
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = false;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = false;
-    public guildOnly = false;
-    public adminOnly = false;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = false;
 
-    public async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel | DMChannel
-    ): Promise<void> {
-        let clientAvatarUrl = msg.client.user.displayAvatarURL();
-
-        let option = FormatUtils.extractMiscActionType(args[2]?.toLowerCase())?.toLowerCase();
-        if (!option) {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('help.general', LangCode.EN_US, {
-                    ICON: clientAvatarUrl,
-                })
-            );
-        } else if (option === 'setup') {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('help.setup', LangCode.EN_US, {
-                    ICON: clientAvatarUrl,
-                })
-            );
-        } else if (option === 'message') {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('help.message', LangCode.EN_US, {
-                    ICON: clientAvatarUrl,
-                })
-            );
-        } else if (option === 'trusted') {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('help.trusted', LangCode.EN_US, {
-                    ICON: clientAvatarUrl,
-                })
-            );
-        } else if (option === 'blacklist') {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('help.blacklist', LangCode.EN_US, {
-                    ICON: clientAvatarUrl,
-                })
-            );
-        } else if (option === 'anniversary') {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('help.anniversary', LangCode.EN_US, {
-                    ICON: clientAvatarUrl,
-                })
-            );
-        } else if (option === 'premium') {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('help.premium', LangCode.EN_US, {
-                    ICON: clientAvatarUrl,
-                })
-            );
-        } else {
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('help.general', LangCode.EN_US, {
-                    ICON: clientAvatarUrl,
-                })
-            );
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let link =
+            intr.options.getString(Lang.getCom('arguments.category'))?.toLowerCase() ?? 'general';
+        let embed: MessageEmbed;
+        switch (link) {
+            case 'general': {
+                embed = Lang.getEmbed('info', 'help.general', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
+                });
+                break;
+            }
+            case 'blacklist': {
+                embed = Lang.getEmbed('info', 'help.blacklist', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
+                });
+                break;
+            }
+            case 'config': {
+                embed = Lang.getEmbed('info', 'help.config', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
+                });
+                break;
+            }
+            case 'message': {
+                embed = Lang.getEmbed('info', 'help.message', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
+                });
+                break;
+            }
+            case 'trusted_role': {
+                embed = Lang.getEmbed('info', 'help.trusted', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
+                });
+                break;
+            }
+            case 'member_anniversary_role': {
+                embed = Lang.getEmbed('info', 'help.mar', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
+                });
+                break;
+            }
+            case 'premium': {
+                embed = Lang.getEmbed('info', 'help.premium', data.lang(), {
+                    BOT: intr.client.user.toString(),
+                    ICON: intr.client.user.displayAvatarURL(),
+                });
+                break;
+            }
+            default: {
+                return;
+            }
         }
+
+        await InteractionUtils.send(intr, embed);
     }
 }

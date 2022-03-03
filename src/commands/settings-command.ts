@@ -1,42 +1,57 @@
-import { FormatUtils, MessageUtils } from '../utils';
-import { GuildRepo, TrustedRoleRepo } from '../services/database/repos';
-import { LangCode, Language } from '../models/enums';
-import { Message, TextChannel } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
 
-import { Command } from './command';
-import { Lang } from '../services';
+import { Language } from '../models/enum-helpers/index.js';
+import { EventData } from '../models/index.js';
+import { TrustedRoleRepo } from '../services/database/repos/index.js';
+import { Lang } from '../services/index.js';
+import { FormatUtils, InteractionUtils } from '../utils/index.js';
+import { Command, CommandDeferType } from './index.js';
 
 export class SettingsCommand implements Command {
-    public name: string = 'settings';
-    public aliases = ['setting'];
+    public metadata: ChatInputApplicationCommandData = {
+        name: Lang.getCom('commands.settings'),
+        description: 'View the settings for this server.',
+        options: [
+            {
+                name: Lang.getCom('arguments.setting'),
+                description: 'The settings to view. Defaults to general.',
+                required: false,
+                type: ApplicationCommandOptionType.String.valueOf(),
+                choices: [
+                    {
+                        name: 'general',
+                        value: 'GENERAL',
+                    },
+                    {
+                        name: 'message',
+                        value: 'MESSAGE',
+                    },
+                    {
+                        name: 'advanced',
+                        value: 'ADVANCED',
+                    },
+                ],
+            },
+        ],
+    };
+    public deferType = CommandDeferType.PUBLIC;
+    public requireDev = false;
+    public requireGuild = true;
+    public requireClientPerms: PermissionString[] = [];
+    public requireUserPerms: PermissionString[] = [];
+    public requireRole = [];
     public requireSetup = true;
-    public guildOnly = true;
-    public adminOnly = false;
-    public ownerOnly = false;
-    public voteOnly = false;
+    public requireVote = false;
     public requirePremium = false;
-    public getPremium = true;
 
-    constructor(private guildRepo: GuildRepo, private trustedRoleRepo: TrustedRoleRepo) {}
+    constructor(public trustedRoleRepo: TrustedRoleRepo) {}
 
-    async execute(
-        args: string[],
-        msg: Message,
-        channel: TextChannel,
-        hasPremium: boolean
-    ): Promise<void> {
-        let guild = msg.guild;
-        let guildData = await this.guildRepo.getGuild(guild.id);
+    public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
+        let type = intr.options.getString(Lang.getCom('arguments.setting')) ?? 'GENERAL';
+        let guild = intr.guild;
 
-        let type =
-            args.length > 2
-                ? FormatUtils.extractMiscActionType(args[2].toLowerCase())?.toLowerCase() ??
-                  'general'
-                : 'general';
-
-        // split settings into general settings, message settings, advanced settings
-        // bday settings [option]
-        if (type === 'message') {
+        if (type === 'MESSAGE') {
             // message settings
             let birthdayChannel: string;
             let memberAnniversaryChannel: string;
@@ -48,57 +63,57 @@ export class SettingsCommand implements Command {
             let memberAnniversaryMentionSetting: string;
             let serverAnniversaryMentionSetting: string;
             birthdayChannel =
-                guildData.BirthdayChannelDiscordId === '0'
-                    ? Lang.getRef('terms.notSet', LangCode.EN_US)
-                    : guild.channels.resolve(guildData.BirthdayChannelDiscordId)?.toString() ||
-                      `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
+                data.guild.BirthdayChannelDiscordId === '0'
+                    ? Lang.getRef('info', 'terms.notSet', data.lang())
+                    : guild.channels.resolve(data.guild.BirthdayChannelDiscordId)?.toString() ||
+                      `**${Lang.getRef('info', 'terms.deletedChannel', data.lang())}**`;
             memberAnniversaryChannel =
-                guildData.MemberAnniversaryChannelDiscordId === '0'
-                    ? Lang.getRef('terms.notSet', LangCode.EN_US)
+                data.guild.MemberAnniversaryChannelDiscordId === '0'
+                    ? Lang.getRef('info', 'terms.notSet', data.lang())
                     : guild.channels
-                          .resolve(guildData.MemberAnniversaryChannelDiscordId)
+                          .resolve(data.guild.MemberAnniversaryChannelDiscordId)
                           ?.toString() ||
-                      `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
+                      `**${Lang.getRef('info', 'terms.deletedChannel', data.lang())}**`;
             serverAnniversaryChannel =
-                guildData.ServerAnniversaryChannelDiscordId === '0'
-                    ? Lang.getRef('terms.notSet', LangCode.EN_US)
+                data.guild.ServerAnniversaryChannelDiscordId === '0'
+                    ? Lang.getRef('info', 'terms.notSet', data.lang())
                     : guild.channels
-                          .resolve(guildData.ServerAnniversaryChannelDiscordId)
+                          .resolve(data.guild.ServerAnniversaryChannelDiscordId)
                           ?.toString() ||
-                      `**${Lang.getRef('terms.deletedChannel', LangCode.EN_US)}**`;
+                      `**${Lang.getRef('info', 'terms.deletedChannel', data.lang())}**`;
 
             // Get our mention settings
             birthdayMentionSetting = FormatUtils.getMentionSetting(
-                guildData.BirthdayMentionSetting,
+                data.guild.BirthdayMentionSetting,
                 guild
             );
             if (birthdayMentionSetting === 'none')
-                birthdayMentionSetting = Lang.getRef('terms.notSet', LangCode.EN_US);
+                birthdayMentionSetting = Lang.getRef('info', 'terms.notSet', data.lang());
             memberAnniversaryMentionSetting = FormatUtils.getMentionSetting(
-                guildData.MemberAnniversaryMentionSetting,
+                data.guild.MemberAnniversaryMentionSetting,
                 guild
             );
             if (memberAnniversaryMentionSetting === 'none')
-                memberAnniversaryMentionSetting = Lang.getRef('terms.notSet', LangCode.EN_US);
+                memberAnniversaryMentionSetting = Lang.getRef('info', 'terms.notSet', data.lang());
             serverAnniversaryMentionSetting = FormatUtils.getMentionSetting(
-                guildData.ServerAnniversaryMentionSetting,
+                data.guild.ServerAnniversaryMentionSetting,
                 guild
             );
             if (serverAnniversaryMentionSetting === 'none')
-                serverAnniversaryMentionSetting = Lang.getRef('terms.notSet', LangCode.EN_US);
+                serverAnniversaryMentionSetting = Lang.getRef('info', 'terms.notSet', data.lang());
 
             // Get Message Time
-            birthdayMessageTime = FormatUtils.getMessageTime(guildData.BirthdayMessageTime);
+            birthdayMessageTime = FormatUtils.getMessageTime(data.guild.BirthdayMessageTime);
             memberAnniversaryMessageTime = FormatUtils.getMessageTime(
-                guildData.MemberAnniversaryMessageTime
+                data.guild.MemberAnniversaryMessageTime
             );
             serverAnniversaryMessageTime = FormatUtils.getMessageTime(
-                guildData.ServerAnniversaryMessageTime
+                data.guild.ServerAnniversaryMessageTime
             );
 
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('info.settingsMessage', LangCode.EN_US, {
+            await InteractionUtils.send(
+                intr,
+                Lang.getEmbed('info', 'settings.message', data.lang(), {
                     SERVER_NAME: guild.name,
                     BIRTHDAY_CHANNEL: birthdayChannel,
                     BIRTHDAY_MESSAGE_TIME: birthdayMessageTime,
@@ -111,44 +126,47 @@ export class SettingsCommand implements Command {
                     SERVER_ANNIVERSARY_MESSAGE_TIME: serverAnniversaryMessageTime,
                     GUILD_ID: guild.id,
                     HAS_PREMIUM: Lang.getRef(
-                        'terms.' + (hasPremium ? 'active' : 'notActive'),
-                        LangCode.EN_US
+                        'info',
+                        'terms.' + (data.hasPremium ? 'active' : 'notActive'),
+                        data.lang()
                     ),
                     DATE: new Date().getFullYear().toString(),
-                    ICON: msg.client.user.displayAvatarURL(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 })
             );
-        } else if (type === 'advanced') {
+        } else if (type === 'ADVANCED') {
             // advanced settings
             let birthdayMasterRole: string;
             let preventsRole = Lang.getRef(
-                'boolean.' + (guildData.TrustedPreventsRole ? 'true' : 'false'),
-                LangCode.EN_US
+                'info',
+                'boolean.' + (data.guild.TrustedPreventsRole ? 'true' : 'false'),
+                data.lang()
             );
             let preventsMessage = Lang.getRef(
-                'boolean.' + (guildData.TrustedPreventsMessage ? 'true' : 'false'),
-                LangCode.EN_US
+                'info',
+                'boolean.' + (data.guild.TrustedPreventsMessage ? 'true' : 'false'),
+                data.lang()
             );
             let requireAllTrustedRoles = Lang.getRef(
-                'boolean.' + (guildData.RequireAllTrustedRoles ? 'true' : 'false'),
-                LangCode.EN_US
+                'info',
+                'boolean.' + (data.guild.RequireAllTrustedRoles ? 'true' : 'false'),
+                data.lang()
             );
-            let useTimezone = Lang.getRef('terms.' + guildData.UseTimezone, LangCode.EN_US);
+            let useTimezone = Lang.getRef('info', 'terms.' + data.guild.UseTimezone, data.lang());
             birthdayMasterRole =
-                guildData.BirthdayMasterRoleDiscordId === '0'
-                    ? Lang.getRef('terms.notSet', LangCode.EN_US)
-                    : guild.roles.resolve(guildData.BirthdayMasterRoleDiscordId)?.toString() ||
-                      `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
+                data.guild.BirthdayMasterRoleDiscordId === '0'
+                    ? Lang.getRef('info', 'terms.notSet', data.lang())
+                    : guild.roles.resolve(data.guild.BirthdayMasterRoleDiscordId)?.toString() ||
+                      `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
 
-            let dateFormat = guildData.DateFormat === 'month_day' ? 'Month/Day' : 'Day/Month';
+            let dateFormat = data.guild.DateFormat === 'month_day' ? 'Month/Day' : 'Day/Month';
 
             let trustedRoleCount =
-                (await this.trustedRoleRepo.getTrustedRoles(msg.guild.id))?.trustedRoles.length ??
-                0;
+                (await this.trustedRoleRepo.getTrustedRoles(guild.id))?.trustedRoles.length ?? 0;
 
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('info.settingsAdvanced', LangCode.EN_US, {
+            await InteractionUtils.send(
+                intr,
+                Lang.getEmbed('info', 'settings.advanced', data.lang(), {
                     SERVER_NAME: guild.name,
                     BIRTHDAY_MASTER_ROLE: birthdayMasterRole,
                     TRUSTED_PREVENTS_ROLE: preventsRole,
@@ -159,33 +177,34 @@ export class SettingsCommand implements Command {
                     DATE_FORMAT: dateFormat,
                     GUILD_ID: guild.id,
                     HAS_PREMIUM: Lang.getRef(
-                        'terms.' + (hasPremium ? 'active' : 'notActive'),
-                        LangCode.EN_US
+                        'info',
+                        'terms.' + (data.hasPremium ? 'active' : 'notActive'),
+                        data.lang()
                     ),
                     DATE: new Date().getFullYear().toString(),
-                    ICON: msg.client.user.displayAvatarURL(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 })
             );
         } else {
             // general settings
             let birthdayRole: string;
             birthdayRole =
-                guildData.BirthdayRoleDiscordId === '0'
-                    ? Lang.getRef('terms.notSet', LangCode.EN_US)
-                    : guild.roles.resolve(guildData.BirthdayRoleDiscordId)?.toString() ||
-                      `**${Lang.getRef('terms.deletedRole', LangCode.EN_US)}**`;
+                data.guild.BirthdayRoleDiscordId === '0'
+                    ? Lang.getRef('info', 'terms.notSet', data.lang())
+                    : guild.roles.resolve(data.guild.BirthdayRoleDiscordId)?.toString() ||
+                      `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
 
             let nameFormat =
-                guildData.NameFormat.charAt(0).toUpperCase() + guildData.NameFormat.slice(1);
+                data.guild.NameFormat.charAt(0).toUpperCase() + data.guild.NameFormat.slice(1);
             let defaultTimezone =
-                guildData.DefaultTimezone === '0'
-                    ? Lang.getRef('terms.notSet', LangCode.EN_US)
-                    : guildData.DefaultTimezone;
-            let serverLanguage = Language.displayName(LangCode.EN_US);
+                data.guild.DefaultTimezone === '0'
+                    ? Lang.getRef('info', 'terms.notSet', data.lang())
+                    : data.guild.DefaultTimezone;
+            let serverLanguage = Language.displayName(data.lang());
 
-            await MessageUtils.send(
-                channel,
-                Lang.getEmbed('info.settingsGeneral', LangCode.EN_US, {
+            await InteractionUtils.send(
+                intr,
+                Lang.getEmbed('info', 'settings.general', data.lang(), {
                     SERVER_NAME: guild.name,
                     BIRTHDAY_ROLE: birthdayRole,
                     NAME_FORMAT: nameFormat,
@@ -193,11 +212,12 @@ export class SettingsCommand implements Command {
                     SERVER_LANGUAGE: serverLanguage,
                     GUILD_ID: guild.id,
                     HAS_PREMIUM: Lang.getRef(
-                        'terms.' + (hasPremium ? 'active' : 'notActive'),
-                        LangCode.EN_US
+                        'info',
+                        'terms.' + (data.hasPremium ? 'active' : 'notActive'),
+                        data.lang()
                     ),
                     DATE: new Date().getFullYear().toString(),
-                    ICON: msg.client.user.displayAvatarURL(),
+                    ICON: intr.client.user.displayAvatarURL(),
                 })
             );
         }

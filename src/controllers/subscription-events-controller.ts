@@ -1,13 +1,15 @@
-import { Request, Response, Router } from 'express';
-
-import { Controller } from './controller';
-import { CustomClient } from '../extensions';
-import { SendSubscriptionEventRequest } from '../models/cluster-api';
 import { ShardingManager } from 'discord.js';
-import { SubscriptionStatusName } from '../models/subscription-models';
-import { mapClass } from '../middleware';
+import { Request, Response, Router } from 'express';
 import router from 'express-promise-router';
+import { createRequire } from 'node:module';
 
+import { CustomClient } from '../extensions/custom-client.js';
+import { mapClass } from '../middleware/map-class.js';
+import { SendSubscriptionEventRequest } from '../models/cluster-api/index.js';
+import { SubscriptionStatusName } from '../models/subscription-models.js';
+import { Controller } from './controller.js';
+
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class SubscriptionEventsController implements Controller {
@@ -33,9 +35,8 @@ export class SubscriptionEventsController implements Controller {
             case SubscriptionStatusName.CANCELLED:
             case SubscriptionStatusName.EXPIRED: {
                 await this.shardManager.broadcastEval(
-                    async (client, context) => {
-                        let customClient = client as CustomClient;
-                        return await customClient.notifySubscription(
+                    async (client: CustomClient, context) => {
+                        return await client.notifySubscription(
                             context.subscriber,
                             context.plan,
                             context.status

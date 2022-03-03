@@ -1,10 +1,12 @@
 import { DiscordAPIError, GuildMember, Role } from 'discord.js';
-import { TimeUtils } from './time-utils';
+import { createRequire } from 'node:module';
 
+import { TimeUtils } from './index.js';
+
+const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class ActionUtils {
-    // TODO: Have giveRole and removeRole take in an interval to sleep for to prevent rate limits
     public static async giveRole(member: GuildMember, role: Role, delay?: number): Promise<void> {
         delay = Config.delays.enabled ? delay : 0;
         try {

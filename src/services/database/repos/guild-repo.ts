@@ -1,8 +1,6 @@
-import { DataAccess } from '../data-access';
-import { GuildData } from '../../../models/database';
-import { Logger } from '../../logger';
-import { Procedure } from '../procedure';
-import { SqlUtils } from '../../../utils';
+import { GuildData } from '../../../models/database/index.js';
+import { SqlUtils } from '../../../utils/index.js';
+import { DataAccess, Procedure } from '../index.js';
 
 export class GuildRepo {
     constructor(private dataAccess: DataAccess) {}
@@ -10,13 +8,6 @@ export class GuildRepo {
     public async getGuild(discordId: string): Promise<GuildData> {
         let results = await this.dataAccess.executeProcedure(Procedure.Guild_Get, [discordId]);
         return SqlUtils.getRow(results, 0, 0);
-    }
-
-    public async getGuilds(discordIds: string[]): Promise<GuildData[]> {
-        let results = await this.dataAccess.executeProcedure(Procedure.Guild_GetAll, [
-            discordIds.join(','),
-        ]);
-        return SqlUtils.getTable(results, 0);
     }
 
     public async addOrUpdateGuild(
@@ -72,13 +63,6 @@ export class GuildRepo {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateBirthdayMasterRole, [
             discordId,
             birthdayMasterRoleId,
-        ]);
-    }
-
-    public async updateMessageEmbedColor(discordId: string, hexColor: string): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateMessageEmbedColor, [
-            discordId,
-            hexColor,
         ]);
     }
 
@@ -158,9 +142,6 @@ export class GuildRepo {
     }
 
     public async updateTrustedPreventsMessage(discordId: string, value: number): Promise<void> {
-        if (discordId === '250678721466466305') {
-            Logger.info('Guild 250678721466466305 changed the trusted prevents message.');
-        }
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateTrustedPreventsMessage, [
             discordId,
             value,
@@ -168,9 +149,6 @@ export class GuildRepo {
     }
 
     public async updateTrustedPreventsRole(discordId: string, value: number): Promise<void> {
-        if (discordId === '250678721466466305') {
-            Logger.info('Guild 250678721466466305 changed the trusted prevents role.');
-        }
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateTrustedPreventsRole, [
             discordId,
             value,
@@ -178,9 +156,6 @@ export class GuildRepo {
     }
 
     public async updateRequireAllTrustedRoles(discordId: string, value: number): Promise<void> {
-        if (discordId === '250678721466466305') {
-            Logger.info('Guild 250678721466466305 changed the require all trusted roles.');
-        }
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateRequireAllTrustedRoles, [
             discordId,
             value,
@@ -191,35 +166,6 @@ export class GuildRepo {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateDateFormat, [
             discordId,
             value,
-        ]);
-    }
-
-    public async guildSetupTrusted(
-        discordId: string,
-        requireAllTrustedRoles: number,
-        preventRole: number,
-        preventMessage: number
-    ): Promise<void> {
-        if (discordId === '250678721466466305') {
-            Logger.info('Guild 250678721466466305 ran trusted setup.');
-        }
-        await this.dataAccess.executeProcedure(Procedure.Guild_SetupTrusted, [
-            discordId,
-            requireAllTrustedRoles,
-            preventRole,
-            preventMessage,
-        ]);
-    }
-
-    public async guildSetupAnniversary(
-        discordId: string,
-        memberAnniversaryChannelId: string,
-        serverAnniversaryChannelId: string
-    ): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_SetupAnniversary, [
-            discordId,
-            memberAnniversaryChannelId,
-            serverAnniversaryChannelId,
         ]);
     }
 }

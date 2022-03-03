@@ -1,4 +1,4 @@
-import { StatsData } from './stats-models';
+import { StatsData } from './index.js';
 
 export class Blacklisted {
     blacklist: Blacklist[];

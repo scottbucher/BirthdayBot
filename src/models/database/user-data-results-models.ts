@@ -1,5 +1,4 @@
-import { StatsData } from './stats-models';
-import { UserData } from './user-models';
+import { StatsData, UserData } from './index.js';
 
 export class UserDataResults {
     userData: UserData[];
