@@ -56,6 +56,45 @@
                     }
                 ]
             },
+            "dev": {
+                "title": "{{COM:bot.name}} - Developer Info",
+                "fields": [
+                    {
+                        "name": "Versions",
+                        "value": [
+                            "**Node.js**: {{NODE_VERSION}}",
+                            "**TypeScript**: {{TS_VERSION}}",
+                            "**ECMAScript**: {{ES_VERSION}}",
+                            "**discord.js**: {{DJS_VERSION}}"
+                        ]
+                    },
+                    {
+                        "name": "Stats",
+                        "value": [
+                            "**Shards**: {{SHARD_COUNT}}",
+                            "**Servers**: {{SERVER_COUNT}} ({{SERVER_COUNT_PER_SHARD}}/Shard)"
+                        ]
+                    },
+                    {
+                        "name": "Memory",
+                        "value": [
+                            "**RSS**: {{RSS_SIZE}} ({{RSS_SIZE_PER_SERVER}}/Server)",
+                            "**Heap**: {{HEAP_TOTAL_SIZE}} ({{HEAP_TOTAL_SIZE_PER_SERVER}}/Server)",
+                            "**Used**: {{HEAP_USED_SIZE}} ({{HEAP_USED_SIZE_PER_SERVER}}/Server)"
+                        ]
+                    },
+                    {
+                        "name": "IDs",
+                        "value": [
+                            "**Hostname**: {{HOSTNAME}}",
+                            "**Shard ID**: {{SHARD_ID}}",
+                            "**Server ID**: {{SERVER_ID}}",
+                            "**Bot ID**: {{BOT_ID}}",
+                            "**User ID**: {{USER_ID}}"
+                        ]
+                    }
+                ]
+            },
             "vote": {
                 "description": "Support {{BOT}} by voting [here]({{COM:links.vote}})!",
                 "color": "{{COM:colors.default}}"
@@ -296,101 +335,6 @@
                     "icon": "{{ICON}}"
                 }
             }
-        },
-        "info": {
-            "title": "{{COM:bot.name}} - Info",
-            "fields": [
-                { "name": "Author", "value": "{{REF:links.authorEmbed}}" },
-                {
-                    "name": "Links",
-                    "value": [
-                        "{{COM:links.sourceEmbed}}",
-                        "{{COM:links.docsEmbed}}",
-                        "{{COM:links.donateEmbed}}",
-                        "{{COM:links.supportEmbed}}",
-                        "{{COM:links.inviteEmbed}}"
-                    ]
-                },
-                {
-                    "name": "Created With",
-                    "value": ["{{REF:links.templateEmbed}}"]
-                }
-            ]
-        },
-        "stats": {
-            "fields": [
-                {
-                    "name": "Total Birthdays",
-                    "value": "{{TOTAL_BIRTHDAYS}}",
-                    "inline": true
-                },
-                {
-                    "name": "Total Servers",
-                    "value": "{{TOTAL_SERVERS}}",
-                    "inline": true
-                },
-                {
-                    "name": "Shard ID",
-                    "value": "{{SHARD_ID}}",
-                    "inline": true
-                },
-                {
-                    "name": "Birthdays Today",
-                    "value": "{{BIRTHDAYS_TODAY}}",
-                    "inline": true
-                },
-                {
-                    "name": "Birthdays This Month",
-                    "value": "{{BIRTHDAYS_THIS_MONTH}}",
-                    "inline": true
-                }
-            ]
-        },
-        "dev": {
-            "title": "{{COM:bot.name}} - Developer Info",
-            "fields": [
-                {
-                    "name": "Versions",
-                    "value": [
-                        "**Node.js**: {{NODE_VERSION}}",
-                        "**TypeScript**: {{TS_VERSION}}",
-                        "**ECMAScript**: {{ES_VERSION}}",
-                        "**discord.js**: {{DJS_VERSION}}"
-                    ]
-                },
-                {
-                    "name": "Stats",
-                    "value": [
-                        "**Shards**: {{SHARD_COUNT}}",
-                        "**Servers**: {{SERVER_COUNT}} ({{SERVER_COUNT_PER_SHARD}}/Shard)"
-                    ]
-                },
-                {
-                    "name": "Memory",
-                    "value": [
-                        "**RSS**: {{RSS_SIZE}} ({{RSS_SIZE_PER_SERVER}}/Server)",
-                        "**Heap**: {{HEAP_TOTAL_SIZE}} ({{HEAP_TOTAL_SIZE_PER_SERVER}}/Server)",
-                        "**Used**: {{HEAP_USED_SIZE}} ({{HEAP_USED_SIZE_PER_SERVER}}/Server)"
-                    ]
-                },
-                {
-                    "name": "IDs",
-                    "value": [
-                        "**Hostname**: {{HOSTNAME}}",
-                        "**Shard ID**: {{SHARD_ID}}",
-                        "**Server ID**: {{SERVER_ID}}",
-                        "**Bot ID**: {{BOT_ID}}",
-                        "**User ID**: {{USER_ID}}"
-                    ]
-                }
-            ]
-        },
-        "test": {
-            "description": "Test command works!"
-        },
-        "translate": {
-            "title": "{{COM:bot.name}} - Translations",
-            "description": "Thank you to our translators who have made it possible for {{COM:bot.name}} to be used in the following languages. If you are interested in providing a translation, please contact the staff in our [support server]({{COM:links.support}})."
         },
         "settings": {
             "general": {
