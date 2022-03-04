@@ -47,7 +47,7 @@
             },
             "voteRequired": {
                 "title": "Vote Required!",
-                "thumbnail": "{{REF:links.voteImage}}",
+                "thumbnail": "{{COM:links.voteImage}}",
                 "description": ["This command requires you to have voted in the past 24 hours!"],
                 "fields": [
                     {
@@ -57,7 +57,7 @@
                     },
                     {
                         "name": "Vote Here",
-                        "value": ["[Top.gg]({{REF:links.vote}})"],
+                        "value": ["[Top.gg]({{COM:links.vote}})"],
                         "inline": true
                     }
                 ],
@@ -72,7 +72,7 @@
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
                     "Invalid time zone!",
-                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
+                    "To find your time zone please use the [map time zone picker]({{COM:links.map}})!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}",
@@ -85,7 +85,7 @@
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
                     "Invalid time zone! Do not use timezone abbreviations!",
-                    "To find your time zone please use the [map time zone picker]({{REF:links.map}})!"
+                    "To find your time zone please use the [map time zone picker]({{COM:links.map}})!"
                 ],
                 "footer": {
                     "text": "{{REF:footers.tryAgain}}",

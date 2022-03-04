@@ -528,7 +528,7 @@
             "birthdayMessageUnLocked": {
                 "title": "{{REF:list.birthdayMessagesTitle}}",
                 "description": [
-                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{COM:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -541,7 +541,7 @@
             "birthdayMessageLocked": {
                 "title": "{{REF:list.birthdayMessagesTitle}}",
                 "description": [
-                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "*A random birthday message is chosen for each birthday message. If there are none, the default will be used. [(?)]({{COM:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -560,7 +560,7 @@
             "memberAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{COM:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -573,7 +573,7 @@
             "memberAnniversaryMessageLocked": {
                 "title": "{{REF:list.memberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "*A random member anniversary message is chosen for each member anniversary. If there are none, the default will be used. [(?)]({{COM:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -592,7 +592,7 @@
             "serverAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{COM:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -605,7 +605,7 @@
             "serverAnniversaryMessageLocked": {
                 "title": "{{REF:list.serverAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{REF:docLinks.whatIsCustomMessage}})*",
+                    "*A random server anniversary message is chosen for each server anniversary. If there are none, the default will be used. [(?)]({{COM:docLinks.whatIsCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -624,7 +624,7 @@
             "userSpecificBirthdayMessageUnLocked": {
                 "title": "{{REF:list.userBirthdayMessagesTitle}}",
                 "description": [
-                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{COM:docLinks.whatIsUserSpecificCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -637,7 +637,7 @@
             "userSpecificBirthdayMessageLocked": {
                 "title": "{{REF:list.userBirthdayMessagesTitle}}",
                 "description": [
-                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "*A user-specific birthday message is the birthday message sent to the designated user on their birthday. [(?)]({{COM:docLinks.whatIsUserSpecificCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -656,7 +656,7 @@
             "userSpecificMemberAnniversaryMessageUnLocked": {
                 "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{COM:docLinks.whatIsUserSpecificCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -669,7 +669,7 @@
             "userSpecificMemberAnniversaryMessageLocked": {
                 "title": "{{REF:list.userMemberAnniversaryMessagesTitle}}",
                 "description": [
-                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{REF:docLinks.whatIsUserSpecificCustomMessage}})*",
+                    "*A user-specific member anniversary message is a message sent on that member's member anniversary. [(?)]({{COM:docLinks.whatIsUserSpecificCustomMessage}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -688,7 +688,7 @@
             "trustedRoleFree": {
                 "title": "{{REF:list.trustedRolesTitle}}",
                 "description": [
-                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `/config` [(?)]({{REF:docLinks.whatIsTrustedRole}})*",
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `/config` [(?)]({{COM:docLinks.whatIsTrustedRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -701,7 +701,7 @@
             "trustedRolePaid": {
                 "title": "{{REF:list.trustedRolesTitle}}",
                 "description": [
-                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `/config` [(?)]({{REF:docLinks.whatIsTrustedRole}})*",
+                    "*A trusted role decides which roles have their birthday celebrated. Edit how the trusted role(s) work with `/config` [(?)]({{COM:docLinks.whatIsTrustedRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -720,7 +720,7 @@
             "memberAnniversaryRoleFree": {
                 "title": "{{REF:list.memberAnniversaryRolesTitle}}",
                 "description": [
-                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{REF:docLinks.whatIsAnniversaryRole}})*",
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{COM:docLinks.whatIsAnniversaryRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -733,7 +733,7 @@
             "memberAnniversaryRolePaid": {
                 "title": "{{REF:list.memberAnniversaryRolesTitle}}",
                 "description": [
-                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{REF:docLinks.whatIsAnniversaryRole}})*",
+                    "*A member anniversary role is a given to a user when they hit the given amount of years apart of a discord. [(?)]({{COM:docLinks.whatIsAnniversaryRole}})*",
                     "",
                     "{{LIST_DATA}}"
                 ],
@@ -900,11 +900,11 @@
                 ]
             },
             "subscriptionAdded": {
-                "title": "{{REF:bot.name}} Premium",
+                "title": "{{COM:bot.name}} Premium",
                 "description": "{{COM:colors.party}} {{SERVER_NAME}}'s premium has been successfully activated! Enjoy the new features! {{COM:colors.party}}",
                 "fields": [
                     {
-                        "name": "{{REF:bot.prefix}} premium",
+                        "name": "/premium",
                         "value": [
                             "View details about your subscription.",
                             "",
@@ -913,17 +913,17 @@
                     }
                 ],
                 "footer": {
-                    "text": "Thanks for support {{REF:bot.name}}!",
+                    "text": "Thanks for support {{COM:bot.name}}!",
                     "icon": "{{ICON}}"
                 },
                 "timestamp": true
             },
             "subscriptionCanceled": {
-                "title": "{{REF:bot.name}} Premium",
+                "title": "{{COM:bot.name}} Premium",
                 "description": "{[SERVER_NAME}}'s premium has been canceled! :(",
                 "fields": [
                     {
-                        "name": "{{REF:bot.prefix}} premium",
+                        "name": "/premium",
                         "value": [
                             "View details about your subscription.",
                             "",
@@ -938,11 +938,11 @@
                 "timestamp": true
             },
             "subscriptionExpired": {
-                "title": "{{REF:bot.name}} Premium",
+                "title": "{{COM:bot.name}} Premium",
                 "description": "{[SERVER_NAME}}'s premium has expired! :(",
                 "fields": [
                     {
-                        "name": "{{REF:bot.prefix}} premium",
+                        "name": "/premium",
                         "value": [
                             "Resubscribe to premium!",
                             "",
