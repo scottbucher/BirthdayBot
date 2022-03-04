@@ -182,7 +182,7 @@
             "channelSet": "Successfully set the {{TYPE}} channel to {{CHANNEL}}",
             "roleCreate": "Successfully created the {{ROLE}} role!",
             "roleClear": "Successfully cleared the {{TYPE}} role!",
-            "roleSet": "Successfully set the {{TYPE}} ole to {{ROLE}}",
+            "roleSet": "Successfully set the {{TYPE}} role to {{ROLE}}!",
             "blacklistAdd": "Successfully added {{TARGET}} to the birthday blacklist!",
             "blacklistClear": "Successfully cleared the birthday blacklist!",
             "blacklistRemove": "Successfully removed {{TARGET}} from the birthday blacklist!",
