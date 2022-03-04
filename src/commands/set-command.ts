@@ -36,7 +36,7 @@ export class SetCommand implements Command {
             {
                 name: Lang.getCom('arguments.user'),
                 description:
-                    'The user whose birthday you are sett. They will have to confirm this.',
+                    'The user whose birthday you are setting. They will have to confirm this.',
                 type: ApplicationCommandOptionType.User.valueOf(),
                 required: false,
             },
