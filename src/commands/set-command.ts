@@ -275,7 +275,8 @@ export class SetCommand implements Command {
                 TARGET: target.toString(),
                 BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                 TIMEZONE: timeZone,
-            })
+            }),
+            target
         );
 
         if (result === undefined) return;
