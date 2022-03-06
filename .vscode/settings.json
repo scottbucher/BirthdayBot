@@ -41,6 +41,7 @@
         "regexes",
         "repos",
         "respawn",
+        "respawned",
         "restjson",
         "varchar"
     ],
