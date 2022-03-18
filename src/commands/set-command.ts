@@ -36,7 +36,7 @@ export class SetCommand implements Command {
             {
                 name: Lang.getCom('arguments.user'),
                 description:
-                    'The user whose birthday you are sett. They will have to confirm this.',
+                    'The user whose birthday you are setting. They will have to confirm this.',
                 type: ApplicationCommandOptionType.User.valueOf(),
                 required: false,
             },
@@ -275,7 +275,8 @@ export class SetCommand implements Command {
                 TARGET: target.toString(),
                 BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
                 TIMEZONE: timeZone,
-            })
+            }),
+            target
         );
 
         if (result === undefined) return;

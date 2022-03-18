@@ -103,7 +103,8 @@ export class CollectorUtils {
     public static async getBooleanFromButton(
         commandIntr: CommandInteraction,
         data: EventData,
-        embed: MessageEmbed
+        embed: MessageEmbed,
+        target?: User
     ): Promise<{ intr: ButtonInteraction; value: boolean }> {
         let prompt = await InteractionUtils.send(commandIntr, {
             embeds: [embed],
@@ -134,7 +135,7 @@ export class CollectorUtils {
 
         return await CollectorUtils.collectByButton(
             prompt,
-            commandIntr.user,
+            target ?? commandIntr.user,
             async (intr: ButtonInteraction) => {
                 try {
                     await InteractionUtils.deferAndDisableButtons(intr);
