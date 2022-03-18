@@ -23,7 +23,7 @@ export class SubscriptionService {
 
         if (!res.ok) return;
 
-        (await res.json()) as SubscriptionLink;
+        return (await res.json()) as SubscriptionLink;
     }
 
     public async getSubscription(
@@ -52,7 +52,7 @@ export class SubscriptionService {
 
         if (!res.ok) return;
 
-        (await res.json()) as SubscriptionStatus[];
+        return (await res.json()) as SubscriptionStatus[];
     }
 
     public async hasService(planName: string, subscriberId: string): Promise<boolean> {
