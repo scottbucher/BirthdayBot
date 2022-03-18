@@ -12,7 +12,7 @@ import { UserDataResults } from '../models/database/user-data-results-models.js'
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/user-repo.js';
 import { Lang } from '../services/index.js';
-import { InteractionUtils, ListUtils, ParseUtils } from '../utils/index.js';
+import { InteractionUtils, ListUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -68,12 +68,10 @@ export class ListCommand implements Command {
 
         let date: moment.MomentInput;
 
-        let pageSize = ParseUtils.parseInt(
+        let pageSize: number =
             type === 'birthday'
                 ? Config.experience.birthdayListSize
-                : Config.experience.memberAnniversaryListSize
-        );
-
+                : Config.experience.memberAnniversaryListSize;
         let embed: MessageEmbed;
 
         let guildMembers = intr.guild.members.cache;

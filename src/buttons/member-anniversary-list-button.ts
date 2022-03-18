@@ -3,13 +3,7 @@ import moment from 'moment';
 import { createRequire } from 'node:module';
 
 import { EventData } from '../models/internal-models.js';
-import {
-    ButtonUtils,
-    InteractionUtils,
-    ListUtils,
-    ParseUtils,
-    RegexUtils,
-} from '../utils/index.js';
+import { ButtonUtils, InteractionUtils, ListUtils, RegexUtils } from '../utils/index.js';
 import { Button, ButtonDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -44,7 +38,7 @@ export class MemberAnniversaryListButton implements Button {
 
         let date: moment.MomentInput;
 
-        let pageSize = ParseUtils.parseInt(Config.experience.memberAnniversaryListSize);
+        let pageSize: number = Config.experience.memberAnniversaryListSize;
 
         let guildMembers = intr.guild.members.cache;
 
