@@ -183,7 +183,7 @@ export class ChannelSubCommand implements Command {
                                     intr,
                                     Lang.getEmbed(
                                         'validation',
-                                        'embeds..noAccessToChannel',
+                                        'embeds.noAccessToChannel',
                                         data.lang(),
                                         {
                                             CHANNEL: channelInput.toString(),
