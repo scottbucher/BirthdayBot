@@ -61,8 +61,8 @@ export class PremiumCommand implements Command {
                 Logs.info.unsubRanPremiumCmd
                     .replaceAll('{SENDER_TAG}', intr.user.tag)
                     .replaceAll('{SENDER_ID}', intr.user.id)
-                    .replaceAll('{GUILD_NAME}', intr.guild.name)
-                    .replaceAll('{GUILD_ID}', intr.guild.id)
+                    .replaceAll('{GUILD_NAME}', intr.guild ? intr.guild.name : 'DM')
+                    .replaceAll('{GUILD_ID}', intr.guild ? intr.guild.id : 'DM')
             );
             return;
         }
