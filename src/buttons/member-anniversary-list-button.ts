@@ -3,7 +3,13 @@ import moment from 'moment';
 import { createRequire } from 'node:module';
 
 import { EventData } from '../models/internal-models.js';
-import { ButtonUtils, InteractionUtils, ListUtils, RegexUtils } from '../utils/index.js';
+import {
+    ButtonUtils,
+    InteractionUtils,
+    ListUtils,
+    ParseUtils,
+    RegexUtils,
+} from '../utils/index.js';
 import { Button, ButtonDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -38,9 +44,14 @@ export class MemberAnniversaryListButton implements Button {
 
         let date: moment.MomentInput;
 
-        let pageSize = Config.experience.memberAnniversaryListSize as number;
+        let pageSize = ParseUtils.parseInt(Config.experience.memberAnniversaryListSize);
 
         let guildMembers = intr.guild.members.cache;
+
+        if (intr.guild.memberCount - guildMembers.size > 5) {
+            guildMembers = await intr.guild.members.fetch();
+        }
+
         // Member Anniversary List
         let memberList = guildMembers.filter(member => !member.user.bot).map(member => member);
 
