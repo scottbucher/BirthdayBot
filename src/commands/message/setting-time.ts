@@ -31,17 +31,7 @@ export class MessageSettingTimeSubCommand implements Command {
 
         let messageTime = intr.options.getInteger(Lang.getCom('arguments.time'));
 
-        let timeOutput: string;
-        if (messageTime === 0)
-            timeOutput = '12:00 ' + Lang.getRef('info', 'terms.amTime', data.lang());
-        else if (messageTime === 12)
-            timeOutput = '12:00 ' + Lang.getRef('info', 'terms.pmTime', data.lang());
-        else if (messageTime < 12)
-            timeOutput =
-                `${messageTime - 12}` + ':00 ' + Lang.getRef('info', 'terms.amTime', data.lang());
-        else
-            timeOutput =
-                `${messageTime - 12}` + ':00 ' + Lang.getRef('info', 'terms.pmTime', data.lang());
+        let timeOutput = FormatUtils.getMessageTime(messageTime);
 
         let displayType = FormatUtils.getCelebrationDisplayType(
             type.replaceAll('_', ''),
