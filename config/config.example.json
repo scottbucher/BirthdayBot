@@ -97,13 +97,13 @@
     },
     "experience": {
         "promptExpireTime": 120,
-        "morePageCount": "5",
-        "birthdayListSize": "60",
-        "memberAnniversaryListSize": "60",
-        "blacklistSize": "60",
-        "messageListSize": "6",
-        "trustedRoleListSize": "20",
-        "memberAnniversaryRoleListSize": "20"
+        "morePageCount": 5,
+        "birthdayListSize": 60,
+        "memberAnniversaryListSize": 60,
+        "blacklistSize": 60,
+        "messageListSize": 6,
+        "trustedRoleListSize": 20,
+        "memberAnniversaryRoleListSize": 20
     },
     "colors": {
         "default": "#4eefff",
