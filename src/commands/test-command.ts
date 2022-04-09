@@ -9,6 +9,7 @@ import {
     TextChannel,
 } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
+import moment from 'moment';
 import { createRequire } from 'node:module';
 
 import { CustomRole } from '../enums/index.js';
@@ -363,6 +364,20 @@ export class TestCommand implements Command {
 
             let timezoneCheck = guildData?.DefaultTimezone !== '0';
 
+            // calculate the year if it wasn't given
+            if (!year && timezoneCheck) {
+                // plus one since we are celebrating the NEXT anniversary in the test
+                let currentDate = moment().tz(guildData.DefaultTimezone);
+                let memberAnniversary = moment(target.joinedAt);
+
+                year = currentDate.year() - memberAnniversary.year();
+
+                // if the anniversary already happened this year, we need to add one to the year
+                if (currentDate.format('MM-DD') > memberAnniversary.format('MM-DD')) {
+                    year++;
+                }
+            }
+
             // Only premium guilds get anniversary roles
             if (data.hasPremium) {
                 memberAnniversaryRoles = (
@@ -416,7 +431,7 @@ export class TestCommand implements Command {
                     }
                 }
             }
-            if (messageCheck) {
+            if (messageCheck && timezoneCheck) {
                 let userList = CelebrationUtils.getUserListString(guildData, [guildMember]);
 
                 if (customMessages.length > 0) {
@@ -518,11 +533,27 @@ export class TestCommand implements Command {
 
             let timezoneCheck = guildData?.DefaultTimezone !== '0';
 
+            // calculate the year if it wasn't given
+
+            // calculate the year if it wasn't given
+            if (!year && timezoneCheck) {
+                // plus one since we are celebrating the NEXT anniversary in the test
+                let currentDate = moment().tz(guildData.DefaultTimezone);
+                let serverAnniversary = moment(guild.createdAt);
+
+                year = currentDate.year() - serverAnniversary.year();
+
+                // if the anniversary already happened this year, we need to add one to the year
+                if (currentDate.format('MM-DD') > serverAnniversary.format('MM-DD')) {
+                    year++;
+                }
+            }
+
             customMessages = (
                 await this.customMessageRepo.getCustomMessages(guild.id, 'serveranniversary')
             ).customMessages;
 
-            if (messageCheck) {
+            if (messageCheck && timezoneCheck) {
                 if (customMessages.length > 0) {
                     // Get our custom message
                     let customMessage = CelebrationUtils.randomMessage(
