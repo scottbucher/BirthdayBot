@@ -1,4 +1,4 @@
-import { Client, Collection, Guild, GuildMember } from 'discord.js';
+import { Client, Collection, DiscordAPIError, Guild, GuildMember } from 'discord.js';
 import moment from 'moment';
 import schedule from 'node-schedule';
 import { createRequire } from 'node:module';
@@ -91,6 +91,11 @@ export class CelebrationJob implements Job {
                 guild = await this.client.guilds.fetch(guildData.GuildDiscordId);
                 if (!guild) continue;
             } catch (error) {
+                // Ignore when we get missing access errors which are when we try and fetch guilds which no longer have the bot
+                if (error instanceof DiscordAPIError && [50001].includes(error.code)) {
+                    return;
+                }
+
                 Logger.error(
                     Logs.error.resolveGuild
                         .replaceAll('{GUILD_ID}', guildData?.GuildDiscordId)
