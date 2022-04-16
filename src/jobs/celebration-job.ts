@@ -93,7 +93,7 @@ export class CelebrationJob implements Job {
             } catch (error) {
                 // Ignore when we get missing access errors which are when we try and fetch guilds which no longer have the bot
                 if (error instanceof DiscordAPIError && [50001].includes(error.code)) {
-                    return;
+                    continue;
                 }
 
                 Logger.error(
