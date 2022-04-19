@@ -94,7 +94,7 @@ export class TestCommand implements Command {
     ) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let type = intr.options.getString(Lang.getCom('arguments.type'));
+        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
         let user = intr.options.getUser(Lang.getCom('arguments.user'));
         let year = intr.options.getInteger(Lang.getCom('arguments.year'));
 
@@ -126,7 +126,7 @@ export class TestCommand implements Command {
 
         let customMessages: CustomMessage[];
         let mentionString = CelebrationUtils.getMentionString(guildData, guild, type);
-        let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
+        let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel, true);
 
         if (type === 'BIRTHDAY') {
             // run the birthday test
@@ -352,7 +352,6 @@ export class TestCommand implements Command {
 
             // If a check is true, it "passes" (we are trying to pass all checks)
             // example: blackListCheck false means the user was IN the blacklist
-            let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
             let memberAnniversaryRolesCheck = false;
             let memberAnniversaryRoles: MemberAnniversaryRole[];
             let anniversaryResolvedRoles: Role[];
