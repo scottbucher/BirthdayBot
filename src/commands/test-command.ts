@@ -126,7 +126,7 @@ export class TestCommand implements Command {
 
         let customMessages: CustomMessage[];
         let mentionString = CelebrationUtils.getMentionString(guildData, guild, type);
-        let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel, true);
+        let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
 
         if (type === 'BIRTHDAY') {
             // run the birthday test

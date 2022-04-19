@@ -48,7 +48,7 @@ export class CelebrationService {
                 }
 
                 // If we can't send a message to the channel then set it to null so we skip messages
-                if (birthdayChannel && !PermissionUtils.canSend(birthdayChannel, false))
+                if (birthdayChannel && !PermissionUtils.canSend(birthdayChannel))
                     birthdayChannel = null;
 
                 // If either are set we have to calculate birthday information
@@ -293,10 +293,7 @@ export class CelebrationService {
                 }
 
                 // If we can't send a message to the channel then set it to null so we skip messages
-                if (
-                    memberAnniversaryChannel &&
-                    !PermissionUtils.canSend(memberAnniversaryChannel, false)
-                )
+                if (memberAnniversaryChannel && !PermissionUtils.canSend(memberAnniversaryChannel))
                     memberAnniversaryChannel = null;
 
                 if (
@@ -582,7 +579,7 @@ export class CelebrationService {
                     // If we can't send a message to the channel then set it to null so we skip messages
                     if (
                         serverAnniversaryChannel &&
-                        !PermissionUtils.canSend(serverAnniversaryChannel, false)
+                        !PermissionUtils.canSend(serverAnniversaryChannel)
                     )
                         serverAnniversaryChannel = null;
                     if (

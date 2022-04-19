@@ -6,7 +6,7 @@ import { GuildData } from '../models/database/index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class PermissionUtils {
-    public static canSend(channel: AnyChannel, embedLinks: boolean = false): boolean {
+    public static canSend(channel: AnyChannel, embedLinks: boolean = true): boolean {
         if (channel instanceof DMChannel) {
             return true;
         } else if (channel instanceof GuildChannel) {
