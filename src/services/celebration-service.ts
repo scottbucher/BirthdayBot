@@ -444,16 +444,20 @@ export class CelebrationService {
                                 let counter = 0;
                                 if (regularMessagesToSend.length > 0) {
                                     for (let message of regularMessagesToSend) {
-                                        if (
-                                            regularMessages[counter].concat('\n\n' + message)
-                                                .length > 4096
-                                        ) {
-                                            counter++;
+                                        if (regularMessages.length === 0) {
                                             regularMessages.push(message);
                                         } else {
-                                            regularMessages[counter] = regularMessages[
-                                                counter
-                                            ].concat('\n\n' + message);
+                                            if (
+                                                regularMessages[counter].concat('\n\n' + message)
+                                                    .length > 4096
+                                            ) {
+                                                counter++;
+                                                regularMessages.push(message);
+                                            } else {
+                                                regularMessages[counter] = regularMessages[
+                                                    counter
+                                                ].concat('\n\n' + message);
+                                            }
                                         }
                                     }
                                 }
@@ -511,10 +515,10 @@ export class CelebrationService {
                                         );
                                 }
 
-                                if (regularMessagesToSend.length > 0) {
+                                if (regularMessages.length > 0) {
                                     // Send our message(s)
 
-                                    for (let message of regularMessagesToSend)
+                                    for (let message of regularMessages)
                                         await MessageUtils.sendWithDelay(
                                             memberAnniversaryChannel,
                                             message,
