@@ -3,7 +3,7 @@
     "version": "4.3.0",
     "author": "Scott Bucher",
     "description": "Celebrate birthdays with automatic birthday roles and announcements! Highly customizable and easy to use!",
-    "license": "MIT",
+    "license": "UNLICENSED",
     "private": true,
     "engines": {
         "node": ">=16.6.0"
