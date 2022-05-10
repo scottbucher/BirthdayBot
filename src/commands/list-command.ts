@@ -30,11 +30,11 @@ export class ListCommand implements Command {
                 choices: [
                     {
                         name: 'birthday',
-                        value: 'BIRTHDAY',
+                        value: 'birthday',
                     },
                     {
                         name: 'memberAnniversary',
-                        value: 'MEMBER_ANNIVERSARY',
+                        value: 'member_anniversary',
                     },
                 ],
             },

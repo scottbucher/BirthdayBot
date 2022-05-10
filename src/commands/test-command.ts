@@ -45,15 +45,15 @@ export class TestCommand implements Command {
                 choices: [
                     {
                         name: 'birthday',
-                        value: 'BIRTHDAY',
+                        value: 'birthday',
                     },
                     {
                         name: 'memberAnniversary',
-                        value: 'MEMBER_ANNIVERSARY',
+                        value: 'member_anniversary',
                     },
                     {
                         name: 'serverAnniversary',
-                        value: 'SERVER_ANNIVERSARY',
+                        value: 'server_anniversary',
                     },
                 ],
             },
@@ -94,7 +94,7 @@ export class TestCommand implements Command {
     ) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
+        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'birthday';
         let user = intr.options.getUser(Lang.getCom('arguments.user'));
         let year = intr.options.getInteger(Lang.getCom('arguments.year'));
 
@@ -114,9 +114,9 @@ export class TestCommand implements Command {
 
         try {
             messageChannel = guild.channels.resolve(
-                type === 'BIRTHDAY'
+                type === 'birthday'
                     ? guildData.BirthdayChannelDiscordId
-                    : type === 'MEMBER_ANNIVERSARY'
+                    : type === 'member_anniversary'
                     ? guildData.MemberAnniversaryChannelDiscordId
                     : guildData.ServerAnniversaryChannelDiscordId
             ) as TextChannel;
@@ -128,7 +128,7 @@ export class TestCommand implements Command {
         let mentionString = CelebrationUtils.getMentionString(guildData, guild, type);
         let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
 
-        if (type === 'BIRTHDAY') {
+        if (type === 'birthday') {
             // run the birthday test
 
             // If a check is true, it "passes" (we are trying to pass all checks)
@@ -347,7 +347,7 @@ export class TestCommand implements Command {
             }
             await InteractionUtils.send(intr, testingEmbed);
             return;
-        } else if (type === 'MEMBER_ANNIVERSARY') {
+        } else if (type === 'member_anniversary') {
             // run the member anniversary test
 
             // If a check is true, it "passes" (we are trying to pass all checks)
