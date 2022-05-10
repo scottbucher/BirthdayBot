@@ -273,9 +273,9 @@ export class CelebrationUtils {
     public static getMentionString(guildData: GuildData, guild: Guild, type: string): string {
         // Find mentioned role
         let mentionSetting = (
-            type === 'birthday'
+            type.toLowerCase() === 'birthday'
                 ? guildData.BirthdayMentionSetting
-                : type === 'memberanniversary'
+                : type.toLowerCase() === 'memberanniversary'
                 ? guildData.MemberAnniversaryMentionSetting
                 : guildData.ServerAnniversaryMentionSetting
         ).toLowerCase();
