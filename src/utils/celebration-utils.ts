@@ -253,7 +253,7 @@ export class CelebrationUtils {
                 return ArrayUtils.chooseRandom(
                     type === 'birthday'
                         ? messages.slice(0, Config.validation.message.maxCount.birthday.free)
-                        : type === 'memberanniversary'
+                        : type === 'memberanniversary' || type === 'member_anniversary'
                         ? messages.slice(
                               0,
                               Config.validation.message.maxCount.memberAnniversary.free
@@ -275,7 +275,8 @@ export class CelebrationUtils {
         let mentionSetting = (
             type.toLowerCase() === 'birthday'
                 ? guildData.BirthdayMentionSetting
-                : type.toLowerCase() === 'memberanniversary'
+                : type.toLowerCase() === 'memberanniversary' ||
+                  type.toLowerCase() === 'member_anniversary'
                 ? guildData.MemberAnniversaryMentionSetting
                 : guildData.ServerAnniversaryMentionSetting
         ).toLowerCase();
