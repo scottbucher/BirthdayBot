@@ -3,6 +3,7 @@ import {
     CommandInteraction,
     GuildMember,
     MessageEmbed,
+    MessageOptions,
     PermissionString,
 } from 'discord.js';
 import moment from 'moment';
@@ -57,6 +58,10 @@ export class MessageTestSubCommand implements Command {
             : await this.customMessageRepo.getCustomMessages(intr.guild.id, databaseType);
 
         let message: CustomMessage;
+        let msgOptions: MessageOptions = {};
+        let mentionString = CelebrationUtils.getMentionString(data.guild, intr.guild, type);
+
+        if (mentionString && mentionString !== '') msgOptions.content = mentionString;
 
         // find the position based on if it is a user or global message
         isUserSpecific
@@ -126,8 +131,7 @@ export class MessageTestSubCommand implements Command {
                     ? Lang.getRef('info', 'defaults.serverAnniversaryMessage', data.lang())
                     : Lang.getRef('info', 'defaults.birthdayMessage', data.lang());
 
-            await InteractionUtils.send(
-                intr,
+            msgOptions.embeds = [
                 new MessageEmbed()
                     .setDescription(
                         CelebrationUtils.replacePlaceHolders(
@@ -138,8 +142,10 @@ export class MessageTestSubCommand implements Command {
                             year
                         )
                     )
-                    .setColor(color)
-            );
+                    .setColor(color),
+            ];
+
+            await InteractionUtils.send(intr, msgOptions);
             return;
         }
 
@@ -169,10 +175,11 @@ export class MessageTestSubCommand implements Command {
         }
 
         if (chosenMessage.Embed) {
-            let embed = new MessageEmbed().setDescription(customMessage).setColor(color);
-            await InteractionUtils.send(intr, embed);
+            msgOptions.embeds = [new MessageEmbed().setDescription(customMessage).setColor(color)];
         } else {
-            await InteractionUtils.send(intr, customMessage);
+            if (msgOptions.content === undefined) msgOptions.content = customMessage;
+            else msgOptions.content += `\n${customMessage}`;
         }
+        await InteractionUtils.send(intr, msgOptions);
     }
 }

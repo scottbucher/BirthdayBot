@@ -4,6 +4,7 @@ import {
     CommandInteraction,
     GuildMember,
     MessageEmbed,
+    MessageOptions,
     PermissionString,
     Role,
     TextChannel,
@@ -125,8 +126,11 @@ export class TestCommand implements Command {
         }
 
         let customMessages: CustomMessage[];
+        let msgOptions: MessageOptions = {};
         let mentionString = CelebrationUtils.getMentionString(guildData, guild, type);
         let messageCheck = messageChannel && PermissionUtils.canSend(messageChannel);
+
+        if (mentionString && mentionString !== '') msgOptions.content = mentionString;
 
         if (type === 'birthday') {
             // run the birthday test
@@ -235,12 +239,17 @@ export class TestCommand implements Command {
                         null
                     );
 
-                    // Send our message(s)
-                    if (mentionString && mentionString !== '')
-                        await MessageUtils.send(messageChannel, mentionString);
+                    // Send our message
+                    if (useEmbed) {
+                        msgOptions.embeds = [
+                            new MessageEmbed().setDescription(message).setColor(color),
+                        ];
+                    } else {
+                        if (msgOptions.content === undefined) msgOptions.content = message;
+                        else msgOptions.content += `\n${message}`;
+                    }
 
-                    let embed = new MessageEmbed().setDescription(message).setColor(color);
-                    await MessageUtils.send(messageChannel, useEmbed ? embed : message);
+                    await MessageUtils.send(messageChannel, msgOptions);
                 }
             }
 
@@ -456,12 +465,18 @@ export class TestCommand implements Command {
                     year === 0 ? 1 : year
                 );
 
-                // Send our message(s)
-                if (mentionString && mentionString !== '')
-                    await MessageUtils.send(messageChannel, mentionString);
+                // Send our message
 
-                let embed = new MessageEmbed().setDescription(message).setColor(color);
-                await MessageUtils.send(messageChannel, useEmbed ? embed : message);
+                if (useEmbed) {
+                    msgOptions.embeds = [
+                        new MessageEmbed().setDescription(message).setColor(color),
+                    ];
+                } else {
+                    if (msgOptions.content === undefined) msgOptions.content = message;
+                    else msgOptions.content += `\n${message}`;
+                }
+
+                await MessageUtils.send(messageChannel, msgOptions);
             }
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -576,12 +591,18 @@ export class TestCommand implements Command {
                     year === 0 ? 1 : year
                 );
 
-                // Send our message(s)
-                if (mentionString && mentionString !== '')
-                    await MessageUtils.send(messageChannel, mentionString);
+                // Send our message
 
-                let embed = new MessageEmbed().setDescription(message).setColor(color);
-                await MessageUtils.send(messageChannel, useEmbed ? embed : message);
+                if (useEmbed) {
+                    msgOptions.embeds = [
+                        new MessageEmbed().setDescription(message).setColor(color),
+                    ];
+                } else {
+                    if (msgOptions.content === undefined) msgOptions.content = message;
+                    else msgOptions.content += `\n${message}`;
+                }
+
+                await MessageUtils.send(messageChannel, msgOptions);
             }
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
