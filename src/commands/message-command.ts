@@ -29,23 +29,23 @@ export class MessageCommand implements Command {
                                 choices: [
                                     {
                                         name: 'birthday',
-                                        value: 'BIRTHDAY',
+                                        value: 'birthday',
                                     },
                                     {
                                         name: 'memberAnniversary',
-                                        value: 'MEMBER_ANNIVERSARY',
+                                        value: 'member_anniversary',
                                     },
                                     {
                                         name: 'serverAnniversary',
-                                        value: 'SERVER_ANNIVERSARY',
+                                        value: 'server_anniversary',
                                     },
                                     {
                                         name: 'userSpecificBirthday',
-                                        value: 'USER_SPECIFIC_BIRTHDAY',
+                                        value: 'user_specific_birthday',
                                     },
                                     {
                                         name: 'userSpecificMemberAnniversary',
-                                        value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                        value: 'user_specific_member_anniversary',
                                     },
                                 ],
                             },
@@ -81,23 +81,23 @@ export class MessageCommand implements Command {
                                 choices: [
                                     {
                                         name: 'birthday',
-                                        value: 'BIRTHDAY',
+                                        value: 'birthday',
                                     },
                                     {
                                         name: 'memberAnniversary',
-                                        value: 'MEMBER_ANNIVERSARY',
+                                        value: 'member_anniversary',
                                     },
                                     {
                                         name: 'serverAnniversary',
-                                        value: 'SERVER_ANNIVERSARY',
+                                        value: 'server_anniversary',
                                     },
                                     {
                                         name: 'userSpecificBirthday',
-                                        value: 'USER_SPECIFIC_BIRTHDAY',
+                                        value: 'user_specific_birthday',
                                     },
                                     {
                                         name: 'userSpecificMemberAnniversary',
-                                        value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                        value: 'user_specific_member_anniversary',
                                     },
                                 ],
                             },
@@ -138,15 +138,15 @@ export class MessageCommand implements Command {
                                 choices: [
                                     {
                                         name: 'birthday',
-                                        value: 'BIRTHDAY',
+                                        value: 'birthday',
                                     },
                                     {
                                         name: 'memberAnniversary',
-                                        value: 'MEMBER_ANNIVERSARY',
+                                        value: 'member_anniversary',
                                     },
                                     {
                                         name: 'serverAnniversary',
-                                        value: 'SERVER_ANNIVERSARY',
+                                        value: 'server_anniversary',
                                     },
                                 ],
                             },
@@ -174,15 +174,15 @@ export class MessageCommand implements Command {
                                 choices: [
                                     {
                                         name: 'birthday',
-                                        value: 'BIRTHDAY',
+                                        value: 'birthday',
                                     },
                                     {
                                         name: 'memberAnniversary',
-                                        value: 'MEMBER_ANNIVERSARY',
+                                        value: 'member_anniversary',
                                     },
                                     {
                                         name: 'serverAnniversary',
-                                        value: 'SERVER_ANNIVERSARY',
+                                        value: 'server_anniversary',
                                     },
                                 ],
                             },
@@ -210,23 +210,23 @@ export class MessageCommand implements Command {
                         choices: [
                             {
                                 name: 'birthday',
-                                value: 'BIRTHDAY',
+                                value: 'birthday',
                             },
                             {
                                 name: 'memberAnniversary',
-                                value: 'MEMBER_ANNIVERSARY',
+                                value: 'member_anniversary',
                             },
                             {
                                 name: 'serverAnniversary',
-                                value: 'SERVER_ANNIVERSARY',
+                                value: 'server_anniversary',
                             },
                             {
                                 name: 'userSpecificBirthday',
-                                value: 'USER_SPECIFIC_BIRTHDAY',
+                                value: 'user_specific_birthday',
                             },
                             {
                                 name: 'userSpecificMemberAnniversary',
-                                value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                value: 'user_specific_member_anniversary',
                             },
                         ],
                     },
@@ -245,23 +245,23 @@ export class MessageCommand implements Command {
                         choices: [
                             {
                                 name: 'birthday',
-                                value: 'BIRTHDAY',
+                                value: 'birthday',
                             },
                             {
                                 name: 'memberAnniversary',
-                                value: 'MEMBER_ANNIVERSARY',
+                                value: 'member_anniversary',
                             },
                             {
                                 name: 'serverAnniversary',
-                                value: 'SERVER_ANNIVERSARY',
+                                value: 'server_anniversary',
                             },
                             {
                                 name: 'userSpecificBirthday',
-                                value: 'USER_SPECIFIC_BIRTHDAY',
+                                value: 'user_specific_birthday',
                             },
                             {
                                 name: 'userSpecificMemberAnniversary',
-                                value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                value: 'user_specific_member_anniversary',
                             },
                         ],
                     },
@@ -296,23 +296,23 @@ export class MessageCommand implements Command {
                         choices: [
                             {
                                 name: 'birthday',
-                                value: 'BIRTHDAY',
+                                value: 'birthday',
                             },
                             {
                                 name: 'memberAnniversary',
-                                value: 'MEMBER_ANNIVERSARY',
+                                value: 'member_anniversary',
                             },
                             {
                                 name: 'serverAnniversary',
-                                value: 'SERVER_ANNIVERSARY',
+                                value: 'server_anniversary',
                             },
                             {
                                 name: 'userSpecificBirthday',
-                                value: 'USER_SPECIFIC_BIRTHDAY',
+                                value: 'user_specific_birthday',
                             },
                             {
                                 name: 'userSpecificMemberAnniversary',
-                                value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                value: 'user_specific_member_anniversary',
                             },
                         ],
                     },
@@ -338,15 +338,15 @@ export class MessageCommand implements Command {
                         choices: [
                             {
                                 name: 'birthday',
-                                value: 'BIRTHDAY',
+                                value: 'birthday',
                             },
                             {
                                 name: 'memberAnniversary',
-                                value: 'MEMBER_ANNIVERSARY',
+                                value: 'member_anniversary',
                             },
                             {
                                 name: 'serverAnniversary',
-                                value: 'SERVER_ANNIVERSARY',
+                                value: 'server_anniversary',
                             },
                         ],
                     },
@@ -372,23 +372,23 @@ export class MessageCommand implements Command {
                         choices: [
                             {
                                 name: 'birthday',
-                                value: 'BIRTHDAY',
+                                value: 'birthday',
                             },
                             {
                                 name: 'memberAnniversary',
-                                value: 'MEMBER_ANNIVERSARY',
+                                value: 'member_anniversary',
                             },
                             {
                                 name: 'serverAnniversary',
-                                value: 'SERVER_ANNIVERSARY',
+                                value: 'server_anniversary',
                             },
                             {
                                 name: 'userSpecificBirthday',
-                                value: 'USER_SPECIFIC_BIRTHDAY',
+                                value: 'user_specific_birthday',
                             },
                             {
                                 name: 'userSpecificMemberAnniversary',
-                                value: 'USER_SPECIFIC_MEMBER_ANNIVERSARY',
+                                value: 'user_specific_member_anniversary',
                             },
                         ],
                     },

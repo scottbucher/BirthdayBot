@@ -26,11 +26,11 @@ export class ViewCommand implements Command {
                 choices: [
                     {
                         name: 'birthday',
-                        value: 'BIRTHDAY',
+                        value: 'birthday',
                     },
                     {
                         name: 'memberAnniversary',
-                        value: 'MEMBER_ANNIVERSARY',
+                        value: 'member_anniversary',
                     },
                 ],
             },
@@ -55,7 +55,7 @@ export class ViewCommand implements Command {
     constructor(private userRepo: UserRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
+        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'birthday';
         let target = intr.options.getUser(Lang.getCom('arguments.user')) ?? intr.user;
 
         if (target !== intr.user && intr.channel instanceof DMChannel) {
@@ -67,7 +67,7 @@ export class ViewCommand implements Command {
         }
 
         switch (type) {
-            case 'BIRTHDAY': {
+            case 'birthday': {
                 let userData = await this.userRepo.getUser(target.id);
 
                 if (!userData || !userData.Birthday || !userData.TimeZone) {
@@ -95,7 +95,7 @@ export class ViewCommand implements Command {
                 );
                 break;
             }
-            case 'MEMBER_ANNIVERSARY': {
+            case 'member_anniversary': {
                 if (intr.channel instanceof DMChannel) {
                     await InteractionUtils.send(
                         intr,

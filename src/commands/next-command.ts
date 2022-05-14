@@ -21,15 +21,15 @@ export class NextCommand implements Command {
                 choices: [
                     {
                         name: 'birthday',
-                        value: 'BIRTHDAY',
+                        value: 'birthday',
                     },
                     {
                         name: 'memberAnniversary',
-                        value: 'MEMBER_ANNIVERSARY',
+                        value: 'member_anniversary',
                     },
                     {
                         name: 'serverAnniversary',
-                        value: 'SERVER_ANNIVERSARY',
+                        value: 'server_anniversary',
                     },
                 ],
             },
@@ -48,12 +48,12 @@ export class NextCommand implements Command {
     constructor(public userRepo: UserRepo) {}
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'BIRTHDAY';
+        let type = intr.options.getString(Lang.getCom('arguments.type')) ?? 'birthday';
         let timezone = data.guild?.DefaultTimezone;
         let userList: string;
         let now = timezone ? moment.tz(timezone) : moment();
 
-        if (type !== 'BIRTHDAY' && (!timezone || timezone === '0')) {
+        if (type !== 'birthday' && (!timezone || timezone === '0')) {
             await InteractionUtils.send(
                 intr,
                 Lang.getErrorEmbed('validation', 'errorEmbeds.serverTimezoneNotSet', data.lang())
@@ -62,7 +62,7 @@ export class NextCommand implements Command {
         }
 
         switch (type) {
-            case 'BIRTHDAY': {
+            case 'birthday': {
                 // Next birthday
                 let users = [...intr.guild.members.cache.filter(member => !member.user.bot).keys()];
 
@@ -116,7 +116,7 @@ export class NextCommand implements Command {
                 );
                 break;
             }
-            case 'MEMBER_ANNIVERSARY': {
+            case 'member_anniversary': {
                 // TODO: fetch members?
                 // Next member anniversary
                 let guildMembers = intr.guild.members.cache
@@ -189,7 +189,7 @@ export class NextCommand implements Command {
                 );
                 break;
             }
-            case 'SERVER_ANNIVERSARY': {
+            case 'server_anniversary': {
                 // Next server anniversary
                 let serverCreatedAt = moment(intr.guild.createdAt).tz(timezone);
                 let anniversaryFormatted = serverCreatedAt.format('MMMM Do');

@@ -1,4 +1,4 @@
-import { Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { Guild, GuildMember, MessageEmbed, MessageOptions, Role, TextChannel } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database/index.js';
@@ -590,6 +590,8 @@ export class CelebrationService {
                         serverAnniversaryChannel &&
                         CelebrationUtils.isServerAnniversaryMessage(guild, guildData)
                     ) {
+                        let msgOptions: MessageOptions = {};
+
                         let serverAnniversaryMessages = guildCelebrationData.customMessages.filter(
                             message =>
                                 message.Type === 'serveranniversary' &&
@@ -618,12 +620,20 @@ export class CelebrationService {
                                     : '';
 
                             // Only send one mention string per celebration message type
-                            if (mentionString && mentionString !== '')
-                                await MessageUtils.send(serverAnniversaryChannel, mentionString);
+                            if (mentionString && mentionString !== '') {
+                                msgOptions.content = mentionString;
+                            }
+
+                            if (message instanceof MessageEmbed) {
+                                msgOptions.embeds = [message];
+                            } else {
+                                if (msgOptions.content === undefined) msgOptions.content = message;
+                                else msgOptions.content += `\n${message}`;
+                            }
 
                             await MessageUtils.sendWithDelay(
                                 serverAnniversaryChannel,
-                                message,
+                                msgOptions,
                                 Config.delays.messages
                             );
                             Logger.info(

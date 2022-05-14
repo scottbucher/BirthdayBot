@@ -5,6 +5,7 @@ import {
     NewsChannel,
     Permissions,
     TextChannel,
+    ThreadChannel,
 } from 'discord.js';
 import { createRequire } from 'node:module';
 
@@ -60,7 +61,6 @@ export class CommandUtils {
             );
             return false;
         }
-
         switch (true) {
             case !intr.inGuild(): {
                 return true;
@@ -77,7 +77,8 @@ export class CommandUtils {
 
                 // Check if the bot has all the required client permissions for this command
                 if (
-                    intr.channel instanceof GuildChannel &&
+                    (intr.channel instanceof GuildChannel ||
+                        intr.channel instanceof ThreadChannel) &&
                     !intr.channel.permissionsFor(intr.client.user).has(command.requireClientPerms)
                 ) {
                     await InteractionUtils.send(
