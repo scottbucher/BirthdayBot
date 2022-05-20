@@ -14,10 +14,10 @@ export class SubscribeCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.subscribe'),
         description: 'Subscribe to Birthday Bot Premium.',
+        dm_permission: false,
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

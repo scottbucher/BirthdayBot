@@ -13,11 +13,11 @@ export class NameFormatSubCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.nameFormat'),
         description: undefined,
+        dm_permission: false,
     };
 
     public deferType = undefined;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];

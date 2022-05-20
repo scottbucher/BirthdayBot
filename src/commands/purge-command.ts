@@ -12,10 +12,10 @@ export class PurgeCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.purge'),
         description: 'Remove your information from the database.',
+        dm_permission: true,
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

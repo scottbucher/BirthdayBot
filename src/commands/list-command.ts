@@ -19,6 +19,7 @@ export class ListCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.list'),
         description: 'View the birthday list.',
+        dm_permission: false,
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -47,7 +48,6 @@ export class ListCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

@@ -13,6 +13,7 @@ export class BlacklistCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.blacklist'),
         description: 'Manage the blacklist.',
+        dm_permission: false,
         options: [
             {
                 name: Lang.getCom('subCommands.add'),
@@ -84,7 +85,6 @@ export class BlacklistCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

@@ -13,11 +13,11 @@ export class TrustedRoleRemoveRoleSubCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('subCommands.role'),
         description: undefined,
+        dm_permission: false,
     };
 
     public deferType = undefined;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];

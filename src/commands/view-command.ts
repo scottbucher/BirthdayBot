@@ -15,6 +15,7 @@ export class ViewCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.view'),
         description: `View your, or someone else's birthday or anniversary. Or view the server's anniversary.`,
+        dm_permission: true,
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -42,7 +43,6 @@ export class ViewCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

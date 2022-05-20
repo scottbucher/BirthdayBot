@@ -53,14 +53,6 @@ export class CommandUtils {
             return false;
         }
 
-        // Check if this command is a guild only command
-        if (command.requireGuild && !intr.guild) {
-            await InteractionUtils.send(
-                intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.serverOnlyCommand', data.lang())
-            );
-            return false;
-        }
         switch (true) {
             case !intr.inGuild(): {
                 return true;

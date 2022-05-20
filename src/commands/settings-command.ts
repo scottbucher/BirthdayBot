@@ -15,6 +15,7 @@ export class SettingsCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.settings'),
         description: 'View the settings for this server.',
+        dm_permission: false,
         options: [
             {
                 name: Lang.getCom('arguments.setting'),
@@ -40,7 +41,6 @@ export class SettingsCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

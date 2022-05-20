@@ -1,24 +1,6 @@
 {
     "data": {
         "embeds": {
-            "welcome": {
-                "title": "Thank you for using {{COM:bot.name}}!",
-                "description": ["{{REF:bot.description}}"],
-                "fields": [
-                    {
-                        "name": "Important {{REF:fields.commands}}",
-                        "value": ["**/{{COM:commands.help}}** - {{REF:commandDescs.help}}"]
-                    },
-                    {
-                        "name": "{{COM:fields.links}}",
-                        "value": [
-                            "{{COM:links.docsEmbed}}",
-                            "{{COM:links.supportEmbed}}",
-                            "{{COM:links.inviteEmbed}}"
-                        ]
-                    }
-                ]
-            },
             "birthdayConfirmPurge": {
                 "title": "Clear User Data",
                 "description": "This command will remove both your time zone and your birthday from the database. [(?)]({{COM:docLinks.whyDoesItNeedMyTimezone}})",

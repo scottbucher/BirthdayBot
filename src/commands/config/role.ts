@@ -17,11 +17,11 @@ export class RoleSubCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.role'),
         description: undefined,
+        dm_permission: false,
     };
 
     public deferType = undefined;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL', 'MANAGE_ROLES'];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];

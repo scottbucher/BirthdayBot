@@ -10,7 +10,6 @@ export interface Command {
     cooldown?: RateLimiter;
     deferType: CommandDeferType;
     requireDev: boolean;
-    requireGuild: boolean;
     requireClientPerms: PermissionString[];
     requireUserPerms: PermissionString[];
     requireRole: CustomRole[];

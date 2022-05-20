@@ -13,6 +13,7 @@ export class TrustedRoleCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.trustedRole'),
         description: 'Manage the Trusted Roles. (Premium servers can have multiple trusted roles)',
+        dm_permission: false,
         options: [
             {
                 name: Lang.getCom('subCommands.add'),
@@ -86,7 +87,6 @@ export class TrustedRoleCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

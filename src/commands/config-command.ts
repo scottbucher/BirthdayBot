@@ -13,6 +13,7 @@ export class ConfigCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.config'),
         description: 'Manage config settings.',
+        dm_permission: false,
         options: [
             {
                 name: Lang.getCom('arguments.setting'),
@@ -68,7 +69,6 @@ export class ConfigCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

@@ -18,24 +18,6 @@
                 },
                 "timestamp": true
             },
-            "welcome": {
-                "title": "Thank you for using {{COM:bot.name}}!",
-                "description": ["{{REF:bot.description}}"],
-                "fields": [
-                    {
-                        "name": "Important {{REF:fields.commands}}",
-                        "value": ["**/{{COM:commands.help}}** - {{REF:commandDescs.help}}"]
-                    },
-                    {
-                        "name": "Links",
-                        "value": [
-                            "{{COM:links.docsEmbed}}",
-                            "{{COM:links.supportEmbed}}",
-                            "{{COM:links.inviteEmbed}}"
-                        ]
-                    }
-                ]
-            },
             "info": {
                 "title": "{{COM:bot.name}} - Info",
                 "fields": [

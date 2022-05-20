@@ -13,6 +13,7 @@ export class LinkCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.link'),
         description: 'Useful links for the bot.',
+        dm_permission: true,
         options: [
             {
                 name: Lang.getCom('commands.link'),
@@ -54,7 +55,6 @@ export class LinkCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

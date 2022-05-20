@@ -15,6 +15,7 @@ export class NextCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.next'),
         description: 'View the next event date. Defaults to birthday.',
+        dm_permission: false,
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -40,7 +41,6 @@ export class NextCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

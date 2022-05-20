@@ -13,6 +13,7 @@ export class MemberAnniversaryRoleCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.mar'),
         description: '[Premium Feature] Manage the Member Anniversary Roles.',
+        dm_permission: false,
         options: [
             {
                 name: Lang.getCom('subCommands.add'),
@@ -72,7 +73,6 @@ export class MemberAnniversaryRoleCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];

@@ -39,6 +39,7 @@ export class TestCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.test'),
         description: 'View the next event date. Defaults to birthday.',
+        dm_permission: false,
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -80,7 +81,6 @@ export class TestCommand implements Command {
     public cooldown = new RateLimiter(1, 5000);
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];

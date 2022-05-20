@@ -25,11 +25,11 @@ export class ChannelSubCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.channel'),
         description: undefined,
+        dm_permission: false,
     };
 
     public deferType = undefined;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL', 'MANAGE_CHANNELS'];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];

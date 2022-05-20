@@ -14,6 +14,7 @@ export class SetAttemptsCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.setAttempts'),
         description: 'Set the attempts for a user. (Birthday bot staff only command)',
+        dm_permission: false,
         options: [
             {
                 name: Lang.getCom('arguments.user'),
@@ -33,7 +34,6 @@ export class SetAttemptsCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = true;
-    public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
     public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
