@@ -40,7 +40,7 @@ export class CommandUtils {
                         INTERVAL: FormatUtils.duration(command.cooldown.interval, data.lang()),
                     })
                 );
-                return;
+                return false;
             }
         }
 
