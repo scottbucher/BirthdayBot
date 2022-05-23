@@ -9,7 +9,6 @@ export interface Command {
     metadata: RESTPostAPIChatInputApplicationCommandsJSONBody;
     cooldown?: RateLimiter;
     deferType: CommandDeferType;
-    requireDev: boolean;
     requireClientPerms: PermissionString[];
     requireRole: CustomRole[];
     requireSetup: boolean;

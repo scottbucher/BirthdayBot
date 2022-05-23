@@ -1,7 +1,6 @@
 export { BlacklistCommand } from './blacklist-command.js';
 export { Command, CommandDeferType } from './command.js';
 export { ConfigCommand } from './config-command.js';
-export { DevCommand } from './dev-command.js';
 export { DonateCommand } from './donate-command.js';
 export { HelpCommand } from './help-command.js';
 export { InfoCommand } from './info-command.js';

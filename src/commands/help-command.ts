@@ -50,12 +50,15 @@ export class HelpCommand implements Command {
                         name: 'premium',
                         value: 'PREMIUM',
                     },
+                    {
+                        name: 'permissions',
+                        value: 'permissions',
+                    },
                 ],
             },
         ],
     };
     public deferType = CommandDeferType.PUBLIC;
-    public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
@@ -114,6 +117,10 @@ export class HelpCommand implements Command {
                     BOT: intr.client.user.toString(),
                     ICON: intr.client.user.displayAvatarURL(),
                 });
+                break;
+            }
+            case 'permissions': {
+                embed = Lang.getEmbed('info', 'help.permissions', data.lang());
                 break;
             }
             default: {

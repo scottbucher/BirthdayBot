@@ -232,7 +232,7 @@
             }
         },
         "errorEmbeds": {
-            "devOnlyCommand": "This command can only be used by developers.",
+            "devOnly": "This action can only be done by developers.",
             "serverOnlyCommand": "This command can only be used in a server.",
             "missingUserPerms": "You don't have permission to run that command!",
             "birthdayNotSet": "{{USER}} hasn't set their birthday!",

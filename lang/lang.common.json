@@ -5,7 +5,6 @@
         "author": "Scott Bucher"
     },
     "commands": {
-        "dev": "dev",
         "help": "help",
         "info": "info",
         "link": "link",
@@ -79,7 +78,8 @@
         "timezone": "timezone",
         "userCount": "user_count",
         "category": "category",
-        "link": "link"
+        "link": "link",
+        "option": "option"
     },
     "settingType": {
         "nameFormat": "nameFormat",

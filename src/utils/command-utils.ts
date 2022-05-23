@@ -14,8 +14,7 @@ import { Lang } from '../services/index.js';
 import { FormatUtils, InteractionUtils, TimeUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
-let Config = require('../../config/config.json');
-
+let Config = require('../config/config.json');
 export class CommandUtils {
     public static findCommand(commands: Command[], input: string): Command {
         return commands.find(command => command.metadata.name === input);
@@ -38,15 +37,6 @@ export class CommandUtils {
                 );
                 return false;
             }
-        }
-
-        // Check if this command is a developer only command
-        if (command.requireDev && !Config.developers.includes(intr.user.id)) {
-            await InteractionUtils.send(
-                intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.devOnlyCommand', data.lang())
-            );
-            return false;
         }
 
         switch (true) {

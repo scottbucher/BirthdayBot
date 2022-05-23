@@ -39,7 +39,6 @@ import {
     BlacklistCommand,
     Command,
     ConfigCommand,
-    DevCommand,
     DonateCommand,
     HelpCommand,
     InfoCommand,
@@ -271,7 +270,6 @@ async function start(): Promise<void> {
         new VoteCommand(),
         new DonateCommand(),
         new LogoCommand(),
-        new DevCommand(),
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Buttons

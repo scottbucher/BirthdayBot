@@ -154,6 +154,16 @@
             }
         },
         "help": {
+            "permissions": {
+                "title": "{{COM:bot.name}} - Permissions",
+                "description": "Want to restrict commands to certain roles, users, or channels? Set up permissions under the bot's **Integration** page in the Server Settings (or simply right-click the bot and select **Manage Integration**).",
+                "fields": [
+                    {
+                        "name": "{{REF:fields.links}}",
+                        "value": ["{{COM:links.docsEmbed}}", "{{COM:links.supportEmbed}}"]
+                    }
+                ]
+            },
             "general": {
                 "title": "{{COM:bot.name}} General Help",
                 "description": [
