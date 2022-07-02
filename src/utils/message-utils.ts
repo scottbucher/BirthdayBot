@@ -156,18 +156,6 @@ export class MessageUtils {
         }
     }
 
-    public static messageOptions(content: string | MessageEmbed | MessageOptions): MessageOptions {
-        let options: MessageOptions = {};
-        if (typeof content === 'string') {
-            options.content = content;
-        } else if (content instanceof MessageEmbed) {
-            options.embeds = [content];
-        } else {
-            options = content;
-        }
-        return options;
-    }
-
     // From pre-update, determine if this is still valid
     public static async sendWithDelay(
         target: User | TextBasedChannel,
@@ -176,8 +164,13 @@ export class MessageUtils {
     ): Promise<Message> {
         delay = Config.delays.enabled ? delay : 0;
         try {
-            let msgOptions = this.messageOptions(content);
-            await target.send(msgOptions);
+            let options: MessageOptions =
+                typeof content === 'string'
+                    ? { content }
+                    : content instanceof MessageEmbed
+                    ? { embeds: [content] }
+                    : content;
+            await target.send(options);
             await TimeUtils.sleep(delay ?? 0);
             return;
         } catch (error) {

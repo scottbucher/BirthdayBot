@@ -2,8 +2,8 @@ import {
     ChatInputApplicationCommandData,
     CommandInteraction,
     GuildMember,
+    InteractionReplyOptions,
     MessageEmbed,
-    MessageOptions,
     PermissionString,
 } from 'discord.js';
 import moment from 'moment';
@@ -58,7 +58,7 @@ export class MessageTestSubCommand implements Command {
             : await this.customMessageRepo.getCustomMessages(intr.guild.id, databaseType);
 
         let message: CustomMessage;
-        let msgOptions: MessageOptions = {};
+        let msgOptions: InteractionReplyOptions = {};
         let mentionString = CelebrationUtils.getMentionString(data.guild, intr.guild, type);
 
         if (mentionString && mentionString !== '') msgOptions.content = mentionString;
