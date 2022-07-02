@@ -1,5 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
-import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import {
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import { CommandInteraction, PermissionString } from 'discord.js';
 import moment from 'moment';
 
 import { EventData } from '../models/index.js';
@@ -9,7 +12,7 @@ import { CelebrationUtils, InteractionUtils, TimeUtils } from '../utils/index.js
 import { Command, CommandDeferType } from './index.js';
 
 export class NextCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.next'),
         description: 'View the next event date. Defaults to birthday.',
         options: [

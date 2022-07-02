@@ -1,9 +1,5 @@
-import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    Message,
-    PermissionString,
-} from 'discord.js';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { CommandInteraction, Message, PermissionString } from 'discord.js';
 
 import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
@@ -14,7 +10,7 @@ import { Command } from '../index.js';
 
 export class NameFormatSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.nameFormat'),
         description: undefined,
     };

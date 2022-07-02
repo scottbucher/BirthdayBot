@@ -1,4 +1,4 @@
-import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v9';
+import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v10';
 import {
     DiscordAPIError,
     EmojiResolvable,

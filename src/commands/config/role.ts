@@ -1,11 +1,5 @@
-import {
-    ButtonInteraction,
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    Message,
-    PermissionString,
-    Role,
-} from 'discord.js';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { ButtonInteraction, CommandInteraction, Message, PermissionString, Role } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { CustomRole } from '../../enums/index.js';
@@ -20,7 +14,7 @@ let Config = require('../../../config/config.json');
 
 export class RoleSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.role'),
         description: undefined,
     };

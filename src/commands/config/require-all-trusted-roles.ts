@@ -1,9 +1,5 @@
-import {
-    ButtonInteraction,
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    PermissionString,
-} from 'discord.js';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { ButtonInteraction, CommandInteraction, PermissionString } from 'discord.js';
 
 import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
@@ -13,7 +9,7 @@ import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 export class RequireAllTrustedRolesSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.requireAllTrustedRoles'),
         description: undefined,
     };

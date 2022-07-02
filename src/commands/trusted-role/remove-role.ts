@@ -1,9 +1,5 @@
-import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    PermissionString,
-    Role,
-} from 'discord.js';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { CommandInteraction, PermissionString, Role } from 'discord.js';
 
 import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
@@ -14,7 +10,7 @@ import { Command } from '../index.js';
 
 export class TrustedRoleRemoveRoleSubCommand implements Command {
     constructor(public trustedRoleRepo: TrustedRoleRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('subCommands.role'),
         description: undefined,
     };

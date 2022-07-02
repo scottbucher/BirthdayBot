@@ -1,9 +1,5 @@
-import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    PermissionString,
-    Role,
-} from 'discord.js';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { CommandInteraction, PermissionString, Role } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { CustomRole } from '../../enums/index.js';
@@ -17,7 +13,7 @@ const require = createRequire(import.meta.url);
 let Config = require('../../../config/config.json');
 export class TrustedRoleAddSubCommand implements Command {
     constructor(public trustedRoleRepo: TrustedRoleRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('subCommands.add'),
         description: undefined,
     };

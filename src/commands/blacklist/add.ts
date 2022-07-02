@@ -1,11 +1,5 @@
-import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    GuildMember,
-    PermissionString,
-    Role,
-    User,
-} from 'discord.js';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { CommandInteraction, GuildMember, PermissionString, Role, User } from 'discord.js';
 
 import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
@@ -16,7 +10,7 @@ import { Command } from '../index.js';
 
 export class BlacklistAddSubCommand implements Command {
     constructor(public blacklistRepo: BlacklistRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('subCommands.add'),
         description: undefined,
     };

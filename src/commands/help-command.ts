@@ -1,10 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    MessageEmbed,
-    PermissionString,
-} from 'discord.js';
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import { CommandInteraction, MessageEmbed, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
@@ -12,7 +10,7 @@ import { InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class HelpCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.help'),
         description: 'The help command.',
         options: [

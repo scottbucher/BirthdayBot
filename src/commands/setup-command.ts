@@ -1,11 +1,5 @@
-import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    Message,
-    PermissionString,
-    Role,
-    TextBasedChannel,
-} from 'discord.js';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { CommandInteraction, Message, PermissionString, Role, TextBasedChannel } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { CustomRole } from '../enums/index.js';
@@ -19,7 +13,7 @@ import { Command, CommandDeferType } from './index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class SetupCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.setup'),
         description: 'Run the initial setup processes.',
     };

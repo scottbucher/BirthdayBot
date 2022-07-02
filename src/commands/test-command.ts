@@ -1,6 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import {
-    ChatInputApplicationCommandData,
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import {
     CommandInteraction,
     GuildMember,
     MessageEmbed,
@@ -34,7 +36,7 @@ import { Command, CommandDeferType } from './index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class TestCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.test'),
         description: 'View the next event date. Defaults to birthday.',
         options: [

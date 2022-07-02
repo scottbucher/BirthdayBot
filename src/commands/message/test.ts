@@ -1,5 +1,5 @@
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
-    ChatInputApplicationCommandData,
     CommandInteraction,
     GuildMember,
     InteractionReplyOptions,
@@ -22,7 +22,7 @@ let Config = require('../../../config/config.json');
 
 export class MessageTestSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('subCommands.test'),
         description: undefined,
     };

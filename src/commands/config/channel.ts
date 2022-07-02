@@ -1,6 +1,6 @@
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
     ButtonInteraction,
-    ChatInputApplicationCommandData,
     CommandInteraction,
     Message,
     PermissionString,
@@ -22,7 +22,7 @@ import { Command } from '../index.js';
 
 export class ChannelSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.channel'),
         description: undefined,
     };
