@@ -17,8 +17,6 @@ export class RoleSubCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.role'),
         description: undefined,
-        dm_permission: false,
-        default_member_permissions: undefined,
     };
 
     public deferType = undefined;

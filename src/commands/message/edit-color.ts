@@ -14,8 +14,6 @@ export class MessageEditColorSubCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('subCommands.color'),
         description: undefined,
-        dm_permission: false,
-        default_member_permissions: undefined,
     };
 
     public deferType = undefined;

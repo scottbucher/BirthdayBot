@@ -14,8 +14,6 @@ export class MessageRemoveSubCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('subCommands.remove'),
         description: undefined,
-        dm_permission: false,
-        default_member_permissions: undefined,
     };
 
     public deferType = undefined;

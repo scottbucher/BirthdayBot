@@ -15,8 +15,6 @@ export class MessageSettingMentionSubCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('subCommands.mention'),
         description: undefined,
-        dm_permission: false,
-        default_member_permissions: undefined,
     };
 
     public deferType = undefined;
