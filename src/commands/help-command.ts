@@ -24,31 +24,31 @@ export class HelpCommand implements Command {
                 choices: [
                     {
                         name: 'general',
-                        value: 'GENERAL',
+                        value: 'general',
                     },
                     {
                         name: 'blacklist',
-                        value: 'BLACKLIST',
+                        value: 'blacklist',
                     },
                     {
                         name: 'config',
-                        value: 'CONFIG',
+                        value: 'config',
                     },
                     {
                         name: 'message',
-                        value: 'MESSAGE',
+                        value: 'message',
                     },
                     {
                         name: 'trusted_role',
-                        value: 'TRUSTED_ROLE',
+                        value: 'trusted_role',
                     },
                     {
                         name: 'member_anniversary_role',
-                        value: 'MEMBER_ANNIVERSARY_ROLE',
+                        value: 'member_anniversary_role',
                     },
                     {
                         name: 'premium',
-                        value: 'PREMIUM',
+                        value: 'premium',
                     },
                     {
                         name: 'permissions',
@@ -66,8 +66,7 @@ export class HelpCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let link =
-            intr.options.getString(Lang.getCom('arguments.category'))?.toLowerCase() ?? 'general';
+        let link = intr.options.getString(Lang.getCom('arguments.category')) ?? 'general';
         let embed: MessageEmbed;
         switch (link) {
             case 'general': {
