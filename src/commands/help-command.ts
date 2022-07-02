@@ -14,6 +14,7 @@ export class HelpCommand implements Command {
         name: Lang.getCom('commands.help'),
         description: 'The help command.',
         dm_permission: true,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('arguments.category'),
@@ -56,7 +57,6 @@ export class HelpCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = false;

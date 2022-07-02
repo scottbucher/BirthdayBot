@@ -20,6 +20,7 @@ export class ListCommand implements Command {
         name: Lang.getCom('commands.list'),
         description: 'View the birthday list.',
         dm_permission: false,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -49,7 +50,6 @@ export class ListCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = true;

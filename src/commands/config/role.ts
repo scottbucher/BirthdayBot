@@ -18,12 +18,12 @@ export class RoleSubCommand implements Command {
         name: Lang.getCom('settingType.role'),
         description: undefined,
         dm_permission: false,
+        default_member_permissions: undefined,
     };
 
     public deferType = undefined;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL', 'MANAGE_ROLES'];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;

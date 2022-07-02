@@ -23,6 +23,7 @@ export class SetCommand implements Command {
         name: Lang.getCom('commands.set'),
         description: 'Set your birthday',
         dm_permission: true,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('arguments.date'),
@@ -49,7 +50,6 @@ export class SetCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = false;

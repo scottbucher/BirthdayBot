@@ -14,12 +14,12 @@ export class TrustedRoleRemoveRoleSubCommand implements Command {
         name: Lang.getCom('subCommands.role'),
         description: undefined,
         dm_permission: false,
+        default_member_permissions: undefined,
     };
 
     public deferType = undefined;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;

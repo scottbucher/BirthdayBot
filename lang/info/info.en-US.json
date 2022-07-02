@@ -186,6 +186,12 @@
                     {
                         "name": "Legend",
                         "value": "** = Server Only Command"
+                    },
+                    {
+                        "name": "Permissions",
+                        "value": [
+                            "Want to restrict commands to certain roles, users, or channels? Set up permissions under the bot's **Integration** page in the Server Settings (or simply right-click the bot and select **Manage Integration**)."
+                        ]
                     }
                 ],
                 "footer": {

@@ -15,11 +15,11 @@ export class SubscribeCommand implements Command {
         name: Lang.getCom('commands.subscribe'),
         description: 'Subscribe to Birthday Bot Premium.',
         dm_permission: false,
+        default_member_permissions: undefined,
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = false;

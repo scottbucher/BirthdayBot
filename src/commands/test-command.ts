@@ -7,6 +7,7 @@ import {
     GuildMember,
     MessageEmbed,
     MessageOptions,
+    Permissions,
     PermissionString,
     Role,
     TextChannel,
@@ -40,6 +41,9 @@ export class TestCommand implements Command {
         name: Lang.getCom('commands.test'),
         description: 'View the next event date. Defaults to birthday.',
         dm_permission: false,
+        default_member_permissions: Permissions.resolve([
+            Permissions.FLAGS.ADMINISTRATOR,
+        ]).toString(),
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -82,7 +86,6 @@ export class TestCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;

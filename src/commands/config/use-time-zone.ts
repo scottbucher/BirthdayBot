@@ -14,12 +14,12 @@ export class UseTimezoneSubCommand implements Command {
         name: Lang.getCom('settingType.useTimezone'),
         description: undefined,
         dm_permission: false,
+        default_member_permissions: undefined,
     };
 
     public deferType = undefined;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;

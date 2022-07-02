@@ -16,6 +16,7 @@ export class NextCommand implements Command {
         name: Lang.getCom('commands.next'),
         description: 'View the next event date. Defaults to birthday.',
         dm_permission: false,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -42,7 +43,6 @@ export class NextCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = true;

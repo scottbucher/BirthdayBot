@@ -15,11 +15,11 @@ export class PremiumCommand implements Command {
         name: Lang.getCom('commands.premium'),
         description: 'View information about premium, or about your current premium subscription.',
         dm_permission: true,
+        default_member_permissions: undefined,
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = false;

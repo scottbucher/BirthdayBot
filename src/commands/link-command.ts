@@ -14,6 +14,7 @@ export class LinkCommand implements Command {
         name: Lang.getCom('commands.link'),
         description: 'Useful links for the bot.',
         dm_permission: true,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('commands.link'),
@@ -56,7 +57,6 @@ export class LinkCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = false;

@@ -11,11 +11,11 @@ export class LogoCommand implements Command {
         name: Lang.getCom('commands.logo'),
         description: 'Information on the Birthday Bot logo competition.',
         dm_permission: true,
+        default_member_permissions: undefined,
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = false;

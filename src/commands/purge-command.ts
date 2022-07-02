@@ -13,11 +13,11 @@ export class PurgeCommand implements Command {
         name: Lang.getCom('commands.purge'),
         description: 'Remove your information from the database.',
         dm_permission: true,
+        default_member_permissions: undefined,
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = false;

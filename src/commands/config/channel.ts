@@ -26,12 +26,12 @@ export class ChannelSubCommand implements Command {
         name: Lang.getCom('settingType.channel'),
         description: undefined,
         dm_permission: false,
+        default_member_permissions: undefined,
     };
 
     public deferType = undefined;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL', 'MANAGE_CHANNELS'];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;

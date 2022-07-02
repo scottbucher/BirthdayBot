@@ -11,7 +11,6 @@ export interface Command {
     deferType: CommandDeferType;
     requireDev: boolean;
     requireClientPerms: PermissionString[];
-    requireUserPerms: PermissionString[];
     requireRole: CustomRole[];
     requireSetup: boolean;
     requireVote: boolean;

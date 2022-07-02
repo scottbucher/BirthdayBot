@@ -11,11 +11,11 @@ export class InfoCommand implements Command {
         name: Lang.getCom('commands.info'),
         description: 'Information about the bot.',
         dm_permission: true,
+        default_member_permissions: undefined,
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [];
     public requireSetup = false;
     public requireVote = false;

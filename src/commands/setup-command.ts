@@ -1,5 +1,12 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import { CommandInteraction, Message, PermissionString, Role, TextBasedChannel } from 'discord.js';
+import {
+    CommandInteraction,
+    Message,
+    Permissions,
+    PermissionString,
+    Role,
+    TextBasedChannel,
+} from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { CustomRole } from '../enums/index.js';
@@ -17,6 +24,9 @@ export class SetupCommand implements Command {
         name: Lang.getCom('commands.setup'),
         description: 'Run the initial setup processes.',
         dm_permission: false,
+        default_member_permissions: Permissions.resolve([
+            Permissions.FLAGS.ADMINISTRATOR,
+        ]).toString(),
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
@@ -25,7 +35,6 @@ export class SetupCommand implements Command {
         'MANAGE_CHANNELS',
         'MANAGE_ROLES',
     ];
-    public requireUserPerms: PermissionString[] = [];
     public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = false;
     public requireVote = false;
