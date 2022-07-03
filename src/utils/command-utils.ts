@@ -14,7 +14,7 @@ import { Lang } from '../services/index.js';
 import { FormatUtils, InteractionUtils, TimeUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
-let Config = require('../config/config.json');
+let Config = require('../../config/config.json');
 export class CommandUtils {
     public static findCommand(commands: Command[], input: string): Command {
         return commands.find(command => command.metadata.name === input);
