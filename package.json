@@ -36,11 +36,11 @@
     },
     "dependencies": {
         "@discordjs/rest": "0.5.0",
-        "chrono-node": "^2.3.8",
+        "chrono-node": "^2.3.9",
         "class-transformer": "0.5.1",
         "class-validator": "0.13.2",
         "color-name-list": "^9.17.0",
-        "discord.js-collector-utils": "^1.5.3",
+        "discord.js-collector-utils": "^1.6.0",
         "luxon": "2.4.0",
         "moment": "^2.29.3",
         "moment-timezone": "^0.5.34",
