@@ -6,12 +6,8 @@ import {
     Permissions,
     ThreadChannel,
 } from 'discord.js';
-import { createRequire } from 'node:module';
 
 import { GuildData } from '../models/database/index.js';
-
-const require = createRequire(import.meta.url);
-let Config = require('../../config/config.json');
 export class PermissionUtils {
     public static canSend(channel: AnyChannel, embedLinks: boolean = true): boolean {
         if (channel instanceof DMChannel) {
@@ -104,29 +100,6 @@ export class PermissionUtils {
         } else {
             return false;
         }
-    }
-
-    public static hasPermission(member: GuildMember, guildData: GuildData): boolean {
-        // Developers, server owners, and members with "Manage Server" have permission for all commands
-        if (
-            member.guild.ownerId === member.id ||
-            member.permissions.has(Permissions.FLAGS.MANAGE_GUILD) ||
-            Config.support.owners.includes(member.id)
-        ) {
-            return true;
-        }
-
-        if (guildData) {
-            // Check if member has a required role
-            let memberRoles = member.roles.cache.map(role => role.id);
-            if (
-                guildData.BirthdayMasterRoleDiscordId &&
-                memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
-            ) {
-                return true;
-            }
-        }
-        return true;
     }
 
     public static hasSubCommandPermission(member: GuildMember, guildData: GuildData): boolean {
