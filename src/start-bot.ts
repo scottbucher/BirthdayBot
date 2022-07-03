@@ -56,6 +56,7 @@ import {
     SettingsCommand,
     SetupCommand,
     SubscribeCommand,
+    SuggestCommand,
     TestCommand,
     TrustedRoleCommand,
     ViewCommand,
@@ -270,6 +271,7 @@ async function start(): Promise<void> {
         new VoteCommand(),
         new DonateCommand(),
         new LogoCommand(),
+        new SuggestCommand(guildRepo, userRepo),
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Buttons

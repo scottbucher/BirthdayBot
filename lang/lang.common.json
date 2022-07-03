@@ -30,7 +30,8 @@
         "list": "list",
         "map": "map",
         "donate": "donate",
-        "logo": "logo"
+        "logo": "logo",
+        "suggest": "suggest"
     },
     "subCommands": {
         "add": "add",

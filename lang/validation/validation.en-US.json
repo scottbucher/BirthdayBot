@@ -238,8 +238,6 @@
             "birthdayNotSet": "{{USER}} hasn't set their birthday!",
             "viewUserInDm": "You cannot request another user's information in a DM!",
             "memberAnniversaryInDM": "You cannot view member anniversaries in a DM!",
-            "suggestBirthdayInDM": "You can't set another person's birthday in a DM!",
-            "cantSuggest": "You don't have permission to suggest another user's birthday!",
             "cantSuggestForBot": "You can't suggest a birthday for a bot!",
             "invalidBirthday": "Invalid birthday!",
             "noBirthdaysInServer": "No one has set their birthday in this server! :(",
