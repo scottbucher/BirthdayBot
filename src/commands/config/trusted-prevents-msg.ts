@@ -42,7 +42,7 @@ export class TrustedPreventsMsgSubCommand implements Command {
             result.intr,
             Lang.getSuccessEmbed(
                 'results',
-                result
+                result.value
                     ? 'successEmbeds.trustedPreventsMessageYes'
                     : 'successEmbeds.trustedPreventsMessageNo',
                 data.lang()

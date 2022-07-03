@@ -42,7 +42,7 @@ export class TrustedPreventsRoleSubCommand implements Command {
             result.intr,
             Lang.getSuccessEmbed(
                 'results',
-                result
+                result.value
                     ? 'successEmbeds.trustedPreventsRoleYes'
                     : 'successEmbeds.trustedPreventsRoleNo',
                 data.lang()

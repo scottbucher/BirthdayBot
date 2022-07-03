@@ -41,7 +41,9 @@ export class RequireAllTrustedRolesSubCommand implements Command {
             result.intr,
             Lang.getSuccessEmbed(
                 'results',
-                result ? 'successEmbeds.requireAllTrustedYes' : 'successEmbeds.requireAllTrustedNo',
+                result.value
+                    ? 'successEmbeds.requireAllTrustedYes'
+                    : 'successEmbeds.requireAllTrustedNo',
                 data.lang()
             )
         );
