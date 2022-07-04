@@ -7,7 +7,6 @@ import {
     TextBasedChannel,
 } from 'discord.js';
 
-import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -30,7 +29,6 @@ export class ChannelSubCommand implements Command {
     public deferType = undefined;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL', 'MANAGE_CHANNELS'];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

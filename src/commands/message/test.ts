@@ -9,7 +9,6 @@ import {
 import moment from 'moment';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../../enums/index.js';
 import { CustomMessage } from '../../models/database/index.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
@@ -30,7 +29,6 @@ export class MessageTestSubCommand implements Command {
     public deferType = undefined;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

@@ -141,7 +141,6 @@ export class SettingsCommand implements Command {
             );
         } else if (type === 'ADVANCED') {
             // advanced settings
-            let birthdayMasterRole: string;
             let preventsRole = Lang.getRef(
                 'info',
                 'boolean.' + (data.guild.TrustedPreventsRole ? 'true' : 'false'),
@@ -158,11 +157,6 @@ export class SettingsCommand implements Command {
                 data.lang()
             );
             let useTimezone = Lang.getRef('info', 'terms.' + data.guild.UseTimezone, data.lang());
-            birthdayMasterRole =
-                data.guild.BirthdayMasterRoleDiscordId === '0'
-                    ? Lang.getRef('info', 'terms.notSet', data.lang())
-                    : guild.roles.resolve(data.guild.BirthdayMasterRoleDiscordId)?.toString() ||
-                      `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
 
             let dateFormat = data.guild.DateFormat === 'month_day' ? 'Month/Day' : 'Day/Month';
 
@@ -173,7 +167,6 @@ export class SettingsCommand implements Command {
                 intr,
                 Lang.getEmbed('info', 'settings.advanced', data.lang(), {
                     SERVER_NAME: guild.name,
-                    BIRTHDAY_MASTER_ROLE: birthdayMasterRole,
                     TRUSTED_PREVENTS_ROLE: preventsRole,
                     TRUSTED_PREVENTS_MESSAGE: preventsMessage,
                     REQUIRE_ALL_TRUSTED_ROLES: requireAllTrustedRoles,

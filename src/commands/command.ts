@@ -2,7 +2,6 @@ import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-typ
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
 
-import { CustomRole } from '../enums/index.js';
 import { EventData } from '../models/index.js';
 
 export interface Command {
@@ -10,7 +9,6 @@ export interface Command {
     cooldown?: RateLimiter;
     deferType: CommandDeferType;
     requireClientPerms: PermissionString[];
-    requireRole: CustomRole[];
     requireSetup: boolean;
     requireVote: boolean;
     requirePremium: boolean;

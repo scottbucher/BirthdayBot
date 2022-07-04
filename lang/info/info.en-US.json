@@ -379,11 +379,6 @@
                 "title": "{{SERVER_NAME}}'s Advanced Settings",
                 "fields": [
                     {
-                        "name": "{{REF:terms.birthdayMasterRole}}",
-                        "value": "{{BIRTHDAY_MASTER_ROLE}}",
-                        "inline": true
-                    },
-                    {
                         "name": "{{REF:terms.dateFormat}}",
                         "value": "{{DATE_FORMAT}}",
                         "inline": true
@@ -991,8 +986,7 @@
             "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",
             "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
             "serverAnniversaryChannelName": "{{COM:emotes.party}} server anniversaries",
-            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
-            "birthdayMasterRoleName": "Birthday Master"
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
         },
         "permissions": {
             "ADD_REACTIONS": "Add Reactions",
@@ -1105,14 +1099,12 @@
         },
         "types": {
             "birthday": "birthday",
-            "birthdayMaster": "birthdayMaster",
             "memberAnniversary": "memberAnniversary",
             "serverAnniversary": "serverAnniversary",
             "userSpecificBirthday": "userSpecificBirthday",
             "userSpecificMemberAnniversary": "userSpecificMemberAnniversary",
             "channel": "channel",
             "birthdayRole": "role",
-            "birthdayMasterRole": "birthdayMasterRole",
             "nameFormat": "nameFormat",
             "timezone": "timezone",
             "useTimezone": "useTimezone",
@@ -1227,7 +1219,6 @@
             "server": "Server",
             "birthdayChannel": "Birthday Channel",
             "birthdayRole": "Birthday Role",
-            "birthdayMasterRole": "Birthday Master Role",
             "trustedPreventsRole": "Trusted Prevents Role",
             "trustedPreventsMessage": "Trusted Prevents Message",
             "requireAllTrustedRoles": "Require All Trusted Roles",
@@ -1247,9 +1238,7 @@
             "serverLanguage": "Server Language",
             "never": "Never",
             "mmdd": "MM/DD",
-            "ddmm": "DD/MM",
-            "birthdayMaster": "Birthday Master",
-            "master": "Master"
+            "ddmm": "DD/MM"
         }
     }
 }

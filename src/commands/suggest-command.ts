@@ -3,7 +3,7 @@ import {
     ApplicationCommandOptionType,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { ButtonInteraction, CommandInteraction, Permissions, PermissionString } from 'discord.js';
+import { ButtonInteraction, CommandInteraction, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
@@ -18,9 +18,7 @@ export class SuggestCommand implements Command {
         description:
             'Suggest a birthday for another user. They will have to confirm the information.',
         dm_permission: false,
-        default_member_permissions: Permissions.resolve([
-            Permissions.FLAGS.ADMINISTRATOR,
-        ]).toString(),
+        default_member_permissions: '0',
         options: [
             {
                 name: Lang.getCom('arguments.user'),

@@ -159,20 +159,6 @@ export class FormatUtils {
         }
     }
 
-    public static extractRoleType(type: string): string {
-        switch (type) {
-            case Lang.getRef('info', 'types.birthday', LangCode.EN_US).toLowerCase():
-                return 'birthday';
-
-            case Lang.getRef('info', 'types.birthdayMaster', LangCode.EN_US).toLowerCase():
-            case Lang.getRef('info', 'terms.birthdayMaster', LangCode.EN_US).toLowerCase():
-            case Lang.getRef('info', 'terms.master', LangCode.EN_US).toLowerCase():
-                return 'birthdayMaster';
-            default:
-                return null;
-        }
-    }
-
     public static extractDateFormatType(type: string): string {
         switch (type) {
             case Lang.getRef('info', 'types.monthDay', LangCode.EN_US).toLowerCase() || 'mm/dd':

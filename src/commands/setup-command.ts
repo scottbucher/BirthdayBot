@@ -9,7 +9,6 @@ import {
 } from 'discord.js';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../enums/index.js';
 import { EventData } from '../models/index.js';
 import { GuildRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
@@ -35,7 +34,6 @@ export class SetupCommand implements Command {
         'MANAGE_CHANNELS',
         'MANAGE_ROLES',
     ];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

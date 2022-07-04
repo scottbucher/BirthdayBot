@@ -1,13 +1,5 @@
-import {
-    AnyChannel,
-    DMChannel,
-    GuildChannel,
-    GuildMember,
-    Permissions,
-    ThreadChannel,
-} from 'discord.js';
+import { AnyChannel, DMChannel, GuildChannel, Permissions, ThreadChannel } from 'discord.js';
 
-import { GuildData } from '../models/database/index.js';
 export class PermissionUtils {
     public static canSend(channel: AnyChannel, embedLinks: boolean = true): boolean {
         if (channel instanceof DMChannel) {
@@ -102,21 +94,6 @@ export class PermissionUtils {
         }
     }
 
-    public static hasSubCommandPermission(member: GuildMember, guildData: GuildData): boolean {
-        if (member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return true;
-
-        if (guildData) {
-            // Check if member has a required role
-            let memberRoles = member.roles.cache.map(role => role.id);
-            if (
-                guildData.BirthdayMasterRoleDiscordId &&
-                memberRoles.includes(guildData.BirthdayMasterRoleDiscordId)
-            ) {
-                return true;
-            }
-        }
-        return false;
-    }
     public static canCreateThreads(channel: AnyChannel, manageThreads: boolean = false): boolean {
         if (channel instanceof DMChannel) {
             return false;

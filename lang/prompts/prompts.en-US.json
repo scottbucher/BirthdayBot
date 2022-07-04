@@ -281,21 +281,6 @@
                 },
                 "timestamp": true
             },
-            "roleType": {
-                "title": "Role Type",
-                "description": [
-                    "Which type of role are you setting?",
-                    "",
-                    "Please enter one of the options listed below:",
-                    "",
-                    "`Birthday` - The role users get on their birthday.",
-                    "`Birthday Master` - The role which allows users to use admin commands."
-                ],
-                "footer": {
-                    "text": "{{REF:footers.expire}}"
-                },
-                "timestamp": true
-            },
             "role": {
                 "title": "Configure the {{TYPE}} Role",
                 "description": [

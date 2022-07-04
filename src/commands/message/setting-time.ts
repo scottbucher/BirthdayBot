@@ -1,7 +1,6 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
 
-import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -19,7 +18,6 @@ export class MessageSettingTimeSubCommand implements Command {
     public deferType = undefined;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

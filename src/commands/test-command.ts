@@ -16,7 +16,6 @@ import { RateLimiter } from 'discord.js-rate-limiter';
 import moment from 'moment';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../enums/index.js';
 import { CustomMessage, MemberAnniversaryRole, UserData } from '../models/database/index.js';
 import { EventData } from '../models/index.js';
 import { BlacklistRepo } from '../services/database/repos/blacklist-repo.js';
@@ -85,7 +84,6 @@ export class TestCommand implements Command {
     public cooldown = new RateLimiter(1, 5000);
     public deferType = CommandDeferType.PUBLIC;
     public requireClientPerms: PermissionString[] = [];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

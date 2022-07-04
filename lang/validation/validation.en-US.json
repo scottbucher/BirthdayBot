@@ -301,8 +301,7 @@
             "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",
             "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
             "serverAnniversaryChannelName": "{{COM:emotes.party}} server anniversaries",
-            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
-            "birthdayMasterRoleName": "Birthday Master"
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
         },
         "links": {
             "voteImage": "https://i.imgur.com/wak8g4V.png"

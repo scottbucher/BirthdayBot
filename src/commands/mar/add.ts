@@ -2,7 +2,6 @@ import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-typ
 import { CommandInteraction, PermissionString, Role } from 'discord.js';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
 import { MemberAnniversaryRoleRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -22,7 +21,6 @@ export class MarAddSubCommand implements Command {
     public deferType = undefined;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;
