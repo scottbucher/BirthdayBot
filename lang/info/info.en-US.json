@@ -240,7 +240,7 @@
                     "**/config trustedPreventsRole [reset]** - Decide if the trusted role should prevent the birthday role.",
                     "**/config requireAllTrustedRoles [reset]** - Decided if a user need all of the trusted roles.",
                     "**/config channel [reset]** - Configure the channels {{COM:bot.name}} will use.",
-                    "**/config role [reset]** - Configure the roles {{COM:bot.name}} will use.",
+                    "**/config role [reset]** - Configure the birthday role.",
                     "",
                     "If you have any question/problems please join our support server [here]({{COM:links.support}})."
                 ],
