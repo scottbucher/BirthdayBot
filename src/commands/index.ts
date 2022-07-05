@@ -1,13 +1,11 @@
 export { BlacklistCommand } from './blacklist-command.js';
 export { Command, CommandDeferType } from './command.js';
 export { ConfigCommand } from './config-command.js';
-export { DevCommand } from './dev-command.js';
 export { DonateCommand } from './donate-command.js';
 export { HelpCommand } from './help-command.js';
 export { InfoCommand } from './info-command.js';
 export { LinkCommand } from './link-command.js';
 export { ListCommand } from './list-command.js';
-export { LogoCommand } from './logo-command.js';
 export { MapCommand } from './map-command.js';
 export { MemberAnniversaryRoleCommand } from './mar-command.js';
 export { MessageCommand } from './message-command.js';
@@ -23,3 +21,4 @@ export { TestCommand } from './test-command.js';
 export { TrustedRoleCommand } from './trusted-role-command.js';
 export { ViewCommand } from './view-command.js';
 export { VoteCommand } from './vote-command.js';
+export { SuggestCommand } from './suggest-command.js';

@@ -1,15 +1,14 @@
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
-    ChatInputApplicationCommandData,
     CommandInteraction,
     GuildMember,
+    InteractionReplyOptions,
     MessageEmbed,
-    MessageOptions,
     PermissionString,
 } from 'discord.js';
 import moment from 'moment';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../../enums/index.js';
 import { CustomMessage } from '../../models/database/index.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
@@ -22,17 +21,14 @@ let Config = require('../../../config/config.json');
 
 export class MessageTestSubCommand implements Command {
     constructor(public customMessageRepo: CustomMessageRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('subCommands.test'),
         description: undefined,
     };
 
     public deferType = undefined;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;
@@ -58,7 +54,7 @@ export class MessageTestSubCommand implements Command {
             : await this.customMessageRepo.getCustomMessages(intr.guild.id, databaseType);
 
         let message: CustomMessage;
-        let msgOptions: MessageOptions = {};
+        let msgOptions: InteractionReplyOptions = {};
         let mentionString = CelebrationUtils.getMentionString(data.guild, intr.guild, type);
 
         if (mentionString && mentionString !== '') msgOptions.content = mentionString;

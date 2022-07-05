@@ -1,10 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    MessageEmbed,
-    PermissionString,
-} from 'discord.js';
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import { CommandInteraction, MessageEmbed, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
@@ -12,15 +10,17 @@ import { InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class LinkCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.link'),
         description: 'Useful links for the bot.',
+        dm_permission: true,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('commands.link'),
                 description: 'Link to display.',
                 required: true,
-                type: ApplicationCommandOptionType.String.valueOf(),
+                type: ApplicationCommandOptionType.String,
                 choices: [
                     {
                         name: 'docs',
@@ -56,10 +56,7 @@ export class LinkCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

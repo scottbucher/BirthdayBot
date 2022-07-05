@@ -1,10 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    MessageEmbed,
-    PermissionString,
-} from 'discord.js';
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import { CommandInteraction, MessageEmbed, PermissionString } from 'discord.js';
 import moment from 'moment';
 import { createRequire } from 'node:module';
 
@@ -18,9 +16,11 @@ import { Command, CommandDeferType } from './index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class ListCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.list'),
         description: 'View the birthday list.',
+        dm_permission: false,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -49,10 +49,7 @@ export class ListCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = true;
     public requirePremium = false;

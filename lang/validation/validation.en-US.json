@@ -232,14 +232,12 @@
             }
         },
         "errorEmbeds": {
-            "devOnlyCommand": "This command can only be used by developers.",
+            "devOnly": "This action can only be done by developers.",
             "serverOnlyCommand": "This command can only be used in a server.",
             "missingUserPerms": "You don't have permission to run that command!",
             "birthdayNotSet": "{{USER}} hasn't set their birthday!",
             "viewUserInDm": "You cannot request another user's information in a DM!",
             "memberAnniversaryInDM": "You cannot view member anniversaries in a DM!",
-            "suggestBirthdayInDM": "You can't set another person's birthday in a DM!",
-            "cantSuggest": "You don't have permission to suggest another user's birthday!",
             "cantSuggestForBot": "You can't suggest a birthday for a bot!",
             "invalidBirthday": "Invalid birthday!",
             "noBirthdaysInServer": "No one has set their birthday in this server! :(",
@@ -303,8 +301,7 @@
             "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",
             "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
             "serverAnniversaryChannelName": "{{COM:emotes.party}} server anniversaries",
-            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
-            "birthdayMasterRoleName": "Birthday Master"
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
         },
         "links": {
             "voteImage": "https://i.imgur.com/wak8g4V.png"

@@ -1,10 +1,13 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import {
-    ChatInputApplicationCommandData,
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import {
     CommandInteraction,
     GuildMember,
     MessageEmbed,
     MessageOptions,
+    Permissions,
     PermissionString,
     Role,
     TextChannel,
@@ -13,7 +16,6 @@ import { RateLimiter } from 'discord.js-rate-limiter';
 import moment from 'moment';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../enums/index.js';
 import { CustomMessage, MemberAnniversaryRole, UserData } from '../models/database/index.js';
 import { EventData } from '../models/index.js';
 import { BlacklistRepo } from '../services/database/repos/blacklist-repo.js';
@@ -34,9 +36,13 @@ import { Command, CommandDeferType } from './index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class TestCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.test'),
         description: 'View the next event date. Defaults to birthday.',
+        dm_permission: false,
+        default_member_permissions: Permissions.resolve([
+            Permissions.FLAGS.ADMINISTRATOR,
+        ]).toString(),
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -77,11 +83,7 @@ export class TestCommand implements Command {
     };
     public cooldown = new RateLimiter(1, 5000);
     public deferType = CommandDeferType.PUBLIC;
-    public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

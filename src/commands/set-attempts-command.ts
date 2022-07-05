@@ -1,5 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
-import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import {
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import { CommandInteraction, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/index.js';
@@ -8,9 +11,11 @@ import { InteractionUtils } from '../utils/interaction-utils.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class SetAttemptsCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.setAttempts'),
         description: 'Set the attempts for a user. (Birthday bot staff only command)',
+        dm_permission: false,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('arguments.user'),
@@ -30,10 +35,7 @@ export class SetAttemptsCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = true;
-    public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

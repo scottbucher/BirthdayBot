@@ -1,10 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    DMChannel,
-    PermissionString,
-} from 'discord.js';
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import { CommandInteraction, DMChannel, PermissionString } from 'discord.js';
 import moment from 'moment';
 
 import { EventData } from '../models/index.js';
@@ -14,9 +12,11 @@ import { InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class ViewCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.view'),
         description: `View your, or someone else's birthday or anniversary. Or view the server's anniversary.`,
+        dm_permission: true,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('arguments.type'),
@@ -44,10 +44,7 @@ export class ViewCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

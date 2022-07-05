@@ -1,18 +1,11 @@
-import {
-    ButtonInteraction,
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    Message,
-    PermissionString,
-    Role,
-} from 'discord.js';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { ButtonInteraction, CommandInteraction, Message, PermissionString, Role } from 'discord.js';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { ClientUtils, CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
+import { ClientUtils, CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 const require = createRequire(import.meta.url);
@@ -20,52 +13,21 @@ let Config = require('../../../config/config.json');
 
 export class RoleSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.role'),
         description: undefined,
     };
 
     public deferType = undefined;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL', 'MANAGE_ROLES'];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
-        let type: string;
-
-        let _prompt = await InteractionUtils.send(
-            intr,
-            Lang.getEmbed('prompts', 'config.roleType', data.lang())
-        );
-
-        type = await CollectorUtils.collectByMessage(
-            intr.channel,
-            intr.user,
-            async (nextMsg: Message) => {
-                let input = FormatUtils.extractRoleType(nextMsg.content.toLowerCase());
-                if (!input) {
-                    await InteractionUtils.send(
-                        intr,
-                        Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
-                    );
-                    return;
-                }
-
-                return input;
-            },
-            async () => {
-                await InteractionUtils.send(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            }
-        );
+        let type = 'birthday';
 
         let displayType = Lang.getRef('info', `terms.${type}`, data.lang());
 
@@ -79,9 +41,7 @@ export class RoleSubCommand implements Command {
             let promptEmbed = Lang.getEmbed('prompts', 'config.role', data.lang(), {
                 TYPE: displayType,
                 TYPE_LOWERCASE: displayType.toLowerCase(),
-                DOC_LINK: Lang.getCom(
-                    `docLinks.whatIsBirthday${type !== 'birthday' ? 'Master' : ''}Role`
-                ),
+                DOC_LINK: Lang.getCom(`docLinks.whatIsBirthdayRole`),
             });
 
             let roleResult = await CollectorUtils.getSetupChoiceFromButton(intr, data, promptEmbed);
@@ -95,14 +55,7 @@ export class RoleSubCommand implements Command {
                     // Create role with desired attributes
                     role = (
                         await guild.roles.create({
-                            name:
-                                type === 'birthday'
-                                    ? Config.emotes.birthday
-                                    : Lang.getRef(
-                                          'info',
-                                          'defaults.birthdayMasterRoleName',
-                                          data.lang()
-                                      ),
+                            name: Config.emotes.birthday,
                             color: Config.colors.role,
                             hoist: true,
                             mentionable: true,
@@ -258,8 +211,6 @@ export class RoleSubCommand implements Command {
         }
 
         // Save the channel
-        type === 'birthday'
-            ? await this.guildRepo.updateBirthdayRole(intr.guild.id, role)
-            : await this.guildRepo.updateBirthdayMasterRole(intr.guild.id, role);
+        await this.guildRepo.updateBirthdayRole(intr.guild.id, role);
     }
 }

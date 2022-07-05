@@ -1,5 +1,4 @@
 import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v9';
 import { Options } from 'discord.js';
 import { createRequire } from 'node:module';
 
@@ -40,13 +39,11 @@ import {
     BlacklistCommand,
     Command,
     ConfigCommand,
-    DevCommand,
     DonateCommand,
     HelpCommand,
     InfoCommand,
     LinkCommand,
     ListCommand,
-    LogoCommand,
     MapCommand,
     MemberAnniversaryRoleCommand,
     MessageCommand,
@@ -58,6 +55,7 @@ import {
     SettingsCommand,
     SetupCommand,
     SubscribeCommand,
+    SuggestCommand,
     TestCommand,
     TrustedRoleCommand,
     ViewCommand,
@@ -112,6 +110,7 @@ import {
 } from './services/database/repos/index.js';
 import {
     CelebrationService,
+    CommandRegistrationService,
     HttpService,
     JobService,
     Logger,
@@ -270,8 +269,7 @@ async function start(): Promise<void> {
         new SubscribeCommand(subService),
         new VoteCommand(),
         new DonateCommand(),
-        new LogoCommand(),
-        new DevCommand(),
+        new SuggestCommand(guildRepo, userRepo),
     ].sort((a, b) => (a.metadata.name > b.metadata.name ? 1 : -1));
 
     // Buttons
@@ -331,52 +329,19 @@ async function start(): Promise<void> {
     );
 
     // Register
-    if (process.argv[2] === '--register') {
-        await registerCommands(commands);
-        process.exit();
-    } else if (process.argv[2] === '--clear') {
-        await clearCommands();
+    if (process.argv[2] == 'commands') {
+        try {
+            let rest = new REST({ version: '10' }).setToken(Config.client.token);
+            let commandRegistrationService = new CommandRegistrationService(rest);
+            let localCmds = commands.map(cmd => cmd.metadata);
+            await commandRegistrationService.process(localCmds, process.argv);
+        } catch (error) {
+            Logger.error(Logs.error.commandAction, error);
+        }
         process.exit();
     }
 
     await bot.start();
-}
-
-async function registerCommands(commands: Command[]): Promise<void> {
-    let cmdDatas = commands.map(cmd => cmd.metadata);
-    let cmdNames = cmdDatas.map(cmdData => cmdData.name);
-
-    Logger.info(
-        Logs.info.commandsRegistering.replaceAll(
-            '{COMMAND_NAMES}',
-            cmdNames.map(cmdName => `'${cmdName}'`).join(', ')
-        )
-    );
-
-    try {
-        let rest = new REST({ version: '9' }).setToken(Config.client.token);
-        await rest.put(Routes.applicationCommands(Config.client.id), { body: [] });
-        await rest.put(Routes.applicationCommands(Config.client.id), { body: cmdDatas });
-    } catch (error) {
-        Logger.error(Logs.error.commandsRegistering, error);
-        return;
-    }
-
-    Logger.info(Logs.info.commandsRegistered);
-}
-
-async function clearCommands(): Promise<void> {
-    Logger.info(Logs.info.commandsClearing);
-
-    try {
-        let rest = new REST({ version: '9' }).setToken(Config.client.token);
-        await rest.put(Routes.applicationCommands(Config.client.id), { body: [] });
-    } catch (error) {
-        Logger.error(Logs.error.commandsClearing, error);
-        return;
-    }
-
-    Logger.info(Logs.info.commandsCleared);
 }
 
 process.on('unhandledRejection', (reason, _promise) => {

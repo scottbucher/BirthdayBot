@@ -5,7 +5,6 @@
         "author": "Scott Bucher"
     },
     "commands": {
-        "dev": "dev",
         "help": "help",
         "info": "info",
         "link": "link",
@@ -31,7 +30,7 @@
         "list": "list",
         "map": "map",
         "donate": "donate",
-        "logo": "logo"
+        "suggest": "suggest"
     },
     "subCommands": {
         "add": "add",
@@ -79,7 +78,8 @@
         "timezone": "timezone",
         "userCount": "user_count",
         "category": "category",
-        "link": "link"
+        "link": "link",
+        "option": "option"
     },
     "settingType": {
         "nameFormat": "nameFormat",
@@ -142,7 +142,6 @@
         "whyDoesItNeedMyTimezone": "{{COM:links.docs}}/faq-1/user#why-does-birthday-bot-need-my-timezone",
         "whyDoesItNeedOnlyMonthAndDate": "{{COM:links.docs}}/faq-1/user#why-does-birthday-bot-only-need-my-birth-month-and-date",
         "whatIsBirthdayRole": "{{COM:links.docs}}/faq-1/birthday-system#what-is-the-birthday-role",
-        "whatIsBirthdayMasterRole": "{{COM:links.docs}}/faq-1/general#what-is-the-birthday-blacklist",
         "whatIsBirthdayChannel": "{{COM:links.docs}}/faq-1/birthday-system#what-is-the-birthday-channel",
         "whatIsMemberAnniversaryChannel": "{{COM:links.docs}}/faq-1/member-anniversaries#what-is-the-member-anniversary-channel",
         "whatIsServerAnniversaryChannel": "{{COM:links.docs}}/faq-1/server-anniversaries#what-is-the-server-anniversary-channel",

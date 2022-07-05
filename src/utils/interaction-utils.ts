@@ -1,16 +1,16 @@
-import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v9';
+import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v10';
 import {
     ButtonInteraction,
     CommandInteraction,
     DiscordAPIError,
+    InteractionReplyOptions,
+    InteractionUpdateOptions,
     Message,
     MessageActionRow,
     MessageComponentInteraction,
     MessageEmbed,
-    MessageOptions,
+    WebhookEditMessageOptions,
 } from 'discord.js';
-
-import { MessageUtils } from './index.js';
 
 const IGNORED_ERRORS = [
     DiscordApiErrors.UnknownMessage,
@@ -76,23 +76,34 @@ export class InteractionUtils {
 
     public static async send(
         intr: CommandInteraction | MessageComponentInteraction,
-        content: string | MessageEmbed | MessageOptions,
+        content: string | MessageEmbed | InteractionReplyOptions,
         hidden: boolean = false
     ): Promise<Message> {
-        // try {
-        let msgOptions = MessageUtils.messageOptions(content);
-
-        if (intr.deferred || intr.replied) {
-            return (await intr.followUp({
-                ...msgOptions,
-                ephemeral: hidden,
-            })) as Message;
-        } else {
-            return (await intr.reply({
-                ...msgOptions,
-                ephemeral: hidden,
-                fetchReply: true,
-            })) as Message;
+        try {
+            let options: InteractionReplyOptions =
+                typeof content === 'string'
+                    ? { content }
+                    : content instanceof MessageEmbed
+                    ? { embeds: [content] }
+                    : content;
+            if (intr.deferred || intr.replied) {
+                return (await intr.followUp({
+                    ...options,
+                    ephemeral: hidden,
+                })) as Message;
+            } else {
+                return (await intr.reply({
+                    ...options,
+                    ephemeral: hidden,
+                    fetchReply: true,
+                })) as Message;
+            }
+        } catch (error) {
+            if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
+                return;
+            } else {
+                throw error;
+            }
         }
         // } catch (error) {
         //     if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
@@ -105,13 +116,16 @@ export class InteractionUtils {
 
     public static async editReply(
         intr: CommandInteraction | MessageComponentInteraction,
-        content: string | MessageEmbed | MessageOptions
+        content: string | MessageEmbed | WebhookEditMessageOptions
     ): Promise<Message> {
         try {
-            let msgOptions = MessageUtils.messageOptions(content);
-            return (await intr.editReply({
-                ...msgOptions,
-            })) as Message;
+            let options: WebhookEditMessageOptions =
+                typeof content === 'string'
+                    ? { content }
+                    : content instanceof MessageEmbed
+                    ? { embeds: [content] }
+                    : content;
+            return (await intr.editReply(options)) as Message;
         } catch (error) {
             if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
                 return;
@@ -123,12 +137,17 @@ export class InteractionUtils {
 
     public static async update(
         intr: MessageComponentInteraction,
-        content: string | MessageEmbed | MessageOptions
+        content: string | MessageEmbed | InteractionUpdateOptions
     ): Promise<Message> {
         try {
-            let msgOptions = MessageUtils.messageOptions(content);
+            let options: InteractionUpdateOptions =
+                typeof content === 'string'
+                    ? { content }
+                    : content instanceof MessageEmbed
+                    ? { embeds: [content] }
+                    : content;
             return (await intr.update({
-                ...msgOptions,
+                ...options,
                 fetchReply: true,
             })) as Message;
         } catch (error) {

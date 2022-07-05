@@ -1,10 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import {
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    MessageEmbed,
-    PermissionString,
-} from 'discord.js';
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import { CommandInteraction, MessageEmbed, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
@@ -12,9 +10,11 @@ import { InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class HelpCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.help'),
         description: 'The help command.',
+        dm_permission: true,
+        default_member_permissions: undefined,
         options: [
             {
                 name: Lang.getCom('arguments.category'),
@@ -24,49 +24,48 @@ export class HelpCommand implements Command {
                 choices: [
                     {
                         name: 'general',
-                        value: 'GENERAL',
+                        value: 'general',
                     },
                     {
                         name: 'blacklist',
-                        value: 'BLACKLIST',
+                        value: 'blacklist',
                     },
                     {
                         name: 'config',
-                        value: 'CONFIG',
+                        value: 'config',
                     },
                     {
                         name: 'message',
-                        value: 'MESSAGE',
+                        value: 'message',
                     },
                     {
                         name: 'trusted_role',
-                        value: 'TRUSTED_ROLE',
+                        value: 'trusted_role',
                     },
                     {
                         name: 'member_anniversary_role',
-                        value: 'MEMBER_ANNIVERSARY_ROLE',
+                        value: 'member_anniversary_role',
                     },
                     {
                         name: 'premium',
-                        value: 'PREMIUM',
+                        value: 'premium',
+                    },
+                    {
+                        name: 'permissions',
+                        value: 'permissions',
                     },
                 ],
             },
         ],
     };
     public deferType = CommandDeferType.PUBLIC;
-    public requireDev = false;
-    public requireGuild = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let link =
-            intr.options.getString(Lang.getCom('arguments.category'))?.toLowerCase() ?? 'general';
+        let link = intr.options.getString(Lang.getCom('arguments.category')) ?? 'general';
         let embed: MessageEmbed;
         switch (link) {
             case 'general': {
@@ -116,6 +115,10 @@ export class HelpCommand implements Command {
                     BOT: intr.client.user.toString(),
                     ICON: intr.client.user.displayAvatarURL(),
                 });
+                break;
+            }
+            case 'permissions': {
+                embed = Lang.getEmbed('info', 'help.permissions', data.lang());
                 break;
             }
             default: {

@@ -1,11 +1,6 @@
-import {
-    ButtonInteraction,
-    ChatInputApplicationCommandData,
-    CommandInteraction,
-    PermissionString,
-} from 'discord.js';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { ButtonInteraction, CommandInteraction, PermissionString } from 'discord.js';
 
-import { CustomRole } from '../../enums/index.js';
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -14,17 +9,14 @@ import { Command } from '../index.js';
 
 export class TrustedPreventsRoleSubCommand implements Command {
     constructor(public guildRepo: GuildRepo) {}
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('settingType.trustedPreventsRole'),
         description: undefined,
     };
 
     public deferType = undefined;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;
@@ -48,7 +40,7 @@ export class TrustedPreventsRoleSubCommand implements Command {
             result.intr,
             Lang.getSuccessEmbed(
                 'results',
-                result
+                result.value
                     ? 'successEmbeds.trustedPreventsRoleYes'
                     : 'successEmbeds.trustedPreventsRoleNo',
                 data.lang()

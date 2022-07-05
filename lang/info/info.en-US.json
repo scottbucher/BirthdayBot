@@ -18,24 +18,6 @@
                 },
                 "timestamp": true
             },
-            "welcome": {
-                "title": "Thank you for using {{COM:bot.name}}!",
-                "description": ["{{REF:bot.description}}"],
-                "fields": [
-                    {
-                        "name": "Important {{REF:fields.commands}}",
-                        "value": ["**/{{COM:commands.help}}** - {{REF:commandDescs.help}}"]
-                    },
-                    {
-                        "name": "Links",
-                        "value": [
-                            "{{COM:links.docsEmbed}}",
-                            "{{COM:links.supportEmbed}}",
-                            "{{COM:links.inviteEmbed}}"
-                        ]
-                    }
-                ]
-            },
             "info": {
                 "title": "{{COM:bot.name}} - Info",
                 "fields": [
@@ -126,58 +108,23 @@
             "support": {
                 "description": "For support join our discord server [here]({{COM:links.support}})!",
                 "color": "{{COM:colors.default}}"
-            },
-            "logoCompetition": {
-                "title": "{{COM:bot.name}} Logo Competition",
-                "description": [
-                    "{{COM:bot.name}} is looking for a new logo! From now until April 30th we are accepting submissions for the new logo!",
-                    "",
-                    "The winning logo will be used by the bot and the artist will be credited and linked in the bot!",
-                    "",
-                    "[Submit your logo designs here!](https://forms.gle/PFGsh4Wsp2BUYucdA)"
-                ],
-                "fields": [
-                    {
-                        "name": "Prizes",
-                        "value": [
-                            "__1st Place__",
-                            "- Will be the new logo of Birthday Bot!",
-                            "- Credited and linked in the bot!",
-                            "- 1 Year of Birthday Bot Premium.",
-                            "",
-                            "__2nd Place__",
-                            "- 4 Months of Birthday Bot Premium.",
-                            "",
-                            "__3rd Place__",
-                            "- 2 Months of Birthday Bot Premium."
-                        ]
-                    },
-                    {
-                        "name": "Specifications/Tips",
-                        "value": [
-                            "- Ensure the logo looks good when used in a Discord profile picture.",
-                            "",
-                            "- The logo should relate to birthdays/celebrations (the theme of the bot)!",
-                            "",
-                            "- Discord limits profile pictures to a maximum of 128x128 pixels, however, it is preferred that you use a larger image so it can be used in other areas such as the website, GitHub, etc. with a scaled down version for the Discord profile picture.",
-                            "",
-                            "- You can make multiple submissions!"
-                        ]
-                    }
-                ],
-                "footer": {
-                    "text": "{{COM:bot.name}} Logo Competition ● Join The support server for more information!",
-                    "icon": "{{ICON}}"
-                }
             }
         },
         "help": {
+            "permissions": {
+                "title": "{{COM:bot.name}} - Permissions",
+                "description": "Want to restrict commands to certain roles, users, or channels? Set up permissions under the bot's **Integration** page in the Server Settings (or simply right-click the bot and select **Manage Integration**).",
+                "fields": [
+                    {
+                        "name": "Links",
+                        "value": ["{{COM:links.docsEmbed}}", "{{COM:links.supportEmbed}}"]
+                    }
+                ]
+            },
             "general": {
                 "title": "{{COM:bot.name}} General Help",
                 "description": [
                     "{{COM:bot.name}} helps your server celebrate birthdays with automatic birthday roles and announcements.",
-                    "",
-                    "**/logo** - Learn about the Birthday Bot Logo Competition! (Win prizes!)",
                     "",
                     "**/premium** - See information about {{COM:bot.name}} Premium.",
                     "**/subscribe** - Subscribe to {{COM:bot.name}} Premium!",
@@ -204,6 +151,12 @@
                     {
                         "name": "Legend",
                         "value": "** = Server Only Command"
+                    },
+                    {
+                        "name": "Permissions",
+                        "value": [
+                            "Want to restrict commands to certain roles, users, or channels? Set up permissions under the bot's **Integration** page in the Server Settings (or simply right-click the bot and select **Manage Integration**)."
+                        ]
                     }
                 ],
                 "footer": {
@@ -242,7 +195,7 @@
                     "**/config trustedPreventsRole [reset]** - Decide if the trusted role should prevent the birthday role.",
                     "**/config requireAllTrustedRoles [reset]** - Decided if a user need all of the trusted roles.",
                     "**/config channel [reset]** - Configure the channels {{COM:bot.name}} will use.",
-                    "**/config role [reset]** - Configure the roles {{COM:bot.name}} will use.",
+                    "**/config role [reset]** - Configure the birthday role.",
                     "",
                     "If you have any question/problems please join our support server [here]({{COM:links.support}})."
                 ],
@@ -380,11 +333,6 @@
             "advanced": {
                 "title": "{{SERVER_NAME}}'s Advanced Settings",
                 "fields": [
-                    {
-                        "name": "{{REF:terms.birthdayMasterRole}}",
-                        "value": "{{BIRTHDAY_MASTER_ROLE}}",
-                        "inline": true
-                    },
                     {
                         "name": "{{REF:terms.dateFormat}}",
                         "value": "{{DATE_FORMAT}}",
@@ -993,8 +941,7 @@
             "memberAnniversaryChannelName": "{{COM:emotes.party}} member anniversaries",
             "memberAnniversaryChannelTopic": "Member Anniversary Announcements!",
             "serverAnniversaryChannelName": "{{COM:emotes.party}} server anniversaries",
-            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!",
-            "birthdayMasterRoleName": "Birthday Master"
+            "serverAnniversaryChannelTopic": "Server Anniversary Announcements!"
         },
         "permissions": {
             "ADD_REACTIONS": "Add Reactions",
@@ -1107,14 +1054,12 @@
         },
         "types": {
             "birthday": "birthday",
-            "birthdayMaster": "birthdayMaster",
             "memberAnniversary": "memberAnniversary",
             "serverAnniversary": "serverAnniversary",
             "userSpecificBirthday": "userSpecificBirthday",
             "userSpecificMemberAnniversary": "userSpecificMemberAnniversary",
             "channel": "channel",
             "birthdayRole": "role",
-            "birthdayMasterRole": "birthdayMasterRole",
             "nameFormat": "nameFormat",
             "timezone": "timezone",
             "useTimezone": "useTimezone",
@@ -1229,7 +1174,6 @@
             "server": "Server",
             "birthdayChannel": "Birthday Channel",
             "birthdayRole": "Birthday Role",
-            "birthdayMasterRole": "Birthday Master Role",
             "trustedPreventsRole": "Trusted Prevents Role",
             "trustedPreventsMessage": "Trusted Prevents Message",
             "requireAllTrustedRoles": "Require All Trusted Roles",
@@ -1249,9 +1193,7 @@
             "serverLanguage": "Server Language",
             "never": "Never",
             "mmdd": "MM/DD",
-            "ddmm": "DD/MM",
-            "birthdayMaster": "Birthday Master",
-            "master": "Master"
+            "ddmm": "DD/MM"
         }
     }
 }

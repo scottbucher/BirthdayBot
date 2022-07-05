@@ -56,16 +56,6 @@ export class GuildRepo {
         ]);
     }
 
-    public async updateBirthdayMasterRole(
-        discordId: string,
-        birthdayMasterRoleId: string
-    ): Promise<void> {
-        await this.dataAccess.executeProcedure(Procedure.Guild_UpdateBirthdayMasterRole, [
-            discordId,
-            birthdayMasterRoleId,
-        ]);
-    }
-
     public async updateBirthdayMessageTime(discordId: string, messageTime: number): Promise<void> {
         await this.dataAccess.executeProcedure(Procedure.Guild_UpdateBirthdayMessageTime, [
             discordId,

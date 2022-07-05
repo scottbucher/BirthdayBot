@@ -1,5 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
-import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import {
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import { CommandInteraction, Permissions, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
@@ -7,9 +10,13 @@ import { CommandUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class ConfigCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.config'),
         description: 'Manage config settings.',
+        dm_permission: false,
+        default_member_permissions: Permissions.resolve([
+            Permissions.FLAGS.ADMINISTRATOR,
+        ]).toString(),
         options: [
             {
                 name: Lang.getCom('arguments.setting'),
@@ -65,10 +72,7 @@ export class ConfigCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

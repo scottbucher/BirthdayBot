@@ -9,16 +9,23 @@ import { EventData } from '../models/index.js';
 import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
 import { BirthdayUtils } from '../utils/birthday-utils.js';
-import { FormatUtils } from '../utils/index.js';
+import { FormatUtils, InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
-export class SetCommand implements Command {
+export class SuggestCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
-        name: Lang.getCom('commands.set'),
-        description: 'Set your birthday',
-        dm_permission: true,
-        default_member_permissions: undefined,
+        name: Lang.getCom('commands.suggest'),
+        description:
+            'Suggest a birthday for another user. They will have to confirm the information.',
+        dm_permission: false,
+        default_member_permissions: '0',
         options: [
+            {
+                name: Lang.getCom('arguments.user'),
+                description: 'The user who you are suggesting a birthday for.',
+                type: ApplicationCommandOptionType.User.valueOf(),
+                required: true,
+            },
             {
                 name: Lang.getCom('arguments.date'),
                 description: 'The date of the birthday you want to set.',
@@ -46,10 +53,19 @@ export class SetCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let birthdayInput = intr.options.getString(Lang.getCom('arguments.date'));
         let timezoneInput = intr.options.getString(Lang.getCom('arguments.timezone'));
+        let target = intr.options.getUser(Lang.getCom('arguments.user'));
 
         let timeZone = timezoneInput ? FormatUtils.findZone(timezoneInput) : undefined;
 
-        let userData = await this.userRepo.getUser(intr.user.id);
+        if (target.bot) {
+            await InteractionUtils.send(
+                intr,
+                Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggestForBot', data.lang())
+            );
+            return;
+        }
+
+        let userData = await this.userRepo.getUser(target.id);
 
         let changesLeft = userData ? userData?.ChangesLeft : 5;
 
@@ -57,20 +73,14 @@ export class SetCommand implements Command {
 
         [timeZone, nextIntr] = await BirthdayUtils.getUseServerDefaultTimezone(
             timeZone,
-            intr.user,
+            target,
             data,
             intr,
             nextIntr
         );
 
         if (!timeZone)
-            timeZone = await BirthdayUtils.getUserTimezone(
-                timeZone,
-                intr.user,
-                data,
-                intr,
-                nextIntr
-            );
+            timeZone = await BirthdayUtils.getUserTimezone(timeZone, target, data, intr, nextIntr);
 
         if (timeZone === undefined) return;
 
@@ -88,7 +98,7 @@ export class SetCommand implements Command {
         if (!birthday)
             birthday = await BirthdayUtils.getUserBirthday(
                 birthday,
-                intr.user,
+                target,
                 data,
                 intr,
                 littleEndian,
@@ -101,7 +111,7 @@ export class SetCommand implements Command {
             birthday,
             timeZone,
             changesLeft,
-            intr.user,
+            target,
             data,
             intr,
             parser,

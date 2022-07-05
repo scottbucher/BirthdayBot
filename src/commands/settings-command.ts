@@ -1,5 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
-import { ChatInputApplicationCommandData, CommandInteraction, PermissionString } from 'discord.js';
+import {
+    ApplicationCommandOptionType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
+import { CommandInteraction, Permissions, PermissionString } from 'discord.js';
 
 import { Language } from '../models/enum-helpers/index.js';
 import { EventData } from '../models/index.js';
@@ -9,9 +12,13 @@ import { FormatUtils, InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class SettingsCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.settings'),
         description: 'View the settings for this server.',
+        dm_permission: false,
+        default_member_permissions: Permissions.resolve([
+            Permissions.FLAGS.ADMINISTRATOR,
+        ]).toString(),
         options: [
             {
                 name: Lang.getCom('arguments.setting'),
@@ -37,10 +44,7 @@ export class SettingsCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;
@@ -136,7 +140,6 @@ export class SettingsCommand implements Command {
             );
         } else if (type === 'ADVANCED') {
             // advanced settings
-            let birthdayMasterRole: string;
             let preventsRole = Lang.getRef(
                 'info',
                 'boolean.' + (data.guild.TrustedPreventsRole ? 'true' : 'false'),
@@ -153,11 +156,6 @@ export class SettingsCommand implements Command {
                 data.lang()
             );
             let useTimezone = Lang.getRef('info', 'terms.' + data.guild.UseTimezone, data.lang());
-            birthdayMasterRole =
-                data.guild.BirthdayMasterRoleDiscordId === '0'
-                    ? Lang.getRef('info', 'terms.notSet', data.lang())
-                    : guild.roles.resolve(data.guild.BirthdayMasterRoleDiscordId)?.toString() ||
-                      `**${Lang.getRef('info', 'terms.deletedRole', data.lang())}**`;
 
             let dateFormat = data.guild.DateFormat === 'month_day' ? 'Month/Day' : 'Day/Month';
 
@@ -168,7 +166,6 @@ export class SettingsCommand implements Command {
                 intr,
                 Lang.getEmbed('info', 'settings.advanced', data.lang(), {
                     SERVER_NAME: guild.name,
-                    BIRTHDAY_MASTER_ROLE: birthdayMasterRole,
                     TRUSTED_PREVENTS_ROLE: preventsRole,
                     TRUSTED_PREVENTS_MESSAGE: preventsMessage,
                     REQUIRE_ALL_TRUSTED_ROLES: requireAllTrustedRoles,

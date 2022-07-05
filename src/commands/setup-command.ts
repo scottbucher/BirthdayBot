@@ -1,14 +1,14 @@
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
-    ChatInputApplicationCommandData,
     CommandInteraction,
     Message,
+    Permissions,
     PermissionString,
     Role,
     TextBasedChannel,
 } from 'discord.js';
 import { createRequire } from 'node:module';
 
-import { CustomRole } from '../enums/index.js';
 import { EventData } from '../models/index.js';
 import { GuildRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
@@ -19,20 +19,21 @@ import { Command, CommandDeferType } from './index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 export class SetupCommand implements Command {
-    public metadata: ChatInputApplicationCommandData = {
+    public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
         name: Lang.getCom('commands.setup'),
         description: 'Run the initial setup processes.',
+        dm_permission: false,
+        default_member_permissions: Permissions.resolve([
+            Permissions.FLAGS.ADMINISTRATOR,
+        ]).toString(),
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
-    public requireGuild = true;
     public requireClientPerms: PermissionString[] = [
         'VIEW_CHANNEL',
         'MANAGE_CHANNELS',
         'MANAGE_ROLES',
     ];
-    public requireUserPerms: PermissionString[] = [];
-    public requireRole = [CustomRole.BirthdayMaster];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;
