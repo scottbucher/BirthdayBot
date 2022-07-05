@@ -2,7 +2,7 @@ import {
     ApplicationCommandOptionType,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { CommandInteraction, PermissionString } from 'discord.js';
+import { CommandInteraction, Permissions, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { UserRepo } from '../services/database/repos/index.js';
@@ -15,7 +15,9 @@ export class SetAttemptsCommand implements Command {
         name: Lang.getCom('commands.setAttempts'),
         description: 'Set the attempts for a user. (Birthday bot staff only command)',
         dm_permission: false,
-        default_member_permissions: undefined,
+        default_member_permissions: Permissions.resolve([
+            Permissions.FLAGS.MANAGE_GUILD,
+        ]).toString(),
         options: [
             {
                 name: Lang.getCom('arguments.user'),
