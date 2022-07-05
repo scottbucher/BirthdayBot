@@ -108,49 +108,6 @@
             "support": {
                 "description": "For support join our discord server [here]({{COM:links.support}})!",
                 "color": "{{COM:colors.default}}"
-            },
-            "logoCompetition": {
-                "title": "{{COM:bot.name}} Logo Competition",
-                "description": [
-                    "{{COM:bot.name}} is looking for a new logo! From now until April 30th we are accepting submissions for the new logo!",
-                    "",
-                    "The winning logo will be used by the bot and the artist will be credited and linked in the bot!",
-                    "",
-                    "[Submit your logo designs here!](https://forms.gle/PFGsh4Wsp2BUYucdA)"
-                ],
-                "fields": [
-                    {
-                        "name": "Prizes",
-                        "value": [
-                            "__1st Place__",
-                            "- Will be the new logo of Birthday Bot!",
-                            "- Credited and linked in the bot!",
-                            "- 1 Year of Birthday Bot Premium.",
-                            "",
-                            "__2nd Place__",
-                            "- 4 Months of Birthday Bot Premium.",
-                            "",
-                            "__3rd Place__",
-                            "- 2 Months of Birthday Bot Premium."
-                        ]
-                    },
-                    {
-                        "name": "Specifications/Tips",
-                        "value": [
-                            "- Ensure the logo looks good when used in a Discord profile picture.",
-                            "",
-                            "- The logo should relate to birthdays/celebrations (the theme of the bot)!",
-                            "",
-                            "- Discord limits profile pictures to a maximum of 128x128 pixels, however, it is preferred that you use a larger image so it can be used in other areas such as the website, GitHub, etc. with a scaled down version for the Discord profile picture.",
-                            "",
-                            "- You can make multiple submissions!"
-                        ]
-                    }
-                ],
-                "footer": {
-                    "text": "{{COM:bot.name}} Logo Competition ● Join The support server for more information!",
-                    "icon": "{{ICON}}"
-                }
             }
         },
         "help": {
@@ -168,8 +125,6 @@
                 "title": "{{COM:bot.name}} General Help",
                 "description": [
                     "{{COM:bot.name}} helps your server celebrate birthdays with automatic birthday roles and announcements.",
-                    "",
-                    "**/logo** - Learn about the Birthday Bot Logo Competition! (Win prizes!)",
                     "",
                     "**/premium** - See information about {{COM:bot.name}} Premium.",
                     "**/subscribe** - Subscribe to {{COM:bot.name}} Premium!",

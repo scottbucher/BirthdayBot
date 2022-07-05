@@ -6,7 +6,6 @@ export { HelpCommand } from './help-command.js';
 export { InfoCommand } from './info-command.js';
 export { LinkCommand } from './link-command.js';
 export { ListCommand } from './list-command.js';
-export { LogoCommand } from './logo-command.js';
 export { MapCommand } from './map-command.js';
 export { MemberAnniversaryRoleCommand } from './mar-command.js';
 export { MessageCommand } from './message-command.js';
