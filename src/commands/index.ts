@@ -12,7 +12,6 @@ export { MessageCommand } from './message-command.js';
 export { NextCommand } from './next-command.js';
 export { PremiumCommand } from './premium-command.js';
 export { PurgeCommand } from './purge-command.js';
-export { SetAttemptsCommand } from './set-attempts-command.js';
 export { SetCommand } from './set-command.js';
 export { SettingsCommand } from './settings-command.js';
 export { SetupCommand } from './setup-command.js';

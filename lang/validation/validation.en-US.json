@@ -247,7 +247,6 @@
             "invalidChannel": "Invalid channel!",
             "invalidRole": "Invalid role!",
             "birthdayRoleManaged": "Birthday Role cannot be managed by an external service!",
-            "attemptsLeft": "That user has not used any attempts!",
             "invalidSetting": "Invalid setting! Please try again",
             "timezoneAbbreviation": "Please do not use timezone abbreviations! Please try again.",
             "invalidTimezone": "Invalid Timezone! Please try again.",

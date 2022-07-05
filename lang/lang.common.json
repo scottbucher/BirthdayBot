@@ -20,7 +20,6 @@
         "purge": "purge",
         "next": "next",
         "premium": "premium",
-        "setAttempts": "set_attempts",
         "settings": "settings",
         "stats": "stats",
         "subscribe": "subscribe",
@@ -53,7 +52,6 @@
         "donate": "donate",
         "support": "support",
         "set": "set",
-        "setAttempts": "set_attempts",
         "next": "next",
         "view": "view"
     },
