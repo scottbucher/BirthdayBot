@@ -2,7 +2,7 @@ import {
     ApplicationCommandOptionType,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { CommandInteraction, PermissionString } from 'discord.js';
+import { CommandInteraction, Permissions, PermissionString } from 'discord.js';
 
 import { Language } from '../models/enum-helpers/index.js';
 import { EventData } from '../models/index.js';
@@ -16,7 +16,9 @@ export class SettingsCommand implements Command {
         name: Lang.getCom('commands.settings'),
         description: 'View the settings for this server.',
         dm_permission: false,
-        default_member_permissions: '0',
+        default_member_permissions: Permissions.resolve([
+            Permissions.FLAGS.MANAGE_GUILD,
+        ]).toString(),
         options: [
             {
                 name: Lang.getCom('arguments.setting'),

@@ -2,7 +2,7 @@ import {
     ApplicationCommandOptionType,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { CommandInteraction, PermissionString } from 'discord.js';
+import { CommandInteraction, Permissions, PermissionString } from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
@@ -14,7 +14,9 @@ export class BlacklistCommand implements Command {
         name: Lang.getCom('commands.blacklist'),
         description: 'Manage the blacklist.',
         dm_permission: false,
-        default_member_permissions: '0',
+        default_member_permissions: Permissions.resolve([
+            Permissions.FLAGS.MANAGE_GUILD,
+        ]).toString(),
         options: [
             {
                 name: Lang.getCom('subCommands.add'),
