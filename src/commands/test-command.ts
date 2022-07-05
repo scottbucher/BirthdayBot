@@ -40,9 +40,7 @@ export class TestCommand implements Command {
         name: Lang.getCom('commands.test'),
         description: 'View the next event date. Defaults to birthday.',
         dm_permission: false,
-        default_member_permissions: Permissions.resolve([
-            Permissions.FLAGS.ADMINISTRATOR,
-        ]).toString(),
+        default_member_permissions: '0',
         options: [
             {
                 name: Lang.getCom('arguments.type'),

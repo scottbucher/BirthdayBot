@@ -23,9 +23,7 @@ export class SetupCommand implements Command {
         name: Lang.getCom('commands.setup'),
         description: 'Run the initial setup processes.',
         dm_permission: false,
-        default_member_permissions: Permissions.resolve([
-            Permissions.FLAGS.ADMINISTRATOR,
-        ]).toString(),
+        default_member_permissions: '0',
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
