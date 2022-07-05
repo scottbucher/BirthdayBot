@@ -45,7 +45,6 @@ export class ViewCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

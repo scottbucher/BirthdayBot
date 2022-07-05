@@ -44,7 +44,6 @@ export class SuggestCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = ['VIEW_CHANNEL'];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

@@ -44,7 +44,6 @@ export class InfoCommand implements Command {
     };
     public deferType = CommandDeferType.PUBLIC;
     public requireClientPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

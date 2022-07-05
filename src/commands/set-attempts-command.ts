@@ -36,7 +36,6 @@ export class SetAttemptsCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = true;
     public requireClientPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = false;
     public requirePremium = false;

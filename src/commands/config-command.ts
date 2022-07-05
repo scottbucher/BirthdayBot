@@ -73,7 +73,6 @@ export class ConfigCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = true;
     public requireVote = false;
     public requirePremium = false;

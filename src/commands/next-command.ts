@@ -43,7 +43,6 @@ export class NextCommand implements Command {
     public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionString[] = [];
-    public requireRole = [];
     public requireSetup = false;
     public requireVote = true;
     public requirePremium = false;
