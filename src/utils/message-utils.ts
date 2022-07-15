@@ -27,6 +27,7 @@ const IGNORED_ERRORS = [
     DiscordApiErrors.UnknownInteraction,
     DiscordApiErrors.CannotSendMessagesToThisUser, // User blocked bot or DM disabled
     DiscordApiErrors.ReactionWasBlocked, // User blocked bot or DM disabled
+    DiscordApiErrors.MaximumActiveThreads,
 ];
 
 export class MessageUtils {
