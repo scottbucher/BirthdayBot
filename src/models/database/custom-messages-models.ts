@@ -1,6 +1,6 @@
 import { StatsData } from './index.js';
 
-export class CustomMessages {
+export class CustomMessageData {
     customMessages: CustomMessage[];
     stats: StatsData;
 

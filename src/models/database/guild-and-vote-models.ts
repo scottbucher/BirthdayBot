@@ -1,10 +1,10 @@
-import { GuildData, Vote } from './index.js';
+import { GuildData, VoteData } from './index.js';
 
-export class GuildDataAndVote {
+export class GuildAndVoteData {
     guildData: GuildData;
-    voteData: Vote;
+    voteData: VoteData;
 
-    constructor(guildData: GuildData, voteData: Vote) {
+    constructor(guildData: GuildData, voteData: VoteData) {
         this.guildData = guildData;
         this.voteData = voteData;
     }

@@ -1,6 +1,6 @@
 import { StatsData } from './index.js';
 
-export class MemberAnniversaryRoles {
+export class MemberAnniversaryRoleData {
     memberAnniversaryRoles: MemberAnniversaryRole[];
     stats: StatsData;
 

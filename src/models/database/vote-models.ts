@@ -1,4 +1,4 @@
-export interface Vote {
+export interface VoteData {
     VoteId: number;
     BotSiteName: string;
     UserDiscordId: string;

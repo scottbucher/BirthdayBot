@@ -35,7 +35,8 @@ export class BlacklistAddSubCommand implements Command {
                     'validation',
                     'errorEmbeds.rawAPIInteractionDataReceived',
                     data.lang()
-                )
+                ),
+                true
             );
             return;
         }
@@ -47,7 +48,8 @@ export class BlacklistAddSubCommand implements Command {
                     'validation',
                     'errorEmbeds.cantBlacklistNotInServer',
                     data.lang()
-                )
+                ),
+                true
             );
             return;
         }
@@ -55,7 +57,8 @@ export class BlacklistAddSubCommand implements Command {
         if (!(mentionable instanceof Role) && mentionable.user.bot) {
             await InteractionUtils.send(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.cantBlacklistBots', data.lang())
+                Lang.getErrorEmbed('validation', 'errorEmbeds.cantBlacklistBots', data.lang()),
+                true
             );
             return;
         }

@@ -1,6 +1,6 @@
 import { StatsData } from './index.js';
 
-export class Blacklisted {
+export class BlacklistData {
     blacklist: Blacklist[];
     stats: StatsData;
 

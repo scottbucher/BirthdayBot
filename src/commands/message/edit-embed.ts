@@ -1,7 +1,7 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
 
-import { CustomMessage, CustomMessages } from '../../models/database/custom-messages-models.js';
+import { CustomMessage, CustomMessageData } from '../../models/database/custom-messages-models.js';
 import { EventData } from '../../models/index.js';
 import { CustomMessageRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -41,7 +41,7 @@ export class MessageEditEmbedSubCommand implements Command {
             intr.guild.id,
             databaseType
         );
-        let userMessages: CustomMessages;
+        let userMessages: CustomMessageData;
 
         if (type === 'user_specific_birthday' || type === 'user_specific_member_anniversary') {
             userMessages = await this.customMessageRepo.getCustomUserMessages(

@@ -62,7 +62,8 @@ export class SetupCommand implements Command {
                 if (!botRoleId) {
                     await InteractionUtils.send(
                         intr,
-                        Lang.getErrorEmbed('validation', 'errorEmbeds.noBotRole', data.lang())
+                        Lang.getErrorEmbed('validation', 'errorEmbeds.noBotRole', data.lang()),
+                        true
                     );
                     return;
                 }
@@ -101,7 +102,8 @@ export class SetupCommand implements Command {
             case 'select': {
                 let _selectMessage = await InteractionUtils.send(
                     intr,
-                    Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())
+                    Lang.getEmbed('prompts', 'setup.inputChannel', data.lang()),
+                    true
                 );
 
                 birthdayChannel = await CollectorUtils.collectByMessage(
@@ -121,7 +123,8 @@ export class SetupCommand implements Command {
                                     'validation',
                                     'errorEmbeds.invalidChannel',
                                     data.lang()
-                                )
+                                ),
+                                true
                             );
                             return;
                         }
@@ -137,7 +140,8 @@ export class SetupCommand implements Command {
                                     {
                                         CHANNEL: channelInput.toString(),
                                     }
-                                )
+                                ),
+                                true
                             );
                             return;
                         }
@@ -146,7 +150,8 @@ export class SetupCommand implements Command {
                     async () => {
                         await InteractionUtils.send(
                             intr,
-                            Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                            Lang.getEmbed('results', 'fail.promptExpired', data.lang()),
+                            true
                         );
                     }
                 );
@@ -190,7 +195,8 @@ export class SetupCommand implements Command {
             case 'select': {
                 let _selectMessage = await InteractionUtils.send(
                     intr,
-                    Lang.getEmbed('prompts', 'setup.inputRole', data.lang())
+                    Lang.getEmbed('prompts', 'setup.inputRole', data.lang()),
+                    true
                 );
 
                 birthdayRole = await CollectorUtils.collectByMessage(
@@ -217,7 +223,8 @@ export class SetupCommand implements Command {
                                     'validation',
                                     'errorEmbeds.invalidRole',
                                     data.lang()
-                                )
+                                ),
+                                true
                             );
                             return;
                         }
@@ -237,7 +244,8 @@ export class SetupCommand implements Command {
                                         BOT: intr.client.user.toString(),
                                         ICON: intr.client.user.displayAvatarURL(),
                                     }
-                                )
+                                ),
+                                true
                             );
                             return;
                         }
@@ -250,7 +258,8 @@ export class SetupCommand implements Command {
                                     'validation',
                                     'errorEmbeds.birthdayRoleManaged',
                                     data.lang()
-                                )
+                                ),
+                                true
                             );
                             return;
                         }
@@ -269,7 +278,8 @@ export class SetupCommand implements Command {
                                         S_Value: membersWithRole > 1 ? 's' : '',
                                         ICON: intr.client.user.displayAvatarURL(),
                                     }
-                                )
+                                ),
+                                true
                             );
                         } else if (membersWithRole > 100) {
                             await InteractionUtils.send(
@@ -282,7 +292,8 @@ export class SetupCommand implements Command {
                                         AMOUNT: membersWithRole.toString(),
                                         ICON: intr.client.user.displayAvatarURL(),
                                     }
-                                )
+                                ),
+                                true
                             );
                             return;
                         }
@@ -292,7 +303,8 @@ export class SetupCommand implements Command {
                     async () => {
                         await InteractionUtils.send(
                             intr,
-                            Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                            Lang.getEmbed('results', 'fail.promptExpired', data.lang()),
+                            true
                         );
                     }
                 );
@@ -325,7 +337,8 @@ export class SetupCommand implements Command {
                 CHANNEL: channelOutput,
                 ROLE: roleOutput,
                 ICON: intr.client.user.displayAvatarURL(),
-            })
+            }),
+            true
         );
 
         await this.guildRepo.addOrUpdateGuild(guild.id, birthdayChannel, birthdayRole);
