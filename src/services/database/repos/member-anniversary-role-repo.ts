@@ -1,4 +1,4 @@
-import { MemberAnniversaryRoles } from '../../../models/database/member-anniversary-role-models.js';
+import { MemberAnniversaryRoleData } from '../../../models/database/index.js';
 import { SqlUtils } from '../../../utils/index.js';
 import { DataAccess, Procedure } from '../index.js';
 export class MemberAnniversaryRoleRepo {
@@ -27,27 +27,27 @@ export class MemberAnniversaryRoleRepo {
         await this.dataAccess.executeProcedure(Procedure.MemberAnniversaryRole_Clear, [discordId]);
     }
 
-    public async getMemberAnniversaryRoles(discordId: string): Promise<MemberAnniversaryRoles> {
+    public async getMemberAnniversaryRoles(discordId: string): Promise<MemberAnniversaryRoleData> {
         let results = await this.dataAccess.executeProcedure(Procedure.MemberAnniversaryRole_Get, [
             discordId,
         ]);
 
         let memberAnniversaryRoles = SqlUtils.getTable(results, 0);
-        return new MemberAnniversaryRoles(memberAnniversaryRoles, null);
+        return new MemberAnniversaryRoleData(memberAnniversaryRoles, null);
     }
 
     public async getMemberAnniversaryRoleList(
         guildId: string,
         pageSize: number,
         page: number
-    ): Promise<MemberAnniversaryRoles> {
+    ): Promise<MemberAnniversaryRoleData> {
         let results = await this.dataAccess.executeProcedure(
             Procedure.MemberAnniversaryRole_GetList,
             [guildId, pageSize, page]
         );
 
-        let memberAnniversaryRolesData = SqlUtils.getTable(results, 0);
+        let memberAnniversaryRoles = SqlUtils.getTable(results, 0);
         let stats = SqlUtils.getRow(results, 1, 0);
-        return new MemberAnniversaryRoles(memberAnniversaryRolesData, stats);
+        return new MemberAnniversaryRoleData(memberAnniversaryRoles, stats);
     }
 }

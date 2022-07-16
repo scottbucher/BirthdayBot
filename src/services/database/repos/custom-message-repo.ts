@@ -1,4 +1,4 @@
-import { CustomMessages } from '../../../models/database/index.js';
+import { CustomMessageData } from '../../../models/database/index.js';
 import { SqlUtils } from '../../../utils/index.js';
 import { DataAccess, Procedure } from '../index.js';
 
@@ -105,24 +105,27 @@ export class CustomMessageRepo {
         await this.dataAccess.executeProcedure(Procedure.Message_ClearUser, [discordId, type]);
     }
 
-    public async getCustomMessages(discordId: string, type: string): Promise<CustomMessages> {
+    public async getCustomMessages(discordId: string, type: string): Promise<CustomMessageData> {
         let results = await this.dataAccess.executeProcedure(Procedure.Message_Get, [
             discordId,
             type,
         ]);
 
         let customMessages = SqlUtils.getTable(results, 0);
-        return new CustomMessages(customMessages, null);
+        return new CustomMessageData(customMessages, null);
     }
 
-    public async getCustomUserMessages(discordId: string, type: string): Promise<CustomMessages> {
+    public async getCustomUserMessages(
+        discordId: string,
+        type: string
+    ): Promise<CustomMessageData> {
         let results = await this.dataAccess.executeProcedure(Procedure.Message_GetUser, [
             discordId,
             type,
         ]);
 
         let customMessages = SqlUtils.getTable(results, 0);
-        return new CustomMessages(customMessages, null);
+        return new CustomMessageData(customMessages, null);
     }
 
     public async getCustomMessageList(
@@ -130,7 +133,7 @@ export class CustomMessageRepo {
         pageSize: number,
         page: number,
         type: string
-    ): Promise<CustomMessages> {
+    ): Promise<CustomMessageData> {
         let results = await this.dataAccess.executeProcedure(Procedure.Message_GetList, [
             guildId,
             pageSize,
@@ -138,9 +141,9 @@ export class CustomMessageRepo {
             type,
         ]);
 
-        let customMessageData = SqlUtils.getTable(results, 0);
+        let customMessages = SqlUtils.getTable(results, 0);
         let stats = SqlUtils.getRow(results, 1, 0);
-        return new CustomMessages(customMessageData, stats);
+        return new CustomMessageData(customMessages, stats);
     }
 
     public async getCustomMessageUserList(
@@ -148,7 +151,7 @@ export class CustomMessageRepo {
         pageSize: number,
         page: number,
         type: string
-    ): Promise<CustomMessages> {
+    ): Promise<CustomMessageData> {
         let results = await this.dataAccess.executeProcedure(Procedure.Message_GetUserList, [
             guildId,
             pageSize,
@@ -156,8 +159,8 @@ export class CustomMessageRepo {
             type,
         ]);
 
-        let customMessageData = SqlUtils.getTable(results, 0);
+        let customMessages = SqlUtils.getTable(results, 0);
         let stats = SqlUtils.getRow(results, 1, 0);
-        return new CustomMessages(customMessageData, stats);
+        return new CustomMessageData(customMessages, stats);
     }
 }

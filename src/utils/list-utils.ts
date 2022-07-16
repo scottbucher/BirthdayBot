@@ -3,13 +3,13 @@ import moment from 'moment';
 import { createRequire } from 'node:module';
 
 import {
-    Blacklisted,
-    CustomMessages,
+    BlacklistData,
+    CustomMessageData,
     GuildData,
+    MemberAnniversaryRoleData,
+    TrustedRoleData,
     UserDataResults,
 } from '../models/database/index.js';
-import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models.js';
-import { TrustedRoles } from '../models/database/trusted-role-models.js';
 import { EventData } from '../models/internal-models.js';
 import { Lang } from '../services/index.js';
 import { CelebrationUtils, ClientUtils } from './index.js';
@@ -20,7 +20,7 @@ let Config = require('../../config/config.json');
 export class ListUtils {
     public static async getCustomMessageListEmbed(
         guild: Guild,
-        customMessageResults: CustomMessages,
+        customMessageResults: CustomMessageData,
         page: number,
         pageSize: number,
         type: string,
@@ -125,7 +125,7 @@ export class ListUtils {
 
     public static async getCustomUserMessageListEmbed(
         guild: Guild,
-        customMessageResults: CustomMessages,
+        customMessageResults: CustomMessageData,
         page: number,
         pageSize: number,
         type: string,
@@ -215,7 +215,7 @@ export class ListUtils {
 
     public static async getTrustedRoleListEmbed(
         guild: Guild,
-        trustedRoleResults: TrustedRoles,
+        trustedRoleResults: TrustedRoleData,
         page: number,
         pageSize: number,
         data: EventData
@@ -383,7 +383,7 @@ export class ListUtils {
 
     public static async getBlacklistFullEmbed(
         guild: Guild,
-        blacklistResults: Blacklisted,
+        blacklistResults: BlacklistData,
         page: number,
         _pageSize: number,
         data: EventData
@@ -424,7 +424,7 @@ export class ListUtils {
 
     public static async getMemberAnniversaryRoleListEmbed(
         guild: Guild,
-        memberAnniversaryRoleResults: MemberAnniversaryRoles,
+        memberAnniversaryRoleResults: MemberAnniversaryRoleData,
         page: number,
         pageSize: number,
         data: EventData

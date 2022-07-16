@@ -1,6 +1,6 @@
 import { StatsData } from './index.js';
 
-export class TrustedRoles {
+export class TrustedRoleData {
     trustedRoles: TrustedRole[];
     stats: StatsData;
 
