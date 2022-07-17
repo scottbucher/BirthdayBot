@@ -3,11 +3,15 @@ import {
     RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { CommandInteraction, Permissions, PermissionString } from 'discord.js';
+import { createRequire } from 'node:module';
 
 import { EventData } from '../models/index.js';
 import { Lang } from '../services/index.js';
 import { CommandUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
+
+const require = createRequire(import.meta.url);
+let Config = require('../../../config/config.json');
 
 export class MessageCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -363,6 +367,7 @@ export class MessageCommand implements Command {
                             'The message to add. Available placeholders: {Users} or @User, {Server}, {Year} (Anniversaries only).',
                         type: ApplicationCommandOptionType.String.valueOf(),
                         required: true,
+                        max_length: Config.validation.message.maxLength,
                     },
                 ],
             },

@@ -178,10 +178,6 @@
                 "description": "Your server has reached the maximum amount of custom {{TYPE}} messages! (**{{PAID_MAX}}**)",
                 "color": "{{COM:colors.error}}"
             },
-            "maxCustomMessageSize": {
-                "description": "Custom Messages are maxed at {{MAX_SIZE}} characters!",
-                "color": "{{COM:colors.error}}"
-            },
             "noUserPlaceholder": {
                 "description": [
                     "Please include the `{{REF:placeHolders.users}}` placeholder somewhere in the message. This indicates where the member names will appear.",

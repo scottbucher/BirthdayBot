@@ -134,16 +134,6 @@ export class MessageAddSubCommand implements Command {
             .replaceAll(Lang.getRegex('info', 'placeHolders.serverRegex', data.lang()), '{Server}')
             .replaceAll(Lang.getRegex('info', 'placeHolders.yearRegex', data.lang()), '{Year}');
 
-        if (message.length > Config.validation.message.maxLength) {
-            await InteractionUtils.send(
-                intr,
-                Lang.getEmbed('validation', 'embeds.maxCustomMessageSize', data.lang(), {
-                    MAX_SIZE: Config.validation.message.maxLength.toString(),
-                })
-            );
-            return;
-        }
-
         // Ensure the required placeholders are in the message
         if (type === 'birthday' || type === 'member_anniversary') {
             // Can also use year and server name placeholder
