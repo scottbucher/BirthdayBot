@@ -1,5 +1,6 @@
 import {
     BlacklistData,
+    CustomMessageData,
     GuildData,
     MemberAnniversaryRoleData,
     TrustedRoleData,
@@ -13,5 +14,6 @@ export class DatabaseModel {
     blacklistData?: BlacklistData;
     trustedRoleData?: TrustedRoleData;
     memberAnniversaryRoleData?: MemberAnniversaryRoleData;
-    VoteData?: VoteData;
+    voteData?: VoteData;
+    customMessageData?: CustomMessageData;
 }
