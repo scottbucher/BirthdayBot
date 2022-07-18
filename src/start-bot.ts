@@ -23,7 +23,7 @@ import {
     BlacklistListSubCommand,
     BlacklistRemoveIdSubCommand,
     BlacklistRemoveRoleOrUserSubCommand,
-} from './commands/blacklist/index.js';
+} from './commands/chat/blacklist/index.js';
 import {
     ChannelSubCommand,
     DateFormatSubCommand,
@@ -34,10 +34,9 @@ import {
     TrustedPreventsMsgSubCommand,
     TrustedPreventsRoleSubCommand,
     UseTimezoneSubCommand,
-} from './commands/config/index.js';
+} from './commands/chat/config/index.js';
 import {
     BlacklistCommand,
-    Command,
     ConfigCommand,
     DonateCommand,
     HelpCommand,
@@ -59,13 +58,13 @@ import {
     TrustedRoleCommand,
     ViewCommand,
     VoteCommand,
-} from './commands/index.js';
+} from './commands/chat/index.js';
 import {
     MarAddSubCommand,
     MarClearSubCommand,
     MarListSubCommand,
     MarRemoveSubCommand,
-} from './commands/mar/index.js';
+} from './commands/chat/mar/index.js';
 import {
     MessageAddSubCommand,
     MessageClearSubCommand,
@@ -76,14 +75,15 @@ import {
     MessageSettingMentionSubCommand,
     MessageSettingTimeSubCommand,
     MessageTestSubCommand,
-} from './commands/message/index.js';
+} from './commands/chat/message/index.js';
 import {
     TrustedRoleAddSubCommand,
     TrustedRoleClearSubCommand,
     TrustedRoleListSubCommand,
     TrustedRoleRemoveIdSubCommand,
     TrustedRoleRemoveRoleSubCommand,
-} from './commands/trusted-role/index.js';
+} from './commands/chat/trusted-role/index.js';
+import { Command } from './commands/index.js';
 import {
     ButtonHandler,
     CommandHandler,
@@ -203,6 +203,7 @@ async function start(): Promise<void> {
 
     // Commands
     let commands: Command[] = [
+        // Chat Commands
         new HelpCommand(),
         new InfoCommand(),
         new LinkCommand(),

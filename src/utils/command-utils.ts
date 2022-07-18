@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    BaseCommandInteraction,
     GuildChannel,
     NewsChannel,
     TextChannel,
@@ -22,7 +22,7 @@ export class CommandUtils {
 
     public static async runChecks(
         command: Command,
-        intr: CommandInteraction,
+        intr: BaseCommandInteraction,
         data: EventData
     ): Promise<boolean> {
         if (command.cooldown) {

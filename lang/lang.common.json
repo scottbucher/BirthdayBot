@@ -4,7 +4,7 @@
         "id": "<BOT_ID>",
         "author": "Scott Bucher"
     },
-    "commands": {
+    "chatCommands": {
         "help": "help",
         "info": "info",
         "link": "link",
@@ -54,6 +54,12 @@
         "set": "set",
         "next": "next",
         "view": "view"
+    },
+    "userCommands": {
+        "viewDateJoined": "View Date Joined"
+    },
+    "messageCommands": {
+        "viewDateSent": "View Date Sent"
     },
     "arguments": {
         "setting": "setting",
