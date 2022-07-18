@@ -7,8 +7,7 @@ import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../../../models/internal-models.js';
 import { BlacklistRepo } from '../../../services/database/repos/blacklist-repo.js';
 import { Lang } from '../../../services/lang.js';
-import { CollectorUtils } from '../../../utils/index.js';
-import { InteractionUtils } from '../../../utils/interaction-utils.js';
+import { CollectorUtils, InteractionUtils } from '../../../utils/index.js';
 import { Command } from '../../index.js';
 
 export class BlacklistClearSubCommand implements Command {

@@ -7,8 +7,7 @@ import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../../../models/index.js';
 import { CustomMessageRepo } from '../../../services/database/repos/index.js';
 import { Lang } from '../../../services/index.js';
-import { CollectorUtils } from '../../../utils/collector-utils.js';
-import { FormatUtils, InteractionUtils } from '../../../utils/index.js';
+import { CollectorUtils, FormatUtils, InteractionUtils } from '../../../utils/index.js';
 import { Command } from '../../index.js';
 
 export class MessageClearSubCommand implements Command {

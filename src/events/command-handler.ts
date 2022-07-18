@@ -6,8 +6,7 @@ import { Command, CommandDeferType } from '../commands/index.js';
 import { EventData, PlanName } from '../models/index.js';
 import { CombinedRepo, GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang, Logger, SubscriptionService } from '../services/index.js';
-import { CommandUtils } from '../utils/index.js';
-import { InteractionUtils } from '../utils/interaction-utils.js';
+import { CommandUtils, InteractionUtils } from '../utils/index.js';
 import { EventHandler } from './index.js';
 
 const require = createRequire(import.meta.url);

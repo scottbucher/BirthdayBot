@@ -7,8 +7,7 @@ import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../../models/index.js';
 import { UserRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils } from '../../utils/collector-utils.js';
-import { InteractionUtils } from '../../utils/index.js';
+import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command, CommandDeferType } from '../index.js';
 
 export class PurgeCommand implements Command {

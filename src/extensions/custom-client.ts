@@ -6,9 +6,7 @@ import { PlanName, SubscriptionStatusName } from '../models/subscription-models.
 import { GuildRepo } from '../services/database/repos/guild-repo.js';
 import { Lang } from '../services/lang.js';
 import { Logger } from '../services/logger.js';
-import { ClientUtils } from '../utils/client-utils.js';
-import { MessageUtils } from '../utils/message-utils.js';
-import { PermissionUtils } from '../utils/permission-utils.js';
+import { ClientUtils, MessageUtils, PermissionUtils } from '../utils/index.js';
 
 const require = createRequire(import.meta.url);
 let Logs = require('../../lang/logs.json');
