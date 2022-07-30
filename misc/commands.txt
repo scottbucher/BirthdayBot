@@ -1,0 +1,66 @@
+# MISC Commands
+- /view [type] (default: birthday, member_anniversary)
+- /next [type] (default: birthday, member_anniversary)
+- /link <type> (support, docs, donate, faq, invite, vote, map)
+- /settings [type] (default: general, event, advanced)
+- /help [category]
+
+
+# List commands
+- /view_messages <type>
+- /view_blacklist
+- /view_trusted_role
+- /view_member_anniversary_roles
+- /view_custom_events
+
+# Config Commands
+- /config timezone <timezone>
+- /config nameFormat <nameFormat>
+- /config dateFormat <dateFormat>
+- /config useTimezone <useTimezone>
+- /config trustedPreventsRole <true/false>
+- /config trustedPreventsMessage <true/false>
+- /config requireAllTrustedRoles <true/false>
+
+# Event Commands (type includes: birthday, memeber_anniversary, server_anniversary, custom_event)
+- /event mention <type> <mention>
+- /event time <type> <0-23>
+- /event post_mode <type> <post_mode>
+- /event channel <type> <channel> 
+
+# Custom Event Commands
+/custom_event add <date>
+/custom_event remove <nano_id>
+/custom_event test <event_number>
+
+# Trusted Role commands
+- /trusted_role add <role>
+- /trusted_role remove <nano_id>
+- /trusted_role clear
+
+# Blacklist Commands
+- /blacklist add <role_or_user>
+- /blacklist remove <nano_id>
+- /blacklist clear
+
+# Member Anniversary Role Commands
+- /mar add <role> <year>
+- /mar remove <year>
+- /mar clear
+
+# Message commands
+- /message add <type>
+	- asks for description
+	- asks for image (link or {USER_PFP})
+	- asks for embed (true/false)
+	- asks for color (if premium & embed = true)
+	- asks for title (if premium & embed = true)
+	- asks for footer (if premium & embed = true)
+- /message remove <nano_id>
+- /message clear <type>
+- /message edit decription <nano_id> <new_description>
+- /message edit embed <nano_id> <true/false>
+- /message edit image <nano_id> <new_image>
+- /message edit title <nano_id> <title>
+- /message edit footer <nano_id> <new_footer>
+- /message test <nano_id>
