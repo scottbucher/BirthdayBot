@@ -1,0 +1,40 @@
+{
+    "id": "",
+    "discordId": "660711235766976553",
+    "language": "en-US",
+    "settings": {
+        "timeZone": "America/New_York",
+        "useTimeZone": "server",
+        "nameFormat": "mention",
+        "dateFormat": "MONTH_DAY",
+        "birthdayRoleDiscordId": "709287764847493172",
+        "birthdayChannelDiscordId": "709287764847493172",
+        "memberAnniversaryChannelDiscordId": "709287764847493172",
+        "serverAnniversaryChannelDiscordId": "709287764847493172",
+        "customEventChannelDiscordId": "709287764847493172",
+        "birthdayMentionSetting": "none",
+        "memberAnniversaryMentionSetting": "none",
+        "serverAnniversaryMentionSetting": "none",
+        "birthdayMessageTime": 0,
+        "memberAnniversaryMessageTime": 0,
+        "serverAnniversaryMessageTime": 0,
+        "birthdayPostSetting": "POST_ONLY",
+        "memberAnniversaryPostSetting": "POST_ONLY",
+        "serverAnniversaryPostSetting": "POST_ONLY",
+        "customEventPostSetting": "POST_ONLY",
+        "daysBeforeBirthdayReminder": 0,
+        "trustedPreventsMessage": true,
+        "trustedPreventsRole": true,
+        "trustedPreventsMention": true,
+        "requireAllTrustedRoles": true
+    },
+    "premium": {
+        "active": true,
+        "lastCheck": "2022-05-13T23:13:18Z"
+    },
+    "+messages": [],
+    "+events": [],
+    "+memberAnniversaryRoles": [],
+    "+blacklists": [],
+    "+trustedRoles": []
+}
