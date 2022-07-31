@@ -1,0 +1,28 @@
+[
+    {
+        "_id": "52f51f6c-6969-4be0-b0b1-5610e2567d4c",
+        "+guild": "660711235766976553",
+        "alias": "60glw1",
+        "type": "birthday",
+        "UserSpecifcDiscordId": null, // For User specific messages (these are a pain in the ass to support)
+        "description": "Happy birthday {Users}!", // The only thing used if Embedded = false
+        "embedded": true,
+        "color": null,
+        "image": "https://tinyurl.com/yftwz68s",
+        "title": "Birthday Announcement!",
+        "footer": "Everyone please wish them a happy birthday in #birthdays!"
+    },
+    {
+        "_id": "0a480038-09da-4ae2-b47b-d73cdc9c0cad",
+        "+guild": "660711235766976553",
+        "alias": "60glw2",
+        "type": "custom_event",
+        "UserSpecifcDiscordId": null, // For User specific messages (these are a pain in the ass to support)
+        "description": "I hope everyone has a very merry Christmas and enjoys the holidays!", // The only thing used if Embedded = false
+        "embedded": true,
+        "color": "green",
+        "image": null,
+        "title": "Merry Christmas!",
+        "footer": "This is a custom event!"
+    }
+]
