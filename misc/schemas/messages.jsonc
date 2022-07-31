@@ -20,7 +20,7 @@
         "UserSpecifcDiscordId": null, // For User specific messages (these are a pain in the ass to support)
         "description": "I hope everyone has a very merry Christmas and enjoys the holidays!", // The only thing used if Embedded = false
         "embedded": true,
-        "color": "green",
+        "color": "#0339fc",
         "image": null,
         "title": "Merry Christmas!",
         "footer": "This is a custom event!"
