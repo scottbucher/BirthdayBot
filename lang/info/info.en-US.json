@@ -1193,7 +1193,8 @@
             "serverLanguage": "Server Language",
             "never": "Never",
             "mmdd": "MM/DD",
-            "ddmm": "DD/MM"
+            "ddmm": "DD/MM",
+            "enterResponse": "Enter Response"
         }
     }
 }
