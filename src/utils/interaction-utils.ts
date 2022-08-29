@@ -1,5 +1,6 @@
 import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v10';
 import {
+    BaseCommandInteraction,
     ButtonInteraction,
     CommandInteraction,
     DiscordAPIError,
@@ -9,6 +10,7 @@ import {
     MessageActionRow,
     MessageComponentInteraction,
     MessageEmbed,
+    ModalSubmitInteraction,
     WebhookEditMessageOptions,
 } from 'discord.js';
 
@@ -75,7 +77,7 @@ export class InteractionUtils {
     }
 
     public static async send(
-        intr: CommandInteraction | MessageComponentInteraction,
+        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         content: string | MessageEmbed | InteractionReplyOptions,
         hidden: boolean = false
     ): Promise<Message> {
