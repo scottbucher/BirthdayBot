@@ -288,6 +288,9 @@ export class CollectorUtils {
         );
     }
 
+    /**
+     * @deprecated Requires the message intent after August 31st 2022
+     */
     public static collectByMessage<T>(
         channel: TextBasedChannel,
         user: User,
