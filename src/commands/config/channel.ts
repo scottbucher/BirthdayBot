@@ -73,7 +73,7 @@ export class ChannelSubCommand implements Command {
             celebrationTypePrompt,
             new Modal({
                 customId: 'modal', // Will be overwritten
-                title: 'Celebration Type',
+                title: Lang.getRef('info', 'terms.celebrationType', LangCode.EN_US),
                 components: [
                     {
                         type: 'ACTION_ROW',
@@ -81,10 +81,11 @@ export class ChannelSubCommand implements Command {
                             {
                                 type: 'TEXT_INPUT',
                                 customId: 'type',
-                                label: 'Celebration Type',
+                                label: Lang.getRef('info', 'terms.celebrationType', LangCode.EN_US),
                                 required: true,
                                 style: 'SHORT',
-                                minLength: 1,
+                                minLength: 6,
+                                maxLength: 18,
                                 placeholder: 'birthday',
                             },
                         ],
@@ -112,10 +113,9 @@ export class ChannelSubCommand implements Command {
             expireFunction
         );
 
+        if (typeResult === undefined) return;
         nextIntr = typeResult.intr;
         type = typeResult.value;
-
-        if (type === undefined) return;
 
         let displayType = Lang.getRef('info', `terms.${type}`, data.lang());
 
@@ -139,12 +139,14 @@ export class ChannelSubCommand implements Command {
             });
 
             let channelResult = await CollectorUtils.getSetupChoiceFromButton(
-                intr,
+                nextIntr,
                 data,
                 promptEmbed
             );
 
             if (channelResult === undefined) return;
+
+            nextIntr = channelResult.intr;
 
             switch (channelResult.value) {
                 case 'create': {
@@ -176,7 +178,7 @@ export class ChannelSubCommand implements Command {
                         })
                     )?.id;
                     await InteractionUtils.send(
-                        intr,
+                        nextIntr,
                         Lang.getSuccessEmbed(
                             'results',
                             'successEmbeds.channelCreate',
@@ -189,8 +191,8 @@ export class ChannelSubCommand implements Command {
                     break;
                 }
                 case 'select': {
-                    let celebrationTypePrompt = await InteractionUtils.send(nextIntr, {
-                        embeds: [Lang.getEmbed('prompts', 'config.inputChannel', data.lang())],
+                    let channelPrompt = await InteractionUtils.send(nextIntr, {
+                        embeds: [Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())],
                         components: [
                             {
                                 type: 'ACTION_ROW',
@@ -211,11 +213,11 @@ export class ChannelSubCommand implements Command {
                         ],
                     });
 
-                    let typeResult = await CollectorUtils.collectByModal(
-                        celebrationTypePrompt,
+                    let channelResult = await CollectorUtils.collectByModal(
+                        channelPrompt,
                         new Modal({
                             customId: 'modal', // Will be overwritten
-                            title: 'Celebration Type',
+                            title: Lang.getRef('info', `terms.${type}Channel`, data.lang()),
                             components: [
                                 {
                                     type: 'ACTION_ROW',
@@ -223,11 +225,15 @@ export class ChannelSubCommand implements Command {
                                         {
                                             type: 'TEXT_INPUT',
                                             customId: 'type',
-                                            label: 'Celebration Type',
+                                            label: Lang.getRef(
+                                                'info',
+                                                `terms.${type}Channel`,
+                                                data.lang()
+                                            ),
                                             required: true,
                                             style: 'SHORT',
                                             minLength: 1,
-                                            placeholder: 'birthday',
+                                            placeholder: 'birthday-announcements',
                                         },
                                     ],
                                 },
@@ -275,14 +281,12 @@ export class ChannelSubCommand implements Command {
                         expireFunction
                     );
 
-                    nextIntr = typeResult.intr;
-                    channel = typeResult.value;
+                    if (channelResult === undefined) return;
+                    nextIntr = channelResult.intr;
+                    channel = channelResult.value;
 
-                    if (channel === undefined) {
-                        return;
-                    }
                     await InteractionUtils.send(
-                        intr,
+                        nextIntr,
                         Lang.getSuccessEmbed('results', 'successEmbeds.channelSet', data.lang(), {
                             CHANNEL: `<#${channel}>`,
                             TYPE: displayType.toLowerCase(),

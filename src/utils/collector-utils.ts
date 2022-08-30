@@ -1,8 +1,10 @@
 import {
+    BaseCommandInteraction,
     ButtonInteraction,
     CommandInteraction,
     Message,
     MessageActionRow,
+    MessageComponentInteraction,
     MessageEmbed,
     Modal,
     ModalSubmitInteraction,
@@ -21,9 +23,9 @@ import {
 } from 'discord.js-collector-utils';
 import { createRequire } from 'node:module';
 
-import { EventData } from '../models/index.js';
-import { Lang } from '../services/index.js';
-import { InteractionUtils } from './index.js';
+import { EventData } from '../models/internal-models.js';
+import { Lang } from '../services/lang.js';
+import { InteractionUtils } from './interaction-utils.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
@@ -123,7 +125,7 @@ export class CollectorUtils {
     }
 
     public static async getSetupChoiceFromButton(
-        prevIntr: CommandInteraction | ButtonInteraction,
+        prevIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         data: EventData,
         embed: MessageEmbed
     ): Promise<{ intr: ButtonInteraction; value: string }> {

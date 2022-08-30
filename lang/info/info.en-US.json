@@ -1194,7 +1194,8 @@
             "never": "Never",
             "mmdd": "MM/DD",
             "ddmm": "DD/MM",
-            "enterResponse": "Enter Response"
+            "enterResponse": "Enter Response",
+            "celebrationType": "Celebration Type"
         }
     }
 }
