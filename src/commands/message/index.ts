@@ -1,9 +1,9 @@
 export { MessageAddSubCommand } from './add.js';
 export { MessageClearSubCommand } from './clear.js';
-export { MessageRemoveSubCommand } from './remove.js';
-export { MessageTestSubCommand } from './test.js';
+export { MessageEditColorSubCommand } from './edit-color.js';
+export { MessageEditEmbedSubCommand } from './edit-embed.js';
 export { MessageListSubCommand } from './list.js';
+export { MessageRemoveSubCommand } from './remove.js';
 export { MessageSettingMentionSubCommand } from './setting-mention.js';
 export { MessageSettingTimeSubCommand } from './setting-time.js';
-export { MessageEditEmbedSubCommand } from './edit-embed.js';
-export { MessageEditColorSubCommand } from './edit-color.js';
+export { MessageTestSubCommand } from './test.js';
