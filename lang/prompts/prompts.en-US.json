@@ -44,7 +44,7 @@
                 },
                 "title": "Time Zone Setup - {{TARGET}}",
                 "description": [
-                    "First, please type/paste your time zone below. [(?)]({{COM:docLinks.whyDoesItNeedMyTimezone}})",
+                    "First, enter your time zone. [(?)]({{COM:docLinks.whyDoesItNeedMyTimezone}})",
                     "To find your time zone please use the [map time zone picker]({{COM:links.map}})!",
                     "",
                     "Simply click your location on the map and copy the name of the selected time zone.",
@@ -116,10 +116,10 @@
                 "timestamp": true
             },
             "inputChannel": {
-                "description": "Please mention a channel or input a channel's name."
+                "description": "Please enter a channel or input a channel's name."
             },
             "inputRole": {
-                "description": "Please mention a role or input a role's name."
+                "description": "Please enter a role or input a role's name."
             }
         },
         "config": {
