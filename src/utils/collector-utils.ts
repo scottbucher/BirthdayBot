@@ -20,9 +20,9 @@ import {
 } from 'discord.js-collector-utils';
 import { createRequire } from 'node:module';
 
-import { EventData } from '../models/internal-models.js';
+import { EventData } from '../models/index.js';
 import { Lang } from '../services/lang.js';
-import { InteractionUtils } from './interaction-utils.js';
+import { InteractionUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');

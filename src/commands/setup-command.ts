@@ -15,8 +15,7 @@ import { createRequire } from 'node:module';
 import { EventData } from '../models/index.js';
 import { GuildRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
-import { CollectorUtils } from '../utils/collector-utils.js';
-import { ClientUtils, InteractionUtils, PermissionUtils } from '../utils/index.js';
+import { ClientUtils, CollectorUtils, InteractionUtils, PermissionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 const require = createRequire(import.meta.url);

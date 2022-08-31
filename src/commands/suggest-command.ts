@@ -15,8 +15,7 @@ import {
 import { EventData } from '../models/index.js';
 import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
-import { BirthdayUtils } from '../utils/birthday-utils.js';
-import { FormatUtils, InteractionUtils } from '../utils/index.js';
+import { BirthdayUtils, FormatUtils, InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class SuggestCommand implements Command {
