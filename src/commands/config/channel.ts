@@ -231,7 +231,7 @@ export class ChannelSubCommand implements Command {
                                             required: true,
                                             style: 'SHORT',
                                             minLength: 1,
-                                            placeholder: placeholder.split(' ').join('-'), // format like #channel-name
+                                            placeholder: `#${placeholder.split(' ').join('-')}`, // format like #channel-name
                                         },
                                     ],
                                 },

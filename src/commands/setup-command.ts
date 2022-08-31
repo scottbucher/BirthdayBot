@@ -141,11 +141,11 @@ export class SetupCommand implements Command {
                                         required: true,
                                         style: 'SHORT',
                                         minLength: 1,
-                                        placeholder: Lang.getRef(
+                                        placeholder: `#${Lang.getRef(
                                             'info',
                                             'defaults.birthdayChannelName',
                                             data.lang()
-                                        ),
+                                        )}`,
                                     },
                                 ],
                             },
