@@ -1,18 +1,18 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
     BaseCommandInteraction,
+    ButtonInteraction,
     CommandInteraction,
+    MessageActionRow,
     MessageComponentInteraction,
-    Modal,
     ModalSubmitInteraction,
     PermissionString,
 } from 'discord.js';
-import { ExpireFunction } from 'discord.js-collector-utils';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
+import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class NameFormatSubCommand implements Command {
@@ -37,68 +37,82 @@ export class NameFormatSubCommand implements Command {
             | BaseCommandInteraction
             | MessageComponentInteraction
             | ModalSubmitInteraction = intr;
-        let expireFunction: ExpireFunction = async () => {
-            await InteractionUtils.send(
-                nextIntr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-            );
-        };
 
         if (!reset) {
             // prompt them for a setting
+            let nameFormatPrompt = await InteractionUtils.send(nextIntr, {
+                embeds: [
+                    Lang.getEmbed('prompts', 'config.nameFormat', data.lang(), {
+                        MENTION: intr.user.toString(),
+                        USERNAME: intr.user.username,
+                        NICKNAME: guildMember.displayName,
+                        TAG: `${intr.user.username}#${intr.user.discriminator}`,
+                    }),
+                ],
+                components: [
+                    {
+                        type: 'ACTION_ROW',
+                        components: [
+                            {
+                                type: 'BUTTON',
+                                customId: 'mention',
+                                label: Lang.getRef('info', 'terms.mention', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                            {
+                                type: 'BUTTON',
+                                customId: 'username',
+                                label: Lang.getRef('info', 'terms.username', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                            {
+                                type: 'BUTTON',
+                                customId: 'nickname',
+                                label: Lang.getRef('info', 'terms.nickname', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                            {
+                                type: 'BUTTON',
+                                customId: 'tag',
+                                label: Lang.getRef('info', 'terms.tag', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                        ],
+                    },
+                ],
+            });
 
-            let nameFormatPrompt = await InteractionUtils.sendWithEnterResponseButton(
-                nextIntr,
-                data,
-                Lang.getEmbed('prompts', 'config.nameFormat', data.lang(), {
-                    MENTION: intr.user.toString(),
-                    USERNAME: intr.user.username,
-                    NICKNAME: guildMember.displayName,
-                    TAG: `${intr.user.username}#${intr.user.discriminator}`,
-                })
-            );
-
-            let nameFormatResult = await CollectorUtils.collectByModal(
+            let nameFormatResult = await CollectorUtils.collectByButton(
                 nameFormatPrompt,
-                new Modal({
-                    customId: 'modal', // Will be overwritten
-                    title: Lang.getRef('info', 'terms.nameFormat', data.lang()),
-                    components: [
-                        {
-                            type: 'ACTION_ROW',
-                            components: [
-                                {
-                                    type: 'TEXT_INPUT',
-                                    customId: 'nameFormat',
-                                    label: Lang.getRef('info', 'terms.nameFormat', data.lang()),
-                                    required: true,
-                                    style: 'SHORT',
-                                    minLength: 1,
-                                    placeholder: Lang.getRef('info', 'types.nickname', data.lang()),
-                                },
-                            ],
-                        },
-                    ],
-                }),
-                intr.user,
-                async (intr: ModalSubmitInteraction) => {
-                    let input = intr.components[0].components[0].value.toLowerCase();
-                    let givenNameFormat = FormatUtils.extractNameFormatType(input);
-                    if (!givenNameFormat) {
-                        await InteractionUtils.send(
-                            intr,
-                            Lang.getErrorEmbed(
-                                'validation',
-                                'errorEmbeds.invalidSetting',
-                                data.lang()
-                            )
-                        );
+                nextIntr.user,
+                async (intr: ButtonInteraction) => {
+                    try {
+                        await InteractionUtils.deferAndDisableButtons(intr);
+                    } catch (error) {
+                        try {
+                            await InteractionUtils.editReply(intr, {
+                                components: InteractionUtils.setComponentsStatus(
+                                    intr.message.components as MessageActionRow[],
+                                    true
+                                ),
+                            });
+                        } catch (error) {
+                            return;
+                        }
                         return;
                     }
 
-                    return { intr, value: givenNameFormat };
+                    return {
+                        intr,
+                        value: intr.customId,
+                    };
                 },
-                expireFunction
+                async () => {
+                    await InteractionUtils.send(
+                        nextIntr,
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                    );
+                }
             );
 
             if (nameFormatResult === undefined) return;

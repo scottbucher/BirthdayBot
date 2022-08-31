@@ -1,18 +1,18 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
     BaseCommandInteraction,
+    ButtonInteraction,
     CommandInteraction,
+    MessageActionRow,
     MessageComponentInteraction,
-    Modal,
     ModalSubmitInteraction,
     PermissionString,
 } from 'discord.js';
-import { ExpireFunction } from 'discord.js-collector-utils';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
+import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class UseTimezoneSubCommand implements Command {
@@ -36,65 +36,62 @@ export class UseTimezoneSubCommand implements Command {
             | BaseCommandInteraction
             | MessageComponentInteraction
             | ModalSubmitInteraction = intr;
-        let expireFunction: ExpireFunction = async () => {
-            await InteractionUtils.send(
-                nextIntr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-            );
-        };
 
         if (!reset) {
-            let useTimeZonePrompt = await InteractionUtils.sendWithEnterResponseButton(
-                nextIntr,
-                data,
-                Lang.getEmbed('prompts', 'config.useTimezone', data.lang())
-            );
+            let useTimeZonePrompt = await InteractionUtils.send(nextIntr, {
+                embeds: [Lang.getEmbed('prompts', 'config.useTimezone', data.lang())],
+                components: [
+                    {
+                        type: 'ACTION_ROW',
+                        components: [
+                            {
+                                type: 'BUTTON',
+                                customId: 'user',
+                                label: Lang.getRef('info', 'terms.user', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                            {
+                                type: 'BUTTON',
+                                customId: 'select',
+                                label: Lang.getRef('info', 'terms.server', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                        ],
+                    },
+                ],
+            });
 
-            let useTimezoneResult = await CollectorUtils.collectByModal(
+            let useTimezoneResult = await CollectorUtils.collectByButton(
                 useTimeZonePrompt,
-                new Modal({
-                    customId: 'modal', // Will be overwritten
-                    title: Lang.getRef('info', 'terms.useTimezone', data.lang()),
-                    components: [
-                        {
-                            type: 'ACTION_ROW',
-                            components: [
-                                {
-                                    type: 'TEXT_INPUT',
-                                    customId: 'useTimezone',
-                                    label: Lang.getRef('info', 'terms.useTimezone', data.lang()),
-                                    required: true,
-                                    style: 'SHORT',
-                                    minLength: 4,
-                                    maxLength: 6,
-                                    placeholder: Lang.getRef('info', 'terms.user', data.lang()),
-                                },
-                            ],
-                        },
-                    ],
-                }),
-                intr.user,
-                async (intr: ModalSubmitInteraction) => {
-                    let input = intr.components[0].components[0].value;
-
-                    let givenSetting =
-                        FormatUtils.extractMiscActionType(input)?.toLowerCase() ?? '';
-
-                    if (givenSetting !== 'user' && givenSetting !== 'server') {
-                        await InteractionUtils.send(
-                            intr,
-                            Lang.getErrorEmbed(
-                                'validation',
-                                'errorEmbeds.invalidSetting',
-                                data.lang()
-                            )
-                        );
+                nextIntr.user,
+                async (intr: ButtonInteraction) => {
+                    try {
+                        await InteractionUtils.deferAndDisableButtons(intr);
+                    } catch (error) {
+                        try {
+                            await InteractionUtils.editReply(intr, {
+                                components: InteractionUtils.setComponentsStatus(
+                                    intr.message.components as MessageActionRow[],
+                                    true
+                                ),
+                            });
+                        } catch (error) {
+                            return;
+                        }
                         return;
                     }
 
-                    return { intr, value: givenSetting.toLowerCase() };
+                    return {
+                        intr,
+                        value: intr.customId,
+                    };
                 },
-                expireFunction
+                async () => {
+                    await InteractionUtils.send(
+                        nextIntr,
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                    );
+                }
             );
 
             if (useTimezoneResult === undefined) return;

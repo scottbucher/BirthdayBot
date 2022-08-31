@@ -1198,7 +1198,16 @@
             "celebrationType": "Celebration Type",
             "newYorkTimezone": "America/New_York",
             "messageColor": "Message Color",
-            "blue": "Blue"
+            "blue": "Blue",
+            "createNew": "Create New",
+            "selectExisting": "Select Existing",
+            "doNotSet": "Do Not Set",
+            "mention": "Mention",
+            "username": "Username",
+            "nickname": "Nickname",
+            "tag": "Tag",
+            "month/day": "Month/Day",
+            "day/month": "Day/Month"
         }
     }
 }

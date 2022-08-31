@@ -1,7 +1,9 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
     BaseCommandInteraction,
+    ButtonInteraction,
     CommandInteraction,
+    MessageActionRow,
     MessageComponentInteraction,
     Modal,
     ModalSubmitInteraction,
@@ -16,7 +18,6 @@ import { Lang } from '../../services/index.js';
 import {
     ClientUtils,
     CollectorUtils,
-    FormatUtils,
     InteractionUtils,
     PermissionUtils,
 } from '../../utils/index.js';
@@ -49,55 +50,66 @@ export class ChannelSubCommand implements Command {
                 Lang.getEmbed('results', 'fail.promptExpired', data.lang())
             );
         };
+        let celebrationTypePrompt = await InteractionUtils.send(nextIntr, {
+            embeds: [Lang.getEmbed('prompts', 'config.channelType', data.lang())],
+            components: [
+                {
+                    type: 'ACTION_ROW',
+                    components: [
+                        {
+                            type: 'BUTTON',
+                            customId: 'birthday',
+                            label: Lang.getRef('info', 'terms.birthday', data.lang()),
+                            style: 'PRIMARY',
+                        },
+                        {
+                            type: 'BUTTON',
+                            customId: 'memberAnniversary',
+                            label: Lang.getRef('info', 'terms.memberAnniversary', data.lang()),
+                            style: 'PRIMARY',
+                        },
+                        {
+                            type: 'BUTTON',
+                            customId: 'serverAnniversary',
+                            label: Lang.getRef('info', 'terms.serverAnniversary', data.lang()),
+                            style: 'PRIMARY',
+                        },
+                    ],
+                },
+            ],
+        });
 
-        let celebrationTypePrompt = await InteractionUtils.sendWithEnterResponseButton(
-            nextIntr,
-            data,
-            Lang.getEmbed('prompts', 'config.channelType', data.lang())
-        );
-
-        let typeResult = await CollectorUtils.collectByModal(
+        let typeResult = await CollectorUtils.collectByButton(
             celebrationTypePrompt,
-            new Modal({
-                customId: 'modal', // Will be overwritten
-                title: Lang.getRef('info', 'terms.celebrationType', data.lang()),
-                components: [
-                    {
-                        type: 'ACTION_ROW',
-                        components: [
-                            {
-                                type: 'TEXT_INPUT',
-                                customId: 'type',
-                                label: Lang.getRef('info', 'terms.celebrationType', data.lang()),
-                                required: true,
-                                style: 'SHORT',
-                                minLength: 6,
-                                maxLength: 18,
-                                placeholder: Lang.getRef('info', 'terms.birthday', data.lang()),
-                            },
-                        ],
-                    },
-                ],
-            }),
-            intr.user,
-            async (intr: ModalSubmitInteraction) => {
-                let input = intr.components[0].components[0].value;
-                let givenType = FormatUtils.extractCelebrationType(input.toLowerCase());
-                if (
-                    !givenType ||
-                    givenType === 'userSpecificBirthday' ||
-                    givenType === 'userSpecificMemberAnniversary'
-                ) {
-                    await InteractionUtils.send(
-                        intr,
-                        Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
-                    );
+            nextIntr.user,
+            async (intr: ButtonInteraction) => {
+                try {
+                    await InteractionUtils.deferAndDisableButtons(intr);
+                } catch (error) {
+                    try {
+                        await InteractionUtils.editReply(intr, {
+                            components: InteractionUtils.setComponentsStatus(
+                                intr.message.components as MessageActionRow[],
+                                true
+                            ),
+                        });
+                    } catch (error) {
+                        return;
+                    }
                     return;
                 }
 
-                return { intr, value: givenType };
+                return {
+                    intr,
+                    value: intr.customId,
+                };
             },
-            expireFunction
+            async () => {
+                await InteractionUtils.send(
+                    nextIntr,
+                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                );
+            }
         );
 
         if (typeResult === undefined) return;

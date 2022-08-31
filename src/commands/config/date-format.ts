@@ -1,18 +1,18 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
     BaseCommandInteraction,
+    ButtonInteraction,
     CommandInteraction,
+    MessageActionRow,
     MessageComponentInteraction,
-    Modal,
     ModalSubmitInteraction,
     PermissionString,
 } from 'discord.js';
-import { ExpireFunction } from 'discord.js-collector-utils';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
+import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class DateFormatSubCommand implements Command {
@@ -36,61 +36,62 @@ export class DateFormatSubCommand implements Command {
             | BaseCommandInteraction
             | MessageComponentInteraction
             | ModalSubmitInteraction = intr;
-        let expireFunction: ExpireFunction = async () => {
-            await InteractionUtils.send(
-                nextIntr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-            );
-        };
 
         if (!reset) {
-            let dateFormatPrompt = await InteractionUtils.sendWithEnterResponseButton(
-                nextIntr,
-                data,
-                Lang.getEmbed('prompts', 'config.dateFormat', data.lang())
-            );
+            let dateFormatPrompt = await InteractionUtils.send(nextIntr, {
+                embeds: [Lang.getEmbed('prompts', 'config.dateFormat', data.lang())],
+                components: [
+                    {
+                        type: 'ACTION_ROW',
+                        components: [
+                            {
+                                type: 'BUTTON',
+                                customId: 'month_day',
+                                label: Lang.getRef('info', 'terms.monthDay', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                            {
+                                type: 'BUTTON',
+                                customId: 'day_month',
+                                label: Lang.getRef('info', 'terms.dayMonth', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                        ],
+                    },
+                ],
+            });
 
-            let dateFormatResult = await CollectorUtils.collectByModal(
+            let dateFormatResult = await CollectorUtils.collectByButton(
                 dateFormatPrompt,
-                new Modal({
-                    customId: 'modal', // Will be overwritten
-                    title: Lang.getRef('info', 'terms.dateFormat', data.lang()),
-                    components: [
-                        {
-                            type: 'ACTION_ROW',
-                            components: [
-                                {
-                                    type: 'TEXT_INPUT',
-                                    customId: 'dateFormat',
-                                    label: Lang.getRef('info', 'terms.dateFormat', data.lang()),
-                                    required: true,
-                                    style: 'SHORT',
-                                    minLength: 1,
-                                    placeholder: Lang.getRef('info', 'types.dayMonth', data.lang()),
-                                },
-                            ],
-                        },
-                    ],
-                }),
-                intr.user,
-                async (intr: ModalSubmitInteraction) => {
-                    let input = intr.components[0].components[0].value;
-                    let givenSetting = FormatUtils.extractDateFormatType(input)?.toLowerCase();
-                    if (!givenSetting) {
-                        await InteractionUtils.send(
-                            intr,
-                            Lang.getErrorEmbed(
-                                'validation',
-                                'errorEmbeds.invalidSetting',
-                                data.lang()
-                            )
-                        );
+                nextIntr.user,
+                async (intr: ButtonInteraction) => {
+                    try {
+                        await InteractionUtils.deferAndDisableButtons(intr);
+                    } catch (error) {
+                        try {
+                            await InteractionUtils.editReply(intr, {
+                                components: InteractionUtils.setComponentsStatus(
+                                    intr.message.components as MessageActionRow[],
+                                    true
+                                ),
+                            });
+                        } catch (error) {
+                            return;
+                        }
                         return;
                     }
 
-                    return { intr, value: givenSetting.toLowerCase() };
+                    return {
+                        intr,
+                        value: intr.customId,
+                    };
                 },
-                expireFunction
+                async () => {
+                    await InteractionUtils.send(
+                        nextIntr,
+                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                    );
+                }
             );
 
             if (dateFormatResult === undefined) return;

@@ -94,16 +94,6 @@
                     "",
                     "Please select an option"
                 ],
-                "fields": [
-                    {
-                        "name": [
-                            "Create New Channel {{COM:emotes.create}}",
-                            "Select Pre-Existing Channel {{COM:emotes.select}}",
-                            "No Birthday Channel {{COM:emotes.deny}}"
-                        ],
-                        "value": "\u200b"
-                    }
-                ],
                 "footer": {
                     "text": "{{REF:footers.expire}}",
                     "icon": "{{ICON}}"
@@ -118,16 +108,6 @@
                     "Note: The Birthday Role is actively removed from those whose birthday it isn't.",
                     "",
                     "Please select an option"
-                ],
-                "fields": [
-                    {
-                        "name": [
-                            "Create New Role {{COM:emotes.create}}",
-                            "Select Pre-Existing Role {{COM:emotes.select}}",
-                            "No Birthday Role {{COM:emotes.deny}}"
-                        ],
-                        "value": "\u200b"
-                    }
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}",
@@ -146,7 +126,7 @@
             "nameFormat": {
                 "title": "Configure the Name Format Setting",
                 "description": [
-                    "Please type/paste the name format setting you would like. [(?)]({{COM:docLinks.whatIsNameFormat}})",
+                    "Please select the name format setting you would like. [(?)]({{COM:docLinks.whatIsNameFormat}})",
                     "",
                     "*Besides each option is how {{COM:bot.name}} will show names with that setting.*",
                     "",
@@ -164,7 +144,7 @@
             "timezone": {
                 "title": "Configure the Server Timezone Setting",
                 "description": [
-                    "Please type/paste the timezone you would like. [(?)]({{COM:docLinks.defaultTimeZone}})",
+                    "Please enter the timezone you would like. [(?)]({{COM:docLinks.defaultTimeZone}})",
                     "To find your time zone please use the [map time zone picker]({{COM:links.map}})!",
                     "",
                     "Simply click your location on the map and copy the name of the selected time zone.",
@@ -179,12 +159,8 @@
             "useTimezone": {
                 "title": "Configure the Use Timezone Setting",
                 "description": [
-                    "Please type/paste the use timezone setting you would like. [(?)]({{COM:docLinks.whatIsUseTimezone}})",
-                    "This decides whether or not {{COM:bot.name}} will use the server's timezone or the user's timezone.",
-                    "",
-                    "**Options**: ",
-                    "`User`",
-                    "`Server`"
+                    "Please select the use timezone setting you would like. [(?)]({{COM:docLinks.whatIsUseTimezone}})",
+                    "This decides whether or not {{COM:bot.name}} will use the server's timezone or the user's timezone."
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}"
@@ -194,10 +170,8 @@
             "dateFormat": {
                 "title": "Configure the Date Format Setting",
                 "description": [
-                    "Please type/paste the date format setting you would like. [(?)]({{COM:docLinks.whatIsDateFormat}})",
-                    "This determines how {{COM:bot.name}} will detect dates in your discord.",
-                    "",
-                    "**Example Usage:** `month/day` or `day/month`"
+                    "Please select the date format setting you would like. [(?)]({{COM:docLinks.whatIsDateFormat}})",
+                    "This determines how {{COM:bot.name}} will detect dates in your discord."
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}"
@@ -207,10 +181,7 @@
             "trustedPreventsMessage": {
                 "title": "Configure the Trusted Prevents Message Setting",
                 "description": [
-                    "Should the trusted role prevent the birthday message? [(?)]({{COM:docLinks.trustedPreventsMessage)",
-                    "",
-                    "True: {{COM:emotes.confirm}}",
-                    "False: {{COM:emotes.deny}}"
+                    "Should the trusted role prevent the birthday message? [(?)]({{COM:docLinks.trustedPreventsMessage)"
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}"
@@ -220,10 +191,7 @@
             "trustedPreventsRole": {
                 "title": "Configure the Trusted Prevents Message Role",
                 "description": [
-                    "Should the trusted role prevent the birthday role? [(?)]({{COM:docLinks.trustedPreventsRole}})",
-                    "",
-                    "True: {{COM:emotes.confirm}}",
-                    "False: {{COM:emotes.deny}}"
+                    "Should the trusted role prevent the birthday role? [(?)]({{COM:docLinks.trustedPreventsRole}})"
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}"
@@ -235,10 +203,7 @@
                 "description": [
                     "With **{{COM:bot.name}} premium** you can set multiple trusted roles. Because of this, you can choose if a user needs one or all of the trusted roles to have their birthday celebrated.",
                     "",
-                    "Should birthdays require all trusted roles? [(?)]({{COM:docLinks.requireAllTrustedRoles}})",
-                    "",
-                    "True: {{COM:emotes.confirm}}",
-                    "False: {{COM:emotes.deny}}"
+                    "Should birthdays require all trusted roles? [(?)]({{COM:docLinks.requireAllTrustedRoles}})"
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}"
@@ -248,9 +213,7 @@
             "channelType": {
                 "title": "Channel Type",
                 "description": [
-                    "Which type of channel are you setting?",
-                    "",
-                    "Please enter one of the options listed below:",
+                    "Please select which type of channel you are setting.",
                     "",
                     "`Birthday` - Where birthday messages will be sent.",
                     "`Member Anniversary` - Where member anniversary messages will be sent.",
@@ -268,16 +231,6 @@
                     "",
                     "Please select an option"
                 ],
-                "fields": [
-                    {
-                        "name": [
-                            "Create New Channel {{COM:emotes.create}}",
-                            "Select Pre-Existing Channel {{COM:emotes.select}}",
-                            "No {{TYPE}} Channel {{COM:emotes.deny}}"
-                        ],
-                        "value": "\u200b"
-                    }
-                ],
                 "footer": {
                     "text": "{{REF:footers.expire}}"
                 },
@@ -289,16 +242,6 @@
                     "This sets up one of the roles {{COM:bot.name}} uses. [(?)]({{DOC_LINK}})",
                     "",
                     "Please select an option"
-                ],
-                "fields": [
-                    {
-                        "name": [
-                            "Create New Role {{COM:emotes.create}}",
-                            "Select Pre-Existing Role {{COM:emotes.select}}",
-                            "No {{TYPE}} Role {{COM:emotes.deny}}"
-                        ],
-                        "value": "\u200b"
-                    }
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}"
