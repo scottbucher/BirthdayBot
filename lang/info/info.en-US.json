@@ -1197,6 +1197,7 @@
             "enterResponse": "Enter Response",
             "celebrationType": "Celebration Type",
             "newYorkTimezone": "America/New_York",
+            "birthdayExample": "August 28th",
             "messageColor": "Message Color",
             "blue": "Blue",
             "createNew": "Create New",

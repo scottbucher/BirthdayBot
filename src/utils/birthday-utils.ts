@@ -152,7 +152,7 @@ export class BirthdayUtils {
             birthdayPrompt,
             new Modal({
                 customId: 'modal', // Will be overwritten
-                title: Lang.getRef('info', 'terms.celebrationType', data.lang()),
+                title: Lang.getRef('info', 'terms.birthday', data.lang()),
                 components: [
                     {
                         type: 'ACTION_ROW',
@@ -160,11 +160,15 @@ export class BirthdayUtils {
                             {
                                 type: 'TEXT_INPUT',
                                 customId: 'type',
-                                label: Lang.getRef('info', 'terms.celebrationType', data.lang()),
+                                label: Lang.getRef('info', 'terms.birthday', data.lang()),
                                 required: true,
                                 style: 'SHORT',
                                 minLength: 1,
-                                placeholder: Lang.getRef('info', 'terms.birthday', data.lang()),
+                                placeholder: Lang.getRef(
+                                    'info',
+                                    'terms.birthdayExample',
+                                    data.lang()
+                                ),
                             },
                         ],
                     },
