@@ -41,15 +41,6 @@ export class CollectorUtils {
             time: Config.experience.promptExpireTime * 1000,
             reset: true,
             target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
             onExpire: expireFunc,
         });
     }
@@ -207,15 +198,6 @@ export class CollectorUtils {
             time: Config.experience.promptExpireTime * 1000,
             reset: true,
             target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
             onExpire: expireFunc,
         });
     }
@@ -234,15 +216,6 @@ export class CollectorUtils {
             time: Config.experience.promptExpireTime * 1000,
             reset: true,
             target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
             onExpire: expireFunc,
         });
     }
@@ -257,15 +230,6 @@ export class CollectorUtils {
             time: Config.experience.promptExpireTime * 1000,
             reset: true,
             target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
             onExpire: expireFunc,
         });
     }
