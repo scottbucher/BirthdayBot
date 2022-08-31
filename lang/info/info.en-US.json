@@ -1206,8 +1206,8 @@
             "username": "Username",
             "nickname": "Nickname",
             "tag": "Tag",
-            "month/day": "Month/Day",
-            "day/month": "Day/Month"
+            "monthDay": "Month/Day",
+            "dayMonth": "Day/Month"
         }
     }
 }
