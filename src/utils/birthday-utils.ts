@@ -166,7 +166,7 @@ export class BirthdayUtils {
                                 minLength: 1,
                                 placeholder: Lang.getRef(
                                     'info',
-                                    'terms.birthdayExample',
+                                    `terms.birthdayExample${littleEndian ? 'DM' : 'MD'}`,
                                     data.lang()
                                 ),
                             },
