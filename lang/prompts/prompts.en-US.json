@@ -181,7 +181,7 @@
             "trustedPreventsMessage": {
                 "title": "Configure the Trusted Prevents Message Setting",
                 "description": [
-                    "Should the trusted role prevent the birthday message? [(?)]({{COM:docLinks.trustedPreventsMessage)"
+                    "Should the trusted role prevent the birthday message? [(?)]({{COM:docLinks.trustedPreventsMessage}})"
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}"
