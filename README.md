@@ -1,120 +1,88 @@
+
 # Birthday Bot
 
-[![Discord Bots](https://top.gg/api/widget/servers/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
-[![Discord Bots](https://top.gg/api/widget/status/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
-[![License](https://img.shields.io/badge/license-No%20License-blue)](https://choosealicense.com/no-permission/)
-[![Stars](https://img.shields.io/github/stars/scottbucher/BirthdayBot.svg)](https://github.com/scottbucher/BirthdayBot/stargazers)
-[![Discord Shield](https://discord.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discord.com/invite/9gUQFtz)
-[![Discord Bots](https://top.gg/api/widget/owner/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
+**Discord Bot** - Track and celebrate birthdays in your discord server! Use `bday help` to get started!
 
-## Important Note
-
-**For the most detailed and up-to-date information and guide please visit the Official Birthday Bot Documentation [here!](https://birthdaybot.scottbucher.dev)**
-
-**Discord Bot** - Celebrate birthdays and anniversaries (**NEW**) with configurable roles, messages and more! Highly customizable and easy to use! Use `bday help` to get started!
-
-## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268921936&scope=bot%20applications.commands)
+## [Click here to add Birthday Bot to your Discord server!](https://discordapp.com/api/oauth2/authorize?client_id=656621136808902656&permissions=269053008&scope=bot)
 
 [Join The Support Server](https://discord.gg/9gUQFtz) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
 
-# Features:
+In your Discord server Birthday Bot will track your users' birthdays and using their time zone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord, use Birthday Bots trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone.
 
-## Free Features
+## Quick Start Guide
 
--   Each user can [set their birthday & time zone](https://birthdaybot.scottbucher.dev/setting-your-birthday) into the bot which stores that information into a database allowing the bot to know on what day and what time zone to celebrate the user's birthday
--   Use the Anniversary System to celebrate the anniversary of when members first joined the server and when the server was created.
-    -   Requires the [Default Timezone](https://birthdaybot.scottbucher.dev/faq-1/general#what-is-the-default-timezone-setting) Setting to be set
-    -   Server owners have heavy control over how, when, and what Birthday Bot does in their Discord
-    -   Customization of the [Celebration Messages](https://birthdaybot.scottbucher.dev/faq-1/custom-messages#what-are-the-different-types-of-custom-messages) (Message contents and design)
-        -   There can be multiple custom messages, the bot will choose one random for each birthday/anniversary
-    -   Customizable Birthday Role and/or Birthday/Anniversary Channels
-    -   Custom Birthday/Anniversary Message Time
-    -   Customizable [Trusted Role System](https://birthdaybot.scottbucher.dev/faq-1/birthday-system/trusted-system) (Birthday System Only) - Using this system server owners decide whose birthdays are celebrated in their Discord. Additionally, server owners can toggle whether the Trusted Role is only required to receive the Birthday Role or Birthday Message, or both.
-    -   Ban specific users from having their birthday celebrated using the birthday blacklist
--   All birthdays are stored Globally. This means if you have multiple Discord servers that you own or are in with Birthday Bot, your users will only have to input their birthday and time zone once.
--   View upcoming birthdays/anniversaries.
--   Clear your information from the database at any time.
--   Near 24/7 up-time!
+Start by typing `bday set`.
 
-## [Premium Features](https://birthdaybot.scottbucher.dev/premium-features):
+![Example Start](https://i.imgur.com/lEt7I0J.png)
 
--   Avoid having to vote to use some commands.
--   Setup [Member Anniversary Roles](https://birthdaybot.scottbucher.dev/faq-1/member-anniversaries#what-are-anniversary-roles) to celebrate how long members have been in your discord
-    -   For example, the **5-Year Veteran** role can be set to be given on a member's 5 Year anniversary in your discord.
--   Setup Multiple [Trusted Roles](https://birthdaybot.scottbucher.dev/faq-1/birthday-system/trusted-system#do-i-need-to-set-up-the-trusted-role)
-    -   Use the [**RequireAllTrustedRoles**](https://birthdaybot.scottbucher.dev/faq-1/birthday-system/trusted-system#what-is-the-require-all-trusted-role-setting) setting to decide if users need all trusted roles or just one to have their birthday celebrated.
--   More control over the Custom Message(s).
-    -   Up to **500** custom birthday messages (_vs_ **_3_** _for free_).
-    -   Up to **500** custom member anniversary messages (_vs_ **_3_** _for free_).
-    -   Up to **500** custom server anniversary messages (_vs_ **_1_** _for free_).
-    -   Decide what [color each custom message](https://birthdaybot.scottbucher.dev/faq-1/custom-messages#what-is-a-message-embed-color) is (You can have a different color for each!)
-        -   Decide which messages are [embedded](https://birthdaybot.scottbucher.dev/faq-1/custom-messages#what-is-a-message-embed-setting) (Color setting only applies to messages that are embedded)
-    -   Set [user-specific custom messages](https://birthdaybot.scottbucher.dev/premium-features#user-specific-custom-messages)
-        -   One custom message per user
-        -   Unlimited user-specific messages per server
--   Support Development!
-    -   Since I started Birthday Bot I have maintained development and server cost completely out of my own expense, Birthday Bot Premium allows me to continue to maintain development as Birthday Bot continues to gain tens of thousands of servers each month.
-    -   Subscriptions to Birthday Bot Premium go straight to server costs.
+### Finding Your Time Zone
 
-### Support & Troubleshooting
+[Keval Bhatt](https://github.com/kevalbhatt) has created a handy map time zone picker:
 
-Birthday Bot is a part of the Arilyn Bot family and any support, questions or feedback are welcome in our support [Discord](https://discord.com/invite/9gUQFtz). Please visit our [FAQ](https://birthdaybot.scottbucher.dev/faq) and setup guide, as well as previous user questions before contacting staff, thanks!
+<https://kevinnovak.github.io/Time-Zone-Picker/>
 
-**Example Birthday Announcement (Fully customizable):**
+Simply click your location on the map, and use the name displayed in the dropdown box as your time zone.
 
-![Example Birthday Announcement](https://i.imgur.com/BZcEJ5j.png)
+You can then take your time zone name and use it in the `bday set` command.
 
-In your Discord server Birthday Bot will track your users' birthdays and using their time zone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord, use Birthday Bots trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone. Similar messages can also be setup to celebrate the anniversary of members joining your discord server and the anniversary of the server itself!
+![Setting your time zone](https://i.imgur.com/Mtpx86n.png)
 
-## Setting your birthday
+Birthday Bot will then know your time zone and will use this to know when to celebrate your birthday.
 
-Birthday Bot makes everything easy using an easily to follow process.
+Full example usage of `bday set`:
 
-Start by using `bday set`.
+![Example usage](https://i.imgur.com/rJXpDss.png)
 
-![Start](https://i.imgur.com/Evo2jsp.png)
+For users that's it! Server owners will have to do a bit more but Birthday Bot makes it easy with the interactive setup commands `bday setup` and `bday setup optional`!
 
-Birthday Bot uses time zones to detect when to celebrate each user's birthday. If you are unsure of your time zone you can find it [here](https://github.com/scottbucher/BirthdayBot/blob/master/README.md#finding-your-time-zone).
+## Commands
 
-Now, you can then reply to this message with your desired time zone.
+The following are commands for BirthdayBot.
 
-![Time Zone Input](https://i.imgur.com/fcmXvsQ.png)
+**NOTE**: To run a command, prefix the command with `bday`, for example: `bday help`.
 
-Birthday Bot will now know your time zone and will use this to know what time to celebrate your birthday!
+### Setup (Admins only)
 
-Now, Birthday Bot will prompt you to put your Birth Month & Date in the following format: MM/DD
+* `setup` - Interactive guide for server setup.
+* `setup optional` - Interactive guide for optional server setup settings.
 
-![Birthday Prompt](https://i.imgur.com/hKvd9bm.png)
+### Info
 
-Simply reply to this message with your desired date.
+* `help` - View useful information about BirthdayBot.
+* `help setup` - View useful information on how to setup Birthday Bot.
+* `help setup optional` - View useful information on how to setup the optional Birthday Bot settings.
+* `about` - View information about BirthdayBot.
+* `serverinfo` - View information about your server.
+* `settings` - View your server's current server settings.
+* `shard` - View information about your current shard.
 
-![Birthday Input](https://i.imgur.com/D6OArx2.png)
+### Server Settings (Admins only)
 
-Finally, the confirmation menu will appear.
+* `SetBirthdayRole <@role/rolename>` - Set a role to be the designated Birthday role.
+* `SetBirthdayChannel [#channel]` - Set a channel to be the designated Birthday Channel.
+* `SetTrustedRole <@role/rolename>` - Set a role to be the designated Trusted role.
+* `CreateBirthdayRole` - Create the default Birthday Role.
+* `CreateBirthdayChannel` - Create the default Birthday Channel.
+* `CreateTrustedRole` - Create the default Trusted Role.
+* `ClearBirthdayRole` - Clears the Birthday Role (Effectively Disabling this feature).
+* `ClearBirthdayChannel` - Clears the Birthday Channel (Effectively Disabling this feature).
+* `ClearTrustedRole` - Clears the Trusted Role (Effectively Disabling this feature).
+* `config message setMention <everyone/here/@role/rolename/disable>` - Who/What role should the bot mention when the birthday message is sent.
+* `config message setTime <0-23>` - What time should the birthday message be sent at.
+* `config message set <message>` - Set the a custom birthday message for your server. Use "@Users" in the message to be replaced with the user's who's birthday it is.
+* `config message reset` - Set the birthday message to it's default value.
+* `config message useEmbed <true/false>` - Set if the Birthday Message will be embedded. (Set false for links/images to work properly)
+* `config trusted preventMessage <true/false>` - Should the bot only send birthday messages for people with the trusted role.
+* `config trusted preventRole <true/false>` - Should the bot only give the birthday role for people with the trusted role.
 
-![Confirmation](https://i.imgur.com/gBafugI.png)
+### Utilities
 
-Ensure this is the correct information, then confirm by clicking the checkmark.
-
-Note: Each user only has a limited amount of Birthday Sets. These multiple sets are made to account for incorrect information input, time zone changes, etc.
-Learn more [here](https://birthdaybot.scottbucher.dev/faq-1/user#how-many-times-can-i-set-my-birthday).
-
-![End](https://i.imgur.com/2F8u3Cw.png)
-
-For users that is it! Server owners will have to do a bit more but Birthday Bot makes it easy with an interactive setup. For more information on server setup follow our guide here.
-
-## Finding your time zone
-
-[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!
-
-Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command.
-
-![Setting your time zone](https://i.imgur.com/ibPmjNs.png)
+* `set` - Set your birthday.
+* `next` - View the next birthday in your current guild.
+* `view <name>` - View a user's birthday.
+* `invite` - Invite Birthday Bot to your discord.
+* `support` - Join the Birthday Bot support server.
 
 ## Help
 
 For additional help join the support server [here](https://discord.gg/9gUQFtz).
-
-## License
-
-Birthday Bot does not have a license. This means, while Birthday Bot's code is public to anyone, you do **NOT** have permission to modify or redistribute this code. Since there is no license, the default copyright laws apply, meaning that I retain all rights to the source code and no one may reproduce, distribute, or create derivative works from it. For more details please visit [here](https://choosealicense.com/no-permission/).

@@ -10,17 +10,17 @@ No, unfortunately birthdays are stored **globally** this means your birthday in 
 
 ## Birthday Bot announced/gave the birthday role/message at the incorrect time?
 
-There are two things that effect a birthday message time.
+There are two things that effect a birthday message time. 
 
-First is your guild server message time \(Configure this with **bday config message setTime &lt;0-23&gt;**\), if for example you run this **bday config message setTime 9** the birthday **message** will send at 9am **for the birthday user**.
+First is your guild server message time \(Configure this with **bday config message setTime &lt;0-23&gt;**\), if for example you run this **bday config message setTime 9** the birthday **message** will send at 9am **for the birthday user**. 
 
-Secondly is the birthday user's time zone which is set when users run **bday set**. For example, if my time zone is America/New_York, and my guild message time \(see above\) is 9am, the birthday role will be given at 12am in **America/New_York**, and the birthday message will be sent at 9am **America/New_York**.
+Secondly is the birthday user's time zone which is set when users run **bday set**. For example, if my time zone is America/New\_York, and my guild message time \(see above\) is 9am, the birthday role will be given at 12am in **America/New\_York**, and the birthday message will be sent at 9am **America/New\_York**.
 
 If you are in a different time zone then the birthday user, the birthday message and/or the birthday role may appear to have sent at an incorrect time.
 
 ## I entered my time zone as EST but Birthday Bot detected the wrong time zone?
 
-As shown when a user runs **bday set** Birthday Bot does **not** accept abbreviated time zones like **EST**, **UST**, etc. However, even when users enter an incorrect time zone, Birthday Bot will attempt to find the best fit for the user. For example, entering **newyork** as your time zone will trigger the bot to detect **America/New_York** as your time zone, or in this case entering **EST** as your time zone will trigger the bot to select the Australia/W**EST** time zone.
+As shown when a user runs **bday set** Birthday Bot does **not**  accept abbreviated time zones like **EST**, **UST**, etc. However, even when users enter an incorrect time zone, Birthday Bot will attempt to find the best fit for the user. For example, entering **newyork** as your time zone will trigger the bot to detect **America/New\_York** as your time zone, or in this case entering **EST** as your time zone will trigger the bot to select the Australia/W**EST** time zone.
 
 ## Do I need to setup the Trusted Role?
 
@@ -40,6 +40,7 @@ You can then take your time zone name and use it in the `bday set` command
 
 Each user can set their birthday & time zone **five** times.
 
-I understand sometimes users may accidentally input the wrong information or switch time zones. However, I wanted to ensure users could not infinitely abuse the Birthday system by continuously setting their birthday. As a result, I decided to give a fixed number of "birthday sets" to address both concerns.
+I understand sometimes users may accidentally input the wrong information or switch time zones. However, I wanted to ensure users could not infinitely abuse the Birthday system by continuously setting their birthday. As a result, I decided to give a fixed number of "birthday sets" to address both concerns. 
 
 If you find yourself in a position where you are out of "birthday sets", exceptions to this fixed rule **may** apply to you, visit our [support server](https://discord.com/invite/9gUQFtz) to request assistance from a developer.
+

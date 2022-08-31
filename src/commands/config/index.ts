@@ -1,9 +1,0 @@
-export { ChannelSubCommand } from './channel.js';
-export { DateFormatSubCommand } from './date-format.js';
-export { NameFormatSubCommand } from './name-format.js';
-export { RequireAllTrustedRolesSubCommand } from './require-all-trusted-roles.js';
-export { RoleSubCommand } from './role.js';
-export { TimezoneSubCommand } from './time-zone.js';
-export { TrustedPreventsMsgSubCommand } from './trusted-prevents-msg.js';
-export { TrustedPreventsRoleSubCommand } from './trusted-prevents-role.js';
-export { UseTimezoneSubCommand } from './use-time-zone.js';
