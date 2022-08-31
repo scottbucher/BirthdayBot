@@ -300,10 +300,7 @@
                 "title": "Custom Message - Embedded",
                 "description": [
                     "Should this message be embedded? [(?)]({{COM:docLinks.whatIsAnEmbed}})",
-                    "Hint: This message is embed! Non-embedded messages are just plain text.",
-                    "",
-                    "True {{COM:emotes.confirm}}",
-                    "False {{COM:emotes.deny}}"
+                    "Hint: This message is embed! Non-embedded messages are just plain text."
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}",
