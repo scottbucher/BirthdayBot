@@ -8,14 +8,12 @@ import {
     Modal,
     ModalSubmitInteraction,
     SelectMenuInteraction,
-    TextBasedChannel,
     User,
 } from 'discord.js';
 import {
     ButtonRetriever,
     CollectorUtils as DjsCollectorUtils,
     ExpireFunction,
-    MessageRetriever,
     ModalRetriever,
     ReactionRetriever,
     SelectMenuRetriever,
@@ -251,32 +249,6 @@ export class CollectorUtils {
         expireFunc?: ExpireFunction
     ): Promise<T> {
         return DjsCollectorUtils.collectByReaction(msg, retriever, {
-            time: Config.experience.promptExpireTime * 1000,
-            reset: true,
-            target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
-            onExpire: expireFunc,
-        });
-    }
-
-    /**
-     * @deprecated Requires the message intent after August 31st 2022
-     */
-    public static collectByMessage<T>(
-        channel: TextBasedChannel,
-        user: User,
-        retriever: MessageRetriever<T>,
-        expireFunc?: ExpireFunction
-    ): Promise<T> {
-        return DjsCollectorUtils.collectByMessage(channel, retriever, {
             time: Config.experience.promptExpireTime * 1000,
             reset: true,
             target: user,
