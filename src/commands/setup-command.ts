@@ -254,7 +254,7 @@ export class SetupCommand implements Command {
                                         required: true,
                                         style: 'SHORT',
                                         minLength: 1,
-                                        placeholder: Config.emotes.birthday,
+                                        placeholder: `@${Config.emotes.birthday}`,
                                     },
                                 ],
                             },
