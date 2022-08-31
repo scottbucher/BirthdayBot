@@ -1,5 +1,13 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import { CommandInteraction, Message, PermissionString } from 'discord.js';
+import {
+    BaseCommandInteraction,
+    CommandInteraction,
+    MessageComponentInteraction,
+    Modal,
+    ModalSubmitInteraction,
+    PermissionString,
+} from 'discord.js';
+import { ExpireFunction } from 'discord.js-collector-utils';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
@@ -22,23 +30,63 @@ export class TimezoneSubCommand implements Command {
     public requirePremium = false;
 
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
-        let timezone: string;
+        let timeZone: string;
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
+        let nextIntr:
+            | BaseCommandInteraction
+            | MessageComponentInteraction
+            | ModalSubmitInteraction = intr;
+        let expireFunction: ExpireFunction = async () => {
+            await InteractionUtils.send(
+                nextIntr,
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+            );
+        };
 
         if (!reset) {
-            // prompt them for a setting
-            let _prompt = await InteractionUtils.send(
-                intr,
+            let serverTimeZonePrompt = await InteractionUtils.sendWithEnterResponseButton(
+                nextIntr,
+                data,
                 Lang.getEmbed('prompts', 'config.timezone', data.lang(), {
                     MENTION: intr.user.toString(),
                 })
             );
 
-            timezone = await CollectorUtils.collectByMessage(
-                intr.channel,
+            let timeZoneResult = await CollectorUtils.collectByModal(
+                serverTimeZonePrompt,
+                new Modal({
+                    customId: 'modal', // Will be overwritten
+                    title: Lang.getRef('info', 'terms.defaultTimezone', data.lang()),
+                    components: [
+                        {
+                            type: 'ACTION_ROW',
+                            components: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    customId: 'defaultTimeZone',
+                                    label: Lang.getRef(
+                                        'info',
+                                        'terms.defaultTimezone',
+                                        data.lang()
+                                    ),
+                                    required: true,
+                                    style: 'SHORT',
+                                    minLength: 1,
+                                    placeholder: Lang.getRef(
+                                        'info',
+                                        'terms.newYorkTimezone',
+                                        data.lang()
+                                    ),
+                                },
+                            ],
+                        },
+                    ],
+                }),
                 intr.user,
-                async (nextMsg: Message) => {
-                    if (FormatUtils.checkAbbreviation(nextMsg.content)) {
+                async (intr: ModalSubmitInteraction) => {
+                    let input = intr.components[0].components[0].value;
+
+                    if (FormatUtils.checkAbbreviation(input)) {
                         await InteractionUtils.send(
                             intr,
                             Lang.getErrorEmbed(
@@ -50,8 +98,8 @@ export class TimezoneSubCommand implements Command {
                         return;
                     }
 
-                    let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
-                    if (!input) {
+                    let givenTimeZone = FormatUtils.findZone(input); // Try and get the time zone
+                    if (!givenTimeZone) {
                         await InteractionUtils.send(
                             intr,
                             Lang.getErrorEmbed(
@@ -63,29 +111,26 @@ export class TimezoneSubCommand implements Command {
                         return;
                     }
 
-                    return input;
+                    return { intr, value: givenTimeZone };
                 },
-                async () => {
-                    await InteractionUtils.send(
-                        intr,
-                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                    );
-                }
+                expireFunction
             );
 
-            if (timezone === undefined) return;
-        } else timezone = '0';
+            if (timeZoneResult === undefined) return;
+            nextIntr = timeZoneResult.intr;
+            timeZone = timeZoneResult.value;
+        } else timeZone = '0';
 
-        if (timezone === 'clear') timezone = '0';
+        if (timeZone === 'clear') timeZone = '0';
 
-        await this.guildRepo.updateDefaultTimezone(intr.guild.id, timezone);
+        await this.guildRepo.updateDefaultTimezone(intr.guild.id, timeZone);
 
         await InteractionUtils.send(
-            intr,
-            timezone === '0'
+            nextIntr,
+            timeZone === '0'
                 ? Lang.getSuccessEmbed('results', 'successEmbeds.defaultTimeCleared', data.lang())
                 : Lang.getSuccessEmbed('results', 'successEmbeds.defaultTimeZoneSet', data.lang(), {
-                      TIMEZONE: timezone,
+                      TIMEZONE: timeZone,
                   })
         );
     }

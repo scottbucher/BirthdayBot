@@ -1,11 +1,15 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
+    BaseCommandInteraction,
     ButtonInteraction,
     CommandInteraction,
     GuildMember,
-    Message,
+    MessageComponentInteraction,
+    Modal,
+    ModalSubmitInteraction,
     PermissionString,
 } from 'discord.js';
+import { ExpireFunction } from 'discord.js-collector-utils';
 import { createRequire } from 'node:module';
 
 import { EventData } from '../../models/index.js';
@@ -56,7 +60,7 @@ export class MessageAddSubCommand implements Command {
         if (databaseType.includes('specific'))
             databaseType = databaseType.includes('birthday') ? 'birthday' : 'memberanniversary';
 
-        let colorResult = '0';
+        let color = '0';
         let embedResult: { intr: ButtonInteraction; value: boolean };
         let target: GuildMember;
         let userId = '0';
@@ -233,7 +237,16 @@ export class MessageAddSubCommand implements Command {
             }
         }
 
-        let nextIntr: CommandInteraction | ButtonInteraction = intr;
+        let nextIntr:
+            | BaseCommandInteraction
+            | MessageComponentInteraction
+            | ModalSubmitInteraction = intr;
+        let expireFunction: ExpireFunction = async () => {
+            await InteractionUtils.send(
+                nextIntr,
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+            );
+        };
 
         // If there is a target, begin the checks if there is a user custom message already for the target
         if (target && type !== 'server_anniversary') {
@@ -291,18 +304,41 @@ export class MessageAddSubCommand implements Command {
         // Only premium servers can have a custom color
         if (data.hasPremium) {
             // prompt them for a color
-            await InteractionUtils.send(
+            let colorPrompt = await InteractionUtils.sendWithEnterResponseButton(
                 nextIntr,
+                data,
                 Lang.getEmbed('prompts', 'customMessage.colorSelection', data.lang(), {
                     ICON: intr.client.user.displayAvatarURL(),
                 })
             );
 
-            colorResult = await CollectorUtils.collectByMessage(
-                intr.channel,
+            let colorResult = await CollectorUtils.collectByModal(
+                colorPrompt,
+                new Modal({
+                    customId: 'modal', // Will be overwritten
+                    title: Lang.getRef('info', 'terms.messageColor', data.lang()),
+                    components: [
+                        {
+                            type: 'ACTION_ROW',
+                            components: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    customId: 'color',
+                                    label: Lang.getRef('info', 'terms.messageColor', data.lang()),
+                                    required: true,
+                                    style: 'SHORT',
+                                    minLength: 1,
+                                    placeholder: Lang.getRef('info', 'terms.blue', data.lang()),
+                                },
+                            ],
+                        },
+                    ],
+                }),
                 intr.user,
-                async (nextMsg: Message) => {
-                    let check = ColorUtils.findHex(nextMsg.content);
+                async (intr: ModalSubmitInteraction) => {
+                    let input = intr.components[0].components[0].value;
+
+                    let check = ColorUtils.findHex(input);
 
                     if (!check) {
                         await InteractionUtils.send(
@@ -312,17 +348,16 @@ export class MessageAddSubCommand implements Command {
                         return;
                     }
 
-                    return check;
+                    return { intr, value: check };
                 },
-                async () => {
-                    await InteractionUtils.send(
-                        intr,
-                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                    );
-                }
+                expireFunction
             );
 
             if (colorResult === undefined) return;
+            nextIntr = colorResult.intr;
+            type = colorResult.value;
+
+            if (color === undefined) return;
         }
 
         // Check if this message should be an embed or not
@@ -341,7 +376,7 @@ export class MessageAddSubCommand implements Command {
             message,
             userId,
             databaseType,
-            colorResult,
+            color,
             embedResult.value ? 1 : 0
         );
 
@@ -360,7 +395,7 @@ export class MessageAddSubCommand implements Command {
                       HAS_PREMIUM: !data.hasPremium
                           ? Lang.getRef('info', 'conditionals.needColorForPremium', data.lang())
                           : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
-                                COLOR_HEX: colorResult,
+                                COLOR_HEX: color,
                             }),
                       TYPE: commandDisplayType,
                       ICON: intr.client.user.displayAvatarURL(),
@@ -377,7 +412,7 @@ export class MessageAddSubCommand implements Command {
                       HAS_PREMIUM: !data.hasPremium
                           ? Lang.getRef('info', 'conditionals.colorForPremium', data.lang())
                           : Lang.getRef('info', 'conditionals.colorForPremium', data.lang(), {
-                                COLOR_HEX: colorResult,
+                                COLOR_HEX: color,
                             }),
                       TYPE: commandDisplayType,
                       USER: target.toString(),

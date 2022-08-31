@@ -13,6 +13,9 @@ import {
     WebhookEditMessageOptions,
 } from 'discord.js';
 
+import { EventData } from '../models/internal-models.js';
+import { Lang } from '../services/lang.js';
+
 const IGNORED_ERRORS = [
     DiscordApiErrors.UnknownMessage,
     DiscordApiErrors.UnknownChannel,
@@ -109,6 +112,30 @@ export class InteractionUtils {
                 throw error;
             }
         }
+    }
+
+    public static async sendWithEnterResponseButton(
+        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        data: EventData,
+        embed: MessageEmbed
+    ): Promise<Message<boolean>> {
+        return await InteractionUtils.send(intr, {
+            embeds: [embed],
+            components: [
+                {
+                    type: 'ACTION_ROW',
+                    components: [
+                        {
+                            type: 'BUTTON',
+                            customId: 'enter_response',
+                            emoji: '⌨️',
+                            label: Lang.getRef('info', 'terms.enterResponse', data.lang()),
+                            style: 'PRIMARY',
+                        },
+                    ],
+                },
+            ],
+        });
     }
 
     public static async editReply(

@@ -1187,7 +1187,7 @@
             "birthdayMessageTime": "Birthday Message Time",
             "memberAnniversaryMessageTime": "Member Anniversary Time",
             "serverAnniversaryMessageTime": "Server Anniversary Time",
-            "birthdayMention": "Birthday  Mention Setting",
+            "birthdayMention": "Birthday Mention Setting",
             "memberAnniversaryMention": "Member Anniversary Mention Setting",
             "serverAnniversaryMention": "Server Anniversary Mention Setting",
             "serverLanguage": "Server Language",
@@ -1195,7 +1195,10 @@
             "mmdd": "MM/DD",
             "ddmm": "DD/MM",
             "enterResponse": "Enter Response",
-            "celebrationType": "Celebration Type"
+            "celebrationType": "Celebration Type",
+            "newYorkTimezone": "America/New_York",
+            "messageColor": "Message Color",
+            "blue": "Blue"
         }
     }
 }

@@ -1,7 +1,6 @@
 import {
     BaseCommandInteraction,
     ButtonInteraction,
-    CommandInteraction,
     Message,
     MessageActionRow,
     MessageComponentInteraction,
@@ -58,7 +57,7 @@ export class CollectorUtils {
     }
 
     public static async getBooleanFromButton(
-        commandIntr: CommandInteraction,
+        commandIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         data: EventData,
         embed: MessageEmbed,
         target?: User

@@ -182,7 +182,9 @@
                     "Please type/paste the use timezone setting you would like. [(?)]({{COM:docLinks.whatIsUseTimezone}})",
                     "This decides whether or not {{COM:bot.name}} will use the server's timezone or the user's timezone.",
                     "",
-                    "**Example Usage:** `user`"
+                    "**Options**: ",
+                    "`User`",
+                    "`Server`"
                 ],
                 "footer": {
                     "text": "{{REF:footers.expire}}"

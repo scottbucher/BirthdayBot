@@ -1,5 +1,13 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import { CommandInteraction, Message, PermissionString } from 'discord.js';
+import {
+    BaseCommandInteraction,
+    CommandInteraction,
+    MessageComponentInteraction,
+    Modal,
+    ModalSubmitInteraction,
+    PermissionString,
+} from 'discord.js';
+import { ExpireFunction } from 'discord.js-collector-utils';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
@@ -24,20 +32,51 @@ export class DateFormatSubCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let dateFormat: string;
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
+        let nextIntr:
+            | BaseCommandInteraction
+            | MessageComponentInteraction
+            | ModalSubmitInteraction = intr;
+        let expireFunction: ExpireFunction = async () => {
+            await InteractionUtils.send(
+                nextIntr,
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+            );
+        };
 
         if (!reset) {
-            // prompt them for a setting
-            let _prompt = await InteractionUtils.send(
-                intr,
+            let dateFormatPrompt = await InteractionUtils.sendWithEnterResponseButton(
+                nextIntr,
+                data,
                 Lang.getEmbed('prompts', 'config.dateFormat', data.lang())
             );
 
-            dateFormat = await CollectorUtils.collectByMessage(
-                intr.channel,
+            let dateFormatResult = await CollectorUtils.collectByModal(
+                dateFormatPrompt,
+                new Modal({
+                    customId: 'modal', // Will be overwritten
+                    title: Lang.getRef('info', 'terms.dateFormat', data.lang()),
+                    components: [
+                        {
+                            type: 'ACTION_ROW',
+                            components: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    customId: 'dateFormat',
+                                    label: Lang.getRef('info', 'terms.dateFormat', data.lang()),
+                                    required: true,
+                                    style: 'SHORT',
+                                    minLength: 1,
+                                    placeholder: Lang.getRef('info', 'types.dayMonth', data.lang()),
+                                },
+                            ],
+                        },
+                    ],
+                }),
                 intr.user,
-                async (nextMsg: Message) => {
-                    let input = FormatUtils.extractDateFormatType(nextMsg.content)?.toLowerCase();
-                    if (!input) {
+                async (intr: ModalSubmitInteraction) => {
+                    let input = intr.components[0].components[0].value;
+                    let givenSetting = FormatUtils.extractDateFormatType(input)?.toLowerCase();
+                    if (!givenSetting) {
                         await InteractionUtils.send(
                             intr,
                             Lang.getErrorEmbed(
@@ -49,23 +88,20 @@ export class DateFormatSubCommand implements Command {
                         return;
                     }
 
-                    return input.toLowerCase();
+                    return { intr, value: givenSetting.toLowerCase() };
                 },
-                async () => {
-                    await InteractionUtils.send(
-                        intr,
-                        Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                    );
-                }
+                expireFunction
             );
 
-            if (dateFormat === undefined) return;
+            if (dateFormatResult === undefined) return;
+            nextIntr = dateFormatResult.intr;
+            dateFormat = dateFormatResult.value;
         } else dateFormat = 'month_day';
 
         await this.guildRepo.updateDateFormat(intr.guild.id, dateFormat);
 
         await InteractionUtils.send(
-            intr,
+            nextIntr,
             Lang.getSuccessEmbed('results', 'successEmbeds.dateFormatSet', data.lang(), {
                 SETTING: Lang.getRef(
                     'info',

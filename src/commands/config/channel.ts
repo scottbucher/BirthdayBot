@@ -10,7 +10,6 @@ import {
 } from 'discord.js';
 import { ExpireFunction } from 'discord.js-collector-utils';
 
-import { LangCode } from '../../enums/lang-code.js';
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
@@ -51,29 +50,17 @@ export class ChannelSubCommand implements Command {
             );
         };
 
-        let celebrationTypePrompt = await InteractionUtils.send(nextIntr, {
-            embeds: [Lang.getEmbed('prompts', 'config.channelType', data.lang())],
-            components: [
-                {
-                    type: 'ACTION_ROW',
-                    components: [
-                        {
-                            type: 'BUTTON',
-                            customId: 'enter_response',
-                            emoji: '⌨️',
-                            label: Lang.getRef('info', 'terms.enterResponse', LangCode.EN_US),
-                            style: 'PRIMARY',
-                        },
-                    ],
-                },
-            ],
-        });
+        let celebrationTypePrompt = await InteractionUtils.sendWithEnterResponseButton(
+            nextIntr,
+            data,
+            Lang.getEmbed('prompts', 'config.channelType', data.lang())
+        );
 
         let typeResult = await CollectorUtils.collectByModal(
             celebrationTypePrompt,
             new Modal({
                 customId: 'modal', // Will be overwritten
-                title: Lang.getRef('info', 'terms.celebrationType', LangCode.EN_US),
+                title: Lang.getRef('info', 'terms.celebrationType', data.lang()),
                 components: [
                     {
                         type: 'ACTION_ROW',
@@ -81,12 +68,12 @@ export class ChannelSubCommand implements Command {
                             {
                                 type: 'TEXT_INPUT',
                                 customId: 'type',
-                                label: Lang.getRef('info', 'terms.celebrationType', LangCode.EN_US),
+                                label: Lang.getRef('info', 'terms.celebrationType', data.lang()),
                                 required: true,
                                 style: 'SHORT',
                                 minLength: 6,
                                 maxLength: 18,
-                                placeholder: 'birthday',
+                                placeholder: Lang.getRef('info', 'terms.birthday', data.lang()),
                             },
                         ],
                     },
@@ -191,27 +178,26 @@ export class ChannelSubCommand implements Command {
                     break;
                 }
                 case 'select': {
-                    let channelPrompt = await InteractionUtils.send(nextIntr, {
-                        embeds: [Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())],
-                        components: [
-                            {
-                                type: 'ACTION_ROW',
-                                components: [
-                                    {
-                                        type: 'BUTTON',
-                                        customId: 'enter_response',
-                                        emoji: '⌨️',
-                                        label: Lang.getRef(
-                                            'info',
-                                            'terms.enterResponse',
-                                            LangCode.EN_US
-                                        ),
-                                        style: 'PRIMARY',
-                                    },
-                                ],
-                            },
-                        ],
-                    });
+                    let channelPrompt = await InteractionUtils.sendWithEnterResponseButton(
+                        nextIntr,
+                        data,
+                        Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())
+                    );
+
+                    let placeholder =
+                        type === 'birthday'
+                            ? Lang.getRef('info', 'defaults.birthdayChannelName', data.lang())
+                            : type === 'memberAnniversary'
+                            ? Lang.getRef(
+                                  'info',
+                                  'defaults.memberAnniversaryChannelName',
+                                  data.lang()
+                              )
+                            : Lang.getRef(
+                                  'info',
+                                  'defaults.serverAnniversaryChannelName',
+                                  data.lang()
+                              );
 
                     let channelResult = await CollectorUtils.collectByModal(
                         channelPrompt,
@@ -224,7 +210,7 @@ export class ChannelSubCommand implements Command {
                                     components: [
                                         {
                                             type: 'TEXT_INPUT',
-                                            customId: 'type',
+                                            customId: 'channel',
                                             label: Lang.getRef(
                                                 'info',
                                                 `terms.${type}Channel`,
@@ -233,7 +219,7 @@ export class ChannelSubCommand implements Command {
                                             required: true,
                                             style: 'SHORT',
                                             minLength: 1,
-                                            placeholder: 'birthday-announcements',
+                                            placeholder: placeholder.split(' ').join('-'), // format like #channel-name
                                         },
                                     ],
                                 },
