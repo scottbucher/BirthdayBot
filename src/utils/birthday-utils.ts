@@ -1,5 +1,15 @@
 import { Chrono } from 'chrono-node';
-import { ButtonInteraction, CommandInteraction, DMChannel, Message, User } from 'discord.js';
+import {
+    BaseCommandInteraction,
+    ButtonInteraction,
+    CommandInteraction,
+    DMChannel,
+    MessageComponentInteraction,
+    Modal,
+    ModalSubmitInteraction,
+    User,
+} from 'discord.js';
+import { ExpireFunction } from 'discord.js-collector-utils';
 
 import { EventData } from '../models/internal-models.js';
 import { UserRepo } from '../services/database/repos/user-repo.js';
@@ -8,14 +18,22 @@ import { CollectorUtils, FormatUtils, InteractionUtils } from './index.js';
 
 export class BirthdayUtils {
     public static async getUserTimezone(
-        timeZone: string,
         target: User,
         data: EventData,
         intr: CommandInteraction,
-        nextIntr: CommandInteraction | ButtonInteraction
-    ): Promise<string> {
-        let _timezoneMessage = await InteractionUtils.send(
+        nextIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction
+    ): Promise<
+        [BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
+    > {
+        let expireFunction: ExpireFunction = async () => {
+            await InteractionUtils.send(
+                nextIntr,
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+            );
+        };
+        let timeZonePrompt = await InteractionUtils.sendWithEnterResponseButton(
             nextIntr,
+            data,
             Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', data.lang(), {
                 TARGET: target.username,
                 AUTHOR_ICON: target.displayAvatarURL(),
@@ -24,11 +42,37 @@ export class BirthdayUtils {
             })
         );
 
-        timeZone = await CollectorUtils.collectByMessage(
-            intr.channel,
+        let timeZoneResult = await CollectorUtils.collectByModal(
+            timeZonePrompt,
+            new Modal({
+                customId: 'modal', // Will be overwritten
+                title: Lang.getRef('info', 'terms.timeZone', data.lang()),
+                components: [
+                    {
+                        type: 'ACTION_ROW',
+                        components: [
+                            {
+                                type: 'TEXT_INPUT',
+                                customId: 'type',
+                                label: Lang.getRef('info', 'terms.timeZone', data.lang()),
+                                required: true,
+                                style: 'SHORT',
+                                minLength: 1,
+                                placeholder: Lang.getRef(
+                                    'info',
+                                    'terms.newYorkTimezone',
+                                    data.lang()
+                                ),
+                            },
+                        ],
+                    },
+                ],
+            }),
             intr.user,
-            async (nextMsg: Message) => {
-                if (FormatUtils.checkAbbreviation(nextMsg.content)) {
+            async (intr: ModalSubmitInteraction) => {
+                let input = intr.components[0].components[0].value;
+
+                if (FormatUtils.checkAbbreviation(input)) {
                     await InteractionUtils.send(
                         intr,
                         Lang.getEmbed(
@@ -44,8 +88,8 @@ export class BirthdayUtils {
                     return;
                 }
 
-                let input = FormatUtils.findZone(nextMsg.content); // Try and get the time zone
-                if (!input) {
+                let givenTimeZone = FormatUtils.findZone(input); // Try and get the time zone
+                if (!givenTimeZone) {
                     await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
@@ -61,17 +105,14 @@ export class BirthdayUtils {
                     return;
                 }
 
-                return input;
+                return { intr, value: givenTimeZone };
             },
-            async () => {
-                await InteractionUtils.send(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            }
+            expireFunction
         );
 
-        return timeZone;
+        if (timeZoneResult === undefined) return;
+
+        return [timeZoneResult.intr, timeZoneResult.value];
     }
 
     public static async getUserBirthday(
@@ -79,11 +120,22 @@ export class BirthdayUtils {
         target: User,
         data: EventData,
         intr: CommandInteraction,
+        nextIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         littleEndian: boolean,
         parser: Chrono
-    ): Promise<string> {
-        let _birthdayMessage = await InteractionUtils.send(
-            intr,
+    ): Promise<
+        [BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
+    > {
+        let expireFunction: ExpireFunction = async () => {
+            await InteractionUtils.send(
+                nextIntr,
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+            );
+        };
+
+        let birthdayPrompt = await InteractionUtils.sendWithEnterResponseButton(
+            nextIntr,
+            data,
             Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupBirthday', data.lang(), {
                 TARGET: target.username,
                 AUTHOR_ICON: target.displayAvatarURL(),
@@ -96,14 +148,40 @@ export class BirthdayUtils {
             }).setAuthor({ name: target.tag, url: target.displayAvatarURL() })
         );
 
-        birthday = await CollectorUtils.collectByMessage(
-            intr.channel,
+        let birthdayResult = await CollectorUtils.collectByModal(
+            birthdayPrompt,
+            new Modal({
+                customId: 'modal', // Will be overwritten
+                title: Lang.getRef('info', 'terms.birthday', data.lang()),
+                components: [
+                    {
+                        type: 'ACTION_ROW',
+                        components: [
+                            {
+                                type: 'TEXT_INPUT',
+                                customId: 'type',
+                                label: Lang.getRef('info', 'terms.birthday', data.lang()),
+                                required: true,
+                                style: 'SHORT',
+                                minLength: 1,
+                                placeholder: Lang.getRef(
+                                    'info',
+                                    `terms.birthdayExample${littleEndian ? 'DM' : 'MD'}`,
+                                    data.lang()
+                                ),
+                            },
+                        ],
+                    },
+                ],
+            }),
             intr.user,
-            async (nextMsg: Message) => {
-                let result = FormatUtils.getBirthday(nextMsg.content, parser, littleEndian);
+            async (intr: ModalSubmitInteraction) => {
+                let input = intr.components[0].components[0].value;
+
+                let givenBirthday = FormatUtils.getBirthday(input, parser, littleEndian);
 
                 // Don't laugh at my double check it prevents the dates chrono misses on the first input
-                if (!result) {
+                if (!givenBirthday) {
                     await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed(
@@ -118,17 +196,14 @@ export class BirthdayUtils {
                     return;
                 }
 
-                return result;
+                return { intr, value: givenBirthday };
             },
-            async () => {
-                await InteractionUtils.send(
-                    intr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                );
-            }
+            expireFunction
         );
 
-        return birthday;
+        if (birthdayResult === undefined) return;
+
+        return [birthdayResult.intr, birthdayResult.value];
     }
 
     public static async getUseServerDefaultTimezone(
@@ -136,8 +211,10 @@ export class BirthdayUtils {
         target: User,
         data: EventData,
         intr: CommandInteraction,
-        nextIntr: CommandInteraction | ButtonInteraction
-    ): Promise<[string, CommandInteraction | ButtonInteraction]> {
+        nextIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction
+    ): Promise<
+        [BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
+    > {
         if (!(intr.channel instanceof DMChannel) && data.guild)
             if (
                 data.guild?.DefaultTimezone !== '0' &&
@@ -170,7 +247,7 @@ export class BirthdayUtils {
                 }
                 nextIntr = defaultTimezoneResult.intr;
             }
-        return [timeZone, nextIntr];
+        return [nextIntr, timeZone];
     }
 
     public static async confirmInformationAndStore(
@@ -179,7 +256,7 @@ export class BirthdayUtils {
         changesLeft: number,
         target: User,
         data: EventData,
-        intr: CommandInteraction,
+        nextIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         parser: Chrono,
         userRepo: UserRepo
     ): Promise<[boolean, CommandInteraction | ButtonInteraction]> {
@@ -189,7 +266,7 @@ export class BirthdayUtils {
         let day = birthDate.getDate();
 
         let result = await CollectorUtils.getBooleanFromButton(
-            intr,
+            nextIntr,
             data,
             Lang.getEmbed('prompts', 'settingBirthday.confirmBirthday', data.lang(), {
                 TARGET: target.toString(),
@@ -200,13 +277,14 @@ export class BirthdayUtils {
         );
 
         if (result === undefined) return;
+        nextIntr = result.intr;
 
         if (result.value) {
             // Confirm
             await userRepo.addOrUpdateUser(target.id, birthday, timeZone, changesLeft); // Add or update user
 
             await InteractionUtils.send(
-                result.intr,
+                nextIntr,
                 Lang.getEmbed('results', 'success.setBirthday', data.lang(), {
                     USER: target.toString(),
                     BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
@@ -217,7 +295,7 @@ export class BirthdayUtils {
         } else {
             // Cancel
             await InteractionUtils.send(
-                result.intr,
+                nextIntr,
                 Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
             );
             return;

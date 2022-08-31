@@ -1,11 +1,16 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
+    BaseCommandInteraction,
     ButtonInteraction,
     CommandInteraction,
-    Message,
+    MessageActionRow,
+    MessageComponentInteraction,
+    Modal,
+    ModalSubmitInteraction,
     PermissionString,
     TextBasedChannel,
 } from 'discord.js';
+import { ExpireFunction } from 'discord.js-collector-utils';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
@@ -13,7 +18,6 @@ import { Lang } from '../../services/index.js';
 import {
     ClientUtils,
     CollectorUtils,
-    FormatUtils,
     InteractionUtils,
     PermissionUtils,
 } from '../../utils/index.js';
@@ -36,47 +40,85 @@ export class ChannelSubCommand implements Command {
     public async execute(intr: CommandInteraction, data: EventData): Promise<void> {
         let type: string;
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
+        let nextIntr:
+            | BaseCommandInteraction
+            | MessageComponentInteraction
+            | ModalSubmitInteraction = intr;
+        let expireFunction: ExpireFunction = async () => {
+            await InteractionUtils.send(
+                nextIntr,
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+            );
+        };
+        let celebrationTypePrompt = await InteractionUtils.send(nextIntr, {
+            embeds: [Lang.getEmbed('prompts', 'config.channelType', data.lang())],
+            components: [
+                {
+                    type: 'ACTION_ROW',
+                    components: [
+                        {
+                            type: 'BUTTON',
+                            customId: 'birthday',
+                            label: Lang.getRef('info', 'terms.birthday', data.lang()),
+                            style: 'PRIMARY',
+                        },
+                        {
+                            type: 'BUTTON',
+                            customId: 'memberAnniversary',
+                            label: Lang.getRef('info', 'terms.memberAnniversary', data.lang()),
+                            style: 'PRIMARY',
+                        },
+                        {
+                            type: 'BUTTON',
+                            customId: 'serverAnniversary',
+                            label: Lang.getRef('info', 'terms.serverAnniversary', data.lang()),
+                            style: 'PRIMARY',
+                        },
+                    ],
+                },
+            ],
+        });
 
-        // prompt them for a type
-        let _prompt = await InteractionUtils.send(
-            intr,
-            Lang.getEmbed('prompts', 'config.channelType', data.lang())
-        );
-
-        type = await CollectorUtils.collectByMessage(
-            intr.channel,
-            intr.user,
-            async (nextMsg: Message) => {
-                let input = FormatUtils.extractCelebrationType(nextMsg.content.toLowerCase());
-                if (
-                    !input ||
-                    input === 'userSpecificBirthday' ||
-                    input === 'userSpecificMemberAnniversary'
-                ) {
-                    await InteractionUtils.send(
-                        intr,
-                        Lang.getErrorEmbed('validation', 'errorEmbeds.invalidSetting', data.lang())
-                    );
+        let typeResult = await CollectorUtils.collectByButton(
+            celebrationTypePrompt,
+            nextIntr.user,
+            async (intr: ButtonInteraction) => {
+                try {
+                    await InteractionUtils.deferAndDisableButtons(intr);
+                } catch (error) {
+                    try {
+                        await InteractionUtils.editReply(intr, {
+                            components: InteractionUtils.setComponentsStatus(
+                                intr.message.components as MessageActionRow[],
+                                true
+                            ),
+                        });
+                    } catch (error) {
+                        return;
+                    }
                     return;
                 }
 
-                return input;
+                return {
+                    intr,
+                    value: intr.customId,
+                };
             },
             async () => {
                 await InteractionUtils.send(
-                    intr,
+                    nextIntr,
                     Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                 );
             }
         );
 
-        if (type === undefined) return;
+        if (typeResult === undefined) return;
+        nextIntr = typeResult.intr;
+        type = typeResult.value;
 
         let displayType = Lang.getRef('info', `terms.${type}`, data.lang());
 
         let channel: string;
-
-        let nextIntr: CommandInteraction | ButtonInteraction = intr;
 
         if (!reset) {
             let guild = intr.guild;
@@ -96,12 +138,14 @@ export class ChannelSubCommand implements Command {
             });
 
             let channelResult = await CollectorUtils.getSetupChoiceFromButton(
-                intr,
+                nextIntr,
                 data,
                 promptEmbed
             );
 
             if (channelResult === undefined) return;
+
+            nextIntr = channelResult.intr;
 
             switch (channelResult.value) {
                 case 'create': {
@@ -133,7 +177,7 @@ export class ChannelSubCommand implements Command {
                         })
                     )?.id;
                     await InteractionUtils.send(
-                        intr,
+                        nextIntr,
                         Lang.getSuccessEmbed(
                             'results',
                             'successEmbeds.channelCreate',
@@ -146,19 +190,60 @@ export class ChannelSubCommand implements Command {
                     break;
                 }
                 case 'select': {
-                    let _selectMessage = await InteractionUtils.send(
-                        intr,
+                    let channelPrompt = await InteractionUtils.sendWithEnterResponseButton(
+                        nextIntr,
+                        data,
                         Lang.getEmbed('prompts', 'setup.inputChannel', data.lang())
                     );
 
-                    channel = await CollectorUtils.collectByMessage(
-                        intr.channel,
+                    let placeholder =
+                        type === 'birthday'
+                            ? Lang.getRef('info', 'defaults.birthdayChannelName', data.lang())
+                            : type === 'memberAnniversary'
+                            ? Lang.getRef(
+                                  'info',
+                                  'defaults.memberAnniversaryChannelName',
+                                  data.lang()
+                              )
+                            : Lang.getRef(
+                                  'info',
+                                  'defaults.serverAnniversaryChannelName',
+                                  data.lang()
+                              );
+
+                    let channelResult = await CollectorUtils.collectByModal(
+                        channelPrompt,
+                        new Modal({
+                            customId: 'modal', // Will be overwritten
+                            title: Lang.getRef('info', `terms.${type}Channel`, data.lang()),
+                            components: [
+                                {
+                                    type: 'ACTION_ROW',
+                                    components: [
+                                        {
+                                            type: 'TEXT_INPUT',
+                                            customId: 'channel',
+                                            label: Lang.getRef(
+                                                'info',
+                                                `terms.${type}Channel`,
+                                                data.lang()
+                                            ),
+                                            required: true,
+                                            style: 'SHORT',
+                                            minLength: 1,
+                                            placeholder: `#${placeholder.split(' ').join('-')}`, // format like #channel-name
+                                        },
+                                    ],
+                                },
+                            ],
+                        }),
                         intr.user,
-                        async (nextMsg: Message) => {
+                        async (intr: ModalSubmitInteraction) => {
+                            let input = intr.components[0].components[0].value;
                             // Find mentioned channel
                             let channelInput: TextBasedChannel = await ClientUtils.findTextChannel(
                                 intr.guild,
-                                nextMsg.content
+                                input
                             );
 
                             if (!channelInput) {
@@ -188,21 +273,18 @@ export class ChannelSubCommand implements Command {
                                 );
                                 return;
                             }
-                            return channelInput?.id;
+
+                            return { intr, value: channelInput?.id };
                         },
-                        async () => {
-                            await InteractionUtils.send(
-                                intr,
-                                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
-                            );
-                        }
+                        expireFunction
                     );
 
-                    if (channel === undefined) {
-                        return;
-                    }
+                    if (channelResult === undefined) return;
+                    nextIntr = channelResult.intr;
+                    channel = channelResult.value;
+
                     await InteractionUtils.send(
-                        intr,
+                        nextIntr,
                         Lang.getSuccessEmbed('results', 'successEmbeds.channelSet', data.lang(), {
                             CHANNEL: `<#${channel}>`,
                             TYPE: displayType.toLowerCase(),

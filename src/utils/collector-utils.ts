@@ -1,20 +1,19 @@
 import {
+    BaseCommandInteraction,
     ButtonInteraction,
-    CommandInteraction,
     Message,
     MessageActionRow,
+    MessageComponentInteraction,
     MessageEmbed,
     Modal,
     ModalSubmitInteraction,
     SelectMenuInteraction,
-    TextBasedChannel,
     User,
 } from 'discord.js';
 import {
     ButtonRetriever,
     CollectorUtils as DjsCollectorUtils,
     ExpireFunction,
-    MessageRetriever,
     ModalRetriever,
     ReactionRetriever,
     SelectMenuRetriever,
@@ -22,7 +21,7 @@ import {
 import { createRequire } from 'node:module';
 
 import { EventData } from '../models/index.js';
-import { Lang } from '../services/index.js';
+import { Lang } from '../services/lang.js';
 import { InteractionUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -42,21 +41,12 @@ export class CollectorUtils {
             time: Config.experience.promptExpireTime * 1000,
             reset: true,
             target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
             onExpire: expireFunc,
         });
     }
 
     public static async getBooleanFromButton(
-        commandIntr: CommandInteraction,
+        commandIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         data: EventData,
         embed: MessageEmbed,
         target?: User
@@ -71,12 +61,14 @@ export class CollectorUtils {
                             type: 'BUTTON',
                             customId: 'true',
                             emoji: Config.emotes.confirm,
+                            label: Lang.getRef('info', 'boolean.yes', data.lang()),
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'false',
                             emoji: Config.emotes.deny,
+                            label: Lang.getRef('info', 'boolean.no', data.lang()),
                             style: 'PRIMARY',
                         },
                     ],
@@ -123,7 +115,7 @@ export class CollectorUtils {
     }
 
     public static async getSetupChoiceFromButton(
-        prevIntr: CommandInteraction | ButtonInteraction,
+        prevIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         data: EventData,
         embed: MessageEmbed
     ): Promise<{ intr: ButtonInteraction; value: string }> {
@@ -137,18 +129,21 @@ export class CollectorUtils {
                             type: 'BUTTON',
                             customId: 'create',
                             emoji: Config.emotes.create,
+                            label: Lang.getRef('info', 'terms.createNew', data.lang()),
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'select',
                             emoji: Config.emotes.select,
+                            label: Lang.getRef('info', 'terms.selectExisting', data.lang()),
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'deny',
                             emoji: Config.emotes.deny,
+                            label: Lang.getRef('info', 'terms.doNotSet', data.lang()),
                             style: 'PRIMARY',
                         },
                     ],
@@ -203,15 +198,6 @@ export class CollectorUtils {
             time: Config.experience.promptExpireTime * 1000,
             reset: true,
             target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
             onExpire: expireFunc,
         });
     }
@@ -230,15 +216,6 @@ export class CollectorUtils {
             time: Config.experience.promptExpireTime * 1000,
             reset: true,
             target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
             onExpire: expireFunc,
         });
     }
@@ -253,38 +230,6 @@ export class CollectorUtils {
             time: Config.experience.promptExpireTime * 1000,
             reset: true,
             target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
-            onExpire: expireFunc,
-        });
-    }
-
-    public static collectByMessage<T>(
-        channel: TextBasedChannel,
-        user: User,
-        retriever: MessageRetriever<T>,
-        expireFunc?: ExpireFunction
-    ): Promise<T> {
-        return DjsCollectorUtils.collectByMessage(channel, retriever, {
-            time: Config.experience.promptExpireTime * 1000,
-            reset: true,
-            target: user,
-            stopFilter: message => {
-                // Check if another command was ran, if so cancel the current running setup
-                let args = message.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(args[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
             onExpire: expireFunc,
         });
     }
