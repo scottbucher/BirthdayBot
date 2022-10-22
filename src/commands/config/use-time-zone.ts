@@ -52,7 +52,7 @@ export class UseTimezoneSubCommand implements Command {
                             },
                             {
                                 type: 'BUTTON',
-                                customId: 'select',
+                                customId: 'server',
                                 label: Lang.getRef('info', 'terms.server', data.lang()),
                                 style: 'PRIMARY',
                             },
