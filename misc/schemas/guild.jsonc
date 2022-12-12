@@ -32,9 +32,9 @@
         "active": true,
         "lastCheck": "2022-05-13T23:13:18Z"
     },
-    "+messages": [],
-    "+events": [],
-    "+memberAnniversaryRoles": [],
-    "+blacklists": [],
-    "+trustedRoles": []
+    "-messages": [],
+    "-events": [],
+    "-memberAnniversaryRoles": [],
+    "-blacklists": [],
+    "-trustedRoles": []
 }
