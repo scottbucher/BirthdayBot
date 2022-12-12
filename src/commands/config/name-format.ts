@@ -1,10 +1,18 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import { CommandInteraction, Message, PermissionString } from 'discord.js';
+import {
+    BaseCommandInteraction,
+    ButtonInteraction,
+    CommandInteraction,
+    MessageActionRow,
+    MessageComponentInteraction,
+    ModalSubmitInteraction,
+    PermissionString,
+} from 'discord.js';
 
 import { EventData } from '../../models/index.js';
 import { GuildRepo } from '../../services/database/repos/index.js';
 import { Lang } from '../../services/index.js';
-import { CollectorUtils, FormatUtils, InteractionUtils } from '../../utils/index.js';
+import { CollectorUtils, InteractionUtils } from '../../utils/index.js';
 import { Command } from '../index.js';
 
 export class NameFormatSubCommand implements Command {
@@ -25,47 +33,91 @@ export class NameFormatSubCommand implements Command {
         let nameFormat: string;
         let guildMember = intr.guild.members.resolve(intr.user.id);
         let reset = intr.options.getBoolean(Lang.getCom('arguments.reset')) ?? false;
+        let nextIntr:
+            | BaseCommandInteraction
+            | MessageComponentInteraction
+            | ModalSubmitInteraction = intr;
 
         if (!reset) {
             // prompt them for a setting
-            let _prompt = await InteractionUtils.send(
-                intr,
-                Lang.getEmbed('prompts', 'config.nameFormat', data.lang(), {
-                    MENTION: intr.user.toString(),
-                    USERNAME: intr.user.username,
-                    NICKNAME: guildMember.displayName,
-                    TAG: `${intr.user.username}#${intr.user.discriminator}`,
-                })
-            );
+            let nameFormatPrompt = await InteractionUtils.send(nextIntr, {
+                embeds: [
+                    Lang.getEmbed('prompts', 'config.nameFormat', data.lang(), {
+                        MENTION: intr.user.toString(),
+                        USERNAME: intr.user.username,
+                        NICKNAME: guildMember.displayName,
+                        TAG: `${intr.user.username}#${intr.user.discriminator}`,
+                    }),
+                ],
+                components: [
+                    {
+                        type: 'ACTION_ROW',
+                        components: [
+                            {
+                                type: 'BUTTON',
+                                customId: 'mention',
+                                label: Lang.getRef('info', 'terms.mention', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                            {
+                                type: 'BUTTON',
+                                customId: 'username',
+                                label: Lang.getRef('info', 'terms.username', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                            {
+                                type: 'BUTTON',
+                                customId: 'nickname',
+                                label: Lang.getRef('info', 'terms.nickname', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                            {
+                                type: 'BUTTON',
+                                customId: 'tag',
+                                label: Lang.getRef('info', 'terms.tag', data.lang()),
+                                style: 'PRIMARY',
+                            },
+                        ],
+                    },
+                ],
+            });
 
-            nameFormat = await CollectorUtils.collectByMessage(
-                intr.channel,
-                intr.user,
-                async (nextMsg: Message) => {
-                    let input = FormatUtils.extractNameFormatType(nextMsg.content.toLowerCase());
-                    if (!input) {
-                        await InteractionUtils.send(
-                            intr,
-                            Lang.getErrorEmbed(
-                                'validation',
-                                'errorEmbeds.invalidSetting',
-                                data.lang()
-                            )
-                        );
+            let nameFormatResult = await CollectorUtils.collectByButton(
+                nameFormatPrompt,
+                nextIntr.user,
+                async (intr: ButtonInteraction) => {
+                    try {
+                        await InteractionUtils.deferAndDisableButtons(intr);
+                    } catch (error) {
+                        try {
+                            await InteractionUtils.editReply(intr, {
+                                components: InteractionUtils.setComponentsStatus(
+                                    intr.message.components as MessageActionRow[],
+                                    true
+                                ),
+                            });
+                        } catch (error) {
+                            return;
+                        }
                         return;
                     }
 
-                    return input.toLowerCase();
+                    return {
+                        intr,
+                        value: intr.customId,
+                    };
                 },
                 async () => {
                     await InteractionUtils.send(
-                        intr,
+                        nextIntr,
                         Lang.getEmbed('results', 'fail.promptExpired', data.lang())
                     );
                 }
             );
 
-            if (nameFormat === undefined) return;
+            if (nameFormatResult === undefined) return;
+            nextIntr = nameFormatResult.intr;
+            nameFormat = nameFormatResult.value;
         } else nameFormat = 'default';
 
         if (nameFormat === 'default') nameFormat = 'mention';
@@ -73,7 +125,7 @@ export class NameFormatSubCommand implements Command {
         await this.guildRepo.updateNameFormat(intr.guild.id, nameFormat);
 
         await InteractionUtils.send(
-            intr,
+            nextIntr,
             Lang.getSuccessEmbed('results', 'successEmbeds.nameFormatSet', data.lang(), {
                 SETTING: nameFormat,
                 FORMAT:

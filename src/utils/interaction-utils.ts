@@ -1,7 +1,7 @@
-import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v10';
+import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v9';
 import {
+    BaseCommandInteraction,
     ButtonInteraction,
-    CommandInteraction,
     DiscordAPIError,
     InteractionReplyOptions,
     InteractionUpdateOptions,
@@ -9,8 +9,12 @@ import {
     MessageActionRow,
     MessageComponentInteraction,
     MessageEmbed,
+    ModalSubmitInteraction,
     WebhookEditMessageOptions,
 } from 'discord.js';
+
+import { EventData } from '../models/internal-models.js';
+import { Lang } from '../services/lang.js';
 
 const IGNORED_ERRORS = [
     DiscordApiErrors.UnknownMessage,
@@ -20,11 +24,12 @@ const IGNORED_ERRORS = [
     DiscordApiErrors.UnknownInteraction,
     DiscordApiErrors.CannotSendMessagesToThisUser, // User blocked bot or DM disabled
     DiscordApiErrors.ReactionWasBlocked, // User blocked bot or DM disabled
+    DiscordApiErrors.MaximumActiveThreads,
 ];
 
 export class InteractionUtils {
     public static async deferReply(
-        intr: CommandInteraction | MessageComponentInteraction,
+        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         hidden: boolean = false
     ): Promise<void> {
         try {
@@ -40,7 +45,9 @@ export class InteractionUtils {
         }
     }
 
-    public static async deferUpdate(intr: MessageComponentInteraction): Promise<void> {
+    public static async deferUpdate(
+        intr: MessageComponentInteraction | ModalSubmitInteraction
+    ): Promise<void> {
         try {
             return await intr.deferUpdate();
         } catch (error) {
@@ -75,7 +82,7 @@ export class InteractionUtils {
     }
 
     public static async send(
-        intr: CommandInteraction | MessageComponentInteraction,
+        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         content: string | MessageEmbed | InteractionReplyOptions,
         hidden: boolean = false
     ): Promise<Message> {
@@ -105,17 +112,34 @@ export class InteractionUtils {
                 throw error;
             }
         }
-        // } catch (error) {
-        //     if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
-        //         return;
-        //     } else {
-        //         throw error;
-        //     }
-        // }
+    }
+
+    public static async sendWithEnterResponseButton(
+        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        data: EventData,
+        embed: MessageEmbed
+    ): Promise<Message<boolean>> {
+        return await InteractionUtils.send(intr, {
+            embeds: [embed],
+            components: [
+                {
+                    type: 'ACTION_ROW',
+                    components: [
+                        {
+                            type: 'BUTTON',
+                            customId: 'enter_response',
+                            emoji: '⌨️',
+                            label: Lang.getRef('info', 'terms.enterResponse', data.lang()),
+                            style: 'PRIMARY',
+                        },
+                    ],
+                },
+            ],
+        });
     }
 
     public static async editReply(
-        intr: CommandInteraction | MessageComponentInteraction,
+        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         content: string | MessageEmbed | WebhookEditMessageOptions
     ): Promise<Message> {
         try {
@@ -136,7 +160,7 @@ export class InteractionUtils {
     }
 
     public static async update(
-        intr: MessageComponentInteraction,
+        intr: MessageComponentInteraction | ModalSubmitInteraction,
         content: string | MessageEmbed | InteractionUpdateOptions
     ): Promise<Message> {
         try {

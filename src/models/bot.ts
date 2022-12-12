@@ -19,7 +19,6 @@ import {
     CommandHandler,
     GuildJoinHandler,
     GuildLeaveHandler,
-    MessageHandler,
     ReactionHandler,
 } from '../events/index.js';
 import { JobService, Logger } from '../services/index.js';
@@ -38,7 +37,6 @@ export class Bot {
         private client: Client,
         private guildJoinHandler: GuildJoinHandler,
         private guildLeaveHandler: GuildLeaveHandler,
-        private messageHandler: MessageHandler,
         private commandHandler: CommandHandler,
         private buttonHandler: ButtonHandler,
         private reactionHandler: ReactionHandler,
@@ -59,7 +57,6 @@ export class Bot {
         );
         this.client.on(Constants.Events.GUILD_CREATE, (guild: Guild) => this.onGuildJoin(guild));
         this.client.on(Constants.Events.GUILD_DELETE, (guild: Guild) => this.onGuildLeave(guild));
-        this.client.on(Constants.Events.MESSAGE_CREATE, (msg: Message) => this.onMessage(msg));
         this.client.on(Constants.Events.INTERACTION_CREATE, (intr: Interaction) =>
             this.onInteraction(intr)
         );
@@ -119,26 +116,6 @@ export class Bot {
             await this.guildLeaveHandler.process(guild);
         } catch (error) {
             Logger.error(Logs.error.guildLeave, error);
-        }
-    }
-
-    private async onMessage(msg: Message): Promise<void> {
-        if (
-            !this.ready ||
-            (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(msg.author.id))
-        ) {
-            return;
-        }
-
-        msg = await PartialUtils.fillMessage(msg);
-        if (!msg) {
-            return;
-        }
-
-        try {
-            await this.messageHandler.process(msg);
-        } catch (error) {
-            Logger.error(Logs.error.message, error);
         }
     }
 

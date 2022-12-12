@@ -3,13 +3,18 @@ import {
     ApplicationCommandOptionType,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { ButtonInteraction, CommandInteraction, PermissionString } from 'discord.js';
+import {
+    BaseCommandInteraction,
+    CommandInteraction,
+    MessageComponentInteraction,
+    ModalSubmitInteraction,
+    PermissionString,
+} from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
-import { BirthdayUtils } from '../utils/birthday-utils.js';
-import { FormatUtils } from '../utils/index.js';
+import { BirthdayUtils, FormatUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class SetCommand implements Command {
@@ -53,9 +58,12 @@ export class SetCommand implements Command {
 
         let changesLeft = userData ? userData?.ChangesLeft : 5;
 
-        let nextIntr: CommandInteraction | ButtonInteraction = intr;
+        let nextIntr:
+            | BaseCommandInteraction
+            | MessageComponentInteraction
+            | ModalSubmitInteraction = intr;
 
-        [timeZone, nextIntr] = await BirthdayUtils.getUseServerDefaultTimezone(
+        [nextIntr, timeZone] = await BirthdayUtils.getUseServerDefaultTimezone(
             timeZone,
             intr.user,
             data,
@@ -64,8 +72,7 @@ export class SetCommand implements Command {
         );
 
         if (!timeZone)
-            timeZone = await BirthdayUtils.getUserTimezone(
-                timeZone,
+            [nextIntr, timeZone] = await BirthdayUtils.getUserTimezone(
                 intr.user,
                 data,
                 intr,
@@ -86,11 +93,12 @@ export class SetCommand implements Command {
             : undefined;
 
         if (!birthday)
-            birthday = await BirthdayUtils.getUserBirthday(
+            [nextIntr, birthday] = await BirthdayUtils.getUserBirthday(
                 birthday,
                 intr.user,
                 data,
                 intr,
+                nextIntr,
                 littleEndian,
                 parser
             );
@@ -103,7 +111,7 @@ export class SetCommand implements Command {
             changesLeft,
             intr.user,
             data,
-            intr,
+            nextIntr,
             parser,
             this.userRepo
         );

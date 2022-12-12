@@ -89,9 +89,7 @@ import {
     CommandHandler,
     GuildJoinHandler,
     GuildLeaveHandler,
-    MessageHandler,
     ReactionHandler,
-    TriggerHandler,
 } from './events/index.js';
 import { CustomClient } from './extensions/index.js';
 import { CelebrationJob, Job, UpdateMemberCacheJob } from './jobs/index.js';
@@ -115,7 +113,6 @@ import {
     Logger,
     SubscriptionService,
 } from './services/index.js';
-import { OldPrefixTrigger, Trigger } from './triggers/index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../config/config.json');
@@ -289,9 +286,6 @@ async function start(): Promise<void> {
         // TODO: Add new reactions here
     ];
 
-    // Triggers
-    let triggers: Trigger[] = [new OldPrefixTrigger()];
-
     // Event handlers
     let guildJoinHandler = new GuildJoinHandler();
     let guildLeaveHandler = new GuildLeaveHandler();
@@ -303,8 +297,6 @@ async function start(): Promise<void> {
         combinedRepo
     );
     let buttonHandler = new ButtonHandler(buttons, subService, combinedRepo);
-    let triggerHandler = new TriggerHandler(triggers);
-    let messageHandler = new MessageHandler(triggerHandler);
     let reactionHandler = new ReactionHandler(reactions);
 
     // Jobs
@@ -319,7 +311,6 @@ async function start(): Promise<void> {
         client,
         guildJoinHandler,
         guildLeaveHandler,
-        messageHandler,
         commandHandler,
         buttonHandler,
         reactionHandler,

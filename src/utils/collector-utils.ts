@@ -1,107 +1,52 @@
 import {
+    BaseCommandInteraction,
     ButtonInteraction,
-    CommandInteraction,
     Message,
     MessageActionRow,
+    MessageComponentInteraction,
     MessageEmbed,
-    MessageReaction,
-    TextBasedChannel,
+    Modal,
+    ModalSubmitInteraction,
+    SelectMenuInteraction,
     User,
 } from 'discord.js';
 import {
     ButtonRetriever,
     CollectorUtils as DjsCollectorUtils,
     ExpireFunction,
-    MessageRetriever,
+    ModalRetriever,
     ReactionRetriever,
+    SelectMenuRetriever,
 } from 'discord.js-collector-utils';
 import { createRequire } from 'node:module';
 
 import { EventData } from '../models/index.js';
-import { Lang } from '../services/index.js';
+import { Lang } from '../services/lang.js';
 import { InteractionUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 
 export class CollectorUtils {
-    public static collectByMessage<T>(
-        channel: TextBasedChannel,
-        user: User,
-        messageRetriever: MessageRetriever<T>,
-        expireFunction?: ExpireFunction
-    ): Promise<T> {
-        return DjsCollectorUtils.collectByMessage(
-            channel,
-            (nextMsg: Message): boolean => nextMsg.author.id === user.id,
-            (nextMsg: Message): boolean => {
-                // Check if another command was ran, if so cancel the current running setup
-                let nextMsgArgs = nextMsg.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(nextMsgArgs[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
-            messageRetriever,
-            expireFunction,
-            { time: Config.experience.promptExpireTime * 1000, reset: true }
-        );
-    }
-
-    public static collectByReaction<T>(
-        msg: Message,
-        user: User,
-        reactionRetriever: ReactionRetriever<T>,
-        expireFunction?: ExpireFunction
-    ): Promise<T> {
-        return DjsCollectorUtils.collectByReaction(
-            msg,
-            (_msgReaction: MessageReaction, reactor: User): boolean => reactor.id === user.id,
-            (nextMsg: Message): boolean => {
-                // Check if another command was ran, if so cancel the current running setup
-                let nextMsgArgs = nextMsg.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(nextMsgArgs[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
-            reactionRetriever,
-            expireFunction,
-            { time: Config.experience.promptExpireTime * 1000, reset: true }
-        );
-    }
-
     public static collectByButton<T>(
         msg: Message,
         user: User,
-        buttonRetriever: ButtonRetriever<T>,
-        expireFunction?: ExpireFunction
+        retriever: ButtonRetriever<T>,
+        expireFunc?: ExpireFunction
     ): Promise<{
         intr: ButtonInteraction;
         value: T;
     }> {
-        return DjsCollectorUtils.collectByButton(
-            msg,
-            (intr: ButtonInteraction) => intr.user.id === user.id,
-            (nextMsg: Message): boolean => {
-                // Check if another command was ran, if so cancel the current running setup
-                let nextMsgArgs = nextMsg.content.split(' ');
-                if ([Lang.getCom('keywords.stop')].includes(nextMsgArgs[0]?.toLowerCase())) {
-                    return true;
-                }
-
-                return false;
-            },
-            buttonRetriever,
-            expireFunction,
-            { time: Config.experience.promptExpireTime * 1000, reset: true }
-        );
+        return DjsCollectorUtils.collectByButton(msg, retriever, {
+            time: Config.experience.promptExpireTime * 1000,
+            reset: true,
+            target: user,
+            onExpire: expireFunc,
+        });
     }
 
     public static async getBooleanFromButton(
-        commandIntr: CommandInteraction,
+        commandIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         data: EventData,
         embed: MessageEmbed,
         target?: User
@@ -116,12 +61,14 @@ export class CollectorUtils {
                             type: 'BUTTON',
                             customId: 'true',
                             emoji: Config.emotes.confirm,
+                            label: Lang.getRef('info', 'boolean.yes', data.lang()),
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'false',
                             emoji: Config.emotes.deny,
+                            label: Lang.getRef('info', 'boolean.no', data.lang()),
                             style: 'PRIMARY',
                         },
                     ],
@@ -168,7 +115,7 @@ export class CollectorUtils {
     }
 
     public static async getSetupChoiceFromButton(
-        prevIntr: CommandInteraction | ButtonInteraction,
+        prevIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         data: EventData,
         embed: MessageEmbed
     ): Promise<{ intr: ButtonInteraction; value: string }> {
@@ -182,18 +129,21 @@ export class CollectorUtils {
                             type: 'BUTTON',
                             customId: 'create',
                             emoji: Config.emotes.create,
+                            label: Lang.getRef('info', 'terms.createNew', data.lang()),
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'select',
                             emoji: Config.emotes.select,
+                            label: Lang.getRef('info', 'terms.selectExisting', data.lang()),
                             style: 'PRIMARY',
                         },
                         {
                             type: 'BUTTON',
                             customId: 'deny',
                             emoji: Config.emotes.deny,
+                            label: Lang.getRef('info', 'terms.doNotSet', data.lang()),
                             style: 'PRIMARY',
                         },
                     ],
@@ -233,5 +183,54 @@ export class CollectorUtils {
                 );
             }
         );
+    }
+
+    public static collectBySelectMenu<T>(
+        msg: Message,
+        user: User,
+        retriever: SelectMenuRetriever<T>,
+        expireFunc?: ExpireFunction
+    ): Promise<{
+        intr: SelectMenuInteraction;
+        value: T;
+    }> {
+        return DjsCollectorUtils.collectBySelectMenu(msg, retriever, {
+            time: Config.experience.promptExpireTime * 1000,
+            reset: true,
+            target: user,
+            onExpire: expireFunc,
+        });
+    }
+
+    public static collectByModal<T>(
+        msg: Message,
+        modal: Modal,
+        user: User,
+        retriever: ModalRetriever<T>,
+        expireFunc?: ExpireFunction
+    ): Promise<{
+        intr: ModalSubmitInteraction;
+        value: T;
+    }> {
+        return DjsCollectorUtils.collectByModal(msg, modal, retriever, {
+            time: Config.experience.promptExpireTime * 1000,
+            reset: true,
+            target: user,
+            onExpire: expireFunc,
+        });
+    }
+
+    public static collectByReaction<T>(
+        msg: Message,
+        user: User,
+        retriever: ReactionRetriever<T>,
+        expireFunc?: ExpireFunction
+    ): Promise<T> {
+        return DjsCollectorUtils.collectByReaction(msg, retriever, {
+            time: Config.experience.promptExpireTime * 1000,
+            reset: true,
+            target: user,
+            onExpire: expireFunc,
+        });
     }
 }

@@ -3,13 +3,19 @@ import {
     ApplicationCommandOptionType,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { ButtonInteraction, CommandInteraction, Permissions, PermissionString } from 'discord.js';
+import {
+    BaseCommandInteraction,
+    CommandInteraction,
+    MessageComponentInteraction,
+    ModalSubmitInteraction,
+    Permissions,
+    PermissionString,
+} from 'discord.js';
 
 import { EventData } from '../models/index.js';
 import { GuildRepo, UserRepo } from '../services/database/repos/index.js';
 import { Lang } from '../services/index.js';
-import { BirthdayUtils } from '../utils/birthday-utils.js';
-import { FormatUtils, InteractionUtils } from '../utils/index.js';
+import { BirthdayUtils, FormatUtils, InteractionUtils } from '../utils/index.js';
 import { Command, CommandDeferType } from './index.js';
 
 export class SuggestCommand implements Command {
@@ -71,9 +77,12 @@ export class SuggestCommand implements Command {
 
         let changesLeft = userData ? userData?.ChangesLeft : 5;
 
-        let nextIntr: CommandInteraction | ButtonInteraction = intr;
+        let nextIntr:
+            | BaseCommandInteraction
+            | MessageComponentInteraction
+            | ModalSubmitInteraction = intr;
 
-        [timeZone, nextIntr] = await BirthdayUtils.getUseServerDefaultTimezone(
+        [nextIntr, timeZone] = await BirthdayUtils.getUseServerDefaultTimezone(
             timeZone,
             target,
             data,
@@ -82,7 +91,12 @@ export class SuggestCommand implements Command {
         );
 
         if (!timeZone)
-            timeZone = await BirthdayUtils.getUserTimezone(timeZone, target, data, intr, nextIntr);
+            [nextIntr, timeZone] = await BirthdayUtils.getUserTimezone(
+                target,
+                data,
+                intr,
+                nextIntr
+            );
 
         if (timeZone === undefined) return;
 
@@ -98,11 +112,12 @@ export class SuggestCommand implements Command {
             : undefined;
 
         if (!birthday)
-            birthday = await BirthdayUtils.getUserBirthday(
+            [nextIntr, birthday] = await BirthdayUtils.getUserBirthday(
                 birthday,
                 target,
                 data,
                 intr,
+                nextIntr,
                 littleEndian,
                 parser
             );
@@ -115,7 +130,7 @@ export class SuggestCommand implements Command {
             changesLeft,
             target,
             data,
-            intr,
+            nextIntr,
             parser,
             this.userRepo
         );
