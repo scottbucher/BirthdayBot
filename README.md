@@ -1,120 +1,126 @@
-# Birthday Bot
+# Discord Bot TypeScript Template
 
-[![Discord Bots](https://top.gg/api/widget/servers/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
-[![Discord Bots](https://top.gg/api/widget/status/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
-[![License](https://img.shields.io/badge/license-No%20License-blue)](https://choosealicense.com/no-permission/)
-[![Stars](https://img.shields.io/github/stars/scottbucher/BirthdayBot.svg)](https://github.com/scottbucher/BirthdayBot/stargazers)
-[![Discord Shield](https://discord.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discord.com/invite/9gUQFtz)
-[![Discord Bots](https://top.gg/api/widget/owner/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
+[![discord.js](https://img.shields.io/github/package-json/dependency-version/KevinNovak/Discord-Bot-TypeScript-Template/discord.js)](https://discord.js.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
+[![Stars](https://img.shields.io/github/stars/KevinNovak/Discord-Bot-TypeScript-Template.svg)](https://github.com/KevinNovak/Discord-Bot-TypeScript-Template/stargazers)
+[![Pull Requests](https://img.shields.io/badge/Pull%20Requests-Welcome!-brightgreen)](https://github.com/KevinNovak/Discord-Bot-TypeScript-Template/pulls)
 
-## Important Note
+**Discord bot** - A discord.js bot template written with TypeScript.
 
-**For the most detailed and up-to-date information and guide please visit the Official Birthday Bot Documentation [here!](https://birthdaybot.scottbucher.dev)**
+## Introduction
 
-**Discord Bot** - Celebrate birthdays and anniversaries (**NEW**) with configurable roles, messages and more! Highly customizable and easy to use! Use `bday help` to get started!
+This template was created to give developers a starting point for new Discord bots, so that much of the initial setup can be avoided and developers can instead focus on meaningful bot features. Developers can simply copy this repo, follow the [setup instructions](#setup) below, and have a working bot with many [boilerplate features](#features) already included!
 
-## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268921936&scope=bot%20applications.commands)
+For help using this template, feel free to [join our support server](https://discord.gg/Vyf6fEWbVr)!
 
-[Join The Support Server](https://discord.gg/9gUQFtz) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
+[![Discord Shield](https://discord.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discord.gg/Vyf6fEWbVr)
 
-# Features:
+## Features
 
-## Free Features
+### Built-In Bot Features:
 
--   Each user can [set their birthday & time zone](https://birthdaybot.scottbucher.dev/setting-your-birthday) into the bot which stores that information into a database allowing the bot to know on what day and what time zone to celebrate the user's birthday
--   Use the Anniversary System to celebrate the anniversary of when members first joined the server and when the server was created.
-    -   Requires the [Default Timezone](https://birthdaybot.scottbucher.dev/faq-1/general#what-is-the-default-timezone-setting) Setting to be set
-    -   Server owners have heavy control over how, when, and what Birthday Bot does in their Discord
-    -   Customization of the [Celebration Messages](https://birthdaybot.scottbucher.dev/faq-1/custom-messages#what-are-the-different-types-of-custom-messages) (Message contents and design)
-        -   There can be multiple custom messages, the bot will choose one random for each birthday/anniversary
-    -   Customizable Birthday Role and/or Birthday/Anniversary Channels
-    -   Custom Birthday/Anniversary Message Time
-    -   Customizable [Trusted Role System](https://birthdaybot.scottbucher.dev/faq-1/birthday-system/trusted-system) (Birthday System Only) - Using this system server owners decide whose birthdays are celebrated in their Discord. Additionally, server owners can toggle whether the Trusted Role is only required to receive the Birthday Role or Birthday Message, or both.
-    -   Ban specific users from having their birthday celebrated using the birthday blacklist
--   All birthdays are stored Globally. This means if you have multiple Discord servers that you own or are in with Birthday Bot, your users will only have to input their birthday and time zone once.
--   View upcoming birthdays/anniversaries.
--   Clear your information from the database at any time.
--   Near 24/7 up-time!
+-   Basic command structure.
+-   Rate limits and command cooldowns.
+-   Welcome message when joining a server.
+-   Shows server count in bot status.
+-   Posts server count to popular bot list websites.
+-   Support for multiple languages.
 
-## [Premium Features](https://birthdaybot.scottbucher.dev/premium-features):
+### Developer Friendly:
 
--   Avoid having to vote to use some commands.
--   Setup [Member Anniversary Roles](https://birthdaybot.scottbucher.dev/faq-1/member-anniversaries#what-are-anniversary-roles) to celebrate how long members have been in your discord
-    -   For example, the **5-Year Veteran** role can be set to be given on a member's 5 Year anniversary in your discord.
--   Setup Multiple [Trusted Roles](https://birthdaybot.scottbucher.dev/faq-1/birthday-system/trusted-system#do-i-need-to-set-up-the-trusted-role)
-    -   Use the [**RequireAllTrustedRoles**](https://birthdaybot.scottbucher.dev/faq-1/birthday-system/trusted-system#what-is-the-require-all-trusted-role-setting) setting to decide if users need all trusted roles or just one to have their birthday celebrated.
--   More control over the Custom Message(s).
-    -   Up to **500** custom birthday messages (_vs_ **_3_** _for free_).
-    -   Up to **500** custom member anniversary messages (_vs_ **_3_** _for free_).
-    -   Up to **500** custom server anniversary messages (_vs_ **_1_** _for free_).
-    -   Decide what [color each custom message](https://birthdaybot.scottbucher.dev/faq-1/custom-messages#what-is-a-message-embed-color) is (You can have a different color for each!)
-        -   Decide which messages are [embedded](https://birthdaybot.scottbucher.dev/faq-1/custom-messages#what-is-a-message-embed-setting) (Color setting only applies to messages that are embedded)
-    -   Set [user-specific custom messages](https://birthdaybot.scottbucher.dev/premium-features#user-specific-custom-messages)
-        -   One custom message per user
-        -   Unlimited user-specific messages per server
--   Support Development!
-    -   Since I started Birthday Bot I have maintained development and server cost completely out of my own expense, Birthday Bot Premium allows me to continue to maintain development as Birthday Bot continues to gain tens of thousands of servers each month.
-    -   Subscriptions to Birthday Bot Premium go straight to server costs.
+-   Written with TypeScript.
+-   Uses the [discord.js](https://discord.js.org/) framework.
+-   Built-in debugging setup for VSCode.
+-   Written with [ESM](https://nodejs.org/api/esm.html#introduction) for future compatibility with packages.
+-   Support for running with the [PM2](https://pm2.keymetrics.io/) process manger.
+-   Support for running with [Docker](https://www.docker.com/).
 
-### Support & Troubleshooting
+### Scales as Your Bot Grows:
 
-Birthday Bot is a part of the Arilyn Bot family and any support, questions or feedback are welcome in our support [Discord](https://discord.com/invite/9gUQFtz). Please visit our [FAQ](https://birthdaybot.scottbucher.dev/faq) and setup guide, as well as previous user questions before contacting staff, thanks!
+-   Supports [sharding](https://discordjs.guide/sharding/) which is required when your bot is in 2500+ servers.
+-   Supports [clustering](https://github.com/KevinNovak/Discord-Bot-TypeScript-Template-Master-Api) which allows you to run your bot on multiple machines.
 
-**Example Birthday Announcement (Fully customizable):**
+## Commands
 
-![Example Birthday Announcement](https://i.imgur.com/BZcEJ5j.png)
+This bot has a few example commands which can be modified as needed.
 
-In your Discord server Birthday Bot will track your users' birthdays and using their time zone celebrate their birthday through its customizable birthday role and message. Even if you have a large discord, use Birthday Bots trusted-role system to only celebrate the users you want to avoid the spam of tracking everyone. Similar messages can also be setup to celebrate the anniversary of members joining your discord server and the anniversary of the server itself!
+### Help Command
 
-## Setting your birthday
+A `/help` command to get help on different areas of the bot, like commands or permissions:
 
-Birthday Bot makes everything easy using an easily to follow process.
+![](https://i.imgur.com/HKDtdWL.png)
+![](https://i.imgur.com/M67wCJK.png)
+![](https://i.imgur.com/N86WW9s.png)
 
-Start by using `bday set`.
+### Info Command
 
-![Start](https://i.imgur.com/Evo2jsp.png)
+A `/info` command to get information about the bot, links to different resources, or developer information.
 
-Birthday Bot uses time zones to detect when to celebrate each user's birthday. If you are unsure of your time zone you can find it [here](https://github.com/scottbucher/BirthdayBot/blob/master/README.md#finding-your-time-zone).
+![](https://i.imgur.com/83BEMBS.png)
+![](https://i.imgur.com/I1bPcNM.png)
 
-Now, you can then reply to this message with your desired time zone.
+### Test Command
 
-![Time Zone Input](https://i.imgur.com/fcmXvsQ.png)
+A generic command, `/test`, which can be copied to create additional commands.
 
-Birthday Bot will now know your time zone and will use this to know what time to celebrate your birthday!
+![](https://i.imgur.com/HxzgUO7.png)
 
-Now, Birthday Bot will prompt you to put your Birth Month & Date in the following format: MM/DD
+### Welcome Message
 
-![Birthday Prompt](https://i.imgur.com/hKvd9bm.png)
+A welcome message is sent to the server and owner when the bot is added.
 
-Simply reply to this message with your desired date.
+![](https://i.imgur.com/75UrFXf.png)
 
-![Birthday Input](https://i.imgur.com/D6OArx2.png)
+## Setup
 
-Finally, the confirmation menu will appear.
+1. Copy example config files.
+    - Navigate to the `config` folder of this project.
+    - Copy all files ending in `.example.json` and remove the `.example` from the copied file names.
+        - Ex: `config.example.json` should be copied and renamed as `config.json`.
+2. Obtain a bot token.
+    - You'll need to create a new bot in your [Discord Developer Portal](https://discord.com/developers/applications/).
+        - See [here](https://www.writebots.com/discord-bot-token/) for detailed instructions.
+        - At the end you should have a **bot token**.
+3. Modify the config file.
+    - Open the `config/config.json` file.
+    - You'll need to edit the following values:
+        - `client.id` - Your discord bot's [user ID](https://techswift.org/2020/04/22/how-to-find-your-user-id-on-discord/).
+        - `client.token` - Your discord bot's token.
+4. Install packages.
+    - Navigate into the downloaded source files and type `npm install`.
+5. Register commands.
+    - In order to use slash commands, they first [have to be registered](https://discordjs.guide/creating-your-bot/command-deployment.html).
+    - Type `npm run commands:register` to register the bot's commands.
+        - Run this script any time you change a command name, structure, or add/remove commands.
+        - This is so Discord knows what your commands look like.
+        - It may take up to an hour for command changes to appear.
 
-![Confirmation](https://i.imgur.com/gBafugI.png)
+## Start Scripts
 
-Ensure this is the correct information, then confirm by clicking the checkmark.
+You can run the bot in multiple modes:
 
-Note: Each user only has a limited amount of Birthday Sets. These multiple sets are made to account for incorrect information input, time zone changes, etc.
-Learn more [here](https://birthdaybot.scottbucher.dev/faq-1/user#how-many-times-can-i-set-my-birthday).
+1. Normal Mode
+    - Type `npm start`.
+    - Starts a single instance of the bot.
+2. Manager Mode
+    - Type `npm run start:manager`.
+    - Starts a shard manager which will spawn multiple bot shards.
+3. PM2 Mode
+    - Type `npm run start:pm2`.
+    - Similar to Manager Mode but uses [PM2](https://pm2.keymetrics.io/) to manage processes.
 
-![End](https://i.imgur.com/2F8u3Cw.png)
+## Bots Using This Template
 
-For users that is it! Server owners will have to do a bit more but Birthday Bot makes it easy with an interactive setup. For more information on server setup follow our guide here.
+A list of Discord bots using this template.
 
-## Finding your time zone
+| Bot                                                                    | Servers                                                       |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------- |
+| [Birthday Bot](https://top.gg/bot/656621136808902656)                  | ![](https://top.gg/api/widget/servers/656621136808902656.svg) |
+| [QOTD Bot](https://top.gg/bot/713586207119900693)                      | ![](https://top.gg/api/widget/servers/713586207119900693.svg) |
+| [Friend Time](https://top.gg/bot/471091072546766849)                   | ![](https://top.gg/api/widget/servers/471091072546766849.svg) |
+| [Bento](https://top.gg/bot/787041583580184609)                         | ![](https://top.gg/api/widget/servers/787041583580184609.svg) |
+| [NFT-Info](https://top.gg/bot/902249456072818708)                      | ![](https://top.gg/api/widget/servers/902249456072818708.svg) |
+| [Skylink-IF](https://top.gg/bot/929527099922993162)                    | ![](https://top.gg/api/widget/servers/929527099922993162.svg) |
+| [Topcoder TC-101](https://github.com/topcoder-platform/tc-discord-bot) |                                                               |
 
-[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!
-
-Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command.
-
-![Setting your time zone](https://i.imgur.com/ibPmjNs.png)
-
-## Help
-
-For additional help join the support server [here](https://discord.gg/9gUQFtz).
-
-## License
-
-Birthday Bot does not have a license. This means, while Birthday Bot's code is public to anyone, you do **NOT** have permission to modify or redistribute this code. Since there is no license, the default copyright laws apply, meaning that I retain all rights to the source code and no one may reproduce, distribute, or create derivative works from it. For more details please visit [here](https://choosealicense.com/no-permission/).
+Don't see your bot listed? [Contact us](https://discord.gg/Vyf6fEWbVr) to have your bot added!

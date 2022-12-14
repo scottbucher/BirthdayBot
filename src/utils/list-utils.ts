@@ -1,4 +1,4 @@
-import { Guild, GuildMember, MessageEmbed } from 'discord.js';
+import { EmbedBuilder, Guild, GuildMember } from 'discord.js';
 import moment from 'moment';
 import { createRequire } from 'node:module';
 
@@ -25,8 +25,8 @@ export class ListUtils {
         pageSize: number,
         type: string,
         data: EventData
-    ): Promise<MessageEmbed> {
-        let embed: MessageEmbed;
+    ): Promise<EmbedBuilder> {
+        let embed: EmbedBuilder;
 
         let i = (page - 1) * pageSize + 1;
 
@@ -130,8 +130,8 @@ export class ListUtils {
         pageSize: number,
         type: string,
         data: EventData
-    ): Promise<MessageEmbed> {
-        let embed: MessageEmbed;
+    ): Promise<EmbedBuilder> {
+        let embed: EmbedBuilder;
 
         let description = '';
 
@@ -219,8 +219,8 @@ export class ListUtils {
         page: number,
         pageSize: number,
         data: EventData
-    ): Promise<MessageEmbed> {
-        let embed: MessageEmbed;
+    ): Promise<EmbedBuilder> {
+        let embed: EmbedBuilder;
 
         let i = (page - 1) * pageSize + 1;
 
@@ -294,8 +294,8 @@ export class ListUtils {
         page: number,
         pageSize: number,
         data: EventData
-    ): Promise<MessageEmbed> {
-        let embed: MessageEmbed;
+    ): Promise<EmbedBuilder> {
+        let embed: EmbedBuilder;
         let description = '';
 
         if (userDataResults.userData.length === 0) {
@@ -347,8 +347,8 @@ export class ListUtils {
         totalPages: number,
         totalMembers: number,
         data: EventData
-    ): Promise<MessageEmbed> {
-        let embed: MessageEmbed;
+    ): Promise<EmbedBuilder> {
+        let embed: EmbedBuilder;
         let description = '';
 
         if (guildMembers.length === 0) {
@@ -387,8 +387,8 @@ export class ListUtils {
         page: number,
         _pageSize: number,
         data: EventData
-    ): Promise<MessageEmbed> {
-        let embed: MessageEmbed;
+    ): Promise<EmbedBuilder> {
+        let embed: EmbedBuilder;
 
         let description = '';
 
@@ -428,8 +428,8 @@ export class ListUtils {
         page: number,
         pageSize: number,
         data: EventData
-    ): Promise<MessageEmbed> {
-        let embed: MessageEmbed;
+    ): Promise<EmbedBuilder> {
+        let embed: EmbedBuilder;
 
         let description = '';
 

@@ -1,13 +1,19 @@
-import { CommandInteraction, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
+import {
+    AutocompleteInteraction,
+    ChatInputCommandInteraction,
+    CommandInteraction,
+    NewsChannel,
+    TextChannel,
+    ThreadChannel,
+} from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { createRequire } from 'node:module';
 
 import { Command, CommandDeferType } from '../commands/index.js';
-import { EventData, PlanName } from '../models/index.js';
-import { CombinedRepo, GuildRepo, UserRepo } from '../services/database/repos/index.js';
-import { Lang, Logger, SubscriptionService } from '../services/index.js';
-import { CommandUtils } from '../utils/index.js';
-import { InteractionUtils } from '../utils/interaction-utils.js';
+import { DiscordLimits } from '../constants/index.js';
+import { EventData } from '../models/internal-models.js';
+import { EventDataService, Lang, Logger } from '../services/index.js';
+import { CommandUtils, InteractionUtils } from '../utils/index.js';
 import { EventHandler } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -20,34 +26,82 @@ export class CommandHandler implements EventHandler {
         Config.rateLimiting.commands.interval * 1000
     );
 
-    constructor(
-        public commands: Command[],
-        public subService: SubscriptionService,
-        public guildRepo: GuildRepo,
-        public userRepo: UserRepo,
-        public combinedRepo: CombinedRepo
-    ) {}
+    constructor(public commands: Command[], private eventDataService: EventDataService) {}
 
-    public async process(intr: CommandInteraction): Promise<void> {
+    public async process(intr: CommandInteraction | AutocompleteInteraction): Promise<void> {
         // Don't respond to self, or other bots
         if (intr.user.id === intr.client.user?.id || intr.user.bot) {
+            return;
+        }
+
+        let commandParts =
+            intr instanceof ChatInputCommandInteraction || intr instanceof AutocompleteInteraction
+                ? [
+                      intr.commandName,
+                      intr.options.getSubcommandGroup(false),
+                      intr.options.getSubcommand(false),
+                  ].filter(Boolean)
+                : [intr.commandName];
+        let commandName = commandParts.join(' ');
+
+        // Try to find the command the user wants
+        let command = CommandUtils.findCommand(this.commands, commandParts);
+        if (!command) {
+            Logger.error(
+                Logs.error.commandNotFound
+                    .replaceAll('{INTERACTION_ID}', intr.id)
+                    .replaceAll('{COMMAND_NAME}', commandName)
+            );
+            return;
+        }
+
+        if (intr instanceof AutocompleteInteraction) {
+            if (!command.autocomplete) {
+                Logger.error(
+                    Logs.error.autocompleteNotFound
+                        .replaceAll('{INTERACTION_ID}', intr.id)
+                        .replaceAll('{COMMAND_NAME}', commandName)
+                );
+                return;
+            }
+
+            try {
+                let option = intr.options.getFocused(true);
+                let choices = await command.autocomplete(intr, option);
+                await InteractionUtils.respond(
+                    intr,
+                    choices?.slice(0, DiscordLimits.CHOICES_PER_AUTOCOMPLETE)
+                );
+            } catch (error) {
+                Logger.error(
+                    intr.channel instanceof TextChannel ||
+                        intr.channel instanceof NewsChannel ||
+                        intr.channel instanceof ThreadChannel
+                        ? Logs.error.autocompleteGuild
+                              .replaceAll('{INTERACTION_ID}', intr.id)
+                              .replaceAll('{OPTION_NAME}', commandName)
+                              .replaceAll('{COMMAND_NAME}', commandName)
+                              .replaceAll('{USER_TAG}', intr.user.tag)
+                              .replaceAll('{USER_ID}', intr.user.id)
+                              .replaceAll('{CHANNEL_NAME}', intr.channel.name)
+                              .replaceAll('{CHANNEL_ID}', intr.channel.id)
+                              .replaceAll('{GUILD_NAME}', intr.guild?.name)
+                              .replaceAll('{GUILD_ID}', intr.guild?.id)
+                        : Logs.error.autocompleteOther
+                              .replaceAll('{INTERACTION_ID}', intr.id)
+                              .replaceAll('{OPTION_NAME}', commandName)
+                              .replaceAll('{COMMAND_NAME}', commandName)
+                              .replaceAll('{USER_TAG}', intr.user.tag)
+                              .replaceAll('{USER_ID}', intr.user.id),
+                    error
+                );
+            }
             return;
         }
 
         // Check if user is rate limited
         let limited = this.rateLimiter.take(intr.user.id);
         if (limited) {
-            return;
-        }
-
-        // Try to find the command the user wants
-        let command = this.commands.find(command => command.metadata.name === intr.commandName);
-        if (!command) {
-            Logger.error(
-                Logs.error.commandNotFound
-                    .replaceAll('{INTERACTION_ID}', intr.id)
-                    .replaceAll('{COMMAND_NAME}', intr.commandName)
-            );
             return;
         }
 
@@ -69,24 +123,13 @@ export class CommandHandler implements EventHandler {
             return;
         }
 
-        let subData =
-            intr.guild && Config.payments.enabled
-                ? await this.subService.getSubscription(PlanName.premium1, intr.guild.id)
-                : undefined;
-
-        let guildDataAndVote = intr.guild
-            ? await this.combinedRepo.GetGuildDataAndUserVote(intr.guild.id, intr.user.id)
-            : undefined;
-
         // Get data from database
-        let data = new EventData(
-            guildDataAndVote?.guildData,
-            subData,
-            guildDataAndVote?.voteData,
-            !Config.payments.enabled ||
-                (subData?.subscription && subData.subscription?.service) ||
-                (subData?.override && subData.override.service)
-        );
+        let data = await this.eventDataService.create({
+            user: intr.user,
+            channel: intr.channel,
+            guild: intr.guild,
+            args: intr instanceof ChatInputCommandInteraction ? intr.options : undefined,
+        });
 
         try {
             // Check if interaction passes command checks
@@ -105,7 +148,7 @@ export class CommandHandler implements EventHandler {
                     intr.channel instanceof ThreadChannel
                     ? Logs.error.commandGuild
                           .replaceAll('{INTERACTION_ID}', intr.id)
-                          .replaceAll('{COMMAND_NAME}', command.metadata.name)
+                          .replaceAll('{COMMAND_NAME}', commandName)
                           .replaceAll('{USER_TAG}', intr.user.tag)
                           .replaceAll('{USER_ID}', intr.user.id)
                           .replaceAll('{CHANNEL_NAME}', intr.channel.name)
@@ -114,7 +157,7 @@ export class CommandHandler implements EventHandler {
                           .replaceAll('{GUILD_ID}', intr.guild?.id)
                     : Logs.error.commandOther
                           .replaceAll('{INTERACTION_ID}', intr.id)
-                          .replaceAll('{COMMAND_NAME}', command.metadata.name)
+                          .replaceAll('{COMMAND_NAME}', commandName)
                           .replaceAll('{USER_TAG}', intr.user.tag)
                           .replaceAll('{USER_ID}', intr.user.id),
                 error

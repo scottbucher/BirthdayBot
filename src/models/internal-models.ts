@@ -1,14 +1,14 @@
-import { LangCode } from '../enums/index.js';
-import { Lang } from '../services/index.js';
-import { GuildData, Vote } from './database/index.js';
-import { SubscriptionStatus } from './index.js';
+import { Locale } from 'discord.js';
+
+import { LangCode } from '../enums/lang-code.js';
+import { Lang } from '../services/lang.js';
 
 // This class is used to store and pass data along in events
 export class EventData {
+    // TODO: Add any data you want to store
     constructor(
-        public guild?: GuildData,
-        public subscription?: SubscriptionStatus,
-        public vote?: Vote,
+        // Guild language
+        public langGuild: Locale,
         public hasPremium?: boolean
     ) {}
 

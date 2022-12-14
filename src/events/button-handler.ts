@@ -1,12 +1,11 @@
-import { ButtonInteraction, Message } from 'discord.js';
+import { ButtonInteraction } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { createRequire } from 'node:module';
 
 import { Button, ButtonDeferType } from '../buttons/index.js';
-import { EventData, PlanName } from '../models/index.js';
-import { CombinedRepo } from '../services/database/repos/combined-repo.js';
+import { EventDataService } from '../services/index.js';
 import { SubscriptionService } from '../services/subscription-service.js';
-import { InteractionUtils } from '../utils/interaction-utils.js';
+import { InteractionUtils } from '../utils/index.js';
 import { EventHandler } from './index.js';
 
 const require = createRequire(import.meta.url);
@@ -20,11 +19,11 @@ export class ButtonHandler implements EventHandler {
 
     constructor(
         private buttons: Button[],
-        public subService: SubscriptionService,
-        public combinedRepo: CombinedRepo
+        private eventDataService: EventDataService,
+        public subService: SubscriptionService
     ) {}
 
-    public async process(intr: ButtonInteraction, msg: Message): Promise<void> {
+    public async process(intr: ButtonInteraction): Promise<void> {
         // Don't respond to self, or other bots
         if (intr.user.id === intr.client.user?.id || intr.user.bot) {
             return;
@@ -47,9 +46,12 @@ export class ButtonHandler implements EventHandler {
         }
 
         // Check if the embeds author equals the users tag
-        // if (button.requireEmbedAuthorTag && msg.embeds[0]?.author?.name !== intr.user.tag) {
-        //     return;
-        // }
+        if (
+            button.requireEmbedAuthorTag &&
+            intr.message.embeds[0]?.author?.name !== intr.user.tag
+        ) {
+            return;
+        }
 
         // Defer interaction
         // NOTE: Anything after this point we should be responding to the interaction
@@ -69,27 +71,16 @@ export class ButtonHandler implements EventHandler {
             return;
         }
 
-        let subData =
-            intr.guild && Config.payments.enabled
-                ? await this.subService.getSubscription(PlanName.premium1, intr.guild.id)
-                : undefined;
-
-        let guildDataAndVote = intr.guild
-            ? await this.combinedRepo.GetGuildDataAndUserVote(intr.guild.id, intr.user.id)
-            : undefined;
-
         // Get data from database
-        let data = new EventData(
-            guildDataAndVote?.guildData,
-            subData,
-            guildDataAndVote?.voteData,
-            !Config.payments.enabled ||
-                (subData?.subscription && subData.subscription?.service) ||
-                (subData?.override && subData.override.service)
-        );
+        // TODO: Implement new database data
+        let data = await this.eventDataService.create({
+            user: intr.user,
+            channel: intr.channel,
+            guild: intr.guild,
+        });
 
         // Execute the button
-        await button.execute(intr, msg, data);
+        await button.execute(intr, data);
     }
 
     private findButton(id: string): Button {

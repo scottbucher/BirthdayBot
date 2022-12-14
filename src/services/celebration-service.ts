@@ -1,4 +1,11 @@
-import { Guild, GuildMember, MessageEmbed, MessageOptions, Role, TextChannel } from 'discord.js';
+import {
+    BaseMessageOptions,
+    EmbedBuilder,
+    Guild,
+    GuildMember,
+    Role,
+    TextChannel,
+} from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { GuildCelebrationData, MemberAnniversaryRole, UserData } from '../models/database/index.js';
@@ -181,7 +188,7 @@ export class CelebrationService {
                             }
                         }
 
-                        let genericBirthdayMessage: MessageEmbed | string;
+                        let genericBirthdayMessage: EmbedBuilder | string;
 
                         if (membersWhoNeedMessage.length > 0) {
                             genericBirthdayMessage = CelebrationUtils.getCelebrationMessage(
@@ -380,7 +387,7 @@ export class CelebrationService {
                                 ),
                             ];
                             let regularMessagesToSend: string[] = [];
-                            let embedMessagesToSend: MessageEmbed[] = [];
+                            let embedMessagesToSend: EmbedBuilder[] = [];
 
                             for (let year of differentYears) {
                                 let message = CelebrationUtils.getCelebrationMessage(
@@ -397,7 +404,7 @@ export class CelebrationService {
                                     hasPremium
                                 );
 
-                                if (message instanceof MessageEmbed) {
+                                if (message instanceof EmbedBuilder) {
                                     embedMessagesToSend.push(message);
                                 } else {
                                     regularMessagesToSend.push(message);
@@ -467,39 +474,43 @@ export class CelebrationService {
                                 // First we need to get a list of colors by mapping and removing duplicates
                                 // If they don't have premium use the default color otherwise use the colors of the custom messages
                                 let colors: number[] = hasPremium
-                                    ? [...new Set(embedMessagesToSend.map(embed => embed.color))]
+                                    ? [
+                                          ...new Set(
+                                              embedMessagesToSend.map(embed => embed.data.color)
+                                          ),
+                                      ]
                                     : [Config.colors.default];
 
                                 // Now we loop through the colors and create a list of messages to send
-                                let embedMessages: MessageEmbed[] = [];
+                                let embedMessages: EmbedBuilder[] = [];
                                 counter = 0;
                                 for (let color of colors) {
                                     // Only get the messages that have the specified color if they have premium
                                     let embedDescriptions: string[] = embedMessagesToSend
-                                        .filter(embed => !hasPremium || embed.color === color)
-                                        .map(embed => embed.description);
+                                        .filter(embed => !hasPremium || embed.data.color === color)
+                                        .map(embed => embed.data.description);
                                     for (let message of embedDescriptions) {
                                         if (embedMessages.length === 0) {
                                             embedMessages.push(
-                                                new MessageEmbed()
+                                                new EmbedBuilder()
                                                     .setColor(color)
                                                     .setDescription(message)
                                             );
                                         } else if (
-                                            embedMessages[counter].description.concat(
+                                            embedMessages[counter].data.description.concat(
                                                 '\n\n' + message
                                             ).length > 4096
                                         ) {
                                             counter++;
                                             embedMessages.push(
-                                                new MessageEmbed()
+                                                new EmbedBuilder()
                                                     .setDescription(message)
                                                     .setColor(color)
                                             );
                                         } else {
-                                            embedMessages[counter].description = embedMessages[
+                                            embedMessages[counter].data.description = embedMessages[
                                                 counter
-                                            ].description.concat('\n\n' + message);
+                                            ].data.description.concat('\n\n' + message);
                                         }
                                     }
                                     counter++;
@@ -590,7 +601,7 @@ export class CelebrationService {
                         serverAnniversaryChannel &&
                         CelebrationUtils.isServerAnniversaryMessage(guild, guildData)
                     ) {
-                        let msgOptions: MessageOptions = {};
+                        let msgOptions: BaseMessageOptions = {};
 
                         let serverAnniversaryMessages = guildCelebrationData.customMessages.filter(
                             message =>
@@ -624,7 +635,7 @@ export class CelebrationService {
                                 msgOptions.content = mentionString;
                             }
 
-                            if (message instanceof MessageEmbed) {
+                            if (message instanceof EmbedBuilder) {
                                 msgOptions.embeds = [message];
                             } else {
                                 if (msgOptions.content === undefined) msgOptions.content = message;

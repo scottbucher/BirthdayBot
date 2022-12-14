@@ -1,4 +1,11 @@
-import { Client, Collection, DiscordAPIError, Guild, GuildMember } from 'discord.js';
+import {
+    Client,
+    Collection,
+    DiscordAPIError,
+    RESTJSONErrorCodes as DiscordApiErrors,
+    Guild,
+    GuildMember,
+} from 'discord.js';
 import moment from 'moment';
 import schedule from 'node-schedule';
 import { createRequire } from 'node:module';
@@ -6,7 +13,6 @@ import { performance } from 'node:perf_hooks';
 
 import { UserData } from '../models/database/index.js';
 import { SubscriptionStatus } from '../models/index.js';
-import { CombinedRepo, UserRepo } from '../services/database/repos/index.js';
 import { CelebrationService, Logger, SubscriptionService } from '../services/index.js';
 import { CelebrationUtils, TimeUtils } from '../utils/index.js';
 import { Job } from './index.js';
@@ -14,6 +20,17 @@ import { Job } from './index.js';
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
+
+const IGNORED_ERRORS = [
+    DiscordApiErrors.UnknownMessage,
+    DiscordApiErrors.UnknownChannel,
+    DiscordApiErrors.UnknownGuild,
+    DiscordApiErrors.UnknownUser,
+    DiscordApiErrors.UnknownInteraction,
+    DiscordApiErrors.CannotSendMessagesToThisUser, // User blocked bot or DM disabled
+    DiscordApiErrors.ReactionWasBlocked, // User blocked bot or DM disabled
+    DiscordApiErrors.MaximumActiveThreads,
+];
 
 export class CelebrationJob implements Job {
     public name = 'Celebration';
@@ -92,7 +109,11 @@ export class CelebrationJob implements Job {
                 if (!guild) continue;
             } catch (error) {
                 // Ignore when we get missing access errors which are when we try and fetch guilds which no longer have the bot
-                if (error instanceof DiscordAPIError && [50001].includes(error.code)) {
+                if (
+                    error instanceof DiscordAPIError &&
+                    typeof error.code == 'number' &&
+                    IGNORED_ERRORS.includes(error.code)
+                ) {
                     continue;
                 }
 

@@ -1,14 +1,20 @@
-import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v9';
 import {
-    BaseCommandInteraction,
+    APIActionRowComponent,
+    APIMessageActionRowComponent,
+    ApplicationCommandOptionChoiceData,
+    AutocompleteInteraction,
     ButtonInteraction,
+    ButtonStyle,
+    CommandInteraction,
+    ComponentType,
     DiscordAPIError,
+    RESTJSONErrorCodes as DiscordApiErrors,
+    EmbedBuilder,
     InteractionReplyOptions,
+    InteractionResponse,
     InteractionUpdateOptions,
     Message,
-    MessageActionRow,
     MessageComponentInteraction,
-    MessageEmbed,
     ModalSubmitInteraction,
     WebhookEditMessageOptions,
 } from 'discord.js';
@@ -29,15 +35,19 @@ const IGNORED_ERRORS = [
 
 export class InteractionUtils {
     public static async deferReply(
-        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        intr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         hidden: boolean = false
-    ): Promise<void> {
+    ): Promise<InteractionResponse> {
         try {
             return await intr.deferReply({
                 ephemeral: hidden,
             });
         } catch (error) {
-            if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;
@@ -47,11 +57,15 @@ export class InteractionUtils {
 
     public static async deferUpdate(
         intr: MessageComponentInteraction | ModalSubmitInteraction
-    ): Promise<void> {
+    ): Promise<InteractionResponse> {
         try {
             return await intr.deferUpdate();
         } catch (error) {
-            if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;
@@ -64,49 +78,74 @@ export class InteractionUtils {
 
         await InteractionUtils.editReply(intr, {
             components: this.setComponentsStatus(
-                intr.message.components as MessageActionRow[],
+                intr.message.components as APIActionRowComponent<APIMessageActionRowComponent>[],
                 false
             ),
         });
     }
 
     public static setComponentsStatus(
-        rowComponents: MessageActionRow[],
+        rowComponents: APIActionRowComponent<APIMessageActionRowComponent>[],
         enabled: boolean
-    ): MessageActionRow[] {
+    ): APIActionRowComponent<APIMessageActionRowComponent>[] {
         rowComponents.forEach(r => {
-            r.components = r.components.map(c => c.setDisabled(!enabled));
+            r.components.forEach(c => {
+                c.disabled = enabled;
+            });
         });
 
         return rowComponents;
     }
 
     public static async send(
-        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
-        content: string | MessageEmbed | InteractionReplyOptions,
+        intr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        content: string | EmbedBuilder | InteractionReplyOptions,
         hidden: boolean = false
     ): Promise<Message> {
         try {
             let options: InteractionReplyOptions =
                 typeof content === 'string'
                     ? { content }
-                    : content instanceof MessageEmbed
+                    : content instanceof EmbedBuilder
                     ? { embeds: [content] }
                     : content;
             if (intr.deferred || intr.replied) {
-                return (await intr.followUp({
+                return await intr.followUp({
                     ...options,
                     ephemeral: hidden,
-                })) as Message;
+                });
             } else {
-                return (await intr.reply({
+                return await intr.reply({
                     ...options,
                     ephemeral: hidden,
                     fetchReply: true,
-                })) as Message;
+                });
             }
         } catch (error) {
-            if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
+            ) {
+                return;
+            } else {
+                throw error;
+            }
+        }
+    }
+
+    public static async respond(
+        intr: AutocompleteInteraction,
+        choices: ApplicationCommandOptionChoiceData[] = []
+    ): Promise<void> {
+        try {
+            return await intr.respond(choices);
+        } catch (error) {
+            if (
+                error instanceof DiscordAPIError &&
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;
@@ -115,22 +154,22 @@ export class InteractionUtils {
     }
 
     public static async sendWithEnterResponseButton(
-        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        intr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         data: EventData,
-        embed: MessageEmbed
+        embed: EmbedBuilder
     ): Promise<Message<boolean>> {
         return await InteractionUtils.send(intr, {
             embeds: [embed],
             components: [
                 {
-                    type: 'ACTION_ROW',
+                    type: ComponentType.ActionRow,
                     components: [
                         {
-                            type: 'BUTTON',
+                            type: ComponentType.ActionRow,
                             customId: 'enter_response',
                             emoji: '⌨️',
                             label: Lang.getRef('info', 'terms.enterResponse', data.lang()),
-                            style: 'PRIMARY',
+                            style: ButtonStyle.Primary,
                         },
                     ],
                 },
@@ -139,19 +178,23 @@ export class InteractionUtils {
     }
 
     public static async editReply(
-        intr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
-        content: string | MessageEmbed | WebhookEditMessageOptions
+        intr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        content: string | EmbedBuilder | WebhookEditMessageOptions
     ): Promise<Message> {
         try {
             let options: WebhookEditMessageOptions =
                 typeof content === 'string'
                     ? { content }
-                    : content instanceof MessageEmbed
+                    : content instanceof EmbedBuilder
                     ? { embeds: [content] }
                     : content;
-            return (await intr.editReply(options)) as Message;
+            return await intr.editReply(options);
         } catch (error) {
-            if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;
@@ -160,22 +203,26 @@ export class InteractionUtils {
     }
 
     public static async update(
-        intr: MessageComponentInteraction | ModalSubmitInteraction,
-        content: string | MessageEmbed | InteractionUpdateOptions
+        intr: MessageComponentInteraction,
+        content: string | EmbedBuilder | InteractionUpdateOptions
     ): Promise<Message> {
         try {
             let options: InteractionUpdateOptions =
                 typeof content === 'string'
                     ? { content }
-                    : content instanceof MessageEmbed
+                    : content instanceof EmbedBuilder
                     ? { embeds: [content] }
                     : content;
-            return (await intr.update({
+            return await intr.update({
                 ...options,
                 fetchReply: true,
-            })) as Message;
+            });
         } catch (error) {
-            if (error instanceof DiscordAPIError && IGNORED_ERRORS.includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;

@@ -1,8 +1,9 @@
-import { RESTJSONErrorCodes as DiscordApiErrors } from 'discord-api-types/v9';
 import {
-    AnyChannel,
+    ApplicationCommand,
+    Channel,
     Client,
     DiscordAPIError,
+    RESTJSONErrorCodes as DiscordApiErrors,
     Guild,
     GuildMember,
     NewsChannel,
@@ -13,11 +14,20 @@ import {
     VoiceChannel,
 } from 'discord.js';
 
-import { LangCode } from '../enums/index.js';
+import { LangCode } from '../enums/lang-code.js';
 import { Lang } from '../services/index.js';
 import { PermissionUtils, RegexUtils } from './index.js';
 
 const FETCH_MEMBER_LIMIT = 20;
+const IGNORED_ERRORS = [
+    DiscordApiErrors.UnknownMessage,
+    DiscordApiErrors.UnknownChannel,
+    DiscordApiErrors.UnknownGuild,
+    DiscordApiErrors.UnknownMember,
+    DiscordApiErrors.UnknownUser,
+    DiscordApiErrors.UnknownInteraction,
+    DiscordApiErrors.MissingAccess,
+];
 
 export class ClientUtils {
     public static async getGuild(client: Client, discordId: string): Promise<Guild> {
@@ -31,7 +41,8 @@ export class ClientUtils {
         } catch (error) {
             if (
                 error instanceof DiscordAPIError &&
-                [DiscordApiErrors.UnknownGuild].includes(error.code)
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
             ) {
                 return;
             } else {
@@ -40,7 +51,7 @@ export class ClientUtils {
         }
     }
 
-    public static async getChannel(client: Client, discordId: string): Promise<AnyChannel> {
+    public static async getChannel(client: Client, discordId: string): Promise<Channel> {
         discordId = RegexUtils.discordId(discordId);
         if (!discordId) {
             return;
@@ -51,7 +62,8 @@ export class ClientUtils {
         } catch (error) {
             if (
                 error instanceof DiscordAPIError &&
-                [DiscordApiErrors.UnknownChannel].includes(error.code)
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
             ) {
                 return;
             } else {
@@ -71,13 +83,19 @@ export class ClientUtils {
         } catch (error) {
             if (
                 error instanceof DiscordAPIError &&
-                [DiscordApiErrors.UnknownUser].includes(error.code)
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
             ) {
                 return;
             } else {
                 throw error;
             }
         }
+    }
+
+    public static async findAppCommand(client: Client, name: string): Promise<ApplicationCommand> {
+        let commands = await client.application.commands.fetch();
+        return commands.find(command => command.name === name);
     }
 
     public static async findMember(guild: Guild, input: string): Promise<GuildMember> {
@@ -98,7 +116,8 @@ export class ClientUtils {
         } catch (error) {
             if (
                 error instanceof DiscordAPIError &&
-                [DiscordApiErrors.UnknownMember, DiscordApiErrors.UnknownUser].includes(error.code)
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
             ) {
                 return;
             } else {
@@ -123,7 +142,8 @@ export class ClientUtils {
         } catch (error) {
             if (
                 error instanceof DiscordAPIError &&
-                [DiscordApiErrors.UnknownRole].includes(error.code)
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
             ) {
                 return;
             } else {
@@ -158,7 +178,8 @@ export class ClientUtils {
         } catch (error) {
             if (
                 error instanceof DiscordAPIError &&
-                [DiscordApiErrors.UnknownChannel].includes(error.code)
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
             ) {
                 return;
             } else {
@@ -195,7 +216,8 @@ export class ClientUtils {
         } catch (error) {
             if (
                 error instanceof DiscordAPIError &&
-                [DiscordApiErrors.UnknownChannel].includes(error.code)
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
             ) {
                 return;
             } else {

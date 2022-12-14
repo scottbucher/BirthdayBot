@@ -1,17 +1,23 @@
-import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import { CommandInteraction, PermissionString } from 'discord.js';
+import {
+    ApplicationCommandOptionChoiceData,
+    AutocompleteFocusedOption,
+    AutocompleteInteraction,
+    CommandInteraction,
+    PermissionsString,
+} from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
 
-import { EventData } from '../models/index.js';
+import { EventData } from '../models/internal-models.js';
 
 export interface Command {
-    metadata: RESTPostAPIChatInputApplicationCommandsJSONBody;
+    names: string[];
     cooldown?: RateLimiter;
     deferType: CommandDeferType;
-    requireClientPerms: PermissionString[];
-    requireSetup: boolean;
-    requireVote: boolean;
-    requirePremium: boolean;
+    requireClientPerms: PermissionsString[];
+    autocomplete?(
+        intr: AutocompleteInteraction,
+        option: AutocompleteFocusedOption
+    ): Promise<ApplicationCommandOptionChoiceData[]>;
     execute(intr: CommandInteraction, data: EventData): Promise<void>;
 }
 

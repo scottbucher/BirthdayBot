@@ -1,4 +1,4 @@
-import { Guild, GuildMember, MessageEmbed, Role } from 'discord.js';
+import { EmbedBuilder, Guild, GuildMember, Role } from 'discord.js';
 import moment from 'moment';
 import { Moment } from 'moment-timezone';
 import { createRequire } from 'node:module';
@@ -362,7 +362,7 @@ export class CelebrationUtils {
         celebrationMembers: GuildMember[],
         year: number,
         hasPremium: boolean
-    ): MessageEmbed | string {
+    ): EmbedBuilder | string {
         let message =
             type === 'birthday'
                 ? Lang.getRef('info', 'defaults.birthdayMessage', LangCode.EN_US)
@@ -393,7 +393,7 @@ export class CelebrationUtils {
         // Replace the placeholders
         message = CelebrationUtils.replacePlaceHolders(message, guild, type, userList, year);
 
-        let embed = new MessageEmbed().setDescription(message).setColor(color);
+        let embed = new EmbedBuilder().setDescription(message).setColor(color);
 
         return useEmbed ? embed : message;
     }
@@ -405,7 +405,7 @@ export class CelebrationUtils {
         celebrationMember: GuildMember,
         year: number,
         hasPremium: boolean
-    ): MessageEmbed | string {
+    ): EmbedBuilder | string {
         let message: string;
         let color = Config.colors.default;
 
@@ -424,7 +424,7 @@ export class CelebrationUtils {
         // Find the color of the embed
         color = CelebrationUtils.getMessageColor(customMessage, hasPremium);
 
-        let embed = new MessageEmbed().setDescription(message).setColor(color);
+        let embed = new EmbedBuilder().setDescription(message).setColor(color);
 
         return customMessage.Embed ? embed : message;
     }

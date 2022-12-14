@@ -1,12 +1,11 @@
 import { Chrono } from 'chrono-node';
-import { Guild, Role } from 'discord.js';
+import { ApplicationCommand, Guild, Role } from 'discord.js';
 import { Duration } from 'luxon'; // TODO: Missing types
-import moment from 'moment-timezone';
+import moment from 'moment';
 import { createRequire } from 'node:module';
 
-import { LangCode } from '../enums/index.js';
-import { Language } from '../models/enum-helpers/index.js';
-import { Lang } from '../services/index.js';
+import { LangCode } from '../enums/lang-code.js';
+import { Lang } from '../services/lang.js';
 
 const require = createRequire(import.meta.url);
 let Abbreviations = require('../../config/abbreviations.json');
@@ -15,6 +14,7 @@ let Config = require('../../config/config.json');
 let zoneNames = moment.tz
     .names()
     .filter(name => Config.validation.regions.some((region: any) => name.startsWith(`${region}/`)));
+
 export class FormatUtils {
     public static roleMention(guild: Guild, discordId: string): string {
         if (discordId === '@here') {
@@ -34,6 +34,34 @@ export class FormatUtils {
 
     public static userMention(discordId: string): string {
         return `<@!${discordId}>`;
+    }
+
+    // TODO: Replace with ApplicationCommand#toString() once discord.js #8818 is merged
+    // https://github.com/discordjs/discord.js/pull/8818
+    public static commandMention(command: ApplicationCommand, subParts: string[] = []): string {
+        let name = [command.name, ...subParts].join(' ');
+        return `</${name}:${command.id}>`;
+    }
+
+    public static duration(milliseconds: number, langCode: LangCode): string {
+        return Duration.fromObject(
+            Object.fromEntries(
+                Object.entries(
+                    Duration.fromMillis(milliseconds, { locale: langCode })
+                        .shiftTo(
+                            'year',
+                            'quarter',
+                            'month',
+                            'week',
+                            'day',
+                            'hour',
+                            'minute',
+                            'second'
+                        )
+                        .toObject()
+                ).filter(([_, value]) => !!value) // Remove units that are 0
+            )
+        ).toHuman({ maximumFractionDigits: 0 });
     }
 
     public static joinWithAnd(values: string[]): string {
@@ -299,25 +327,5 @@ export class FormatUtils {
         else if (time === 12) return '12:00 ' + pm;
         else if (time < 12) return `${time}:00 ${am}`;
         else return `${time - 12}:00 ${pm}`;
-    }
-    public static duration(milliseconds: number, langCode: LangCode): string {
-        return Duration.fromObject(
-            Object.fromEntries(
-                Object.entries(
-                    Duration.fromMillis(milliseconds, { locale: Language.locale(langCode) })
-                        .shiftTo(
-                            'year',
-                            'quarter',
-                            'month',
-                            'week',
-                            'day',
-                            'hour',
-                            'minute',
-                            'second'
-                        )
-                        .toObject()
-                ).filter(([_, value]) => !!value) // Remove units that are 0
-            )
-        ).toHuman({ maximumFractionDigits: 0 });
     }
 }

@@ -1,12 +1,11 @@
 import { ActivityType, ShardingManager } from 'discord.js';
-import moment from 'moment';
 import { createRequire } from 'node:module';
 
 import { CustomClient } from '../extensions/index.js';
-import { BotSite } from '../models/index.js';
+import { BotSite } from '../models/config-models.js';
 import { HttpService, Lang, Logger } from '../services/index.js';
 import { ShardUtils } from '../utils/index.js';
-import { Job } from './job.js';
+import { Job } from './index.js';
 
 const require = createRequire(import.meta.url);
 let BotSites: BotSite[] = require('../../config/bot-sites.json');
@@ -27,14 +26,8 @@ export class UpdateServerCountJob implements Job {
     public async run(): Promise<void> {
         let serverCount = await ShardUtils.serverCount(this.shardManager);
 
-        let minute = moment().minute();
-
-        let type: ActivityType = 'STREAMING';
-        // figure I would just leave this logic for multiple statuses
-        let name =
-            (minute / 5) % 2 === 0
-                ? `bdays to ${serverCount.toLocaleString()} servers`
-                : `bdays to ${serverCount.toLocaleString()} servers`;
+        let type = ActivityType.Streaming;
+        let name = `to ${serverCount.toLocaleString()} servers`;
         let url = Lang.getCom('links.stream');
 
         await this.shardManager.broadcastEval(

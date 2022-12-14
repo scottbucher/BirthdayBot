@@ -1,4 +1,4 @@
-import { ColorResolvable, MessageEmbed } from 'discord.js';
+import { ColorResolvable, EmbedBuilder } from 'discord.js';
 import { Linguini, TypeMapper, TypeMappers, Utils } from 'linguini';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -66,7 +66,7 @@ export class Lang {
         location: string,
         langCode: LangCode,
         variables?: { [name: string]: string }
-    ): MessageEmbed {
+    ): EmbedBuilder {
         return (
             this.linguiniObjects[type].get(location, langCode, this.errorEmbedTm, variables) ??
             this.linguiniObjects[type].get(location, this.Default, this.errorEmbedTm, variables)
@@ -78,7 +78,7 @@ export class Lang {
         location: string,
         langCode: LangCode,
         variables?: { [name: string]: string }
-    ): MessageEmbed {
+    ): EmbedBuilder {
         return (
             this.linguiniObjects[type].get(location, langCode, this.successEmbedTm, variables) ??
             this.linguiniObjects[type].get(location, this.Default, this.successEmbedTm, variables)
@@ -90,7 +90,7 @@ export class Lang {
         location: string,
         langCode: LangCode,
         variables?: { [name: string]: string }
-    ): MessageEmbed {
+    ): EmbedBuilder {
         return (
             this.linguiniObjects[type].get(location, langCode, this.messageEmbedTm, variables) ??
             this.linguiniObjects[type].get(location, this.Default, this.messageEmbedTm, variables)
@@ -116,25 +116,35 @@ export class Lang {
         );
     }
 
+    // TODO: Locales
+    // public static getRefLocalizationMap(
+    //     location: string,
+    //     variables?: { [name: string]: string }
+    // ): LocalizationMap {
+    //     let obj = {};
+    //     for (let langCode of Language.Enabled) {
+    //         obj[langCode] = this.getRef('info', location, langCode, variables);
+    //     }
+    //     return obj;
+    // }
+
     public static getCom(location: string, variables?: { [name: string]: string }): string {
         return this.linguiniObjects.info.getCom(location, variables);
     }
-    private static successEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
-        return new MessageEmbed({
+    private static successEmbedTm: TypeMapper<EmbedBuilder> = (jsonValue: any) => {
+        return new EmbedBuilder({
             description: Utils.join(jsonValue, '\n'),
-            color: Lang.getCom('colors.success') as ColorResolvable,
-        });
+        }).setColor(Lang.getCom('colors.success') as ColorResolvable);
     };
 
-    private static errorEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
-        return new MessageEmbed({
+    private static errorEmbedTm: TypeMapper<EmbedBuilder> = (jsonValue: any) => {
+        return new EmbedBuilder({
             description: Utils.join(jsonValue, '\n'),
-            color: Lang.getCom('colors.error') as ColorResolvable,
-        });
+        }).setColor(Lang.getCom('colors.error') as ColorResolvable);
     };
 
-    private static messageEmbedTm: TypeMapper<MessageEmbed> = (jsonValue: any) => {
-        return new MessageEmbed({
+    private static messageEmbedTm: TypeMapper<EmbedBuilder> = (jsonValue: any) => {
+        return new EmbedBuilder({
             author: jsonValue.author,
             title: Utils.join(jsonValue.title, '\n'),
             url: jsonValue.url,

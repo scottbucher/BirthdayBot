@@ -1,12 +1,13 @@
 import { Chrono } from 'chrono-node';
 import {
-    BaseCommandInteraction,
     ButtonInteraction,
     CommandInteraction,
+    ComponentType,
     DMChannel,
     MessageComponentInteraction,
-    Modal,
+    ModalBuilder,
     ModalSubmitInteraction,
+    TextInputStyle,
     User,
 } from 'discord.js';
 import { ExpireFunction } from 'discord.js-collector-utils';
@@ -21,9 +22,9 @@ export class BirthdayUtils {
         target: User,
         data: EventData,
         intr: CommandInteraction,
-        nextIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction
+        nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction
     ): Promise<
-        [BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
+        [CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
     > {
         let expireFunction: ExpireFunction = async () => {
             await InteractionUtils.send(
@@ -44,19 +45,19 @@ export class BirthdayUtils {
 
         let timeZoneResult = await CollectorUtils.collectByModal(
             timeZonePrompt,
-            new Modal({
+            new ModalBuilder({
                 customId: 'modal', // Will be overwritten
                 title: Lang.getRef('info', 'terms.timeZone', data.lang()),
                 components: [
                     {
-                        type: 'ACTION_ROW',
+                        type: ComponentType.ActionRow,
                         components: [
                             {
-                                type: 'TEXT_INPUT',
+                                type: ComponentType.TextInput,
                                 customId: 'type',
                                 label: Lang.getRef('info', 'terms.timeZone', data.lang()),
                                 required: true,
-                                style: 'SHORT',
+                                style: TextInputStyle.Short,
                                 minLength: 1,
                                 placeholder: Lang.getRef(
                                     'info',
@@ -70,9 +71,12 @@ export class BirthdayUtils {
             }),
             intr.user,
             async (intr: ModalSubmitInteraction) => {
-                let input = intr.components[0].components[0].value;
+                let textInput = intr.components[0].components[0];
+                if (textInput.type !== ComponentType.TextInput) {
+                    return;
+                }
 
-                if (FormatUtils.checkAbbreviation(input)) {
+                if (FormatUtils.checkAbbreviation(textInput.value)) {
                     await InteractionUtils.send(
                         intr,
                         Lang.getEmbed(
@@ -88,7 +92,7 @@ export class BirthdayUtils {
                     return;
                 }
 
-                let givenTimeZone = FormatUtils.findZone(input); // Try and get the time zone
+                let givenTimeZone = FormatUtils.findZone(textInput.value); // Try and get the time zone
                 if (!givenTimeZone) {
                     await InteractionUtils.send(
                         intr,
@@ -120,11 +124,11 @@ export class BirthdayUtils {
         target: User,
         data: EventData,
         intr: CommandInteraction,
-        nextIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         littleEndian: boolean,
         parser: Chrono
     ): Promise<
-        [BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
+        [CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
     > {
         let expireFunction: ExpireFunction = async () => {
             await InteractionUtils.send(
@@ -150,19 +154,19 @@ export class BirthdayUtils {
 
         let birthdayResult = await CollectorUtils.collectByModal(
             birthdayPrompt,
-            new Modal({
+            new ModalBuilder({
                 customId: 'modal', // Will be overwritten
                 title: Lang.getRef('info', 'terms.birthday', data.lang()),
                 components: [
                     {
-                        type: 'ACTION_ROW',
+                        type: ComponentType.ActionRow,
                         components: [
                             {
-                                type: 'TEXT_INPUT',
+                                type: ComponentType.TextInput,
                                 customId: 'type',
                                 label: Lang.getRef('info', 'terms.birthday', data.lang()),
                                 required: true,
-                                style: 'SHORT',
+                                style: TextInputStyle.Short,
                                 minLength: 1,
                                 placeholder: Lang.getRef(
                                     'info',
@@ -176,9 +180,12 @@ export class BirthdayUtils {
             }),
             intr.user,
             async (intr: ModalSubmitInteraction) => {
-                let input = intr.components[0].components[0].value;
+                let textInput = intr.components[0].components[0];
+                if (textInput.type !== ComponentType.TextInput) {
+                    return;
+                }
 
-                let givenBirthday = FormatUtils.getBirthday(input, parser, littleEndian);
+                let givenBirthday = FormatUtils.getBirthday(textInput.value, parser, littleEndian);
 
                 // Don't laugh at my double check it prevents the dates chrono misses on the first input
                 if (!givenBirthday) {
@@ -211,9 +218,9 @@ export class BirthdayUtils {
         target: User,
         data: EventData,
         intr: CommandInteraction,
-        nextIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction
+        nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction
     ): Promise<
-        [BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
+        [CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
     > {
         if (!(intr.channel instanceof DMChannel) && data.guild)
             if (
@@ -256,7 +263,7 @@ export class BirthdayUtils {
         changesLeft: number,
         target: User,
         data: EventData,
-        nextIntr: BaseCommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         parser: Chrono,
         userRepo: UserRepo
     ): Promise<[boolean, CommandInteraction | ButtonInteraction]> {

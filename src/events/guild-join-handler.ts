@@ -1,14 +1,16 @@
 import { Guild } from 'discord.js';
 import { createRequire } from 'node:module';
 
-import { Lang, Logger } from '../services/index.js';
-import { ClientUtils, MessageUtils } from '../utils/index.js';
+import { EventDataService, Lang, Logger } from '../services/index.js';
+import { ClientUtils, FormatUtils, MessageUtils } from '../utils/index.js';
 import { EventHandler } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Logs = require('../../lang/logs.json');
 
 export class GuildJoinHandler implements EventHandler {
+    constructor(private eventDataService: EventDataService) {}
+
     public async process(guild: Guild): Promise<void> {
         Logger.info(
             Logs.info.guildJoined
@@ -16,14 +18,24 @@ export class GuildJoinHandler implements EventHandler {
                 .replaceAll('{GUILD_ID}', guild.id)
         );
 
+        let owner = await guild.fetchOwner();
+
+        // Get data from database
+        let data = await this.eventDataService.create({
+            user: owner?.user,
+            guild,
+        });
+
         // Send welcome message to the server's notify channel
-        // TODO: Replace "Lang.Default" here with the server's language
-        let guildLang = Lang.Default;
-        let notifyChannel = await ClientUtils.findNotifyChannel(guild, guildLang);
+        let notifyChannel = await ClientUtils.findNotifyChannel(guild, data.lang());
         if (notifyChannel) {
             await MessageUtils.send(
                 notifyChannel,
-                Lang.getEmbed('info', 'embeds.guildJoin', guildLang).setAuthor({
+                Lang.getEmbed('info', 'embeds.guildJoin', data.lang(), {
+                    CMD_LINK_HELP: FormatUtils.commandMention(
+                        await ClientUtils.findAppCommand(guild.client, Lang.getCom('commands.help'))
+                    ),
+                }).setAuthor({
                     name: guild.name,
                     iconURL: guild.iconURL(),
                 })
@@ -31,13 +43,14 @@ export class GuildJoinHandler implements EventHandler {
         }
 
         // Send welcome message to owner
-        // TODO: Replace "Lang.Default" here with the owner's language
-        let ownerLang = Lang.Default;
-        let owner = await guild.fetchOwner();
         if (owner) {
             await MessageUtils.send(
                 owner.user,
-                Lang.getEmbed('info', 'embeds.guildJoin', ownerLang).setAuthor({
+                Lang.getEmbed('info', 'embeds.guildJoin', data.lang(), {
+                    CMD_LINK_HELP: FormatUtils.commandMention(
+                        await ClientUtils.findAppCommand(guild.client, Lang.getCom('commands.help'))
+                    ),
+                }).setAuthor({
                     name: guild.name,
                     iconURL: guild.iconURL(),
                 })

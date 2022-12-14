@@ -1,10 +1,26 @@
-import { DiscordAPIError, GuildMember, Role } from 'discord.js';
+import {
+    DiscordAPIError,
+    RESTJSONErrorCodes as DiscordApiErrors,
+    GuildMember,
+    Role,
+} from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { TimeUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
+
+const IGNORED_ERRORS = [
+    DiscordApiErrors.UnknownMessage,
+    DiscordApiErrors.UnknownChannel,
+    DiscordApiErrors.UnknownGuild,
+    DiscordApiErrors.UnknownUser,
+    DiscordApiErrors.UnknownInteraction,
+    DiscordApiErrors.CannotSendMessagesToThisUser, // User blocked bot or DM disabled
+    DiscordApiErrors.ReactionWasBlocked, // User blocked bot or DM disabled
+    DiscordApiErrors.MaximumActiveThreads,
+];
 
 export class ActionUtils {
     public static async giveRole(member: GuildMember, role: Role, delay?: number): Promise<void> {
@@ -16,7 +32,11 @@ export class ActionUtils {
             // 10011: "Unknown Role" (Role was deleted)
             // 50001: "Missing Access"
             // 50013: "Missing Permission"
-            if (error instanceof DiscordAPIError && [10011, 50001, 50013].includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;
@@ -33,7 +53,11 @@ export class ActionUtils {
             // 10011: "Unknown Role" (Role was deleted)
             // 50001: "Missing Access"
             // 50013: "Missing Permission"
-            if (error instanceof DiscordAPIError && [10011, 50001, 50013].includes(error.code)) {
+            if (
+                error instanceof DiscordAPIError &&
+                typeof error.code == 'number' &&
+                IGNORED_ERRORS.includes(error.code)
+            ) {
                 return;
             } else {
                 throw error;

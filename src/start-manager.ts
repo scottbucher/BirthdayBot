@@ -1,19 +1,11 @@
 import { ShardingManager } from 'discord.js';
 import { createRequire } from 'node:module';
-
 import 'reflect-metadata';
-import {
-    GuildsController,
-    RootController,
-    ShardsController,
-    SubscriptionEventsController,
-    VotesController,
-} from './controllers/index.js';
+
+import { GuildsController, RootController, ShardsController } from './controllers/index.js';
 import { Job, UpdateServerCountJob } from './jobs/index.js';
 import { Api } from './models/api.js';
 import { Manager } from './models/manager.js';
-import { DataAccess } from './services/database/data-access.js';
-import { UserRepo } from './services/database/repos/user-repo.js';
 import { HttpService, JobService, Logger, MasterApiService } from './services/index.js';
 import { MathUtils, ShardUtils } from './utils/index.js';
 
@@ -61,17 +53,11 @@ async function start(): Promise<void> {
 
     let shardManager = new ShardingManager('dist/start-bot.js', {
         token: Config.client.token,
-        mode: Debug.override.shardMode.enabled ? Debug.override.shardMode.value : 'worker',
+        mode: Debug.override.shardMode.enabled ? Debug.override.shardMode.value : 'process',
         respawn: true,
         totalShards,
         shardList,
     });
-
-    // Data Access for repos
-    let dataAccess = new DataAccess(Config.mysql);
-
-    // Repos
-    let userRepo = new UserRepo(dataAccess);
 
     // Jobs
     let jobs: Job[] = [
@@ -85,15 +71,7 @@ async function start(): Promise<void> {
     let guildsController = new GuildsController(shardManager);
     let shardsController = new ShardsController(shardManager);
     let rootController = new RootController();
-    let votesController = new VotesController(userRepo);
-    let subscriptionEventsController = new SubscriptionEventsController(shardManager);
-    let api = new Api([
-        guildsController,
-        shardsController,
-        rootController,
-        votesController,
-        subscriptionEventsController,
-    ]);
+    let api = new Api([guildsController, shardsController, rootController]);
 
     // Start
     await manager.start();
