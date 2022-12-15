@@ -5,7 +5,12 @@
         "alias": "60glw3",
         "date": "12-25", // The year is ignored like birthdays
         "+message": "ObjectId(0a480038-09da-4ae2-b47b-d73cdc9c0cad)",
-        "messageTime": 0,
+        "time": {
+            "year": null, // Optional if the date is year specific
+            "month": 2,
+            "day": 3,
+            "hour": 14
+        },
         "mentionSetting": "everyone"
     }
 ]

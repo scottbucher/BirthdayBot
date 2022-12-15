@@ -1,7 +1,0 @@
-[
-    {
-        "_id": "3bfe9f00-8414-422a-b738-01a8780eebb7",
-        "+guild": "ObjectId(660711235766976553)",
-        "discordId": "478288246858711040" // can be a user or a role
-    }
-]

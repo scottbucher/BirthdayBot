@@ -1,40 +1,57 @@
 {
     "_id": "4a37b19e-1721-4dbf-99a1-f0cd6720c630",
     "discordId": "660711235766976553",
-    "language": "en-US",
     "settings": {
+        "language": "en-US",
         "timeZone": "America/New_York",
-        "useTimeZone": "server",
-        "nameFormat": "mention",
-        "dateFormat": "MONTH_DAY",
-        "birthdayRoleDiscordId": "709287764847493172",
-        "birthdayChannelDiscordId": "709287764847493172",
-        "memberAnniversaryChannelDiscordId": "709287764847493172",
-        "serverAnniversaryChannelDiscordId": "709287764847493172",
-        "customEventChannelDiscordId": "709287764847493172",
-        "birthdayMentionSetting": "none",
-        "memberAnniversaryMentionSetting": "none",
-        "serverAnniversaryMentionSetting": "none",
-        "birthdayMessageTime": 0,
-        "memberAnniversaryMessageTime": 0,
-        "serverAnniversaryMessageTime": 0,
-        "birthdayPostSetting": "POST_ONLY",
-        "memberAnniversaryPostSetting": "POST_ONLY",
-        "serverAnniversaryPostSetting": "POST_ONLY",
-        "customEventPostSetting": "POST_ONLY",
-        "daysBeforeBirthdayReminder": 0,
-        "trustedPreventsMessage": true,
-        "trustedPreventsRole": true,
-        "trustedPreventsMention": true,
-        "requireAllTrustedRoles": true
+        "formats": {
+            "user": "MENTION",
+            "date": "MONTH_DAY"
+        },
+        "birthdays": {
+            "channelDiscordId": "709287764847493172",
+            "roleDiscordId": "709287764847493172",
+            "useTimeZone": "SERVER",
+            "postHourUtc": 3,
+            "postMode": "POST_ONLY",
+            "mention": null, // or "<@3543533453535345345345354>" whatever role
+            "reminderDaysBefore": 1,
+        },
+        "memberAnniversaries": {
+            "channelDiscordId": "709287764847493172",
+            "postHourUtc": 5,
+            "postMode": "POST_ONLY",
+            "mention": null
+        },
+        "serverAnniversaries": {
+            "channelDiscordId": "709287764847493172",
+            "postHourUtc": 5,
+            "postMode": "POST_ONLY",
+            "mention": null
+        },
+        "customEvents": {
+            "channelDiscordId": "709287764847493172",
+            "postMode": "POST_ONLY",
+            "mention": null
+        },
+        "trustedSystem": {
+            "roles": ["660746189419053057", "660746189419053057", "660746189419053057"],
+            "requireAll": true,
+            "requireForMessage": true,
+            "requireForRole": true,
+            "requireForMention": true,
+        },
+        "blacklist": {
+            "users": ["660746189419053057", "660746189419053057"],
+            "roles": ["660746189419053057"]
+        }
     },
     "premium": {
         "active": true,
         "lastCheck": "2022-05-13T23:13:18Z"
     },
+    "created": "2022-06-19T03:51:01.943Z",
     "-messages": [],
     "-events": [],
-    "-memberAnniversaryRoles": [],
-    "-blacklists": [],
-    "-trustedRoles": []
+    "-memberAnniversaryRoles": []
 }
