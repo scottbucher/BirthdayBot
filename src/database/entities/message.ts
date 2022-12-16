@@ -18,7 +18,6 @@ import { EventData, GuildData } from './index.js';
 @Entity({ collection: 'messages' })
 @Unique({ properties: ['guildDiscordId', 'alias'] })
 @Index({ properties: ['guildDiscordId'] })
-@Index({ properties: ['channel'] })
 export class MessageData {
     @PrimaryKey()
     _id!: ObjectId;
@@ -30,13 +29,10 @@ export class MessageData {
     guildDiscordId!: string;
 
     @Property()
-    eventId?: string;
-
-    @Property()
     alias = RandomUtils.friendlyId(6);
 
     @Property()
-    descrption!: string;
+    description!: string;
 
     @Property()
     type = MessageType.BIRTHDAY;
@@ -60,7 +56,7 @@ export class MessageData {
     guild!: IdentifiedReference<GuildData>;
 
     // Not all messages are tied to an event
-    @OneToOne(() => EventData, event => event.messageId, { owner: false })
+    @OneToOne(() => EventData, event => event.message, { owner: false })
     event?: IdentifiedReference<EventData>;
 
     constructor(
@@ -74,7 +70,7 @@ export class MessageData {
         footer?: string
     ) {
         this.guildDiscordId = guildDiscordId;
-        this.descrption = description;
+        this.description = description;
         this.type = type;
         this.embedded = embedded;
         this.color = color;

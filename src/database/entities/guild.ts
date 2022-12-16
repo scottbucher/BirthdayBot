@@ -2,6 +2,7 @@ import {
     Cascade,
     Collection,
     Embeddable,
+    Index,
     OneToMany,
     PrimaryKey,
     Property,
@@ -145,6 +146,7 @@ export class Premium {
 
 @Entity({ collection: 'guilds' })
 @Unique({ properties: ['discordId'] })
+@Index({ properties: ['discordId'] })
 export class GuildData {
     @PrimaryKey()
     _id!: ObjectId;
