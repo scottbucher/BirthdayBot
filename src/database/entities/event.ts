@@ -46,9 +46,6 @@ export class EventData {
     guildDiscordId!: string;
 
     @Property()
-    eventId?: string;
-
-    @Property()
     messageId?: string;
 
     @Property()
