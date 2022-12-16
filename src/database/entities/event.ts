@@ -9,6 +9,7 @@ import {
     PrimaryKey,
     Property,
     SerializedPrimaryKey,
+    Unique,
 } from '@mikro-orm/core';
 import { ObjectId } from '@mikro-orm/mongodb';
 
@@ -32,6 +33,7 @@ export class TimeSettings {
 }
 
 @Entity({ collection: 'events' })
+@Unique({ properties: ['guildDiscordId', 'alias'] })
 @Index({ properties: ['guild'] })
 export class EventData {
     @PrimaryKey()

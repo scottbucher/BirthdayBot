@@ -16,7 +16,7 @@ import { RandomUtils } from '../../utils/index.js';
 import { EventData, GuildData } from './index.js';
 
 @Entity({ collection: 'messages' })
-@Unique({ properties: ['guildDiscordId', 'name'] })
+@Unique({ properties: ['guildDiscordId', 'alias'] })
 @Index({ properties: ['guildDiscordId'] })
 @Index({ properties: ['channel'] })
 export class MessageData {

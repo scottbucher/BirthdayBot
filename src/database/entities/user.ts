@@ -4,7 +4,7 @@ import { ObjectId } from '@mikro-orm/mongodb';
 import { TimeUtils } from '../../utils/index.js';
 
 @Entity({ collection: 'users' })
-@Unique({ properties: ['userDiscordId'] })
+@Unique({ properties: ['discordId'] })
 export class UserData {
     // IDs
     @PrimaryKey()
