@@ -1,84 +1,137 @@
-import { Embeddable, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import {
+    Cascade,
+    Collection,
+    Embeddable,
+    OneToMany,
+    PrimaryKey,
+    Property,
+    Unique,
+} from '@mikro-orm/core';
 import { Embedded } from '@mikro-orm/core/decorators/Embedded.js';
 import { Entity } from '@mikro-orm/core/decorators/Entity.js';
 import { SerializedPrimaryKey } from '@mikro-orm/core/decorators/PrimaryKey.js';
 import { ObjectId } from '@mikro-orm/mongodb';
 
+import { DateFormat, LangCode, NameFormat, PostMode, UseTimezone } from '../../enums/index.js';
 import { TimeUtils } from '../../utils/time-utils.js';
+import { EventData } from './index.js';
+import { MessageData } from './message.js';
 
 @Embeddable()
 export class GuildSettings {
     @Property()
-    timeZone!: string;
+    language = LangCode.EN_US;
 
     @Property()
-    useTimezone = 'server';
+    timezone?: string;
+}
+
+@Embeddable()
+export class FormatSettings {
+    @Property()
+    name = NameFormat.MENTION;
 
     @Property()
-    nameFormat = 'mention';
+    date = DateFormat.MONTH_DAY;
+}
+
+@Embeddable()
+export class BirthdaySettings {
+    @Property()
+    channelDiscordId?: string;
 
     @Property()
-    dateFormat = 'month_day';
+    birthdayRoleDiscordId?: string;
 
     @Property()
-    birthdayRoleDiscordId = '0';
+    useTimezone = UseTimezone.SERVER;
+
+    // Can't default to 0 since each server has a different timezone
+    // Calculated when server timezone is set and useTimezone is set to SERVER
+    @Property()
+    postHourUTC?: number;
 
     @Property()
-    birthdayChannelDiscordId = '0';
+    postMode = PostMode.POST_ONLY;
 
     @Property()
-    memberAnniversaryChannelDiscordId = '0';
+    mention?: string;
 
     @Property()
-    serverAnniversaryChannelDiscordId = '0';
+    reminderDaysBefore = 0;
+}
+
+@Embeddable()
+export class MemberAnniversarySettings {
+    @Property()
+    channelDiscordId?: string;
+
+    // Can't default to 0 since each server has a different timezone
+    // Calculated when server timezone is set
+    @Property()
+    postHourUTC?: number;
 
     @Property()
-    customEventChannelDiscordId = '0';
+    postMode = PostMode.POST_ONLY;
 
     @Property()
-    birthdayMentionSetting = 0;
+    mention?: string;
+}
+
+@Embeddable()
+export class ServerAnniversarySettings {
+    @Property()
+    channelDiscordId?: string;
+
+    // Can't default to 0 since each server has a different timezone
+    // Calculated when server timezone is set
+    @Property()
+    postHourUTC?: number;
 
     @Property()
-    memberAnniversaryMentionSetting = 0;
+    postMode = PostMode.POST_ONLY;
 
     @Property()
-    serverAnniversaryMentionSetting = 0;
+    mention?: string;
+}
+
+@Embeddable()
+export class EventSettings {
+    @Property()
+    channelDiscordId?: string;
 
     @Property()
-    birthdayMessageTime = 0;
+    postMode = PostMode.POST_ONLY;
 
     @Property()
-    memberAnniversaryMessageTime = 0;
+    mention?: string;
+}
+
+@Embeddable()
+export class TrustedSystemSettings {
+    @Property()
+    roleIds: string[] = [];
 
     @Property()
-    serverAnniversaryMessageTime = 0;
+    requireAll = true;
 
     @Property()
-    birthdayPostSetting = 'POST_ONLY';
+    requireForMessage = true;
 
     @Property()
-    memberAnniversaryPostSetting = 'POST_ONLY';
+    requireForRole = true;
 
     @Property()
-    serverAnniversaryPostSetting = 'POST_ONLY';
+    requireForMention = true;
+}
+
+@Embeddable()
+export class BlacklistSettings {
+    @Property()
+    roleIds: string[] = [];
 
     @Property()
-    customEventPostSetting = 'POST_ONLY';
-
-    @Property()
-    daysBeforeBirthdayReminder = 0;
-
-    @Property()
-    trustedPreventsMessage = true;
-
-    @Property()
-    trustedPreventsRole = true;
-
-    @Property()
-    trustedPreventsMention = true;
-
-    @Property()
-    requireAllTrustedRoles = true;
+    userIds: string[] = [];
 }
 
 @Embeddable()
@@ -87,7 +140,7 @@ export class Premium {
     isPremium = false;
 
     @Property()
-    lastCheck: string = TimeUtils.now().toISOString();
+    lastCheck: string = TimeUtils.now().toISO();
 }
 
 @Entity({ collection: 'guilds' })
@@ -103,15 +156,38 @@ export class GuildData {
     discordId!: string;
 
     @Embedded({ object: true })
-    settings: GuildSettings = new GuildSettings();
+    guildSettings: GuildSettings = new GuildSettings();
+
+    @Embedded({ object: true })
+    birthdaySettings: BirthdaySettings = new BirthdaySettings();
+
+    @Embedded({ object: true })
+    memberAnniversarySettings: MemberAnniversarySettings = new MemberAnniversarySettings();
+
+    @Embedded({ object: true })
+    serverAnniversarySettings: ServerAnniversarySettings = new ServerAnniversarySettings();
+
+    @Embedded({ object: true })
+    eventSettings: EventSettings = new EventSettings();
+
+    @Embedded({ object: true })
+    trustedSystemSettings: TrustedSystemSettings = new TrustedSystemSettings();
+
+    @Embedded({ object: true })
+    blacklistSettings: BlacklistSettings = new BlacklistSettings();
 
     @Embedded({ object: true })
     premium: Premium = new Premium();
 
     @Property()
-    created = TimeUtils.now().toISOString();
+    created = TimeUtils.now().toISO();
 
     // @OneToMany
+    @OneToMany(() => MessageData, message => message.guild, { cascade: [Cascade.ALL] })
+    messages = new Collection<MessageData>(this);
+
+    @OneToMany(() => EventData, event => event.guild, { cascade: [Cascade.ALL] })
+    events = new Collection<EventData>(this);
 
     constructor(
         discordId: string,
@@ -119,7 +195,7 @@ export class GuildData {
         birthdayRoleDiscordId: string
     ) {
         this.discordId = discordId;
-        this.settings.birthdayChannelDiscordId = birthdayChannelDiscordId;
-        this.settings.birthdayRoleDiscordId = birthdayRoleDiscordId;
+        this.birthdaySettings.channelDiscordId = birthdayChannelDiscordId;
+        this.birthdaySettings.birthdayRoleDiscordId = birthdayRoleDiscordId;
     }
 }

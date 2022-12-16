@@ -1,4 +1,6 @@
 import {
+    Embeddable,
+    Embedded,
     Entity,
     IdentifiedReference,
     Index,
@@ -10,12 +12,28 @@ import {
 } from '@mikro-orm/core';
 import { ObjectId } from '@mikro-orm/mongodb';
 
+import { RandomUtils } from '../../utils/index.js';
 import { GuildData } from './guild.js';
-import { Message } from './index.js';
+import { MessageData } from './index.js';
+
+@Embeddable()
+export class TimeSettings {
+    @Property()
+    year?: number;
+
+    @Property()
+    month!: number;
+
+    @Property()
+    day!: number;
+
+    @Property()
+    hour = 0;
+}
 
 @Entity({ collection: 'events' })
 @Index({ properties: ['guild'] })
-export class Event {
+export class EventData {
     @PrimaryKey()
     _id!: ObjectId;
 
@@ -26,20 +44,38 @@ export class Event {
     guildDiscordId!: string;
 
     @Property()
-    eventAlias?: string;
+    eventId?: string;
 
     @Property()
-    date!: string;
+    messageId?: string;
 
     @Property()
-    time = 0;
+    alias = RandomUtils.friendlyId(6);
+
+    @Embedded({ object: true })
+    timeSettings: TimeSettings = new TimeSettings();
 
     @Property()
-    mentionSetting = 0;
+    mention?: string;
 
     @ManyToOne()
     guild!: IdentifiedReference<GuildData>;
 
-    @OneToOne()
-    message!: IdentifiedReference<Message>;
+    // You assign a message to an event after the event is created
+    @OneToOne(() => MessageData, message => message.eventId)
+    message?: IdentifiedReference<MessageData>;
+
+    constructor(
+        guildDiscordId: string,
+        month: number,
+        day: number,
+        year?: number,
+        mention?: string
+    ) {
+        this.guildDiscordId = guildDiscordId;
+        this.timeSettings.month = month;
+        this.timeSettings.day = day;
+        this.timeSettings.year = year;
+        this.mention = mention;
+    }
 }

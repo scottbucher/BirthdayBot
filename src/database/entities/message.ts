@@ -1,4 +1,5 @@
 import {
+    Cascade,
     Entity,
     IdentifiedReference,
     Index,
@@ -11,13 +12,15 @@ import {
 } from '@mikro-orm/core';
 import { ObjectId } from '@mikro-orm/mongodb';
 
-import { Event, GuildData } from './index.js';
+import { MessageType } from '../../enums/message-type.js';
+import { RandomUtils } from '../../utils/index.js';
+import { EventData, GuildData } from './index.js';
 
 @Entity({ collection: 'messages' })
 @Unique({ properties: ['guildDiscordId', 'name'] })
 @Index({ properties: ['guildDiscordId'] })
 @Index({ properties: ['channel'] })
-export class Message {
+export class MessageData {
     @PrimaryKey()
     _id!: ObjectId;
 
@@ -28,16 +31,19 @@ export class Message {
     guildDiscordId!: string;
 
     @Property()
-    messageAlias?: string;
+    eventId?: string;
 
     @Property()
-    type = 'birthday';
+    alias = RandomUtils.friendlyId(6);
 
     @Property()
     descrption!: string;
 
     @Property()
-    embedded!: boolean;
+    type = MessageType.BIRTHDAY;
+
+    @Property()
+    embedded = true;
 
     @Property()
     color?: string;
@@ -54,6 +60,27 @@ export class Message {
     @ManyToOne()
     guild!: IdentifiedReference<GuildData>;
 
-    @OneToOne()
-    event!: IdentifiedReference<Event>;
+    // Not all messages are tied to an event
+    @OneToOne(() => EventData, event => event.messageId, { cascade: [Cascade.ALL] })
+    event?: IdentifiedReference<EventData>;
+
+    constructor(
+        guildDiscordId: string,
+        description: string,
+        type?: MessageType,
+        embedded?: boolean,
+        color?: string,
+        image?: string,
+        title?: string,
+        footer?: string
+    ) {
+        this.guildDiscordId = guildDiscordId;
+        this.descrption = description;
+        this.type = type;
+        this.embedded = embedded;
+        this.color = color;
+        this.image = image;
+        this.title = title;
+        this.footer = footer;
+    }
 }

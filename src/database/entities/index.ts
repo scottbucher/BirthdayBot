@@ -1,4 +1,5 @@
 export { GuildData } from './guild.js';
-export { Blacklist } from './blacklist.js';
-export { Event } from './event.js';
-export { Message } from './message.js';
+export { EventData } from './event.js';
+export { MessageData } from './message.js';
+export { UserData } from './user.js';
+export { VoteData } from './vote.js';

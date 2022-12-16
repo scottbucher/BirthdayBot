@@ -20,3 +20,4 @@ export { TimeUtils } from './time-utils.js';
 export { CollectorUtils } from './collector-utils.js';
 export { ButtonUtils } from './button-utils.js';
 export { BirthdayUtils } from './birthday-utils.js';
+export { RandomUtils } from './random-utils.js';
