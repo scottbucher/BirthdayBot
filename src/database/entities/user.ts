@@ -23,17 +23,17 @@ export class UserData {
     @Property()
     birthdayEndUTC!: string;
 
-    @Property()
-    timezone!: string;
+    @Property() S;
+    timeZone!: string;
 
     @Property()
     created = TimeUtils.now().toISO();
 
-    constructor(userDiscordId: string, birthday: string, timezone: string) {
+    constructor(userDiscordId: string, birthday: string, timeZone: string) {
         this.discordId = userDiscordId;
-        this.timezone = timezone;
+        this.timeZone = timeZone;
 
-        this.birthdayStartUTC = TimeUtils.dateToUTC(birthday, timezone).toISO();
-        this.birthdayEndUTC = TimeUtils.dateToUTC(birthday, timezone).plus({ days: 1 }).toISO();
+        this.birthdayStartUTC = TimeUtils.dateToUTC(birthday, timeZone).toISO();
+        this.birthdayEndUTC = TimeUtils.dateToUTC(birthday, timeZone).plus({ days: 1 }).toISO();
     }
 }

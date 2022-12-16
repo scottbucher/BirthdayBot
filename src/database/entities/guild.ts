@@ -12,7 +12,7 @@ import { Entity } from '@mikro-orm/core/decorators/Entity.js';
 import { SerializedPrimaryKey } from '@mikro-orm/core/decorators/PrimaryKey.js';
 import { ObjectId } from '@mikro-orm/mongodb';
 
-import { DateFormat, LangCode, NameFormat, PostMode, UseTimezone } from '../../enums/index.js';
+import { DateFormat, LangCode, NameFormat, PostMode, UseTimeZone } from '../../enums/index.js';
 import { TimeUtils } from '../../utils/time-utils.js';
 import { EventData } from './index.js';
 import { MessageData } from './message.js';
@@ -23,7 +23,7 @@ export class GuildSettings {
     language = LangCode.EN_US;
 
     @Property()
-    timezone?: string;
+    timeZone?: string;
 }
 
 @Embeddable()
@@ -44,10 +44,10 @@ export class BirthdaySettings {
     birthdayRoleDiscordId?: string;
 
     @Property()
-    useTimezone = UseTimezone.SERVER;
+    useTimeZone = UseTimeZone.SERVER;
 
-    // Can't default to 0 since each server has a different timezone
-    // Calculated when server timezone is set and useTimezone is set to SERVER
+    // Can't default to 0 since each server has a different timeZone
+    // Calculated when server timeZone is set and useTimeZone is set to SERVER
     @Property()
     postHourUTC?: number;
 
@@ -66,8 +66,8 @@ export class MemberAnniversarySettings {
     @Property()
     channelDiscordId?: string;
 
-    // Can't default to 0 since each server has a different timezone
-    // Calculated when server timezone is set
+    // Can't default to 0 since each server has a different timeZone
+    // Calculated when server timeZone is set
     @Property()
     postHourUTC?: number;
 
@@ -83,8 +83,8 @@ export class ServerAnniversarySettings {
     @Property()
     channelDiscordId?: string;
 
-    // Can't default to 0 since each server has a different timezone
-    // Calculated when server timezone is set
+    // Can't default to 0 since each server has a different timeZone
+    // Calculated when server timeZone is set
     @Property()
     postHourUTC?: number;
 

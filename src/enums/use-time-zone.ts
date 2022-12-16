@@ -1,4 +1,4 @@
-export enum UseTimezone {
+export enum UseTimeZone {
     SERVER = 'SERVER',
     USER = 'USER',
 }
