@@ -1,5 +1,4 @@
 import {
-    Cascade,
     Entity,
     IdentifiedReference,
     Index,
@@ -61,7 +60,7 @@ export class MessageData {
     guild!: IdentifiedReference<GuildData>;
 
     // Not all messages are tied to an event
-    @OneToOne(() => EventData, event => event.messageId, { cascade: [Cascade.ALL] })
+    @OneToOne(() => EventData, event => event.messageId, { owner: false })
     event?: IdentifiedReference<EventData>;
 
     constructor(

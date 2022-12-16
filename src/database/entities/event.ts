@@ -62,7 +62,7 @@ export class EventData {
     guild!: IdentifiedReference<GuildData>;
 
     // You assign a message to an event after the event is created
-    @OneToOne(() => MessageData, message => message.eventId)
+    @OneToOne(() => MessageData, message => message.eventId, { owner: true })
     message?: IdentifiedReference<MessageData>;
 
     constructor(
