@@ -18,6 +18,12 @@
             "VoiceStateManager": 0
         }
     },
+    "database": {
+        "host": "<DATABASE_HOST>",
+        "username": "<DATABASE_USERNAME>",
+        "password": "<DATABASE_PASSWORD>",
+        "database": "<DATABASE_NAME>"
+    },
     "api": {
         "port": 3001,
         "secret": "00000000-0000-0000-0000-000000000000"
