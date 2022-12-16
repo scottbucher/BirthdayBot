@@ -1,6 +1,6 @@
 export { ActionUtils } from './action-utils.js';
 export { ArrayUtils } from './array-utils.js';
-export { CelebrationUtils } from './celebration-utils.js';
+// export { CelebrationUtils } from './celebration-utils.js';
 export { ClientUtils } from './client-utils.js';
 export { ColorUtils } from './color-utils.js';
 export { CommandUtils } from './command-utils.js';

@@ -1,18 +1,12 @@
-import { EmbedBuilder, Guild, GuildMember } from 'discord.js';
-import moment from 'moment';
+import { EmbedBuilder, Guild } from 'discord.js';
 import { createRequire } from 'node:module';
 
-import {
-    Blacklisted,
-    CustomMessages,
-    GuildData,
-    UserDataResults,
-} from '../models/database/index.js';
+import { Blacklisted, CustomMessages } from '../models/database/index.js';
 import { MemberAnniversaryRoles } from '../models/database/member-anniversary-role-models.js';
 import { TrustedRoles } from '../models/database/trusted-role-models.js';
 import { EventData } from '../models/internal-models.js';
 import { Lang } from '../services/index.js';
-import { CelebrationUtils, ClientUtils } from './index.js';
+import { ClientUtils } from './index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
@@ -287,99 +281,99 @@ export class ListUtils {
         return embed.setThumbnail(guild.iconURL());
     }
 
-    public static async getBirthdayListFullEmbed(
-        guild: Guild,
-        userDataResults: UserDataResults,
-        guildData: GuildData,
-        page: number,
-        pageSize: number,
-        data: EventData
-    ): Promise<EmbedBuilder> {
-        let embed: EmbedBuilder;
-        let description = '';
+    // public static async getBirthdayListFullEmbed(
+    //     guild: Guild,
+    //     userDataResults: UserDataResults,
+    //     guildData: GuildData,
+    //     page: number,
+    //     pageSize: number,
+    //     data: EventData
+    // ): Promise<EmbedBuilder> {
+    //     let embed: EmbedBuilder;
+    //     let description = '';
 
-        if (userDataResults.userData.length === 0) {
-            description += Lang.getRef('info', 'list.emptyList', data.lang());
-        }
+    //     if (userDataResults.userData.length === 0) {
+    //         description += Lang.getRef('info', 'list.emptyList', data.lang());
+    //     }
 
-        let birthdays = [
-            ...new Set(
-                userDataResults.userData.map(data => moment(data.Birthday).format('MMMM Do'))
-            ),
-        ]; // remove duplicates
+    //     let birthdays = [
+    //         ...new Set(
+    //             userDataResults.userData.map(data => moment(data.Birthday).format('MMMM Do'))
+    //         ),
+    //     ]; // remove duplicates
 
-        // Go through the list of birthdays
-        for (let birthday of birthdays) {
-            let users = userDataResults.userData.filter(
-                data => moment(data.Birthday).format('MMMM Do') === birthday
-            ); // Get all users with this birthday to create the sub list
+    //     // Go through the list of birthdays
+    //     for (let birthday of birthdays) {
+    //         let users = userDataResults.userData.filter(
+    //             data => moment(data.Birthday).format('MMMM Do') === birthday
+    //         ); // Get all users with this birthday to create the sub list
 
-            let members = guild.members.cache
-                .filter(m => users.map(u => u.UserDiscordId).includes(m.id))
-                .map(member => member);
+    //         let members = guild.members.cache
+    //             .filter(m => users.map(u => u.UserDiscordId).includes(m.id))
+    //             .map(member => member);
 
-            let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
-            description += `__**${birthday}**__: ${userList}\n`; // Append the description
-        }
+    //         let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
+    //         description += `__**${birthday}**__: ${userList}\n`; // Append the description
+    //     }
 
-        embed = Lang.getEmbed('info', 'list.birthday', data.lang(), {
-            PAGE: `${page > 0 ? page.toString() : '1'}`,
-            LIST_DATA: description,
-            TOTAL_PAGES: `${
-                userDataResults.stats.TotalPages > 0
-                    ? userDataResults.stats.TotalPages.toString()
-                    : '1'
-            }`,
-            TOTAL_BIRTHDAYS: userDataResults.stats.TotalItems.toString(),
-            PER_PAGE: pageSize.toString(),
-            ICON: guild.client.user.displayAvatarURL(),
-        });
+    //     embed = Lang.getEmbed('info', 'list.birthday', data.lang(), {
+    //         PAGE: `${page > 0 ? page.toString() : '1'}`,
+    //         LIST_DATA: description,
+    //         TOTAL_PAGES: `${
+    //             userDataResults.stats.TotalPages > 0
+    //                 ? userDataResults.stats.TotalPages.toString()
+    //                 : '1'
+    //         }`,
+    //         TOTAL_BIRTHDAYS: userDataResults.stats.TotalItems.toString(),
+    //         PER_PAGE: pageSize.toString(),
+    //         ICON: guild.client.user.displayAvatarURL(),
+    //     });
 
-        return embed.setThumbnail(guild.iconURL());
-    }
+    //     return embed.setThumbnail(guild.iconURL());
+    // }
 
-    public static async getMemberAnniversaryListFullEmbed(
-        guild: Guild,
-        guildMembers: GuildMember[],
-        guildData: GuildData,
-        page: number,
-        pageSize: number,
-        totalPages: number,
-        totalMembers: number,
-        data: EventData
-    ): Promise<EmbedBuilder> {
-        let embed: EmbedBuilder;
-        let description = '';
+    // public static async getMemberAnniversaryListFullEmbed(
+    //     guild: Guild,
+    //     guildMembers: GuildMember[],
+    //     guildData: GuildData,
+    //     page: number,
+    //     pageSize: number,
+    //     totalPages: number,
+    //     totalMembers: number,
+    //     data: EventData
+    // ): Promise<EmbedBuilder> {
+    //     let embed: EmbedBuilder;
+    //     let description = '';
 
-        if (guildMembers.length === 0) {
-            description += Lang.getRef('info', 'list.emptyList', data.lang());
-        }
+    //     if (guildMembers.length === 0) {
+    //         description += Lang.getRef('info', 'list.emptyList', data.lang());
+    //     }
 
-        let anniversaries = [
-            ...new Set(guildMembers.map(m => moment(m.joinedAt).format('MMMM Do'))),
-        ]; // remove duplicates
+    //     let anniversaries = [
+    //         ...new Set(guildMembers.map(m => moment(m.joinedAt).format('MMMM Do'))),
+    //     ]; // remove duplicates
 
-        // Go through the list of birthdays
-        for (let anniversary of anniversaries) {
-            let members = guildMembers.filter(
-                m => moment(m.joinedAt).format('MMMM Do') === anniversary
-            ); // Get all users with this birthday to create the sub list
-            let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
-            description += `__**${anniversary}**__: ${userList}\n`; // Append the description
-        }
+    //     // Go through the list of birthdays
+    //     for (let anniversary of anniversaries) {
+    //         let members = guildMembers.filter(
+    //             m => moment(m.joinedAt).format('MMMM Do') === anniversary
+    //         ); // Get all users with this birthday to create the sub list
+    //         let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
+    //         description += `__**${anniversary}**__: ${userList}\n`; // Append the description
+    //     }
 
-        // Update config variables and add member anniversary list message
-        embed = Lang.getEmbed('info', 'list.memberAnniversary', data.lang(), {
-            PAGE: `${page > 0 ? page.toString() : '1'}`,
-            LIST_DATA: description,
-            TOTAL_PAGES: `${totalPages > 0 ? totalPages.toString() : '1'}`,
-            TOTAL_ANNIVERSARIES: totalMembers.toString(),
-            PER_PAGE: pageSize.toString(),
-            ICON: guild.client.user.displayAvatarURL(),
-        });
+    //     // Update config variables and add member anniversary list message
+    //     embed = Lang.getEmbed('info', 'list.memberAnniversary', data.lang(), {
+    //         PAGE: `${page > 0 ? page.toString() : '1'}`,
+    //         LIST_DATA: description,
+    //         TOTAL_PAGES: `${totalPages > 0 ? totalPages.toString() : '1'}`,
+    //         TOTAL_ANNIVERSARIES: totalMembers.toString(),
+    //         PER_PAGE: pageSize.toString(),
+    //         ICON: guild.client.user.displayAvatarURL(),
+    //     });
 
-        return embed.setThumbnail(guild.iconURL());
-    }
+    //     return embed.setThumbnail(guild.iconURL());
+    // }
 
     public static async getBlacklistFullEmbed(
         guild: Guild,
