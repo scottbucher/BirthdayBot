@@ -15,7 +15,7 @@ import { ObjectId } from '@mikro-orm/mongodb';
 
 import { DateFormat, LangCode, NameFormat, PostMode, UseTimeZone } from '../../enums/index.js';
 import { TimeUtils } from '../../utils/time-utils.js';
-import { EventData } from './index.js';
+import { EventData, MemberAnniversaryRoleData } from './index.js';
 import { MessageData } from './message.js';
 
 @Embeddable()
@@ -190,6 +190,9 @@ export class GuildData {
 
     @OneToMany(() => EventData, event => event.guild, { cascade: [Cascade.ALL] })
     events = new Collection<EventData>(this);
+
+    @OneToMany(() => MemberAnniversaryRoleData, mar => mar.guild, { cascade: [Cascade.ALL] })
+    memberAnniversaryRoles = new Collection<EventData>(this);
 
     constructor(
         discordId: string,
