@@ -33,7 +33,7 @@ export class TimeSettings {
 }
 
 @Entity({ collection: 'events' })
-@Unique({ properties: ['guildDiscordId', 'alias'] })
+@Unique({ properties: ['guild', 'alias'] })
 @Index({ properties: ['guild'] })
 export class EventData {
     @PrimaryKey()

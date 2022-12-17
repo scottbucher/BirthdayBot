@@ -2,7 +2,9 @@ import {
     Cascade,
     Collection,
     Embeddable,
+    IdentifiedReference,
     Index,
+    ManyToOne,
     OneToMany,
     PrimaryKey,
     Property,
@@ -14,8 +16,9 @@ import { SerializedPrimaryKey } from '@mikro-orm/core/decorators/PrimaryKey.js';
 import { ObjectId } from '@mikro-orm/mongodb';
 
 import { DateFormat, LangCode, NameFormat, PostMode, UseTimeZone } from '../../enums/index.js';
+import { RandomUtils } from '../../utils/index.js';
 import { TimeUtils } from '../../utils/time-utils.js';
-import { EventData, MemberAnniversaryRoleData } from './index.js';
+import { EventData } from './index.js';
 import { MessageData } from './message.js';
 
 @Embeddable()
@@ -62,10 +65,31 @@ export class BirthdaySettings {
     reminderDaysBefore = 0;
 }
 
+@Unique({ properties: ['guild', 'alias'] })
+@Unique({ properties: ['guild', 'year'] })
+@Embeddable()
+export class MemberAnniversaryRoleData {
+    @Property()
+    year!: number;
+
+    @Property()
+    roleDiscordId!: string;
+
+    @Property()
+    alias = RandomUtils.friendlyId(6);
+
+    @ManyToOne()
+    guild!: IdentifiedReference<MemberAnniversarySettings>;
+}
+
 @Embeddable()
 export class MemberAnniversarySettings {
     @Property()
     channelDiscordId?: string;
+
+    // @OneToMany
+    @OneToMany(() => MemberAnniversaryRoleData, mar => mar.guild, { cascade: [Cascade.ALL] })
+    messages = new Collection<MessageData>(this);
 
     // Can't default to 0 since each server has a different timeZone
     // Calculated when server timeZone is set
@@ -190,9 +214,6 @@ export class GuildData {
 
     @OneToMany(() => EventData, event => event.guild, { cascade: [Cascade.ALL] })
     events = new Collection<EventData>(this);
-
-    @OneToMany(() => MemberAnniversaryRoleData, mar => mar.guild, { cascade: [Cascade.ALL] })
-    memberAnniversaryRoles = new Collection<EventData>(this);
 
     constructor(
         discordId: string,

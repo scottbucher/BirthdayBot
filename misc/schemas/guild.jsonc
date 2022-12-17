@@ -19,6 +19,12 @@
         },
         "memberAnniversaries": {
             "channelDiscordId": "709287764847493172",
+            "roles": [
+                {
+                    "year": 1,
+                    "role": "3453454534553453"
+                }
+            ],
             "postHourUtc": 5,
             "postMode": "POST_ONLY",
             "mention": null
