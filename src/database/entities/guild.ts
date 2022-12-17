@@ -150,6 +150,10 @@ export class TrustedSystemSettings {
 
     @Property()
     requireForMention = true;
+
+    addRoleId(roleId: string): void {
+        this.roleIds = [...new Set([...this.roleIds, roleId])];
+    }
 }
 
 @Embeddable()
@@ -159,6 +163,14 @@ export class BlacklistSettings {
 
     @Property()
     userIds: string[] = [];
+
+    addRoleId(roleId: string): void {
+        this.roleIds = [...new Set([...this.roleIds, roleId])];
+    }
+
+    addUserId(userId: string): void {
+        this.userIds = [...new Set([...this.userIds, userId])];
+    }
 }
 
 @Embeddable()
