@@ -58,13 +58,7 @@ export class EventData {
     @OneToOne(() => MessageData, message => message.event, { owner: true })
     message?: IdentifiedReference<MessageData>;
 
-    constructor(
-        guildDiscordId: string,
-        month: number,
-        day: number,
-        year?: number,
-        mention?: string
-    ) {
+    constructor(month: number, day: number, year?: number, mention?: string) {
         this.timeSettings.month = month;
         this.timeSettings.day = day;
         this.timeSettings.year = year;
