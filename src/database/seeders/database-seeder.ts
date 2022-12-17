@@ -1,4 +1,4 @@
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, ref } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
 import { createRequire } from 'node:module';
 
@@ -66,6 +66,7 @@ export class DatabaseSeeder extends Seeder {
             color: '#f54293',
             image: 'https://tinyurl.com/44vdkj76',
         };
+        let message1 = new MessageData(message1Description, message1Options);
 
         let message2Description = '{Users} is celebrating {Year}(s) of being the server!';
         let message2Options: MessageOptions = {
@@ -75,16 +76,19 @@ export class DatabaseSeeder extends Seeder {
             color: '#f54293',
             image: 'https://tinyurl.com/44vdkj76',
         };
+        let message2 = new MessageData(message2Description, message2Options);
 
         let message3Description = '{Server} is now {Year}(s) old!';
         let message3Options: MessageOptions = {
             type: MessageType.SERVER_ANNIVERSARY,
         };
+        let message3 = new MessageData(message3Description, message3Options);
 
         let message4Description = 'Merry Christmas {Server}!';
         let message4Options: MessageOptions = {
             type: MessageType.EVENT,
         };
+        let message4 = new MessageData(message4Description, message4Options);
 
         let guild = new GuildData(guildId, birthdayChannelDiscordId, birthdayRoleDiscordId);
 
@@ -100,21 +104,14 @@ export class DatabaseSeeder extends Seeder {
             new MemberAnniversaryRoleData(3, memberAnniversaryRoleYear3)
         );
 
-        let event1 = new EventData(event1Month, event1Day, event1Options);
-        let message4 = new MessageData(message4Description, message4Options);
-        event1.message.set(message4);
-
-        guild.events.add(event1);
-
         guild.serverAnniversarySettings.channelDiscordId = serverAnniversaryChannel;
         guild.eventSettings.channelDiscordId = eventChannel;
 
-        guild.messages.add([
-            new MessageData(message1Description, message1Options),
-            new MessageData(message2Description, message2Options),
-            new MessageData(message3Description, message3Options),
-            new MessageData(message4Description, message4Options),
-        ]);
+        guild.messages.add([message1, message2, message3, message4]);
+
+        let event1 = new EventData(event1Month, event1Day, event1Options);
+        event1.message = ref(message4);
+        guild.events.add(event1);
 
         em.persist(guild);
 
