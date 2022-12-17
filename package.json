@@ -21,6 +21,7 @@
         "clean": "git clean -xdf --exclude=\"/config/**/*\"",
         "clean:dry": "git clean -xdf --exclude=\"/config/**/*\" --dry-run",
         "build": "tsc --project tsconfig.json",
+        "database:seed": "npm run build && node --enable-source-maps dist/seed-database.js",
         "commands:view": "npm run build && node --enable-source-maps dist/start-bot.js commands view",
         "commands:register": "npm run build && node --enable-source-maps dist/start-bot.js commands register",
         "commands:rename": "npm run build && node --enable-source-maps dist/start-bot.js commands rename",
