@@ -59,7 +59,7 @@ export class DatabaseSeeder extends Seeder {
         let user2TimeZone = 'America/New_York';
 
         // Message Data
-        let message1Description = 'Happy Birthday {user}! You are now {age} years old!';
+        let message1Description = 'Happy Birthday {User}!';
         let message1Options: MessageOptions = {
             title: 'Happy Birthday!',
             footer: 'This birthday message was sent automatically by the Birthday Bot.',
@@ -81,7 +81,7 @@ export class DatabaseSeeder extends Seeder {
             type: MessageType.SERVER_ANNIVERSARY,
         };
 
-        let message4Description = 'Merry Christmas {SERVER}!';
+        let message4Description = 'Merry Christmas {Server}!';
         let message4Options: MessageOptions = {
             type: MessageType.EVENT,
         };
