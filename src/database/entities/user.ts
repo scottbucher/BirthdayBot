@@ -1,10 +1,9 @@
-import { Entity, Index, PrimaryKey, Property, SerializedPrimaryKey, Unique } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, SerializedPrimaryKey, Unique } from '@mikro-orm/core';
 import { ObjectId } from '@mikro-orm/mongodb';
 
 import { TimeUtils } from '../../utils/index.js';
 
 @Entity({ collection: 'users' })
-@Index({ properties: ['discordId'] })
 @Unique({ properties: ['discordId'] })
 export class UserData {
     // IDs
