@@ -4,8 +4,6 @@ import {
     Embeddable,
     Embedded,
     Entity,
-    IdentifiedReference,
-    ManyToOne,
     OneToMany,
     PrimaryKey,
     Property,
@@ -15,10 +13,8 @@ import {
 import { ObjectId } from '@mikro-orm/mongodb';
 
 import { DateFormat, LangCode, NameFormat, PostMode, UseTimeZone } from '../../enums/index.js';
-import { RandomUtils } from '../../utils/index.js';
 import { TimeUtils } from '../../utils/time-utils.js';
-import { EventData } from './index.js';
-import { MessageData } from './message.js';
+import { EventData, MemberAnniversaryRoleData, MessageData } from './index.js';
 
 @Embeddable()
 export class GuildSettings {
@@ -64,34 +60,10 @@ export class BirthdaySettings {
     reminderDaysBefore = 0;
 }
 
-@Unique({ properties: ['guild', 'alias'] })
-@Unique({ properties: ['guild', 'year'] })
-@Embeddable()
-export class MemberAnniversaryRoleData {
-    @Property()
-    year!: number;
-
-    @Property()
-    roleDiscordId!: string;
-
-    @Property()
-    alias = RandomUtils.friendlyId(6);
-
-    @ManyToOne()
-    guild!: IdentifiedReference<GuildData>;
-
-    constructor(year: number, roleDiscordId: string) {
-        this.year = year;
-        this.roleDiscordId = roleDiscordId;
-    }
-}
-
 @Embeddable()
 export class MemberAnniversarySettings {
     @Property()
     channelDiscordId?: string;
-
-    memberAnniversaryRoles: MemberAnniversaryRoleData[] = [];
 
     // Can't default to 0 since each server has a different timeZone
     // Calculated when server timeZone is set
@@ -227,6 +199,9 @@ export class GuildData {
 
     @OneToMany(() => EventData, event => event.guild, { cascade: [Cascade.ALL] })
     events = new Collection<EventData>(this);
+
+    @OneToMany(() => MemberAnniversaryRoleData, mar => mar.guild, { cascade: [Cascade.ALL] })
+    memberAnniversaryRoles = new Collection<MemberAnniversaryRoleData>(this);
 
     constructor(
         discordId: string,

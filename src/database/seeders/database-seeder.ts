@@ -5,8 +5,14 @@ import { createRequire } from 'node:module';
 import { MessageType } from '../../enums/message-type.js';
 import { Logger } from '../../services/index.js';
 import { EventOptions } from '../entities/event.js';
-import { MemberAnniversaryRoleData } from '../entities/guild.js';
-import { EventData, GuildData, MessageData, UserData, VoteData } from '../entities/index.js';
+import {
+    EventData,
+    GuildData,
+    MemberAnniversaryRoleData,
+    MessageData,
+    UserData,
+    VoteData,
+} from '../entities/index.js';
 import { MessageOptions } from '../entities/message.js';
 
 const require = createRequire(import.meta.url);
@@ -75,11 +81,15 @@ export class DatabaseSeeder extends Seeder {
         guild.blacklistSettings.addRoleId(blacklistedRole1);
         guild.blacklistSettings.addRoleId(blacklistedRole2);
         guild.memberAnniversarySettings.channelDiscordId = memberAnniversaryChannel;
-        guild.memberAnniversarySettings.memberAnniversaryRoles.push(
-            new MemberAnniversaryRoleData(1, memberAnniversaryRoleYear1),
-            new MemberAnniversaryRoleData(2, memberAnniversaryRoleYear2),
-            new MemberAnniversaryRoleData(3, memberAnniversaryRoleYear3)
-        );
+
+        // Add member anniversary roles
+        let anniversaryRole1 = new MemberAnniversaryRoleData(memberAnniversaryRoleYear1, 1);
+        guild.memberAnniversaryRoles.add(anniversaryRole1);
+        let anniversaryRole2 = new MemberAnniversaryRoleData(memberAnniversaryRoleYear2, 2);
+        guild.memberAnniversaryRoles.add(anniversaryRole2);
+        let anniversaryRole3 = new MemberAnniversaryRoleData(memberAnniversaryRoleYear3, 3);
+        guild.memberAnniversaryRoles.add(anniversaryRole3);
+
         guild.serverAnniversarySettings.channelDiscordId = serverAnniversaryChannel;
         guild.eventSettings.channelDiscordId = eventChannel;
 
