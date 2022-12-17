@@ -2,17 +2,17 @@ import {
     Cascade,
     Collection,
     Embeddable,
+    Embedded,
+    Entity,
     IdentifiedReference,
     Index,
     ManyToOne,
     OneToMany,
     PrimaryKey,
     Property,
+    SerializedPrimaryKey,
     Unique,
 } from '@mikro-orm/core';
-import { Embedded } from '@mikro-orm/core/decorators/Embedded.js';
-import { Entity } from '@mikro-orm/core/decorators/Entity.js';
-import { SerializedPrimaryKey } from '@mikro-orm/core/decorators/PrimaryKey.js';
 import { ObjectId } from '@mikro-orm/mongodb';
 
 import { DateFormat, LangCode, NameFormat, PostMode, UseTimeZone } from '../../enums/index.js';
