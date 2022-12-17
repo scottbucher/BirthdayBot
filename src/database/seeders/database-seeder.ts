@@ -122,12 +122,6 @@ export class DatabaseSeeder extends Seeder {
 
         em.persist(guild);
 
-        let foundGuild = await em.findOne(GuildData, { discordId: guildId });
-        let messages = await em.find(MessageData, { guild: foundGuild });
-        let eventMessage = messages[messages.length - 1];
-        let event = await em.findOne(EventData, { guild: foundGuild });
-        event.message = eventMessage;
-
         // New Users
         em.persist([
             new UserData(user1DiscordId, user1Birthday, user1TimeZone),
