@@ -43,9 +43,6 @@ export class EventData {
     id!: string;
 
     @Property()
-    guildDiscordId!: string;
-
-    @Property()
     alias = RandomUtils.friendlyId(6);
 
     @Embedded({ object: true })
@@ -68,7 +65,6 @@ export class EventData {
         year?: number,
         mention?: string
     ) {
-        this.guildDiscordId = guildDiscordId;
         this.timeSettings.month = month;
         this.timeSettings.day = day;
         this.timeSettings.year = year;
