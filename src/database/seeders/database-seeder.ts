@@ -6,7 +6,7 @@ import { MessageType } from '../../enums/message-type.js';
 import { Logger } from '../../services/index.js';
 import { EventOptions } from '../entities/event.js';
 import { MemberAnniversaryRoleData } from '../entities/guild.js';
-import { EventData, GuildData, MessageData, UserData } from '../entities/index.js';
+import { EventData, GuildData, MessageData, UserData, VoteData } from '../entities/index.js';
 import { MessageOptions } from '../entities/message.js';
 
 const require = createRequire(import.meta.url);
@@ -57,6 +57,13 @@ export class DatabaseSeeder extends Seeder {
         let user2DiscordId = '212772875793334272'; // Kevin
         let user2Birthday = '11-28';
         let user2TimeZone = 'America/New_York';
+
+        // Vote Data
+        let botSite = 'top.gg';
+        let date1 = '"2021-05-23 19:24:11"';
+        let date2 = '"2021-06-20 21:33:08"';
+        let date3 = '"2021-07-14 08:04:44"';
+        let date4 = '"2021-08-09 12:56:23"';
 
         // Message Data
         let message1Description = 'Happy Birthday {User}!';
@@ -115,9 +122,25 @@ export class DatabaseSeeder extends Seeder {
 
         em.persist(guild);
 
+        let foundGuild = await em.findOne(GuildData, { discordId: guildId });
+        let messages = await em.find(MessageData, { guild: foundGuild });
+        let eventMessage = messages[messages.length - 1];
+        let event = await em.findOne(EventData, { guild: foundGuild });
+        event.message = eventMessage;
+
         // New Users
-        em.persist(new UserData(user1DiscordId, user1Birthday, user1TimeZone));
-        em.persist(new UserData(user2DiscordId, user2Birthday, user2TimeZone));
+        em.persist([
+            new UserData(user1DiscordId, user1Birthday, user1TimeZone),
+            new UserData(user2DiscordId, user2Birthday, user2TimeZone),
+        ]);
+
+        // New Votes
+        em.persist([
+            new VoteData(botSite, user1DiscordId, date1),
+            new VoteData(botSite, user2DiscordId, date2),
+            new VoteData(botSite, user1DiscordId, date3),
+            new VoteData(botSite, user2DiscordId, date4),
+        ]);
 
         await em.flush();
 
