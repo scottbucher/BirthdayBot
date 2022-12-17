@@ -58,10 +58,15 @@ export class EventData {
     @OneToOne(() => MessageData, message => message.event, { owner: true })
     message?: IdentifiedReference<MessageData>;
 
-    constructor(month: number, day: number, year?: number, mention?: string) {
+    constructor(month: number, day: number, options?: EventOptions) {
         this.timeSettings.month = month;
         this.timeSettings.day = day;
-        this.timeSettings.year = year;
-        this.mention = mention;
+        this.timeSettings.year = options?.year;
+        this.mention = options?.mention;
     }
+}
+
+export interface EventOptions {
+    year?: number;
+    mention?: string;
 }

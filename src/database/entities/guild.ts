@@ -80,6 +80,11 @@ export class MemberAnniversaryRoleData {
 
     @ManyToOne()
     memberAnniversarySettings!: IdentifiedReference<MemberAnniversarySettings>;
+
+    constructor(year: number, roleDiscordId: string) {
+        this.year = year;
+        this.roleDiscordId = roleDiscordId;
+    }
 }
 
 @Embeddable()
@@ -91,7 +96,7 @@ export class MemberAnniversarySettings {
     @OneToMany(() => MemberAnniversaryRoleData, mar => mar.memberAnniversarySettings, {
         cascade: [Cascade.ALL],
     })
-    messages = new Collection<MessageData>(this);
+    memberAnniversaryRoles = new Collection<MemberAnniversaryRoleData>(this);
 
     // Can't default to 0 since each server has a different timeZone
     // Calculated when server timeZone is set

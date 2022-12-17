@@ -56,21 +56,22 @@ export class MessageData {
     @OneToOne(() => EventData, event => event.message, { owner: false })
     event?: IdentifiedReference<EventData>;
 
-    constructor(
-        description: string,
-        type?: MessageType,
-        embedded?: boolean,
-        color?: string,
-        image?: string,
-        title?: string,
-        footer?: string
-    ) {
+    constructor(description: string, options?: MessageOptions) {
         this.description = description;
-        this.type = type;
-        this.embedded = embedded;
-        this.color = color;
-        this.image = image;
-        this.title = title;
-        this.footer = footer;
+        this.type = options?.type ?? MessageType.BIRTHDAY;
+        this.embedded = options?.embedded ?? true;
+        this.color = options?.color;
+        this.image = options?.image;
+        this.title = options?.title;
+        this.footer = options?.footer;
     }
+}
+
+export interface MessageOptions {
+    type?: MessageType;
+    embedded?: boolean;
+    color?: string;
+    image?: string;
+    title?: string;
+    footer?: string;
 }
