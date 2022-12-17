@@ -79,7 +79,7 @@ export class MemberAnniversaryRoleData {
     alias = RandomUtils.friendlyId(6);
 
     @ManyToOne()
-    guild!: IdentifiedReference<MemberAnniversarySettings>;
+    memberAnniversarySettings!: IdentifiedReference<MemberAnniversarySettings>;
 }
 
 @Embeddable()
@@ -88,7 +88,9 @@ export class MemberAnniversarySettings {
     channelDiscordId?: string;
 
     // @OneToMany
-    @OneToMany(() => MemberAnniversaryRoleData, mar => mar.guild, { cascade: [Cascade.ALL] })
+    @OneToMany(() => MemberAnniversaryRoleData, mar => mar.memberAnniversarySettings, {
+        cascade: [Cascade.ALL],
+    })
     messages = new Collection<MessageData>(this);
 
     // Can't default to 0 since each server has a different timeZone
