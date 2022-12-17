@@ -65,7 +65,22 @@ export class DatabaseSeeder extends Seeder {
         let date3 = '"2021-07-14 08:04:44"';
         let date4 = '"2021-08-09 12:56:23"';
 
-        // Message Data
+        // Create Guild
+        let guild = new GuildData(guildId, birthdayChannelDiscordId, birthdayRoleDiscordId);
+        em.persist(guild);
+        guild.trustedSystemSettings.roleIds.concat([staffRole, adminRole]);
+        guild.blacklistSettings.userIds.concat([blacklistedUser1, blacklistedUser2]);
+        guild.blacklistSettings.roleIds.concat([blacklistedRole1, blacklistedRole2]);
+        guild.memberAnniversarySettings.channelDiscordId = memberAnniversaryChannel;
+        guild.memberAnniversarySettings.memberAnniversaryRoles.push(
+            new MemberAnniversaryRoleData(1, memberAnniversaryRoleYear1),
+            new MemberAnniversaryRoleData(2, memberAnniversaryRoleYear2),
+            new MemberAnniversaryRoleData(3, memberAnniversaryRoleYear3)
+        );
+        guild.serverAnniversarySettings.channelDiscordId = serverAnniversaryChannel;
+        guild.eventSettings.channelDiscordId = eventChannel;
+
+        // Create messages
         let message1Description = 'Happy Birthday {User}!';
         let message1Options: MessageOptions = {
             title: 'Happy Birthday!',
@@ -74,6 +89,7 @@ export class DatabaseSeeder extends Seeder {
             image: 'https://tinyurl.com/44vdkj76',
         };
         let message1 = new MessageData(message1Description, message1Options);
+        guild.messages.add(message1);
 
         let message2Description = '{Users} is celebrating {Year}(s) of being the server!';
         let message2Options: MessageOptions = {
@@ -84,43 +100,26 @@ export class DatabaseSeeder extends Seeder {
             image: 'https://tinyurl.com/44vdkj76',
         };
         let message2 = new MessageData(message2Description, message2Options);
+        guild.messages.add(message2);
 
         let message3Description = '{Server} is now {Year}(s) old!';
         let message3Options: MessageOptions = {
             type: MessageType.SERVER_ANNIVERSARY,
         };
         let message3 = new MessageData(message3Description, message3Options);
+        guild.messages.add(message3);
 
         let message4Description = 'Merry Christmas {Server}!';
         let message4Options: MessageOptions = {
             type: MessageType.EVENT,
         };
         let message4 = new MessageData(message4Description, message4Options);
+        guild.messages.add(message4);
 
-        let guild = new GuildData(guildId, birthdayChannelDiscordId, birthdayRoleDiscordId);
-
-        guild.trustedSystemSettings.roleIds.concat([staffRole, adminRole]);
-
-        guild.blacklistSettings.userIds.concat([blacklistedUser1, blacklistedUser2]);
-        guild.blacklistSettings.roleIds.concat([blacklistedRole1, blacklistedRole2]);
-
-        guild.memberAnniversarySettings.channelDiscordId = memberAnniversaryChannel;
-        guild.memberAnniversarySettings.memberAnniversaryRoles.push(
-            new MemberAnniversaryRoleData(1, memberAnniversaryRoleYear1),
-            new MemberAnniversaryRoleData(2, memberAnniversaryRoleYear2),
-            new MemberAnniversaryRoleData(3, memberAnniversaryRoleYear3)
-        );
-
-        guild.serverAnniversarySettings.channelDiscordId = serverAnniversaryChannel;
-        guild.eventSettings.channelDiscordId = eventChannel;
-
-        guild.messages.add([message1, message2, message3, message4]);
-
+        // Create events
         let event1 = new EventData(event1Month, event1Day, event1Options);
         event1.message = ref(message4);
         guild.events.add(event1);
-
-        em.persist(guild);
 
         // New Users
         em.persist([
