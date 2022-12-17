@@ -112,9 +112,11 @@ export class DatabaseSeeder extends Seeder {
             new MessageData(message4Description, message4Options),
         ]);
 
+        em.persist(guild);
+
         // New Users
-        new UserData(user1DiscordId, user1Birthday, user1TimeZone);
-        new UserData(user2DiscordId, user2Birthday, user2TimeZone);
+        em.persist(new UserData(user1DiscordId, user1Birthday, user1TimeZone));
+        em.persist(new UserData(user2DiscordId, user2Birthday, user2TimeZone));
 
         await em.flush();
 
