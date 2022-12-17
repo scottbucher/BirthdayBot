@@ -100,7 +100,11 @@ export class DatabaseSeeder extends Seeder {
             new MemberAnniversaryRoleData(3, memberAnniversaryRoleYear3)
         );
 
-        guild.events.add([new EventData(event1Month, event1Day, event1Options)]);
+        let event1 = new EventData(event1Month, event1Day, event1Options);
+        let message4 = new MessageData(message4Description, message4Options);
+        event1.message.set(message4);
+
+        guild.events.add([event1]);
 
         guild.serverAnniversarySettings.channelDiscordId = serverAnniversaryChannel;
         guild.eventSettings.channelDiscordId = eventChannel;
