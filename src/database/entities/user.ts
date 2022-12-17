@@ -24,7 +24,7 @@ export class UserData {
     @Property()
     birthdayEndUTC!: string;
 
-    @Property() S;
+    @Property()
     timeZone!: string;
 
     @Property()
