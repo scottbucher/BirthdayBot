@@ -69,8 +69,8 @@ export class DatabaseSeeder extends Seeder {
         let guild = new GuildData(guildId, birthdayChannelDiscordId, birthdayRoleDiscordId);
         em.persist(guild);
         guild.trustedSystemSettings.roleIds = [staffRole, adminRole];
-        guild.blacklistSettings.userIds = [blacklistedUser1, blacklistedUser2];
-        guild.blacklistSettings.roleIds = [blacklistedRole1, blacklistedRole2];
+        guild.blacklistSettings.userIds.push(blacklistedUser1, blacklistedUser2);
+        guild.blacklistSettings.roleIds.push(blacklistedRole1, blacklistedRole2);
         guild.memberAnniversarySettings.channelDiscordId = memberAnniversaryChannel;
         guild.memberAnniversarySettings.memberAnniversaryRoles.push(
             new MemberAnniversaryRoleData(1, memberAnniversaryRoleYear1),
