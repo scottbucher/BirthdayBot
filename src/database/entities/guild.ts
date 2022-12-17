@@ -5,7 +5,6 @@ import {
     Embedded,
     Entity,
     IdentifiedReference,
-    Index,
     ManyToOne,
     OneToMany,
     PrimaryKey,
@@ -79,7 +78,7 @@ export class MemberAnniversaryRoleData {
     alias = RandomUtils.friendlyId(6);
 
     @ManyToOne()
-    memberAnniversarySettings!: IdentifiedReference<MemberAnniversarySettings>;
+    guild!: IdentifiedReference<GuildData>;
 
     constructor(year: number, roleDiscordId: string) {
         this.year = year;
@@ -92,11 +91,7 @@ export class MemberAnniversarySettings {
     @Property()
     channelDiscordId?: string;
 
-    // @OneToMany
-    @OneToMany(() => MemberAnniversaryRoleData, mar => mar.memberAnniversarySettings, {
-        cascade: [Cascade.ALL],
-    })
-    memberAnniversaryRoles = new Collection<MemberAnniversaryRoleData>(this);
+    memberAnniversaryRoles: MemberAnniversaryRoleData[] = [];
 
     // Can't default to 0 since each server has a different timeZone
     // Calculated when server timeZone is set
@@ -177,7 +172,6 @@ export class Premium {
 
 @Entity({ collection: 'guilds' })
 @Unique({ properties: ['discordId'] })
-@Index({ properties: ['discordId'] })
 export class GuildData {
     @PrimaryKey()
     _id!: ObjectId;
