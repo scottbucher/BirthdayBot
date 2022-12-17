@@ -25,6 +25,7 @@ export class Language {
         hi: { englishName: 'Hindi', nativeName: 'हिन्दी' },
         hr: { englishName: 'Croatian', nativeName: 'Hrvatski' },
         hu: { englishName: 'Hungarian', nativeName: 'Magyar' },
+        id: { englishName: 'Indonesian', nativeName: 'Bahasa Indonesia' },
         it: { englishName: 'Italian', nativeName: 'Italiano' },
         ja: { englishName: 'Japanese', nativeName: '日本語' },
         ko: { englishName: 'Korean', nativeName: '한국어' },
