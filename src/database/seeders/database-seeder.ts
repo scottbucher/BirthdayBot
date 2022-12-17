@@ -101,7 +101,7 @@ export class DatabaseSeeder extends Seeder {
         guild.blacklistSettings.roleIds.concat([blacklistedRole1, blacklistedRole2]);
 
         guild.memberAnniversarySettings.channelDiscordId = memberAnniversaryChannel;
-        guild.memberAnniversarySettings.memberAnniversaryRoles.concat(
+        guild.memberAnniversarySettings.memberAnniversaryRoles.push(
             new MemberAnniversaryRoleData(1, memberAnniversaryRoleYear1),
             new MemberAnniversaryRoleData(2, memberAnniversaryRoleYear2),
             new MemberAnniversaryRoleData(3, memberAnniversaryRoleYear3)
