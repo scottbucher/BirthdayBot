@@ -50,7 +50,9 @@
         "commandDescs": {
             "view": "View your, or someone else's birthday or anniversary.",
             "info": "View information about the bot.",
-            "messageAdd": "Add a custom message."
+            "messageAdd": "Add a custom message.",
+            "link": "Useful links for the bot.",
+            "list": "View the birthday or member anniversary list for your server."
         },
         "arguments": {
             "setting": "setting",
@@ -76,6 +78,15 @@
             "link": "link",
             "option": "option",
             "event": "event"
+        },
+        "argDescs": {
+            "helpOption": "Select what section you need help with.",
+            "viewUser": "Optional user argument. Select a user to view their birthday or anniversary.",
+            "viewType": "View either a birthday or a member anniversary. Defaults to birthday.",
+            "infoOption": "What information would you like to view?",
+            "linkOption": "What link would you like to view?",
+            "listType": "What type of list you would like to view, defaults to birthday.",
+            "page": "Optional page to jump to. Defaults to 1."
         },
         "helpChoice": {
             "general": "General",
@@ -110,11 +121,14 @@
             "dev": "Dev",
             "translate": "Translate"
         },
-        "argDescs": {
-            "helpOption": "Select what section you need help with.",
-            "viewUser": "Optional user argument. Select a user to view their birthday or anniversary.",
-            "viewType": "View either a birthday or a member anniversary. Defaults to birthday.",
-            "infoOption": "What information would you like to view?"
+        "linkChoices": {
+            "docs": "Docs",
+            "faq": "FAQ",
+            "donate": "Donate",
+            "invite": "Invite",
+            "support": "Support",
+            "vote": "Vote",
+            "map": "Map"
         },
         "meta": {
             "language": "en-US",

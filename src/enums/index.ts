@@ -8,3 +8,4 @@ export { DateFormat } from './date-format.js';
 export { CelebrationType } from './celebration-type.js';
 export { EventDataType } from './event-data-type.js';
 export { DataValidation } from './data-validation.js';
+export { LinkOption } from './link-option.js';

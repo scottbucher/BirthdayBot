@@ -41,6 +41,38 @@ export const ChatCommandMetadata: {
             },
         ],
     },
+    LINK: {
+        name: Lang.getRef('commands', 'chatCommands.link', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.link'),
+        description: Lang.getRef('commands', 'commandDescs.link', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.link'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+        options: [
+            {
+                ...Args.LINK_OPTION,
+                required: true,
+            },
+        ],
+    },
+    LIST: {
+        name: Lang.getRef('commands', 'chatCommands.list', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.list'),
+        description: Lang.getRef('commands', 'commandDescs.list', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.list'),
+        dm_permission: false,
+        default_member_permissions: undefined,
+        options: [
+            {
+                ...Args.LIST_TYPE_OPTION,
+                required: false,
+            },
+            {
+                ...Args.PAGE_OPTION,
+                required: false,
+            },
+        ],
+    },
 };
 
 export const MessageCommandMetadata: {

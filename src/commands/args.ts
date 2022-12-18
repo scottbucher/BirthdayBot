@@ -1,6 +1,6 @@
 import { APIApplicationCommandBasicOption, ApplicationCommandOptionType } from 'discord.js';
 
-import { CelebrationType, HelpOption, InfoOption } from '../enums/index.js';
+import { CelebrationType, HelpOption, InfoOption, LinkOption } from '../enums/index.js';
 import { Language } from '../models/enum-helpers/language.js';
 import { Lang } from '../services/index.js';
 
@@ -142,5 +142,89 @@ export class Args {
             //     value: InfoOption.TRANSLATE,
             // },
         ],
+    };
+
+    public static readonly LINK_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.link', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.link'),
+        description: Lang.getRef('commands', 'argDescs.linkOption', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.linkOption'),
+        type: ApplicationCommandOptionType.String,
+        choices: [
+            {
+                name: Lang.getRef('commands', 'linkChoices.docs', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.docs'),
+                value: LinkOption.DOCS,
+            },
+            {
+                name: Lang.getRef('commands', 'linkChoices.faq', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.faq'),
+                value: LinkOption.FAQ,
+            },
+            {
+                name: Lang.getRef('commands', 'linkChoices.donate', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.donate'),
+                value: LinkOption.DONATE,
+            },
+            {
+                name: Lang.getRef('commands', 'linkChoices.invite', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.invite'),
+                value: LinkOption.INVITE,
+            },
+            {
+                name: Lang.getRef('commands', 'linkChoices.support', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.support'),
+                value: LinkOption.SUPPORT,
+            },
+            {
+                name: Lang.getRef('commands', 'linkChoices.vote', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.vote'),
+                value: LinkOption.VOTE,
+            },
+            {
+                name: Lang.getRef('commands', 'linkChoices.map', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.map'),
+                value: LinkOption.MAP,
+            },
+        ],
+    };
+
+    public static readonly LIST_TYPE_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.type', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.type'),
+        description: Lang.getRef('commands', 'argDescs.listType', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.listType'),
+        type: ApplicationCommandOptionType.String.valueOf(),
+        choices: [
+            {
+                name: Lang.getRef('commands', 'celebrationTypeChoices.birthday', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap(
+                    'commands',
+                    'celebrationTypeChoices.birthday'
+                ),
+                value: CelebrationType.BIRTHDAY,
+            },
+            {
+                name: Lang.getRef(
+                    'commands',
+                    'celebrationTypeChoices.memberAnniversary',
+                    Language.Default
+                ),
+                name_localizations: Lang.getRefLocalizationMap(
+                    'commands',
+                    'celebrationTypeChoices.memberAnniversary'
+                ),
+                value: CelebrationType.MEMBER_ANNIVERSARY,
+            },
+        ],
+    };
+
+    public static readonly PAGE_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.page', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.page'),
+        description: Lang.getRef('commands', 'argDescs.page', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.page'),
+        type: ApplicationCommandOptionType.Integer.valueOf(),
+        min_value: 1,
     };
 }

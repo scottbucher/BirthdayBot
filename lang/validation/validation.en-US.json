@@ -274,7 +274,8 @@
             "everyoneIsNotAValidRole": "{{EVERYONE}} is not a valid role!",
             "noUserSpecificBirthdayMessages": "This server doesn't have any user specific custom birthday messages!",
             "noUserSpecificMemberAnniversaryMessages": "This server doesn't have any user specific custom birthday messages!",
-            "noBotRole": "Could not find the bot's integration role!"
+            "noBotRole": "Could not find the bot's integration role!",
+            "notImplemented": "This feature has not been implemented yet!"
         }
     },
     "refs": {
