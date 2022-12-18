@@ -1,6 +1,5 @@
 import djs, { ChatInputCommandInteraction, EmbedBuilder, PermissionsString } from 'discord.js';
 import { filesize } from 'filesize';
-import { info } from 'node:console';
 import { createRequire } from 'node:module';
 import os from 'node:os';
 import typescript from 'typescript';
