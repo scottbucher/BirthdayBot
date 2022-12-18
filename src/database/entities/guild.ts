@@ -14,7 +14,7 @@ import { ObjectId } from '@mikro-orm/mongodb';
 
 import { DateFormat, LangCode, NameFormat, PostMode, UseTimeZone } from '../../enums/index.js';
 import { TimeUtils } from '../../utils/time-utils.js';
-import { EventData, MemberAnniversaryRoleData, MessageData } from './index.js';
+import { CustomEventData, MemberAnniversaryRoleData, MessageData } from './index.js';
 
 @Embeddable()
 export class GuildSettings {
@@ -148,7 +148,7 @@ export class BlacklistSettings {
 @Embeddable()
 export class Premium {
     @Property()
-    isPremium = false;
+    active = false;
 
     @Property()
     lastCheck: string = TimeUtils.now().toISO();
@@ -197,8 +197,8 @@ export class GuildData {
     @OneToMany(() => MessageData, message => message.guild, { cascade: [Cascade.ALL] })
     messages = new Collection<MessageData>(this);
 
-    @OneToMany(() => EventData, event => event.guild, { cascade: [Cascade.ALL] })
-    events = new Collection<EventData>(this);
+    @OneToMany(() => CustomEventData, event => event.guild, { cascade: [Cascade.ALL] })
+    events = new Collection<CustomEventData>(this);
 
     @OneToMany(() => MemberAnniversaryRoleData, mar => mar.guild, { cascade: [Cascade.ALL] })
     memberAnniversaryRoles = new Collection<MemberAnniversaryRoleData>(this);

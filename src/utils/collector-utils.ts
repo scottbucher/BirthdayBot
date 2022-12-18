@@ -175,7 +175,7 @@ export class CollectorUtils {
             async () => {
                 await InteractionUtils.send(
                     commandIntr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                    Lang.getEmbed('results', 'fail.promptExpired', data.lang)
                 );
             }
         );
@@ -244,7 +244,7 @@ export class CollectorUtils {
             async () => {
                 await InteractionUtils.send(
                     prevIntr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                    Lang.getEmbed('results', 'fail.promptExpired', data.lang)
                 );
             }
         );

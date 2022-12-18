@@ -7,7 +7,7 @@ interface LanguageData {
 
 export class Language {
     public static Default = Locale.EnglishUS;
-    public static Enabled: Locale[] = [Locale.EnglishUS, Locale.EnglishGB];
+    public static Enabled: Locale[] = [Locale.EnglishUS];
 
     public static Data: {
         [key in Locale]: LanguageData;

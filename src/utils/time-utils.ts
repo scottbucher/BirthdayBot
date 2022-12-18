@@ -17,6 +17,21 @@ export class TimeUtils {
         return now;
     }
 
+    public static nextOccurrenceOfMonthDay(month: number, day: number, timeZone: string): DateTime {
+        let now = DateTime.utc().setZone(timeZone);
+        let dateTime = DateTime.fromObject(
+            {
+                month,
+                day,
+            },
+            { zone: timeZone }
+        );
+        if (dateTime < now) {
+            dateTime = dateTime.plus({ year: 1 });
+        }
+        return dateTime;
+    }
+
     public static isLeap(year: number): boolean {
         return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
     }
@@ -24,6 +39,11 @@ export class TimeUtils {
     // Function to take in a date string and timezone and return the date in UTC
     public static dateToUTC(dateString: string, timeZone: string): DateTime {
         return DateTime.fromISO(dateString, { zone: timeZone }).toUTC();
+    }
+
+    // Function to take in a date in utc and a timezone and return the date in that timezone
+    public static dateFromUTC(dateString: string, timeZone: string): DateTime {
+        return DateTime.fromISO(dateString).setZone(timeZone);
     }
 
     public static cronIntervalTime(

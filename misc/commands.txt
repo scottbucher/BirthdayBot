@@ -30,17 +30,18 @@
 
 # Custom Event Commands
 /custom_event add <date>
-/custom_event remove <nano_id>
+/custom_event remove <alias>
 /custom_event test <event_number>
+/custom_event set_message <event_alias> <message_alias>
 
 # Trusted Role commands
 - /trusted_role add <role>
-- /trusted_role remove <nano_id>
+- /blacklist remove <id>
 - /trusted_role clear
 
 # Blacklist Commands
 - /blacklist add <role_or_user>
-- /blacklist remove <nano_id>
+- /blacklist remove <id>
 - /blacklist clear
 
 # Member Anniversary Role Commands
@@ -56,11 +57,11 @@
 	- asks for color (if premium & embed = true)
 	- asks for title (if premium & embed = true)
 	- asks for footer (if premium & embed = true)
-- /message remove <nano_id>
+- /message remove <alias>
 - /message clear <type>
-- /message edit decription <nano_id> <new_description>
-- /message edit embed <nano_id> <true/false>
-- /message edit image <nano_id> <new_image>
-- /message edit title <nano_id> <title>
-- /message edit footer <nano_id> <new_footer>
-- /message test <nano_id>
+- /message edit decription <alias> <new_description>
+- /message edit embed <alias> <true/false>
+- /message edit image <alias> <new_image>
+- /message edit title <alias> <title>
+- /message edit footer <alias> <new_footer>
+- /message test <alias>

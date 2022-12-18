@@ -6,13 +6,8 @@ import {
     Events,
     Guild,
     Interaction,
-    Message,
-    MessageReaction,
-    PartialMessageReaction,
-    PartialUser,
     RateLimitData,
     RESTEvents,
-    User,
 } from 'discord.js';
 import { createRequire } from 'node:module';
 
@@ -21,11 +16,8 @@ import {
     CommandHandler,
     GuildJoinHandler,
     GuildLeaveHandler,
-    MessageHandler,
-    ReactionHandler,
 } from '../events/index.js';
 import { JobService, Logger } from '../services/index.js';
-import { PartialUtils } from '../utils/index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../../config/config.json');
@@ -40,10 +32,8 @@ export class Bot {
         private client: Client,
         private guildJoinHandler: GuildJoinHandler,
         private guildLeaveHandler: GuildLeaveHandler,
-        private messageHandler: MessageHandler,
         private commandHandler: CommandHandler,
         private buttonHandler: ButtonHandler,
-        private reactionHandler: ReactionHandler,
         private jobService: JobService
     ) {}
 
@@ -59,13 +49,7 @@ export class Bot {
         );
         this.client.on(Events.GuildCreate, (guild: Guild) => this.onGuildJoin(guild));
         this.client.on(Events.GuildDelete, (guild: Guild) => this.onGuildLeave(guild));
-        this.client.on(Events.MessageCreate, (msg: Message) => this.onMessage(msg));
         this.client.on(Events.InteractionCreate, (intr: Interaction) => this.onInteraction(intr));
-        this.client.on(
-            Events.MessageReactionAdd,
-            (messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) =>
-                this.onReaction(messageReaction, user)
-        );
         this.client.rest.on(RESTEvents.RateLimited, (rateLimitData: RateLimitData) =>
             this.onRateLimit(rateLimitData)
         );
@@ -120,26 +104,6 @@ export class Bot {
         }
     }
 
-    private async onMessage(msg: Message): Promise<void> {
-        if (
-            !this.ready ||
-            (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(msg.author.id))
-        ) {
-            return;
-        }
-
-        try {
-            msg = await PartialUtils.fillMessage(msg);
-            if (!msg) {
-                return;
-            }
-
-            await this.messageHandler.process(msg);
-        } catch (error) {
-            Logger.error(Logs.error.message, error);
-        }
-    }
-
     private async onInteraction(intr: Interaction): Promise<void> {
         if (
             !this.ready ||
@@ -160,38 +124,6 @@ export class Bot {
             } catch (error) {
                 Logger.error(Logs.error.button, error);
             }
-        }
-    }
-
-    private async onReaction(
-        msgReaction: MessageReaction | PartialMessageReaction,
-        reactor: User | PartialUser
-    ): Promise<void> {
-        if (
-            !this.ready ||
-            (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(reactor.id))
-        ) {
-            return;
-        }
-
-        try {
-            msgReaction = await PartialUtils.fillReaction(msgReaction);
-            if (!msgReaction) {
-                return;
-            }
-
-            reactor = await PartialUtils.fillUser(reactor);
-            if (!reactor) {
-                return;
-            }
-
-            await this.reactionHandler.process(
-                msgReaction,
-                msgReaction.message as Message,
-                reactor
-            );
-        } catch (error) {
-            Logger.error(Logs.error.reaction, error);
         }
     }
 

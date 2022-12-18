@@ -2,6 +2,7 @@ import {
     AutocompleteInteraction,
     ChatInputCommandInteraction,
     CommandInteraction,
+    DMChannel,
     NewsChannel,
     TextChannel,
     ThreadChannel,
@@ -11,6 +12,7 @@ import { createRequire } from 'node:module';
 
 import { Command, CommandDeferType } from '../commands/index.js';
 import { DiscordLimits } from '../constants/index.js';
+import { Language } from '../models/enum-helpers/language.js';
 import { EventData } from '../models/internal-models.js';
 import { EventDataService, Lang, Logger } from '../services/index.js';
 import { CommandUtils, InteractionUtils } from '../utils/index.js';
@@ -67,7 +69,8 @@ export class CommandHandler implements EventHandler {
 
             try {
                 let option = intr.options.getFocused(true);
-                let choices = await command.autocomplete(intr, option);
+                let data = await this.eventDataService.create();
+                let choices = await command.autocomplete(intr, option, data);
                 await InteractionUtils.respond(
                     intr,
                     choices?.slice(0, DiscordLimits.CHOICES_PER_AUTOCOMPLETE)
@@ -125,10 +128,18 @@ export class CommandHandler implements EventHandler {
 
         // Get data from database
         let data = await this.eventDataService.create({
-            user: intr.user,
-            channel: intr.channel,
-            guild: intr.guild,
-            args: intr instanceof ChatInputCommandInteraction ? intr.options : undefined,
+            guild: !(intr.channel instanceof DMChannel) ? intr.guild : undefined,
+            args:
+                intr instanceof ChatInputCommandInteraction
+                    ? {
+                          messageAlias: intr.options.getString(
+                              Lang.getRef('commands', 'arguments.message', Language.Default)
+                          ),
+                          eventAlias: intr.options.getString(
+                              Lang.getRef('commands', 'arguments.event', Language.Default)
+                          ),
+                      }
+                    : undefined,
         });
 
         try {
@@ -169,9 +180,9 @@ export class CommandHandler implements EventHandler {
         try {
             await InteractionUtils.send(
                 intr,
-                Lang.getEmbed('errors', 'embeds.command', data.lang(), {
+                Lang.getEmbed('errors', 'embeds.command', data.lang, {
                     ERROR_CODE: intr.id,
-                    GUILD_ID: intr.guild?.id ?? Lang.getRef('info', 'other.na', data.lang()),
+                    GUILD_ID: intr.guild?.id ?? Lang.getRef('info', 'other.na', data.lang),
                     SHARD_ID: (intr.guild?.shardId ?? 0).toString(),
                 })
             );

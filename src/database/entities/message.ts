@@ -13,7 +13,7 @@ import { ObjectId } from '@mikro-orm/mongodb';
 
 import { MessageType } from '../../enums/message-type.js';
 import { RandomUtils } from '../../utils/index.js';
-import { EventData, GuildData } from './index.js';
+import { CustomEventData, GuildData } from './index.js';
 
 @Entity({ collection: 'messages' })
 @Unique({ properties: ['guild', 'alias'] })
@@ -53,8 +53,8 @@ export class MessageData {
     guild!: IdentifiedReference<GuildData>;
 
     // Not all messages are tied to an event
-    @OneToOne(() => EventData, event => event.message, { owner: false })
-    event?: IdentifiedReference<EventData>;
+    @OneToOne(() => CustomEventData, event => event.message, { owner: false })
+    event?: IdentifiedReference<CustomEventData>;
 
     constructor(description: string, options?: MessageOptions) {
         this.description = description;

@@ -36,7 +36,7 @@ const IGNORED_ERRORS = [
 export class InteractionUtils {
     public static async deferReply(
         intr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
-        hidden: boolean = false
+        hidden: boolean = true
     ): Promise<InteractionResponse> {
         try {
             return await intr.deferReply({
@@ -100,7 +100,7 @@ export class InteractionUtils {
     public static async send(
         intr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         content: string | EmbedBuilder | InteractionReplyOptions,
-        hidden: boolean = false
+        hidden: boolean = true
     ): Promise<Message> {
         try {
             let options: InteractionReplyOptions =
@@ -168,7 +168,7 @@ export class InteractionUtils {
                             type: ComponentType.ActionRow,
                             customId: 'enter_response',
                             emoji: '⌨️',
-                            label: Lang.getRef('info', 'terms.enterResponse', data.lang()),
+                            label: Lang.getRef('info', 'terms.enterResponse', data.lang),
                             style: ButtonStyle.Primary,
                         },
                     ],

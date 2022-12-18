@@ -1,19 +1,26 @@
+import { Loaded } from '@mikro-orm/core';
+import { MongoDriver, MongoEntityManager } from '@mikro-orm/mongodb';
 import { Locale } from 'discord.js';
 
-import { LangCode } from '../enums/lang-code.js';
-import { Lang } from '../services/lang.js';
+import { CustomEventData, GuildData } from '../database/entities/index.js';
+import { MessageData } from '../database/entities/message.js';
 
 // This class is used to store and pass data along in events
 export class EventData {
-    // TODO: Add any data you want to store
     constructor(
-        // Guild language
+        public lang: Locale,
         public langGuild: Locale,
-        public hasPremium?: boolean
+        public em: MongoEntityManager<MongoDriver>,
+        public guildData?: Loaded<GuildData>,
+        public messageData?: Loaded<MessageData>,
+        public eventData?: Loaded<CustomEventData, 'message'>
     ) {}
+}
 
-    public lang(): LangCode {
-        // TODO: Calculate language based on event data
-        return Lang.Default;
-    }
+export interface ButtonData {
+    id?: string; // Button ID
+    lc?: string; // Link Command
+    ch?: string; // Channel Discord ID
+    lg?: Locale; // Language
+    pg?: number; // Page
 }

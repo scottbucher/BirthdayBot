@@ -22,16 +22,15 @@ export class GuildJoinHandler implements EventHandler {
 
         // Get data from database
         let data = await this.eventDataService.create({
-            user: owner?.user,
             guild,
         });
 
         // Send welcome message to the server's notify channel
-        let notifyChannel = await ClientUtils.findNotifyChannel(guild, data.lang());
+        let notifyChannel = await ClientUtils.findNotifyChannel(guild, data.lang);
         if (notifyChannel) {
             await MessageUtils.send(
                 notifyChannel,
-                Lang.getEmbed('info', 'embeds.guildJoin', data.lang(), {
+                Lang.getEmbed('info', 'embeds.guildJoin', data.lang, {
                     CMD_LINK_HELP: FormatUtils.commandMention(
                         await ClientUtils.findAppCommand(guild.client, Lang.getCom('commands.help'))
                     ),
@@ -46,7 +45,7 @@ export class GuildJoinHandler implements EventHandler {
         if (owner) {
             await MessageUtils.send(
                 owner.user,
-                Lang.getEmbed('info', 'embeds.guildJoin', data.lang(), {
+                Lang.getEmbed('info', 'embeds.guildJoin', data.lang, {
                     CMD_LINK_HELP: FormatUtils.commandMention(
                         await ClientUtils.findAppCommand(guild.client, Lang.getCom('commands.help'))
                     ),

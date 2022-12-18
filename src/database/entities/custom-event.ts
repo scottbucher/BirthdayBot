@@ -32,10 +32,10 @@ export class TimeSettings {
     hour = 0;
 }
 
-@Entity({ collection: 'events' })
+@Entity({ collection: 'customEvents' })
 @Unique({ properties: ['guild', 'alias'] })
 @Index({ properties: ['guild'] })
-export class EventData {
+export class CustomEventData {
     @PrimaryKey()
     _id!: ObjectId;
 

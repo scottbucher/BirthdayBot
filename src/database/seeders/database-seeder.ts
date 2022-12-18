@@ -4,9 +4,10 @@ import { createRequire } from 'node:module';
 
 import { MessageType } from '../../enums/message-type.js';
 import { Logger } from '../../services/index.js';
-import { EventOptions } from '../entities/event.js';
+import { TimeUtils } from '../../utils/time-utils.js';
+import { EventOptions } from '../entities/custom-event.js';
 import {
-    EventData,
+    CustomEventData,
     GuildData,
     MemberAnniversaryRoleData,
     MessageData,
@@ -57,11 +58,15 @@ export class DatabaseSeeder extends Seeder {
 
         // User Data
         let user1DiscordId = '478288246858711040'; // Scott
-        let user1Birthday = '08-28';
+        let user1Birthday = TimeUtils.nextOccurrenceOfMonthDay(8, 28, 'America/New_York').toFormat(
+            'yyyy-MM-dd'
+        );
         let user1TimeZone = 'America/New_York';
 
         let user2DiscordId = '212772875793334272'; // Kevin
-        let user2Birthday = '11-28';
+        let user2Birthday = TimeUtils.nextOccurrenceOfMonthDay(11, 28, 'America/New_York')
+            .toUTC()
+            .toFormat('yyyy-MM-dd');
         let user2TimeZone = 'America/New_York';
 
         // Vote Data
@@ -130,7 +135,7 @@ export class DatabaseSeeder extends Seeder {
         guild.messages.add(message4);
 
         // Create events
-        let event1 = new EventData(event1Month, event1Day, event1Options);
+        let event1 = new CustomEventData(event1Month, event1Day, event1Options);
         event1.message = ref(message4);
         guild.events.add(event1);
 

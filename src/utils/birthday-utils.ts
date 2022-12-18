@@ -26,13 +26,13 @@ export class BirthdayUtils {
     //     let expireFunction: ExpireFunction = async () => {
     //         await InteractionUtils.send(
     //             nextIntr,
-    //             Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+    //             Lang.getEmbed('results', 'fail.promptExpired', data.lang)
     //         );
     //     };
     //     let timeZonePrompt = await InteractionUtils.sendWithEnterResponseButton(
     //         nextIntr,
     //         data,
-    //         Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', data.lang(), {
+    //         Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupTimeZone', data.lang, {
     //             TARGET: target.username,
     //             AUTHOR_ICON: target.displayAvatarURL(),
     //             ICON: intr.client.user.displayAvatarURL(),
@@ -44,7 +44,7 @@ export class BirthdayUtils {
     //         timeZonePrompt,
     //         new ModalBuilder({
     //             customId: 'modal', // Will be overwritten
-    //             title: Lang.getRef('info', 'terms.timeZone', data.lang()),
+    //             title: Lang.getRef('info', 'terms.timeZone', data.lang),
     //             components: [
     //                 {
     //                     type: ComponentType.ActionRow,
@@ -52,14 +52,14 @@ export class BirthdayUtils {
     //                         {
     //                             type: ComponentType.TextInput,
     //                             customId: 'type',
-    //                             label: Lang.getRef('info', 'terms.timeZone', data.lang()),
+    //                             label: Lang.getRef('info', 'terms.timeZone', data.lang),
     //                             required: true,
     //                             style: TextInputStyle.Short,
     //                             minLength: 1,
     //                             placeholder: Lang.getRef(
     //                                 'info',
     //                                 'terms.newYorkTimezone',
-    //                                 data.lang()
+    //                                 data.lang
     //                             ),
     //                         },
     //                     ],
@@ -79,7 +79,7 @@ export class BirthdayUtils {
     //                     Lang.getEmbed(
     //                         'validation',
     //                         'embeds.invalidTimeZoneAbbreviation',
-    //                         data.lang(),
+    //                         data.lang,
     //                         {
     //                             TARGET: target.username,
     //                             ICON: intr.client.user.displayAvatarURL(),
@@ -96,7 +96,7 @@ export class BirthdayUtils {
     //                     Lang.getErrorEmbed(
     //                         'validation',
     //                         'errorEmbeds.invalidTimezone',
-    //                         data.lang(),
+    //                         data.lang,
     //                         {
     //                             TARGET: target.username,
     //                             ICON: intr.client.user.displayAvatarURL(),
@@ -130,22 +130,22 @@ export class BirthdayUtils {
         let expireFunction: ExpireFunction = async () => {
             await InteractionUtils.send(
                 nextIntr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang())
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang)
             );
         };
 
         let birthdayPrompt = await InteractionUtils.sendWithEnterResponseButton(
             nextIntr,
             data,
-            Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupBirthday', data.lang(), {
+            Lang.getEmbed('prompts', 'settingBirthday.birthdaySetupBirthday', data.lang, {
                 TARGET: target.username,
                 AUTHOR_ICON: target.displayAvatarURL(),
                 ICON: intr.client.user.displayAvatarURL(),
                 TAG: target.tag,
                 DATE_EXAMPLE: littleEndian ? '28/08' : '08/28',
                 DATE_FORMAT: littleEndian
-                    ? Lang.getRef('info', 'terms.ddmm', data.lang())
-                    : Lang.getRef('info', 'terms.mmdd', data.lang()),
+                    ? Lang.getRef('info', 'terms.ddmm', data.lang)
+                    : Lang.getRef('info', 'terms.mmdd', data.lang),
             }).setAuthor({ name: target.tag, url: target.displayAvatarURL() })
         );
 
@@ -153,7 +153,7 @@ export class BirthdayUtils {
             birthdayPrompt,
             new ModalBuilder({
                 customId: 'modal', // Will be overwritten
-                title: Lang.getRef('info', 'terms.birthday', data.lang()),
+                title: Lang.getRef('info', 'terms.birthday', data.lang),
                 components: [
                     {
                         type: ComponentType.ActionRow,
@@ -161,14 +161,14 @@ export class BirthdayUtils {
                             {
                                 type: ComponentType.TextInput,
                                 customId: 'type',
-                                label: Lang.getRef('info', 'terms.birthday', data.lang()),
+                                label: Lang.getRef('info', 'terms.birthday', data.lang),
                                 required: true,
                                 style: TextInputStyle.Short,
                                 minLength: 1,
                                 placeholder: Lang.getRef(
                                     'info',
                                     `terms.birthdayExample${littleEndian ? 'DM' : 'MD'}`,
-                                    data.lang()
+                                    data.lang
                                 ),
                             },
                         ],
@@ -182,20 +182,20 @@ export class BirthdayUtils {
                     return;
                 }
 
-                let givenBirthday = FormatUtils.getBirthday(textInput.value, parser, littleEndian);
+                let givenBirthday = FormatUtils.getBirthday(
+                    textInput.value,
+                    parser,
+                    littleEndian,
+                    data.lang
+                );
 
                 // Don't laugh at my double check it prevents the dates chrono misses on the first input
                 if (!givenBirthday) {
                     await InteractionUtils.send(
                         intr,
-                        Lang.getErrorEmbed(
-                            'validation',
-                            'errorEmbeds.invalidBirthday',
-                            data.lang(),
-                            {
-                                TARGET: target.username,
-                            }
-                        )
+                        Lang.getErrorEmbed('validation', 'errorEmbeds.invalidBirthday', data.lang, {
+                            TARGET: target.username,
+                        })
                     );
                     return;
                 }
@@ -231,7 +231,7 @@ export class BirthdayUtils {
     //                 Lang.getEmbed(
     //                     'prompts',
     //                     'settingBirthday.defaultTimeZoneAvailable' + (timeZone ? 'Override' : ''),
-    //                     data.lang(),
+    //                     data.lang,
     //                     {
     //                         SERVER_TIMEZONE: data.guild.DefaultTimezone,
     //                         INPUTTED_TIMEZONE: timeZone,
@@ -272,7 +272,7 @@ export class BirthdayUtils {
     //     let result = await CollectorUtils.getBooleanFromButton(
     //         nextIntr,
     //         data,
-    //         Lang.getEmbed('prompts', 'settingBirthday.confirmBirthday', data.lang(), {
+    //         Lang.getEmbed('prompts', 'settingBirthday.confirmBirthday', data.lang, {
     //             TARGET: target.toString(),
     //             BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
     //             TIMEZONE: timeZone,
@@ -289,7 +289,7 @@ export class BirthdayUtils {
 
     //         await InteractionUtils.send(
     //             nextIntr,
-    //             Lang.getEmbed('results', 'success.setBirthday', data.lang(), {
+    //             Lang.getEmbed('results', 'success.setBirthday', data.lang, {
     //                 USER: target.toString(),
     //                 BIRTHDAY: `${FormatUtils.getMonth(month)} ${day}`,
     //                 TIMEZONE: timeZone,
@@ -300,7 +300,7 @@ export class BirthdayUtils {
     //         // Cancel
     //         await InteractionUtils.send(
     //             nextIntr,
-    //             Lang.getEmbed('results', 'fail.actionCanceled', data.lang())
+    //             Lang.getEmbed('results', 'fail.actionCanceled', data.lang)
     //         );
     //         return;
     //     }
