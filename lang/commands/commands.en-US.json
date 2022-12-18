@@ -30,9 +30,7 @@
             "list": "list",
             "map": "map",
             "donate": "donate",
-            "suggest": "suggest"
-        },
-        "subCommands": {
+            "suggest": "suggest",
             "add": "add",
             "user": "user",
             "edit": "edit",
@@ -42,19 +40,17 @@
             "roleOrUser": "role_or_user",
             "id": "id",
             "clear": "clear",
-            "list": "list",
             "embed": "embed",
             "color": "color",
             "time": "time",
             "mention": "mention",
-            "test": "test",
             "docs": "docs",
-            "map": "map",
-            "donate": "donate",
-            "support": "support",
-            "set": "set",
-            "next": "next",
-            "view": "view"
+            "support": "support"
+        },
+        "commandDescs": {
+            "view": "View your, or someone else's birthday or anniversary.",
+            "info": "View information about the bot.",
+            "messageAdd": "Add a custom message."
         },
         "arguments": {
             "setting": "setting",
@@ -103,10 +99,22 @@
             "premium": "{{REF:helpOptions.premium}} -- Commands and information about Birthday Bot premium.",
             "permissions": "{{REF:helpOptions.permissions}} -- Information about the permissions required to use commands."
         },
+        "celebrationTypeChoices": {
+            "birthday": "Birthday",
+            "memberAnniversary": "Member Anniversary",
+            "serverAnniversary": "Server Anniversary",
+            "event": "Event"
+        },
+        "infoChoices": {
+            "about": "About",
+            "dev": "Dev",
+            "translate": "Translate"
+        },
         "argDescs": {
             "helpOption": "Select what section you need help with.",
-            "viewUserOption": "Optional user argument to view. Defaults to you.",
-            "viewType": "View either a birthday or a member anniversary. Defaults to birthday."
+            "viewUser": "Optional user argument. Select a user to view their birthday or anniversary.",
+            "viewType": "View either a birthday or a member anniversary. Defaults to birthday.",
+            "infoOption": "What information would you like to view?"
         },
         "meta": {
             "language": "en-US",

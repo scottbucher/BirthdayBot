@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction, DMChannel, PermissionsString } from 'disco
 import { DateTime } from 'luxon';
 
 import { UserData } from '../../database/entities/user.js';
-import { DataValidation, EventDataType } from '../../enums/index.js';
+import { CelebrationType, DataValidation, EventDataType } from '../../enums/index.js';
 import { Language } from '../../models/enum-helpers/language.js';
 import { EventData } from '../../models/internal-models.js';
 import { Lang } from '../../services/lang.js';
@@ -23,7 +23,7 @@ export class ViewCommand implements Command {
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         let type =
             intr.options.getString(Lang.getRef('commands', 'arguments.type', Language.Default)) ??
-            'birthday';
+            CelebrationType.BIRTHDAY;
         let target =
             intr.options.getUser(Lang.getRef('commands', 'arguments.user', Language.Default)) ??
             intr.user;
@@ -37,7 +37,7 @@ export class ViewCommand implements Command {
         }
 
         switch (type) {
-            case 'birthday': {
+            case CelebrationType.BIRTHDAY: {
                 let userData = await data.em.findOne(
                     UserData,
                     { discordId: target.id },
@@ -69,7 +69,7 @@ export class ViewCommand implements Command {
                 );
                 break;
             }
-            case 'member_anniversary': {
+            case CelebrationType.MEMBER_ANNIVERSARY: {
                 if (intr.channel instanceof DMChannel) {
                     await InteractionUtils.send(
                         intr,

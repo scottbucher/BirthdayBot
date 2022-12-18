@@ -11,7 +11,7 @@ import {
 } from '@mikro-orm/core';
 import { ObjectId } from '@mikro-orm/mongodb';
 
-import { MessageType } from '../../enums/message-type.js';
+import { CelebrationType } from '../../enums/celebration-type.js';
 import { RandomUtils } from '../../utils/index.js';
 import { CustomEventData, GuildData } from './index.js';
 
@@ -32,7 +32,7 @@ export class MessageData {
     description!: string;
 
     @Property()
-    type = MessageType.BIRTHDAY;
+    type = CelebrationType.BIRTHDAY;
 
     @Property()
     embedded = true;
@@ -58,7 +58,7 @@ export class MessageData {
 
     constructor(description: string, options?: MessageOptions) {
         this.description = description;
-        this.type = options?.type ?? MessageType.BIRTHDAY;
+        this.type = options?.type ?? CelebrationType.BIRTHDAY;
         this.embedded = options?.embedded ?? true;
         this.color = options?.color;
         this.image = options?.image;
@@ -68,7 +68,7 @@ export class MessageData {
 }
 
 export interface MessageOptions {
-    type?: MessageType;
+    type?: CelebrationType;
     embedded?: boolean;
     color?: string;
     image?: string;

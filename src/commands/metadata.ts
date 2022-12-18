@@ -1,5 +1,4 @@
 import {
-    ApplicationCommandOptionType,
     ApplicationCommandType,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
     RESTPostAPIContextMenuApplicationCommandsJSONBody,
@@ -7,6 +6,7 @@ import {
 
 import { Language } from '../models/enum-helpers/language.js';
 import { Lang } from '../services/index.js';
+import { Args } from './args.js';
 
 export const ChatCommandMetadata: {
     [command: string]: RESTPostAPIChatInputApplicationCommandsJSONBody;
@@ -14,41 +14,30 @@ export const ChatCommandMetadata: {
     VIEW: {
         name: Lang.getRef('commands', 'chatCommands.view', Language.Default),
         type: ApplicationCommandType.ChatInput,
-        description: `View your, or someone else's birthday or anniversary. Or view the server's anniversary.`,
+        description: Lang.getRef('commands', 'commandDescs.view', Language.Default),
         dm_permission: true,
         default_member_permissions: undefined,
         options: [
             {
-                name: Lang.getRef('commands', 'arguments.type', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.type'),
-                description: Lang.getRef('commands', 'argDescs.viewType', Language.Default),
-                description_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'argDescs.viewType'
-                ),
-                type: ApplicationCommandOptionType.String.valueOf(),
+                ...Args.VIEW_TYPE_OPTION,
                 required: false,
-                choices: [
-                    {
-                        name: 'birthday',
-                        value: 'birthday',
-                    },
-                    {
-                        name: 'memberAnniversary',
-                        value: 'member_anniversary',
-                    },
-                ],
             },
             {
-                name: Lang.getRef('commands', 'arguments.user', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.user'),
-                description: Lang.getRef('commands', 'argDescs.viewUserOption', Language.Default),
-                description_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'argDescs.viewUserOption'
-                ),
-                type: ApplicationCommandOptionType.User.valueOf(),
+                ...Args.VIEW_USER_OPTION,
                 required: false,
+            },
+        ],
+    },
+    INFO: {
+        name: Lang.getRef('commands', 'chatCommands.info', Language.Default),
+        type: ApplicationCommandType.ChatInput,
+        description: Lang.getRef('commands', 'commandDescs.info', Language.Default),
+        dm_permission: true,
+        default_member_permissions: undefined,
+        options: [
+            {
+                ...Args.INFO_OPTION,
+                required: true,
             },
         ],
     },

@@ -1,4 +1,4 @@
-export enum MessageType {
+export enum CelebrationType {
     BIRTHDAY = 'BIRTHDAY',
     MEMBER_ANNIVERSARY = 'MEMBER_ANNIVERSARY',
     SERVER_ANNIVERSARY = 'SERVER_ANNIVERSARY',

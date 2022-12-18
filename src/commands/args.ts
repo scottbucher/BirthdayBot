@@ -1,6 +1,6 @@
 import { APIApplicationCommandBasicOption, ApplicationCommandOptionType } from 'discord.js';
 
-import { HelpOption } from '../enums/index.js';
+import { CelebrationType, HelpOption, InfoOption } from '../enums/index.js';
 import { Language } from '../models/enum-helpers/language.js';
 import { Lang } from '../services/index.js';
 
@@ -78,6 +78,69 @@ export class Args {
                 ),
                 value: HelpOption.PERMISSIONS,
             },
+        ],
+    };
+
+    public static readonly VIEW_TYPE_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.type', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.type'),
+        description: Lang.getRef('commands', 'argDescs.viewType', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.viewType'),
+        type: ApplicationCommandOptionType.String.valueOf(),
+        choices: [
+            {
+                name: Lang.getRef('commands', 'celebrationTypeChoices.birthday', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap(
+                    'commands',
+                    'celebrationTypeChoices.birthday'
+                ),
+                value: CelebrationType.BIRTHDAY,
+            },
+            {
+                name: Lang.getRef(
+                    'commands',
+                    'celebrationTypeChoices.memberAnniversary',
+                    Language.Default
+                ),
+                name_localizations: Lang.getRefLocalizationMap(
+                    'commands',
+                    'celebrationTypeChoices.memberAnniversary'
+                ),
+                value: CelebrationType.MEMBER_ANNIVERSARY,
+            },
+        ],
+    };
+
+    public static readonly VIEW_USER_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.user', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.user'),
+        description: Lang.getRef('commands', 'argDescs.viewUser', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.viewUser'),
+        type: ApplicationCommandOptionType.User.valueOf(),
+    };
+
+    public static readonly INFO_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.option', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.option'),
+        description: Lang.getRef('commands', 'argDescs.infoOption', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.infoOption'),
+        type: ApplicationCommandOptionType.String,
+        choices: [
+            {
+                name: Lang.getRef('commands', 'infoChoices.about', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('commands', 'infoChoices.about'),
+                value: InfoOption.ABOUT,
+            },
+            {
+                name: Lang.getRef('commands', 'infoChoices.dev', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap('commands', 'infoChoices.dev'),
+                value: InfoOption.DEV,
+            },
+            // {
+            //     name: Lang.getRef('commands', 'infoChoices.translate', Language.Default),
+            //     name_localizations: Lang.getRefLocalizationMap('commands', 'infoChoices.translate'),
+            //     value: InfoOption.TRANSLATE,
+            // },
         ],
     };
 }

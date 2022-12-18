@@ -2,7 +2,7 @@ import { EntityManager, ref } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
 import { createRequire } from 'node:module';
 
-import { MessageType } from '../../enums/message-type.js';
+import { CelebrationType } from '../../enums/celebration-type.js';
 import { Logger } from '../../services/index.js';
 import { TimeUtils } from '../../utils/time-utils.js';
 import { EventOptions } from '../entities/custom-event.js';
@@ -111,7 +111,7 @@ export class DatabaseSeeder extends Seeder {
 
         let message2Description = '{Users} is celebrating {Year}(s) of being the server!';
         let message2Options: MessageOptions = {
-            type: MessageType.MEMBER_ANNIVERSARY,
+            type: CelebrationType.MEMBER_ANNIVERSARY,
             title: 'Happy Anniversary!',
             footer: 'This anniversary message was sent automatically by the Birthday Bot.',
             color: '#f54293',
@@ -122,14 +122,14 @@ export class DatabaseSeeder extends Seeder {
 
         let message3Description = '{Server} is now {Year}(s) old!';
         let message3Options: MessageOptions = {
-            type: MessageType.SERVER_ANNIVERSARY,
+            type: CelebrationType.SERVER_ANNIVERSARY,
         };
         let message3 = new MessageData(message3Description, message3Options);
         guild.messages.add(message3);
 
         let message4Description = 'Merry Christmas {Server}!';
         let message4Options: MessageOptions = {
-            type: MessageType.EVENT,
+            type: CelebrationType.EVENT,
         };
         let message4 = new MessageData(message4Description, message4Options);
         guild.messages.add(message4);
