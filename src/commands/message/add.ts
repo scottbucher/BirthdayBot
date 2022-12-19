@@ -355,7 +355,7 @@ export class MessageAddSubCommand implements Command {
 
             if (colorResult === undefined) return;
             nextIntr = colorResult.intr;
-            type = colorResult.value;
+            color = colorResult.value;
 
             if (color === undefined) return;
         }
