@@ -11,6 +11,7 @@ export class Args {
         description: Lang.getRef('commands', 'argDescs.helpOption', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.helpOption'),
         type: ApplicationCommandOptionType.String,
+        required: false,
         choices: [
             {
                 name: Lang.getRef('commands', 'helpChoiceDescs.general', Language.Default),
@@ -87,6 +88,7 @@ export class Args {
         description: Lang.getRef('commands', 'argDescs.viewType', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.viewType'),
         type: ApplicationCommandOptionType.String.valueOf(),
+        required: false,
         choices: [
             {
                 name: Lang.getRef('commands', 'celebrationTypeChoices.birthday', Language.Default),
@@ -117,6 +119,7 @@ export class Args {
         description: Lang.getRef('commands', 'argDescs.viewUser', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.viewUser'),
         type: ApplicationCommandOptionType.User.valueOf(),
+        required: false,
     };
 
     public static readonly INFO_OPTION: APIApplicationCommandBasicOption = {
@@ -125,6 +128,7 @@ export class Args {
         description: Lang.getRef('commands', 'argDescs.infoOption', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.infoOption'),
         type: ApplicationCommandOptionType.String,
+        required: true,
         choices: [
             {
                 name: Lang.getRef('commands', 'infoChoices.about', Language.Default),
@@ -150,6 +154,7 @@ export class Args {
         description: Lang.getRef('commands', 'argDescs.linkOption', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.linkOption'),
         type: ApplicationCommandOptionType.String,
+        required: true,
         choices: [
             {
                 name: Lang.getRef('commands', 'linkChoices.docs', Language.Default),
@@ -195,6 +200,7 @@ export class Args {
         description: Lang.getRef('commands', 'argDescs.listType', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.listType'),
         type: ApplicationCommandOptionType.String.valueOf(),
+        required: false,
         choices: [
             {
                 name: Lang.getRef('commands', 'celebrationTypeChoices.birthday', Language.Default),
@@ -228,6 +234,7 @@ export class Args {
             'argDescs.celebrationType'
         ),
         type: ApplicationCommandOptionType.String.valueOf(),
+        required: false,
         choices: [
             {
                 name: Lang.getRef('commands', 'celebrationTypeChoices.birthday', Language.Default),
@@ -279,5 +286,29 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.page'),
         type: ApplicationCommandOptionType.Integer.valueOf(),
         min_value: 1,
+        required: false,
+    };
+
+    public static readonly DATE_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.date', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.date'),
+        description: Lang.getRef('commands', 'argDescs.setDateOption', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.setDateOption'),
+        type: ApplicationCommandOptionType.Integer.valueOf(),
+        min_value: 1,
+        required: false,
+    };
+
+    public static readonly TIME_ZONE_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.timeZone', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.timeZone'),
+        description: Lang.getRef('commands', 'argDescs.setTimeZoneOption', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap(
+            'commands',
+            'argDescs.setTimeZoneOption'
+        ),
+        type: ApplicationCommandOptionType.Integer.valueOf(),
+        min_value: 1,
+        required: false,
     };
 }

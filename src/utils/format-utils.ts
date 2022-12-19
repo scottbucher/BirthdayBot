@@ -7,11 +7,6 @@ import { Lang } from '../services/lang.js';
 
 const require = createRequire(import.meta.url);
 let Abbreviations = require('../../config/abbreviations.json');
-// let Config = require('../../config/config.json');
-
-// let zoneNames = moment.tz
-//     .names()
-//     .filter(name => Config.validation.regions.some((region: any) => name.startsWith(`${region}/`)));
 
 export class FormatUtils {
     public static roleMention(guild: Guild, discordId: string): string {
@@ -73,11 +68,6 @@ export class FormatUtils {
     public static checkAbbreviation(input: string): boolean {
         return Abbreviations.abbreviations.includes(input.toUpperCase());
     }
-
-    // public static findZone(input: string): string {
-    //     let zoneSearch = input.split(/\s+/).join('_').toLowerCase();
-    //     return zoneNames.find(zone => zone.toLowerCase().includes(zoneSearch));
-    // }
 
     // TODO: take another look at this
     public static getBirthday(

@@ -9,6 +9,9 @@ import {
     ListCommand,
     MapCommand,
     NextCommand,
+    PremiumCommand,
+    PurgeCommand,
+    SetCommand,
     ViewCommand,
 } from './commands/chat/index.js';
 import {
@@ -70,6 +73,9 @@ async function start(): Promise<void> {
         new ListCommand(),
         new MapCommand(),
         new NextCommand(),
+        new PremiumCommand(subService),
+        new PurgeCommand(),
+        new SetCommand(),
         // Message Context Commands
         // User Context Commands
         // TODO: Add new commands here

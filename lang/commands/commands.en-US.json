@@ -54,7 +54,10 @@
             "link": "Useful links for the bot.",
             "list": "View the birthday or member anniversary list for your server.",
             "map": "View the timezone map.",
-            "next": "View the next event date. Defaults to birthday."
+            "next": "View the next event date. Defaults to birthday.",
+            "premium": "View information about premium, or about your current premium subscription.",
+            "purge": "Remove your information from the database.",
+            "set": "Set your birthday."
         },
         "arguments": {
             "setting": "setting",
@@ -74,7 +77,7 @@
             "number": "number",
             "type": "type",
             "date": "date",
-            "timezone": "timezone",
+            "timeZone": "time_zone",
             "userCount": "user_count",
             "category": "category",
             "link": "link",
@@ -89,7 +92,9 @@
             "linkOption": "What link would you like to view?",
             "listType": "What type of list you would like to view, defaults to birthday.",
             "page": "Optional page to jump to. Defaults to 1.",
-            "celebrationType": "What celebration type to use. Defaults to birthday."
+            "celebrationType": "What celebration type to use. Defaults to birthday.",
+            "setDateOption": "Your birthday.",
+            "setTimeZoneOption": "Your time zone. Find this with /map!"
         },
         "helpChoice": {
             "general": "General",

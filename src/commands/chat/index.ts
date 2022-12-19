@@ -4,3 +4,6 @@ export { LinkCommand } from './link-command.js';
 export { ListCommand } from './list-command.js';
 export { MapCommand } from './map-command.js';
 export { NextCommand } from './next-command.js';
+export { PremiumCommand } from './premium-command.js';
+export { PurgeCommand } from './purge-command.js';
+export { SetCommand } from './set-command.js';

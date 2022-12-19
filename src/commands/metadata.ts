@@ -95,6 +95,40 @@ export const ChatCommandMetadata: {
             },
         ],
     },
+    PREMIUM: {
+        name: Lang.getRef('commands', 'chatCommands.premium', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.premium'),
+        description: Lang.getRef('commands', 'commandDescs.premium', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.premium'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
+    PURGE: {
+        name: Lang.getRef('commands', 'chatCommands.purge', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.purge'),
+        description: Lang.getRef('commands', 'commandDescs.purge', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.purge'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
+    SET: {
+        name: Lang.getRef('commands', 'chatCommands.set', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.set'),
+        description: Lang.getRef('commands', 'commandDescs.set', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.set'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+        options: [
+            {
+                ...Args.DATE_OPTION,
+                required: false,
+            },
+            {
+                ...Args.TIME_ZONE_OPTION,
+                required: false,
+            },
+        ],
+    },
 };
 
 export const MessageCommandMetadata: {

@@ -17,7 +17,7 @@ export class NextCommand implements Command {
     public requireSetup = false;
     public requireVote = false;
     public requireEventData: EventDataType[] = [];
-    public dataValidation: DataValidation[] = [];
+    public dataValidation: DataValidation[] = [DataValidation.VOTE_RECENT];
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         let type =
