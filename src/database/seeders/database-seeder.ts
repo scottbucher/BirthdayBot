@@ -78,6 +78,7 @@ export class DatabaseSeeder extends Seeder {
 
         // Create Guild
         let guild = new GuildData(guildId, birthdayChannelDiscordId, birthdayRoleDiscordId);
+        guild.guildSettings.timeZone = 'America/New_York';
         em.persist(guild);
         guild.trustedSystemSettings.addRoleId(staffRole);
         guild.trustedSystemSettings.addRoleId(adminRole);

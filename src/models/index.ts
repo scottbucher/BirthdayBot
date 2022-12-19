@@ -7,3 +7,4 @@ export {
 } from './subscription-models.js';
 export { BirthdayMemberStatus, AnniversaryMemberStatus } from './celebration-job.js';
 export { EventData } from './internal-models.js';
+export { SplitUsers } from './split-users.js';

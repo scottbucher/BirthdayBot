@@ -28,7 +28,7 @@ export class MemberAnniversaryRoleData {
     alias = RandomUtils.friendlyId(6);
 
     @Property()
-    role!: string;
+    discordId!: string;
 
     @Property()
     year!: number;
@@ -36,8 +36,8 @@ export class MemberAnniversaryRoleData {
     @ManyToOne()
     guild!: IdentifiedReference<GuildData>;
 
-    constructor(role: string, year: number) {
-        this.role = role;
+    constructor(discordId: string, year: number) {
+        this.discordId = discordId;
         this.year = year;
     }
 }

@@ -52,7 +52,9 @@
             "info": "View information about the bot.",
             "messageAdd": "Add a custom message.",
             "link": "Useful links for the bot.",
-            "list": "View the birthday or member anniversary list for your server."
+            "list": "View the birthday or member anniversary list for your server.",
+            "map": "View the timezone map.",
+            "next": "View the next event date. Defaults to birthday."
         },
         "arguments": {
             "setting": "setting",
@@ -86,7 +88,8 @@
             "infoOption": "What information would you like to view?",
             "linkOption": "What link would you like to view?",
             "listType": "What type of list you would like to view, defaults to birthday.",
-            "page": "Optional page to jump to. Defaults to 1."
+            "page": "Optional page to jump to. Defaults to 1.",
+            "celebrationType": "What celebration type to use. Defaults to birthday."
         },
         "helpChoice": {
             "general": "General",
@@ -115,6 +118,14 @@
             "memberAnniversary": "Member Anniversary",
             "serverAnniversary": "Server Anniversary",
             "event": "Event"
+        },
+        "celebrationListTypes": {
+            "birthday": "Birthday",
+            "memberAnniversary": "Member Anniversary",
+            "serverAnniversary": "Server Anniversary",
+            "event": "Event",
+            "userSpecificBirthday": "User Specific Birthday",
+            "userSpecificMemberAnniversary": "User Specific Member Anniversary"
         },
         "infoChoices": {
             "about": "About",

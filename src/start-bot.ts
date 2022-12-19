@@ -3,7 +3,14 @@ import { Options, Partials } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { Button } from './buttons/index.js';
-import { InfoCommand, LinkCommand, ListCommand, ViewCommand } from './commands/chat/index.js';
+import {
+    InfoCommand,
+    LinkCommand,
+    ListCommand,
+    MapCommand,
+    NextCommand,
+    ViewCommand,
+} from './commands/chat/index.js';
 import {
     ChatCommandMetadata,
     Command,
@@ -61,6 +68,8 @@ async function start(): Promise<void> {
         new InfoCommand(),
         new LinkCommand(),
         new ListCommand(),
+        new MapCommand(),
+        new NextCommand(),
         // Message Context Commands
         // User Context Commands
         // TODO: Add new commands here

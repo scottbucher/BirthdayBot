@@ -219,6 +219,59 @@ export class Args {
         ],
     };
 
+    public static readonly CELEBRATION_TYPE_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.type', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.type'),
+        description: Lang.getRef('commands', 'argDescs.celebrationType', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap(
+            'commands',
+            'argDescs.celebrationType'
+        ),
+        type: ApplicationCommandOptionType.String.valueOf(),
+        choices: [
+            {
+                name: Lang.getRef('commands', 'celebrationTypeChoices.birthday', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap(
+                    'commands',
+                    'celebrationTypeChoices.birthday'
+                ),
+                value: CelebrationType.BIRTHDAY,
+            },
+            {
+                name: Lang.getRef(
+                    'commands',
+                    'celebrationTypeChoices.memberAnniversary',
+                    Language.Default
+                ),
+                name_localizations: Lang.getRefLocalizationMap(
+                    'commands',
+                    'celebrationTypeChoices.memberAnniversary'
+                ),
+                value: CelebrationType.MEMBER_ANNIVERSARY,
+            },
+            {
+                name: Lang.getRef(
+                    'commands',
+                    'celebrationTypeChoices.serverAnniversary',
+                    Language.Default
+                ),
+                name_localizations: Lang.getRefLocalizationMap(
+                    'commands',
+                    'celebrationTypeChoices.serverAnniversary'
+                ),
+                value: CelebrationType.SERVER_ANNIVERSARY,
+            },
+            {
+                name: Lang.getRef('commands', 'celebrationTypeChoices.event', Language.Default),
+                name_localizations: Lang.getRefLocalizationMap(
+                    'commands',
+                    'celebrationTypeChoices.event'
+                ),
+                value: CelebrationType.EVENT,
+            },
+        ],
+    };
+
     public static readonly PAGE_OPTION: APIApplicationCommandBasicOption = {
         name: Lang.getRef('commands', 'arguments.page', Language.Default),
         name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.page'),

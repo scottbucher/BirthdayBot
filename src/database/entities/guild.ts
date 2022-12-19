@@ -167,6 +167,9 @@ export class GuildData {
     discordId!: string;
 
     @Embedded({ object: true })
+    formatSettings: FormatSettings = new FormatSettings();
+
+    @Embedded({ object: true })
     guildSettings: GuildSettings = new GuildSettings();
 
     @Embedded({ object: true })

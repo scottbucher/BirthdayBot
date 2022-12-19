@@ -2,6 +2,8 @@ import parser, { CronDate } from 'cron-parser';
 import { DateTime } from 'luxon';
 import { promisify } from 'node:util';
 
+import { UseTimeZone } from '../enums/use-time-zone.js';
+
 let setTimeoutAsync = promisify(setTimeout);
 
 export class TimeUtils {
@@ -71,5 +73,19 @@ export class TimeUtils {
         }
 
         return DateTime.fromISO(cronTime.toISOString()).toUTC();
+    }
+
+    public static getCurrentDateTime(
+        serverTimeZone: string,
+        userTimeZone: string,
+        useTimeZone: UseTimeZone
+    ): DateTime {
+        return DateTime.local({
+            zone: !serverTimeZone
+                ? userTimeZone
+                : useTimeZone !== UseTimeZone.SERVER
+                ? userTimeZone
+                : serverTimeZone,
+        });
     }
 }

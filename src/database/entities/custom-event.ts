@@ -29,7 +29,7 @@ export class TimeSettings {
     day!: number;
 
     @Property()
-    hour = 0;
+    utcHour = 0;
 }
 
 @Entity({ collection: 'customEvents' })

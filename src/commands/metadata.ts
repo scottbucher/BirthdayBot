@@ -73,6 +73,28 @@ export const ChatCommandMetadata: {
             },
         ],
     },
+    MAP: {
+        name: Lang.getRef('commands', 'chatCommands.map', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.map'),
+        description: Lang.getRef('commands', 'commandDescs.map', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.map'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
+    NEXT: {
+        name: Lang.getRef('commands', 'chatCommands.next', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.next'),
+        description: Lang.getRef('commands', 'commandDescs.next', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.next'),
+        dm_permission: false,
+        default_member_permissions: undefined,
+        options: [
+            {
+                ...Args.CELEBRATION_TYPE_OPTION,
+                required: false,
+            },
+        ],
+    },
 };
 
 export const MessageCommandMetadata: {

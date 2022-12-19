@@ -49,9 +49,9 @@
 //         Logger.info('Started fetching database information for guilds and users...');
 //         let startCalculating = performance.now();
 //         let now = moment();
-//         let today = now.clone().format('MM-DD');
-//         let tomorrow = now.clone().add(1, 'day').format('MM-DD');
-//         let yesterday = now.clone().subtract(1, 'day').format('MM-DD');
+//         let today = now.clone().format('LL-dd');
+//         let tomorrow = now.clone().add(1, 'day').format('LL-dd');
+//         let yesterday = now.clone().subtract(1, 'day').format('LL-dd');
 
 //         // Get a user data list of all POSSIBLE birthday events, this includes birthday role, message AND role take.
 //         // Do to timezones and custom message time this can range by a day, thus we get 3 days worth of birthdays for each check
