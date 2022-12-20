@@ -19,8 +19,9 @@ export class ListCommand implements Command {
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         let _type =
-            intr.options.getString(Lang.getRef('commands', 'arguments.type', Language.Default)) ??
-            CelebrationType.BIRTHDAY;
+            (intr.options.getString(
+                Lang.getRef('commands', 'arguments.type', Language.Default)
+            ) as CelebrationType) ?? CelebrationType.BIRTHDAY;
         let _page =
             intr.options.getInteger(Lang.getRef('commands', 'arguments.page', Language.Default)) ??
             1;

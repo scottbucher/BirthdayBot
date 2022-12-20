@@ -1,6 +1,25 @@
-import { APIApplicationCommandBasicOption, ApplicationCommandOptionType } from 'discord.js';
+import {
+    APIApplicationCommandBasicOption,
+    APIApplicationCommandOptionChoice,
+    ApplicationCommandOptionType,
+} from 'discord.js';
 
-import { CelebrationType, HelpOption, InfoOption, LinkOption } from '../enums/index.js';
+import {
+    CelebrationType,
+    HelpOption,
+    InfoOption,
+    LinkOption,
+    ListCelebrationType,
+    ViewCelebrationType,
+} from '../enums/index.js';
+import {
+    CelebrationTypeHelper,
+    HelpOptionHelper,
+    InfoOptionHelper,
+    LinkOptionHelper,
+    ListCelebrationTypeHelper,
+    ViewCelebrationTypeHelper,
+} from '../models/enum-helpers/index.js';
 import { Language } from '../models/enum-helpers/language.js';
 import { Lang } from '../services/index.js';
 
@@ -12,74 +31,14 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.helpOption'),
         type: ApplicationCommandOptionType.String,
         required: false,
-        choices: [
-            {
-                name: Lang.getRef('commands', 'helpChoiceDescs.general', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'helpChoiceDescs.general'
-                ),
-                value: HelpOption.GENERAL,
-            },
-            {
-                name: Lang.getRef('commands', 'helpChoiceDescs.blacklist', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'helpChoiceDescs.blacklist'
-                ),
-                value: HelpOption.BLACKLIST,
-            },
-            {
-                name: Lang.getRef('commands', 'helpChoiceDescs.config', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'helpChoiceDescs.config'
-                ),
-                value: HelpOption.CONFIG,
-            },
-            {
-                name: Lang.getRef('commands', 'helpChoiceDescs.message', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'helpChoiceDescs.message'
-                ),
-                value: HelpOption.MESSAGE,
-            },
-            {
-                name: Lang.getRef('commands', 'helpChoiceDescs.event', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'helpChoiceDescs.event'),
-                value: HelpOption.TRUSTED_ROLE,
-            },
-            {
-                name: Lang.getRef('commands', 'helpChoiceDescs.trustedRole', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'helpChoiceDescs.trustedRole'
-                ),
-                value: HelpOption.TRUSTED_ROLE,
-            },
-            {
-                name: Lang.getRef('commands', 'helpChoiceDescs.mar', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'helpChoiceDescs.mar'),
-                value: HelpOption.MEMBER_ANNIVERSARY_ROLE,
-            },
-            {
-                name: Lang.getRef('commands', 'helpChoiceDescs.premium', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'helpChoiceDescs.premium'
-                ),
-                value: HelpOption.PREMIUM,
-            },
-            {
-                name: Lang.getRef('commands', 'helpChoiceDescs.permissions', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'helpChoiceDescs.permissions'
-                ),
-                value: HelpOption.PERMISSIONS,
-            },
-        ],
+        choices: Object.values(HelpOption).map(
+            choice =>
+                <APIApplicationCommandOptionChoice<string>>{
+                    name: HelpOptionHelper.Data[choice].displayName(Language.Default),
+                    name_localizations: HelpOptionHelper.Data[choice].localizationMap(),
+                    value: choice,
+                }
+        ),
     };
 
     public static readonly VIEW_TYPE_OPTION: APIApplicationCommandBasicOption = {
@@ -89,28 +48,14 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.viewType'),
         type: ApplicationCommandOptionType.String.valueOf(),
         required: false,
-        choices: [
-            {
-                name: Lang.getRef('commands', 'celebrationTypeChoices.birthday', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'celebrationTypeChoices.birthday'
-                ),
-                value: CelebrationType.BIRTHDAY,
-            },
-            {
-                name: Lang.getRef(
-                    'commands',
-                    'celebrationTypeChoices.memberAnniversary',
-                    Language.Default
-                ),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'celebrationTypeChoices.memberAnniversary'
-                ),
-                value: CelebrationType.MEMBER_ANNIVERSARY,
-            },
-        ],
+        choices: Object.values(ViewCelebrationType).map(
+            choice =>
+                <APIApplicationCommandOptionChoice<string>>{
+                    name: ViewCelebrationTypeHelper.Data[choice].displayName(Language.Default),
+                    name_localizations: ViewCelebrationTypeHelper.Data[choice].localizationMap(),
+                    value: choice,
+                }
+        ),
     };
 
     public static readonly VIEW_USER_OPTION: APIApplicationCommandBasicOption = {
@@ -129,23 +74,14 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.infoOption'),
         type: ApplicationCommandOptionType.String,
         required: true,
-        choices: [
-            {
-                name: Lang.getRef('commands', 'infoChoices.about', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'infoChoices.about'),
-                value: InfoOption.ABOUT,
-            },
-            {
-                name: Lang.getRef('commands', 'infoChoices.dev', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'infoChoices.dev'),
-                value: InfoOption.DEV,
-            },
-            // {
-            //     name: Lang.getRef('commands', 'infoChoices.translate', Language.Default),
-            //     name_localizations: Lang.getRefLocalizationMap('commands', 'infoChoices.translate'),
-            //     value: InfoOption.TRANSLATE,
-            // },
-        ],
+        choices: Object.values(InfoOption).map(
+            choice =>
+                <APIApplicationCommandOptionChoice<string>>{
+                    name: InfoOptionHelper.Data[choice].displayName(Language.Default),
+                    name_localizations: InfoOptionHelper.Data[choice].localizationMap(),
+                    value: choice,
+                }
+        ),
     };
 
     public static readonly LINK_OPTION: APIApplicationCommandBasicOption = {
@@ -155,43 +91,14 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.linkOption'),
         type: ApplicationCommandOptionType.String,
         required: true,
-        choices: [
-            {
-                name: Lang.getRef('commands', 'linkChoices.docs', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.docs'),
-                value: LinkOption.DOCS,
-            },
-            {
-                name: Lang.getRef('commands', 'linkChoices.faq', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.faq'),
-                value: LinkOption.FAQ,
-            },
-            {
-                name: Lang.getRef('commands', 'linkChoices.donate', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.donate'),
-                value: LinkOption.DONATE,
-            },
-            {
-                name: Lang.getRef('commands', 'linkChoices.invite', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.invite'),
-                value: LinkOption.INVITE,
-            },
-            {
-                name: Lang.getRef('commands', 'linkChoices.support', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.support'),
-                value: LinkOption.SUPPORT,
-            },
-            {
-                name: Lang.getRef('commands', 'linkChoices.vote', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.vote'),
-                value: LinkOption.VOTE,
-            },
-            {
-                name: Lang.getRef('commands', 'linkChoices.map', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap('commands', 'linkChoices.map'),
-                value: LinkOption.MAP,
-            },
-        ],
+        choices: Object.values(LinkOption).map(
+            choice =>
+                <APIApplicationCommandOptionChoice<string>>{
+                    name: LinkOptionHelper.Data[choice].displayName(Language.Default),
+                    name_localizations: LinkOptionHelper.Data[choice].localizationMap(),
+                    value: choice,
+                }
+        ),
     };
 
     public static readonly LIST_TYPE_OPTION: APIApplicationCommandBasicOption = {
@@ -201,28 +108,14 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.listType'),
         type: ApplicationCommandOptionType.String.valueOf(),
         required: false,
-        choices: [
-            {
-                name: Lang.getRef('commands', 'celebrationTypeChoices.birthday', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'celebrationTypeChoices.birthday'
-                ),
-                value: CelebrationType.BIRTHDAY,
-            },
-            {
-                name: Lang.getRef(
-                    'commands',
-                    'celebrationTypeChoices.memberAnniversary',
-                    Language.Default
-                ),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'celebrationTypeChoices.memberAnniversary'
-                ),
-                value: CelebrationType.MEMBER_ANNIVERSARY,
-            },
-        ],
+        choices: Object.values(ListCelebrationType).map(
+            choice =>
+                <APIApplicationCommandOptionChoice<string>>{
+                    name: ListCelebrationTypeHelper.Data[choice].displayName(Language.Default),
+                    name_localizations: ListCelebrationTypeHelper.Data[choice].localizationMap(),
+                    value: choice,
+                }
+        ),
     };
 
     public static readonly CELEBRATION_TYPE_OPTION: APIApplicationCommandBasicOption = {
@@ -235,48 +128,14 @@ export class Args {
         ),
         type: ApplicationCommandOptionType.String.valueOf(),
         required: false,
-        choices: [
-            {
-                name: Lang.getRef('commands', 'celebrationTypeChoices.birthday', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'celebrationTypeChoices.birthday'
-                ),
-                value: CelebrationType.BIRTHDAY,
-            },
-            {
-                name: Lang.getRef(
-                    'commands',
-                    'celebrationTypeChoices.memberAnniversary',
-                    Language.Default
-                ),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'celebrationTypeChoices.memberAnniversary'
-                ),
-                value: CelebrationType.MEMBER_ANNIVERSARY,
-            },
-            {
-                name: Lang.getRef(
-                    'commands',
-                    'celebrationTypeChoices.serverAnniversary',
-                    Language.Default
-                ),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'celebrationTypeChoices.serverAnniversary'
-                ),
-                value: CelebrationType.SERVER_ANNIVERSARY,
-            },
-            {
-                name: Lang.getRef('commands', 'celebrationTypeChoices.event', Language.Default),
-                name_localizations: Lang.getRefLocalizationMap(
-                    'commands',
-                    'celebrationTypeChoices.event'
-                ),
-                value: CelebrationType.EVENT,
-            },
-        ],
+        choices: Object.values(CelebrationType).map(
+            choice =>
+                <APIApplicationCommandOptionChoice<string>>{
+                    name: CelebrationTypeHelper.Data[choice].displayName(Language.Default),
+                    name_localizations: CelebrationTypeHelper.Data[choice].localizationMap(),
+                    value: choice,
+                }
+        ),
     };
 
     public static readonly PAGE_OPTION: APIApplicationCommandBasicOption = {

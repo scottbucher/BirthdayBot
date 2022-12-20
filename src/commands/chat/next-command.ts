@@ -20,9 +20,9 @@ export class NextCommand implements Command {
     public dataValidation: DataValidation[] = [DataValidation.VOTE_RECENT];
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
-        let type =
-            intr.options.getString(Lang.getRef('commands', 'arguments.type', Language.Default)) ??
-            CelebrationType.BIRTHDAY;
+        let type: CelebrationType = intr.options.getString(
+            Lang.getRef('commands', 'arguments.type', Language.Default)
+        ) as CelebrationType;
         let guildData = data.guildData;
         let timeZone = guildData?.guildSettings.timeZone;
         let userList: string;

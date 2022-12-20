@@ -5,8 +5,12 @@ export { PostMode } from './post-mode.js';
 export { UseTimeZone } from './use-time-zone.js';
 export { NameFormat } from './name-format.js';
 export { DateFormat } from './date-format.js';
-export { CelebrationType } from './celebration-type.js';
+export {
+    CelebrationType,
+    ListCelebrationType,
+    MessageListCelebrationType,
+    ViewCelebrationType,
+} from './celebration-type.js';
 export { EventDataType } from './event-data-type.js';
 export { DataValidation } from './data-validation.js';
 export { LinkOption } from './link-option.js';
-export { ListType } from './list-type.js';

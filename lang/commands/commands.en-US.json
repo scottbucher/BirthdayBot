@@ -122,12 +122,6 @@
             "birthday": "Birthday",
             "memberAnniversary": "Member Anniversary",
             "serverAnniversary": "Server Anniversary",
-            "event": "Event"
-        },
-        "celebrationListTypes": {
-            "birthday": "Birthday",
-            "memberAnniversary": "Member Anniversary",
-            "serverAnniversary": "Server Anniversary",
             "event": "Event",
             "userSpecificBirthday": "User Specific Birthday",
             "userSpecificMemberAnniversary": "User Specific Member Anniversary"
@@ -136,6 +130,16 @@
             "about": "About",
             "dev": "Dev",
             "translate": "Translate"
+        },
+        "dateFormatChoices": {
+            "monthDay": "Month/Day",
+            "dayMonth": "Day/Month"
+        },
+        "nameFormatChoices": {
+            "mention": "Mention",
+            "username": "Username",
+            "nickname": "Nickname",
+            "tag": "Tag"
         },
         "linkChoices": {
             "docs": "Docs",

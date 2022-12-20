@@ -22,8 +22,9 @@ export class ViewCommand implements Command {
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         let type =
-            intr.options.getString(Lang.getRef('commands', 'arguments.type', Language.Default)) ??
-            CelebrationType.BIRTHDAY;
+            (intr.options.getString(
+                Lang.getRef('commands', 'arguments.type', Language.Default)
+            ) as CelebrationType) ?? CelebrationType.BIRTHDAY;
         let target =
             intr.options.getUser(Lang.getRef('commands', 'arguments.user', Language.Default)) ??
             intr.user;

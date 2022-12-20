@@ -20,7 +20,7 @@ export class LinkCommand implements Command {
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         let link = intr.options.getString(
             Lang.getRef('commands', 'arguments.link', Language.Default)
-        );
+        ) as LinkOption;
 
         let embed: EmbedBuilder;
         switch (link) {

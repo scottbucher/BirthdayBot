@@ -29,7 +29,7 @@ export class InfoCommand implements Command {
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         let option = intr.options.getString(
             Lang.getRef('commands', 'arguments.option', Language.Default)
-        );
+        ) as InfoOption;
 
         let embed: EmbedBuilder;
         switch (option) {
