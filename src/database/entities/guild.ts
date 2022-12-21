@@ -58,6 +58,9 @@ export class BirthdaySettings {
 
     @Property()
     reminderDaysBefore = 0;
+
+    @Property()
+    permanentListMessageId?: string;
 }
 
 @Embeddable()
@@ -75,6 +78,9 @@ export class MemberAnniversarySettings {
 
     @Property()
     mention?: string;
+
+    @Property()
+    permanentListMessageId?: string;
 }
 
 @Embeddable()
