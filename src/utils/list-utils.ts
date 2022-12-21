@@ -1,4 +1,12 @@
+import { EmbedBuilder, Guild, GuildMember } from 'discord.js';
+import { DateTime } from 'luxon';
 import { createRequire } from 'node:module';
+
+import { GuildData } from '../database/entities/guild.js';
+import { UserData } from '../database/entities/user.js';
+import { EventData } from '../models/internal-models.js';
+import { Lang } from '../services/lang.js';
+import { CelebrationUtils } from './celebration-utils.js';
 
 const require = createRequire(import.meta.url);
 let _Config = require('../../config/config.json');
@@ -249,86 +257,112 @@ export class ListUtils {
     //     }
     //     return embed.setThumbnail(guild.iconURL());
     // }
-    // public static async getBirthdayListFullEmbed(
-    //     guild: Guild,
-    //     userDataResults: UserDataResults,
-    //     guildData: GuildData,
-    //     page: number,
-    //     pageSize: number,
-    //     data: EventData
-    // ): Promise<EmbedBuilder> {
-    //     let embed: EmbedBuilder;
-    //     let description = '';
-    //     if (userDataResults.userData.length === 0) {
-    //         description += Lang.getRef('info', 'list.emptyList', data.lang);
-    //     }
-    //     let birthdays = [
-    //         ...new Set(
-    //             userDataResults.userData.map(data => moment(data.Birthday).format('MMMM Do'))
-    //         ),
-    //     ]; // remove duplicates
-    //     // Go through the list of birthdays
-    //     for (let birthday of birthdays) {
-    //         let users = userDataResults.userData.filter(
-    //             data => moment(data.Birthday).format('MMMM Do') === birthday
-    //         ); // Get all users with this birthday to create the sub list
-    //         let members = guild.members.cache
-    //             .filter(m => users.map(u => u.UserDiscordId).includes(m.id))
-    //             .map(member => member);
-    //         let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
-    //         description += `__**${birthday}**__: ${userList}\n`; // Append the description
-    //     }
-    //     embed = Lang.getEmbed('info', 'list.birthday', data.lang, {
-    //         PAGE: `${page > 0 ? page.toString() : '1'}`,
-    //         LIST_DATA: description,
-    //         TOTAL_PAGES: `${
-    //             userDataResults.stats.TotalPages > 0
-    //                 ? userDataResults.stats.TotalPages.toString()
-    //                 : '1'
-    //         }`,
-    //         TOTAL_BIRTHDAYS: userDataResults.stats.TotalItems.toString(),
-    //         PER_PAGE: pageSize.toString(),
-    //         ICON: guild.client.user.displayAvatarURL(),
-    //     });
-    //     return embed.setThumbnail(guild.iconURL());
-    // }
-    // public static async getMemberAnniversaryListFullEmbed(
-    //     guild: Guild,
-    //     guildMembers: GuildMember[],
-    //     guildData: GuildData,
-    //     page: number,
-    //     pageSize: number,
-    //     totalPages: number,
-    //     totalMembers: number,
-    //     data: EventData
-    // ): Promise<EmbedBuilder> {
-    //     let embed: EmbedBuilder;
-    //     let description = '';
-    //     if (guildMembers.length === 0) {
-    //         description += Lang.getRef('info', 'list.emptyList', data.lang);
-    //     }
-    //     let anniversaries = [
-    //         ...new Set(guildMembers.map(m => moment(m.joinedAt).format('MMMM Do'))),
-    //     ]; // remove duplicates
-    //     // Go through the list of birthdays
-    //     for (let anniversary of anniversaries) {
-    //         let members = guildMembers.filter(
-    //             m => moment(m.joinedAt).format('MMMM Do') === anniversary
-    //         ); // Get all users with this birthday to create the sub list
-    //         let userList = CelebrationUtils.getUserListString(guildData, members); // Get the sub list of usernames for this date
-    //         description += `__**${anniversary}**__: ${userList}\n`; // Append the description
-    //     }
-    //     // Update config variables and add member anniversary list message
-    //     embed = Lang.getEmbed('info', 'list.memberAnniversary', data.lang, {
-    //         PAGE: `${page > 0 ? page.toString() : '1'}`,
-    //         LIST_DATA: description,
-    //         TOTAL_PAGES: `${totalPages > 0 ? totalPages.toString() : '1'}`,
-    //         TOTAL_ANNIVERSARIES: totalMembers.toString(),
-    //         PER_PAGE: pageSize.toString(),
-    //         ICON: guild.client.user.displayAvatarURL(),
-    //     });
-    //     return embed.setThumbnail(guild.iconURL());
-    // }
+    public static async getBirthdayListFullEmbed(
+        guild: Guild,
+        userDatas: UserData[],
+        guildData: GuildData,
+        page: number,
+        pageSize: number,
+        data: EventData
+    ): Promise<EmbedBuilder> {
+        let embed: EmbedBuilder;
+        let description = '';
+        if (userDatas.length === 0) {
+            description += Lang.getRef('info', 'list.emptyList', data.lang);
+        }
+
+        // Calculate the starting and ending index of the list
+        let startIndex = (page - 1) * pageSize;
+        let endIndex = startIndex + pageSize;
+
+        // Calculate stats
+        let totalPages = Math.ceil(userDatas.length / pageSize);
+        let totalBirthdays = userDatas.length;
+
+        if (page > totalPages) page = totalPages;
+
+        // Sort the list of users in order of birthdays
+        userDatas.sort((a, b) => {
+            let aDate = DateTime.fromISO(a.birthdayStartUTC);
+            let bDate = DateTime.fromISO(b.birthdayStartUTC);
+            if (aDate.month === bDate.month) {
+                return aDate.day - bDate.day;
+            } else {
+                return aDate.month - bDate.month;
+            }
+        });
+
+        // Remove the users that are not in the page range
+        userDatas = userDatas.slice(startIndex, endIndex);
+
+        let birthdays = [
+            ...new Set(
+                userDatas.map(data => DateTime.fromISO(data.birthdayStartUTC).toFormat('LLLL d'))
+            ),
+        ]; // remove duplicates
+        // Go through the list of birthdays
+        for (let birthday of birthdays) {
+            let users = userDatas.filter(
+                data => DateTime.fromISO(data.birthdayStartUTC).toFormat('LLLL d') === birthday
+            ); // Get all users with this birthday to create the sub list
+            let members = guild.members.cache
+                .filter(m => users.map(u => u.discordId).includes(m.id))
+                .map(member => member);
+            let userList = CelebrationUtils.getUserListString(guildData, members, data.lang); // Get the sub list of usernames for this date
+            description += `__**${birthday}**__: ${userList}\n`; // Append the description
+        }
+        embed = Lang.getEmbed('info', 'list.birthday', data.lang, {
+            PAGE: `${page > 0 ? page.toString() : '1'}`,
+            LIST_DATA: description,
+            TOTAL_PAGES: totalPages.toString(),
+            TOTAL_BIRTHDAYS: totalBirthdays.toString(),
+            PER_PAGE: pageSize.toString(),
+            ICON: guild.client.user.displayAvatarURL(),
+        });
+        return embed.setThumbnail(guild.iconURL());
+    }
+    public static async getMemberAnniversaryListFullEmbed(
+        guild: Guild,
+        guildMembers: GuildMember[],
+        guildData: GuildData,
+        page: number,
+        pageSize: number,
+        totalPages: number,
+        totalMembers: number,
+        data: EventData
+    ): Promise<EmbedBuilder> {
+        let embed: EmbedBuilder;
+        let description = '';
+        if (guildMembers.length === 0) {
+            description += Lang.getRef('info', 'list.emptyList', data.lang);
+        }
+
+        // filter out any members which have a joinedTimestamp of null
+        guildMembers = guildMembers.filter(m => m.joinedTimestamp !== null);
+
+        let anniversaries = [
+            ...new Set(guildMembers.map(m => DateTime.fromJSDate(m.joinedAt).toFormat('LLLL d'))),
+        ]; // remove duplicates
+
+        // Go through the list of birthdays
+        for (let anniversary of anniversaries) {
+            let members = guildMembers.filter(
+                m => DateTime.fromJSDate(m.joinedAt).toFormat('LLLL d') === anniversary
+            ); // Get all users with this birthday to create the sub list
+            let userList = CelebrationUtils.getUserListString(guildData, members, data.lang); // Get the sub list of usernames for this date
+            description += `__**${anniversary}**__: ${userList}\n`; // Append the description
+        }
+        // Update config variables and add member anniversary list message
+        embed = Lang.getEmbed('info', 'list.memberAnniversary', data.lang, {
+            PAGE: `${page > 0 ? page.toString() : '1'}`,
+            LIST_DATA: description,
+            TOTAL_PAGES: `${totalPages > 0 ? totalPages.toString() : '1'}`,
+            TOTAL_ANNIVERSARIES: totalMembers.toString(),
+            PER_PAGE: pageSize.toString(),
+            ICON: guild.client.user.displayAvatarURL(),
+        });
+        return embed.setThumbnail(guild.iconURL());
+    }
     // public static async getBlacklistFullEmbed(
     //     guild: Guild,
     //     blacklistResults: Blacklisted,
