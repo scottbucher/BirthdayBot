@@ -29,7 +29,7 @@
                 "description": [
                     "Success! {{USER}}'s birthday has been set to **{{BIRTHDAY}}, {{TIMEZONE}}**",
                     "",
-                    "**Important Note:** Birthdays are stored globally. This means your birthday is now set for all servers with Birthday Bot!"
+                    "**Important Note:** Birthdays are stored globally. This means your birthday is now set for all servers that you and Birthday Bot are in!"
                 ],
                 "color": "{{COM:colors.success}}"
             },
