@@ -90,7 +90,7 @@ export const ChatCommandMetadata: {
         default_member_permissions: undefined,
         options: [
             {
-                ...Args.CELEBRATION_TYPE_OPTION,
+                ...Args.NEXT_CELEBRATION_TYPE_OPTION,
                 required: false,
             },
         ],

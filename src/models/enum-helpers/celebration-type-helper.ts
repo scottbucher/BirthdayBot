@@ -4,6 +4,7 @@ import {
     CelebrationType,
     ListCelebrationType,
     MessageListCelebrationType,
+    NextCelebrationType,
     ViewCelebrationType,
 } from '../../enums/index.js';
 import { Lang } from '../../services/index.js';
@@ -85,6 +86,8 @@ export class CelebrationTypeHelper {
         MEMBER_ANNIVERSARY: memberAnniversaryData,
         SERVER_ANNIVERSARY: serverAnniversaryData,
         EVENT: eventData,
+        USER_SPECIFIC_BIRTHDAY: userSpecificBirthdayData,
+        USER_SPECIFIC_MEMBER_ANNIVERSARY: userSpecificMemberAnniversaryData,
     };
 }
 
@@ -106,6 +109,16 @@ export class ViewCelebrationTypeHelper {
     };
 }
 
+export class NextCelebrationTypeHelper {
+    public static Data: {
+        [key in NextCelebrationType]: CelebrationTypeData;
+    } = {
+        BIRTHDAY: birthdayData,
+        MEMBER_ANNIVERSARY: memberAnniversaryData,
+        EVENT: eventData,
+    };
+}
+
 export class MessageListCelebrationTypeHelper {
     public static Data: {
         [key in MessageListCelebrationType]: CelebrationTypeData;
@@ -113,6 +126,7 @@ export class MessageListCelebrationTypeHelper {
         BIRTHDAY: birthdayData,
         MEMBER_ANNIVERSARY: memberAnniversaryData,
         SERVER_ANNIVERSARY: serverAnniversaryData,
+        EVENT: eventData,
         USER_SPECIFIC_BIRTHDAY: userSpecificBirthdayData,
         USER_SPECIFIC_MEMBER_ANNIVERSARY: userSpecificMemberAnniversaryData,
     };

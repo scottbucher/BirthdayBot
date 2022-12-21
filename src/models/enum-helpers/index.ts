@@ -5,6 +5,7 @@ export {
     ListCelebrationTypeHelper,
     MessageListCelebrationTypeHelper,
     ViewCelebrationTypeHelper,
+    NextCelebrationTypeHelper,
 } from './celebration-type-helper.js';
 export { DateFormatHelper } from './date-format-helper.js';
 export { LinkOptionHelper } from './link-option-helper.js';

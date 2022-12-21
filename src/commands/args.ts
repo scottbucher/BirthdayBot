@@ -5,19 +5,19 @@ import {
 } from 'discord.js';
 
 import {
-    CelebrationType,
     HelpOption,
     InfoOption,
     LinkOption,
-    ListCelebrationType,
-    ViewCelebrationType,
+    ListCelebrationTypes,
+    NextCelebrationTypes,
+    ViewCelebrationTypes,
 } from '../enums/index.js';
 import {
-    CelebrationTypeHelper,
     HelpOptionHelper,
     InfoOptionHelper,
     LinkOptionHelper,
     ListCelebrationTypeHelper,
+    NextCelebrationTypeHelper,
     ViewCelebrationTypeHelper,
 } from '../models/enum-helpers/index.js';
 import { Language } from '../models/enum-helpers/language.js';
@@ -48,7 +48,7 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.viewType'),
         type: ApplicationCommandOptionType.String.valueOf(),
         required: false,
-        choices: Object.values(ViewCelebrationType).map(
+        choices: Object.values(ViewCelebrationTypes).map(
             choice =>
                 <APIApplicationCommandOptionChoice<string>>{
                     name: ViewCelebrationTypeHelper.Data[choice].displayName(Language.Default),
@@ -108,7 +108,7 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.listType'),
         type: ApplicationCommandOptionType.String.valueOf(),
         required: false,
-        choices: Object.values(ListCelebrationType).map(
+        choices: Object.values(ListCelebrationTypes).map(
             choice =>
                 <APIApplicationCommandOptionChoice<string>>{
                     name: ListCelebrationTypeHelper.Data[choice].displayName(Language.Default),
@@ -118,7 +118,7 @@ export class Args {
         ),
     };
 
-    public static readonly CELEBRATION_TYPE_OPTION: APIApplicationCommandBasicOption = {
+    public static readonly NEXT_CELEBRATION_TYPE_OPTION: APIApplicationCommandBasicOption = {
         name: Lang.getRef('commands', 'arguments.type', Language.Default),
         name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.type'),
         description: Lang.getRef('commands', 'argDescs.celebrationType', Language.Default),
@@ -128,11 +128,11 @@ export class Args {
         ),
         type: ApplicationCommandOptionType.String.valueOf(),
         required: false,
-        choices: Object.values(CelebrationType).map(
+        choices: Object.values(NextCelebrationTypes).map(
             choice =>
                 <APIApplicationCommandOptionChoice<string>>{
-                    name: CelebrationTypeHelper.Data[choice].displayName(Language.Default),
-                    name_localizations: CelebrationTypeHelper.Data[choice].localizationMap(),
+                    name: NextCelebrationTypeHelper.Data[choice].displayName(Language.Default),
+                    name_localizations: NextCelebrationTypeHelper.Data[choice].localizationMap(),
                     value: choice,
                 }
         ),

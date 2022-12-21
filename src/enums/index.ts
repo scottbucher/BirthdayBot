@@ -10,6 +10,11 @@ export {
     ListCelebrationType,
     MessageListCelebrationType,
     ViewCelebrationType,
+    NextCelebrationType,
+    ListCelebrationTypes,
+    MessageListCelebrationTypes,
+    ViewCelebrationTypes,
+    NextCelebrationTypes,
 } from './celebration-type.js';
 export { EventDataType } from './event-data-type.js';
 export { DataValidation } from './data-validation.js';
