@@ -13,3 +13,4 @@ export { NameFormatHelper } from './name-format-helper.js';
 export { HelpOptionHelper } from './help-option-helper.js';
 export { InfoOptionHelper } from './info-option-helper.js';
 export { PostModeHelper } from './post-mode-helper.js';
+export { UseTimeZoneHelper } from './use-time-zone-helper.js';

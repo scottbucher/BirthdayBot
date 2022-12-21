@@ -140,6 +140,10 @@
             "postPin": "Post and Pin",
             "threads": "Threads"
         },
+        "useTimeZoneChoices": {
+            "server": "Server",
+            "user": "User"
+        },
         "nameFormatChoices": {
             "mention": "Mention",
             "username": "Username",
