@@ -155,7 +155,7 @@ export class CollectorUtils {
                 } catch (error) {
                     try {
                         await InteractionUtils.editReply(intr, {
-                            components: InteractionUtils.setComponentsStatus(
+                            components: InteractionUtils.setButtonComponentStatus(
                                 intr.message
                                     .components as APIActionRowComponent<APIMessageActionRowComponent>[],
                                 true
@@ -224,7 +224,7 @@ export class CollectorUtils {
                 } catch (error) {
                     try {
                         await InteractionUtils.editReply(intr, {
-                            components: InteractionUtils.setComponentsStatus(
+                            components: InteractionUtils.setButtonComponentStatus(
                                 intr.message
                                     .components as APIActionRowComponent<APIMessageActionRowComponent>[],
                                 true

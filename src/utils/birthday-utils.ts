@@ -223,9 +223,11 @@ export class BirthdayUtils {
     ): Promise<
         [CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
     > {
+        let guildData = data.guildData;
         if (!(intr.channel instanceof DMChannel) && data.guildData)
             if (
-                data.guildData.guildSettings.timeZone &&
+                guildData &&
+                guildData.guildSettings.timeZone &&
                 (!timeZone || timeZone !== data.guildData.guildSettings.timeZone)
             ) {
                 // if the guild has a timezone, and their inputted timezone isn't already the guild's timezone

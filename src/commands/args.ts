@@ -58,7 +58,7 @@ export class Args {
         ),
     };
 
-    public static readonly VIEW_USER_OPTION: APIApplicationCommandBasicOption = {
+    public static readonly USER_OPTION: APIApplicationCommandBasicOption = {
         name: Lang.getRef('commands', 'arguments.user', Language.Default),
         name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.user'),
         description: Lang.getRef('commands', 'argDescs.viewUser', Language.Default),

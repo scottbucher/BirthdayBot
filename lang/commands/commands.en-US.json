@@ -57,7 +57,9 @@
             "next": "View the next event date. Defaults to birthday.",
             "premium": "View information about premium, or about your current premium subscription.",
             "purge": "Remove your information from the database.",
-            "set": "Set your birthday."
+            "set": "Set your birthday.",
+            "subscribe": "Subscribe to Birthday Bot premium.",
+            "suggest": "Suggest a birthday for another user. The user must confirm the suggestion."
         },
         "arguments": {
             "setting": "setting",

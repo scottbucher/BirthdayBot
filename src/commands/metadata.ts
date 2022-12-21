@@ -1,5 +1,7 @@
 import {
     ApplicationCommandType,
+    PermissionFlagsBits,
+    PermissionsBitField,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
     RESTPostAPIContextMenuApplicationCommandsJSONBody,
 } from 'discord.js';
@@ -23,7 +25,7 @@ export const ChatCommandMetadata: {
                 required: false,
             },
             {
-                ...Args.VIEW_USER_OPTION,
+                ...Args.USER_OPTION,
                 required: false,
             },
         ],
@@ -119,6 +121,38 @@ export const ChatCommandMetadata: {
         dm_permission: true,
         default_member_permissions: undefined,
         options: [
+            {
+                ...Args.DATE_OPTION,
+                required: false,
+            },
+            {
+                ...Args.TIME_ZONE_OPTION,
+                required: false,
+            },
+        ],
+    },
+    SUBSCRIBE: {
+        name: Lang.getRef('commands', 'chatCommands.subscribe', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.subscribe'),
+        description: Lang.getRef('commands', 'commandDescs.subscribe', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.subscribe'),
+        dm_permission: false,
+        default_member_permissions: undefined,
+    },
+    SUGGEST: {
+        name: Lang.getRef('commands', 'chatCommands.suggest', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.suggest'),
+        description: Lang.getRef('commands', 'commandDescs.suggest', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.suggest'),
+        dm_permission: false,
+        default_member_permissions: PermissionsBitField.resolve([
+            PermissionFlagsBits.ManageGuild,
+        ]).toString(),
+        options: [
+            {
+                ...Args.USER_OPTION,
+                required: true,
+            },
             {
                 ...Args.DATE_OPTION,
                 required: false,
