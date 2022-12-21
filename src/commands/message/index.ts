@@ -1,9 +1,0 @@
-export { MessageAddSubCommand } from './add.js';
-export { MessageClearSubCommand } from './clear.js';
-export { MessageEditColorSubCommand } from './edit-color.js';
-export { MessageEditEmbedSubCommand } from './edit-embed.js';
-export { MessageListSubCommand } from './list.js';
-export { MessageRemoveSubCommand } from './remove.js';
-export { MessageSettingMentionSubCommand } from './setting-mention.js';
-export { MessageSettingTimeSubCommand } from './setting-time.js';
-export { MessageTestSubCommand } from './test.js';
