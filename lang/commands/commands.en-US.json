@@ -59,7 +59,8 @@
             "purge": "Remove your information from the database.",
             "set": "Set your birthday.",
             "subscribe": "Subscribe to Birthday Bot premium.",
-            "suggest": "Suggest a birthday for another user. The user must confirm the suggestion."
+            "suggest": "Suggest a birthday for another user. The user must confirm the suggestion.",
+            "vote": "Vote to support Birthday Bot!"
         },
         "arguments": {
             "setting": "setting",

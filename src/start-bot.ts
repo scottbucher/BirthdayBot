@@ -16,6 +16,7 @@ import {
     SubscribeCommand,
     SuggestCommand,
     ViewCommand,
+    VoteCommand,
 } from './commands/chat/index.js';
 import {
     ChatCommandMetadata,
@@ -71,6 +72,7 @@ async function start(): Promise<void> {
     let commands: Command[] = [
         // Chat Commands
         new HelpCommand(),
+        new VoteCommand(),
         new ViewCommand(),
         new InfoCommand(),
         new LinkCommand(),

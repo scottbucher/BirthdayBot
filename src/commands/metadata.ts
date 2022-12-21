@@ -83,6 +83,14 @@ export const ChatCommandMetadata: {
         dm_permission: true,
         default_member_permissions: undefined,
     },
+    VOTE: {
+        name: Lang.getRef('commands', 'chatCommands.vote', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.vote'),
+        description: Lang.getRef('commands', 'commandDescs.vote', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.vote'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
     NEXT: {
         name: Lang.getRef('commands', 'chatCommands.next', Language.Default),
         name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.next'),

@@ -10,3 +10,4 @@ export { SetCommand } from './set-command.js';
 export { SuggestCommand } from './suggest-command.js';
 export { SubscribeCommand } from './subscribe-command.js';
 export { HelpCommand } from './help-command.js';
+export { VoteCommand } from './vote-command.js';
