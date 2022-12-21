@@ -60,7 +60,8 @@
             "set": "Set your birthday.",
             "subscribe": "Subscribe to Birthday Bot premium.",
             "suggest": "Suggest a birthday for another user. The user must confirm the suggestion.",
-            "vote": "Vote to support Birthday Bot!"
+            "vote": "Vote to support Birthday Bot!",
+            "setup": "Run the initial setup processes for your server."
         },
         "arguments": {
             "setting": "setting",

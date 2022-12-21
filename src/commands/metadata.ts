@@ -171,6 +171,16 @@ export const ChatCommandMetadata: {
             },
         ],
     },
+    SETUP: {
+        name: Lang.getRef('commands', 'chatCommands.setup', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.setup'),
+        description: Lang.getRef('commands', 'commandDescs.setup', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.setup'),
+        dm_permission: false,
+        default_member_permissions: PermissionsBitField.resolve([
+            PermissionFlagsBits.ManageGuild,
+        ]).toString(),
+    },
 };
 
 export const MessageCommandMetadata: {
