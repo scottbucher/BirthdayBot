@@ -17,7 +17,7 @@ let Logs = require('../../../lang/logs.json');
 
 export class SubscribeCommand implements Command {
     public names = [Lang.getRef('commands', 'chatCommands.subscribe', Language.Default)];
-    public deferType = CommandDeferType.HIDDEN;
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionsString[] = [];
     public requireSetup = false;
@@ -53,13 +53,14 @@ export class SubscribeCommand implements Command {
         if (!subLink) {
             await InteractionUtils.send(
                 intr,
-                Lang.getEmbed('info', 'premium.premiumAlreadyActive', data.lang)
+                Lang.getEmbed('info', 'premium.premiumAlreadyActive', data.lang),
+                false
             );
             return;
         }
 
-        await MessageUtils.send(
-            intr.user,
+        await InteractionUtils.send(
+            intr,
             Lang.getEmbed('info', 'premium.subscriptionPM', data.lang, {
                 SUB_LINK: subLink.link,
                 BIRTHDAY_MESSAGE_MAX_FREE:
@@ -77,12 +78,14 @@ export class SubscribeCommand implements Command {
                 MAX_ANNIVERSARY_ROLES:
                     Config.validation.memberAnniversaryRoles.maxCount.paid.toString(),
                 MAX_TRUSTED_ROLES: Config.validation.trustedRoles.maxCount.paid.toString(),
-            })
+            }),
+            false
         );
 
         await InteractionUtils.send(
             intr,
-            Lang.getEmbed('info', 'premium.subscriptionDMPrompt', data.lang)
+            Lang.getEmbed('info', 'premium.subscriptionDMPrompt', data.lang),
+            false
         );
 
         Logger.info(
