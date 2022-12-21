@@ -1,22 +1,17 @@
-# Key 
-\- not done  
-/ in progress  
-x done
-
 ## MISC Commands
-- /view [type] (default: birthday, member_anniversary, server_anniversary)
-- /next [type] (default: birthday, member_anniversary)
-- /link <type> (support, docs, donate, faq, invite, vote, map)
+- /view [type] (default: birthday, member_anniversary, server_anniversary) - Done
+- /next [type] (default: birthday, member_anniversary) - Done
+- /link <type> (support, docs, donate, faq, invite, vote, map) - Done
 - /settings [type] (default: general, event, advanced)
 - /help [category]
-- /purge
-- /set [date] [time zone]
+- /purge - In Progress
+- /set [date] [time zone] - In Progress
 - /suggest <user> [date] [time zone]
-- /info <choice>
-- /premium
+- /info <choice> - Done
+- /premium - Done
 - /subscribe
 - /vote
-- /map
+- /map - Done
 
 ## MISC Setting Commands
 - /setup 
