@@ -8,7 +8,7 @@ import { PlanName } from '../../models/subscription-models.js';
 import { Lang } from '../../services/lang.js';
 import { Logger } from '../../services/logger.js';
 import { SubscriptionService } from '../../services/subscription-service.js';
-import { InteractionUtils, MessageUtils } from '../../utils/index.js';
+import { InteractionUtils } from '../../utils/index.js';
 import { Command, CommandDeferType } from '../command.js';
 
 const require = createRequire(import.meta.url);
