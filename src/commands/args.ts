@@ -153,7 +153,7 @@ export class Args {
         name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.date'),
         description: Lang.getRef('commands', 'argDescs.setDateOption', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.setDateOption'),
-        type: ApplicationCommandOptionType.Integer.valueOf(),
+        type: ApplicationCommandOptionType.String.valueOf(),
         min_value: 1,
         required: false,
     };
@@ -166,7 +166,7 @@ export class Args {
             'commands',
             'argDescs.setTimeZoneOption'
         ),
-        type: ApplicationCommandOptionType.Integer.valueOf(),
+        type: ApplicationCommandOptionType.String.valueOf(),
         min_value: 1,
         required: false,
     };
