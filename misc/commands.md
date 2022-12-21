@@ -47,7 +47,7 @@
 ## Custom Event Commands
 /custom_event add <date>
 /custom_event remove <alias>
-/custom_event test <event_number>
+/custom_event test <event_alias>
 /custom_event set_message <event_alias> <message_alias>
 
 ## Trusted Role commands
