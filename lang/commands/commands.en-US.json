@@ -135,6 +135,11 @@
             "monthDay": "Month/Day",
             "dayMonth": "Day/Month"
         },
+        "postModeChoices": {
+            "postOnly": "Post Only",
+            "postPin": "Post and Pin",
+            "threads": "Threads"
+        },
         "nameFormatChoices": {
             "mention": "Mention",
             "username": "Username",
