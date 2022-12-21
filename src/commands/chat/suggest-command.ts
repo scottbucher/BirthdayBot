@@ -17,7 +17,7 @@ import { Command, CommandDeferType } from '../command.js';
 
 export class SuggestCommand implements Command {
     public names = [Lang.getRef('commands', 'chatCommands.suggest', Language.Default)];
-    public deferType = CommandDeferType.HIDDEN;
+    public deferType = CommandDeferType.PUBLIC;
     public requireDev = false;
     public requireClientPerms: PermissionsString[] = [];
     public requireSetup = false;
@@ -26,16 +26,23 @@ export class SuggestCommand implements Command {
     public dataValidation: DataValidation[] = [];
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
-        let birthdayInput = intr.options.getString(Lang.getCom('arguments.date'));
-        let timezoneInput = intr.options.getString(Lang.getCom('arguments.timezone'));
-        let target = intr.options.getUser(Lang.getCom('arguments.user'));
+        let birthdayInput = intr.options.getString(
+            Lang.getRef('commands', 'arguments.date', Language.Default)
+        );
+        let timezoneInput = intr.options.getString(
+            Lang.getRef('commands', 'arguments.timeZone', Language.Default)
+        );
+        let target = intr.options.getUser(
+            Lang.getRef('commands', 'arguments.user', Language.Default)
+        );
 
         let timeZone = timezoneInput ? TimeZoneUtils.find(timezoneInput).name : undefined;
 
         if (target.bot) {
             await InteractionUtils.send(
                 intr,
-                Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggestForBot', data.lang)
+                Lang.getErrorEmbed('validation', 'errorEmbeds.cantSuggestForBot', data.lang),
+                false
             );
             return;
         }
@@ -56,7 +63,8 @@ export class SuggestCommand implements Command {
             target,
             data,
             intr,
-            nextIntr
+            nextIntr,
+            false
         );
 
         if (!timeZone)
@@ -64,7 +72,8 @@ export class SuggestCommand implements Command {
                 target,
                 data,
                 intr,
-                nextIntr
+                nextIntr,
+                false
             );
 
         if (timeZone === undefined) return;
@@ -88,7 +97,8 @@ export class SuggestCommand implements Command {
                 intr,
                 nextIntr,
                 littleEndian,
-                parser
+                parser,
+                false
             );
 
         if (birthday === undefined) return;
@@ -100,7 +110,8 @@ export class SuggestCommand implements Command {
             data,
             nextIntr,
             parser,
-            userData
+            userData,
+            false
         );
     }
 }

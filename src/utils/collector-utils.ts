@@ -117,30 +117,35 @@ export class CollectorUtils {
         commandIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         data: EventData,
         embed: EmbedBuilder,
+        hidden: boolean = true,
         target?: User
     ): Promise<{ intr: ButtonInteraction; value: boolean }> {
-        let prompt = await InteractionUtils.send(commandIntr, {
-            embeds: [embed],
-            components: [
-                {
-                    type: ComponentType.ActionRow,
-                    components: [
-                        {
-                            type: ComponentType.Button,
-                            customId: 'true',
-                            emoji: Config.emotes.confirm,
-                            style: ButtonStyle.Primary,
-                        },
-                        {
-                            type: ComponentType.Button,
-                            customId: 'false',
-                            emoji: Config.emotes.deny,
-                            style: ButtonStyle.Primary,
-                        },
-                    ],
-                },
-            ],
-        });
+        let prompt = await InteractionUtils.send(
+            commandIntr,
+            {
+                embeds: [embed],
+                components: [
+                    {
+                        type: ComponentType.ActionRow,
+                        components: [
+                            {
+                                type: ComponentType.Button,
+                                customId: 'true',
+                                emoji: Config.emotes.confirm,
+                                style: ButtonStyle.Primary,
+                            },
+                            {
+                                type: ComponentType.Button,
+                                customId: 'false',
+                                emoji: Config.emotes.deny,
+                                style: ButtonStyle.Primary,
+                            },
+                        ],
+                    },
+                ],
+            },
+            hidden
+        );
 
         if (!prompt) {
             return;
@@ -175,7 +180,8 @@ export class CollectorUtils {
             async () => {
                 await InteractionUtils.send(
                     commandIntr,
-                    Lang.getEmbed('results', 'fail.promptExpired', data.lang)
+                    Lang.getEmbed('results', 'fail.promptExpired', data.lang),
+                    hidden
                 );
             }
         );

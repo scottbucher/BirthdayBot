@@ -158,25 +158,30 @@ export class InteractionUtils {
     public static async sendWithEnterResponseButton(
         intr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         data: EventData,
-        embed: EmbedBuilder
+        embed: EmbedBuilder,
+        hidden: boolean = true
     ): Promise<Message<boolean>> {
-        return await InteractionUtils.send(intr, {
-            embeds: [embed],
-            components: [
-                {
-                    type: ComponentType.ActionRow,
-                    components: [
-                        {
-                            type: ComponentType.Button,
-                            customId: 'enter_response',
-                            emoji: '⌨️',
-                            label: Lang.getRef('info', 'terms.enterResponse', data.lang),
-                            style: ButtonStyle.Primary,
-                        },
-                    ],
-                },
-            ],
-        });
+        return await InteractionUtils.send(
+            intr,
+            {
+                embeds: [embed],
+                components: [
+                    {
+                        type: ComponentType.ActionRow,
+                        components: [
+                            {
+                                type: ComponentType.Button,
+                                customId: 'enter_response',
+                                emoji: '⌨️',
+                                label: Lang.getRef('info', 'terms.enterResponse', data.lang),
+                                style: ButtonStyle.Primary,
+                            },
+                        ],
+                    },
+                ],
+            },
+            hidden
+        );
     }
 
     public static async editReply(

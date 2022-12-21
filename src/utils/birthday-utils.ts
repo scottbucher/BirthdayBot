@@ -28,14 +28,16 @@ export class BirthdayUtils {
         target: User,
         data: EventData,
         intr: CommandInteraction,
-        nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction
+        nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        hidden: boolean = true
     ): Promise<
         [CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
     > {
         let expireFunction: ExpireFunction = async () => {
             await InteractionUtils.send(
                 nextIntr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang)
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang),
+                hidden
             );
         };
         let timeZonePrompt = await InteractionUtils.sendWithEnterResponseButton(
@@ -46,7 +48,8 @@ export class BirthdayUtils {
                 AUTHOR_ICON: target.displayAvatarURL(),
                 ICON: intr.client.user.displayAvatarURL(),
                 TAG: target.tag,
-            })
+            }),
+            hidden
         );
 
         let timeZoneResult = await CollectorUtils.collectByModal(
@@ -93,7 +96,8 @@ export class BirthdayUtils {
                                 TARGET: target.username,
                                 ICON: intr.client.user.displayAvatarURL(),
                             }
-                        )
+                        ),
+                        hidden
                     );
                     return;
                 }
@@ -105,7 +109,8 @@ export class BirthdayUtils {
                         Lang.getErrorEmbed('validation', 'errorEmbeds.invalidTimezone', data.lang, {
                             TARGET: target.username,
                             ICON: intr.client.user.displayAvatarURL(),
-                        })
+                        }),
+                        hidden
                     );
                     return;
                 }
@@ -127,14 +132,16 @@ export class BirthdayUtils {
         intr: CommandInteraction,
         nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         littleEndian: boolean,
-        parser: Chrono
+        parser: Chrono,
+        hidden: boolean = true
     ): Promise<
         [CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
     > {
         let expireFunction: ExpireFunction = async () => {
             await InteractionUtils.send(
                 nextIntr,
-                Lang.getEmbed('results', 'fail.promptExpired', data.lang)
+                Lang.getEmbed('results', 'fail.promptExpired', data.lang),
+                hidden
             );
         };
 
@@ -150,7 +157,8 @@ export class BirthdayUtils {
                 DATE_FORMAT: littleEndian
                     ? Lang.getRef('info', 'terms.ddmm', data.lang)
                     : Lang.getRef('info', 'terms.mmdd', data.lang),
-            }).setAuthor({ name: target.tag, url: target.displayAvatarURL() })
+            }).setAuthor({ name: target.tag, url: target.displayAvatarURL() }),
+            hidden
         );
 
         let birthdayResult = await CollectorUtils.collectByModal(
@@ -199,7 +207,8 @@ export class BirthdayUtils {
                         intr,
                         Lang.getErrorEmbed('validation', 'errorEmbeds.invalidBirthday', data.lang, {
                             TARGET: target.username,
-                        })
+                        }),
+                        hidden
                     );
                     return;
                 }
@@ -219,7 +228,8 @@ export class BirthdayUtils {
         target: User,
         data: EventData,
         intr: CommandInteraction,
-        nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction
+        nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
+        hidden: boolean = true
     ): Promise<
         [CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction, string]
     > {
@@ -243,7 +253,8 @@ export class BirthdayUtils {
                             INPUTTED_TIMEZONE: timeZone,
                             TARGET: target.username,
                         }
-                    )
+                    ),
+                    hidden
                 );
 
                 if (defaultTimezoneResult === undefined) return;
@@ -267,12 +278,13 @@ export class BirthdayUtils {
         data: EventData,
         nextIntr: CommandInteraction | MessageComponentInteraction | ModalSubmitInteraction,
         parser: Chrono,
-        userData: UserData
+        userData: UserData,
+        hidden: boolean = true
     ): Promise<[boolean, CommandInteraction | ButtonInteraction]> {
         // Re-Parse into a Chrono date to format the output variables
-        let birthDate = parser.parseDate(birthday);
-        let month = birthDate.getMonth() + 1;
-        let day = birthDate.getDate();
+        let input = birthday.split('-'); // comes in MM-DD format
+        let month = parseInt(input[0]);
+        let day = parseInt(input[1]);
 
         let result = await CollectorUtils.getBooleanFromButton(
             nextIntr,
@@ -282,6 +294,7 @@ export class BirthdayUtils {
                 BIRTHDAY: `${FormatUtils.getMonth(month, data.lang)} ${day}`,
                 TIMEZONE: timeZone,
             }),
+            hidden,
             target
         );
 
@@ -290,12 +303,12 @@ export class BirthdayUtils {
 
         if (result.value) {
             // Confirmed
+            let nextBirthday = TimeUtils.nextOccurrenceOfMonthDay(month, day, timeZone);
+
             userData = await data.em.upsert(UserData, {
                 discordId: target.id,
-                birthdayStartUTC: TimeUtils.dateToUTC(birthday, timeZone).toISO(),
-                birthdayEndUTC: (userData.birthdayEndUTC = TimeUtils.dateToUTC(birthday, timeZone)
-                    .plus({ days: 1 })
-                    .toISO()),
+                birthdayStartUTC: nextBirthday.toUTC().toISO(),
+                birthdayEndUTC: nextBirthday.plus({ days: 1 }).toUTC().toISO(),
                 timeZone: timeZone,
             });
             await data.em.persistAndFlush(userData);
@@ -306,7 +319,8 @@ export class BirthdayUtils {
                     USER: target.toString(),
                     BIRTHDAY: `${FormatUtils.getMonth(month, data.lang)} ${day}`,
                     TIMEZONE: timeZone,
-                })
+                }),
+                hidden
             );
             return;
         } else {

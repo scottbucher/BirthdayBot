@@ -99,7 +99,7 @@ export class FormatUtils {
                     Lang.getRef('info', 'months.feb', langCode).toLowerCase().slice(0, 2) + ' 29th'
                 )
         )
-            input = '2000-02-29';
+            input = '02-29';
         let results = parser.parseDate(input); // Try an parse a date
 
         if (!results) return null;
@@ -109,7 +109,7 @@ export class FormatUtils {
         let temp = `2000-${month}-${day}`;
         let doubleCheck = parser.parseDate(temp);
 
-        return doubleCheck ? temp : null;
+        return doubleCheck ? `${month}-${day}` : null;
     }
 
     public static getMonth(month: number, langCode: Locale): string {
