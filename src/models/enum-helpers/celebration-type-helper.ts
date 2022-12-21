@@ -115,6 +115,7 @@ export class NextCelebrationTypeHelper {
     } = {
         BIRTHDAY: birthdayData,
         MEMBER_ANNIVERSARY: memberAnniversaryData,
+        SERVER_ANNIVERSARY: serverAnniversaryData,
         EVENT: eventData,
     };
 }

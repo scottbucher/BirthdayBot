@@ -35,10 +35,12 @@ export type ViewCelebrationType = CelebrationType.BIRTHDAY | CelebrationType.MEM
 export const NextCelebrationTypes = [
     CelebrationType.BIRTHDAY,
     CelebrationType.MEMBER_ANNIVERSARY,
+    CelebrationType.SERVER_ANNIVERSARY,
     CelebrationType.EVENT,
 ];
 
 export type NextCelebrationType =
     | CelebrationType.BIRTHDAY
     | CelebrationType.MEMBER_ANNIVERSARY
+    | CelebrationType.SERVER_ANNIVERSARY
     | CelebrationType.EVENT;

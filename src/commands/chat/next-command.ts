@@ -2,7 +2,13 @@ import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { DateTime } from 'luxon';
 
 import { UserData } from '../../database/entities/user.js';
-import { CelebrationType, DataValidation, EventDataType, UseTimeZone } from '../../enums/index.js';
+import {
+    CelebrationType,
+    DataValidation,
+    EventDataType,
+    NextCelebrationType,
+    UseTimeZone,
+} from '../../enums/index.js';
 import { Language } from '../../models/enum-helpers/language.js';
 import { EventData } from '../../models/internal-models.js';
 import { Lang } from '../../services/lang.js';
@@ -20,9 +26,10 @@ export class NextCommand implements Command {
     public dataValidation: DataValidation[] = [DataValidation.VOTE_RECENT];
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
-        let type: CelebrationType = intr.options.getString(
-            Lang.getRef('commands', 'arguments.type', Language.Default)
-        ) as CelebrationType;
+        let type: NextCelebrationType =
+            (intr.options.getString(
+                Lang.getRef('commands', 'arguments.type', Language.Default)
+            ) as NextCelebrationType) ?? CelebrationType.BIRTHDAY;
         let guildData = data.guildData;
         let timeZone = guildData?.guildSettings.timeZone;
         let userList: string;
