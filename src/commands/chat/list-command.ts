@@ -28,7 +28,7 @@ export class ListCommand implements Command {
         // TODO: Implement List Command
         await InteractionUtils.send(
             intr,
-            Lang.getErrorEmbed('validation', 'errorEmbeds.notImplemented', data.lang)
+            Lang.getEmbed('validation', 'embeds.notImplemented', data.lang)
         );
     }
 }

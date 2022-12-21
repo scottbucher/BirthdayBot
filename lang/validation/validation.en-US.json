@@ -1,19 +1,6 @@
 {
     "data": {
         "embeds": {
-            "oldPrefixUsed": {
-                "title": "Slash Commands Update",
-                "description": [
-                    "{{COM:bot.name}} now uses **Slash Commands**! Try it by typing `/{{COM:commands.help}}`!",
-                    "",
-                    "If you don't see any slash commands listed for {{COM:bot.name}}:",
-                    "",
-                    "  1. Check that you have the **Use Application Commands** permission in this channel.",
-                    "  2. Try kicking and [re-inviting {{COM:bot.name}}]({{COM:links.invite}}).",
-                    "  3. Join our [support server]({{COM:links.support}}) for help."
-                ],
-                "color": "{{COM:colors.warn}}"
-            },
             "missingClientPerms": {
                 "description": [
                     "I don't have all permissions required to run that command here! Please check the server and channel permissions to make sure I have the following permissions.",
@@ -229,6 +216,12 @@
                 },
                 "timestamp": true,
                 "color": "{{COM:colors.error}}"
+            },
+            "notImplemented": {
+                "title": "Coming Soon!",
+                "description": "This feature has not yet been implemented!",
+                "timestamp": true,
+                "color": "{{COM:colors.warn}}"
             }
         },
         "errorEmbeds": {

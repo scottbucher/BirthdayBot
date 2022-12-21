@@ -206,7 +206,7 @@ export class NextCommand implements Command {
                 // Not implemented yet
                 await InteractionUtils.send(
                     intr,
-                    Lang.getErrorEmbed('validation', 'errorEmbeds.notImplemented', data.lang)
+                    Lang.getEmbed('validation', 'embeds.notImplemented', data.lang)
                 );
                 break;
             }
