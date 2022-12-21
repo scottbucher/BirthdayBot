@@ -7,11 +7,12 @@
 
 
 # List commands
-- /view_messages <type>
-- /view_blacklist
-- /view_trusted_role
-- /view_member_anniversary_roles
-- /view_custom_events
+- /view_messages <type> [page] // All celebration types accepted
+- /view_blacklist [page]
+- /view_trusted_role [page]
+- /view_member_anniversary_roles [page]
+- /view_custom_events [page]
+	- Shows the date, alias, and message alias, and all message properties
 
 # Config Commands
 - /config timezone <timezone>
@@ -52,7 +53,8 @@
 # Message commands
 - /message add <type>
 	- asks for description
-	- asks for image (link or {USER_PFP})
+	- asks for image (link or {USER_PFP} if birthday / member anniversary, server anniversary can use {SERVER_ICON})
+		- Give these options through buttons based on the type
 	- asks for embed (true/false)
 	- asks for color (if premium & embed = true)
 	- asks for title (if premium & embed = true)
@@ -65,3 +67,11 @@
 - /message edit title <alias> <title>
 - /message edit footer <alias> <new_footer>
 - /message test <alias>
+
+# Permanent List Commands
+- /permanent_list generate <type> [channel]
+	- Generates a permanent list of all birthdays or member anniversaries
+	- defaults to the channel the command was run in
+	- Server can only have one permanent list at a time
+	- If a permanent list already exists, the database id will be overwritten
+	- No command to remove, the server can just delete the message?
