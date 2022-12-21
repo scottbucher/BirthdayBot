@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 
 import { Button } from './buttons/index.js';
 import {
+    HelpCommand,
     InfoCommand,
     LinkCommand,
     ListCommand,
@@ -69,6 +70,7 @@ async function start(): Promise<void> {
     // Commands
     let commands: Command[] = [
         // Chat Commands
+        new HelpCommand(),
         new ViewCommand(),
         new InfoCommand(),
         new LinkCommand(),
