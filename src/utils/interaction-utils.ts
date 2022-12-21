@@ -3,6 +3,7 @@ import {
     APIMessageActionRowComponent,
     ApplicationCommandOptionChoiceData,
     AutocompleteInteraction,
+    ButtonBuilder,
     ButtonInteraction,
     ButtonStyle,
     CommandInteraction,
@@ -77,20 +78,21 @@ export class InteractionUtils {
         await intr.deferUpdate();
 
         await InteractionUtils.editReply(intr, {
-            components: this.setComponentsStatus(
+            components: this.setButtonComponentStatus(
                 intr.message.components as APIActionRowComponent<APIMessageActionRowComponent>[],
                 false
             ),
         });
     }
 
-    public static setComponentsStatus(
+    public static setButtonComponentStatus(
         rowComponents: APIActionRowComponent<APIMessageActionRowComponent>[],
         enabled: boolean
     ): APIActionRowComponent<APIMessageActionRowComponent>[] {
         rowComponents.forEach(r => {
             r.components.forEach(c => {
-                c.disabled = enabled;
+                if (c.type === ComponentType.Button)
+                    return ButtonBuilder.from(c).setDisabled(enabled);
             });
         });
 
@@ -165,7 +167,7 @@ export class InteractionUtils {
                     type: ComponentType.ActionRow,
                     components: [
                         {
-                            type: ComponentType.ActionRow,
+                            type: ComponentType.Button,
                             customId: 'enter_response',
                             emoji: '⌨️',
                             label: Lang.getRef('info', 'terms.enterResponse', data.lang),
