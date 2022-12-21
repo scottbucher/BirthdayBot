@@ -273,10 +273,10 @@ export class CelebrationUtils {
         type: CelebrationType
     ): string {
         return type === CelebrationType.BIRTHDAY
-            ? guildData.birthdaySettings.mention
+            ? guildData.birthdaySettings.ping
             : type === CelebrationType.MEMBER_ANNIVERSARY
-            ? guildData.memberAnniversarySettings.mention
-            : guildData.serverAnniversarySettings.mention;
+            ? guildData.memberAnniversarySettings.ping
+            : guildData.serverAnniversarySettings.ping;
     }
 
     public static replacePlaceHolders(

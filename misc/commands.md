@@ -39,7 +39,7 @@
 - /config requireAllTrustedRoles <true/false>
 
 ## Event Commands (type includes: birthday, memeber_anniversary, server_anniversary, custom_event)
-- /event mention <type> <mention>
+- /event ping <type> <ping>
 - /event time <type> <0-23>
 - /event post_mode <type> <post_mode>
 - /event channel <type> <channel> 

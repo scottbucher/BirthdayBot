@@ -54,7 +54,7 @@ export class BirthdaySettings {
     postMode = PostMode.POST_ONLY;
 
     @Property()
-    mention?: string;
+    ping?: string;
 
     @Property()
     reminderDaysBefore = 0;
@@ -77,7 +77,7 @@ export class MemberAnniversarySettings {
     postMode = PostMode.POST_ONLY;
 
     @Property()
-    mention?: string;
+    ping?: string;
 
     @Property()
     permanentListMessageId?: string;
@@ -97,7 +97,7 @@ export class ServerAnniversarySettings {
     postMode = PostMode.POST_ONLY;
 
     @Property()
-    mention?: string;
+    ping?: string;
 }
 
 @Embeddable()
@@ -109,7 +109,7 @@ export class EventSettings {
     postMode = PostMode.POST_ONLY;
 
     @Property()
-    mention?: string;
+    ping?: string;
 }
 
 @Embeddable()

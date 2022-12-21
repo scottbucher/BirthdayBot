@@ -53,7 +53,7 @@ export class DatabaseSeeder extends Seeder {
         let event1Month = 12;
         let event1Day = 25;
         let event1Options: EventOptions = {
-            mention: `@everyone`,
+            ping: `@everyone`,
         };
 
         // User Data

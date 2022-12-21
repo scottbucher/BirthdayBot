@@ -286,16 +286,16 @@ export class FormatUtils {
         }
     }
 
-    public static getMentionSetting(mentionSetting: string, guild: Guild): string {
+    /**
+     * @deprecated the full ping is stored in the database so no formatting is needed
+     */
+    public static getMentionSetting(ping: string, guild: Guild): string {
         // Find mentioned role
-        let roleInput: Role = guild.roles.resolve(mentionSetting);
+        let roleInput: Role = guild.roles.resolve(ping);
 
         if (!roleInput || roleInput.guild.id !== guild.id) {
-            if (
-                mentionSetting?.toLowerCase() === 'everyone' ||
-                mentionSetting?.toLowerCase() === 'here'
-            ) {
-                return '@' + mentionSetting;
+            if (ping?.toLowerCase() === 'everyone' || ping?.toLowerCase() === 'here') {
+                return '@' + ping;
             }
         } else {
             return roleInput?.toString();

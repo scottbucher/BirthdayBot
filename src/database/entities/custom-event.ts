@@ -49,7 +49,7 @@ export class CustomEventData {
     timeSettings: TimeSettings = new TimeSettings();
 
     @Property()
-    mention?: string;
+    ping?: string;
 
     @ManyToOne()
     guild!: IdentifiedReference<GuildData>;
@@ -62,11 +62,11 @@ export class CustomEventData {
         this.timeSettings.month = month;
         this.timeSettings.day = day;
         this.timeSettings.year = options?.year;
-        this.mention = options?.mention;
+        this.ping = options?.ping;
     }
 }
 
 export interface EventOptions {
     year?: number;
-    mention?: string;
+    ping?: string;
 }

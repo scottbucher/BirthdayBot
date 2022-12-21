@@ -14,7 +14,7 @@
             "useTimeZone": "SERVER",
             "postHourUtc": 3,
             "postMode": "POST_ONLY",
-            "mention": null, // or "<@3543533453535345345345354>" whatever role
+            "ping": null, // or "<@3543533453535345345345354>" whatever role
             "reminderDaysBefore": 1,
         },
         "memberAnniversaries": {
@@ -27,18 +27,18 @@
             ],
             "postHourUtc": 5,
             "postMode": "POST_ONLY",
-            "mention": null
+            "ping": null
         },
         "serverAnniversaries": {
             "channelDiscordId": "709287764847493172",
             "postHourUtc": 5,
             "postMode": "POST_ONLY",
-            "mention": null
+            "ping": null
         },
         "customEvents": {
             "channelDiscordId": "709287764847493172",
             "postMode": "POST_ONLY",
-            "mention": null
+            "ping": null
         },
         "trustedSystem": {
             "roles": ["660746189419053057", "660746189419053057", "660746189419053057"],

@@ -43,7 +43,7 @@
             "embed": "embed",
             "color": "color",
             "time": "time",
-            "mention": "mention",
+            "ping": "ping",
             "docs": "docs",
             "support": "support"
         },
@@ -70,7 +70,7 @@
             "embed": "embed",
             "color": "color",
             "time": "time",
-            "mention": "mention",
+            "ping": "ping",
             "position": "position",
             "message": "message",
             "year": "year",
