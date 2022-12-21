@@ -1,6 +1,6 @@
 # Key 
-- not done 
-/ in progress
+\- not done  
+/ in progress  
 x done
 
 ## MISC Commands
