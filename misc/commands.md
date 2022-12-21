@@ -3,14 +3,14 @@
 - /next [type] (default: birthday, member_anniversary) - Done
 - /link <type> (support, docs, donate, faq, invite, vote, map) - Done
 - /settings [type] (default: general, event, advanced)
-- /help [category]
-- /purge - In Progress
-- /set [date] [time zone] - In Progress
-- /suggest <user> [date] [time zone]
+- /help [category] - In Progress (Waiting till all the commands are done and finalized)
+- /purge - Done
+- /set [date] [time zone] - Done
+- /suggest <user> [date] [time zone] - Done
 - /info <choice> - Done
 - /premium - Done
-- /subscribe
-- /vote
+- /subscribe - Done
+- /vote - Done
 - /map - Done
 
 ## MISC Setting Commands
