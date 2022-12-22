@@ -59,14 +59,14 @@ export class DatabaseSeeder extends Seeder {
         // User Data
         let user1DiscordId = '478288246858711040'; // Scott
         let user1Birthday = TimeUtils.nextOccurrenceOfMonthDay(8, 28, 'America/New_York').toFormat(
-            'yyyy-MM-dd'
+            'LL-d'
         );
         let user1TimeZone = 'America/New_York';
 
         let user2DiscordId = '212772875793334272'; // Kevin
         let user2Birthday = TimeUtils.nextOccurrenceOfMonthDay(11, 28, 'America/New_York')
             .toUTC()
-            .toFormat('yyyy-MM-dd');
+            .toFormat('LL-d');
         let user2TimeZone = 'America/New_York';
 
         // Vote Data

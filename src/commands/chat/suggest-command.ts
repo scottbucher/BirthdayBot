@@ -48,7 +48,7 @@ export class SuggestCommand implements Command {
         let userData = await data.em.findOne(
             UserData,
             { discordId: intr.user.id },
-            { populate: ['birthdayStartUTC', 'timeZone'] }
+            { populate: ['birthday', 'timeZone'] }
         );
 
         let guildData = data.guildData;

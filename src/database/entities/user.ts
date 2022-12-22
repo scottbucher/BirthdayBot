@@ -18,10 +18,7 @@ export class UserData {
     discordId!: string;
 
     @Property()
-    birthdayStartUTC!: string;
-
-    @Property()
-    birthdayEndUTC!: string;
+    birthday!: string;
 
     @Property()
     timeZone!: string;
@@ -33,7 +30,6 @@ export class UserData {
         this.discordId = userDiscordId;
         this.timeZone = timeZone;
 
-        this.birthdayStartUTC = TimeUtils.dateToUTC(birthday, timeZone).toISO();
-        this.birthdayEndUTC = TimeUtils.dateToUTC(birthday, timeZone).plus({ days: 1 }).toISO();
+        this.birthday = birthday;
     }
 }

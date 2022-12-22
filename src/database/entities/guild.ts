@@ -45,10 +45,8 @@ export class BirthdaySettings {
     @Property()
     useTimeZone = UseTimeZone.SERVER;
 
-    // Can't default to 0 since each server has a different timeZone
-    // Calculated when server timeZone is set and useTimeZone is set to SERVER
     @Property()
-    postHourUTC?: number;
+    postHour = 0;
 
     @Property()
     postMode = PostMode.POST_ONLY;
@@ -68,10 +66,8 @@ export class MemberAnniversarySettings {
     @Property()
     channelDiscordId?: string;
 
-    // Can't default to 0 since each server has a different timeZone
-    // Calculated when server timeZone is set
     @Property()
-    postHourUTC?: number;
+    postHour = 0;
 
     @Property()
     postMode = PostMode.POST_ONLY;
@@ -88,10 +84,8 @@ export class ServerAnniversarySettings {
     @Property()
     channelDiscordId?: string;
 
-    // Can't default to 0 since each server has a different timeZone
-    // Calculated when server timeZone is set
     @Property()
-    postHourUTC?: number;
+    postHour = 0;
 
     @Property()
     postMode = PostMode.POST_ONLY;

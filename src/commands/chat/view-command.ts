@@ -7,7 +7,6 @@ import { Language } from '../../models/enum-helpers/language.js';
 import { EventData } from '../../models/internal-models.js';
 import { Lang } from '../../services/lang.js';
 import { InteractionUtils } from '../../utils/interaction-utils.js';
-import { TimeUtils } from '../../utils/time-utils.js';
 import { Command, CommandDeferType } from '../command.js';
 
 export class ViewCommand implements Command {
@@ -40,10 +39,10 @@ export class ViewCommand implements Command {
                 let userData = await data.em.findOne(
                     UserData,
                     { discordId: target.id },
-                    { populate: ['birthdayStartUTC', 'timeZone'] }
+                    { populate: ['birthday', 'timeZone'] }
                 );
 
-                if (!userData || !userData.birthdayStartUTC || !userData.timeZone) {
+                if (!userData || !userData.birthday || !userData.timeZone) {
                     await InteractionUtils.send(
                         intr,
                         Lang.getErrorEmbed('validation', 'errorEmbeds.birthdayNotSet', data.lang, {
@@ -57,12 +56,12 @@ export class ViewCommand implements Command {
                     intr,
                     Lang.getEmbed('results', 'success.viewBirthday', data.lang, {
                         USER: target.toString(),
-                        BIRTHDAY: TimeUtils.dateFromUTC(
-                            userData?.birthdayStartUTC,
-                            userData?.timeZone
-                        ).toFormat('LLLL d', {
-                            locale: data.lang,
-                        }),
+                        BIRTHDAY: DateTime.fromFormat(userData?.birthday, 'LL-d').toFormat(
+                            'LLLL d',
+                            {
+                                locale: data.lang,
+                            }
+                        ),
                         TIMEZONE: userData.timeZone,
                     })
                 );

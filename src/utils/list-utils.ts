@@ -283,8 +283,8 @@ export class ListUtils {
 
         // Sort the list of users in order of birthdays
         userDatas.sort((a, b) => {
-            let aDate = DateTime.fromISO(a.birthdayStartUTC);
-            let bDate = DateTime.fromISO(b.birthdayStartUTC);
+            let aDate = DateTime.fromFormat(a.birthday, 'LL-d');
+            let bDate = DateTime.fromFormat(b.birthday, 'LL-d');
             if (aDate.month === bDate.month) {
                 return aDate.day - bDate.day;
             } else {
@@ -297,13 +297,20 @@ export class ListUtils {
 
         let birthdays = [
             ...new Set(
-                userDatas.map(data => DateTime.fromISO(data.birthdayStartUTC).toFormat('LLLL d'))
+                userDatas.map(d =>
+                    DateTime.fromFormat(d.birthday, 'LL-d').toFormat('LLLL d', {
+                        locale: data.lang,
+                    })
+                )
             ),
         ]; // remove duplicates
         // Go through the list of birthdays
         for (let birthday of birthdays) {
             let users = userDatas.filter(
-                data => DateTime.fromISO(data.birthdayStartUTC).toFormat('LLLL d') === birthday
+                d =>
+                    DateTime.fromFormat(d.birthday, 'LL-d').toFormat('LLLL d', {
+                        locale: data.lang,
+                    }) === birthday
             ); // Get all users with this birthday to create the sub list
             let members = guild.members.cache
                 .filter(m => users.map(u => u.discordId).includes(m.id))
@@ -341,13 +348,19 @@ export class ListUtils {
         guildMembers = guildMembers.filter(m => m.joinedTimestamp !== null);
 
         let anniversaries = [
-            ...new Set(guildMembers.map(m => DateTime.fromJSDate(m.joinedAt).toFormat('LLLL d'))),
+            ...new Set(
+                guildMembers.map(m =>
+                    DateTime.fromJSDate(m.joinedAt).toFormat('LLLL d', { locale: data.lang })
+                )
+            ),
         ]; // remove duplicates
 
         // Go through the list of birthdays
         for (let anniversary of anniversaries) {
             let members = guildMembers.filter(
-                m => DateTime.fromJSDate(m.joinedAt).toFormat('LLLL d') === anniversary
+                m =>
+                    DateTime.fromJSDate(m.joinedAt).toFormat('LLLL d', { locale: data.lang }) ===
+                    anniversary
             ); // Get all users with this birthday to create the sub list
             let userList = CelebrationUtils.getUserListString(guildData, members, data.lang); // Get the sub list of usernames for this date
             description += `__**${anniversary}**__: ${userList}\n`; // Append the description

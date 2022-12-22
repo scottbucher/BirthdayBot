@@ -307,8 +307,7 @@ export class BirthdayUtils {
 
             userData = await data.em.upsert(UserData, {
                 discordId: target.id,
-                birthdayStartUTC: nextBirthday.toUTC().toISO(),
-                birthdayEndUTC: nextBirthday.plus({ days: 1 }).toUTC().toISO(),
+                birthday: nextBirthday.toFormat('LL-d'),
                 timeZone: timeZone,
             });
             await data.em.persistAndFlush(userData);

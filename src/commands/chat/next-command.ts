@@ -89,9 +89,10 @@ export class NextCommand implements Command {
                     nextBirthdayUsers.map(user => intr.guild.members.resolve(user.discordId)),
                     data.lang
                 );
-                let nextBirthday = DateTime.fromISO(nextBirthdayUsers[0].birthdayStartUTC).toFormat(
-                    'LLLL d'
-                );
+                let nextBirthday = DateTime.fromFormat(
+                    nextBirthdayUsers[0].birthday,
+                    'LL-d'
+                ).toFormat('LLLL d', { locale: data.lang });
 
                 await InteractionUtils.send(
                     intr,
@@ -181,7 +182,9 @@ export class NextCommand implements Command {
                 let serverCreatedAt = DateTime.fromJSDate(intr.guild.createdAt, {
                     zone: guildData.guildSettings?.timeZone,
                 });
-                let anniversaryFormatted = serverCreatedAt.toFormat('LLLL d');
+                let anniversaryFormatted = serverCreatedAt.toFormat('LLLL d', {
+                    locale: data.lang,
+                });
                 let yearsOldRoundedUp = now.year - serverCreatedAt.year;
 
                 // If the diff is negative that date has already passed so we need to increase the year (this is how we round up)

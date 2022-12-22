@@ -21,10 +21,10 @@ export class PurgeCommand implements Command {
         let userData = await data.em.findOne(
             UserData,
             { discordId: target.id },
-            { populate: ['birthdayStartUTC', 'timeZone'] }
+            { populate: ['birthday', 'timeZone'] }
         );
 
-        if (!userData || !(userData.birthdayEndUTC && userData.timeZone)) {
+        if (!userData || !(userData.birthday && userData.timeZone)) {
             // Are they in the database?
             await InteractionUtils.send(
                 intr,
@@ -47,8 +47,7 @@ export class PurgeCommand implements Command {
 
         if (result.value) {
             // Confirm
-            userData.birthdayStartUTC = undefined;
-            userData.birthdayEndUTC = undefined;
+            userData.birthday = undefined;
             userData.timeZone = undefined;
             await data.em.flush();
 

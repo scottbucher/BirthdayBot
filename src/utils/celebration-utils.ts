@@ -35,13 +35,13 @@ export class CelebrationUtils {
         );
 
         if (usersAfter.length > 0) {
-            let nextBirthday = usersAfter[0].birthdayStartUTC; // First birthday after current date
-            return usersAfter.filter(userData => userData.birthdayStartUTC === nextBirthday); // TODO: Check by only month and day
+            let nextBirthday = usersAfter[0].birthday; // First birthday after current date
+            return usersAfter.filter(userData => userData.birthday === nextBirthday); // TODO: Check by only month and day
         }
 
         if (usersBefore.length > 0) {
-            let nextBirthday = usersBefore[0].birthdayStartUTC; // First birthday starting at beginning of year
-            return usersBefore.filter(userData => userData.birthdayStartUTC === nextBirthday); // TODO: Check by only month and day
+            let nextBirthday = usersBefore[0].birthday; // First birthday starting at beginning of year
+            return usersBefore.filter(userData => userData.birthday === nextBirthday); // TODO: Check by only month and day
         }
     }
 
@@ -51,14 +51,14 @@ export class CelebrationUtils {
             before: userDatas
                 .filter(
                     user =>
-                        DateTime.fromISO(user.birthdayStartUTC).toFormat('LL-dd') <
+                        DateTime.fromFormat(user.birthday, 'LL-d').toFormat('LL-dd') <
                         splitTime.toFormat('LL-dd')
                 )
                 .sort((a, b) => this.compareUserDatas(a, b)),
             after: userDatas
                 .filter(
                     user =>
-                        DateTime.fromISO(user.birthdayStartUTC).toFormat('LL-dd') >
+                        DateTime.fromFormat(user.birthday, 'LL-d').toFormat('LL-dd') >
                         splitTime.toFormat('LL-dd')
                 )
                 .sort((a, b) => this.compareUserDatas(a, b)),
@@ -66,8 +66,8 @@ export class CelebrationUtils {
     }
 
     public static compareUserDatas(a: UserData, b: UserData): number {
-        let aBday = DateTime.fromISO(a.birthdayStartUTC).toFormat('LL-dd');
-        let bBday = DateTime.fromISO(b.birthdayStartUTC).toFormat('LL-dd');
+        let aBday = DateTime.fromFormat(a.birthday, 'LL-d').toFormat('LL-dd');
+        let bBday = DateTime.fromFormat(b.birthday, 'LL-d').toFormat('LL-dd');
 
         if (aBday > bBday) {
             return 1;
@@ -93,7 +93,7 @@ export class CelebrationUtils {
             guildData.birthdaySettings.useTimeZone
         );
 
-        let birthday = DateTime.fromISO(userData.birthdayStartUTC);
+        let birthday = DateTime.fromFormat(userData.birthday, 'LL-d');
 
         let currentDateFormatted = currentDate.toFormat('LL-dd');
         let yesterdayDateFormatted = currentDate.minus({ days: 1 }).toFormat('LL-dd');
@@ -125,7 +125,7 @@ export class CelebrationUtils {
             guildData.birthdaySettings.useTimeZone
         );
 
-        let birthday = DateTime.fromISO(userData.birthdayStartUTC);
+        let birthday = DateTime.fromFormat(userData.birthday, 'LL-d');
 
         let currentDateFormatted = currentDate.toFormat('LL-dd');
         let birthdayFormatted = birthday.toFormat('LL-dd');
@@ -138,7 +138,7 @@ export class CelebrationUtils {
         let needsBirthdayRoleAdded: boolean;
         let needsBirthdayRoleRemoved: boolean;
         if (currentDateFormatted === birthdayFormatted) {
-            needsBirthdayMessage = currentHour === guildData.birthdaySettings.postHourUTC;
+            needsBirthdayMessage = currentHour === guildData.birthdaySettings.postHour;
             needsBirthdayRoleAdded = currentHour === 0;
             needsBirthdayRoleRemoved = false;
         } else {
@@ -180,7 +180,7 @@ export class CelebrationUtils {
             return new AnniversaryMemberStatus(guildMember, false, null);
 
         let needsAnniversaryMessage =
-            currentDate.hour === guildData.memberAnniversarySettings.postHourUTC;
+            currentDate.hour === guildData.memberAnniversarySettings.postHour;
         let role: Role;
 
         if (currentDate.hour === 0 && memberAnniversaryRoles && memberAnniversaryRoles.length > 0) {
@@ -214,7 +214,7 @@ export class CelebrationUtils {
         // The date is correct, now check the time
         return currentDateFormatted !== anniversaryFormatted
             ? false
-            : currentDate.hour !== guildData.serverAnniversarySettings.postHourUTC
+            : currentDate.hour !== guildData.serverAnniversarySettings.postHour
             ? false
             : true;
     }
