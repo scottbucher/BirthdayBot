@@ -13,6 +13,7 @@ import {
     PremiumCommand,
     PurgeCommand,
     SetCommand,
+    SetupCommand,
     SubscribeCommand,
     SuggestCommand,
     ViewCommand,
@@ -84,6 +85,7 @@ async function start(): Promise<void> {
         new SetCommand(),
         new SuggestCommand(),
         new SubscribeCommand(subService),
+        new SetupCommand(),
         // Message Context Commands
         // User Context Commands
         // TODO: Add new commands here

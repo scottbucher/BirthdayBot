@@ -188,7 +188,7 @@ export class CollectorUtils {
     }
 
     public static async getSetupChoiceFromButton(
-        prevIntr: CommandInteraction | ButtonInteraction,
+        prevIntr: CommandInteraction | ButtonInteraction | ModalSubmitInteraction,
         data: EventData,
         embed: EmbedBuilder
     ): Promise<{ intr: ButtonInteraction; value: string }> {
