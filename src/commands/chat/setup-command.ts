@@ -195,7 +195,7 @@ export class SetupCommand implements Command {
                 break;
             }
             case 'deny': {
-                birthdayChannel = '0';
+                birthdayChannel = undefined;
                 break;
             }
         }
@@ -362,21 +362,19 @@ export class SetupCommand implements Command {
                 break;
             }
             case 'deny': {
-                birthdayRole = '0';
+                birthdayRole = undefined;
                 break;
             }
         }
 
-        let channelOutput =
-            birthdayChannel === '0'
-                ? `${Lang.getRef('info', 'terms.notSet', data.lang)}`
-                : guild.channels.resolve(birthdayChannel)?.toString() ||
-                  `**${Lang.getRef('info', 'terms.unknownChannel', data.lang)}**`;
-        let roleOutput =
-            birthdayRole === '0'
-                ? `${Lang.getRef('info', 'terms.notSet', data.lang)}`
-                : guild.roles.resolve(birthdayRole)?.toString() ||
-                  `**${Lang.getRef('info', 'terms.unknownRole', data.lang)}**`;
+        let channelOutput = !birthdayChannel
+            ? `${Lang.getRef('info', 'terms.notSet', data.lang)}`
+            : guild.channels.resolve(birthdayChannel)?.toString() ||
+              `**${Lang.getRef('info', 'terms.unknownChannel', data.lang)}**`;
+        let roleOutput = !birthdayRole
+            ? `${Lang.getRef('info', 'terms.notSet', data.lang)}`
+            : guild.roles.resolve(birthdayRole)?.toString() ||
+              `**${Lang.getRef('info', 'terms.unknownRole', data.lang)}**`;
 
         await InteractionUtils.send(
             nextIntr,
