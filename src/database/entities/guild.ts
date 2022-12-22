@@ -40,7 +40,7 @@ export class BirthdaySettings {
     channelDiscordId?: string;
 
     @Property()
-    birthdayRoleDiscordId?: string;
+    roleDiscordId?: string;
 
     @Property()
     useTimeZone = UseTimeZone.SERVER;
@@ -219,6 +219,6 @@ export class GuildData {
     ) {
         this.discordId = discordId;
         this.birthdaySettings.channelDiscordId = birthdayChannelDiscordId;
-        this.birthdaySettings.birthdayRoleDiscordId = birthdayRoleDiscordId;
+        this.birthdaySettings.roleDiscordId = birthdayRoleDiscordId;
     }
 }
