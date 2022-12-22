@@ -29,8 +29,6 @@ export class ListCommand implements Command {
     public deferType = CommandDeferType.HIDDEN;
     public requireDev = false;
     public requireClientPerms: PermissionsString[] = [];
-    public requireSetup = false;
-    public requireVote = false;
     public requireEventData: EventDataType[] = [];
     public dataValidation: DataValidation[] = [];
 

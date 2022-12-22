@@ -20,8 +20,6 @@ export class InfoCommand implements Command {
     public names = [Lang.getRef('commands', 'chatCommands.info', Language.Default)];
     public deferType = CommandDeferType.HIDDEN;
     public requireClientPerms: PermissionsString[] = [];
-    public requireSetup = false;
-    public requireVote = false;
     public requirePremium = false;
     public requireEventData: EventDataType[] = [];
     public dataValidation: DataValidation[] = [];

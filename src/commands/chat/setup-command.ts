@@ -38,8 +38,6 @@ export class SetupCommand implements Command {
         'ManageRoles',
         'ManageChannels',
     ];
-    public requireSetup = false;
-    public requireVote = false;
     public requireEventData: EventDataType[] = [];
     public dataValidation: DataValidation[] = [];
 
