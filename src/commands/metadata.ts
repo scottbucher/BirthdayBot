@@ -181,6 +181,22 @@ export const ChatCommandMetadata: {
             PermissionFlagsBits.ManageGuild,
         ]).toString(),
     },
+    SETTINGS: {
+        name: Lang.getRef('commands', 'chatCommands.settings', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'chatCommands.settings'),
+        description: Lang.getRef('commands', 'commandDescs.settings', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'commandDescs.settings'),
+        dm_permission: false,
+        default_member_permissions: PermissionsBitField.resolve([
+            PermissionFlagsBits.ManageGuild,
+        ]).toString(),
+        options: [
+            {
+                ...Args.SETTINGS_OPTION,
+                required: false,
+            },
+        ],
+    },
 };
 
 export const MessageCommandMetadata: {

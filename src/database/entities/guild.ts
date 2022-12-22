@@ -121,7 +121,7 @@ export class TrustedSystemSettings {
     requireForRole = true;
 
     @Property()
-    requireForMention = true;
+    requireForPing = true;
 
     addRoleId(roleId: string): void {
         this.roleIds = [...new Set([...this.roleIds, roleId])];

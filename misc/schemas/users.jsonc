@@ -1,8 +1,7 @@
 {
     "_id": "0c6ee7a5-f009-47aa-a614-d38b3f8e51ed",
     "discordId": "478288246858711040",
-    "birthdayStartUTC": "2023-08-28T05:00:00.000Z",
-    "birthdayEndUTC": "2023-08-29T05:00:00.000Z",
+    "birthday": "08-28",
     "timeZone": "America/New_York",
     "changesLeft": 5 // Might remove
 }

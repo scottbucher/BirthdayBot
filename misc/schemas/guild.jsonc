@@ -12,7 +12,7 @@
             "channelDiscordId": "709287764847493172",
             "roleDiscordId": "709287764847493172",
             "useTimeZone": "SERVER",
-            "postHourUtc": 3,
+            "postHour": 3,
             "postMode": "POST_ONLY",
             "ping": null, // or "<@3543533453535345345345354>" whatever role
             "reminderDaysBefore": 1,
@@ -25,13 +25,13 @@
                     "role": "3453454534553453"
                 }
             ],
-            "postHourUtc": 5,
+            "postHour": 5,
             "postMode": "POST_ONLY",
             "ping": null
         },
         "serverAnniversaries": {
             "channelDiscordId": "709287764847493172",
-            "postHourUtc": 5,
+            "postHour": 5,
             "postMode": "POST_ONLY",
             "ping": null
         },
@@ -45,7 +45,7 @@
             "requireAll": true,
             "requireForMessage": true,
             "requireForRole": true,
-            "requireForMention": true,
+            "requireForPing": true,
         },
         "blacklist": {
             "users": ["660746189419053057", "660746189419053057"],

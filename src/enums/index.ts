@@ -19,3 +19,4 @@ export {
 export { EventDataType } from './event-data-type.js';
 export { DataValidation } from './data-validation.js';
 export { LinkOption } from './link-option.js';
+export { SettingsOption } from './settings-option.js';

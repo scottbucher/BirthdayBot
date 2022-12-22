@@ -61,7 +61,8 @@
             "subscribe": "Subscribe to Birthday Bot premium.",
             "suggest": "Suggest a birthday for another user. The user must confirm the suggestion.",
             "vote": "Vote to support Birthday Bot!",
-            "setup": "Run the initial setup processes for your server."
+            "setup": "Run the initial setup processes for your server.",
+            "settings": "View your server's settings."
         },
         "arguments": {
             "setting": "setting",
@@ -98,7 +99,8 @@
             "page": "Optional page to jump to. Defaults to 1.",
             "celebrationType": "What celebration type to use. Defaults to birthday.",
             "setDateOption": "Your birthday.",
-            "setTimeZoneOption": "Your time zone. Find this with /map!"
+            "setTimeZoneOption": "Your time zone. Find this with /map!",
+            "setting": "What group of settings to view."
         },
         "helpChoice": {
             "general": "General",
@@ -162,6 +164,11 @@
             "support": "Support",
             "vote": "Vote",
             "map": "Map"
+        },
+        "settingsChoice": {
+            "general": "General",
+            "message": "Message",
+            "advanced": "Advanced"
         },
         "meta": {
             "language": "en-US",

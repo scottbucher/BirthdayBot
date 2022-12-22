@@ -12,3 +12,4 @@ export { SubscribeCommand } from './subscribe-command.js';
 export { HelpCommand } from './help-command.js';
 export { VoteCommand } from './vote-command.js';
 export { SetupCommand } from './setup-command.js';
+export { SettingsCommand } from './settings-command.js';

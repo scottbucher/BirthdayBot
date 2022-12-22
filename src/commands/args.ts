@@ -10,6 +10,7 @@ import {
     LinkOption,
     ListCelebrationTypes,
     NextCelebrationTypes,
+    SettingsOption,
     ViewCelebrationTypes,
 } from '../enums/index.js';
 import {
@@ -18,6 +19,7 @@ import {
     LinkOptionHelper,
     ListCelebrationTypeHelper,
     NextCelebrationTypeHelper,
+    SettingsOptionHelper,
     ViewCelebrationTypeHelper,
 } from '../models/enum-helpers/index.js';
 import { Language } from '../models/enum-helpers/language.js';
@@ -169,5 +171,22 @@ export class Args {
         type: ApplicationCommandOptionType.String.valueOf(),
         min_value: 1,
         required: false,
+    };
+
+    public static readonly SETTINGS_OPTION: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('commands', 'arguments.setting', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('commands', 'arguments.setting'),
+        description: Lang.getRef('commands', 'argDescs.setting', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commands', 'argDescs.setting'),
+        type: ApplicationCommandOptionType.String.valueOf(),
+        required: false,
+        choices: Object.values(SettingsOption).map(
+            choice =>
+                <APIApplicationCommandOptionChoice<string>>{
+                    name: SettingsOptionHelper.Data[choice].displayName(Language.Default),
+                    name_localizations: SettingsOptionHelper.Data[choice].localizationMap(),
+                    value: choice,
+                }
+        ),
     };
 }

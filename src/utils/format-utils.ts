@@ -3,6 +3,7 @@ import { ApplicationCommand, Guild, Locale, Role } from 'discord.js';
 import { Duration } from 'luxon'; // TODO: Missing types
 import { createRequire } from 'node:module';
 
+import { PostMode } from '../enums/post-mode.js';
 import { Lang } from '../services/lang.js';
 
 const require = createRequire(import.meta.url);
@@ -310,5 +311,13 @@ export class FormatUtils {
         else if (time === 12) return '12:00 ' + pm;
         else if (time < 12) return `${time}:00 ${am}`;
         else return `${time - 12}:00 ${pm}`;
+    }
+
+    public static getPostModeDisplay(mode: PostMode, langCode: Locale): string {
+        return mode === PostMode.POST_ONLY
+            ? Lang.getRef('commands', 'postModeChoices.postOnly', langCode)
+            : mode === PostMode.POST_AND_PIN
+            ? Lang.getRef('commands', 'postModeChoices.postPin', langCode)
+            : Lang.getRef('commands', 'postModeChoices.threads', langCode);
     }
 }

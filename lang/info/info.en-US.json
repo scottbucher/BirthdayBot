@@ -349,6 +349,11 @@
                         "inline": true
                     },
                     {
+                        "name": "{{REF:terms.trustedPreventsPing}}",
+                        "value": "{{TRUSTED_PREVENTS_PING}}",
+                        "inline": true
+                    },
+                    {
                         "name": "{{REF:terms.requireAllTrustedRoles}}",
                         "value": "{{REQUIRE_ALL_TRUSTED_ROLES}}",
                         "inline": true
@@ -399,6 +404,11 @@
                         "inline": true
                     },
                     {
+                        "name": "{{REF:terms.eventChannel}}",
+                        "value": "{{EVENT_CHANNEL}}",
+                        "inline": true
+                    },
+                    {
                         "name": "{{REF:terms.birthdayMessageTime}}",
                         "value": "{{BIRTHDAY_MESSAGE_TIME}}",
                         "inline": true
@@ -414,18 +424,43 @@
                         "inline": true
                     },
                     {
-                        "name": "{{REF:terms.birthdayMention}}",
-                        "value": "{{BIRTHDAY_MENTION}}",
+                        "name": "{{REF:terms.birthdayPing}}",
+                        "value": "{{BIRTHDAY_PING}}",
                         "inline": true
                     },
                     {
-                        "name": "{{REF:terms.memberAnniversaryMention}}",
-                        "value": "{{MEMBER_ANNIVERSARY_MENTION}}",
+                        "name": "{{REF:terms.memberAnniversaryPing}}",
+                        "value": "{{MEMBER_ANNIVERSARY_PING}}",
                         "inline": true
                     },
                     {
-                        "name": "{{REF:terms.serverAnniversaryMention}}",
-                        "value": "{{SERVER_ANNIVERSARY_MENTION}}",
+                        "name": "{{REF:terms.serverAnniversaryPing}}",
+                        "value": "{{SERVER_ANNIVERSARY_PING}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.eventPing}}",
+                        "value": "{{EVENT_PING}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.birthdayPostMode}}",
+                        "value": "{{BIRTHDAY_POST_MODE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.memberAnniversaryPostMode}}",
+                        "value": "{{MEMBER_ANNIVERSARY_POST_MODE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.serverAnniversaryPostMode}}",
+                        "value": "{{SERVER_ANNIVERSARY_POST_MODE}}",
+                        "inline": true
+                    },
+                    {
+                        "name": "{{REF:terms.eventPostMode}}",
+                        "value": "{{EVENT_POST_MODE}}",
                         "inline": true
                     },
                     {
@@ -1124,6 +1159,7 @@
             "notInBlacklist": "Not In Blacklist",
             "trustedPreventMsg": "Trusted Prevented Message",
             "trustedPreventRole": "Trusted Prevented Role",
+            "trustedPreventPing": "Trusted Prevented Ping",
             "didPreventMsg": "Didn't Prevent Message",
             "didntPreventMsg": "Prevented Message",
             "didPreventRole": "Didn't Prevent Role",
@@ -1176,6 +1212,7 @@
             "birthdayRole": "Birthday Role",
             "trustedPreventsRole": "Trusted Prevents Role",
             "trustedPreventsMessage": "Trusted Prevents Message",
+            "trustedPreventsPing": "Trusted Prevents Ping",
             "requireAllTrustedRoles": "Require All Trusted Roles",
             "defaultTimezone": "Default Timezone",
             "numberOfTrustedRoles": "Number Of Trusted Roles",
@@ -1184,12 +1221,18 @@
             "dateFormat": "Date Format",
             "memberAnniversaryChannel": "Member Anniversary Channel",
             "serverAnniversaryChannel": "Server Anniversary Channel",
+            "eventChannel": "Event Channel",
             "birthdayMessageTime": "Birthday Message Time",
             "memberAnniversaryMessageTime": "Member Anniversary Time",
             "serverAnniversaryMessageTime": "Server Anniversary Time",
-            "birthdayMention": "Birthday Mention Setting",
-            "memberAnniversaryMention": "Member Anniversary Mention Setting",
-            "serverAnniversaryMention": "Server Anniversary Mention Setting",
+            "birthdayPing": "Birthday Ping",
+            "memberAnniversaryPing": "Member Anniversary Ping",
+            "serverAnniversaryPing": "Server Anniversary Ping",
+            "eventPing": "Event Ping",
+            "birthdayPostMode": "Birthday Post Mode",
+            "memberAnniversaryPostMode": "Member Anniversary Post Mode",
+            "serverAnniversaryPostMode": "Server Anniversary Post Mode",
+            "eventPostMode": "Event Post Mode",
             "serverLanguage": "Server Language",
             "never": "Never",
             "mmdd": "MM/DD",
