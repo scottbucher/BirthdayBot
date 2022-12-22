@@ -73,7 +73,6 @@ export class SetCommand implements Command {
 
         if (!birthday)
             [nextIntr, birthday] = await BirthdayUtils.getUserBirthday(
-                birthday,
                 intr.user,
                 data,
                 intr,

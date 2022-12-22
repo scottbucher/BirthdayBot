@@ -126,7 +126,6 @@ export class BirthdayUtils {
     }
 
     public static async getUserBirthday(
-        birthday: string,
         target: User,
         data: EventData,
         intr: CommandInteraction,

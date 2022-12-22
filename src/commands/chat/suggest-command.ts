@@ -89,7 +89,6 @@ export class SuggestCommand implements Command {
 
         if (!birthday)
             [nextIntr, birthday] = await BirthdayUtils.getUserBirthday(
-                birthday,
                 target,
                 data,
                 intr,
