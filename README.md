@@ -4,7 +4,7 @@
 [![Discord Bots](https://top.gg/api/widget/status/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
 [![License](https://img.shields.io/badge/license-No%20License-blue)](https://choosealicense.com/no-permission/)
 [![Stars](https://img.shields.io/github/stars/scottbucher/BirthdayBot.svg)](https://github.com/scottbucher/BirthdayBot/stargazers)
-[![Discord Shield](https://discord.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discord.com/invite/9gUQFtz)
+[![Discord Shield](https://discord.com/api/guilds/660711235766976553/widget.png?style=shield)](https://discord.com/invite/39w2cnBRa2)
 [![Discord Bots](https://top.gg/api/widget/owner/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
 
 ## Important Note
@@ -15,7 +15,7 @@
 
 ## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268921936&scope=bot%20applications.commands)
 
-[Join The Support Server](https://discord.gg/9gUQFtz) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
+[Join The Support Server](https://discord.gg/39w2cnBRa2) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
 
 # Features:
 
@@ -59,7 +59,7 @@
 
 ### Support & Troubleshooting
 
-Birthday Bot is a part of the Arilyn Bot family and any support, questions or feedback are welcome in our support [Discord](https://discord.com/invite/9gUQFtz). Please visit our [FAQ](https://birthdaybot.scottbucher.dev/faq) and setup guide, as well as previous user questions before contacting staff, thanks!
+Birthday Bot is a part of the Arilyn Bot family and any support, questions or feedback are welcome in our support [Discord](https://discord.com/invite/39w2cnBRa2). Please visit our [FAQ](https://birthdaybot.scottbucher.dev/faq) and setup guide, as well as previous user questions before contacting staff, thanks!
 
 **Example Birthday Announcement (Fully customizable):**
 
@@ -111,7 +111,7 @@ Simply click your location on the map and copy the name of the selected time zon
 
 ## Help
 
-For additional help join the support server [here](https://discord.gg/9gUQFtz).
+For additional help join the support server [here](https://discord.gg/39w2cnBRa2).
 
 ## License
 
