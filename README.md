@@ -97,7 +97,7 @@ In your Discord server Birthday Bot will track your users' birthdays and using t
 
 ## Setting your birthday
 
-Birthday Bot makes everything easy using an easily to follow process.
+Birthday Bot makes everything easy using an easy-to-follow process.
 
 Start by using `/set`.
 
