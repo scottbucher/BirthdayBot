@@ -103,11 +103,11 @@ Start by using `/set`.
 
 ![Default time zone prompt](https://birthday-bot-docs-images.s3.amazonaws.com/1-Set+command+with+default+time+zone+prompt.png)
 
-If your server has a default time zone set you will be asked if you would like to use that time zone. If you do, simply press the check mark, if not choose the x.
+If your server has a default time zone set, you will be asked if you would like to use that time zone. If you do, simply press the check mark; if not, choose the x.
 
-Birthday Bot uses time zones to detect when to celebrate each user's birthday. If you are unsure of your time zone you can find it [here](https://github.com/scottbucher/BirthdayBot/blob/master/README.md#finding-your-time-zone).
+Birthday Bot uses time zones to detect when to celebrate each user's birthday. If you are unsure of your time zone, you can find it [here](https://github.com/scottbucher/BirthdayBot/blob/master/README.md#finding-your-time-zone).
 
-If you chose the x or your server does not have a default time zone set you will recieve another prompt asking for your time zone
+If you chose the x or your server does not have a default time zone set, you will receive another prompt asking for your time zone
 
 ![Time zone input](https://birthday-bot-docs-images.s3.amazonaws.com/2-birthday+bot+time+zone+set+up+in+set+command.png)
 
@@ -127,7 +127,7 @@ Simply click the "Enter response" button as you did for adding your time zone.
 
 ![Birthday input modal](https://birthday-bot-docs-images.s3.amazonaws.com/5-birthday+input+modal.png)
 
-Simply enter your birth month and day along with your birth year if you want (it is not required) and click submit.
+In the text box enter your birth month and day along with your birth year if you want (it is not required) and click submit.
 
 Finally, the confirmation menu will appear.
 
@@ -137,9 +137,9 @@ Ensure this is the correct information, then confirm by clicking the checkmark.
 
 ![End](https://birthday-bot-docs-images.s3.amazonaws.com/7-birthday+set+success+message.png)
 
-For users that is it! Server owners will have to do a bit more but Birthday Bot makes it easy with an interactive setup. For more information on server setup follow our guide here.
+For users that is it! Server owners will have to do a bit more but Birthday Bot makes it easy with an interactive setup. For more information on server setup follow our guide [here](https://birthdaybot.scottbucher.dev/server-setup/required-setup).
 
-As the message states birth years are hidden in all servers by default. Learn more about Birthday Bot's user privacy settings [here](https://birthdaybot.scottbucher.dev/faq-1/user/user-privacy).
+As the message states, birth years are hidden in all servers by default. Learn more about Birthday Bot's user privacy settings [here](https://birthdaybot.scottbucher.dev/faq-1/user/user-privacy).
 
 ## Finding your time zone
 
