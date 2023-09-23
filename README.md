@@ -101,41 +101,53 @@ Birthday Bot makes everything easy using an easily to follow process.
 
 Start by using `/set`.
 
-![Start](https://i.imgur.com/Evo2jsp.png)
+![Default time zone prompt](https://birthday-bot-docs-images.s3.amazonaws.com/1-Set+command+with+default+time+zone+prompt.png)
+
+If your server has a default time zone set you will be asked if you would like to use that time zone. If you do, simply press the check mark, if not choose the x.
 
 Birthday Bot uses time zones to detect when to celebrate each user's birthday. If you are unsure of your time zone you can find it [here](https://github.com/scottbucher/BirthdayBot/blob/master/README.md#finding-your-time-zone).
 
-Now, you can then reply to this message with your desired time zone.
+If you chose the x or your server does not have a default time zone set you will recieve another prompt asking for your time zone
 
-![Time Zone Input](https://i.imgur.com/fcmXvsQ.png)
+![Time zone input](https://birthday-bot-docs-images.s3.amazonaws.com/2-birthday+bot+time+zone+set+up+in+set+command.png)
+
+Please press the "Enter Response" button and you will see a text input modal like the one below
+
+![Time zone input Modal](https://birthday-bot-docs-images.s3.amazonaws.com/3-time+zone+input+modal.png)
+
+In the text box please enter your time zone and click submit.
 
 Birthday Bot will now know your time zone and will use this to know what time to celebrate your birthday!
 
-Now, Birthday Bot will prompt you to put your Birth Month & Date in the following format: MM/DD
+Now, Birthday Bot will prompt you to put your Birth Month & Date as well as the option to add your birth year.
 
-![Birthday Prompt](https://i.imgur.com/hKvd9bm.png)
+![Birthday prompt](https://birthday-bot-docs-images.s3.amazonaws.com/4-birthday+input+prompt.png)
 
-Simply reply to this message with your desired date.
+Simply click the "Enter response" button as you did for adding your time zone.
 
-![Birthday Input](https://i.imgur.com/D6OArx2.png)
+![Birthday input modal](https://birthday-bot-docs-images.s3.amazonaws.com/5-birthday+input+modal.png)
+
+Simply enter your birth month and day along with your birth year if you want (it is not required) and click submit.
 
 Finally, the confirmation menu will appear.
 
-![Confirmation](https://i.imgur.com/gBafugI.png)
+![Confirmation](https://birthday-bot-docs-images.s3.amazonaws.com/6-birthday+save+confirmation.png)
 
 Ensure this is the correct information, then confirm by clicking the checkmark.
 
-![End](https://i.imgur.com/2F8u3Cw.png)
+![End](https://birthday-bot-docs-images.s3.amazonaws.com/7-birthday+set+success+message.png)
 
 For users that is it! Server owners will have to do a bit more but Birthday Bot makes it easy with an interactive setup. For more information on server setup follow our guide here.
+
+As the message states birth years are hidden in all servers by default. Learn more about Birthday Bot's user privacy settings [here](https://birthdaybot.scottbucher.dev/faq-1/user/user-privacy).
 
 ## Finding your time zone
 
 [Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!
 
-Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `bday set` command.
+Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `/set` command.
 
-![Setting your time zone](https://i.imgur.com/ibPmjNs.png)
+![Setting your time zone](https://birthday-bot-docs-images.s3.amazonaws.com/2-birthday+bot+time+zone+set+up+in+set+command.png)
 
 ## Help
 
