@@ -109,7 +109,7 @@ Birthday Bot uses time zones to detect when to celebrate each user's birthday. I
 
 If you chose the x or your server does not have a default time zone set you will recieve another prompt asking for your time zone
 
-![Time zone input](https://birthday-bot-docs-images.s3.amazonaws.com/2-birthday+bot+time+zone+set+up+in+set+command.png)
+![Time zone input](https://birthday-bot-docs-images.s3.amazonaws.com/3-time+zone+input+modal.png)
 
 Please press the "Enter Response" button and you will see a text input modal like the one below
 
