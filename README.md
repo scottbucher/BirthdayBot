@@ -143,7 +143,7 @@ As the message states, birth years are hidden in all servers by default. Learn m
 
 ## Finding your time zone
 
-[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://kevinnovak.github.io/Time-Zone-Picker/)!
+[Kevin Novak](https://github.com/KevinNovak) has created a handy [map time zone picker](https://zones.arilyn.cc/?utm_source=birthday-bot&utm_medium=docs)!
 
 Simply click your location on the map and copy the name of the selected time zone. You can then use it in the `/set` command.
 
