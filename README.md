@@ -1,3 +1,6 @@
+OUT OF DATE, use the new [website](https://birthdaybot.app/?utm_source=github) instead!
+
+
 # Birthday Bot
 
 [![Discord Bots](https://top.gg/api/widget/servers/656621136808902656.svg?noavatar=true)](https://top.gg/bot/656621136808902656)
@@ -13,9 +16,9 @@
 
 **Discord Bot** - Celebrate Birthdays, Custom Events, Member Anniversaries and Server Anniversaries with the most customizable Birthday bot! Configure messages, roles, channels, and much more to your liking! Use `/set` to set your birthday and time zone, `/setup` to setup your server, and `/help` to see all commands as well as more information about the bot!
 
-## [Click here to add Birthday Bot to your Discord server!](https://discord.com/api/oauth2/authorize?client_id=656621136808902656&permissions=268921936&scope=bot%20applications.commands)
+## [Click here to add Birthday Bot to your Discord server!](https://birthdaybot.app/invite?src=github)
 
-[Join The Support Server](https://discord.gg/39w2cnBRa2) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
+[Join The Support Server](https://birthdaybot.app/go/support?src=github) | [Donate with Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=PE97AGAPRX35Q&currency_code=USD&source=url)
 
 # Features:
 
@@ -151,7 +154,7 @@ Simply click your location on the map and copy the name of the selected time zon
 
 ## Help
 
-For additional help join the support server [here](https://discord.gg/39w2cnBRa2).
+For additional help join the support server [here](https://birthdaybot.app/go/support?src=github).
 
 ## License
 
